@@ -14,12 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
@@ -33,17 +32,17 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import java.util.ArrayList;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetShortcutsBinding;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.TaskEntryEditFragmentArgs;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.ShortcutUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class ShortcutsBottomSheet extends BaseBottomSheetDialogFragment {
 
@@ -52,26 +51,18 @@ public class ShortcutsBottomSheet extends BaseBottomSheetDialogFragment {
   private MainActivity activity;
   private FragmentBottomsheetShortcutsBinding binding;
 
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
-
   @Override
   public View onCreateView(
       @NonNull LayoutInflater inflater,
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    binding = FragmentBottomsheetShortcutsBinding
-        .inflate(inflater, container, false);
+    binding = FragmentBottomsheetShortcutsBinding.inflate(inflater, container, false);
     return binding.getRoot();
   }
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-    setSkipCollapsedInPortrait();
     super.onViewCreated(view, savedInstanceState);
     activity = (MainActivity) requireActivity();
     binding.setActivity(activity);
@@ -156,9 +147,11 @@ public class ShortcutsBottomSheet extends BaseBottomSheetDialogFragment {
       } else if (checkBox.getId() == R.id.shopping_list) {
         shortcutInfos.add(ShortcutUtil.createShortcutShoppingList(context, checkBox.getText()));
       } else if (checkBox.getId() == R.id.add_to_shopping_list) {
-        Uri uriWithArgs = getUriWithArgs(getString(R.string.deep_link_shoppingListItemEditFragment),
+        Uri uriWithArgs = MainActivity.getUriWithArgs(
+            getString(R.string.deep_link_shoppingListItemEditFragment),
             new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
-                .build().toBundle()
+                .build()
+                .toBundle()
         );
         shortcutInfos.add(ShortcutUtil.createShortcutAddToShoppingList(
             context, uriWithArgs, checkBox.getText()
@@ -176,9 +169,11 @@ public class ShortcutsBottomSheet extends BaseBottomSheetDialogFragment {
       } else if (checkBox.getId() == R.id.tasks) {
         shortcutInfos.add(ShortcutUtil.createShortcutTasks(context, checkBox.getText()));
       } else if (checkBox.getId() == R.id.task_add) {
-        Uri uriWithArgs = getUriWithArgs(getString(R.string.deep_link_taskEntryEditFragment),
+        Uri uriWithArgs = MainActivity.getUriWithArgs(
+            getString(R.string.deep_link_taskEntryEditFragment),
             new TaskEntryEditFragmentArgs.Builder(Constants.ACTION.CREATE)
-                .build().toBundle()
+                .build()
+                .toBundle()
         );
         shortcutInfos.add(ShortcutUtil.createShortcutTaskAdd(
             context, uriWithArgs, checkBox.getText()
@@ -192,6 +187,16 @@ public class ShortcutsBottomSheet extends BaseBottomSheetDialogFragment {
     shortcutManager.setDynamicShortcuts(shortcutInfos);
     activity.getCurrentFragment().updateShortcuts();
     dismiss();
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.linearContainer.setPadding(
+        binding.linearContainer.getPaddingLeft(),
+        binding.linearContainer.getPaddingTop(),
+        binding.linearContainer.getPaddingRight(),
+        UiUtil.dpToPx(activity, 12) + bottom
+    );
   }
 
   @NonNull

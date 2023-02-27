@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.api;
@@ -272,13 +272,23 @@ public class GrocyApi {
     );
   }
 
-  public String getStockLogEntries(int limit, int offset) {
-    return getUrl(
-        "/objects/stock_log",
-        "limit=" + limit,
-        "offset=" + offset,
-        "order=id%3Adesc"
-    );
+  public String getStockLogEntries(int limit, int offset, int filterProductId) {
+    if (filterProductId == -1) {
+      return getUrl(
+          "/objects/stock_log",
+          "limit=" + limit,
+          "offset=" + offset,
+          "order=id%3Adesc"
+      );
+    } else {
+      return getUrl(
+          "/objects/stock_log",
+          "query%5B%5D=product_id%3D" + filterProductId,
+          "limit=" + limit,
+          "offset=" + offset,
+          "order=id%3Adesc"
+      );
+    }
   }
 
   /**

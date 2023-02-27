@@ -14,11 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowLanguageBinding;
 import xyz.zedler.patrick.grocy.model.Language;
+import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.ViewHolder> {
@@ -74,17 +76,24 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.ViewHo
 
   @Override
   public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    Context context = holder.binding.getRoot().getContext();
     holder.binding.linearLanguageContainer.setBackground(
-        ViewUtil.getRippleBgListItemSurface(holder.binding.getRoot().getContext())
+        ViewUtil.getRippleBgListItemSurface(context)
     );
 
     if (position == 0) {
       holder.binding.textLanguageName.setText(R.string.setting_language_system);
       holder.binding.textLanguageTranslators.setText(R.string.setting_language_not_available);
 
+      boolean isSelected = selectedCode == null;
       holder.binding.imageLanguageSelected.setVisibility(
-          selectedCode != null ? View.INVISIBLE : View.VISIBLE
+          isSelected ? View.VISIBLE : View.INVISIBLE
       );
+      if (isSelected) {
+        holder.binding.linearLanguageContainer.setBackground(
+            ViewUtil.getBgListItemSelected(context)
+        );
+      }
       holder.binding.linearLanguageContainer.setOnClickListener(
           view -> listener.onItemRowClicked(null)
       );
@@ -97,9 +106,17 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.ViewHo
 
     // SELECTED
 
-    holder.binding.imageLanguageSelected.setVisibility(
-        language.getCode().equals(selectedCode) ? View.VISIBLE : View.INVISIBLE
-    );
+    boolean isSelected = language.getCode().equals(selectedCode);
+    if (selectedCode != null && !isSelected && !languageHashMap.containsKey(selectedCode)) {
+      String lang = LocaleUtil.getLangFromLanguageCode(selectedCode);
+      if (languageHashMap.containsKey(lang)) {
+        isSelected = language.getCode().equals(lang);
+      }
+    }
+    holder.binding.imageLanguageSelected.setVisibility(isSelected ? View.VISIBLE : View.INVISIBLE);
+    if (isSelected) {
+      holder.binding.linearLanguageContainer.setBackground(ViewUtil.getBgListItemSelected(context));
+    }
 
     // CONTAINER
 

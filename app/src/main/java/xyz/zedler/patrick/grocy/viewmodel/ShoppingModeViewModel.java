@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.viewmodel;
@@ -162,19 +162,19 @@ public class ShoppingModeViewModel extends BaseViewModel {
     return selectedShoppingListIdLive;
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
+  public void downloadData(@Nullable String dbChangedTime, boolean skipOfflineCheck) {
     if (currentQueueLoading != null) {
       currentQueueLoading.reset(true);
       currentQueueLoading = null;
     }
-    if (isOffline()) { // skip downloading and update recyclerview
+    if (!skipOfflineCheck && isOffline()) { // skip downloading and update recyclerview
       isLoadingLive.setValue(false);
       updateFilteredShoppingListItems();
       return;
     }
     if (dbChangedTime == null) {
       dlHelper.getTimeDbChanged(
-          this::downloadData,
+          time -> downloadData(time, skipOfflineCheck),
           () -> onDownloadError(null)
       );
       return;
@@ -222,7 +222,7 @@ public class ShoppingModeViewModel extends BaseViewModel {
   }
 
   public void downloadData() {
-    downloadData(null);
+    downloadData(null, false);
   }
 
   public void downloadDataForceUpdate() {
@@ -236,10 +236,12 @@ public class ShoppingModeViewModel extends BaseViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
     editPrefs.apply();
-    downloadData();
+    downloadData(null, true);
   }
 
   private void onQueueEmpty() {
+    if (isOffline()) setOfflineLive(false);
+
     if (itemsToSyncTemp == null || itemsToSyncTemp.isEmpty() || serverItemHashMapTemp == null) {
       fillShoppingListItemAmountsHashMap();
       updateFilteredShoppingListItems();
@@ -290,10 +292,8 @@ public class ShoppingModeViewModel extends BaseViewModel {
     if (debug) {
       Log.e(TAG, "onError: VolleyError: " + error);
     }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
+    showNetworkErrorMessage(error);
+    if (!isOffline()) setOfflineLive(true);
   }
 
   public int getSelectedShoppingListId() {

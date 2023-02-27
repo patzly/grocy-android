@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.viewmodel;
@@ -32,6 +32,8 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
@@ -42,8 +44,6 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
@@ -61,6 +61,8 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
+  private final MutableLiveData<Boolean> isQuantityUnitStockChangeableLive;
+  private final MutableLiveData<Boolean> hasProductAlreadyStockTransactionsLive;
 
   private List<QuantityUnit> quantityUnits;
   private List<QuantityUnitConversion> conversions;
@@ -84,6 +86,8 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
     formData = new FormDataMasterProductCatQuantityUnit(application, getBeginnerModeEnabled());
     args = startupArgs;
     isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
+    isQuantityUnitStockChangeableLive = new MutableLiveData<>(VersionUtil.isGrocyServerMin330(sharedPrefs));
+    hasProductAlreadyStockTransactionsLive = new MutableLiveData<>(false);
 
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
@@ -109,6 +113,8 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
       formData.fillWithProductIfNecessary(args.getProduct());
       if (downloadAfterLoading) {
         downloadData();
+      } else {
+        updateHasProductAlreadyStockTransactions();
       }
     });
   }
@@ -138,6 +144,7 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
         )
     );
     if (queue.isEmpty()) {
+      updateHasProductAlreadyStockTransactions();
       return;
     }
 
@@ -162,6 +169,7 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
       setOfflineLive(false);
     }
     formData.fillWithProductIfNecessary(args.getProduct());
+    updateHasProductAlreadyStockTransactions();
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
@@ -175,13 +183,15 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
   }
 
   public void showQuBottomSheet(int type) {
-    if (type == FormDataMasterProductCatQuantityUnit.STOCK && !isQuantityUnitStockChangeable()) {
+    assert hasProductAlreadyStockTransactionsLive.getValue() != null
+        && isQuantityUnitStockChangeableLive.getValue() != null;
+    if (type == FormDataMasterProductCatQuantityUnit.STOCK && !isQuantityUnitStockChangeableLive.getValue()) {
       showMessage(getString(R.string.msg_help_qu_stock));
       return;
     }
     List<QuantityUnit> quantityUnitsAllowed;
     if (type == FormDataMasterProductCatQuantityUnit.STOCK && isActionEdit
-        && isQuantityUnitStockChangeable()) {
+        && hasProductAlreadyStockTransactionsLive.getValue()) {
       QuantityUnit quStockOld = QuantityUnit
           .getFromId(this.quantityUnits, getFilledProduct().getQuIdStockInt());
       quantityUnitsAllowed = new ArrayList<>();
@@ -252,8 +262,25 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
     currentQueueLoading = queueLoading;
   }
 
-  public boolean isQuantityUnitStockChangeable() {
-    return VersionUtil.isGrocyServerMin330(sharedPrefs);
+  public MutableLiveData<Boolean> getIsQuantityUnitStockChangeableLive() {
+    return isQuantityUnitStockChangeableLive;
+  }
+
+  private void updateHasProductAlreadyStockTransactions() {
+    if (!isActionEdit) {
+      return;
+    }
+    dlHelper.getStockLogEntries(10, 0, getFilledProduct().getId(), entries -> {
+      if (VersionUtil.isGrocyServerMin330(sharedPrefs)) {
+        hasProductAlreadyStockTransactionsLive.setValue(!entries.isEmpty());
+      } else {
+        isQuantityUnitStockChangeableLive.setValue(entries.isEmpty());
+      }
+    }, null).perform(dlHelper.getUuid());
+  }
+
+  public MutableLiveData<Boolean> getHasProductAlreadyStockTransactionsLive() {
+    return hasProductAlreadyStockTransactionsLive;
   }
 
   public boolean isFeatureEnabled(String pref) {

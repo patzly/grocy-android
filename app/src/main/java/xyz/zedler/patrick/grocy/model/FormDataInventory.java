@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.model;
@@ -93,6 +93,7 @@ public class FormDataInventory {
   private final LiveData<String> storeNameLive;
   private final MutableLiveData<Location> locationLive;
   private final LiveData<String> locationNameLive;
+  private final MutableLiveData<Integer> printLabelTypeLive;
   private final MutableLiveData<String> noteLive;
   private final PluralUtil pluralUtil;
   private boolean currentProductFlowInterrupted = false;
@@ -269,6 +270,7 @@ public class FormDataInventory {
         locationLive,
         location -> location != null ? location.getName() : null
     );
+    printLabelTypeLive = new MutableLiveData<>(0);
     noteLive = new MutableLiveData<>();
   }
 
@@ -652,6 +654,14 @@ public class FormDataInventory {
     return locationNameLive;
   }
 
+  public MutableLiveData<Integer> getPrintLabelTypeLive() {
+    return printLabelTypeLive;
+  }
+
+  public void setPrintLabelTypeLive(int type) {
+    printLabelTypeLive.setValue(type);
+  }
+
   public MutableLiveData<String> getNoteLive() {
     return noteLive;
   }
@@ -715,8 +725,8 @@ public class FormDataInventory {
       return false;
     }
     if (NumUtil.getDecimalPlacesCount(amountLive.getValue()) > maxDecimalPlacesAmount) {
-      amountErrorLive.setValue(application.getString(
-          R.string.error_max_decimal_places, String.valueOf(maxDecimalPlacesAmount)
+      amountErrorLive.setValue(application.getResources().getQuantityString(
+          R.plurals.error_max_decimal_places, maxDecimalPlacesAmount, maxDecimalPlacesAmount
       ));
       return false;
     }
@@ -781,8 +791,8 @@ public class FormDataInventory {
       return false;
     }
     if (NumUtil.getDecimalPlacesCount(priceLive.getValue()) > decimalPlacesPriceInput) {
-      priceErrorLive.setValue(application.getString(
-          R.string.error_max_decimal_places, String.valueOf(decimalPlacesPriceInput)
+      priceErrorLive.setValue(application.getResources().getQuantityString(
+          R.plurals.error_max_decimal_places, decimalPlacesPriceInput, decimalPlacesPriceInput
       ));
       return false;
     }
@@ -877,6 +887,9 @@ public class FormDataInventory {
         if (isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) && location != null) {
           json.put("location_id", String.valueOf(location.getId()));
         }
+        if (isFeatureEnabled(PREF.FEATURE_LABEL_PRINTER)) {
+          json.put("stock_label_type", String.valueOf(printLabelTypeLive.getValue()));
+        }
         if (noteLive.getValue() != null && !noteLive.getValue().isEmpty()) {
           json.put("note", noteLive.getValue());
         }
@@ -897,13 +910,28 @@ public class FormDataInventory {
     String barcode = barcodeLive.getValue();
     Product product = productDetailsLive.getValue().getProduct();
     Store store = storeLive.getValue();
+    String note = noteLive.getValue();
 
     ProductBarcode productBarcode = new ProductBarcode();
     productBarcode.setProductIdInt(product.getId());
     productBarcode.setBarcode(barcode);
+    productBarcode.setNote(note);
     if (store != null && isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
       productBarcode.setStoreId(String.valueOf(store.getId()));
     }
+    return productBarcode;
+  }
+
+  public ProductBarcode fillProductBarcodeWithoutForm() {
+    if (productDetailsLive.getValue() == null) {
+      return null;
+    }
+    String barcode = barcodeLive.getValue();
+    Product product = productDetailsLive.getValue().getProduct();
+
+    ProductBarcode productBarcode = new ProductBarcode();
+    productBarcode.setProductIdInt(product.getId());
+    productBarcode.setBarcode(barcode);
     return productBarcode;
   }
 
@@ -921,6 +949,7 @@ public class FormDataInventory {
     storeLive.setValue(null);
     showStoreSection.setValue(true);
     locationLive.setValue(null);
+    printLabelTypeLive.setValue(0);
     noteLive.setValue(null);
     new Handler().postDelayed(() -> {
       productNameErrorLive.setValue(null);

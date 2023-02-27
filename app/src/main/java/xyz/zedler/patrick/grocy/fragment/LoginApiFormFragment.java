@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -22,20 +22,18 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentLoginApiFormBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.viewmodel.LoginApiFormViewModel;
 
 public class LoginApiFormFragment extends BaseFragment {
@@ -74,6 +72,46 @@ public class LoginApiFormFragment extends BaseFragment {
     binding.setFormData(viewModel.getFormData());
     binding.setLifecycleOwner(getViewLifecycleOwner());
     binding.setActivity(activity);
+
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setScroll(binding.scroll, binding.constraint);
+    systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setOnMenuItemClickListener(item -> {
+      int id = item.getItemId();
+      if (id == R.id.action_help) {
+        activity.showHelpBottomSheet();
+      } else if (id == R.id.action_feedback) {
+        activity.showFeedbackBottomSheet();
+      } else if (id == R.id.action_website) {
+        openGrocyWebsite();
+      } else if (id == R.id.action_settings) {
+        activity.navigateDeepLink(R.string.deep_link_settingsFragment);
+      } else if (id == R.id.action_about) {
+        activity.navigateDeepLink(R.string.deep_link_aboutFragment);
+      }
+      return true;
+    });
+
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
+    activity.getScrollBehavior().setProvideTopScroll(false);
+    activity.getScrollBehavior().setCanBottomAppBarBeVisible(false);
+    activity.getScrollBehavior().setBottomBarVisibility(false, true, false);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.scroll, false
+    );
+
+    new Handler().postDelayed(() -> {
+      if (!viewModel.isAutoProceedDoneWasDone() && args.getServerUrl() != null
+          && args.getGrocyApiKey() != null && args.getGrocyIngressProxyId() != null
+          && args.getHomeAssistantToken() != null && viewModel.getFormData().isFormValid()) {
+        viewModel.setAutoProceedDoneWasDone(true);
+        proceedWithLogin();
+      }
+    }, 100);
   }
 
   public void proceedWithLogin() {
@@ -91,15 +129,18 @@ public class LoginApiFormFragment extends BaseFragment {
     if (ingressProxyId != null) {
       grocyServerUrl += "/api/hassio_ingress/" + ingressProxyId;
     }
-    navigate(LoginApiFormFragmentDirections.actionLoginApiFormFragmentToLoginRequestFragment(
-        grocyServerUrl,
-        viewModel.getFormData().getApiKeyTrimmed()
-    ).setHomeAssistantServerUrl(
-        ingressProxyId != null ? hassServerUrl : null
-    ).setHomeAssistantToken(
-        ingressProxyId != null ? viewModel.getFormData().getLongLivedAccessTokenTrimmed()
-            : null
-    ));
+    activity.navigateFragment(
+        LoginApiFormFragmentDirections.actionLoginApiFormFragmentToLoginRequestFragment(
+            grocyServerUrl,
+            viewModel.getFormData().getApiKeyTrimmed()
+        ).setHomeAssistantServerUrl(
+            ingressProxyId != null ? hassServerUrl : null
+        ).setHomeAssistantToken(
+            ingressProxyId != null
+                ? viewModel.getFormData().getLongLivedAccessTokenTrimmed()
+                : null
+        )
+    );
   }
 
   public void openHomeAssistantProfileWebsite() {
@@ -135,33 +176,7 @@ public class LoginApiFormFragment extends BaseFragment {
     startActivity(intent);
   }
 
-  public void openHelpWebsite() {
-    boolean success = NetUtil.openURL(requireContext(), Constants.URL.HELP);
-    if (!success) {
-      activity.showSnackbar(R.string.error_no_browser);
-    }
-  }
-
   public void openGrocyWebsite() {
     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_grocy))));
-  }
-
-  public void showFeedbackBottomSheet() {
-    activity.showBottomSheet(new FeedbackBottomSheet());
-  }
-
-  @Override
-  protected void onEnterAnimationEnd() {
-    if (!viewModel.isAutoProceedDoneWasDone() && args.getServerUrl() != null
-        && args.getGrocyApiKey() != null && args.getGrocyIngressProxyId() != null
-        && args.getHomeAssistantToken() != null && viewModel.getFormData().isFormValid()) {
-      viewModel.setAutoProceedDoneWasDone(true);
-      proceedWithLogin();
-    }
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.background);
   }
 }

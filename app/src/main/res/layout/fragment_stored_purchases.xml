@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <layout
@@ -42,13 +42,12 @@
   <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="?android:attr/colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
       android:layout_width="match_parent"
       android:layout_height="?attr/actionBarSize"
-      android:orientation="vertical"
-      android:background="@color/primary">
+      android:orientation="vertical">
 
       <FrameLayout
         android:layout_width="match_parent"
@@ -91,8 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/title_stored_purchases"
-            android:layout_marginEnd="16dp"
-            android:textColor="@color/on_primary" />
+            android:layout_marginEnd="16dp" />
 
           <FrameLayout
             android:id="@+id/frame_help"
@@ -130,8 +128,6 @@
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never"
-      app:progressBackgroundColor="@{@color/surface}"
-      app:progressForegroundColor="@{@color/secondary}"
       app:setRefreshing="@{viewModel.isLoadingLive}"
       app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
 
@@ -164,22 +160,15 @@
               android:focusableInTouchMode="true"/>
 
             <com.google.android.material.card.MaterialCardView
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              style="@style/Widget.Grocy.Card.Text"
               android:layout_marginStart="16dp"
               android:layout_marginEnd="16dp"
               android:layout_marginBottom="8dp"
               android:layout_marginTop="8dp"
-              android:visibility="@{viewModel.displayHelpLive ? View.VISIBLE : View.GONE}"
-              app:contentPadding="16dp"
-              app:cardElevation="0dp"
-              app:cardCornerRadius="12dp"
-              app:cardBackgroundColor="@color/on_background_variant">
+              android:visibility="@{viewModel.displayHelpLive ? View.VISIBLE : View.GONE}">
 
               <TextView
-                style="@style/Widget.Grocy.TextView.Paragraph"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/Widget.Grocy.TextView.Paragraph.Card"
                 android:text="@string/msg_stored_purchases" />
 
             </com.google.android.material.card.MaterialCardView>

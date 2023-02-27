@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -29,8 +29,9 @@ import android.widget.AdapterView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -45,8 +46,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ACTION;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditIngredientEditViewModel;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditIngredientEditViewModel.RecipeEditIngredientEditViewModelFactory;
@@ -97,10 +97,10 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
     systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipe);
-    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setScroll(binding.scroll, binding.constraint);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
-    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
     binding.categoryQuantityUnit.setOnClickListener(v -> {
@@ -115,11 +115,23 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
       activity.showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
     });
 
+    viewModel.getFormData().getOnlyCheckSingleUnitInStockLive().observe(getViewLifecycleOwner(), state -> {
+      if (state) return;
+      viewModel.setStockQuantityUnit();
+    });
+    viewModel.getFormData().getQuantityUnitLive().observe(
+        getViewLifecycleOwner(), value -> binding.textQuantityUnitLabel.setTextColor(
+            ResUtil.getColorAttr(
+                activity, value == null ? R.attr.colorError : R.attr.colorOnSurfaceVariant
+            )
+        )
+    );
+
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        SnackbarMessage message = (SnackbarMessage) event;
-        Snackbar snack = message.getSnackbar(activity, activity.binding.coordinatorMain);
-        activity.showSnackbar(snack);
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       } else if (event.getType() == Event.NAVIGATE_UP) {
         activity.navigateUp();
       } else if (event.getType() == Event.BOTTOM_SHEET) {
@@ -160,6 +172,7 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
       viewModel.loadFromDatabase(true);
     }
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
@@ -208,7 +221,7 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
     if (product == null) {
       return;
     }
-    viewModel.setProduct(product.getId(), null, null);
+    viewModel.setProduct(product.getId(), null, null, null);
   }
 
   public void clearFocusAndCheckProductInput() {

@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <layout
@@ -60,271 +60,281 @@
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never">
 
-      <LinearLayout
-        android:id="@+id/linear_container"
+      <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:paddingBottom="@dimen/global_scroll_bottom_padding"
-        android:orientation="vertical">
+        android:paddingBottom="@dimen/global_scroll_bottom_padding">
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatServerFragment())}"
-          android:background="@{fragment.shouldNavigateToServer ? @drawable/ripple_list_item_bg_selected : @drawable/ripple_list_item_bg}"
-          app:clickUtil="@{clickUtil}">
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintWidth_max="@dimen/max_content_width"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintEnd_toEndOf="parent">
 
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_settings_system"
-            tools:ignore="ContentDescription" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@string/category_server" />
-
-          </LinearLayout>
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.Icon"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_round_chevron_right"
-            tools:ignore="ContentDescription" />
-
-        </LinearLayout>
-
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatUserSettingsFragment())}"
-          app:clickUtil="@{clickUtil}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_cloud_sync"
-            tools:ignore="ContentDescription" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@string/category_user_settings" />
-
-          </LinearLayout>
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.Icon"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_round_chevron_right"
-            tools:ignore="ContentDescription" />
-
-        </LinearLayout>
-
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatAppearanceFragment())}"
-          app:clickUtil="@{clickUtil}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_visibility"
-            tools:ignore="ContentDescription" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@string/category_appearance" />
-
-          </LinearLayout>
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.Icon"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_round_chevron_right"
-            tools:ignore="ContentDescription" />
-
-        </LinearLayout>
-
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatNetworkFragment())}"
-          app:clickUtil="@{clickUtil}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_signal_wifi"
-            tools:ignore="ContentDescription" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@string/category_network" />
-
-          </LinearLayout>
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.Icon"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_round_chevron_right"
-            tools:ignore="ContentDescription" />
-
-        </LinearLayout>
-
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatBehaviorFragment())}"
-          android:background="@{fragment.shouldNavigateToBehavior ? @drawable/ripple_list_item_bg_selected : @drawable/ripple_list_item_bg}"
-          app:clickUtil="@{clickUtil}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_design_services"
-            tools:ignore="ContentDescription" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@string/category_behavior" />
-
-          </LinearLayout>
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.Icon"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_round_chevron_right"
-            tools:ignore="ContentDescription" />
-
-        </LinearLayout>
-
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatScannerFragment())}"
-          app:clickUtil="@{clickUtil}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_barcode_scan"
-            tools:ignore="ContentDescription" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@string/category_scanner" />
-
-          </LinearLayout>
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.Icon"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_round_chevron_right"
-            tools:ignore="ContentDescription" />
-
-        </LinearLayout>
-
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatShoppingModeFragment())}"
-          app:clickUtil="@{clickUtil}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            tools:ignore="ContentDescription"
-            android:src="@drawable/ic_round_storefront" />
-
-          <TextView
-            style="@style/Widget.Grocy.TextView.ListItem.Title"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:text="@string/title_shopping_mode" />
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.Icon"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_round_chevron_right"
-            tools:ignore="ContentDescription" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-            android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsNotificationsFragment())}"
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+            android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatServerFragment())}"
+            android:background="@{fragment.shouldNavigateToServer ? @drawable/ripple_list_item_bg_selected : @drawable/ripple_list_item_bg}"
             app:clickUtil="@{clickUtil}">
 
-          <ImageView
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_settings_system"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/category_server" />
+
+            </LinearLayout>
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.Icon"
+              android:layout_marginStart="16dp"
+              android:src="@drawable/ic_round_chevron_right"
+              tools:ignore="ContentDescription" />
+
+          </LinearLayout>
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+            android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatUserSettingsFragment())}"
+            app:clickUtil="@{clickUtil}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_cloud_sync"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/category_user_settings" />
+
+            </LinearLayout>
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.Icon"
+              android:layout_marginStart="16dp"
+              android:src="@drawable/ic_round_chevron_right"
+              tools:ignore="ContentDescription" />
+
+          </LinearLayout>
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+            android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatAppearanceFragment())}"
+            app:clickUtil="@{clickUtil}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_visibility"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/category_appearance" />
+
+            </LinearLayout>
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.Icon"
+              android:layout_marginStart="16dp"
+              android:src="@drawable/ic_round_chevron_right"
+              tools:ignore="ContentDescription" />
+
+          </LinearLayout>
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+            android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatNetworkFragment())}"
+            app:clickUtil="@{clickUtil}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_signal_wifi"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/category_network" />
+
+            </LinearLayout>
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.Icon"
+              android:layout_marginStart="16dp"
+              android:src="@drawable/ic_round_chevron_right"
+              tools:ignore="ContentDescription" />
+
+          </LinearLayout>
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+            android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatBehaviorFragment())}"
+            android:background="@{fragment.shouldNavigateToBehavior ? @drawable/ripple_list_item_bg_selected : @drawable/ripple_list_item_bg}"
+            app:clickUtil="@{clickUtil}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_design_services"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/category_behavior" />
+
+            </LinearLayout>
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.Icon"
+              android:layout_marginStart="16dp"
+              android:src="@drawable/ic_round_chevron_right"
+              tools:ignore="ContentDescription" />
+
+          </LinearLayout>
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+            android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatScannerFragment())}"
+            app:clickUtil="@{clickUtil}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_barcode_scan"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/category_scanner" />
+
+            </LinearLayout>
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.Icon"
+              android:layout_marginStart="16dp"
+              android:src="@drawable/ic_round_chevron_right"
+              tools:ignore="ContentDescription" />
+
+          </LinearLayout>
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+            android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatShoppingModeFragment())}"
+            app:clickUtil="@{clickUtil}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              tools:ignore="ContentDescription"
+              android:src="@drawable/ic_round_storefront" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:text="@string/title_shopping_mode" />
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.Icon"
+              android:layout_marginStart="16dp"
+              android:src="@drawable/ic_round_chevron_right"
+              tools:ignore="ContentDescription" />
+
+          </LinearLayout>
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+            android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsNotificationsFragment())}"
+            app:clickUtil="@{clickUtil}">
+
+            <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               tools:ignore="ContentDescription"
               android:src="@drawable/ic_round_notifications" />
 
-          <TextView
+            <TextView
               style="@style/Widget.Grocy.TextView.ListItem.Title"
               android:layout_width="0dp"
               android:layout_weight="1"
               android:text="@string/title_notifications" />
 
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.Icon"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_round_chevron_right"
-            tools:ignore="ContentDescription" />
-
-        </LinearLayout>
-
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatDebuggingFragment())}"
-          app:clickUtil="@{clickUtil}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_bug_report_anim"
-            tools:ignore="ContentDescription" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@string/category_debugging" />
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.Icon"
+              android:layout_marginStart="16dp"
+              android:src="@drawable/ic_round_chevron_right"
+              tools:ignore="ContentDescription" />
 
           </LinearLayout>
 
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.Icon"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_round_chevron_right"
-            tools:ignore="ContentDescription" />
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+            android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatDebuggingFragment())}"
+            app:clickUtil="@{clickUtil}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_bug_report_anim"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/category_debugging" />
+
+            </LinearLayout>
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.Icon"
+              android:layout_marginStart="16dp"
+              android:src="@drawable/ic_round_chevron_right"
+              tools:ignore="ContentDescription" />
+
+          </LinearLayout>
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+            android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToAboutFragment())}"
+            app:clickUtil="@{clickUtil}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_info_outline_anim"
+              tools:ignore="ContentDescription" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:text="@string/title_about" />
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.Icon"
+              android:layout_marginStart="16dp"
+              android:src="@drawable/ic_round_chevron_right"
+              tools:ignore="ContentDescription" />
+
+          </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToAboutFragment())}"
-          app:clickUtil="@{clickUtil}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_info_outline_anim_menu"
-            tools:ignore="ContentDescription" />
-
-          <TextView
-            style="@style/Widget.Grocy.TextView.ListItem.Title"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:text="@string/title_about" />
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.Icon"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_round_chevron_right"
-            tools:ignore="ContentDescription" />
-
-        </LinearLayout>
-
-      </LinearLayout>
+      </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 

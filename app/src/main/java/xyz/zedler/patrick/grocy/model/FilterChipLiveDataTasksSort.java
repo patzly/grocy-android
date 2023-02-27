@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.model;
@@ -73,7 +73,7 @@ public class FilterChipLiveDataTasksSort extends FilterChipLiveData {
         R.string.property_sort_mode,
         sortMode.equals(SORT_NAME)
             ? application.getString(R.string.property_name)
-            : application.getString(R.string.property_due_date)
+            : application.getString(R.string.property_due_date_task)
     ));
   }
 
@@ -104,7 +104,7 @@ public class FilterChipLiveDataTasksSort extends FilterChipLiveData {
       menuItemDataList.add(new MenuItemData(
           ID_SORT_DUE_DATE,
           0,
-          application.getString(R.string.property_due_date),
+          application.getString(R.string.property_due_date_task),
           sortMode.equals(SORT_DUE_DATE)
       ));
     }

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -23,23 +23,23 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.NETWORK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatNetworkBinding;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS.NETWORK;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
@@ -83,12 +83,19 @@ public class SettingsCatNetworkFragment extends BaseFragment {
     binding.setClickUtil(new ClickUtil());
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setScroll(binding.scroll, binding.constraint);
+    systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+
     viewModel.getEventHandler().observe(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
-            activity.binding.coordinatorMain
-        ));
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
@@ -113,12 +120,12 @@ public class SettingsCatNetworkFragment extends BaseFragment {
     proxyHostLive = new MutableLiveData<>(viewModel.getProxyHost());
     proxyPortLive = new MutableLiveData<>(String.valueOf(viewModel.getProxyPort()));
 
-    if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-      activity.getScrollBehaviorOld().setUpScroll(binding.scroll);
-      activity.getScrollBehaviorOld().setHideOnScroll(true);
-      activity.updateBottomAppBar(false, R.menu.menu_empty);
-      activity.binding.fabMain.hide();
-    }
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.scroll, false
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(false, R.menu.menu_empty);
 
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
 
@@ -173,10 +180,5 @@ public class SettingsCatNetworkFragment extends BaseFragment {
 
   public void restartApp() {
     RestartUtil.restartApp(requireContext());
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
   }
 }

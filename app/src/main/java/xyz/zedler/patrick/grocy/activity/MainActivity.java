@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.activity;
@@ -30,6 +30,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
@@ -39,6 +40,7 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -59,9 +61,15 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
-import androidx.appcompat.widget.TooltipCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsAnimationCompat;
+import androidx.core.view.WindowInsetsAnimationCompat.BoundsCompat;
+import androidx.core.view.WindowInsetsAnimationCompat.Callback;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
@@ -80,8 +88,12 @@ import com.google.android.material.color.DynamicColorsOptions;
 import com.google.android.material.color.HarmonizedColors;
 import com.google.android.material.color.HarmonizedColorsOptions;
 import com.google.android.material.elevation.SurfaceColors;
+import com.google.android.material.math.MathUtils;
 import com.google.android.material.snackbar.Snackbar;
 import info.guardianproject.netcipher.proxy.OrbotHelper;
+import java.lang.reflect.Field;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.Security;
 import java.util.ArrayList;
@@ -92,6 +104,7 @@ import java.util.Objects;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
 import org.conscrypt.Conscrypt;
+import xyz.zedler.patrick.grocy.BuildConfig;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.PREF;
@@ -99,14 +112,15 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.NETWORK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.Constants.THEME;
+import xyz.zedler.patrick.grocy.NavigationMainDirections;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
 import xyz.zedler.patrick.grocy.behavior.BottomScrollBehavior;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.repository.MainRepository;
@@ -119,6 +133,7 @@ import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
 import xyz.zedler.patrick.grocy.util.ShortcutUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class MainActivity extends AppCompatActivity {
@@ -135,13 +150,13 @@ public class MainActivity extends AppCompatActivity {
   private Locale locale;
   private NavController navController;
   private BroadcastReceiver networkReceiver;
-  private BottomAppBarRefreshScrollBehavior scrollBehaviorOld;
   private BottomScrollBehavior scrollBehavior;
+  private SystemBarBehavior systemBarBehavior;
   private HapticUtil hapticUtil;
   private boolean runAsSuperClass;
-
-  public boolean isScrollRestored = false;
   private boolean debug;
+  private boolean wasKeyboardOpened;
+  private float fabBaseY;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -235,6 +250,12 @@ public class MainActivity extends AppCompatActivity {
     // UTILS
 
     hapticUtil = new HapticUtil(this);
+    hapticUtil.setEnabled(
+        sharedPrefs.getBoolean(
+            Constants.SETTINGS.BEHAVIOR.HAPTIC, HapticUtil.areSystemHapticsTurnedOn(this)
+        )
+    );
+
     clickUtil = new ClickUtil();
     netUtil = new NetUtil(this);
 
@@ -311,19 +332,48 @@ public class MainActivity extends AppCompatActivity {
     updateStartDestination();
 
     navController.addOnDestinationChangedListener((controller, dest, args) -> {
-      if (isServerUrlEmpty() || dest.getId() == R.id.shoppingModeFragment
-          || dest.getId() == R.id.onboardingFragment
-      ) {
-        // TODO: overthink this when finished
-        //binding.bottomAppBar.setVisibility(View.GONE);
+      if (isServerUrlEmpty()) {
         binding.fabMain.hide();
-      } else {
-        binding.bottomAppBar.setVisibility(View.VISIBLE);
       }
     });
 
     // BOTTOM APP BAR
 
+    binding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
+    binding.bottomAppBar.setMenuAlignmentMode(BottomAppBar.MENU_ALIGNMENT_MODE_START);
+
+    // Use reflection to store bottomInset in BAB manually
+    // The automatic method includes IME insets which is bad behavior for BABs
+    ViewCompat.setOnApplyWindowInsetsListener(binding.bottomAppBar, (v, insets) -> {
+      int bottomInset = insets.getInsets(Type.systemBars()).bottom;
+      ViewCompat.setPaddingRelative(v, 0, 0, 0, bottomInset);
+      Class<?> classBottomAppBar = BottomAppBar.class;
+      Object objectBottomAppBar = classBottomAppBar.cast(binding.bottomAppBar);
+      Field fieldBottomInset = null;
+      try {
+        if (objectBottomAppBar != null && objectBottomAppBar.getClass().getSuperclass() != null) {
+          fieldBottomInset = objectBottomAppBar.getClass().getDeclaredField("bottomInset");
+        } else {
+          Log.e(TAG, "onCreate: reflection for bottomInset not working");
+        }
+      } catch (NoSuchFieldException e) {
+        Log.e(TAG, "onCreate: ", e);
+      }
+      if (fieldBottomInset != null) {
+        fieldBottomInset.setAccessible(true);
+        try {
+          fieldBottomInset.set(objectBottomAppBar, bottomInset);
+        } catch (IllegalAccessException e) {
+          Log.e(TAG, "onCreate: ", e);
+        }
+      }
+      // Calculate initial FAB y position for restoring after shifted by keyboard
+      int babHeight = UiUtil.dpToPx(this, 80);
+      int fabHeight = UiUtil.dpToPx(this, 56);
+      int bottom = UiUtil.getDisplayHeight(this);
+      fabBaseY = bottom - bottomInset - (babHeight / 2f) - (fabHeight / 2f);
+      return insets;
+    });
     binding.bottomAppBar.setNavigationOnClickListener(v -> {
       if (clickUtil.isDisabled()) {
         return;
@@ -335,16 +385,96 @@ public class MainActivity extends AppCompatActivity {
     binding.fabMainScroll.setBackgroundTintList(
         ColorStateList.valueOf(SurfaceColors.SURFACE_2.getColor(this))
     );
-    TooltipCompat.setTooltipText(binding.fabMainScroll, getString(R.string.action_top_scroll));
+    ViewUtil.setTooltipText(binding.fabMainScroll, R.string.action_top_scroll);
 
     scrollBehavior = new BottomScrollBehavior(
-        this, binding.bottomAppBar, binding.fabMain, binding.fabMainScroll
+        this, binding.bottomAppBar, binding.fabMain, binding.fabMainScroll, binding.anchor
     );
 
-    // TODO: remove old behavior
-    scrollBehaviorOld = new BottomAppBarRefreshScrollBehavior(this);
-    scrollBehaviorOld.setUpBottomAppBar(new BottomAppBar(this));
-    //scrollBehavior.setUpTopScroll(R.id.fab_main_scroll);
+    // IME ANIMATION
+
+    Callback callback = new Callback(Callback.DISPATCH_MODE_STOP) {
+      WindowInsetsAnimationCompat animation;
+      int bottomInsetStart, bottomInsetEnd;
+      float yStart, yEnd;
+
+      @Override
+      public void onPrepare(@NonNull WindowInsetsAnimationCompat animation) {
+        this.animation = animation;
+        if (systemBarBehavior != null) {
+          bottomInsetStart = systemBarBehavior.getAdditionalBottomInset();
+        }
+        yStart = binding.fabMain.getY();
+      }
+
+      @NonNull
+      @Override
+      public BoundsCompat onStart(
+          @NonNull WindowInsetsAnimationCompat animation, @NonNull BoundsCompat bounds) {
+        if (systemBarBehavior != null) {
+          bottomInsetEnd = systemBarBehavior.getAdditionalBottomInset();
+          systemBarBehavior.setAdditionalBottomInset(bottomInsetStart);
+          systemBarBehavior.refresh(false);
+        }
+        yEnd = binding.fabMain.getY();
+        binding.fabMain.setY(yStart);
+        return bounds;
+      }
+
+      @NonNull
+      @Override
+      public WindowInsetsCompat onProgress(
+          @NonNull WindowInsetsCompat insets,
+          @NonNull List<WindowInsetsAnimationCompat> animations) {
+        if (systemBarBehavior != null) {
+          systemBarBehavior.setAdditionalBottomInset(
+              (int) MathUtils.lerp(
+                  bottomInsetStart, bottomInsetEnd, animation.getInterpolatedFraction()
+              )
+          );
+          systemBarBehavior.refresh(false);
+        }
+        binding.fabMain.setY(MathUtils.lerp(yStart, yEnd, animation.getInterpolatedFraction()));
+        return insets;
+      }
+    };
+    ViewCompat.setOnApplyWindowInsetsListener(binding.coordinatorMain, (v, insets) -> {
+      int bottomInset = insets.getInsets(Type.ime()).bottom;
+      if (systemBarBehavior != null) {
+        systemBarBehavior.setAdditionalBottomInset(bottomInset);
+        systemBarBehavior.refresh(false);
+      }
+      if (insets.isVisible(Type.ime())) {
+        wasKeyboardOpened = true;
+        binding.fabMain.setTranslationY(-bottomInset - UiUtil.dpToPx(this, 16));
+        int keyboardY = UiUtil.getDisplayHeight(this) - bottomInset;
+        if (keyboardY < scrollBehavior.getSnackbarAnchorY()) {
+          binding.anchor.setY(keyboardY);
+        } else {
+          scrollBehavior.updateSnackbarAnchor();
+        }
+        float elevation = UiUtil.dpToPx(this, 6);
+        ViewCompat.setElevation(binding.fabMain, elevation);
+        binding.fabMain.setCompatElevation(elevation);
+      } else {
+        binding.fabMain.setY(fabBaseY);
+        scrollBehavior.updateSnackbarAnchor();
+        ViewCompat.setElevation(binding.fabMain, 0);
+        binding.fabMain.setCompatElevation(0);
+        // If the keyboard was shown and the page was therefore scrollable
+        // and the bottom bar has disappeared caused by scrolling down,
+        // then the bottom bar should not stay hidden when the keyboard disappears
+        if (wasKeyboardOpened) {
+          wasKeyboardOpened = false;
+          Log.i(TAG, "onCreate: hello");
+          scrollBehavior.setBottomBarVisibility(true);
+        }
+      }
+      return insets;
+    });
+    ViewCompat.setWindowInsetsAnimationCallback(binding.coordinatorMain, callback);
+
+    // SUPPORTED GROCY VERSIONS
 
     Runnable onSuccessConfigLoad = () -> {
       String version = sharedPrefs.getString(Constants.PREF.GROCY_VERSION, null);
@@ -380,6 +510,18 @@ public class MainActivity extends AppCompatActivity {
           null
       );
     }
+
+    // Show changelog if app was updated
+    int versionNew = BuildConfig.VERSION_CODE;
+    int versionOld = sharedPrefs.getInt(PREF.LAST_VERSION, 0);
+    if (versionOld == 0) {
+      sharedPrefs.edit().putInt(PREF.LAST_VERSION, versionNew).apply();
+    } else if (versionOld != versionNew) {
+      sharedPrefs.edit().putInt(PREF.LAST_VERSION, versionNew).apply();
+      new Handler(Looper.getMainLooper()).postDelayed(
+          this::showChangelogBottomSheet, 900
+      );
+    }
   }
 
   @Override
@@ -396,7 +538,9 @@ public class MainActivity extends AppCompatActivity {
     if (runAsSuperClass) {
       return;
     }
-    hapticUtil.setEnabled(HapticUtil.areSystemHapticsTurnedOn(this));
+    if (!sharedPrefs.contains(Constants.SETTINGS.BEHAVIOR.HAPTIC)) {
+      hapticUtil.setEnabled(HapticUtil.areSystemHapticsTurnedOn(this));
+    }
   }
 
   @Override
@@ -446,9 +590,8 @@ public class MainActivity extends AppCompatActivity {
     return scrollBehavior;
   }
 
-  @Deprecated
-  public BottomAppBarRefreshScrollBehavior getScrollBehaviorOld() {
-    return scrollBehaviorOld;
+  public void setSystemBarBehavior(SystemBarBehavior behavior) {
+    systemBarBehavior = behavior;
   }
 
   public void updateBottomAppBar(
@@ -458,26 +601,130 @@ public class MainActivity extends AppCompatActivity {
   ) {
     // Handler with postDelayed is necessary for workaround of issue #552
     new Handler().postDelayed(() -> {
-      //scrollBehaviorOld.setTopScrollVisibility(true);
       if (showFab && !binding.fabMain.isShown() && !isServerUrlEmpty()) {
         binding.fabMain.show();
       } else if (!showFab && binding.fabMain.isShown()) {
         binding.fabMain.hide();
       }
-      binding.bottomAppBar.replaceMenu(newMenuId);
-      Menu menu = binding.bottomAppBar.getMenu();
-      int tint = ResUtil.getColorAttr(this, R.attr.colorOnSurfaceVariant);
-      for (int i = 0; i < menu.size(); i++) {
-        MenuItem item = menu.getItem(i);
-        if (item.getIcon() != null) {
-          if (VERSION.SDK_INT >= VERSION_CODES.O) {
-            item.setIconTintList(ColorStateList.valueOf(tint));
-          } else {
+
+      Drawable overflowIcon = binding.bottomAppBar.getOverflowIcon();
+
+      // IF ANIMATIONS DISABLED
+      if (!UiUtil.areAnimationsEnabled(this)) {
+        binding.bottomAppBar.replaceMenu(newMenuId);
+        Menu menu = binding.bottomAppBar.getMenu();
+        int tint = ResUtil.getColorAttr(this, R.attr.colorOnSurfaceVariant);
+        for (int i = 0; i < menu.size(); i++) {
+          MenuItem item = menu.getItem(i);
+          if (item.getIcon() != null) {
+            item.getIcon().mutate();
+            item.getIcon().setAlpha(255);
             item.getIcon().setTint(tint);
           }
         }
+        if (overflowIcon != null && overflowIcon.isVisible()) {
+          overflowIcon.setAlpha(255);
+          overflowIcon.setTint(tint);
+        }
+        binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
+        return;
       }
-      binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
+
+      long iconFadeOutDuration = 150;
+      long iconFadeInDuration = 300;
+
+      int alphaFrom = 255;
+      // get better start value if animation was not finished yet
+      if (binding.bottomAppBar.getMenu() != null
+          && binding.bottomAppBar.getMenu().size() > 0
+          && binding.bottomAppBar.getMenu().getItem(0) != null
+          && binding.bottomAppBar.getMenu().getItem(0).getIcon() != null) {
+        alphaFrom = binding.bottomAppBar.getMenu().getItem(0).getIcon().getAlpha();
+      }
+      ValueAnimator animatorFadeOut = ValueAnimator.ofInt(alphaFrom, 0);
+      animatorFadeOut.addUpdateListener(animation -> {
+        for (int i = 0; i < binding.bottomAppBar.getMenu().size(); i++) {
+          MenuItem item = binding.bottomAppBar.getMenu().getItem(i);
+          if (item.getIcon() != null && item.isVisible()) {
+            item.getIcon().setAlpha((int) animation.getAnimatedValue());
+          }
+        }
+        if (overflowIcon != null && overflowIcon.isVisible()) {
+          overflowIcon.setAlpha((int) animation.getAnimatedValue());
+        }
+      });
+      animatorFadeOut.setDuration(iconFadeOutDuration);
+      animatorFadeOut.setInterpolator(new FastOutSlowInInterpolator());
+      animatorFadeOut.start();
+
+      new Handler(Looper.getMainLooper()).postDelayed(() -> {
+        binding.bottomAppBar.replaceMenu(newMenuId);
+
+        int iconIndex = 0;
+        int overflowCount = 0;
+        int tint = ResUtil.getColorAttr(this, R.attr.colorOnSurfaceVariant);
+        for (int i = 0; i < binding.bottomAppBar.getMenu().size(); i++) {
+          MenuItem item = binding.bottomAppBar.getMenu().getItem(i);
+          if (item.getIcon() == null || !item.isVisible()) {
+            if (item.isVisible()) {
+              overflowCount++;
+            }
+            continue;
+          }
+          iconIndex++;
+          int index = iconIndex;
+          item.getIcon().mutate();
+          item.getIcon().setTint(tint);
+          item.getIcon().setAlpha(0);
+          new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            Rect bounds = item.getIcon().copyBounds();
+            int top = bounds.top;
+            int offset = UiUtil.dpToPx(this, 12);
+            ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
+            animator.addUpdateListener(animation -> {
+              bounds.offsetTo(
+                  0,
+                  (int) (top + (float) animation.getAnimatedValue() * offset)
+              );
+              item.getIcon().setBounds(bounds);
+              item.getIcon().setAlpha(255 - (int) ((float) animation.getAnimatedValue() * 255));
+              item.getIcon().invalidateSelf();
+            });
+            animator.setDuration(iconFadeInDuration - index * 50L);
+            animator.setInterpolator(new FastOutSlowInInterpolator());
+            animator.start();
+          }, index * 90L);
+        }
+        if (overflowCount > 0) {
+          Drawable overflowIconNew = binding.bottomAppBar.getOverflowIcon();
+          if (overflowIconNew == null || !overflowIconNew.isVisible()) {
+            return;
+          }
+          iconIndex++;
+          int index = iconIndex;
+          overflowIconNew.setTint(tint);
+          overflowIconNew.setAlpha(0);
+          new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            Rect bounds = overflowIconNew.copyBounds();
+            int top = bounds.top;
+            int offset = UiUtil.dpToPx(this, 12);
+            ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
+            animator.addUpdateListener(animation -> {
+              bounds.offsetTo(
+                  0,
+                  (int) (top + (float) animation.getAnimatedValue() * offset)
+              );
+              overflowIconNew.setBounds(bounds);
+              overflowIconNew.setAlpha(255 - (int) ((float) animation.getAnimatedValue() * 255));
+              overflowIconNew.invalidateSelf();
+            });
+            animator.setDuration(iconFadeInDuration - index * 50L);
+            animator.setInterpolator(new FastOutSlowInInterpolator());
+            animator.start();
+          }, index * 90L);
+        }
+        binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
+      }, iconFadeOutDuration);
     }, 10);
   }
 
@@ -547,7 +794,7 @@ public class MainActivity extends AppCompatActivity {
       onLongClick.run();
       return true;
     });
-    TooltipCompat.setTooltipText(binding.fabMain, getString(tooltipStringId));
+    ViewUtil.setTooltipText(binding.fabMain, tooltipStringId);
   }
 
   @Override
@@ -592,33 +839,38 @@ public class MainActivity extends AppCompatActivity {
 
   // NAVIGATION
 
-  private NavOptions getNavOptionsFragmentFadeOrSlide(boolean slideVertically) {
-    boolean useSliding = getSharedPrefs().getBoolean(
-        Constants.SETTINGS.APPEARANCE.USE_SLIDING,
-        Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
-    );
-    if (useSliding) {
-      if (slideVertically) {
-        return new NavOptions.Builder()
-            .setEnterAnim(R.anim.slide_in_up)
-            .setPopExitAnim(R.anim.slide_out_down)
-            .setExitAnim(R.anim.slide_no)
-            .build();
+  public NavOptions.Builder getNavOptionsBuilderFragmentFadeOrSlide(boolean slideVertically) {
+    if (UiUtil.areAnimationsEnabled(this)) {
+      boolean useSliding = getSharedPrefs().getBoolean(
+          Constants.SETTINGS.APPEARANCE.USE_SLIDING,
+          Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
+      );
+      if (useSliding) {
+        if (slideVertically) {
+          return new NavOptions.Builder()
+              .setEnterAnim(R.anim.slide_in_up)
+              .setPopExitAnim(R.anim.slide_out_down)
+              .setExitAnim(R.anim.slide_no);
+        } else {
+          return new NavOptions.Builder()
+              .setEnterAnim(R.anim.slide_from_end)
+              .setPopExitAnim(R.anim.slide_to_end)
+              .setPopEnterAnim(R.anim.slide_from_start)
+              .setExitAnim(R.anim.slide_to_start);
+        }
       } else {
         return new NavOptions.Builder()
-            .setEnterAnim(R.anim.slide_from_end)
-            .setPopExitAnim(R.anim.slide_to_end)
-            .setPopEnterAnim(R.anim.slide_from_start)
-            .setExitAnim(R.anim.slide_to_start)
-            .build();
+            .setEnterAnim(R.anim.enter_end_fade)
+            .setExitAnim(R.anim.exit_start_fade)
+            .setPopEnterAnim(R.anim.enter_start_fade)
+            .setPopExitAnim(R.anim.exit_end_fade);
       }
     } else {
       return new NavOptions.Builder()
-          .setEnterAnim(R.anim.enter_end_fade)
-          .setExitAnim(R.anim.exit_start_fade)
-          .setPopEnterAnim(R.anim.enter_start_fade)
-          .setPopExitAnim(R.anim.exit_end_fade)
-          .build();
+          .setEnterAnim(R.anim.fade_in_a11y)
+          .setExitAnim(R.anim.fade_out_a11y)
+          .setPopEnterAnim(R.anim.fade_in_a11y)
+          .setPopExitAnim(R.anim.fade_out_a11y);
     }
   }
 
@@ -682,7 +934,7 @@ public class MainActivity extends AppCompatActivity {
     }
     try {
       navController.navigate(
-          destination, arguments, getNavOptionsFragmentFadeOrSlide(true)
+          destination, arguments, getNavOptionsBuilderFragmentFadeOrSlide(true).build()
       );
     } catch (IllegalArgumentException e) {
       Log.e(TAG, "navigateFragment: ", e);
@@ -691,41 +943,150 @@ public class MainActivity extends AppCompatActivity {
 
   public void navigateFragment(NavDirections directions) {
     if (navController == null || directions == null) {
-      Log.e(TAG, "navigate: controller or direction is null");
+      Log.e(TAG, "navigateFragment: controller or direction is null");
       return;
     }
     try {
-      navController.navigate(directions, getNavOptionsFragmentFadeOrSlide(true));
+      navController.navigate(
+          directions, getNavOptionsBuilderFragmentFadeOrSlide(true).build()
+      );
     } catch (IllegalArgumentException e) {
-      Log.e(TAG, "navigate: " + directions, e);
+      Log.e(TAG, "navigateFragment: " + directions, e);
     }
   }
 
   public void navigateFragment(@IdRes int destination, @NonNull NavOptions navOptions) {
     if (navController == null ) {
-      Log.e(TAG, "navigate: controller is null");
+      Log.e(TAG, "navigateFragment: controller is null");
       return;
     }
     try {
       navController.navigate(destination, null, navOptions);
     } catch (IllegalArgumentException e) {
-      Log.e(TAG, "navigate: ", e);
+      Log.e(TAG, "navigateFragment: ", e);
     }
   }
 
   public void navigateDeepLink(@NonNull Uri uri, boolean slideVertically) {
     if (navController == null ) {
-      Log.e(TAG, "navigateFragment: controller is null");
+      Log.e(TAG, "navigateDeepLink: controller is null");
       return;
     }
     try {
-      navController.navigate(uri, getNavOptionsFragmentFadeOrSlide(slideVertically));
+      navController.navigate(uri, getNavOptionsBuilderFragmentFadeOrSlide(slideVertically).build());
     } catch (IllegalArgumentException e) {
-      Log.e(TAG, "navigateFragment: ", e);
+      Log.e(TAG, "navigateDeepLink: ", e);
     }
   }
 
-  public void showToastTextLong(@StringRes int resId, boolean showLong) {
+  public void navigateDeepLink(@NonNull Uri uri, @NonNull NavOptions navOptions) {
+    if (navController == null ) {
+      Log.e(TAG, "navigateDeepLink: controller is null");
+      return;
+    }
+    try {
+      navController.navigate(uri, navOptions);
+    } catch (IllegalArgumentException e) {
+      Log.e(TAG, "navigateDeepLink: ", e);
+    }
+  }
+
+  public void navigateDeepLink(String uri) {
+    navigateDeepLink(Uri.parse(uri), true);
+  }
+
+  public void navigateDeepLink(@StringRes int uri) {
+    navigateDeepLink(Uri.parse(getString(uri)), true);
+  }
+
+  public void navigateDeepLink(@StringRes int uri, @NonNull Bundle args) {
+    navigateDeepLink(getUriWithArgs(getString(uri), args), true);
+  }
+
+  public static Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
+    String[] parts = uri.split("\\?");
+    if (parts.length == 1) {
+      return Uri.parse(uri);
+    }
+    String linkPart = parts[0];
+    String argsPart = parts[parts.length - 1];
+    String[] pairs = argsPart.split("&");
+    StringBuilder finalDeepLink = new StringBuilder(linkPart + "?");
+    for (int i = 0; i <= pairs.length - 1; i++) {
+      String pair = pairs[i];
+      String key = pair.split("=")[0];
+      Object valueBundle = argsBundle.get(key);
+      if (valueBundle == null) {
+        continue;
+      }
+      try {
+        String encoded;
+        if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
+          encoded = URLEncoder.encode(valueBundle.toString(), StandardCharsets.UTF_8);
+        } else {
+          encoded = URLEncoder.encode(valueBundle.toString(), "UTF-8");
+        }
+        finalDeepLink.append(key).append("=").append(encoded);
+      } catch (Throwable ignore) {
+      }
+      if (i != pairs.length - 1) {
+        finalDeepLink.append("&");
+      }
+    }
+    return Uri.parse(finalDeepLink.toString());
+  }
+
+  public void restartToApply(long delay, @NonNull Bundle bundle) {
+    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+      onSaveInstanceState(bundle);
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+        finish();
+      }
+      Intent intent = new Intent(this, MainActivity.class);
+      intent.putExtra(ARGUMENT.INSTANCE_STATE, bundle);
+      startActivity(intent);
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        finish();
+      }
+      overridePendingTransition(R.anim.fade_in_restart, R.anim.fade_out_restart);
+    }, delay);
+  }
+
+  public boolean isOnline() {
+    return netUtil.isOnline();
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    getCurrentFragment().getActivityResult(requestCode, resultCode, data);
+  }
+
+  public Snackbar getSnackbar(String msg, boolean showLong) {
+    return Snackbar.make(
+        binding.coordinatorMain, msg, showLong ? Snackbar.LENGTH_LONG : Snackbar.LENGTH_SHORT
+    );
+  }
+
+  public Snackbar getSnackbar(@StringRes int resId, boolean showLong) {
+    return getSnackbar(getString(resId), showLong);
+  }
+
+  public void showSnackbar(Snackbar snackbar) {
+    snackbar.setAnchorView(binding.anchor);
+    snackbar.setAnchorViewLayoutListenerEnabled(true);
+    snackbar.show();
+  }
+
+  public void showSnackbar(String msg, boolean showLong) {
+    showSnackbar(getSnackbar(msg, showLong));
+  }
+
+  public void showSnackbar(@StringRes int resId, boolean showLong) {
+    showSnackbar(getSnackbar(resId, showLong));
+  }
+
+  public void showToast(@StringRes int resId, boolean showLong) {
     Toast toast = Toast.makeText(
         this, resId, showLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT
     );
@@ -739,37 +1100,6 @@ public class MainActivity extends AppCompatActivity {
       }
     }
     toast.show();
-  }
-
-  public boolean isOnline() {
-    return netUtil.isOnline();
-  }
-
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    getCurrentFragment().getActivityResult(requestCode, resultCode, data);
-  }
-
-  public Snackbar getSnackbar(@StringRes int resId, int duration) {
-    return Snackbar.make(binding.coordinatorMain, getString(resId), duration);
-  }
-
-  public void showSnackbar(Snackbar snackbar) {
-    if (binding.fabMain.isOrWillBeShown()) {
-      snackbar.setAnchorView(binding.fabMain);
-    } else if (binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-      snackbar.setAnchorView(binding.bottomAppBar);
-    }
-    snackbar.show();
-  }
-
-  public void showSnackbar(String message) {
-    showSnackbar(Snackbar.make(binding.coordinatorMain, message, Snackbar.LENGTH_LONG));
-  }
-
-  public void showSnackbar(@StringRes int resId) {
-    showSnackbar(getString(resId));
   }
 
   public void showBottomSheet(BottomSheetDialogFragment bottomSheet) {
@@ -790,24 +1120,31 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void showTextBottomSheet(@RawRes int file, @StringRes int title, @StringRes int link) {
-    Bundle bundle = new Bundle();
-    bundle.putInt(Constants.ARGUMENT.TITLE, title);
-    bundle.putInt(Constants.ARGUMENT.FILE, file);
+    NavigationMainDirections.ActionGlobalTextDialog action
+        = NavigationMainDirections.actionGlobalTextDialog();
+    action.setTitle(title);
+    action.setFile(file);
     if (link != 0) {
-      bundle.putString(Constants.ARGUMENT.LINK, getString(link));
+      action.setLink(link);
     }
-    showBottomSheet(new TextBottomSheet(), bundle);
+    navigate(action);
   }
 
   public void showChangelogBottomSheet() {
-    Bundle bundle = new Bundle();
-    bundle.putInt(Constants.ARGUMENT.TITLE, R.string.info_changelog);
-    bundle.putInt(Constants.ARGUMENT.FILE, R.raw.changelog);
-    bundle.putStringArray(
-        Constants.ARGUMENT.HIGHLIGHTS,
-        new String[]{"New:", "Improved:", "Fixed:"}
-    );
-    showBottomSheet(new TextBottomSheet(), bundle);
+    NavigationMainDirections.ActionGlobalTextDialog action
+        = NavigationMainDirections.actionGlobalTextDialog();
+    action.setTitle(R.string.info_changelog);
+    action.setFile(R.raw.changelog);
+    action.setHighlights(new String[]{"New:", "Improved:", "Fixed:"});
+    navigate(action);
+  }
+
+  public void showHelpBottomSheet() {
+    showTextBottomSheet(R.raw.help, R.string.title_help);
+  }
+
+  public void showFeedbackBottomSheet() {
+    showBottomSheet(new FeedbackBottomSheet());
   }
 
   public Locale getLocale() {
@@ -825,9 +1162,7 @@ public class MainActivity extends AppCompatActivity {
   public void showKeyboard(EditText editText) {
     new Handler().postDelayed(() -> {
       editText.requestFocus();
-      ((InputMethodManager) Objects
-          .requireNonNull(getSystemService(Context.INPUT_METHOD_SERVICE))
-      ).showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+      WindowCompat.getInsetsController(getWindow(), editText).show(Type.ime());
     }, 100);
   }
 
@@ -851,10 +1186,6 @@ public class MainActivity extends AppCompatActivity {
 
   public void updateGrocyApi() {
     grocyApi = new GrocyApi(getApplication());
-  }
-
-  public Menu getBottomMenu() {
-    return binding.bottomAppBar.getMenu();
   }
 
   @NonNull
@@ -947,10 +1278,6 @@ public class MainActivity extends AppCompatActivity {
     ViewUtil.startIcon(view);
   }
 
-  public void executeOnStart() {
-    onStart();
-  }
-
   private void insertConscrypt() {
     Security.insertProviderAt(Conscrypt.newProvider(), 1);
 
@@ -973,6 +1300,10 @@ public class MainActivity extends AppCompatActivity {
       Log.e(TAG, "insertConscrypt: NoSuchAlgorithmException");
       Log.e(TAG, e.getMessage() != null ? e.getMessage() : e.toString());
     }
+  }
+
+  public void setHapticEnabled(boolean enabled) {
+    hapticUtil.setEnabled(enabled);
   }
 
   public void performHapticClick() {

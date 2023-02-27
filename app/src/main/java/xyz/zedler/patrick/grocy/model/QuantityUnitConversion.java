@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.model;
@@ -178,24 +178,34 @@ public class QuantityUnitConversion implements Parcelable {
     return Objects.hash(id, fromQuId, toQuId, factor, productId, rowCreatedTimestamp);
   }
 
-  public static QuantityUnitConversion getFromTargetUnit(List<QuantityUnitConversion> quantityUnitConversions, int toQuId) {
+  public static List<QuantityUnitConversion> getFromTargetUnit(List<QuantityUnitConversion> quantityUnitConversions, int toQuId) {
     if (quantityUnitConversions == null) return null;
+    ArrayList<QuantityUnitConversion> result = new ArrayList<>();
     for (QuantityUnitConversion quantityUnitConversion : quantityUnitConversions) {
       if (quantityUnitConversion.getToQuId() == toQuId) {
-        return quantityUnitConversion;
+        result.add(quantityUnitConversion);
       }
     }
-    return null;
+    return result;
   }
 
-  public static QuantityUnitConversion getFromTwoUnits(List<QuantityUnitConversion> quantityUnitConversions, int fromQuId, int toQuId) {
+  public static QuantityUnitConversion getFromTwoUnits(
+      List<QuantityUnitConversion> quantityUnitConversions,
+      int fromQuId,
+      int toQuId,
+      int productId
+  ) {
     if (quantityUnitConversions == null) return null;
+    QuantityUnitConversion tempConversion = null;
     for (QuantityUnitConversion quantityUnitConversion : quantityUnitConversions) {
       if (quantityUnitConversion.getFromQuId() == fromQuId && quantityUnitConversion.getToQuId() == toQuId) {
-        return quantityUnitConversion;
+        if (NumUtil.isStringInt(quantityUnitConversion.getProductId()) && quantityUnitConversion.getProductIdInt() == productId) {
+          return quantityUnitConversion;
+        }
+        tempConversion = quantityUnitConversion;
       }
     }
-    return null;
+    return tempConversion;
   }
 
   public static ArrayList<QuantityUnitConversion> getQuantityUnitConversionsForRecipePositions(
@@ -204,10 +214,8 @@ public class QuantityUnitConversion implements Parcelable {
   ) {
     ArrayList<QuantityUnitConversion> result = new ArrayList<>();
     for (RecipePosition recipePosition : recipePositions) {
-      QuantityUnitConversion quantityUnitConversion = getFromTargetUnit(quantityUnitConversions, recipePosition.getQuantityUnitId());
-      if (quantityUnitConversion != null) {
-        result.add(quantityUnitConversion);
-      }
+      List<QuantityUnitConversion> conversionsPosition = getFromTargetUnit(quantityUnitConversions, recipePosition.getQuantityUnitId());
+      result.addAll(conversionsPosition);
     }
     return result;
   }

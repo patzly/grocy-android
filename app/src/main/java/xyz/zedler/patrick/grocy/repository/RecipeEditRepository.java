@@ -14,22 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
-
-import java.util.List;
-
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 
 public class RecipeEditRepository {
@@ -50,16 +49,20 @@ public class RecipeEditRepository {
     private final List<ProductBarcode> productBarcodes;
     private final List<RecipePosition> recipePositions;
     private final List<QuantityUnit> quantityUnits;
+    private final List<QuantityUnitConversion> quantityUnitConversions;
 
     public RecipeEditData(
             List<Product> products,
             List<ProductBarcode> productBarcodes,
             List<RecipePosition> recipePositions,
-            List<QuantityUnit> quantityUnits) {
+            List<QuantityUnit> quantityUnits,
+            List<QuantityUnitConversion> quantityUnitConversions
+    ) {
       this.products = products;
       this.productBarcodes = productBarcodes;
       this.recipePositions = recipePositions;
       this.quantityUnits = quantityUnits;
+      this.quantityUnitConversions = quantityUnitConversions;
     }
 
     public List<Product> getProducts() {
@@ -77,6 +80,10 @@ public class RecipeEditRepository {
     public List<QuantityUnit> getQuantityUnits() {
       return quantityUnits;
     }
+
+    public List<QuantityUnitConversion> getQuantityUnitConversions() {
+      return quantityUnitConversions;
+    }
   }
 
   public void loadFromDatabase(DataListener listener) {
@@ -86,6 +93,7 @@ public class RecipeEditRepository {
             appDatabase.productBarcodeDao().getProductBarcodes(),
             appDatabase.recipePositionDao().getRecipePositions(),
             appDatabase.quantityUnitDao().getQuantityUnits(),
+            appDatabase.quantityUnitConversionDao().getConversions(),
             RecipeEditData::new
         )
         .subscribeOn(Schedulers.io())

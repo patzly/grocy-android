@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <layout
@@ -40,131 +40,102 @@
 
   <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize">
+      android:layout_height="wrap_content">
 
-      <LinearLayout
-        android:id="@+id/linear_app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:background="@color/primary">
-
-        <FrameLayout
-          android:id="@+id/frame_back"
-          android:layout_width="48dp"
-          android:layout_height="48dp"
-          android:layout_marginStart="4dp"
-          android:layout_marginEnd="20dp"
-          android:background="?attr/actionBarItemBackground"
-          android:clickable="true"
-          android:gravity="center"
-          android:contentDescription="@string/action_back"
-          android:tooltipText="@string/action_back"
-          android:focusable="true"
-          tools:targetApi="o"
-          android:onClick="@{() -> activity.navigateUp()}">
-
-          <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_arrow_back" />
-
-        </FrameLayout>
-
-        <TextView
-          android:id="@+id/app_bar_title"
-          style="@style/Widget.Grocy.TextView.Toolbar"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginEnd="16dp"
-          android:text="@string/title_shopping_list" />
-
-      </LinearLayout>
+      <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.Grocy.Toolbar.Back"
+        app:title="@string/title_shopping_list" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
       android:id="@+id/scroll"
-      android:background="@color/background"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize"
-      android:overScrollMode="never"
-      android:fillViewport="true">
+      android:overScrollMode="never">
 
-      <LinearLayout
-        android:id="@+id/linear_body"
+      <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:paddingBottom="80dp"
-        android:orientation="vertical"
-        android:animateLayoutChanges="true"
-        app:transitionTypeChanging="@{true}">
+        android:paddingBottom="@dimen/global_scroll_bottom_padding">
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-          android:layout_width="match_parent"
+          android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:onClick="@{v -> switchAutoAdd.setChecked(!switchAutoAdd.isChecked())}">
+          android:orientation="vertical"
+          android:animateLayoutChanges="true"
+          app:transitionTypeChanging="@{true}"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintWidth_max="@dimen/max_content_width"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintEnd_toEndOf="parent">
 
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_auto_mode"
-            tools:ignore="ContentDescription" />
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{v -> switchAutoAdd.setChecked(!switchAutoAdd.isChecked())}">
 
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_auto_mode"
+              tools:ignore="ContentDescription" />
 
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@string/setting_auto_add_shopping_list" />
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Description"
-              android:text="@string/setting_auto_add_shopping_list_description" />
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/setting_auto_add_shopping_list" />
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Description"
+                android:text="@string/setting_auto_add_shopping_list_description" />
+
+            </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+              android:id="@+id/switch_auto_add"
+              style="@style/Widget.Grocy.Switch"
+              android:onCheckedChanged="@{(view, checked) -> viewModel.setAutoAddToShoppingListEnabled(checked)}"
+              app:initialChecked="@{viewModel.autoAddToShoppingListLive}" />
+
+          </LinearLayout>
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+            android:onClick="@{() -> viewModel.showShoppingListsBottomSheet()}"
+            android:visibility="@{viewModel.autoAddToShoppingListLive ? View.VISIBLE : View.GONE}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                android:text="@string/property_shopping_list" />
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@{viewModel.autoAddToShoppingListTextLive}" />
+
+            </LinearLayout>
 
           </LinearLayout>
 
-          <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/switch_auto_add"
-            style="@style/Widget.Grocy.Switch"
-            android:onCheckedChanged="@{(view, checked) -> viewModel.setAutoAddToShoppingListEnabled(checked)}"
-            app:initialChecked="@{viewModel.autoAddToShoppingListLive}"/>
-
         </LinearLayout>
 
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-          android:onClick="@{() -> viewModel.showShoppingListsBottomSheet()}"
-          android:visibility="@{viewModel.autoAddToShoppingListLive ? View.VISIBLE : View.GONE}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            tools:ignore="ContentDescription" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-              android:text="@string/property_shopping_list" />
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@{viewModel.autoAddToShoppingListTextLive}" />
-
-          </LinearLayout>
-
-        </LinearLayout>
-
-      </LinearLayout>
+      </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 

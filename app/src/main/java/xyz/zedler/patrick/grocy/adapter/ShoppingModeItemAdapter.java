@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.adapter;
@@ -485,6 +485,7 @@ public class ShoppingModeItemAdapter extends
       description = (Spanned) TextUtil.trimCharSequence(description);
       if (description != null && !description.toString().isEmpty()) {
         binding.cardDescription.setText(description.toString());
+        binding.cardDescription.setRadius(UiUtil.dpToPx(context, 8));
         binding.cardDescription.setVisibility(View.VISIBLE);
       } else {
         binding.cardDescription.setVisibility(View.GONE);

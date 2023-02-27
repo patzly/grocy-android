@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.util;
@@ -150,7 +150,8 @@ public class AmountUtil {
       @NonNull StringBuilder stringBuilder,
       @Nullable StockItem stockItem,
       @Nullable QuantityUnit quantityUnit,
-      int maxDecimalPlacesAmount
+      int maxDecimalPlacesAmount,
+      boolean addSpace
   ) {
     if (stockItem == null) return;
     if (stockItem.getIsAggregatedAmountInt() == 0) return;
@@ -161,7 +162,8 @@ public class AmountUtil {
           stockItem.getAmountAggregatedDouble()
       );
     }
-    stringBuilder.append("  ∑ ");
+    if (addSpace) stringBuilder.append("  ");
+    stringBuilder.append("∑ ");
     stringBuilder.append(
         context.getString(
             R.string.subtitle_amount,
@@ -189,8 +191,12 @@ public class AmountUtil {
   ) {
     if (stockItem == null) return null;
     StringBuilder stringBuilder = new StringBuilder();
-    addStockAmountNormalInfo(context, pluralUtil, stringBuilder, stockItem, quantityUnit, maxDecimalPlacesAmount);
-    addStockAmountAggregatedInfo(context, pluralUtil, stringBuilder, stockItem, quantityUnit, maxDecimalPlacesAmount);
+    boolean addSpaceBetween = false;
+    if (!stockItem.getProduct().getNoOwnStockBoolean()) {
+      addStockAmountNormalInfo(context, pluralUtil, stringBuilder, stockItem, quantityUnit, maxDecimalPlacesAmount);
+      addSpaceBetween = true;
+    }
+    addStockAmountAggregatedInfo(context, pluralUtil, stringBuilder, stockItem, quantityUnit, maxDecimalPlacesAmount, addSpaceBetween);
     return stringBuilder.toString();
   }
 

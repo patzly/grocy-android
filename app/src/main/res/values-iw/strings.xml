@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <resources>
@@ -43,6 +43,14 @@
   <string name="action_open_one">פתיחת %1$s אחד מתוך %2$s</string>
   <string name="action_edit_product">עריכת מוצר</string>
   <string name="action_shopping_list_add">הוספה לרשימת הקניות</string>
+  <string name="action_copy_recipe">העתקת מתכון</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_product_opened">מוצר נפתח</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_from">העברה מתוך</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_to">העברה אל</string>
+
   <string name="action_back">חזרה</string>
   <string name="action_search">חיפוש</string>
   <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
@@ -95,6 +103,8 @@
   <string name="action_purchase_all_items">לרכוש את כל הפריטים</string>
   <string name="action_skip_entry">לדלג על רשומה</string>
   <string name="action_toggle_flash">להחליף מצב מבזק</string>
+  <string name="action_edit_recipe">עריכת מתכון</string>
+  <string name="action_delete_recipe">מחיקת מתכון</string>
   <string name="action_delete_shopping_list">מחיקת רשימת קניות</string>
   <string name="action_create_key">יצירת מפתח</string>
   <string name="action_login">כניסה</string>
@@ -224,13 +234,10 @@
   <string name="msg_feedback">יש לך משאלות, שאלות או תקלות? ניתן ליצור אתנו קשר כדי לאפשר לנו לעזור לך!\nאחרת נשמח מאוד לקבל ביקורת חיובית בחנות Play.</string>
   <string name="msg_point_at_barcode">נא להפנות את המצלמה שלך לעבר ברקוד</string>
   <string name="msg_press_hold_confirm">נגיעה והחזקה תאשרנה מחיקה</string>
-  <string name="msg_welcome_to_grocy">ברוך בואך ל־Grocy עבור Android!\n\nכדי להשתמש ב־grocy ביעילות רצוי שיהיה לך שרת משלך או את התוסף של grocy ל־Home Assistant.\nאם מעניין אותך רק להתנסות ביישומון הזה אפשר להשתמש בשרת ההדגמה שיצר ברנד בסטל, היוצר של grocy.</string>
-  <string name="msg_choose_option_below">נא לבחור אפשרות אחת מלמטה.</string>
   <string name="msg_qr_code_scan">במכשיר אחר, עליך לבקר באתר של grocy ולגשת לעמוד ‚מפתחות API’. יש ללחוץ על ‚הוספה’ ואז על סמל ה־QR הקטן ולסרוק את קוד ה־QR.</string>
   <string name="msg_port_connection_info_without_port">היישום יתחבר לפתחה %1$s.\nאם צריך להתחבר לפתחה אחרת, ניתן להוסיף אותה לכתובת.\nלדוגמה: http://domain.com:81/‎</string>
   <string name="msg_port_connection_info_with_port">היישומון יתחבר לפתחה %1$s.</string>
   <string name="msg_not_implemented_yet">זה יוטמע בקרוב. נא להשתמש במנשק השרת שלך לבינתיים.</string>
-  <string name="stock_disabled">השבתת את יכולת המלאי בהגדרות ה־grocy שלך, כנראה כיוון שאין לך צורך בה. היישום הזה יכול לעשות ניהול מלאי בלבד כרגע, לכן יכול להיות שלא יביא לך תועלת.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_parent_product_deactivated">למוצר זה לא יכול להיות מוצר הורה כיוון שהוא כבר משמש כמוצר הורה למוצר אחר.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -385,6 +392,7 @@
   <string name="title_stored_purchases">רכישות שמורות</string>
   <string name="title_chores">מטלות</string>
   <string name="title_chore">מטלה</string>
+  <string name="title_recipe_edit">עריכת מתכון</string>
   <string name="title_spoiled">מקולקל</string>
   <string name="title_use_specific">להשתמש בפריט מסוים מהמלאי</string>
   <string name="title_specific">פריט מסוים במלאי</string>
@@ -424,10 +432,6 @@
   <string name="title_product_cat_qu_conversions">המרת יחידות כמות</string>
   <string name="title_unknown_input">קלט בלתי ידוע</string>
   <string name="title_presets_new_products">ערכות למוצרים חדשים</string>
-  <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
-   Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
-  <string name="title_use_scanner_tool">להשתמש ב־%1$s</string>
-
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
   <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
@@ -547,7 +551,6 @@
     <item quantity="many">מסד הנתונים שלך מכיל %1$d מוצרים.</item>
     <item quantity="other">מסד הנתונים שלך מכיל %1$d מוצרים.</item>
   </plurals>
-
   <string name="property_name">שם</string>
   <string name="property_name_singular">שם (צורת יחיד)</string>
   <string name="property_name_plural">שם (צורת ריבוי)</string>

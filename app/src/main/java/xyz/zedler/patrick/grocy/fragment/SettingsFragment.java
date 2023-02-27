@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -25,15 +25,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class SettingsFragment extends BaseFragment {
 
@@ -69,20 +69,19 @@ public class SettingsFragment extends BaseFragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
-    systemBarBehavior.setScroll(binding.scroll, binding.linearContainer);
+    systemBarBehavior.setScroll(binding.scroll, binding.constraint);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
-    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
-    if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) { // not from login screen
-      activity.getScrollBehavior().setUpScroll(
-          binding.appBar, true, binding.scroll, false
-      );
-      activity.getScrollBehavior().setBottomBarVisibility(true);
-      activity.updateBottomAppBar(false, R.menu.menu_empty);
-      activity.binding.fabMain.hide();
-    }
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.scroll, false
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(false, R.menu.menu_empty);
+
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
   }
 
@@ -98,18 +97,33 @@ public class SettingsFragment extends BaseFragment {
 
   @Override
   public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary, () -> {
-      if (shouldNavigateToBehavior()) {
-        setArguments(new SettingsFragmentArgs.Builder(args)
-            .setShowCategory(null).build().toBundle());
-        new Handler().postDelayed(() -> navigate(SettingsFragmentDirections
-            .actionSettingsFragmentToSettingsCatBehaviorFragment()), 200);
-      } else if (shouldNavigateToServer()) {
-        setArguments(new SettingsFragmentArgs.Builder(args)
-            .setShowCategory(null).build().toBundle());
-        new Handler().postDelayed(() -> navigate(SettingsFragmentDirections
-            .actionSettingsFragmentToSettingsCatServerFragment()), 200);
+    if (nextAnim == 0) {
+      return null;
+    }
+    Animation anim = AnimationUtils.loadAnimation(getActivity(), nextAnim);
+    anim.setAnimationListener(new Animation.AnimationListener() {
+      @Override
+      public void onAnimationStart(Animation animation) {
+      }
+      @Override
+      public void onAnimationRepeat(Animation animation) {
+      }
+      @Override
+      public void onAnimationEnd(Animation animation) {
+        if (!enter) return;
+        if (shouldNavigateToBehavior()) {
+          setArguments(new SettingsFragmentArgs.Builder(args)
+              .setShowCategory(null).build().toBundle());
+          new Handler().postDelayed(() -> activity.navigateFragment(SettingsFragmentDirections
+              .actionSettingsFragmentToSettingsCatBehaviorFragment()), 200);
+        } else if (shouldNavigateToServer()) {
+          setArguments(new SettingsFragmentArgs.Builder(args)
+              .setShowCategory(null).build().toBundle());
+          new Handler().postDelayed(() -> activity.navigateFragment(SettingsFragmentDirections
+              .actionSettingsFragmentToSettingsCatServerFragment()), 200);
+        }
       }
     });
+    return anim;
   }
 }

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -70,7 +70,6 @@ public class ShoppingModeFragment extends BaseFragment implements
   private Timer timer;
   private TimerTask timerTask;
   private Handler handler;
-  private SystemBarBehavior systemBarBehavior;
 
   private boolean debug = false;
 
@@ -109,11 +108,14 @@ public class ShoppingModeFragment extends BaseFragment implements
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
-    systemBarBehavior = new SystemBarBehavior(activity);
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.applyAppBarInsetOnContainer(false);
+    systemBarBehavior.applyStatusBarInsetOnContainer(false);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
     binding.toolbar.setOnClickListener(v -> showShoppingListsBottomSheet());
@@ -196,10 +198,9 @@ public class ShoppingModeFragment extends BaseFragment implements
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
-            activity.binding.coordinatorMain
-        ));
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       }
     });
 
@@ -210,9 +211,11 @@ public class ShoppingModeFragment extends BaseFragment implements
     }
 
     // UPDATE UI
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.recycler, true
     );
+    activity.updateBottomAppBar(false, R.menu.menu_empty);
     activity.getScrollBehavior().setBottomBarVisibility(false, true);
   }
 
@@ -327,7 +330,6 @@ public class ShoppingModeFragment extends BaseFragment implements
     if (isOnline) {
       viewModel.downloadData();
     }
-    systemBarBehavior.refresh();
   }
 
   private void hideDisabledFeatures() {

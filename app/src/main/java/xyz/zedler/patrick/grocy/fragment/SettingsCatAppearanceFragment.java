@@ -14,21 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
@@ -40,17 +36,17 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.divider.MaterialDivider;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.Constants.THEME;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatAppearanceBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LanguagesBottomSheet;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
-import xyz.zedler.patrick.grocy.Constants.THEME;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
@@ -92,10 +88,10 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
 
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
-    systemBarBehavior.setScroll(binding.scroll, binding.linearContainer);
+    systemBarBehavior.setScroll(binding.scroll, binding.constraint);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
-    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
     setUpThemeSelection();
@@ -129,7 +125,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
       }
       getSharedPrefs().edit().putInt(SETTINGS.APPEARANCE.DARK_MODE, pref).apply();
       performHapticClick();
-      restartToApply(0, getInstanceState());
+      activity.restartToApply(0, getInstanceState());
     });
 
     binding.partialOptionTransition.linearOtherTransition.setOnClickListener(
@@ -144,13 +140,12 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
     );
     binding.partialOptionTransition.switchOtherTransition.setOnCheckedChangeListener(this);
 
-    if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) { // not from login screen
-      activity.getScrollBehavior().setUpScroll(
-          binding.appBar, true, binding.scroll, false
-      );
-      activity.getScrollBehavior().setBottomBarVisibility(true);
-      activity.updateBottomAppBar(false, R.menu.menu_empty);
-    }
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.scroll, false
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(false, R.menu.menu_empty);
 
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
   }
@@ -250,7 +245,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
           ViewUtil.uncheckAllChildren(container);
           card.setChecked(true);
           getSharedPrefs().edit().putString(SETTINGS.APPEARANCE.THEME, name).apply();
-          restartToApply(100, getInstanceState());
+          activity.restartToApply(100, getInstanceState());
         }
       });
 
@@ -259,7 +254,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
       );
       boolean isSelected;
       if (selected.isEmpty()) {
-        isSelected = hasDynamic ? name.equals(THEME.DYNAMIC) : name.equals(THEME.YELLOW);
+        isSelected = hasDynamic ? name.equals(THEME.DYNAMIC) : name.equals(THEME.GREEN);
       } else {
         isSelected = selected.equals(name);
       }
@@ -300,26 +295,5 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
       bundle.putInt(ARGUMENT.SCROLL_POSITION + 1, binding.scrollOtherTheme.getScrollX());
     }
     return bundle;
-  }
-
-  public void restartToApply(long delay, @NonNull Bundle bundle) {
-    new Handler(Looper.getMainLooper()).postDelayed(() -> {
-      onSaveInstanceState(bundle);
-      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-        activity.finish();
-      }
-      Intent intent = new Intent(activity, MainActivity.class);
-      intent.putExtra(ARGUMENT.INSTANCE_STATE, bundle);
-      startActivity(intent);
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        activity.finish();
-      }
-      activity.overridePendingTransition(R.anim.fade_in_restart, R.anim.fade_out_restart);
-    }, delay);
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
   }
 }

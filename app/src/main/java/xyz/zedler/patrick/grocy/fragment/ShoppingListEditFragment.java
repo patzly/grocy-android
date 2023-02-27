@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -30,6 +30,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListEditBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -80,12 +81,20 @@ public class ShoppingListEditFragment extends BaseFragment {
     binding.setActivity(activity);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setScroll(binding.scroll, binding.constraint);
+    systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
+
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
-            activity.binding.coordinatorMain
-        ));
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       } else if (event.getType() == Event.NAVIGATE_UP) {
         activity.navigateUp();
       } else if (event.getType() == Event.SET_SHOPPING_LIST_ID) {
@@ -125,13 +134,11 @@ public class ShoppingListEditFragment extends BaseFragment {
       );
     }
 
-    updateUI(ShoppingListEditFragmentArgs.fromBundle(requireArguments())
-        .getAnimateStart() && savedInstanceState == null);
-  }
+    // UPDATE UI
 
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
+    activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,
         startUpShoppingList != null && startUpShoppingList.getId() != 1
@@ -142,7 +149,8 @@ public class ShoppingListEditFragment extends BaseFragment {
         R.drawable.ic_round_backup,
         R.string.action_save,
         Constants.FAB.TAG.SAVE,
-        animated,
+        ShoppingListEditFragmentArgs.fromBundle(requireArguments())
+            .getAnimateStart() && savedInstanceState == null,
         () -> {
           clearInputFocus();
           viewModel.saveShoppingList();

@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <menu
@@ -32,13 +32,13 @@
     app:showAsAction="never" />
 
   <item
-    android:id="@+id/action_feedback"
-    android:title="@string/action_feedback"
+    android:id="@+id/action_help"
+    android:title="@string/title_help"
     app:showAsAction="never" />
 
   <item
-    android:id="@+id/action_changelog"
-    android:title="@string/info_changelog"
+    android:id="@+id/action_feedback"
+    android:title="@string/action_feedback"
     app:showAsAction="never" />
 
 </menu>

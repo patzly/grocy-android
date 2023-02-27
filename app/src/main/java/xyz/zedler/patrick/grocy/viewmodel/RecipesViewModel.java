@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.viewmodel;
@@ -29,7 +29,10 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
-import xyz.zedler.patrick.grocy.R;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -44,8 +47,9 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
+import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.repository.RecipesRepository;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
@@ -124,27 +128,32 @@ public class RecipesViewModel extends BaseViewModel {
     });
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (isOffline()) { // skip downloading and update recyclerview
+  public void downloadData(boolean skipOfflineCheck) {
+    if (!skipOfflineCheck && isOffline()) { // skip downloading and update recyclerview
       isLoadingLive.setValue(false);
       updateFilteredRecipes();
       return;
     }
 
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        () -> {
+          if (isOffline()) setOfflineLive(false);
+          loadFromDatabase(false);
+        },
         this::onDownloadError,
         Recipe.class,
         RecipeFulfillment.class,
         RecipePosition.class,
         Product.class,
         QuantityUnit.class,
-        QuantityUnitConversion.class
+        QuantityUnitConversion.class,
+        StockItem.class,
+        ShoppingListItem.class
     );
   }
 
   public void downloadData() {
-    downloadData(null);
+    downloadData(false);
   }
 
   public void downloadDataForceUpdate() {
@@ -155,18 +164,18 @@ public class RecipesViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
     editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
     editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_STOCK_ITEMS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
     editPrefs.apply();
-    downloadData();
+    downloadData(true);
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
     if (debug) {
       Log.e(TAG, "onError: VolleyError: " + error);
     }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
+    showNetworkErrorMessage(error);
+    if (!isOffline()) setOfflineLive(true);
   }
 
   public void updateFilteredRecipes() {
@@ -204,8 +213,11 @@ public class RecipesViewModel extends BaseViewModel {
       if (searchInput != null && !searchInput.isEmpty()) {
         searchContainsItem = recipe.getName().toLowerCase().contains(searchInput);
 
-        if (!searchContainsItem && recipeFulfillment != null)
-          searchContainsItem = recipeFulfillment.getProductNamesCommaSeparated().toLowerCase().contains(searchInput);
+        if (!searchContainsItem && recipeFulfillment != null
+            && recipeFulfillment.getProductNamesCommaSeparated() != null) {
+          searchContainsItem = recipeFulfillment.getProductNamesCommaSeparated()
+              .toLowerCase().contains(searchInput);
+        }
       }
 
       if (!searchContainsItem) {
@@ -241,23 +253,32 @@ public class RecipesViewModel extends BaseViewModel {
     dlHelper.delete(
         grocyApi.getObject(ENTITY.RECIPES, recipeId),
         response -> downloadData(),
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 
   public void consumeRecipe(int recipeId) {
-    dlHelper.get(
+    dlHelper.post(
         grocyApi.consumeRecipe(recipeId),
         response -> downloadData(),
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 
-  public void addNotFulfilledProductsToCartForRecipe(int recipeId) {
-    dlHelper.get(
+  public void addNotFulfilledProductsToCartForRecipe(int recipeId, int[] excludedProductIds) {
+    JSONObject jsonObject = new JSONObject();
+    try {
+      JSONArray array = new JSONArray();
+      for (int id : excludedProductIds) array.put(id);
+      jsonObject.put("excludedProductIds", array);
+    } catch (JSONException e) {
+      throw new RuntimeException(e);
+    }
+    dlHelper.postWithArray(
         grocyApi.addNotFulfilledProductsToCartForRecipe(recipeId),
+        jsonObject,
         response -> downloadData(),
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 
@@ -265,7 +286,7 @@ public class RecipesViewModel extends BaseViewModel {
     dlHelper.post(
         grocyApi.copyRecipe(recipeId),
         response -> downloadData(),
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 

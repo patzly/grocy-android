@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -33,6 +33,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -41,21 +42,21 @@ import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.ResUtil;
-import xyz.zedler.patrick.grocy.util.ViewUtil;
+import xyz.zedler.patrick.grocy.util.RestartUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SettingsCatServerFragment extends BaseFragment {
 
   private static final String TAG = SettingsCatServerFragment.class.getSimpleName();
 
-  private static final String DIALOG_SHOWING = "dialog_showing";
+  private static final String DIALOG_RESTART_SHOWING = "dialog_restart_showing";
+  private static final String DIALOG_LOGOUT_SHOWING = "dialog_logout_showing";
 
   private FragmentSettingsCatServerBinding binding;
   private MainActivity activity;
   private SettingsViewModel viewModel;
-  private AlertDialog dialog;
+  private AlertDialog dialogRestart, dialogLogout;
 
   @Override
   public View onCreateView(
@@ -86,11 +87,14 @@ public class SettingsCatServerFragment extends BaseFragment {
 
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
-    systemBarBehavior.setScroll(binding.scroll, binding.linearContainer);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setScroll(binding.scroll, binding.constraint);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
-    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+
+    binding.swipe.setEnabled(false);
 
     binding.textCompatible.setTextColor(
         viewModel.isVersionCompatible()
@@ -98,26 +102,39 @@ public class SettingsCatServerFragment extends BaseFragment {
             : ResUtil.getColorAttr(activity, R.attr.colorError)
     );
 
+    binding.linearSettingReloadConfig.setOnClickListener(v -> {
+      binding.linearSettingReloadConfig.setEnabled(false);
+      binding.swipe.setRefreshing(true);
+      viewModel.reloadConfiguration(
+          () -> {
+            binding.linearSettingReloadConfig.setEnabled(true);
+            binding.swipe.setRefreshing(false);
+            showRestartDialog();
+          },
+          () -> {
+            binding.linearSettingReloadConfig.setEnabled(true);
+            binding.swipe.setRefreshing(false);
+          }
+      );
+    });
+
     viewModel.getEventHandler().observe(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
-            activity.binding.coordinatorMain
-        ));
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
       }
     });
 
-    if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) { // not from login screen
-      activity.getScrollBehavior().setUpScroll(
-          binding.appBar, true, binding.scroll, false
-      );
-      activity.getScrollBehavior().setBottomBarVisibility(true);
-      activity.updateBottomAppBar(false, R.menu.menu_empty);
-      activity.binding.fabMain.hide();
-    }
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.scroll, false
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(false, R.menu.menu_empty);
 
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
   }
@@ -125,16 +142,22 @@ public class SettingsCatServerFragment extends BaseFragment {
   @Override
   public void onSaveInstanceState(@NonNull Bundle outState) {
     super.onSaveInstanceState(outState);
-    outState.putBoolean(DIALOG_SHOWING, dialog != null && dialog.isShowing());
+    outState.putBoolean(DIALOG_RESTART_SHOWING, dialogRestart != null && dialogRestart.isShowing());
+    outState.putBoolean(DIALOG_LOGOUT_SHOWING, dialogLogout != null && dialogLogout.isShowing());
   }
 
   @Override
   public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
     super.onViewStateRestored(savedInstanceState);
-    if (savedInstanceState != null && savedInstanceState.getBoolean(DIALOG_SHOWING)) {
-      new Handler(Looper.getMainLooper()).postDelayed(
-          () -> showLogoutDialog(viewModel.isDemo()), 1
-      );
+    if (savedInstanceState != null) {
+      if (savedInstanceState.getBoolean(DIALOG_RESTART_SHOWING)) {
+        new Handler(Looper.getMainLooper()).postDelayed(this::showRestartDialog, 1);
+      }
+      if (savedInstanceState.getBoolean(DIALOG_LOGOUT_SHOWING)) {
+        new Handler(Looper.getMainLooper()).postDelayed(
+            () -> showLogoutDialog(viewModel.isDemo()), 1
+        );
+      }
     }
   }
 
@@ -146,8 +169,21 @@ public class SettingsCatServerFragment extends BaseFragment {
     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(serverUrl)));
   }
 
+  public void showRestartDialog() {
+    dialogRestart = new MaterialAlertDialogBuilder(activity)
+        .setTitle(R.string.title_restart)
+        .setMessage(R.string.msg_restart)
+        .setPositiveButton(R.string.action_restart, (dialog, which) -> {
+          performHapticHeavyClick();
+          RestartUtil.restartApp(activity);
+        }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
+        .setOnCancelListener(dialog -> performHapticClick())
+        .create();
+    dialogRestart.show();
+  }
+
   public void showLogoutDialog(boolean isDemoInstance) {
-    dialog = new MaterialAlertDialogBuilder(
+    dialogLogout = new MaterialAlertDialogBuilder(
         activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution
     ).setTitle(isDemoInstance ? R.string.title_logout_demo : R.string.title_logout)
         .setMessage(isDemoInstance ? R.string.msg_logout_demo : R.string.msg_logout)
@@ -157,6 +193,6 @@ public class SettingsCatServerFragment extends BaseFragment {
         }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
         .setOnCancelListener(dialog -> performHapticClick())
         .create();
-    dialog.show();
+    dialogLogout.show();
   }
 }

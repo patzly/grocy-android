@@ -14,45 +14,39 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.ArrayList;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.LocationAdapter;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetListSelectionBinding;
 import xyz.zedler.patrick.grocy.model.Location;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class LocationsBottomSheet extends BaseBottomSheetDialogFragment
     implements LocationAdapter.LocationAdapterListener {
 
   private final static String TAG = LocationsBottomSheet.class.getSimpleName();
 
+  private FragmentBottomsheetListSelectionBinding binding;
   private MainActivity activity;
   private ArrayList<Location> locations;
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
 
   @Override
   public View onCreateView(
@@ -60,8 +54,8 @@ public class LocationsBottomSheet extends BaseBottomSheetDialogFragment
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    View view = inflater.inflate(
-        R.layout.fragment_bottomsheet_list_selection, container, false
+    binding = FragmentBottomsheetListSelectionBinding.inflate(
+        inflater, container, false
     );
 
     activity = (MainActivity) requireActivity();
@@ -78,25 +72,30 @@ public class LocationsBottomSheet extends BaseBottomSheetDialogFragment
     int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
     String title = bundle.getString(ARGUMENT.TITLE);
-    TextView textViewTitle = view.findViewById(R.id.text_list_selection_title);
-    textViewTitle.setText(title != null ? title : activity.getString(R.string.property_locations));
+    ViewUtil.centerText(binding.textListSelectionTitle);
+    binding.textListSelectionTitle.setText(title != null ? title : activity.getString(R.string.property_locations));
 
-    RecyclerView recyclerView = view.findViewById(R.id.recycler_list_selection);
-    recyclerView.setLayoutManager(
+    binding.recyclerListSelection.setLayoutManager(
         new LinearLayoutManager(
             activity,
             LinearLayoutManager.VERTICAL,
             false
         )
     );
-    recyclerView.setItemAnimator(new DefaultItemAnimator());
-    recyclerView.setAdapter(
+    binding.recyclerListSelection.setItemAnimator(new DefaultItemAnimator());
+    binding.recyclerListSelection.setAdapter(
         new LocationAdapter(
             locations, selected, this
         )
     );
 
-    return view;
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    binding = null;
   }
 
   @Override
@@ -110,6 +109,16 @@ public class LocationsBottomSheet extends BaseBottomSheetDialogFragment
   public void onDismiss(@NonNull DialogInterface dialog) {
     activity.getCurrentFragment().onBottomSheetDismissed();
     super.onDismiss(dialog);
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.recyclerListSelection.setPadding(
+        binding.recyclerListSelection.getPaddingLeft(),
+        binding.recyclerListSelection.getPaddingTop(),
+        binding.recyclerListSelection.getPaddingRight(),
+        UiUtil.dpToPx(activity, 8) + bottom
+    );
   }
 
   @NonNull

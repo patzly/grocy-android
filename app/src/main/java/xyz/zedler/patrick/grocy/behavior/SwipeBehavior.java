@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.behavior;
@@ -37,6 +37,7 @@ import android.view.View;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
   private int swipedPos = -1;
   private float swipeThreshold = 0.5f;
   private final Paint paintBg, paintDivider;
-  private final RectF rectIcon = new RectF();
+  private final int colorBg, colorBgSwipe, colorDivider;
 
   private final View.OnTouchListener onTouchListener = new View.OnTouchListener() {
     @Override
@@ -118,10 +119,14 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     buttons = new ArrayList<>();
     buttonWidth = UiUtil.dpToPx(context, UiUtil.isOrientationPortrait(context) ? 72 : 64);
 
+    colorBg = ResUtil.getColorAttr(context, android.R.attr.colorBackground);
+    colorBgSwipe = ResUtil.getColorAttr(context, R.attr.colorPrimary);
+    colorDivider = ResUtil.getColorAttr(context, R.attr.colorOutlineVariant);
+
     paintBg = new Paint(Paint.ANTI_ALIAS_FLAG);
-    paintBg.setColor(ResUtil.getColorAttr(context, R.attr.colorPrimary));
+    paintBg.setColor(colorBg);
     paintDivider = new Paint(Paint.ANTI_ALIAS_FLAG);
-    paintDivider.setColor(ResUtil.getColorAttr(context, R.attr.colorOutline));
+    paintDivider.setColor(colorBg);
 
     GestureDetector.SimpleOnGestureListener gestureListener
         = new GestureDetector.SimpleOnGestureListener() {
@@ -292,16 +297,15 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     if (dX < UiUtil.dpToPx(context, 24)) {
       if (dX > 0) {
         float friction = dX / UiUtil.dpToPx(context, 24);
-        int alpha = (int) (255 * friction);
-        paintBg.setAlpha(alpha);
-        paintDivider.setAlpha(alpha);
+        paintBg.setColor(ColorUtils.blendARGB(colorBg, colorBgSwipe, friction));
+        paintDivider.setColor(ColorUtils.blendARGB(colorBg, colorDivider, friction));
       } else {
-        paintBg.setAlpha(0);
-        paintDivider.setAlpha(0);
+        paintBg.setColor(colorBg);
+        paintDivider.setColor(colorBg);
       }
     } else {
-      paintBg.setAlpha(255);
-      paintDivider.setAlpha(255);
+      paintBg.setColor(colorBgSwipe);
+      paintDivider.setColor(colorDivider);
     }
 
     // draw background
@@ -339,10 +343,9 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     float buttonLeft = itemView.getLeft();
     for (int i = 0; i < buttons.size(); i++) {
       float right = buttonLeft + buttonWidth;
-      rectIcon.set(buttonLeft, itemView.getTop(), right, itemView.getBottom());
       buttons.get(i).draw(
           canvas,
-          rectIcon,
+          new RectF(buttonLeft, itemView.getTop(), right, itemView.getBottom()),
           i,
           buttons.size(),
           pos
@@ -371,7 +374,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     private int pos;
     private RectF clickRegion;
     private final UnderlayButtonClickListener clickListener;
-    private Paint paintBg;
+    private Paint paintButton;
 
     public UnderlayButton(
         Context context, @DrawableRes int resId, UnderlayButtonClickListener clickListener
@@ -391,9 +394,8 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
       }
       drawable.setColorFilter(ResUtil.getColorAttr(context, R.attr.colorOnPrimary), Mode.SRC_ATOP);
 
-      paintBg = new Paint(Paint.ANTI_ALIAS_FLAG);
-      paintBg.setColor(ResUtil.getColorAttr(context, R.attr.colorOnPrimary));
-      paintBg.setAlpha(20);
+      paintButton = new Paint(Paint.ANTI_ALIAS_FLAG);
+      paintButton.setColor(ResUtil.getColorAttr(context, R.attr.colorOnPrimary, 0.08f));
     }
 
     private boolean onClick(float x, float y) {
@@ -422,7 +424,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
           centerX + sizeHalf,
           centerY + sizeHalf,
           bgCornerRadius, bgCornerRadius,
-          paintBg
+          paintButton
       );
 
       // DRAW ICON

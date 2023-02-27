@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <resources>
@@ -206,13 +206,11 @@
   <string name="msg_feedback">Heb je wensen, vragen of fouten gevonden? Neem contact met ons op, wij helpen je graag. Anders zouden we het heel fijn vinden als je een leuke recensie achter laat in de Play Store.</string>
   <string name="msg_point_at_barcode">Richt de camera op de streepjescode</string>
   <string name="msg_press_hold_confirm">Druk en houd ingedrukt op te bevestigen</string>
-  <string name="msg_welcome_to_grocy">Welkom bij Grocy Android!\n\nOm deze app te kunnen gebruiken heb je een eigen server nodig of de grocy add-on voor Home Assistant.\nAls je alleen deze app wil testen dan kan je de test server van Bernd Bestel, de bedenker van grocy, gebruiken.</string>
   <string name="msg_choose_option_below">Kies een van de onderstaande opties.</string>
   <string name="msg_qr_code_scan">Bezoek op een ander apparaat jouw grocy en ga naar de \'API sleutels\' pagina. Klik op \'Toevoegen\', klik daarna op het kleine QR-code symbooltje en scan de QR-code.</string>
   <string name="msg_port_connection_info_without_port">De app zal connecteren op poort %1$s.\nAls je wil connecteren op een andere poort, kan je deze aan de URL toevoegen.\nVoorbeeld: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">De app zal connecteren op poort %1$s.</string>
   <string name="msg_not_implemented_yet">Dit komt binnenkort beschikbaar. Gebruik voor nu de server weergave.</string>
-  <string name="stock_disabled">Je hebt de voorraadfunctie in je grocy configuratie uitgeschakeld, waarschijnlijk omdat je deze niet nodig hebt. Maar deze app kan op dit moment alleen voorraadbeheer doen, dus het kan zijn dat je er niet veel aan hebt.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">Op de voorraad overzichtspagina staan alle producten die momenteel op voorraad zijn of onder hun minimum aantal zijn. Schakel dit in om dit product daar altijd te verbergen.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -395,7 +393,6 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="title_presets_new_products">Voorinstellingen voor nieuwe producten</string>
   <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
    Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
-  <string name="title_use_scanner_tool">Gebruik %1$s</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
@@ -692,7 +689,6 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
 
   <string name="setting_theme">Thema</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
-  <string name="setting_theme_follow_system">Volg systeem</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">Donker</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->

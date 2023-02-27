@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.view;
@@ -30,12 +30,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import com.google.android.material.card.MaterialCardView;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class ExpandableCard extends LinearLayout {
 
   private final Context context;
+  private MaterialCardView cardView;
   private TextView textViewCollapsed, textViewExpanded;
   private boolean isOrWillBeExpanded = false;
   private ValueAnimator heightAnimator;
@@ -84,7 +86,8 @@ public class ExpandableCard extends LinearLayout {
           }
         });
 
-    findViewById(R.id.card_expandable_card).setOnClickListener(v -> changeState());
+    cardView = findViewById(R.id.card_expandable_card);
+    cardView.setOnClickListener(v -> changeState());
   }
 
   public void setText(String text) {
@@ -95,6 +98,10 @@ public class ExpandableCard extends LinearLayout {
   public void setText(Spanned spanned) {
     textViewCollapsed.setText(spanned);
     textViewExpanded.setText(spanned);
+  }
+
+  public void setRadius(float radius) {
+    cardView.setRadius(radius);
   }
 
   public void changeState() {

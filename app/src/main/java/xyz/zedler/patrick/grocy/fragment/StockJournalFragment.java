@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -26,7 +26,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -44,6 +43,7 @@ import xyz.zedler.patrick.grocy.adapter.StockLogEntryAdapter.StockLogEntryAdapte
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentStockJournalBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
@@ -108,6 +108,17 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();
+
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.applyAppBarInsetOnContainer(false);
+    systemBarBehavior.applyStatusBarInsetOnContainer(false);
+    systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
+
+    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
 
     // APP BAR BEHAVIOR
 
@@ -182,10 +193,9 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
-            activity.binding.coordinatorMain
-        ));
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
@@ -233,13 +243,12 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
 
     // UPDATE UI
 
-    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
-    activity.updateBottomAppBar(
-        false,
-        R.menu.menu_empty,
-        this::onMenuItemClick
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.recycler, true, true
     );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(false, R.menu.menu_empty, this::onMenuItemClick);
   }
 
   @Override
@@ -297,7 +306,7 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
     }
     viewModel.setOfflineLive(!isOnline);
     if (isOnline) {
-      viewModel.downloadData();
+      viewModel.downloadData(true);
     }
   }
 
@@ -337,11 +346,6 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
     activity.hideKeyboard();
     binding.editTextSearch.setText("");
     viewModel.setIsSearchVisible(false);
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
   }
 
   @NonNull

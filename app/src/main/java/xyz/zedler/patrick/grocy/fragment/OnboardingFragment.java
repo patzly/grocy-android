@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -27,7 +27,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,12 +36,13 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayoutMediator;
 import java.util.HashMap;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentOnboardingBinding;
 import xyz.zedler.patrick.grocy.databinding.FragmentOnboardingPageBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class OnboardingFragment extends BaseFragment {
@@ -78,18 +78,23 @@ public class OnboardingFragment extends BaseFragment {
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-    binding.frameOnboardingPrevious.setOnClickListener(v -> {
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setContainer(binding.linearContainer);
+    systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
+
+    binding.buttonOnboardingPrevious.setOnClickListener(v -> {
       if (binding.pagerOnboarding.getCurrentItem() == 0) {
         return;
       }
-      ViewUtil.startIcon(binding.imageOnboardingPrevious);
+      ViewUtil.startIcon(binding.buttonOnboardingPrevious.getIcon());
       binding.pagerOnboarding.setCurrentItem(binding.pagerOnboarding.getCurrentItem() - 1);
     });
-    binding.frameOnboardingNext.setOnClickListener(v -> {
+    binding.buttonOnboardingNext.setOnClickListener(v -> {
       if (binding.pagerOnboarding.getCurrentItem() == 3) {
         return;
       }
-      ViewUtil.startIcon(binding.imageOnboardingNext);
+      ViewUtil.startIcon(binding.buttonOnboardingNext.getIcon());
       binding.pagerOnboarding.setCurrentItem(binding.pagerOnboarding.getCurrentItem() + 1);
     });
     setArrows(0, false);
@@ -159,22 +164,24 @@ public class OnboardingFragment extends BaseFragment {
     for (int i = 0; i < tabStrip.getChildCount(); i++) {
       tabStrip.getChildAt(i).setOnTouchListener((v, event) -> true);
     }
-  }
 
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.background);
+    // UPDATE UI
+
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
+    activity.getScrollBehavior().setProvideTopScroll(false);
+    activity.updateBottomAppBar(false, R.menu.menu_empty);
+    activity.getScrollBehavior().setBottomBarVisibility(false, true);
   }
 
   @SuppressLint("RestrictedApi")
   @Override
   public boolean onBackPressed() {
     if (!sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false)) {
-      activity.showSnackbar(R.string.msg_features);
+      activity.showSnackbar(R.string.msg_features, true);
       sharedPrefs.edit().putBoolean(Constants.PREF.INTRO_SHOWN, true).apply();
     }
     if (findNavController().getBackQueue().getSize() == 2) { // TODO: Better condition
-      navigate(OnboardingFragmentDirections.actionOnboardingFragmentToNavigationLogin());
+      activity.navigate(OnboardingFragmentDirections.actionOnboardingFragmentToNavigationLogin());
       return true;
     } else {
       return false;
@@ -183,18 +190,18 @@ public class OnboardingFragment extends BaseFragment {
 
   private void setArrows(int position, boolean animated) {
     if (animated) {
-      binding.frameOnboardingPrevious.animate().alpha(
+      binding.buttonOnboardingPrevious.animate().alpha(
           position > 0 ? 1 : 0
       ).setDuration(200).start();
-      binding.frameOnboardingNext.animate().alpha(
+      binding.buttonOnboardingNext.animate().alpha(
           position < 2 ? 1 : 0
       ).setDuration(200).start();
     } else {
-      binding.frameOnboardingPrevious.setAlpha(position > 0 ? 1 : 0);
-      binding.frameOnboardingNext.setAlpha(position < 2 ? 1 : 0);
+      binding.buttonOnboardingPrevious.setAlpha(position > 0 ? 1 : 0);
+      binding.buttonOnboardingNext.setAlpha(position < 2 ? 1 : 0);
     }
-    binding.frameOnboardingPrevious.setEnabled(position > 0);
-    binding.frameOnboardingNext.setEnabled(position < 2);
+    binding.buttonOnboardingPrevious.setEnabled(position > 0);
+    binding.buttonOnboardingNext.setEnabled(position < 2);
   }
 
   private void setOffset(int targetPos, int scrollPos, float offset) {
@@ -331,11 +338,8 @@ public class OnboardingFragment extends BaseFragment {
       if (binding == null) {
         return;
       }
-      if (binding.imageOnboardingFront == null || binding.imageOnboardingBack == null) {
-        return;
-      }
       int frontOffset = 200, backOffset = -200;
-      int rotation = 100;
+      int rotation = 90;
       int titleOffset = 150;
       binding.imageOnboardingFront.setTranslationX(
           position == this.position

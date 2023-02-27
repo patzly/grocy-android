@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -24,7 +24,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,6 +31,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.StockOverviewItemAdapter;
@@ -51,8 +52,6 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.StockOverviewViewModel;
 
@@ -70,7 +69,6 @@ public class StockOverviewFragment extends BaseFragment implements
   private FragmentStockOverviewBinding binding;
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
-  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(
@@ -80,7 +78,7 @@ public class StockOverviewFragment extends BaseFragment implements
   ) {
     binding = FragmentStockOverviewBinding.inflate(inflater, container, false);
     embeddedFragmentScanner = new EmbeddedFragmentScannerBundle(
-        this, binding.containerScanner, this, R.color.primary
+        this, binding.containerScanner, this
     );
     return binding.getRoot();
   }
@@ -116,11 +114,14 @@ public class StockOverviewFragment extends BaseFragment implements
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();
 
-    systemBarBehavior = new SystemBarBehavior(activity);
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.applyAppBarInsetOnContainer(false);
+    systemBarBehavior.applyStatusBarInsetOnContainer(false);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
 
@@ -199,10 +200,9 @@ public class StockOverviewFragment extends BaseFragment implements
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
-            activity.binding.coordinatorMain
-        ));
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       }
     });
 
@@ -288,6 +288,7 @@ public class StockOverviewFragment extends BaseFragment implements
 
     // UPDATE UI
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.recycler, true, true
     );
@@ -351,10 +352,14 @@ public class StockOverviewFragment extends BaseFragment implements
       setUpSearch();
       return true;
     } else if (item.getItemId() == R.id.action_stock_journal) {
-      navigate(StockOverviewFragmentDirections.actionStockOverviewFragmentToStockJournalFragment());
+      activity.navigateFragment(
+          StockOverviewFragmentDirections.actionStockOverviewFragmentToStockJournalFragment()
+      );
       return true;
     } else if (item.getItemId() == R.id.action_stock_entries) {
-      navigate(StockOverviewFragmentDirections.actionStockOverviewFragmentToStockEntriesFragment());
+      activity.navigateFragment(
+          StockOverviewFragmentDirections.actionStockOverviewFragmentToStockEntriesFragment()
+      );
       return true;
     }
     return false;
@@ -384,10 +389,10 @@ public class StockOverviewFragment extends BaseFragment implements
         .getQuantityUnitFromId(stockItem.getProduct().getQuIdPurchaseInt());
     Location location = viewModel.getLocationFromId(stockItem.getProduct().getLocationIdInt());
     if (quantityUnitStock == null || quantityUnitPurchase == null) {
-      activity.showSnackbar(R.string.error_undefined);
+      activity.showSnackbar(R.string.error_undefined, false);
       return;
     }
-    navigate(StockOverviewFragmentDirections
+    activity.navigateFragment(StockOverviewFragmentDirections
         .actionStockOverviewFragmentToProductOverviewBottomSheetDialogFragment()
         .setShowActions(true)
         .setStockItem(stockItem)
@@ -402,7 +407,6 @@ public class StockOverviewFragment extends BaseFragment implements
       return;
     }
     viewModel.setOfflineLive(!isOnline);
-    systemBarBehavior.refresh();
     if (isOnline) {
       viewModel.downloadData();
     }
@@ -436,11 +440,6 @@ public class StockOverviewFragment extends BaseFragment implements
     if (viewModel.isScannerVisible()) {
       viewModel.toggleScannerVisibility();
     }
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
   }
 
   @NonNull

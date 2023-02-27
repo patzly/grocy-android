@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.util;
@@ -90,6 +90,7 @@ public class ResUtil {
 
         R.color.custom_yellow_80,
         R.color.custom_yellow_50,
+        R.color.custom_yellow_30,
 
         R.color.custom_green_80,
         R.color.custom_green_50,
@@ -97,11 +98,31 @@ public class ResUtil {
         R.color.custom_red_60,
         R.color.custom_red_50,
         R.color.custom_red_35,
+        R.color.custom_red_30,
 
-        R.color.toast_brown_90,
-        R.color.toast_brown_70,
-        R.color.toast_brown_50,
-        R.color.toast_brown_30,
+        R.color.custom_brown_90,
+        R.color.custom_brown_70,
+        R.color.custom_brown_50,
+        R.color.custom_brown_30,
+
+        R.color.custom_dirt_95,
+        R.color.custom_dirt_90,
+        R.color.custom_dirt_80,
+        R.color.custom_dirt_60,
+        R.color.custom_dirt_40,
+        R.color.custom_dirt_30,
+
+        R.color.custom_blue_90,
+        R.color.custom_blue_70,
+        R.color.custom_blue_60,
+        R.color.custom_blue_40,
+        R.color.custom_blue_10,
+
+        R.color.custom_grey_95,
+        R.color.custom_grey_90,
+        R.color.custom_grey_80,
+        R.color.custom_grey_60,
+        R.color.custom_grey_10,
     };
     HarmonizedColorsOptions options = new HarmonizedColorsOptions.Builder()
         .setColorResourceIds(resIds)
@@ -155,11 +176,9 @@ public class ResUtil {
     for (int i = 0; i < menu.size(); i++) {
       MenuItem item = menu.getItem(i);
       if (item == null || item.getIcon() == null) {
-        return;
+        continue;
       }
-      item.getIcon().setTintList(
-          ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant))
-      );
+      item.getIcon().setTint(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant));
     }
   }
 
@@ -217,7 +236,7 @@ public class ResUtil {
     Canvas canvas = new Canvas(bitmap);
 
     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    paint.setColor(ContextCompat.getColor(context, R.color.icon));
+    paint.setColor(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant));
     paint.setTextSize(UiUtil.dpToPx(context, textSize));
     paint.setTypeface(ResourcesCompat.getFont(context, R.font.material_digits_round));
     paint.setLetterSpacing(0.1f);

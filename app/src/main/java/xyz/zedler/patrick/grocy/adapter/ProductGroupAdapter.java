@@ -14,12 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.util.ResUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class ProductGroupAdapter extends RecyclerView.Adapter<ProductGroupAdapter.ViewHolder> {
 
@@ -83,6 +86,8 @@ public class ProductGroupAdapter extends RecyclerView.Adapter<ProductGroupAdapte
       @NonNull final ProductGroupAdapter.ViewHolder holder,
       int position
   ) {
+    Context context = holder.linearLayoutContainer.getContext();
+
     ProductGroup productGroup = productGroups.get(holder.getAdapterPosition());
 
     // NAME
@@ -91,19 +96,25 @@ public class ProductGroupAdapter extends RecyclerView.Adapter<ProductGroupAdapte
 
     // SELECTED
 
-    if (productGroup.getId() != -1 && selectedId != -1) {
-      if (productGroup.getId() == selectedId) {
-        holder.imageViewSelected.setVisibility(View.VISIBLE);
-      }
-    } else if (selectedId == -1 && productGroup.getId() == -1) {
+    boolean isSelected = (productGroup.getId() != -1 && selectedId != -1
+        && productGroup.getId() == selectedId)
+        || selectedId == -1 && productGroup.getId() == -1;
+    if (isSelected) {
       holder.imageViewSelected.setVisibility(View.VISIBLE);
+      holder.textViewName.setTextColor(
+          ResUtil.getColorAttr(context, R.attr.colorOnSecondaryContainer)
+      );
+      holder.linearLayoutContainer.setBackground(ViewUtil.getBgListItemSelected(context));
+    } else {
+      holder.imageViewSelected.setVisibility(View.INVISIBLE);
+      holder.textViewName.setTextColor(
+          ResUtil.getColorAttr(context, R.attr.colorOnSurface)
+      );
+      holder.linearLayoutContainer.setBackground(ViewUtil.getRippleBgListItemSurface(context));
+      holder.linearLayoutContainer.setOnClickListener(
+          view -> listener.onItemRowClicked(holder.getAdapterPosition())
+      );
     }
-
-    // CONTAINER
-
-    holder.linearLayoutContainer.setOnClickListener(
-        view -> listener.onItemRowClicked(holder.getAdapterPosition())
-    );
   }
 
   @Override

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.adapter;
@@ -22,16 +22,14 @@ package xyz.zedler.patrick.grocy.adapter;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.LinearLayout;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -79,6 +77,7 @@ public class RecipeEntryAdapter extends
   private boolean sortAscending;
   private String extraField;
   private final int maxDecimalPlacesAmount;
+  private boolean containsPictures;
 
   public RecipeEntryAdapter(
       Context context,
@@ -104,6 +103,15 @@ public class RecipeEntryAdapter extends
         STOCK.DECIMAL_PLACES_AMOUNT,
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
     );
+
+    containsPictures = false;
+    for (Recipe recipe : recipes) {
+      String pictureFileName = recipe.getPictureFileName();
+      if (pictureFileName != null && !pictureFileName.isEmpty()) {
+        containsPictures = true;
+        break;
+      }
+    }
   }
 
   @Override
@@ -146,7 +154,9 @@ public class RecipeEntryAdapter extends
     int position = viewHolder.getAdapterPosition();
 
     Recipe recipe = recipes.get(position);
-    RecipeFulfillment recipeFulfillment = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(recipeFulfillments, recipe.getId());
+    RecipeFulfillment recipeFulfillment = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(
+        recipeFulfillments, recipe.getId()
+    );
     RecipeViewHolder holder = (RecipeViewHolder) viewHolder;
 
     // NAME
@@ -184,26 +194,16 @@ public class RecipeEntryAdapter extends
       // REQUIREMENTS FULFILLED
       if (recipeFulfillment.isNeedFulfilled()) {
         holder.binding.fulfilled.setText(R.string.msg_recipes_enough_in_stock);
-        holder.binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
-            context.getResources(),
-            R.drawable.ic_round_check_circle_outline,
-            context.getTheme()
-        ));
-        holder.binding.imageFulfillment.setColorFilter(
-            colorGreen.getAccent(),
-            android.graphics.PorterDuff.Mode.SRC_IN
+        holder.binding.imageFulfillment.setImageResource(R.drawable.ic_round_check_circle_outline);
+        holder.binding.imageFulfillment.setImageTintList(
+            ColorStateList.valueOf(colorGreen.getAccent())
         );
         holder.binding.missing.setVisibility(View.GONE);
       } else if (recipeFulfillment.isNeedFulfilledWithShoppingList()) {
         holder.binding.fulfilled.setText(R.string.msg_recipes_not_enough);
-        holder.binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
-            context.getResources(),
-            R.drawable.ic_round_error_outline,
-            context.getTheme()
-        ));
-        holder.binding.imageFulfillment.setColorFilter(
-            colorYellow.getAccent(),
-            android.graphics.PorterDuff.Mode.SRC_IN
+        holder.binding.imageFulfillment.setImageResource(R.drawable.ic_round_error_outline);
+        holder.binding.imageFulfillment.setImageTintList(
+            ColorStateList.valueOf(colorYellow.getAccent())
         );
         holder.binding.missing.setText(
             context.getResources()
@@ -214,14 +214,9 @@ public class RecipeEntryAdapter extends
         holder.binding.missing.setVisibility(View.VISIBLE);
       } else {
         holder.binding.fulfilled.setText(R.string.msg_recipes_not_enough);
-        holder.binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
-            context.getResources(),
-            R.drawable.ic_round_highlight_off,
-            context.getTheme()
-        ));
-        holder.binding.imageFulfillment.setColorFilter(
-            colorRed.getAccent(),
-            android.graphics.PorterDuff.Mode.SRC_IN
+        holder.binding.imageFulfillment.setImageResource(R.drawable.ic_round_highlight_off);
+        holder.binding.imageFulfillment.setImageTintList(
+            ColorStateList.valueOf(colorRed.getAccent())
         );
         holder.binding.missing.setText(
             context.getResources()
@@ -238,7 +233,9 @@ public class RecipeEntryAdapter extends
     switch (extraField) {
       case FilterChipLiveDataRecipesExtraField.EXTRA_FIELD_CALORIES:
         if (recipeFulfillment != null) {
-          extraFieldText = NumUtil.trimAmount(recipeFulfillment.getCalories(), maxDecimalPlacesAmount);
+          extraFieldText = NumUtil.trimAmount(
+              recipeFulfillment.getCalories(), maxDecimalPlacesAmount
+          );
           extraFieldSubtitleText = "kcal";
         }
         break;
@@ -256,20 +253,22 @@ public class RecipeEntryAdapter extends
       holder.binding.extraFieldSubtitle.setVisibility(View.GONE);
     }
 
-    if (recipe.getPictureFileName() != null) {
+    String pictureFileName = recipe.getPictureFileName();
+    if (pictureFileName != null && !pictureFileName.isEmpty()) {
       holder.binding.picture.layout(0, 0, 0, 0);
 
       Glide.with(context)
           .load(
               new GlideUrl(grocyApi.getRecipePicture(recipe.getPictureFileName()), grocyAuthHeaders)
-          ).transform(new CenterCrop(), new RoundedCorners(UiUtil.dpToPx(context, 12)))
-          .transition(DrawableTransitionOptions.withCrossFade())
+          ).transform(
+              new CenterCrop(), new RoundedCorners(UiUtil.dpToPx(context, 12))
+          ).transition(DrawableTransitionOptions.withCrossFade())
           .listener(new RequestListener<>() {
             @Override
-            public boolean onLoadFailed(
-                @Nullable @org.jetbrains.annotations.Nullable GlideException e, Object model,
+            public boolean onLoadFailed(@Nullable GlideException e, Object model,
                 Target<Drawable> target, boolean isFirstResource) {
               holder.binding.picture.setVisibility(View.GONE);
+              holder.binding.picturePlaceholder.setVisibility(View.VISIBLE);
               return false;
             }
 
@@ -277,17 +276,16 @@ public class RecipeEntryAdapter extends
             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
                 DataSource dataSource, boolean isFirstResource) {
               holder.binding.picture.setVisibility(View.VISIBLE);
+              holder.binding.picturePlaceholder.setVisibility(View.GONE);
               return false;
             }
-          })
-          .into(holder.binding.picture);
+          }).into(holder.binding.picture);
+    } else if (containsPictures) {
+      holder.binding.picture.setVisibility(View.GONE);
+      holder.binding.picturePlaceholder.setVisibility(View.VISIBLE);
     } else {
       holder.binding.picture.setVisibility(View.GONE);
-      LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-          0, LayoutParams.WRAP_CONTENT
-      );
-      layoutParams.weight = 4;
-      holder.binding.linearTextContainer.setLayoutParams(layoutParams);
+      holder.binding.picturePlaceholder.setVisibility(View.GONE);
     }
 
 

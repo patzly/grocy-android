@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.model;
@@ -132,10 +132,6 @@ public class Product extends GroupedListItem implements Parcelable {
   @SerializedName("cumulate_min_stock_amount_of_sub_products")
   private String accumulateSubProductsMinStockAmount;
 
-  @ColumnInfo(name = "treat_opened_as_out_of_stock")
-  @SerializedName("treat_opened_as_out_of_stock")
-  private String treatOpenedAsOutOfStock;
-
   @ColumnInfo(name = "due_type")
   @SerializedName("due_type")
   private String dueDateType;
@@ -147,6 +143,18 @@ public class Product extends GroupedListItem implements Parcelable {
   @ColumnInfo(name = "hide_on_stock_overview")
   @SerializedName("hide_on_stock_overview")
   private String hideOnStockOverview;
+
+  @ColumnInfo(name = "default_stock_label_type")
+  @SerializedName("default_stock_label_type")
+  private String defaultStockLabelType;
+
+  @ColumnInfo(name = "should_not_be_frozen")
+  @SerializedName("should_not_be_frozen")
+  private String shouldNotBeFrozen;
+
+  @ColumnInfo(name = "treat_opened_as_out_of_stock")
+  @SerializedName("treat_opened_as_out_of_stock")
+  private String treatOpenedAsOutOfStock;
 
   @ColumnInfo(name = "no_own_stock")
   @SerializedName("no_own_stock")
@@ -203,7 +211,6 @@ public class Product extends GroupedListItem implements Parcelable {
     storeId = null;
     minStockAmount = String.valueOf(0);
     accumulateSubProductsMinStockAmount = "0";
-    treatOpenedAsOutOfStock = presetTreatOpened ? "1" : "0";
     dueDateType = "1";
     defaultDueDays = String.valueOf(presetDefaultDueDays);
     defaultDueDaysAfterOpen = "0";
@@ -220,6 +227,9 @@ public class Product extends GroupedListItem implements Parcelable {
     defaultDueDaysAfterThawing = "0";
     quickConsumeAmount = "1";
     hideOnStockOverview = "0";
+    defaultStockLabelType = "0";
+    shouldNotBeFrozen = "0";
+    treatOpenedAsOutOfStock = presetTreatOpened ? "1" : "0";
     noOwnStock = "0";
     defaultConsumeLocationId = null;
     moveOnOpen = "0";
@@ -249,10 +259,12 @@ public class Product extends GroupedListItem implements Parcelable {
     parentProductId = parcel.readString();
     calories = parcel.readString();
     accumulateSubProductsMinStockAmount = parcel.readString();
-    treatOpenedAsOutOfStock = parcel.readString();
     dueDateType = parcel.readString();
     quickConsumeAmount = parcel.readString();
     hideOnStockOverview = parcel.readString();
+    defaultStockLabelType = parcel.readString();
+    shouldNotBeFrozen = parcel.readString();
+    treatOpenedAsOutOfStock = parcel.readString();
     noOwnStock = parcel.readString();
     defaultConsumeLocationId = parcel.readString();
     moveOnOpen = parcel.readString();
@@ -282,10 +294,12 @@ public class Product extends GroupedListItem implements Parcelable {
     dest.writeString(parentProductId);
     dest.writeString(calories);
     dest.writeString(accumulateSubProductsMinStockAmount);
-    dest.writeString(treatOpenedAsOutOfStock);
     dest.writeString(dueDateType);
     dest.writeString(quickConsumeAmount);
     dest.writeString(hideOnStockOverview);
+    dest.writeString(defaultStockLabelType);
+    dest.writeString(shouldNotBeFrozen);
+    dest.writeString(treatOpenedAsOutOfStock);
     dest.writeString(noOwnStock);
     dest.writeString(defaultConsumeLocationId);
     dest.writeString(moveOnOpen);
@@ -454,6 +468,10 @@ public class Product extends GroupedListItem implements Parcelable {
     return defaultDueDaysAfterFreezing;
   }
 
+  public int getDefaultDueDaysAfterFreezingInt() {
+    return NumUtil.isStringInt(defaultDueDaysAfterFreezing) ? Integer.parseInt(defaultDueDaysAfterFreezing) : 0;
+  }
+
   public void setDefaultDueDaysAfterFreezing(String defaultDueDaysAfterFreezing) {
     this.defaultDueDaysAfterFreezing = defaultDueDaysAfterFreezing;
   }
@@ -561,19 +579,6 @@ public class Product extends GroupedListItem implements Parcelable {
     this.accumulateSubProductsMinStockAmount = accumulateSubProductsMinStockAmount ? "1" : "0";
   }
 
-  public boolean getTreatOpenedAsOutOfStockBoolean() {
-    return NumUtil.isStringInt(treatOpenedAsOutOfStock)
-        && Integer.parseInt(treatOpenedAsOutOfStock) == 1;
-  }
-
-  public String getTreatOpenedAsOutOfStock() {
-    return treatOpenedAsOutOfStock;
-  }
-
-  public void setTreatOpenedAsOutOfStock(String treatOpenedAsOutOfStock) {
-    this.treatOpenedAsOutOfStock = treatOpenedAsOutOfStock;
-  }
-
   public String getDueDateType() {
     return dueDateType;
   }
@@ -616,6 +621,47 @@ public class Product extends GroupedListItem implements Parcelable {
 
   public void setHideOnStockOverviewBoolean(boolean hideOnStockOverview) {
     this.hideOnStockOverview = hideOnStockOverview ? "1" : "0";
+  }
+
+  public int getDefaultStockLabelTypeInt() {
+    return NumUtil.isStringInt(defaultStockLabelType) ? Integer.parseInt(defaultStockLabelType) : 0;
+  }
+
+  public String getDefaultStockLabelType() {
+    return defaultStockLabelType;
+  }
+
+  public void setDefaultStockLabelType(String defaultStockLabelType) {
+    this.defaultStockLabelType = defaultStockLabelType;
+  }
+
+  public String getShouldNotBeFrozen() {
+    return shouldNotBeFrozen;
+  }
+
+  public boolean getShouldNotBeFrozenBoolean() {
+    return NumUtil.isStringInt(shouldNotBeFrozen) && Integer.parseInt(shouldNotBeFrozen) == 1;
+  }
+
+  public void setShouldNotBeFrozen(String shouldNotBeFrozen) {
+    this.shouldNotBeFrozen = shouldNotBeFrozen;
+  }
+
+  public void setShouldNotBeFrozenBoolean(boolean shouldNotBeFrozen) {
+    this.shouldNotBeFrozen = shouldNotBeFrozen ? "1" : "0";
+  }
+
+  public boolean getTreatOpenedAsOutOfStockBoolean() {
+    return NumUtil.isStringInt(treatOpenedAsOutOfStock)
+        && Integer.parseInt(treatOpenedAsOutOfStock) == 1;
+  }
+
+  public String getTreatOpenedAsOutOfStock() {
+    return treatOpenedAsOutOfStock;
+  }
+
+  public void setTreatOpenedAsOutOfStock(String treatOpenedAsOutOfStock) {
+    this.treatOpenedAsOutOfStock = treatOpenedAsOutOfStock;
   }
 
   public String getNoOwnStock() {
@@ -699,10 +745,12 @@ public class Product extends GroupedListItem implements Parcelable {
           product.parentProductId != null ? product.parentProductId : JSONObject.NULL;
       String calories = product.calories;
       String cumulateAmounts = product.accumulateSubProductsMinStockAmount;
-      String treatOpened = product.treatOpenedAsOutOfStock;
       String dueType = product.dueDateType;
       String quickConsume = product.quickConsumeAmount;
       String hideOnStock = product.hideOnStockOverview;
+      String defaultStockLabelType = product.defaultStockLabelType;
+      String shouldNotBeFrozen = product.shouldNotBeFrozen;
+      String treatOpened = product.treatOpenedAsOutOfStock;
       String noOwnStock = product.noOwnStock;
       Object defaultConsumeLocationId = product.defaultConsumeLocationId != null
           ? product.defaultConsumeLocationId : JSONObject.NULL;
@@ -729,12 +777,14 @@ public class Product extends GroupedListItem implements Parcelable {
       json.put("parent_product_id", parentProductId);
       json.put("calories", calories);
       json.put("cumulate_min_stock_amount_of_sub_products", cumulateAmounts);
-      if (treatOpened != null && VersionUtil.isGrocyServerMin320(prefs)) {
-        json.put("treat_opened_as_out_of_stock", treatOpened);
-      }
       json.put("due_type", dueType);
       json.put("quick_consume_amount", quickConsume);
       json.put("hide_on_stock_overview", hideOnStock);
+      json.put("default_stock_label_type", defaultStockLabelType);
+      json.put("should_not_be_frozen", shouldNotBeFrozen);
+      if (treatOpened != null && VersionUtil.isGrocyServerMin320(prefs)) {
+        json.put("treat_opened_as_out_of_stock", treatOpened);
+      }
       if (noOwnStock != null && VersionUtil.isGrocyServerMin330(prefs)) {
         json.put("no_own_stock", noOwnStock);
       }
@@ -786,6 +836,16 @@ public class Product extends GroupedListItem implements Parcelable {
       }
     }
     return null;
+  }
+
+  public static ArrayList<Product> getProductChildren(List<Product> allProducts, int parentProductId) {
+    ArrayList<Product> productChildren = new ArrayList<>();
+    for (Product product : allProducts) {
+      if (NumUtil.isStringInt(product.getParentProductId()) && Integer.parseInt(product.getParentProductId()) == parentProductId) {
+        productChildren.add(product);
+      }
+    }
+    return productChildren;
   }
 
   public static ArrayList<Product> getActiveProductsOnly(List<Product> allProducts) {

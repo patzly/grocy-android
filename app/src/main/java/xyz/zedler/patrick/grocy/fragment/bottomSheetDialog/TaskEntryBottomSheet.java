@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
@@ -23,27 +23,27 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.transition.TransitionManager;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.button.MaterialButton;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetTaskEntryBinding;
 import xyz.zedler.patrick.grocy.model.Task;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
 
@@ -55,12 +55,6 @@ public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
   private ProgressBar progressConfirm;
   private ValueAnimator confirmProgressAnimator;
   private Task task;
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
 
   @Override
   public View onCreateView(
@@ -106,13 +100,13 @@ public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
     }
     if (task.getDueDate() != null && !task.getDueDate().isEmpty()) {
       binding.date.setText(
-          getString(R.string.property_due_date),
+          getString(R.string.property_due_date_task),
           dateUtil.getLocalizedDate(task.getDueDate()),
           dateUtil.getHumanForDaysFromNow(task.getDueDate())
       );
     } else {
       binding.date.setText(
-          getString(R.string.property_due_date),
+          getString(R.string.property_due_date_task),
           getString(R.string.subtitle_none_selected)
       );
     }
@@ -126,6 +120,7 @@ public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
             : getString(R.string.subtitle_none_selected)
     );
 
+    ResUtil.tintMenuItemIcons(activity, binding.toolbar.getMenu());
     binding.toolbar.setOnMenuItemClickListener(item -> {
       if (item.getItemId() == R.id.action_toggle_done) {
         activity.getCurrentFragment().toggleDoneStatus(task);
@@ -147,14 +142,14 @@ public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
 
   public void onTouchDelete(View view, MotionEvent event) {
     if (event.getAction() == MotionEvent.ACTION_DOWN) {
-      showAndStartProgress(view);
+      showAndStartProgress((MaterialButton) view);
     } else if (event.getAction() == MotionEvent.ACTION_UP
         || event.getAction() == MotionEvent.ACTION_CANCEL) {
       hideAndStopProgress();
     }
   }
 
-  private void showAndStartProgress(View buttonView) {
+  private void showAndStartProgress(MaterialButton button) {
     assert getView() != null;
     TransitionManager.beginDelayedTransition((ViewGroup) getView());
     progressConfirm.setVisibility(View.VISIBLE);
@@ -181,8 +176,7 @@ public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
         if (currentProgress == progressConfirm.getMax()) {
           TransitionManager.beginDelayedTransition((ViewGroup) requireView());
           progressConfirm.setVisibility(View.GONE);
-          ImageView buttonImage = buttonView.findViewById(R.id.image_action_button);
-          ((Animatable) buttonImage.getDrawable()).start();
+          ViewUtil.startIcon(button.getIcon());
           activity.getCurrentFragment().deleteTask(task);
           dismiss();
           return;
@@ -215,6 +209,16 @@ public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
     if (progressConfirm.getProgress() != 100) {
       Toast.makeText(requireContext(), R.string.msg_press_hold_confirm, Toast.LENGTH_LONG).show();
     }
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.linearContainerScroll.setPadding(
+        binding.linearContainerScroll.getPaddingLeft(),
+        binding.linearContainerScroll.getPaddingTop(),
+        binding.linearContainerScroll.getPaddingRight(),
+        UiUtil.dpToPx(activity, 8) + bottom
+    );
   }
 
   @NonNull

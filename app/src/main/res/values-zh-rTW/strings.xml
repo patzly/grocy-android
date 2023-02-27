@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <resources>
@@ -52,7 +52,7 @@
   <string name="action_new">新增</string>
   <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
   <string name="action_prev">上一</string>
-  <string name="action_feedback">傳送意見</string>
+  <string name="action_feedback">傳送回饋</string>
   <string name="action_reset">重設</string>
   <string name="action_reload">重整</string>
   <string name="action_top_scroll">回到頂部</string>
@@ -97,6 +97,8 @@
   <string name="action_purchase_all_items">購買所有項目</string>
   <string name="action_skip_entry">略過條目</string>
   <string name="action_toggle_flash">開/關 閃光燈</string>
+  <string name="action_edit_recipe">編輯食譜</string>
+  <string name="action_delete_recipe">刪除食譜</string>
   <string name="action_delete_shopping_list">刪除購物清單</string>
   <string name="action_create_key">新增金鑰</string>
   <string name="action_login">登入</string>
@@ -213,7 +215,10 @@
   <string name="msg_not_found">找不到此物品</string>
   <string name="msg_editor_hint">輸入文字</string>
   <string name="msg_coming_soon">此功能即將實裝</string>
-  <string name="msg_undone_transaction">處理未完成</string>
+  <string name="msg_undo_transaction">確定要還原操作嗎？</string>
+  <string name="msg_undone_transaction">已還原操作</string>
+  <!-- %1$s is a date -->
+  <string name="msg_undone_transaction_description">於 %1$s 取消</string>
   <string name="msg_failed_to_sync">同步條目失敗</string>
   <string name="msg_synced">同步條目完成</string>
   <!-- %1$s is a shopping list name -->
@@ -261,7 +266,7 @@
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">即將執行:\n\n從%4$s的庫存中\n刪除%1$s%2$s%3$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-  <string name="msg_quick_mode_confirm_open">即將執行:\n\n將%4$s的\n%1$s%2$s%3$s標記為已開封</string>
+  <string name="msg_quick_mode_confirm_open">即將執行:\n\n將 %4$s 的\n%1$s %2$s %3$s 標記為已開封</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">即將執行:\n\n將%1$s%2$s%3$s\n從%4$s\n移至%5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
@@ -281,7 +286,8 @@
   <string name="msg_press_hold_confirm">按住以確認</string>
   <string name="msg_recipe_consume_ask">確定要消耗食譜「%1$s」中需要的所有食材嗎（被標記為「僅檢查有無存貨」的食材將被忽略）？</string>
   <string name="msg_recipe_shopping_list_ask">確定要將食譜「%1$s」中所有庫存不足的食材加入購物清單嗎？\n\n取消勾選不加入購物清單的食材：</string>
-  <string name="msg_welcome_to_grocy">歡迎使用Grocy Android！\n\n如果要使用Grocy，您需要有自己的伺服器或是Home Assistant的Grocy add-on插件。 \n 如果您只是想試用這個應用程式，可以使用Grocy作者Bernd Bestel的測試伺服器</string>
+  <string name="msg_welcome">歡迎使用 Grocy Android !</string>
+  <string name="msg_welcome_introduce">如果要使用Grocy，您需要擁有自己的伺服器或是 Home Assistant 的 Grocy add-on 插件。 \n 如果您只是想試用這個應用程式，可以使用 Grocy 作者 Bernd Bestel 的測試伺服器</string>
   <string name="msg_choose_option_below">請從以下選項中選擇一個</string>
   <string name="msg_qr_code_scan">在其他裝置上開啟Grocy中的\"API 金鑰\"。依序點擊\"新增\"和二維條碼圖示，並且掃描條碼</string>
   <string name="msg_qr_code_scan_token">您正在使用Home Assistant中的Grocy add-on插件。在Home Assistant側邊欄的個人設定頁面最底部新增一個永久有效存取權杖。創建權杖後，點擊「Generate QR code」並掃描</string>
@@ -289,7 +295,8 @@
   <string name="msg_port_connection_info_with_port">此應用程式將連線至連接埠%1$s</string>
   <string name="msg_clear_form_first">在掃描其他已知的二維條碼之前清空表單</string>
   <string name="msg_not_implemented_yet">本功能即將實裝，請暫時使用伺服器的網頁介面</string>
-  <string name="stock_disabled">庫存功能已在您的Grocy設定中被停用。但是此應用程式目前只有庫存管理的功能，所以對您可能沒有太大的幫助</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_stock_label_type">這是在購買時會填入的預設值</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">庫存總覽頁面會列出庫存中的所有物品。啟用此選項以在庫存總覽頁面中永久隱藏此物品</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -330,9 +337,9 @@
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_choose">您可以選擇條碼掃描器用於相機條碼掃描</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") 使用相機的畫面偵測條碼，然後計算每個條紋的相對寬度。\n- 有時會產生錯誤的結果\n- 條碼必須與掃描器平行\n- 需要良好的對比度及銳利度\n- 在裝置上完全離線執行\n- 框架是開源的</string>
+  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") 使用相機的畫面偵測條碼，然後計算每個條紋的相對寬度。\n\n- 有時會產生錯誤的結果\n- 條碼必須與掃描器平行\n- 需要良好的對比度及銳利度\n- 在裝置上完全離線執行\n- 框架是開源的</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit 使用機器學習技術執行條碼掃描。\n- 幾乎不會產生錯誤的結果\n- 對模糊或低對比度ˇ的條碼也適用\n- 在裝置上完全離線直行\n- 框架不是開源的</string>
+  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit 使用機器學習技術執行條碼掃描。\n\n- 幾乎不會產生錯誤的結果\n- 對模糊或低對比度的條碼也適用\n- 在裝置上完全離線直行\n- 框架不是開源的</string>
   <string name="msg_help_external_scanner_settings">此應用程式支援以鍵盤格式輸入的USB及藍牙掃描器。請在掃描器上做以下設定：\n\n前綴：None\n後綴：TAB或ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_specific_item">清單中的第一個項目將被預設消耗規則選取，即「最先開封，然後最先到期，最後先入先出」</string>
@@ -346,7 +353,7 @@
   <string name="msg_help_date_chooser_keyboard">如果在您的地區慣用的日期格式是DDMMYY，您可以在設定中啟用反向日期格式。\n使用鍵盤上的輸入鍵完成輸入並關閉此頁面</string>
   <string name="msg_help_quick_mode">長按標題欄以啟用快速模式，在快速模式中，已有輸入或掃描預設值的物品會自動以預設值填入所有欄位並立即處理</string>
   <string name="msg_help_loading_circle_settings">在需要從伺服器載入資料的頁面中，此應用程式會先發出請求來檢查伺服器的資料庫是否有更新，並且只更新已經過期的資料。啟用此選項以在發出這種請求時顯示載入圖示</string>
-  <string name="msg_help_start">新手模式已啟用：在所有頁面上顯示可用的提示。點擊以更改</string>
+  <string name="msg_help_start">教學模式已啟用：在所有頁面上顯示可用的提示。點擊以更改</string>
   <string name="msg_help_purchased_date_settings">以下選項啟用後，將會在購買以及庫存頁面上顯示購買日期欄位。否則購買日期將預設為今天</string>
   <string name="msg_help_normal_login">如果您使用的是Home Assistant中的Grocy add-on插件，請點擊此卡片</string>
   <string name="msg_help_home_assistant_login">您正在使用Home Assistant中的Grocy add-on插件，因此需要填寫更多詳細資料。點擊此卡片以切換為一般登入</string>
@@ -446,6 +453,7 @@
   <string name="title_master_data">主資料</string>
   <string name="title_stock_entries">庫存條目</string>
   <string name="title_stock_entry">庫存條目</string>
+  <string name="title_stock_journal">庫存日誌</string>
   <string name="title_shopping_list">購物清單</string>
   <string name="title_feedback">回饋</string>
   <string name="title_settings">設定</string>
@@ -472,6 +480,9 @@
   <string name="title_recipes">食譜</string>
   <string name="title_recipe_create">新增食譜</string>
   <string name="title_recipe_edit">編輯食譜</string>
+  <!-- Editor for editing product description or recipe preparation-->
+  <string name="title_editor">編輯</string>
+
   <string name="title_spoiled">已過期</string>
   <string name="title_use_specific">使用特定的庫存</string>
   <string name="title_specific">特定的庫存</string>
@@ -512,10 +523,6 @@
   <string name="title_product_cat_qu_conversions">數量單位轉換</string>
   <string name="title_unknown_input">未知的輸入</string>
   <string name="title_presets_new_products">新物品預設設定</string>
-  <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
-   Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
-  <string name="title_use_scanner_tool">使用%1$s</string>
-
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s%2$s</string>
   <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
@@ -622,6 +629,10 @@
   <plurals name="description_overview_shopping_list">
     <item quantity="other">%1$d項在您的購物清單上</item>
   </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_recipes">
+    <item quantity="other">您目前共有 %1$d 道食譜</item>
+  </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_chores_due_soon">
     <item quantity="other">%1$d件家務應在%2$d天內完成</item>
@@ -650,7 +661,6 @@
   <plurals name="description_overview_master_data">
     <item quantity="other">您的資料庫包含%1$d項物品</item>
   </plurals>
-
   <string name="property_name">名稱</string>
   <string name="property_name_singular">名稱 (單)</string>
   <string name="property_name_plural">名稱 (多)</string>
@@ -725,6 +735,7 @@
   <string name="property_location_default">預設位置</string>
   <string name="property_location_default_insert">預設位置:%1$s</string>
   <string name="property_location_consume_default">預設消耗位置</string>
+  <string name="property_move_on_open">開封時移動</string>
   <string name="property_notes">備註</string>
   <string name="property_locations">位置</string>
   <string name="property_store">店家</string>
@@ -755,6 +766,8 @@
   <string name="property_opened">已開封</string>
   <string name="property_not_opened">未開封</string>
   <string name="property_is_freezer">是否冷凍</string>
+  <!-- kcal (kilo calories) is a unit for energy -->
+  <string name="property_energy">每庫存單位的熱量（大卡）</string>
   <string name="property_active">有效</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">永不顯示在庫存總覽</string>
@@ -915,6 +928,9 @@
   <string name="hint_key">金鑰正確</string>
 
   <string name="setting_theme">主題</string>
+  <string name="setting_theme_description">試試其他樣式</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system (automatic or shorter auto) theme. The button width should be as dense as possible. -->
+  <string name="setting_theme_auto">自動</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">深色</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
@@ -923,6 +939,9 @@
   <string name="setting_language_description">選擇語言</string>
   <string name="setting_language_info">感謝Transifex上所有的翻譯志願者!\n請至我們的GitHub瞭解如何讓Grocy Android支援您的語言</string>
   <string name="setting_language_system">與系統相同</string>
+  <string name="setting_language_not_available">當翻譯不支援時使用英語</string>
+  <string name="setting_transition">切換頁面時使用滑動效果</string>
+  <string name="setting_transition_description">取代淡出效果</string>
   <string name="setting_open_food_facts">使用\"Open Food Facts\"和\"Open Beauty Facts\"</string>
   <string name="setting_open_food_facts_description">由條碼獲得資訊</string>
   <string name="setting_choose_barcode_scanner">選擇條碼掃描器</string>
@@ -977,6 +996,8 @@
   <string name="setting_timeout_descriptions">逾時後取消載入</string>
   <string name="setting_beginner_mode">新手模式</string>
   <string name="setting_beginner_mode_description">預設顯示提示</string>
+  <string name="setting_haptic">震動效果</string>
+  <string name="setting_haptic_description">沉浸式體驗</string>
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">展開底部列表</string>
   <string name="setting_expand_bottom_sheets_description">橫向模式</string>
@@ -986,6 +1007,8 @@
   <string name="setting_date_keyboard_input_description">取代日期選擇器</string>
   <string name="setting_date_keyboard_reverse">使用反向日期格式進行輸入‎</string>
   <string name="setting_date_keyboard_reverse_description">‎DDMMYY 而不是 YYMMDD‎</string>
+  <string name="setting_copy_barcode_note">將條碼的備註複製到庫存條目</string>
+  <string name="setting_copy_barcode_note_description">購買物品時</string>
   <string name="setting_loading_circle">顯示載入圖示</string>
   <string name="setting_loading_circle_description">在較慢的網路中有幫助</string>
   <string name="setting_tor">使用Tor</string>
@@ -1006,6 +1029,7 @@
   <string name="setting_notifications_due_soon">即將到期物品</string>
   <string name="setting_notifications_due_soon_description">每天檢查庫存並且在有物品即將到期時通知您</string>
   <string name="setting_notifications_chores_description">每天檢查家務並且在有今天需要完成的家務時通知您</string>
+  <string name="setting_notification_time">通知時間</string>
   <!-- the description of the notification time preference.
   With the "Due soon" check enabled, the user will be notified every day at the selected time how
   many products in stock are due soon, so check means a check of the products in stock -->

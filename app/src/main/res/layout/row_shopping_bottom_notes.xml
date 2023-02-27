@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <LinearLayout
@@ -22,20 +22,19 @@
   android:orientation="vertical"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:minHeight="32dp"
+  android:minHeight="48dp"
   android:clickable="true"
   android:focusable="true"
   android:paddingTop="4dp"
   android:paddingBottom="8dp"
   android:paddingStart="16dp"
-  android:paddingEnd="16dp"
+  android:paddingEnd="24dp"
   android:gravity="center_vertical">
 
   <TextView
     android:id="@+id/notes"
+    style="@style/Widget.Grocy.TextView.TitleLarge"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textSize="22sp"
-    android:textColor="@color/on_background" />
+    android:layout_height="wrap_content" />
 
 </LinearLayout>

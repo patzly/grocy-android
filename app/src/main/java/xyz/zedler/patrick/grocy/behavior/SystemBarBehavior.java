@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.behavior;
@@ -27,11 +27,13 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import androidx.annotation.NonNull;
+import androidx.core.graphics.ColorUtils;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.elevation.SurfaceColors;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 
@@ -41,20 +43,16 @@ public class SystemBarBehavior {
 
   private final Activity activity;
   private final Window window;
-  private int containerPaddingTop;
-  private int containerPaddingBottom;
-  private int scrollContentPaddingBottom;
-  private int statusBarInset;
-  private int navBarInset;
+  private int containerPaddingTop, containerPaddingBottom, scrollContentPaddingBottom;
+  private int statusBarInset, navBarInset;
   private AppBarLayout appBarLayout;
   private ViewGroup container;
   private NestedScrollView scrollView;
   private ViewGroup scrollContent;
-  private boolean applyAppBarInsetOnContainer;
-  private boolean applyStatusBarInsetOnContainer;
+  private boolean applyAppBarInsetOnContainer, applyStatusBarInsetOnContainer;
   private boolean hasScrollView, hasRecycler;
   private boolean isScrollable;
-  private int addBottomInset;
+  private int additionalBottomInset;
 
   public SystemBarBehavior(@NonNull Activity activity) {
     this.activity = activity;
@@ -102,7 +100,11 @@ public class SystemBarBehavior {
   }
 
   public void setAdditionalBottomInset(int additional) {
-    addBottomInset = additional;
+    additionalBottomInset = additional;
+  }
+
+  public int getAdditionalBottomInset() {
+    return additionalBottomInset;
   }
 
   public void setUp() {
@@ -161,7 +163,7 @@ public class SystemBarBehavior {
             container.getPaddingLeft(),
             container.getPaddingTop(),
             container.getPaddingRight(),
-            paddingBottom + addBottomInset + navBarInset
+            paddingBottom + additionalBottomInset + navBarInset
         );
         return insets;
       });
@@ -177,7 +179,7 @@ public class SystemBarBehavior {
               container.getPaddingLeft(),
               container.getPaddingTop(),
               container.getPaddingRight(),
-              paddingBottom + addBottomInset + navBarInset
+              paddingBottom + additionalBottomInset + navBarInset
           );
           return insets;
         });
@@ -199,7 +201,7 @@ public class SystemBarBehavior {
               container.getPaddingLeft(),
               container.getPaddingTop(),
               container.getPaddingRight(),
-              container.getPaddingBottom() + addBottomInset
+              container.getPaddingBottom() + additionalBottomInset
           );
         }
       }
@@ -215,17 +217,20 @@ public class SystemBarBehavior {
   }
 
   public void refresh() {
+    refresh(true);
+  }
+
+  public void refresh(boolean measureScrollContent) {
     // TOP INSET
     if (appBarLayout != null) {
       // STATUS BAR INSET
       appBarLayout.setPadding(0, statusBarInset, 0, appBarLayout.getPaddingBottom());
-      appBarLayout.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
 
       // APP BAR INSET
       if (container != null && applyAppBarInsetOnContainer) {
         ViewGroup.MarginLayoutParams params
             = (ViewGroup.MarginLayoutParams) container.getLayoutParams();
-        params.topMargin = appBarLayout.getMeasuredHeight();
+        params.topMargin = appBarLayout.getHeight();
         container.setLayoutParams(params);
       } else if (container != null) {
         container.setPadding(
@@ -256,7 +261,7 @@ public class SystemBarBehavior {
           container.getPaddingLeft(),
           container.getPaddingTop(),
           container.getPaddingRight(),
-          paddingBottom + addBottomInset + navBarInset
+          paddingBottom + additionalBottomInset + navBarInset
       );
     } else {
       if (UiUtil.isNavigationModeGesture(activity) && hasContainer()) {
@@ -268,7 +273,7 @@ public class SystemBarBehavior {
             container.getPaddingLeft(),
             container.getPaddingTop(),
             container.getPaddingRight(),
-            paddingBottom + addBottomInset + navBarInset
+            paddingBottom + additionalBottomInset + navBarInset
         );
       } else {
         View root = window.getDecorView().findViewById(android.R.id.content);
@@ -284,19 +289,17 @@ public class SystemBarBehavior {
               container.getPaddingLeft(),
               container.getPaddingTop(),
               container.getPaddingRight(),
-              container.getPaddingBottom() + addBottomInset
+              container.getPaddingBottom() + additionalBottomInset
           );
         }
       }
     }
 
-    if (hasScrollView) {
+    if (hasScrollView && measureScrollContent) {
       // call viewThreeObserver, this updates the system bar appearance
       measureScrollView();
-    } else {
-      // call directly because there won't be any changes caused by scroll content
-      updateSystemBars();
     }
+    // updateSystemBars() doesn't need to be called again if no scroll view is used
   }
 
   private void measureScrollView() {
@@ -339,8 +342,9 @@ public class SystemBarBehavior {
   private void updateSystemBars() {
     boolean isOrientationPortrait = UiUtil.isOrientationPortrait(activity);
     boolean isDarkModeActive = UiUtil.isDarkModeActive(activity);
-
-    int colorScrim = ResUtil.getColorAttr(activity, android.R.attr.colorBackground, 0.7f);
+    int colorScrim = ColorUtils.setAlphaComponent(
+        SurfaceColors.SURFACE_2.getColor(activity), 1
+    );
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // 29
       window.setStatusBarColor(Color.TRANSPARENT);

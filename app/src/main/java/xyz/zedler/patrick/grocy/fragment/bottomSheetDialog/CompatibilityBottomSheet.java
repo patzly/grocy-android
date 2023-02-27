@@ -14,38 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.ArrayList;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetCompatibilityBinding;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class CompatibilityBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = CompatibilityBottomSheet.class.getSimpleName();
 
+  private FragmentBottomsheetCompatibilityBinding binding;
   private MainActivity activity;
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
 
   @SuppressLint("ApplySharedPref")
   @Override
@@ -54,8 +48,8 @@ public class CompatibilityBottomSheet extends BaseBottomSheetDialogFragment {
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    View view = inflater.inflate(
-        R.layout.fragment_bottomsheet_compatibility, container, false
+    binding = FragmentBottomsheetCompatibilityBinding.inflate(
+        inflater, container, false
     );
 
     activity = (MainActivity) requireActivity();
@@ -73,19 +67,18 @@ public class CompatibilityBottomSheet extends BaseBottomSheetDialogFragment {
       supportedVersionsSingle.append("- ").append(version).append("\n");
     }
 
-    TextView textViewMsg = view.findViewById(R.id.text_compatibility_msg);
-    textViewMsg.setText(activity.getString(
+    binding.textCompatibilityMsg.setText(activity.getString(
         R.string.msg_compatibility,
         currentVersion,
         supportedVersionsSingle
     ));
 
-    view.findViewById(R.id.button_compatibility_cancel).setOnClickListener(v -> {
+    binding.buttonCompatibilityCancel.setOnClickListener(v -> {
       dismiss();
       activity.getCurrentFragment().enableLoginButtons();
     });
 
-    view.findViewById(R.id.button_compatibility_ignore).setOnClickListener(v -> {
+    binding.buttonCompatibilityIgnore.setOnClickListener(v -> {
       prefs.edit().putString(Constants.PREF.VERSION_COMPATIBILITY_IGNORED, currentVersion)
           .apply();
       activity.getCurrentFragment().login(false);
@@ -93,9 +86,24 @@ public class CompatibilityBottomSheet extends BaseBottomSheetDialogFragment {
     });
 
     setCancelable(false);
-    setSkipCollapsedInPortrait();
 
-    return view;
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    binding = null;
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.linearContainer.setPadding(
+        binding.linearContainer.getPaddingLeft(),
+        binding.linearContainer.getPaddingTop(),
+        binding.linearContainer.getPaddingRight(),
+        UiUtil.dpToPx(activity, 12) + bottom
+    );
   }
 
   @NonNull

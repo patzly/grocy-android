@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.viewmodel;
@@ -129,10 +129,10 @@ public class TaskEntryEditViewModel extends BaseViewModel {
 
     NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     queue.append(
-        dlHelper.updateTaskCategories(dbChangedTime, taskCategories -> {
-          this.taskCategories = taskCategories;
-        }), dlHelper.updateUsers(dbChangedTime, users -> this.users = users
-        )
+        dlHelper.updateTaskCategories(
+            dbChangedTime, taskCategories -> this.taskCategories = taskCategories
+        ),
+        dlHelper.updateUsers(dbChangedTime, users -> this.users = users)
     );
     if (queue.isEmpty()) {
       onQueueEmpty();
@@ -196,7 +196,7 @@ public class TaskEntryEditViewModel extends BaseViewModel {
           jsonObject,
           response -> navigateUp(),
           error -> {
-            showErrorMessage(error);
+            showNetworkErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveEntry: " + error);
             }
@@ -208,7 +208,7 @@ public class TaskEntryEditViewModel extends BaseViewModel {
           jsonObject,
           response -> navigateUp(),
           error -> {
-            showErrorMessage(error);
+            showNetworkErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveEntry: " + error);
             }
@@ -262,7 +262,7 @@ public class TaskEntryEditViewModel extends BaseViewModel {
             task.getId()
         ),
         response -> navigateUp(),
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 

@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <vector
@@ -25,5 +25,5 @@
   android:viewportHeight="24">
   <path
     android:pathData="M12.918,10.31c0.029,0 0.058,0.01 0.08,0.032l0.635,0.637a0.113,0.113 0,0 1,-0.08 0.193h-0.407v2.066a0.228,0.228 0,0 1,-0.228 0.227,0.227 0.227,0 0,1 -0.227,-0.227v-2.066h-0.408a0.113,0.113 0,0 1,-0.08 -0.193l0.635,-0.637a0.112,0.112 0,0 1,0.08 -0.031zM11.42,10.31c0.125,0 0.228,0.102 0.228,0.227v2.067h0.407c0.102,0 0.153,0.122 0.08,0.193l-0.635,0.637a0.115,0.115 0,0 1,-0.16 0l-0.635,-0.637a0.113,0.113 0,0 1,0.08 -0.193h0.408v-2.067c0,-0.125 0.102,-0.226 0.227,-0.226z"
-    android:fillColor="#4f8799" />
+    android:fillColor="?attr/colorTertiary" />
 </vector>

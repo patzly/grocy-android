@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <manifest
@@ -24,10 +24,14 @@
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.CAMERA" />
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
   <uses-permission android:name="android.permission.VIBRATE" />
   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
   <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
+  <uses-feature
+    android:name="android.hardware.camera"
+    android:required="false" />
 
   <queries>
     <package android:name="org.torproject.android" />
@@ -36,9 +40,9 @@
   <application
     android:label="@string/app_name"
     android:icon="@mipmap/ic_launcher"
-    android:theme="@style/Theme.GrocyM3"
+    android:theme="@style/Theme.Grocy"
     android:supportsRtl="true"
-    android:enableOnBackInvokedCallback="true"
+    android:enableOnBackInvokedCallback="false"
     android:hardwareAccelerated="true"
     android:localeConfig="@xml/locales_config"
     android:allowBackup="true"
@@ -49,6 +53,7 @@
 
     <activity
       android:name=".activity.SplashActivity"
+      android:windowSoftInputMode="adjustNothing"
       android:exported="true">
 
       <intent-filter>
@@ -60,7 +65,7 @@
 
     <activity
       android:name=".activity.MainActivity"
-      android:windowSoftInputMode="adjustPan"
+      android:windowSoftInputMode="adjustNothing"
       android:exported="true">
 
       <intent-filter>

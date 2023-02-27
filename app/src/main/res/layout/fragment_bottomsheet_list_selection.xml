@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <LinearLayout
@@ -47,7 +47,7 @@
 
         <TextView
           android:id="@+id/text_list_selection_title"
-          style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
+          style="@style/Widget.Grocy.TextView.Toolbar"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:paddingStart="0dp"
@@ -56,12 +56,11 @@
 
         <TextView
           android:id="@+id/text_list_selection_description"
-          style="@style/Widget.Grocy.TextView.ListItem.Description"
+          style="@style/Widget.Grocy.TextView.BodyMedium"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:paddingTop="4dp"
-          android:visibility="gone"
-          android:maxLines="30" />
+          android:visibility="gone" />
 
       </LinearLayout>
 
@@ -93,7 +92,7 @@
 
     <ProgressBar
       android:id="@+id/progress_confirmation"
-      style="@style/Widget.Grocy.ProgressBar.Horizontal.Red"
+      style="@style/Widget.Grocy.ProgressBar.Horizontal.Error"
       android:layout_gravity="bottom"
       android:indeterminate="false"
       android:max="100"

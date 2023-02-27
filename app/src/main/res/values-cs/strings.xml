@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <resources>
@@ -330,7 +330,7 @@
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">Provede se:\n\nOdebrat %1$s %2$s produktu %3$s ze zásob\nUmístění: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-  <string name="msg_quick_mode_confirm_open">Provede se:\nOznačit %1$s %2$s produktu %3$s jako otevřené\nUmístění: %4$s</string>
+  <string name="msg_quick_mode_confirm_open">Provede se:\n\nOznač %1$s %2$s produktu %3$s jako otevřený\nUmístění: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">Provede se:\nPřesun %1$s %2$s produktu %3$s\nZ: %4$s\nDo: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
@@ -350,15 +350,17 @@
   <string name="msg_press_hold_confirm">Podržením potvrdíte odstranění</string>
   <string name="msg_recipe_consume_ask">Opravdu si přejete spotřebovat všechny ingredience receptu „%1$s“? Suroviny označené „Zkontrolovat pouze zda je v zásobě jakékoliv množství“ budou ignorovány.</string>
   <string name="msg_recipe_shopping_list_ask">Chcete přidat všechny chybějící ingredience z receptu „%1$s“ do nákupního seznamu?\nOdškrtněte ty, které v nákupním seznamu nechcete.</string>
-  <string name="msg_welcome_to_grocy">Vítejte v grocy klientu pro Android!\n\nChcete-li grocy používat, musíte si ji nejprve nainstalovat na svůj server nebo jako grocy add-on pro Home Assistant.\nPokud si jen chcete aplikaci vyzkoušet, můžete použít demo server od Bernda Bestela, tvůrce grocy.</string>
-  <string name="msg_choose_option_below">Prosím, vyberte jednu z možností.</string>
-  <string name="msg_qr_code_scan">Nejprve navštivte web vašeho grocy serveru a přejděte na stránku \'Spravovat API klíče\'. Klikněte na „Přidat”. Poté API klíč zkopírujte a použijte v této aplikaci. Pokud půjdete na web grocy na jiném zařízení, klikněte na ikonu QR kódu a API klíč naskenujte.</string>
+  <string name="msg_welcome">Grocy pro Android vás vítá</string>
+  <string name="msg_welcome_introduce">Chcete-li grocy používat, musíte si ji nejprve nainstalovat na svůj server nebo jako grocy add-on pro Home Assistant.\nPokud si jen chcete aplikaci vyzkoušet, můžete použít demo server od Bernda Bestela, tvůrce grocy.</string>
+  <string name="msg_choose_option_below">Vyberte si jednu z možností</string>
+  <string name="msg_qr_code_scan">Nejprve navštivte web vašeho grocy serveru a přejděte na stránku \'Spravovat API klíče\'. Klikněte na „Přidat”. Poté API klíč zkopírujte a použijte v této aplikaci. Pohodlnější je otevřít web grocy na jiném zařízení. Tam na stránce \'Spravovat API klíče\' klikněte na ikonu QR kódu a API klíč naskenujte.</string>
   <string name="msg_qr_code_scan_token">Používáte doplněk pro Home Assistant. Vytvořte přístupový kód s dlouhou životností ve svém profilu aplikace Home Assistant. Funkci najdete v poslední sekci. Po vytvoření klikněte na Generate QR Code a sejměte ho tu.</string>
   <string name="msg_port_connection_info_without_port">Aplikace se připojuje k portu %1$s.\nJestliže ji chcete připojit k jinému číslu portu, přidejte toto číslo (např. 81) k URL vašeho serveru.\nPříklad: http://mujserver.cz:81/</string>
   <string name="msg_port_connection_info_with_port">Aplikace se připojuje k portu č.: %1$s</string>
   <string name="msg_clear_form_first">Nejprve smažte všechny údaje než začnete skenovat další čárový kód</string>
   <string name="msg_not_implemented_yet">Tato funkce zatím není implemetována. Zatím, prosím, použijte rozhraní svého serveru.</string>
-  <string name="stock_disabled">V konfiguraci grocy na vašem serveru máte vypnutou funkci Přehled zásob. Ovšem tato aplikace je určena hlavně na správu produktů. Její funkčnost je teď značně omezená.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_stock_label_type">Výchozí typ nálepky s čárovým kódem pro produkt při nákupu</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">Stránka Přehledu zásob zobrazuje všechny produkty, které jsou v zásobě nebo pod jejich minimálním stavem. Zaškrtnutím se v něm produkt nikdy neobjeví.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -400,9 +402,9 @@
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_choose">Vyberte typ rozpoznávání čárových kódů</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_zxing">Algoritmus ZXing používá k rozpoznání čárového kódu data o kontrastu snímané scény. Pak vypočítá relativní délku všech čar.\nObčas rozpozná čárový kód s chybou.\nČárový kód musí být vyrovnán podle horizontální linie a potřebuje dobrou ostrost a kontrast obrazu.\nK rozpoznání čárového kódu není potřeba internet.\nAplikace je opensource – její zdrojový kód je veřejně přístupný.</string>
+  <string name="msg_help_barcode_scanner_info_zxing">Algoritmus ZXing používá k rozpoznání čárového kódu data o kontrastu snímané scény. Pak vypočítá relativní délku všech čar.\nObčas rozpozná čárový kód chybně.\nČárový kód musí být vyrovnán podle horizontální linie a potřebuje dobrou ostrost a kontrast obrazu.\nK rozpoznání čárového kódu není potřeba internet.\nAplikace je opensource – její zdrojový kód je veřejně přístupný.</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_mlkit">ML kit používá strojové učení.\nJe téměř vždy přesný.\nČárový kód může být pod jakýmkoliv úhlem.</string>
+  <string name="msg_help_barcode_scanner_info_mlkit">ML kit používá strojové učení.\nJe téměř bezchybný.\nČárový kód může být pod jakýmkoliv úhlem, deformovaný a nekontrastní.\nK rozpoznání čárového kódu není potřeba internet.\nTato aplikace není volně přístupná.</string>
   <string name="msg_help_external_scanner_ready">Je-li řádek vybraný a prázdný můžete ho vyplnit pomocí externí čtečky</string>
   <string name="msg_help_external_scanner_settings">Tato aplikace podporuje externí skenery čárových kódů, které simulují klávesnici a mohou být připojeny přes USB nebo Bluetooth. Skener si nastavte takto:\n\nPrefix: Žádný\nSuffix: TAB nebo ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -472,6 +474,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="error_api_qr_code">Tento QR kód neobsahuje přihlašovací údaje Grocy API</string>
   <string name="error_token_qr_code">Toto není správný QR kód z Home Assistant s dlouhou životností</string>
   <string name="error_loading_qus">Nepodařilo se načíst měrné jednotky produktu</string>
+  <string name="error_no_children">Vybraný produkt nemá žádné podřízené produkty</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Nemůže být roven %1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
@@ -488,6 +491,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="error_name_exists">Toto jméno již existuje</string>
   <string name="error_network">Chyba sítě</string>
   <string name="error_network_subtitle">Potřebná data nemohla být načtena</string>
+  <string name="error_network_exact">Chyba sítě: %1$s</string>
   <string name="error_unknown">Jejda!</string>
   <string name="error_not_grocy_instance">Neplatná instance grocy</string>
   <string name="error_timeout">Odezva serveru byla příliš dlouhá</string>
@@ -598,10 +602,6 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="title_product_cat_qu_conversions">Převody měr. jednotek</string>
   <string name="title_unknown_input">Nesprávně vložené údaje</string>
   <string name="title_presets_new_products">Výchozí hodnoty pro nové produkty</string>
-  <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
-   Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
-  <string name="title_use_scanner_tool">Přečíst s pomocí %1$s</string>
-
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
   <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
@@ -661,6 +661,12 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="subtitle_recipe_due_score">Index min. trvanlivosti: %1$s</string>
   <string name="subtitle_per_serving">na 1 porci</string>
   <string name="subtitle_tap_preparation_mode">Klepnutím spustíte režim přípravy jídla z receptu</string>
+  <!-- Context is Label printer -->
+  <string name="subtitle_print_label_no">Bez tisku nálepky</string>
+  <!-- Short form for "One label per purchase" -->
+  <string name="subtitle_print_label_per_purchase">Při nákupu</string>
+  <!-- Short form for "One label per unit" -->
+  <string name="subtitle_print_label_per_unit">Každé balení</string>
 
   <string name="description_input_product_part1">Pole produktu obsahuje:</string>
   <string name="description_input_product_part2">Vyberte si, jak pokračovat:</string>
@@ -797,6 +803,13 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
     <item quantity="few">Máte uloženy %1$d produkty</item>
     <item quantity="many">Máte uloženo %1$d produktů</item>
     <item quantity="other">Máte uloženo %1$d produktů</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="error_max_decimal_places">
+    <item quantity="one">Max. %1$s desetinné místo</item>
+    <item quantity="few">Max. %1$s desetinná místa</item>
+    <item quantity="many">Max. %1$s desetinných míst</item>
+    <item quantity="other">Max. %1$s desetinných míst</item>
   </plurals>
 
   <string name="property_name">Jméno</string>
@@ -1167,6 +1180,8 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="setting_timeout_descriptions">po kterém se načítání zruší</string>
   <string name="setting_beginner_mode">Pro začátečníky</string>
   <string name="setting_beginner_mode_description">Zobrazovat nápovědu</string>
+  <string name="setting_haptic">Hmatové efekty</string>
+  <string name="setting_haptic_description">Rozšíŕená realita</string>
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">Rozbalit kontextové záložky</string>
   <string name="setting_expand_bottom_sheets_description">je-li displej na šířku</string>
@@ -1176,6 +1191,8 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="setting_date_keyboard_input_description">místo vybírání z nabídky</string>
   <string name="setting_date_keyboard_reverse">Zadávat nejprve den v datumu</string>
   <string name="setting_date_keyboard_reverse_description">DDMMRR (DenMěsícRok) místo RRMMDD</string>
+  <string name="setting_copy_barcode_note">Zkopírovat poznámku z čárového kódu do poznámky v Seznamu zásob</string>
+  <string name="setting_copy_barcode_note_description">Při nákupu</string>
   <string name="setting_loading_circle">Zobrazovat symbol čtení ze serveru u všech požadavků</string>
   <string name="setting_loading_circle_description">vhodné pro pomalé připojení k internetu nebo serveru</string>
   <string name="setting_tor">Použít službu Tor</string>

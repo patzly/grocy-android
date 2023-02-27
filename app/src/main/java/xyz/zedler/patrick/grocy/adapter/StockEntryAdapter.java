@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.adapter;
@@ -25,15 +25,18 @@ import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowStockEntryBinding;
@@ -49,13 +52,10 @@ import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.PREF;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class StockEntryAdapter extends
@@ -340,21 +340,25 @@ public class StockEntryAdapter extends
       holder.binding.dueDate.setTypeface(
           ResourcesCompat.getFont(context, R.font.jost_medium)
       );
-      @ColorRes int color;
+
+      ColorRoles colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
+      ColorRoles colorOrange = ResUtil.getHarmonizedRoles(context, R.color.orange);
+
+      int color;
       if (Integer.parseInt(days) >= 0) {
-        color = R.color.retro_yellow_fg;
+        color = colorYellow.getAccent();
       } else if (product != null && product.getDueDateTypeInt() == StockItem.DUE_TYPE_EXPIRATION) {
-        color = R.color.retro_red_fg;
+        color = ResUtil.getColorAttr(context, R.attr.colorError);
       } else {
-        color = R.color.retro_dirt_fg;
+        color = colorOrange.getAccent(); // formally DIRT
       }
-      holder.binding.dueDate.setTextColor(ContextCompat.getColor(context, color));
+      holder.binding.dueDate.setTextColor(color);
     } else {
       holder.binding.dueDate.setTypeface(
           ResourcesCompat.getFont(context, R.font.jost_book)
       );
       holder.binding.dueDate.setTextColor(
-          ContextCompat.getColor(context, R.color.on_background_secondary)
+          ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant)
       );
     }
 

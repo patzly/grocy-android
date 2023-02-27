@@ -14,11 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.behavior;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
@@ -52,9 +54,10 @@ public class BottomScrollBehavior {
   private static final int PUFFER_DIVIDER = 2;
 
   private final BottomAppBar bottomAppBar;
-  private final FloatingActionButton fabTopScroll;
+  private final FloatingActionButton fabMain, fabTopScroll;
   private AppBarLayout appBar;
   private ViewGroup scrollView;
+  private final View snackbarAnchor;
   private boolean liftOnScroll;
   private boolean provideTopScroll;
 
@@ -66,13 +69,19 @@ public class BottomScrollBehavior {
   private int currentState;
   private final int topScrollLimit;
   private boolean isTopScroll = false;
+  private boolean canBottomAppBarBeVisible;
+  private boolean useOverScrollFix;
+  private boolean useTopScrollAsAnchor, useFabAsAnchor;
 
   public BottomScrollBehavior(
       @NonNull Context context, @NonNull BottomAppBar bottomAppBar,
-      @NonNull FloatingActionButton fabMain, @NonNull FloatingActionButton fabTopScroll
+      @NonNull FloatingActionButton fabMain, @NonNull FloatingActionButton fabTopScroll,
+      @NonNull View snackbarAnchor
   ) {
     this.bottomAppBar = bottomAppBar;
+    this.fabMain = fabMain;
     this.fabTopScroll = fabTopScroll;
+    this.snackbarAnchor = snackbarAnchor;
 
     ViewCompat.setOnApplyWindowInsetsListener(fabTopScroll, (v, insets) -> {
       int insetBottom = insets.getInsets(Type.systemBars()).bottom;
@@ -103,9 +112,9 @@ public class BottomScrollBehavior {
         return; // no translation change
       }
       bottomBarTranslationY = translationY;
-      if (fabMain.isOrWillBeShown() && bottomAppBar.getY() > fabMain.getTop() ) {
+      if (fabMain.isOrWillBeShown() && bottomAppBar.getY() > fabMain.getY()) {
         fabTopScroll.setTranslationY(
-            fabMain.getTop() - fabMainMarginTop - fabTopScroll.getBottom()
+            fabMain.getY() - fabMainMarginTop - fabTopScroll.getBottom()
         );
       } else if (bottomAppBar.getY() > insetBottomY) {
         fabTopScroll.setTranslationY(
@@ -114,9 +123,44 @@ public class BottomScrollBehavior {
       } else {
         fabTopScroll.setTranslationY(translationY);
       }
+      updateSnackbarAnchor();
+    });
+
+    fabMain.addOnHideAnimationListener(new AnimatorListenerAdapter() {
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        useFabAsAnchor = false;
+        updateSnackbarAnchor();
+      }
+    });
+    fabMain.addOnShowAnimationListener(new AnimatorListenerAdapter() {
+      @Override
+      public void onAnimationStart(Animator animation) {
+        useFabAsAnchor = true;
+        updateSnackbarAnchor();
+      }
+    });
+
+    fabTopScroll.addOnHideAnimationListener(new AnimatorListenerAdapter() {
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        useTopScrollAsAnchor = false;
+        updateSnackbarAnchor();
+      }
+    });
+    fabTopScroll.addOnShowAnimationListener(new AnimatorListenerAdapter() {
+      @Override
+      public void onAnimationStart(Animator animation) {
+        useTopScrollAsAnchor = true;
+        updateSnackbarAnchor();
+      }
     });
 
     topScrollLimit = UiUtil.dpToPx(context, 150);
+    canBottomAppBarBeVisible = true;
+    useOverScrollFix = Build.VERSION.SDK_INT < 31;
+    useFabAsAnchor = true;
+    useTopScrollAsAnchor = false;
   }
 
   private void test(MainActivity activity) {
@@ -201,13 +245,31 @@ public class BottomScrollBehavior {
     setUpScroll(appBar, liftOnScroll, scrollView, true);
   }
 
+  public void setProvideTopScroll(boolean provideTopScroll) {
+    this.provideTopScroll = provideTopScroll;
+    if (fabTopScroll != null && !provideTopScroll) {
+      fabTopScroll.hide();
+    }
+  }
+
+  public void setCanBottomAppBarBeVisible(boolean canBeVisible) {
+    canBottomAppBarBeVisible = canBeVisible;
+  }
+
   public void setBottomBarVisibility(boolean visible, boolean stay, boolean animated) {
-    bottomAppBar.setHideOnScroll(!stay);
-    new Handler(Looper.getMainLooper()).post(() -> {
-      if (visible) {
-        bottomAppBar.performShow(animated);
-      } else {
-        bottomAppBar.performHide(animated);
+    bottomAppBar.setHideOnScroll(canBottomAppBarBeVisible && !stay);
+    ViewTreeObserver observer = bottomAppBar.getViewTreeObserver();
+    observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+      @Override
+      public void onGlobalLayout() {
+        if (visible && canBottomAppBarBeVisible) {
+          bottomAppBar.performShow(animated);
+        } else {
+          bottomAppBar.performHide(animated);
+        }
+        if (bottomAppBar.getViewTreeObserver().isAlive()) {
+          bottomAppBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        }
       }
     });
   }
@@ -234,8 +296,14 @@ public class BottomScrollBehavior {
           appBar.setLifted(true);
         }
       } else {
+        if (useOverScrollFix) {
+          if (scrollView.getScrollY() == 0) {
+            setOverScrollEnabled(false);
+          }
+        } else {
+          setOverScrollEnabled(true);
+        }
         appBar.setLifted(true);
-        setOverScrollEnabled(true);
       }
     } else {
       appBar.setLifted(!lift);
@@ -246,7 +314,7 @@ public class BottomScrollBehavior {
   }
 
   private void measureScrollView() {
-    if (scrollView == null || !(scrollView instanceof RecyclerView)) {
+    if (scrollView == null || scrollView instanceof RecyclerView) {
       return;
     }
     ViewTreeObserver observer = scrollView.getViewTreeObserver();
@@ -273,15 +341,18 @@ public class BottomScrollBehavior {
     }
     if (Build.VERSION.SDK_INT >= 31) {
       // Stretch effect is always nice
-      if (scrollView instanceof RecyclerView) {
-        ((RecyclerView) scrollView).setOverScrollMode(View.OVER_SCROLL_ALWAYS);
-      } else {
-        scrollView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
-      }
+      scrollView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
     } else {
       scrollView.setOverScrollMode(
           enabled ? View.OVER_SCROLL_IF_CONTENT_SCROLLS : View.OVER_SCROLL_NEVER
       );
+    }
+  }
+
+  public void setNestedOverScrollFixEnabled(boolean enabled) {
+    useOverScrollFix = enabled && Build.VERSION.SDK_INT < 31;
+    if (useOverScrollFix && scrollView != null && scrollView.getScrollY() == 0) {
+      setOverScrollEnabled(false);
     }
   }
 
@@ -294,7 +365,7 @@ public class BottomScrollBehavior {
           if (currentState != STATE_SCROLLED_UP) {
             onScrollUp();
           }
-          if (liftOnScroll && scrollY < pufferSize) {
+          if ((liftOnScroll || useOverScrollFix) && scrollY < pufferSize) {
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
               if (scrollY > 0) {
                 setOverScrollEnabled(false);
@@ -331,7 +402,7 @@ public class BottomScrollBehavior {
             if (currentState != STATE_SCROLLED_UP) {
               onScrollUp();
             }
-            if (liftOnScroll && dy < pufferSize) {
+            if ((liftOnScroll || useOverScrollFix) && dy < pufferSize) {
               new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 if (scrollAbsoluteY > 0) {
                   setOverScrollEnabled(false);
@@ -386,6 +457,20 @@ public class BottomScrollBehavior {
     }
     if (DEBUG) {
       Log.i(TAG, "onScrollDown: DOWN");
+    }
+  }
+
+  public void updateSnackbarAnchor() {
+    snackbarAnchor.setY(getSnackbarAnchorY());
+  }
+
+  public float getSnackbarAnchorY() {
+    if (useTopScrollAsAnchor) {
+      return fabTopScroll.getY();
+    } else if (useFabAsAnchor) {
+      return Math.min(fabMain.getY(), bottomAppBar.getY());
+    } else {
+      return bottomAppBar.getY();
     }
   }
 }

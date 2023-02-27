@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.viewmodel;
@@ -34,8 +34,10 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -44,6 +46,7 @@ import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuickModeConfirmBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
@@ -112,6 +115,7 @@ public class PurchaseViewModel extends BaseViewModel {
   private Integer storedPurchaseId;
   private StoredPurchase storedPurchase;
   private Runnable queueEmptyAction;
+  private boolean productWillBeFilled;
   private final int maxDecimalPlacesAmount;
   private final int decimalPlacesPriceInput;
 
@@ -176,7 +180,7 @@ public class PurchaseViewModel extends BaseViewModel {
       this.products = data.getProducts();
       this.pendingProducts = data.getPendingProducts();
       formData.getProductsLive().setValue(
-              appendPendingProducts(Product.getActiveAndStockEnabledProductsOnly(products), pendingProducts)
+              appendPendingProducts(Product.getActiveProductsOnly(products), pendingProducts)
       );
       productHashMap = ArrayUtil.getProductsHashMap(products);
       this.pendingProductBarcodes = data.getPendingProductBarcodes();
@@ -200,10 +204,6 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
-        /*if(isOffline()) { // skip downloading
-            isLoadingLive.setValue(false);
-            return;
-        }*/
     if (dbChangedTime == null) {
       dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
       return;
@@ -215,7 +215,7 @@ public class PurchaseViewModel extends BaseViewModel {
           this.products = products;
           productHashMap = ArrayUtil.getProductsHashMap(products);
           formData.getProductsLive().setValue(
-                  appendPendingProducts(Product.getActiveAndStockEnabledProductsOnly(products), pendingProducts)
+                  appendPendingProducts(Product.getActiveProductsOnly(products), pendingProducts)
           );
         }), dlHelper.updateQuantityUnitConversions(dbChangedTime, conversions -> {
           this.unitConversions = conversions;
@@ -243,8 +243,6 @@ public class PurchaseViewModel extends BaseViewModel {
       onQueueEmpty();
       return;
     }
-
-    //currentQueueLoading = queue;
     queue.start();
   }
 
@@ -297,6 +295,12 @@ public class PurchaseViewModel extends BaseViewModel {
 
     DownloadHelper.OnProductDetailsResponseListener listener = productDetails -> {
       Product updatedProduct = productDetails.getProduct();
+
+      if (updatedProduct.getNoOwnStockBoolean()) {
+        showProductChildrenBottomSheet(updatedProduct);
+        return;
+      }
+
       formData.getProductDetailsLive().setValue(productDetails);
       formData.getProductNameLive().setValue(updatedProduct.getName());
 
@@ -345,11 +349,12 @@ public class PurchaseViewModel extends BaseViewModel {
         Double amountInUnit = AmountUtil.getShoppingListItemAmount(
             shoppingListItem, productHashMap, quantityUnitHashMap, unitConversionHashMap
         );
-        if (amountInUnit != null) {
-          formData.getAmountLive().setValue(NumUtil.trimAmount(amountInUnit, maxDecimalPlacesAmount));
-        } else {
-          formData.getAmountLive().setValue(NumUtil.trimAmount(shoppingListItem.getAmountDouble(), maxDecimalPlacesAmount));
-        }
+        formData.getAmountLive().setValue(
+            NumUtil.trimAmount(
+                Objects.requireNonNullElseGet(amountInUnit, shoppingListItem::getAmountDouble),
+                maxDecimalPlacesAmount
+            )
+        );
       } else if (!isTareWeightEnabled && !isQuickModeEnabled()) {
         String defaultAmount = sharedPrefs.getString(
             Constants.SETTINGS.STOCK.DEFAULT_PURCHASE_AMOUNT,
@@ -393,9 +398,9 @@ public class PurchaseViewModel extends BaseViewModel {
           lastPrice = barcode.getLastPrice();
         } else {
           lastPrice = productDetails.getLastPrice();
-        }
-        if (lastPrice != null && !lastPrice.isEmpty()) {
-          lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice) * initialUnitFactor, decimalPlacesPriceInput);
+          if (lastPrice != null && !lastPrice.isEmpty()) {
+            lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice) / initialUnitFactor, decimalPlacesPriceInput);
+          }
         }
         formData.getPriceLive().setValue(lastPrice);
       }
@@ -419,6 +424,21 @@ public class PurchaseViewModel extends BaseViewModel {
       // location
       if (isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
         formData.getLocationLive().setValue(productDetails.getLocation());
+      }
+
+      // stock label type
+      if (isFeatureEnabled(PREF.FEATURE_LABEL_PRINTER)) {
+        formData.getPrintLabelTypeLive()
+            .setValue(productDetails.getProduct().getDefaultStockLabelTypeInt());
+      }
+
+      // note
+      if (barcode != null
+          && barcode.getNote() != null
+          && sharedPrefs.getBoolean(BEHAVIOR.COPY_BARCODE_NOTE,
+          SETTINGS_DEFAULT.BEHAVIOR.COPY_BARCODE_NOTE)
+      ) {
+        formData.getNoteLive().setValue(barcode.getNote());
       }
 
       formData.isFormValid();
@@ -655,6 +675,10 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public void purchaseProduct() {
+    purchaseProduct(false);
+  }
+
+  public void purchaseProduct(boolean confirmed) {
     if (!formData.isFormValid()) {
       showMessage(R.string.error_missing_information);
       return;
@@ -675,6 +699,13 @@ public class PurchaseViewModel extends BaseViewModel {
     assert formData.getProductDetailsLive().getValue() != null;
     Product product = formData.getProductDetailsLive().getValue().getProduct();
     JSONObject body = formData.getFilledJSONObject();
+
+    if (!confirmed && product.getShouldNotBeFrozenBoolean()
+        && formData.getLocationLive().getValue() != null
+        && formData.getLocationLive().getValue().getIsFreezerInt() == 1) {
+      sendEvent(Event.CONFIRM_FREEZING);
+      return;
+    }
 
     OnJSONArrayResponseListener onResponse = response -> {
       // UNDO OPTION
@@ -725,7 +756,7 @@ public class PurchaseViewModel extends BaseViewModel {
           }
         },
         error -> {
-          showErrorMessage(error);
+          showNetworkErrorMessage(error);
           if (debug) {
             Log.i(TAG, "purchaseProduct: " + error);
           }
@@ -743,7 +774,7 @@ public class PurchaseViewModel extends BaseViewModel {
             Log.i(TAG, "undoTransaction: undone");
           }
         },
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 
@@ -953,6 +984,18 @@ public class PurchaseViewModel extends BaseViewModel {
     showBottomSheet(new LocationsBottomSheet(), bundle);
   }
 
+  public void showProductChildrenBottomSheet(Product parentProduct) {
+    ArrayList<Product> childrenProducts = Product.getProductChildren(products, parentProduct.getId());
+    if (childrenProducts.isEmpty()) {
+      showMessage(R.string.error_no_children);
+      return;
+    }
+    Bundle bundle = new Bundle();
+    bundle.putParcelableArrayList(ARGUMENT.PRODUCTS, childrenProducts);
+    bundle.putInt(Constants.ARGUMENT.SELECTED_ID, -1);
+    showBottomSheet(new ProductsBottomSheet(), bundle);
+  }
+
   public void showConfirmationBottomSheet() {
     Bundle bundle = new Bundle();
     bundle.putString(Constants.ARGUMENT.TEXT, formData.getConfirmationText());
@@ -981,6 +1024,14 @@ public class PurchaseViewModel extends BaseViewModel {
 
   public void setQueueEmptyAction(Runnable queueEmptyAction) {
     this.queueEmptyAction = queueEmptyAction;
+  }
+
+  public void setProductWillBeFilled(boolean productWillBeFilled) {
+    this.productWillBeFilled = productWillBeFilled;
+  }
+
+  public boolean isProductWillBeFilled() {
+    return productWillBeFilled;
   }
 
   private ArrayList<Product> appendPendingProducts(

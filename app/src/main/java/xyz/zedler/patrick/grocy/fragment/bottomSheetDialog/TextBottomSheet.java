@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
@@ -27,11 +27,9 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout.LayoutParams;
 import androidx.annotation.NonNull;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetTextBinding;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
@@ -45,12 +43,11 @@ public class TextBottomSheet extends BaseBottomSheetDialogFragment {
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle state) {
     binding = FragmentBottomsheetTextBinding.inflate(inflater, container, false);
 
-    Bundle bundle = requireArguments();
+    TextBottomSheetArgs args = TextBottomSheetArgs.fromBundle(requireArguments());
 
-    binding.toolbarText.setTitle(getString(bundle.getInt(Constants.ARGUMENT.TITLE)));
+    binding.toolbarText.setTitle(getString(args.getTitle()));
 
-    int linkResId = bundle.getInt(Constants.ARGUMENT.LINK);
-    String link = linkResId != 0 ? getString(linkResId) : null;
+    String link = args.getLink() != 0 ? getString(args.getLink()) : null;
     if (link != null) {
       binding.toolbarText.inflateMenu(R.menu.menu_link);
       ResUtil.tintMenuItemIcon(
@@ -58,7 +55,7 @@ public class TextBottomSheet extends BaseBottomSheetDialogFragment {
       );
       binding.toolbarText.setOnMenuItemClickListener(item -> {
         int id = item.getItemId();
-        if (id == R.id.action_open_link && getViewUtil().isClickEnabled()) {
+        if (id == R.id.action_open_link && getViewUtil().isClickEnabled(id)) {
           performHapticClick();
           ViewUtil.startIcon(item.getIcon());
           new Handler(Looper.getMainLooper()).postDelayed(
@@ -73,12 +70,11 @@ public class TextBottomSheet extends BaseBottomSheetDialogFragment {
       binding.toolbarText.setTitleCentered(true);
     }
 
-    String[] highlights = bundle.getStringArray(Constants.ARGUMENT.HIGHLIGHTS);
+    String[] highlights = args.getHighlights();
     if (highlights == null) {
       highlights = new String[]{};
     }
-    int file = bundle.getInt(Constants.ARGUMENT.FILE);
-    binding.formattedText.setText(ResUtil.getRawText(requireContext(), file), highlights);
+    binding.formattedText.setText(ResUtil.getRawText(requireContext(), args.getFile()), highlights);
 
     return binding.getRoot();
   }
@@ -91,9 +87,12 @@ public class TextBottomSheet extends BaseBottomSheetDialogFragment {
 
   @Override
   public void applyBottomInset(int bottom) {
-    LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-    params.setMargins(0, 0, 0, bottom);
-    binding.formattedText.setLayoutParams(params);
+    binding.linearContainerScroll.setPadding(
+        binding.linearContainerScroll.getPaddingLeft(),
+        binding.linearContainerScroll.getPaddingTop(),
+        binding.linearContainerScroll.getPaddingRight(),
+        bottom
+    );
   }
 
   @NonNull

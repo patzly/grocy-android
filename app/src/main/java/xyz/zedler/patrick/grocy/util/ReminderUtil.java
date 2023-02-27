@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.util;
@@ -34,16 +34,19 @@ import android.os.Build.VERSION_CODES;
 import android.os.Handler;
 import android.os.Looper;
 import androidx.annotation.Nullable;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
+import com.google.android.material.color.DynamicColors;
 import java.util.Calendar;
-import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.notification.BootReceiver;
-import xyz.zedler.patrick.grocy.notification.DueSoonNotificationReceiver;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT.NOTIFICATIONS;
+import xyz.zedler.patrick.grocy.Constants.THEME;
+import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.notification.BootReceiver;
+import xyz.zedler.patrick.grocy.notification.DueSoonNotificationReceiver;
 
 public class ReminderUtil {
 
@@ -156,16 +159,61 @@ public class ReminderUtil {
       String title,
       String text,
       int notificationId,
-      String notificationChannelId,
+      String channelId,
       Intent intent
   ) {
-    NotificationCompat.Builder builder = new NotificationCompat.Builder(
-        context,
-        notificationChannelId
-    )
+    int themeResId = -1;
+    Context dynamicColorContext = null;
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    String theme = sharedPrefs.getString(
+        Constants.SETTINGS.APPEARANCE.THEME, Constants.SETTINGS_DEFAULT.APPEARANCE.THEME
+    );
+    switch (theme) {
+      case THEME.RED:
+        themeResId = R.style.Theme_Grocy_Red;
+        break;
+      case THEME.YELLOW:
+        themeResId = R.style.Theme_Grocy_Yellow;
+        break;
+      case THEME.LIME:
+        themeResId = R.style.Theme_Grocy_Lime;
+        break;
+      case THEME.GREEN:
+        themeResId = R.style.Theme_Grocy_Green;
+        break;
+      case THEME.TURQUOISE:
+        themeResId = R.style.Theme_Grocy_Turquoise;
+        break;
+      case THEME.TEAL:
+        themeResId = R.style.Theme_Grocy_Teal;
+        break;
+      case THEME.BLUE:
+        themeResId = R.style.Theme_Grocy_Blue;
+        break;
+      case THEME.PURPLE:
+        themeResId = R.style.Theme_Grocy_Purple;
+        break;
+      default:
+        if (DynamicColors.isDynamicColorAvailable()) {
+          dynamicColorContext = DynamicColors.wrapContextIfAvailable(context);
+        } else {
+          themeResId = R.style.Theme_Grocy_Green;
+        }
+        break;
+    }
+
+    Context colorContext;
+    if (themeResId != -1) {
+      colorContext = new ContextThemeWrapper(context, themeResId);
+    } else {
+      colorContext = dynamicColorContext;
+    }
+
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId);
+    builder
         .setContentTitle(title)
         .setAutoCancel(true)
-        .setColor(ContextCompat.getColor(context, R.color.retro_green_bg_black))
+        .setColor(ResUtil.getColorAttr(colorContext, R.attr.colorPrimary))
         .setSmallIcon(R.drawable.ic_round_grocy_notification)
         .setContentIntent(
             PendingIntent.getActivity(

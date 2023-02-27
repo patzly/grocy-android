@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <LinearLayout
@@ -23,12 +23,8 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:id="@+id/container"
   style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
-  android:orientation="horizontal"
-  android:paddingStart="0dp"
-  android:paddingEnd="4dp"
-  android:paddingTop="2dp"
-  android:paddingBottom="2dp"
-  android:gravity="center_vertical"
+  android:paddingStart="16dp"
+  android:paddingEnd="8dp"
   android:animateLayoutChanges="true">
 
   <ImageView
@@ -37,10 +33,7 @@
     android:src="@drawable/ic_round_check_circle"
     android:visibility="invisible"
     tools:ignore="ContentDescription"
-    android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
-    android:layout_marginTop="16dp"
-    android:layout_marginBottom="16dp"
     app:tint="?attr/colorPrimary" />
 
   <TextView
@@ -49,8 +42,6 @@
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_weight="1"
-    android:layout_marginTop="16dp"
-    android:layout_marginBottom="16dp"
     android:singleLine="false" />
 
   <com.google.android.material.button.MaterialButton

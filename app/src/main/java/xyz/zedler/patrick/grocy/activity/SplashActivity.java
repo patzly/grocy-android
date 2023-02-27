@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.activity;
@@ -50,8 +50,15 @@ public class SplashActivity extends MainActivity {
 
   @Override
   public void onCreate(Bundle bundle) {
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
       super.onCreate(bundle);
+
+      boolean speedUpStart = sharedPrefs.getBoolean(
+          Constants.SETTINGS.BEHAVIOR.SPEED_UP_START,
+          Constants.SETTINGS_DEFAULT.BEHAVIOR.SPEED_UP_START
+      );
 
       getSplashScreen().setOnExitAnimationListener(view -> {
         AnimatorSet set = new AnimatorSet();
@@ -59,8 +66,8 @@ public class SplashActivity extends MainActivity {
             ObjectAnimator.ofFloat(view, "alpha", 0),
             ObjectAnimator.ofFloat(view.getIconView(), "alpha", 0)
         );
-        set.setDuration(400);
-        set.setStartDelay(550);
+        set.setDuration(speedUpStart ? 200 : 400);
+        set.setStartDelay(speedUpStart ? 0 : 550);
         set.addListener(new AnimatorListenerAdapter() {
           @Override
           public void onAnimationEnd(Animator animation, boolean isReverse) {
@@ -70,10 +77,13 @@ public class SplashActivity extends MainActivity {
         set.start();
       });
     } else {
-      SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-
       // DARK MODE
 
+      try {
+        sharedPrefs.getInt(SETTINGS.APPEARANCE.DARK_MODE, SETTINGS_DEFAULT.APPEARANCE.DARK_MODE);
+      } catch (ClassCastException e) {
+        sharedPrefs.edit().remove(SETTINGS.APPEARANCE.DARK_MODE).apply();
+      }
       int modeNight = sharedPrefs.getInt(
           SETTINGS.APPEARANCE.DARK_MODE, SETTINGS_DEFAULT.APPEARANCE.DARK_MODE);
       int uiMode = getResources().getConfiguration().uiMode;
@@ -141,7 +151,6 @@ public class SplashActivity extends MainActivity {
             Constants.SETTINGS.BEHAVIOR.SPEED_UP_START,
             Constants.SETTINGS_DEFAULT.BEHAVIOR.SPEED_UP_START
         );
-
         LayerDrawable splashContent = (LayerDrawable) ResourcesCompat.getDrawable(
             getResources(), R.drawable.splash_content, getTheme()
         );
@@ -175,6 +184,11 @@ public class SplashActivity extends MainActivity {
     }
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(base);
     // Night mode
+    try {
+      sharedPrefs.getInt(SETTINGS.APPEARANCE.DARK_MODE, SETTINGS_DEFAULT.APPEARANCE.DARK_MODE);
+    } catch (ClassCastException e) {
+      sharedPrefs.edit().remove(SETTINGS.APPEARANCE.DARK_MODE).apply();
+    }
     int modeNight = sharedPrefs.getInt(
         SETTINGS.APPEARANCE.DARK_MODE, SETTINGS_DEFAULT.APPEARANCE.DARK_MODE
     );

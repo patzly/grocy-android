@@ -14,21 +14,22 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<com.google.android.material.card.MaterialCardView
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  app:cardCornerRadius="16dp"
+  app:strokeColor="?attr/colorOutline"
+  app:strokeWidth="1dp">
 
   <com.journeyapps.barcodescanner.BarcodeView
     android:id="@+id/zxing_barcode_surface"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:zxing_framing_rect_width="220dp"
-    app:zxing_framing_rect_height="220dp"/>
+    android:layout_height="match_parent" />
 
   <com.journeyapps.barcodescanner.ViewfinderView
     android:id="@+id/zxing_viewfinder_view"
@@ -36,18 +37,6 @@
     android:layout_height="match_parent"
     app:zxing_possible_result_points="@color/transparent"
     app:zxing_result_view="@color/transparent"
-    app:zxing_viewfinder_mask="@color/background"
     app:zxing_viewfinder_laser_visibility="false"/>
 
-  <com.google.android.material.card.MaterialCardView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:layout_margin="11dp"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="0dp"
-    app:cardBackgroundColor="@color/transparent"
-    app:strokeWidth="5dp"
-    app:strokeColor="@color/grey800" />
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</com.google.android.material.card.MaterialCardView>

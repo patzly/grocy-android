@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.model;
@@ -30,6 +30,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import java.util.ArrayList;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
@@ -52,9 +53,10 @@ public class FormDataMasterProductCatOptional {
   private final MutableLiveData<ProductGroup> productGroupLive;
   private final LiveData<String> productGroupNameLive;
   private final MutableLiveData<String> energyLive;
+  private final MutableLiveData<Integer> defaultStockLabelTypeLive;
   private final MutableLiveData<Boolean> neverShowOnStockLive;
   private final MutableLiveData<Boolean> noOwnStockLive;
-
+  private final MutableLiveData<Boolean> shouldNotBeFrozenLive;
 
   private final MutableLiveData<Product> productLive;
   private boolean filledWithProduct;
@@ -86,8 +88,10 @@ public class FormDataMasterProductCatOptional {
         productGroup -> productGroup != null ? productGroup.getName() : null
     );
     energyLive = new MutableLiveData<>();
-    neverShowOnStockLive = new MutableLiveData<>();
-    noOwnStockLive = new MutableLiveData<>();
+    defaultStockLabelTypeLive = new MutableLiveData<>(0);
+    neverShowOnStockLive = new MutableLiveData<>(false);
+    noOwnStockLive = new MutableLiveData<>(false);
+    shouldNotBeFrozenLive = new MutableLiveData<>(false);
 
     productLive = new MutableLiveData<>();
     filledWithProduct = false;
@@ -154,6 +158,14 @@ public class FormDataMasterProductCatOptional {
     return energyLive;
   }
 
+  public MutableLiveData<Integer> getDefaultStockLabelTypeLive() {
+    return defaultStockLabelTypeLive;
+  }
+
+  public void setDefaultStockLabelTypeLive(int type) {
+    defaultStockLabelTypeLive.setValue(type);
+  }
+
   public MutableLiveData<Boolean> getNeverShowOnStockLive() {
     return neverShowOnStockLive;
   }
@@ -176,6 +188,16 @@ public class FormDataMasterProductCatOptional {
 
   public boolean getNoOwnStockVisible() {
     return VersionUtil.isGrocyServerMin330(sharedPrefs);
+  }
+
+  public MutableLiveData<Boolean> getShouldNotBeFrozenLive() {
+    return shouldNotBeFrozenLive;
+  }
+
+  public void toggleShouldNotBeFrozenLive() {
+    shouldNotBeFrozenLive.setValue(
+        shouldNotBeFrozenLive.getValue() == null || !shouldNotBeFrozenLive.getValue()
+    );
   }
 
   public MutableLiveData<Boolean> getScannerVisibilityLive() {
@@ -275,6 +297,7 @@ public class FormDataMasterProductCatOptional {
     assert isActiveLive.getValue() != null;
     assert neverShowOnStockLive.getValue() != null;
     assert noOwnStockLive.getValue() != null;
+    assert shouldNotBeFrozenLive.getValue() != null;
     ProductGroup pGroup = productGroupLive.getValue();
     product.setActive(isActiveLive.getValue());
     product.setParentProductId(parentProductLive.getValue() != null
@@ -283,8 +306,14 @@ public class FormDataMasterProductCatOptional {
         ? descriptionLive.getValue() : null);
     product.setProductGroupId(pGroup != null ? String.valueOf(pGroup.getId()) : null);
     product.setCalories(energyLive.getValue());
+    if (isFeatureLabelPrintEnabled()) {
+      product.setDefaultStockLabelType(String.valueOf(defaultStockLabelTypeLive.getValue()));
+    } else {
+      product.setDefaultStockLabelType(String.valueOf(0));
+    }
     product.setHideOnStockOverviewBoolean(neverShowOnStockLive.getValue());
     product.setNoOwnStockBoolean(noOwnStockLive.getValue());
+    product.setShouldNotBeFrozenBoolean(shouldNotBeFrozenLive.getValue());
     return product;
   }
 
@@ -311,8 +340,18 @@ public class FormDataMasterProductCatOptional {
         ? Html.fromHtml(product.getDescription()) : null);
     productGroupLive.setValue(getProductGroupFromId(product.getProductGroupId()));
     energyLive.setValue(product.getCalories());
+    defaultStockLabelTypeLive.setValue(product.getDefaultStockLabelTypeInt());
     neverShowOnStockLive.setValue(product.getHideOnStockOverviewBoolean());
     noOwnStockLive.setValue(product.getNoOwnStockBoolean());
+    shouldNotBeFrozenLive.setValue(product.getShouldNotBeFrozenBoolean());
     filledWithProduct = true;
+  }
+
+  public boolean isFeatureLabelPrintEnabled() {
+    return sharedPrefs.getBoolean(PREF.FEATURE_LABEL_PRINTER, false);
+  }
+
+  public boolean isFeatureFreezingEnabled() {
+    return sharedPrefs.getBoolean(PREF.FEATURE_STOCK_FREEZING_TRACKING, false);
   }
 }

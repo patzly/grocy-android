@@ -14,44 +14,50 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.widget.HorizontalScrollView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentOverviewStartBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
-import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
+import xyz.zedler.patrick.grocy.view.FormattedTextView;
 import xyz.zedler.patrick.grocy.viewmodel.OverviewStartViewModel;
 
 public class OverviewStartFragment extends BaseFragment {
 
   private final static String TAG = OverviewStartFragment.class.getSimpleName();
 
+  private static final String DIALOG_FAB_INFO = "dialog_fab_info";
+
   private MainActivity activity;
   private FragmentOverviewStartBinding binding;
   private OverviewStartViewModel viewModel;
-  private InfoFullscreenHelper infoFullscreenHelper;
   private ClickUtil clickUtil;
-  private SystemBarBehavior systemBarBehavior;
+  private AlertDialog dialogFabInfo;
 
   @Override
   public View onCreateView(
@@ -59,19 +65,13 @@ public class OverviewStartFragment extends BaseFragment {
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    binding = FragmentOverviewStartBinding.inflate(
-        inflater, container, false
-    );
+    binding = FragmentOverviewStartBinding.inflate(inflater, container, false);
     return binding.getRoot();
   }
 
   @Override
   public void onDestroyView() {
     super.onDestroyView();
-    if (infoFullscreenHelper != null) {
-      infoFullscreenHelper.destroyInstance();
-      infoFullscreenHelper = null;
-    }
     if (binding != null) {
       binding = null;
     }
@@ -87,50 +87,47 @@ public class OverviewStartFragment extends BaseFragment {
     binding.setActivity(activity);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
-    systemBarBehavior = new SystemBarBehavior(activity);
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipe);
-    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setScroll(binding.scroll, binding.constraint);
+    systemBarBehavior.applyAppBarInsetOnContainer(false);
+    systemBarBehavior.applyStatusBarInsetOnContainer(false);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     ViewUtil.setOnlyOverScrollStretchEnabled(binding.scrollHorizActions);
     binding.scrollHorizActions.post(
-        () -> binding.scrollHorizActions.fullScroll(
-            UiUtil.isLayoutRtl(activity)
-                ? HorizontalScrollView.FOCUS_LEFT
-                : HorizontalScrollView.FOCUS_RIGHT
-        )
+        () -> {
+          if (binding == null) return;
+          binding.scrollHorizActions.fullScroll(
+              UiUtil.isLayoutRtl(activity)
+                  ? HorizontalScrollView.FOCUS_LEFT
+                  : HorizontalScrollView.FOCUS_RIGHT
+          );
+        }
     );
 
     clickUtil = new ClickUtil(1000);
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
-            activity.binding.coordinatorMain
-        ));
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       }
     });
-
-    infoFullscreenHelper = new InfoFullscreenHelper(binding.frameContainer);
-    viewModel.getInfoFullscreenLive().observe(
-        getViewLifecycleOwner(),
-        infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
-    );
-
-    viewModel.getOfflineLive().observe(getViewLifecycleOwner(), this::appBarOfflineInfo);
 
     binding.toolbar.setOnMenuItemClickListener(item -> {
       int id = item.getItemId();
       if (id == R.id.action_settings) {
-        navigateDeepLink(getString(R.string.deep_link_settingsFragment));
+        activity.navigateDeepLink(getString(R.string.deep_link_settingsFragment));
+      } else if (id == R.id.action_help) {
+        activity.showHelpBottomSheet();
       } else if (id == R.id.action_about) {
-        navigateDeepLink(getString(R.string.deep_link_aboutFragment));
+        activity.navigateDeepLink(getString(R.string.deep_link_aboutFragment));
       } else if (id == R.id.action_feedback) {
         activity.showBottomSheet(new FeedbackBottomSheet());
-      } else if (id == R.id.action_changelog) {
-        activity.showChangelogBottomSheet();
       }
       return false;
     });
@@ -140,37 +137,51 @@ public class OverviewStartFragment extends BaseFragment {
     }
 
     // UPDATE UI
-    updateUI((getArguments() == null
-        || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
-        && savedInstanceState == null);
-  }
 
-  private void updateUI(boolean animated) {
+    boolean animated = (getArguments() == null
+        || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+        && savedInstanceState == null;
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
     activity.getScrollBehavior().setBottomBarVisibility(true);
-    activity.updateBottomAppBar(true, R.menu.menu_empty);
+    activity.updateBottomAppBar(viewModel.isFeatureEnabled(PREF.FEATURE_STOCK), R.menu.menu_empty);
     activity.updateFab(
         R.drawable.ic_round_barcode_scan,
         R.string.action_scan,
         Constants.FAB.TAG.SCAN,
         animated,
-        () -> activity.navigateFragment(
-            R.id.consumeFragment,
-            new ConsumeFragmentArgs.Builder()
-                .setStartWithScanner(true).build().toBundle()
-        ), () -> activity.navigateFragment(
+        () -> {
+          if (showFabInfoDialogIfAppropriate()) {
+            return;
+          }
+          activity.navigateFragment(
+              R.id.consumeFragment,
+              new ConsumeFragmentArgs.Builder().setStartWithScanner(true).build().toBundle()
+          );
+        }, () -> activity.navigateFragment(
             R.id.purchaseFragment,
-            new PurchaseFragmentArgs.Builder()
-                .setStartWithScanner(true).build().toBundle()
+            new PurchaseFragmentArgs.Builder().setStartWithScanner(true).build().toBundle()
         )
     );
+
+    if (savedInstanceState != null && savedInstanceState.getBoolean(DIALOG_FAB_INFO)) {
+      new Handler(Looper.getMainLooper()).postDelayed(
+          this::showFabInfoDialogIfAppropriate, 1
+      );
+    }
+  }
+
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    boolean isShowing = dialogFabInfo != null && dialogFabInfo.isShowing();
+    outState.putBoolean(DIALOG_FAB_INFO, isShowing);
   }
 
   public void navigateToSettingsCatBehavior() {
     Bundle bundle = new SettingsFragmentArgs.Builder()
         .setShowCategory(Constants.SETTINGS.BEHAVIOR.class.getSimpleName())
         .build().toBundle();
-    navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
+    activity.navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
   }
 
   public void navigateToSettingsCatServer() {
@@ -178,9 +189,9 @@ public class OverviewStartFragment extends BaseFragment {
       Bundle bundle = new SettingsFragmentArgs.Builder()
           .setShowCategory(Constants.SETTINGS.SERVER.class.getSimpleName())
           .build().toBundle();
-      navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
+      activity.navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
     } else {
-      navigateDeepLink(getString(R.string.deep_link_settingsCatServerFragment));
+      activity.navigateDeepLink(getString(R.string.deep_link_settingsCatServerFragment));
     }
   }
 
@@ -189,10 +200,46 @@ public class OverviewStartFragment extends BaseFragment {
       Bundle bundle = new SettingsFragmentArgs.Builder()
           .setShowCategory(Constants.SETTINGS.SERVER.class.getSimpleName())
           .build().toBundle();
-      navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
+      activity.navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
     } else {
-      navigateDeepLink(getString(R.string.deep_link_settingsCatServerFragment));
+      activity.navigateDeepLink(getString(R.string.deep_link_settingsCatServerFragment));
     }
+  }
+
+  private boolean showFabInfoDialogIfAppropriate() {
+    if (viewModel.getOverviewFabInfoShown()) {
+      return false;
+    }
+    FormattedTextView textView = new FormattedTextView(activity);
+    textView.setTextColor(ResUtil.getColorAttr(activity, R.attr.colorOnSurfaceVariant));
+    textView.setTextSizeParagraph(14);
+    textView.setBlockDistance(8);
+    textView.setSideMargin(24);
+    textView.setLastBlockWithBottomMargin(false);
+    textView.setText(getString(R.string.msg_help_fab_overview_start));
+    dialogFabInfo = new MaterialAlertDialogBuilder(
+        activity, R.style.ThemeOverlay_Grocy_AlertDialog
+    ).setTitle(R.string.title_help)
+        .setView(textView)
+        .setPositiveButton(R.string.title_consume, (dialog, which) -> {
+          performHapticClick();
+          viewModel.setOverviewFabInfoShown();
+          activity.navigateFragment(
+              R.id.consumeFragment,
+              new ConsumeFragmentArgs.Builder()
+                  .setStartWithScanner(true).build().toBundle()
+          );
+        }).setNegativeButton(R.string.title_purchase, (dialog, which) -> {
+          performHapticClick();
+          viewModel.setOverviewFabInfoShown();
+          activity.navigateFragment(
+              R.id.purchaseFragment,
+              new PurchaseFragmentArgs.Builder()
+                  .setStartWithScanner(true).build().toBundle()
+          );
+        }).setOnCancelListener(dialog -> performHapticClick()).create();
+    dialogFabInfo.show();
+    return true;
   }
 
   public void startLogoAnimation() {
@@ -208,25 +255,7 @@ public class OverviewStartFragment extends BaseFragment {
       return;
     }
     viewModel.setOfflineLive(!online);
-    if (online) {
-      viewModel.downloadData();
-    }
-  }
-
-  private void appBarOfflineInfo(boolean visible) {
-    boolean currentState = binding.linearOfflineError.getVisibility() == View.VISIBLE;
-    if (visible == currentState) {
-      return;
-    }
-    binding.linearOfflineError.setVisibility(visible ? View.VISIBLE : View.GONE);
-    if (systemBarBehavior != null) {
-      systemBarBehavior.refresh();
-    }
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
+    viewModel.downloadData(false);
   }
 
   @NonNull

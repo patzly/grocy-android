@@ -25,7 +25,7 @@ plugins {
 android {
     namespace 'xyz.zedler.patrick.grocy'
     compileSdkVersion 33
-    buildToolsVersion '33.0.0'
+    buildToolsVersion '33.0.2'
 
     buildFeatures {
         viewBinding true
@@ -41,8 +41,8 @@ android {
         applicationId "xyz.zedler.patrick.grocy"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 42
-        versionName "2.3.0"
+        versionCode 44
+        versionName "3.1.0"
         resConfigs 'cs', 'de', 'en', 'es', 'fr', 'hu', 'it', 'iw', 'nb', 'nl', 'pl', 'pt-rPT', 'ru',
                 'sk', 'sv', 'uk', 'zh-rCN', 'zh-rTW'
 
@@ -87,25 +87,25 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.6.0-rc01'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.preference:preference:1.2.0'
-    implementation 'androidx.browser:browser:1.4.0'
+    implementation 'androidx.browser:browser:1.5.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'androidx.paging:paging-runtime:3.1.1'
 
     // Navigation framework for easy navigation control using XML
-    implementation 'androidx.navigation:navigation-fragment:2.5.2'
-    implementation 'androidx.navigation:navigation-ui:2.5.2'
+    implementation 'androidx.navigation:navigation-fragment:2.5.3'
+    implementation 'androidx.navigation:navigation-ui:2.5.3'
 
     // Android Room for database and RxJava for Async access of database
-    implementation 'androidx.room:room-runtime:2.4.3'
-    implementation 'androidx.room:room-rxjava3:2.4.3'
-    annotationProcessor 'androidx.room:room-compiler:2.4.3'
-    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'androidx.room:room-runtime:2.5.0'
+    implementation 'androidx.room:room-rxjava3:2.5.0'
+    annotationProcessor 'androidx.room:room-compiler:2.5.0'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
 
     // Nice material views
-    implementation 'com.google.android.material:material:1.8.0-alpha01'
+    implementation 'com.google.android.material:material:1.9.0-alpha01'
 
     // Volley for all general network requests and Glide for image loading
     // Netcipher for Tor support and Conscrypt for new TLS support on old Android devices
@@ -115,15 +115,15 @@ dependencies {
     implementation 'org.conscrypt:conscrypt-android:2.5.2'
 
     // GSON for converting JSON responses to Java objects
-    implementation 'com.google.code.gson:gson:2.9.1'
+    implementation 'com.google.code.gson:gson:2.10.1'
 
     // FuzzyWuzzy for fuzzy search in product names and autocompletion
     implementation 'me.xdrop:fuzzywuzzy:1.4.0'
 
     // Work for daily notifications
-    implementation 'androidx.work:work-runtime:2.7.1'
+    implementation 'androidx.work:work-runtime:2.8.0'
 
-    implementation 'androidx.webkit:webkit:1.5.0'
+    implementation 'androidx.webkit:webkit:1.6.0'
 
     // ZXing for barcode scanning
     //noinspection GradleDependency
@@ -132,5 +132,5 @@ dependencies {
     // https://github.com/journeyapps/zxing-android-embedded#option-2-desugaring-advanced
     // prevents bug https://github.com/patzly/grocy-android/issues/425
     //noinspection GradleDependency
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
 }

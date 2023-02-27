@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.viewmodel;
@@ -142,8 +142,8 @@ public class StockOverviewViewModel extends BaseViewModel {
     );
     if (NumUtil.isStringInt(args.getStatusFilterId())) {
       if (Integer.parseInt(args.getStatusFilterId())
-          == FilterChipLiveDataStockStatus.STATUS_DUE_SOON) {
-        filterChipLiveDataStatus.setStatusDueSoon();
+          == FilterChipLiveDataStockStatus.STATUS_NOT_FRESH) {
+        filterChipLiveDataStatus.setStatusNotFresh();
       }
     }
     filterChipLiveDataProductGroup = new FilterChipLiveDataProductGroup(
@@ -189,6 +189,8 @@ public class StockOverviewViewModel extends BaseViewModel {
       for (VolatileItem volatileItem : data.getVolatileItems()) {
         StockItem stockItem = stockItemHashMap.get(volatileItem.getProductId());
         if (stockItem == null) continue;
+        Product product = productHashMap.get(stockItem.getProductId());
+        if (product != null && product.getNoOwnStockBoolean()) continue;
         if (volatileItem.getVolatileType() == VolatileItem.TYPE_DUE) {
           stockItem.setItemDue(true);
           itemsDueCount++;
@@ -248,6 +250,7 @@ public class StockOverviewViewModel extends BaseViewModel {
       }
 
       filterChipLiveDataStatus
+          .setNotFreshCount(itemsDueCount+itemsOverdueCount+itemsExpiredCount)
           .setDueSoonCount(itemsDueCount)
           .setOverdueCount(itemsOverdueCount)
           .setExpiredCount(itemsExpiredCount)
@@ -257,19 +260,22 @@ public class StockOverviewViewModel extends BaseViewModel {
           .emitCounts();
       updateFilteredStockItems();
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       }
     });
   }
 
-  public void downloadData() {
-    if (isOffline()) { // skip downloading and update recyclerview
+  public void downloadData(boolean skipOfflineCheck) {
+    if (!skipOfflineCheck && isOffline()) { // skip downloading and update recyclerview
       isLoadingLive.setValue(false);
       updateFilteredStockItems();
       return;
     }
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        () -> {
+          if (isOffline()) setOfflineLive(false);
+          loadFromDatabase(false);
+        },
         this::onDownloadError,
         QuantityUnit.class,
         ProductGroup.class,
@@ -285,6 +291,10 @@ public class StockOverviewViewModel extends BaseViewModel {
     );
   }
 
+  public void downloadData() {
+    downloadData(false);
+  }
+
   public void downloadDataForceUpdate() {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
@@ -298,17 +308,15 @@ public class StockOverviewViewModel extends BaseViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_STOCK_LOCATIONS, null);
     editPrefs.apply();
-    downloadData();
+    downloadData(true);
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
     if (debug) {
       Log.e(TAG, "onError: VolleyError: " + error);
     }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
+    showNetworkErrorMessage(error);
+    if (!isOffline()) setOfflineLive(true);
   }
 
   public void updateFilteredStockItems() {
@@ -380,13 +388,16 @@ public class StockOverviewViewModel extends BaseViewModel {
       }
 
       MissingItem missingItem = productIdsMissingItems.get(item.getProductId());
+      boolean hasOwnStock = !item.getProduct().getNoOwnStockBoolean();
       if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_ALL
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_NOT_FRESH
+          && (item.isItemDue() || item.isItemOverdue() || item.isItemExpired()) && hasOwnStock
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_DUE_SOON
-          && item.isItemDue()
+          && item.isItemDue() && hasOwnStock
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_OVERDUE
-          && item.isItemOverdue()
+          && item.isItemOverdue() && hasOwnStock
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_EXPIRED
-          && item.isItemExpired()
+          && item.isItemExpired() && hasOwnStock
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_BELOW_MIN
           && missingItem != null
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_IN_STOCK
@@ -499,7 +510,7 @@ public class StockOverviewViewModel extends BaseViewModel {
                     Log.i(TAG, "consumeProduct: undone");
                   }
                 },
-                this::showErrorMessage
+                this::showNetworkErrorMessage
             ));
           }
           downloadData();
@@ -511,7 +522,7 @@ public class StockOverviewViewModel extends BaseViewModel {
           }
         },
         error -> {
-          showErrorMessage(error);
+          showNetworkErrorMessage(error);
           if (debug) {
             Log.i(TAG, "consumeProduct: " + error);
           }
@@ -573,7 +584,7 @@ public class StockOverviewViewModel extends BaseViewModel {
                     Log.i(TAG, "openProduct: undone");
                   }
                 },
-                this::showErrorMessage
+                this::showNetworkErrorMessage
             ));
           }
           downloadData();
@@ -585,7 +596,7 @@ public class StockOverviewViewModel extends BaseViewModel {
           }
         },
         error -> {
-          showErrorMessage(error);
+          showNetworkErrorMessage(error);
           if (debug) {
             Log.i(TAG, "openProduct: " + error);
           }

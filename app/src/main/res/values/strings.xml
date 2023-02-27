@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <resources>
@@ -101,6 +101,8 @@
   <string name="action_open_scanner">Open scanner</string>
   <string name="action_discard">Discard</string>
   <string name="action_clear_form">Clear form</string>
+  <!-- Short form for "Link barcode to existing product and clear form", this should fit into a button so keep it short -->
+  <string name="action_link_and_clear">Link &amp; Clear</string>
   <string name="action_toggle_done">Toggle done</string>
   <string name="action_edit_notes">Edit notes</string>
   <string name="action_add_missing">Add missing products</string>
@@ -150,6 +152,16 @@
   <plurals name="msg_expired_products">
     <item quantity="one">%1$d expired</item>
     <item quantity="other">%1$d expired</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_short">
+    <item quantity="one">%1$d not fresh</item>
+    <item quantity="other">%1$d not fresh</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_long">
+    <item quantity="one">%1$d not fresh (all below)</item>
+    <item quantity="other">%1$d not fresh (all below)</item>
   </plurals>
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
   <plurals name="msg_missing_products">
@@ -218,6 +230,8 @@
   <string name="msg_task_undo">Undo task</string>
   <string name="msg_recipes_enough_in_stock">Enough in stock</string>
   <string name="msg_recipes_enough_in_stock_filter">(%1$d) Enough in stock</string>
+  <!-- %1$s is an amount with quantity unit (e.g. 3 bottles) -->
+  <string name="msg_recipes_enough_in_stock_amount">Enough in stock (%1$s)</string>
   <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) Not enough in stock but on shopping list</string>
   <string name="msg_recipes_not_enough_filter">(%1$d) Not enough in stock</string>
   <string name="msg_recipes_not_enough">Not enough in stock</string>
@@ -229,6 +243,7 @@
     <item quantity="one">%1$d ingredient missing</item>
     <item quantity="other">%1$d ingredients missing</item>
   </plurals>
+  <string name="msg_recipes_ingredient_fulfillment_info_list">Missing: %1$s | Already on shopping list: %2$s</string>
   <string name="msg_chore_executed">Tracked execution of chore</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Purchased %1$s %2$s of %3$s</string>
@@ -276,6 +291,7 @@
     <item quantity="other">%1$s %2$s will be removed from stock.</item>
   </plurals>
   <string name="msg_transfer_tare_weight">Products with tare weight enabled are currently not supported for transfer.</string>
+  <string name="msg_should_not_be_frozen">This product should\'t be frozen. Do you want to proceed?</string>
   <string name="msg_item_marked_as_done">Marked item as done</string>
   <string name="msg_item_marked_as_undone">Marked item as undone</string>
   <string name="option_synced_success">Option synced successfully</string>
@@ -301,7 +317,7 @@
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">Transaction which will be executed:\n\nRemove %1$s %2$s of %3$s from stock\nLocation: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-  <string name="msg_quick_mode_confirm_open">Transaction which will be executed:\n\Mark %1$s %2$s of %3$s as opened\nLocation: %4$s</string>
+  <string name="msg_quick_mode_confirm_open">Transaction which will be executed:\n\nMark %1$s %2$s of %3$s as opened\nLocation: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">Transaction which will be executed:\n\nTransfer %1$s %2$s of %3$s\nFrom Location: %4$s\nTo Location: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
@@ -322,15 +338,17 @@
   <string name="msg_press_hold_confirm">Press and hold to confirm deletion</string>
   <string name="msg_recipe_consume_ask">Are you sure to consume all ingredients needed by recipe \"%1$s\"? (ingredients marked with \"only check if any amount is in stock\" will be ignored)</string>
   <string name="msg_recipe_shopping_list_ask">Are you sure to put all missing ingredients for recipe \"%1$s\" on the shopping list?\n\nUncheck ingredients to not put them on the shopping list:</string>
-  <string name="msg_welcome_to_grocy">Welcome to Grocy Android!\n\nTo use grocy productively you need your own server or the grocy add-on for Home Assistant.\nIf you just want to try out this app you can use the demo server from Bernd Bestel, the creator of grocy.</string>
-  <string name="msg_choose_option_below">Please choose one option from below.</string>
+  <string name="msg_welcome">Welcome to Grocy Android!</string>
+  <string name="msg_welcome_introduce">To use grocy productively you need your own server or the grocy add-on for Home Assistant.\nIf you just want to try out this app you can use the demo server from Bernd Bestel, the creator of grocy.</string>
+  <string name="msg_choose_option_below">Please choose an option below.</string>
   <string name="msg_qr_code_scan">On another device, visit your grocy website and go to \'API keys\' page. Click \'Add\', then click on the little QR code symbol and scan the QR code.</string>
   <string name="msg_qr_code_scan_token">You\'re using the grocy Home Assistant add-on. Create a long-lived access token in your Home Assistant profile settings (last section). Below the token field, click on \"Generate QR code\" and scan it here.</string>
   <string name="msg_port_connection_info_without_port">The app will connect to port %1$s.\nIf you want it to connect to a different port, you can add one to the URL.\nExample: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">The app will connect to port %1$s.</string>
   <string name="msg_clear_form_first">Clear the form first before scanning another known barcode.</string>
   <string name="msg_not_implemented_yet">This will be implemented soon. Please use your server interface for now.</string>
-  <string name="stock_disabled">You have disabled the stock feature in your grocy configuration, probably because you don\'t need it. But this app can only do stock management at the moment, so it may not be of much use to you.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_stock_label_type">This is the default stock entry label type which will be prefilled on purchase.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">The stock overview page lists all products which are currently in-stock or below their min. amount. Enable this to hide this product there always.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -341,6 +359,8 @@
   <string name="msg_help_move_on_open">When enabled, on marking this product as opened, the corresponding amount will be moved to the default consume location.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_own_stock">When enabled, the corresponding product can\'t have own stock, means it will not be selectable on purchase (useful for parent products which are just used as a summary/total view of the sub products).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_should_not_be_frozen">When enabled, on moving this product to a freezer location (so when freezing it), a warning will be shown.</string>
   <string name="msg_help_due_date_type">Based on the selected due date type, the highlighting on the stock overview page will be different. \"Best before date\" means that the product is maybe still safe to be consumed after its due date is reached. \"Expiration date\" means that the product is not safe to be consumed after its due date is reached.</string>
   <string name="msg_help_default_due_days_format">You can long press on an item below to enter a date instead of a number.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -372,9 +392,9 @@
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_choose">You can choose a barcode scanner for camera barcode scanning.</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") uses the contrast data from the camera stream to detect a barcode. It then calculates the relative width of all lines.\n- Sometimes incorrect results\n- Barcode has to be horizontally aligned\n- Requires good contrast and sharpness\n- Is performed completely offline on your device\n- Framework is open source</string>
+  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") uses the contrast data from the camera stream to detect a barcode. It then calculates the relative width of all lines.\n\n- Sometimes incorrect results\n- Barcode has to be horizontally aligned\n- Requires good contrast and sharpness\n- Is performed completely offline on your device\n- Framework is open source</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit uses machine learning with the latest technologies for barcode scanning.\n- Almost no incorrect results\n- Orientation doesn\'t matter\n- Even works for fuzzy or low contrast barcodes\n- Is performed completely offline on your device\n- Framework is not open source</string>
+  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit uses machine learning with the latest technologies for barcode scanning.\n\n- Almost no incorrect results\n- Orientation doesn\'t matter\n- Even works for fuzzy or low contrast barcodes\n- Is performed completely offline on your device\n- Framework is not open source</string>
   <string name="msg_help_external_scanner_ready">You can use an external scanner for the field below while it\'s focused and empty.</string>
   <string name="msg_help_external_scanner_settings">This app supports external scanner devices which act as a keyboard and can be connected via USB or Bluetooth. The following options must be configured in your external scanner:\n\nPrefix: None\nSuffix: TAB or ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -400,6 +420,7 @@
   <string name="msg_help_home_assistant_login_server">In the field below you can also enter your Nabu Casa cloud URL if you\'re using that service. Tap this card to visit the Nabu Casa website.</string>
   <string name="msg_help_home_assistant_login_token">You can create a long-lived access token in your Home Assistant profile settings (last section). Tap here to open the URL from above.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Navigate back or tap this card to scan a QR code which fills the fields below.</string>
+  <string name="msg_help_fab_overview_start">The action button on this overview page has two actions:\n\n- Short tap: consume with barcode scanner\n- Long tap: purchase with barcode scanner\n\nWith this button the quick mode on the respective pages is turned on by default. You can change this in behavior settings.</string>
   <string name="msg_share">Check out this Android client for the awesome grocy-project: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">API key not working</string>
@@ -440,6 +461,7 @@
   <string name="error_api_qr_code">Not a QR code with grocy API credentials</string>
   <string name="error_token_qr_code">Not a QR code with a long-lived access token from Home Assistant</string>
   <string name="error_loading_qus">Failed to load quantity units from product</string>
+  <string name="error_no_children">The selected product has no children</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Cannot be equal to %1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
@@ -450,14 +472,13 @@
   <string name="error_bounds_max">Must be lower than or equal to %1$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_bounds_higher">Must be higher than %1$s</string>
-  <!-- %1$s is a number like 0, 1, 2 -->
-  <string name="error_max_decimal_places">Max. %1$s decimal places</string>
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">This page only works with internet access. Check your connection.</string>
   <string name="error_no_done_items">There are no items marked as done</string>
   <string name="error_name_exists">Name already exists</string>
   <string name="error_network">Network error</string>
   <string name="error_network_subtitle">The required data could not be loaded completely</string>
+  <string name="error_network_exact">Network error: %1$s</string>
   <string name="error_unknown">Oops!</string>
   <string name="error_not_grocy_instance">Not a valid grocy instance</string>
   <string name="error_timeout">Timeout error</string>
@@ -575,9 +596,8 @@
   <string name="title_product_cat_qu_conversions">QU conversions</string>
   <string name="title_unknown_input">Unknown input</string>
   <string name="title_presets_new_products">Presets for new products</string>
-  <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
-   Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
-  <string name="title_use_scanner_tool">Use %1$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
+  <string name="title_ingredient_with_amount">%1$s %2$s of %3$s</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
@@ -638,6 +658,14 @@
   <string name="subtitle_recipe_due_score">Due score: %1$s</string>
   <string name="subtitle_per_serving">per serving</string>
   <string name="subtitle_tap_preparation_mode">Tap here for preparation mode</string>
+  <!-- Context is Label printer -->
+  <string name="subtitle_print_label_no">No label</string>
+  <!-- Short form for "One label per purchase" -->
+  <string name="subtitle_print_label_per_purchase">Per purchase</string>
+  <!-- Short form for "One label per unit" -->
+  <string name="subtitle_print_label_per_unit">Per unit</string>
+  <!-- %1$s is a price and %2$s is a currency -->
+  <string name="subtitle_total_price">Total price: %1$s %2$s</string>
 
   <string name="description_input_product_part1">Product field contains:</string>
   <string name="description_input_product_part2">Please choose how to proceed:</string>
@@ -739,6 +767,11 @@
     <item quantity="one">Your database contains %1$d product.</item>
     <item quantity="other">Your database contains %1$d products.</item>
   </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="error_max_decimal_places">
+    <item quantity="one">Max. %1$s decimal place</item>
+    <item quantity="other">Max. %1$s decimal places</item>
+  </plurals>
 
   <string name="property_name">Name</string>
   <string name="property_name_singular">Name (singular form)</string>
@@ -798,6 +831,8 @@
   <string name="property_due_type_expiration">Expiration date</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date">Due date</string>
+  <!-- This string is for due date of task -->
+  <string name="property_due_date_task">Due date</string>
   <!-- %1$s is a due date-->
   <string name="property_due_date_fill">Due date: %1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -853,6 +888,8 @@
   <string name="property_never_show">Never show on stock overview</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_disable_own_stock">Disable own stock</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_should_not_be_frozen">Should not be frozen</string>
   <string name="property_number">Number</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_enable_tare_weight">Enable tare weight handling</string>
@@ -1090,6 +1127,8 @@
   <string name="setting_timeout_descriptions">After which loading is cancelled</string>
   <string name="setting_beginner_mode">Beginner mode</string>
   <string name="setting_beginner_mode_description">Display help texts by default</string>
+  <string name="setting_haptic">Haptic effects</string>
+  <string name="setting_haptic_description">An immersive experience</string>
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">Expand bottom sheets</string>
   <string name="setting_expand_bottom_sheets_description">In landscape mode</string>
@@ -1099,6 +1138,8 @@
   <string name="setting_date_keyboard_input_description">Instead of date picker wheels</string>
   <string name="setting_date_keyboard_reverse">Use reverse date format for input</string>
   <string name="setting_date_keyboard_reverse_description">DDMMYY instead of YYMMDD</string>
+  <string name="setting_copy_barcode_note">Copy barcode note to stock entry note</string>
+  <string name="setting_copy_barcode_note_description">When purchasing a product</string>
   <string name="setting_loading_circle">Show loading circle for all requests</string>
   <string name="setting_loading_circle_description">Helpful for slow networks</string>
   <string name="setting_tor">Use Tor</string>

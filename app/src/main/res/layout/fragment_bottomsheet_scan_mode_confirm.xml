@@ -14,13 +14,13 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:id="@+id/header"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:orientation="vertical"
@@ -31,14 +31,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-      style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
-      android:text="@string/title_confirmation" />
+    <com.google.android.material.appbar.MaterialToolbar
+      android:id="@+id/toolbar"
+      style="@style/Widget.Grocy.Toolbar"
+      app:title="@string/title_confirmation" />
 
     <ProgressBar
       android:id="@+id/progress_timeout"
       android:layout_width="match_parent"
-      style="@style/Widget.Grocy.ProgressBar.Horizontal.Green"
+      style="@style/Widget.Grocy.ProgressBar.Horizontal.Primary"
       android:layout_gravity="bottom"
       android:indeterminate="false"
       android:max="100"
@@ -60,9 +61,39 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
-      android:padding="16dp"
+      android:paddingStart="16dp"
+      android:paddingEnd="16dp"
+      android:paddingTop="12dp"
+      android:paddingBottom="12dp"
       android:clickable="true"
       android:focusable="true">
+
+      <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/toggle_group_consume_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="12dp"
+        app:singleSelection="true"
+        app:selectionRequired="true">
+
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/toggle_consume"
+          style="@style/Widget.Grocy.Button.OutlinedButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/action_consume"
+          tools:ignore="TextContrastCheck" />
+
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/toggle_open"
+          style="@style/Widget.Grocy.Button.OutlinedButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/action_open"
+          tools:ignore="TextContrastCheck" />
+
+      </com.google.android.material.button.MaterialButtonToggleGroup>
 
       <TextView
         android:id="@+id/text"
@@ -79,20 +110,14 @@
 
         <com.google.android.material.button.MaterialButton
           android:id="@+id/button_cancel"
-          style="@style/Widget.Grocy.Button.UnelevatedButton"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:backgroundTint="@color/retro_red_bg_white"
+          style="@style/Widget.Grocy.Button.TextButton"
           android:text="@string/action_cancel" />
 
         <com.google.android.material.button.MaterialButton
           android:id="@+id/button_proceed"
           style="@style/Widget.Grocy.Button.UnelevatedButton"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
           android:layout_marginStart="8dp"
-          android:text="@string/action_proceed"
-          app:backgroundTint="@color/retro_green_bg_white" />
+          android:text="@string/action_proceed" />
 
       </LinearLayout>
 

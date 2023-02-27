@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <resources>
@@ -144,6 +144,16 @@
     <item quantity="one">%1$d abgelaufen</item>
     <item quantity="other">%1$d abgelaufen</item>
   </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_short">
+    <item quantity="one">%1$d nicht frisch</item>
+    <item quantity="other">%1$d nicht frisch</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_long">
+    <item quantity="one">%1$d nicht frisch (alles folgende)</item>
+    <item quantity="other">%1$d nicht frisch (alles folgende)</item>
+  </plurals>
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
   <plurals name="msg_missing_products">
     <item quantity="one">%1$d unter Mindestbestand</item>
@@ -211,6 +221,8 @@
   <string name="msg_task_undo">Aufgabe rückgängig machen</string>
   <string name="msg_recipes_enough_in_stock">Bestand reicht aus</string>
   <string name="msg_recipes_enough_in_stock_filter">(%1$d) Bestand reicht aus</string>
+  <!-- %1$s is an amount with quantity unit (e.g. 3 bottles) -->
+  <string name="msg_recipes_enough_in_stock_amount">Bestand reicht aus (%1$s)</string>
   <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) Nicht ausreichend im Bestand aber bereits auf Einkaufszettel</string>
   <string name="msg_recipes_not_enough_filter">(%1$d) Bestand nicht ausreichend</string>
   <string name="msg_recipes_not_enough">Bestand nicht ausreichend</string>
@@ -222,6 +234,7 @@
     <item quantity="one">%1$d Zutat fehlt</item>
     <item quantity="other">%1$d Zutaten fehlen</item>
   </plurals>
+  <string name="msg_recipes_ingredient_fulfillment_info_list">Fehlend: %1$s | Bereits auf dem Einkaufszettel: %2$s</string>
   <string name="msg_chore_executed">Ausführung erfasst</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">%1$s %2$s %3$s dem Bestand hinzugefügt</string>
@@ -269,11 +282,12 @@
     <item quantity="other">%1$s %2$s werden vom Bestand entfernt.</item>
   </plurals>
   <string name="msg_transfer_tare_weight">Produkte mit aktivierter Taragewichtbehandlung können aktuell nicht umgelagert werden.</string>
+  <string name="msg_should_not_be_frozen">Dieses Produkt sollte nicht eingefroren werden. Möchten Sie fortfahren?</string>
   <string name="msg_item_marked_as_done">Eintrag als erledigt markiert</string>
   <string name="msg_item_marked_as_undone">Eintrag als unerledigt markiert</string>
   <string name="option_synced_success">Einstellung erfolgreich synchronisiert</string>
   <string name="option_synced_error">Einstellung konnte nicht synchronisiert werden</string>
-  <string name="msg_recipe_added_to_cart">Fehlende Produkte auf den Einkaufszettel setzen</string>
+  <string name="msg_recipe_added_to_cart">Fehlende Produkte wurden auf den Einkaufszettel gesetzt</string>
   <string name="msg_recipe_consumed">Alle Zutaten, die vom Rezept \"%1$s\" benötigt werden, wurden aus dem Bestand entfernt</string>
   <string name="msg_stored_purchases_overview">Es gibt Einkäufe auf dem Gerät, welche noch nicht auf den Server übertragen wurden. Hier tippen für Details.</string>
   <string name="msg_stored_purchases">Einkäufe, welche noch nicht auf den Server übertragen wurden, werden hier angezeigt. Sie wurden zusammen mit temporären Produkten in dieser App gespeichert, damit Sie Ihren Einkauf schneller im Schnellmodus erfassen konnten und Produkte nicht gleich in den Stammdaten erstellen mussten.</string>
@@ -313,16 +327,18 @@
   <string name="msg_point_at_barcode">Richten Sie die Kamera auf einen Barcode</string>
   <string name="msg_press_hold_confirm">Drücken und halten, um das Löschen zu bestätigen</string>
   <string name="msg_recipe_consume_ask">Sicher, dass alle Zutaten, die vom Rezept \"%1$s\" benötigt werden, aus dem Bestand entfernt werden sollen (Zutaten markiert mit \"Nur prüfen, ob eine beliebige Menge im Bestand verfügbar ist\" werden ignoriert)?</string>
-  <string name="msg_recipe_shopping_list_ask">Alle fehlenden Zutaten für Rezept \"%1$s\" wirklich auf den Einkaufszettel setzen?\n\nEntferne den Haken einer Zutat, um diese nicht auf den Einkaufszettel zu übernehmen:</string>
-  <string name="msg_welcome_to_grocy">Willkommen zu Grocy Android!\n\nUm grocy produktiv nutzen zu können, brauchen Sie Ihren eigenen Server oder das grocy Add-on für Home Assistant.\nWenn Sie diese App nur ausprobieren möchten, können Sie den Demo-Server von Bernd Bestel benutzen, dem Entwickler von grocy.</string>
-  <string name="msg_choose_option_below">Bitte wählen Sie unten eine Option.</string>
+  <string name="msg_recipe_shopping_list_ask">Alle fehlenden Zutaten für Rezept \"%1$s\" wirklich auf den Einkaufszettel setzen?\n\nEntfernen Sie den Haken einer Zutat, um diese nicht auf den Einkaufszettel zu übernehmen:</string>
+  <string name="msg_welcome">Willkommen bei Grocy Android!</string>
+  <string name="msg_welcome_introduce">Um grocy produktiv nutzen zu können, brauchen Sie Ihren eigenen Server oder das grocy Add-on für Home Assistant.\nWenn Sie diese App nur ausprobieren möchten, können Sie den Demo-Server von Bernd Bestel benutzen, dem Entwickler von grocy.</string>
+  <string name="msg_choose_option_below">Bitte wählen Sie eine der Optionen unten aus.</string>
   <string name="msg_qr_code_scan">Besuchen Sie Ihren grocy-Server auf einem anderen Gerät und navigieren Sie zu der Seite \'API-Schlüssel\'. Danach auf \'Hinzufügen\' und das kleine QR-Code-Symbol klicken und den QR-Code scannen.</string>
   <string name="msg_qr_code_scan_token">Sie benutzen das grocy Home Assistant Add-on. Erstellen Sie einen langlebigen Zugangsschlüssel in Ihren Home Assistant Profileinstellungen (letzter Abschnitt). Dann klicken Sie unter dem Feld mit dem Token auf \"Generate QR code\" und scannen den Code hier.</string>
   <string name="msg_port_connection_info_without_port">Die App wird sich zu Port %1$s verbinden.\nWenn sie sich zu einem anderen Port verbinden soll, können Sie einen in der URL hinzufügen.\nBeispiel: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">Die App wird sich zu Port %1$s verbinden.</string>
   <string name="msg_clear_form_first">Leeren Sie zuerst das Formular, bevor Sie einen anderen bekannten Barcode scannen.</string>
   <string name="msg_not_implemented_yet">Dies wird bald implementiert. Bitte benutzen Sie vorerst Ihre Server-Oberfläche.</string>
-  <string name="stock_disabled">Sie haben in Ihrer grocy-Konfiguration das Bestandsfeature deaktiviert, wahrscheinlich weil Sie es nicht brauchen. Diese App kann aber im Moment nur Bestandsverwaltung, also kann es sein, dass sie Ihnen nicht viel nützt.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_stock_label_type">Dies ist die Standardeinstellung für das Bestandseintragsetikett, die beim Einkauf vorbelegt wird.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">Die Bestand-Seite listet alle Produkte auf, die derzeit im Bestand oder unter ihrem Mindestbestand sind. Aktiviere dies, um dieses Produkt nie dort anzuzeigen.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -333,6 +349,8 @@
   <string name="msg_help_move_on_open">Wenn aktiviert, wird die entsprechende Menge an den Standardverbrauchsstandort umgelagert, wenn das Produkt als geöffnet markiert wurde.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_own_stock">Wenn aktiviert, kann dieses Produkt keinen eigenen Bestand haben, bedeutet es ist unter \"Einkauf\" nicht auswählbar (nützlich für übergeordnete Produkte, die nur als Zusammenfassung/Gesamtansicht der untergeordneten Produkte verwendet werden).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_should_not_be_frozen">Wenn aktiviert und wenn dieses Produkt zu einem Gefrierstandort umgelagert (sprich eingefroren) wird, wird eine entsprechende Warnung angezeigt.</string>
   <string name="msg_help_due_date_type">Je nach ausgewähltem Typ wird die Hervorhebung auf der Bestandsübersicht unterschiedlich sein. \"MHD\" bedeutet, dass das Produkt nach dem Fälligkeitsdatum möglicherweise immer noch verzehrt werden kann. \"Verbrauchsdatum\" bedeutet, dass das Produkt nach dem Fälligkeitsdatum nicht mehr verzehrt werden kann.</string>
   <string name="msg_help_default_due_days_format">Sie können lange auf einen Eintrag unten tippen, um ein Datum anstatt einer Zahl einzugeben.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -364,9 +382,9 @@
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_choose">Sie können einen Barcode-Scanner für das Barcode-Scannen mit der Kamera wählen.</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") benutzt die Kontrastdaten vom Kamera-Stream, um einen Barcode zu erkennen. Danach berechnet es die relative Breite aller Linien.\n- Manchmal falsche Ergebnisse\n- Barcodes müssen horizontal ausgerichtet sein\n- Benötigt guten Kontrast und gute Schärfe\n- Ausführung komplett auf dem Gerät\n- Framework ist open source</string>
+  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") benutzt die Kontrastdaten vom Kamera-Stream, um einen Barcode zu erkennen. Danach berechnet es die relative Breite aller Linien.\n\n- Manchmal falsche Ergebnisse\n- Barcodes müssen horizontal ausgerichtet sein\n- Benötigt guten Kontrast und gute Schärfe\n- Ausführung komplett auf dem Gerät\n- Framework ist open source</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit benutzt maschinelles Lernen mit den neuesten Technologien für das Barcode-Scannen.\n- Fast nie falschen Ergebnisse\n- Ausrichtung der Barcodes spielt keine Rolle\n- Funktioniert sogar mit unscharfen Barcodes oder mit wenig Kontrast\n- Ausführung komplett auf dem Gerät\n- Framework ist nicht open source</string>
+  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit benutzt maschinelles Lernen mit den neuesten Technologien für das Barcode-Scannen.\n\n- Fast nie falsche Ergebnisse\n- Ausrichtung der Barcodes spielt keine Rolle\n- Funktioniert sogar mit unscharfen Barcodes oder mit wenig Kontrast\n- Ausführung komplett auf dem Gerät\n- Framework ist nicht open source</string>
   <string name="msg_help_external_scanner_ready">Sie können einen externen Scanner für das Feld unten verwenden, während es fokussiert und leer ist.</string>
   <string name="msg_help_external_scanner_settings">Diese App unterstützt externe Scanner-Geräte, welche wie eine Tastatur Eingaben senden und über USB oder Bluetooth verbunden werden können. Die folgenden Optionen müssen in Ihrem externen Scanner eingestellt sein:\n\nPräfix: Keines\nSuffix: TAB oder ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -379,7 +397,7 @@
   <string name="msg_help_produces_product">Wenn ein Produkt ausgewählt ist, wird beim Verbrauch dieses Rezeptes eine Einheit (pro Portion in Bestandsmengeneinheit) dem Bestand hinzugefügt.</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_only_check_any_amount">Eine andere Menge/Einheit kann dann unten verwendet werden, wobei es für die Bestandsprüfung ausreichend ist, wenn eine beliebige Menge des Produkts verfügbar ist.</string>
-  <string name="msg_help_date_chooser">Sie können in den Einstellungen zu Tastatureingabe wechseln, damit ist es vielleicht möglich, Ihre Eingabegeschwindigkeit erhöhen.</string>
+  <string name="msg_help_date_chooser">Sie können in den Einstellungen zur Tastatureingabe wechseln, womit Sie eventuell eine höhere Eingabegeschwindigkeit erreichen.</string>
   <string name="msg_help_date_chooser_keyboard">Sie können in den Einstellungen ein umgekehrtes Datumsformat aktivieren, falls DDMMYY in Ihrem Land bevorzugt ist.\nUm die Eingabe zu übernehmen und diese Seite zu schließen, drücken Sie die Erledigt-Taste auf Ihrer Tastatur.</string>
   <string name="msg_help_quick_mode">Sie können lange auf die Titelleiste oben tippen, um den Schnellmodus zu aktivieren. In diesem Modus wird eine Transaktion sofort ausgeführt, wenn ein Produkt eingegeben oder gescannt wurde und alle Felder automatisch befüllt werden konnten (mit Produkt- oder Barcode-Standardwerten).</string>
   <string name="msg_help_loading_circle_settings">Auf jeder Seite wo etwas vom Server geladen werden muss, überprüft die App erst mit einer winzigen Anfrage, ob sich die Server-Datenbank seit dem letzten Laden verändert hat und aktualisiert nur veraltete Daten. Aktivieren Sie diese Option, wenn bei dieser Anfrage auch ein Ladekreis angezeigt werden soll.</string>
@@ -392,6 +410,7 @@
   <string name="msg_help_home_assistant_login_server">In dem nächsten Feld können Sie auch Ihre Nabu Casa Cloud-URL eingeben, falls Sie diesen Service benutzen. Auf diese Karte tippen, um die Nabu Casa Website zu besuchen.</string>
   <string name="msg_help_home_assistant_login_token">Sie können einen langlebigen Zugangsschlüssel in Ihren Home Assistant Profileinstellungen erstellen (letzter Abschnitt). Hier tippen, um die URL von oben zu öffnen.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Navigieren Sie zurück oder tippen Sie auf  diese Karte, um einen QR-Code zu scannen, wodurch die Felder unten vorausgefüllt werden.</string>
+  <string name="msg_help_fab_overview_start">Der Aktionsknopf auf dieser Übersichtsseite hat zwei Aktionen:\n\n- Kurzes Drücken: Verbrauchen mit Barcode-Scanner\n- Langes Drücken: Einkaufen mit Barcode-Scanner\n\nMit diesem Knopf ist der Schnellmodus auf den jeweiligen Seiten standardmäßig aktiviert. Dies können Sie in den Einstellungen für Verhalten ändern.</string>
   <string name="msg_share">Schau Dir mal diesen Android-Client für grocy an: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">API Schüssel funktioniert nicht</string>
@@ -432,6 +451,7 @@
   <string name="error_api_qr_code">Kein QR-Code mit grocy API-Zugangsdaten</string>
   <string name="error_token_qr_code">Kein QR-Code mit einem langlebigen Zugangsschlüssel von Home Assistant</string>
   <string name="error_loading_qus">Mengeneinheiten konnten nicht vom Produkt geladen werden</string>
+  <string name="error_no_children">Das ausgewählte Produkt hat keine untergeordneten Produkte</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Darf nicht gleich %1$s sein</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
@@ -448,6 +468,7 @@
   <string name="error_name_exists">Name existiert bereits</string>
   <string name="error_network">Netzwerkfehler</string>
   <string name="error_network_subtitle">Die benötigten Daten konnten nicht vollständig geladen werden</string>
+  <string name="error_network_exact">Netzwerkfehler: %1$s</string>
   <string name="error_unknown">Uups!</string>
   <string name="error_not_grocy_instance">Keine gültige Grocy Instanz</string>
   <string name="error_timeout">Zeitüberschreitungsfehler</string>
@@ -558,9 +579,8 @@
   <string name="title_product_cat_qu_conversions">ME-Umrechnungen</string>
   <string name="title_unknown_input">Unbekannte Eingabe</string>
   <string name="title_presets_new_products">Vorgaben für neue Produkte</string>
-  <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
-   Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
-  <string name="title_use_scanner_tool">%1$s benutzen</string>
+  <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
+  <string name="title_ingredient_with_amount">%1$s %2$s %3$s</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
@@ -621,6 +641,14 @@
   <string name="subtitle_recipe_due_score">Fällig.-Punkte: %1$s</string>
   <string name="subtitle_per_serving">pro Portion</string>
   <string name="subtitle_tap_preparation_mode">Hier tippen für Zubereitungsmodus</string>
+  <!-- Context is Label printer -->
+  <string name="subtitle_print_label_no">Kein Etikett</string>
+  <!-- Short form for "One label per purchase" -->
+  <string name="subtitle_print_label_per_purchase">Pro Einkauf</string>
+  <!-- Short form for "One label per unit" -->
+  <string name="subtitle_print_label_per_unit">Pro Einheit</string>
+  <!-- %1$s is a price and %2$s is a currency -->
+  <string name="subtitle_total_price">Gesamtpreis: %1$s %2$s</string>
 
   <string name="description_input_product_part1">Produkt-Feld enthält:</string>
   <string name="description_input_product_part2">Bitte wählen Sie, wie Sie fortfahren möchten:</string>
@@ -721,6 +749,11 @@
   <plurals name="description_overview_master_data">
     <item quantity="one">Ihre Datenbank enthält ein Produkt.</item>
     <item quantity="other">Ihre Datenbank enthält %1$d Produkte.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="error_max_decimal_places">
+    <item quantity="one">Max. %1$s Nachkommastelle</item>
+    <item quantity="other">Max. %1$s Nachkommastellen</item>
   </plurals>
 
   <string name="property_name">Name</string>
@@ -836,6 +869,8 @@
   <string name="property_never_show">Nie auf der Bestand-Seite anzeigen</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_disable_own_stock">Eigenen Bestand deaktivieren</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_should_not_be_frozen">Sollte nicht eingefroren werden</string>
   <string name="property_number">Zahl</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_enable_tare_weight">Taragewichtbehandlung aktivieren</string>
@@ -1071,6 +1106,8 @@
   <string name="setting_timeout_descriptions">Nach der das Laden abgebrochen wird</string>
   <string name="setting_beginner_mode">Anfängermodus</string>
   <string name="setting_beginner_mode_description">Hilfe-Texte standardmäßig einblenden</string>
+  <string name="setting_haptic">Haptische Effekte</string>
+  <string name="setting_haptic_description">Ein immersives Erlebnis</string>
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">Bottom sheets vollständig ausfahren</string>
   <string name="setting_expand_bottom_sheets_description">Im Querformat</string>
@@ -1080,6 +1117,8 @@
   <string name="setting_date_keyboard_input_description">Anstatt mit Auswahlrädern</string>
   <string name="setting_date_keyboard_reverse">Umgekehrtes Datumsformat für Eingabe benutzen</string>
   <string name="setting_date_keyboard_reverse_description">DDMMYY anstatt YYMMDD</string>
+  <string name="setting_copy_barcode_note">Barcode-Notiz zu Bestandseintrag-Notiz kopieren</string>
+  <string name="setting_copy_barcode_note_description">Beim Kauf eines Produkts</string>
   <string name="setting_loading_circle">Ladekreis für alle Serveranfragen anzeigen</string>
   <string name="setting_loading_circle_description">Hilfreich für langsame Netzwerke</string>
   <string name="setting_tor">Tor verwenden</string>

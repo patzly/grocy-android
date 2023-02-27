@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <layout
@@ -61,7 +61,10 @@
             android:id="@+id/name"
             style="@style/Widget.Grocy.TextView.Toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:singleLine="false"
+            android:maxLines="3"
+            android:textSize="18sp"/>
 
           <TextView
             style="@style/Widget.Grocy.TextView.ListItem.Description"
@@ -215,7 +218,7 @@
             android:id="@+id/amount_less"
             style="@style/Widget.Grocy.Button.IconButton"
             android:layout_marginBottom="8dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="8dp"
             android:onClick="@{() -> bottomSheet.changeAmount(false)}"
             app:icon="@drawable/ic_round_expand_more" />
 
@@ -229,7 +232,7 @@
           android:layout_marginTop="8dp">
 
           <TextView
-            style="@style/Widget.Grocy.TextView.LabelLarge"
+            style="@style/Widget.Grocy.TextView.ListItem.OverLine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?attr/colorSecondary"
@@ -294,15 +297,15 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="vertical"
-          android:layout_marginTop="16dp"
-          android:paddingStart="16dp"
-          android:paddingEnd="16dp">
+          android:layout_marginTop="16dp">
 
           <TextView
             android:id="@+id/ingredients_headline"
-            style="@style/Widget.Grocy.TextView.LabelLarge"
+            style="@style/Widget.Grocy.TextView.ListItem.OverLine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:textColor="?attr/colorSecondary"
             android:text="@string/property_ingredients" />
 
@@ -310,7 +313,7 @@
             android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="8dp"
+            android:paddingTop="4dp"
             android:paddingBottom="8dp"
             android:overScrollMode="never"
             android:clipToPadding="false"
@@ -324,7 +327,8 @@
           android:layout_height="wrap_content"
           android:layout_marginStart="16dp"
           android:layout_marginEnd="16dp"
-          android:layout_marginBottom="16dp" />
+          android:layout_marginBottom="16dp"
+          android:layout_marginTop="8dp"/>
 
       </LinearLayout>
 

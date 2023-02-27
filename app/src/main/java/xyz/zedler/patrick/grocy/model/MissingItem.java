@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.model;
@@ -67,7 +67,7 @@ public class MissingItem implements Parcelable {
     dest.writeString(isPartlyInStock);
   }
 
-  public static final Creator<MissingItem> CREATOR = new Creator<MissingItem>() {
+  public static final Creator<MissingItem> CREATOR = new Creator<>() {
 
     @Override
     public MissingItem createFromParcel(Parcel in) {

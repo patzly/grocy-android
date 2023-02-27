@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -25,9 +25,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spanned;
 import android.view.KeyEvent;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import androidx.annotation.ColorRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,7 +34,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
-import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 import com.android.volley.VolleyError;
 import java.net.URLEncoder;
@@ -132,9 +128,6 @@ public class BaseFragment extends Fragment {
     return false;
   }
 
-  public void clearFields() {
-  }
-
   public void editObject(Object object) {
   }
 
@@ -186,7 +179,7 @@ public class BaseFragment extends Fragment {
   public void consumeRecipe(int recipeId) {
   }
 
-  public void addNotFulfilledProductsToCartForRecipe(int recipeId) {
+  public void addNotFulfilledProductsToCartForRecipe(int recipeId, int[] excludedProductIds) {
   }
 
   public void editRecipe(Recipe recipe) {
@@ -213,6 +206,9 @@ public class BaseFragment extends Fragment {
   }
 
   public void selectShoppingList(ShoppingList shoppingList) {
+  }
+
+  public void selectProduct(Product product) {
   }
 
   public void selectQuantityUnit(QuantityUnit quantityUnit) {
@@ -278,6 +274,9 @@ public class BaseFragment extends Fragment {
   public void updateBarcodeFormats() {
   }
 
+  public void setMarkAsOpenToggle(boolean markAsOpen) {
+  }
+
   public void startTransaction() {
   }
 
@@ -290,38 +289,6 @@ public class BaseFragment extends Fragment {
   public void login(boolean checkVersion) {
   }
 
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    if (nextAnim == 0) {
-      return null;
-    }
-
-    Animation anim = AnimationUtils.loadAnimation(getActivity(), nextAnim);
-
-    anim.setAnimationListener(new Animation.AnimationListener() {
-
-      @Override
-      public void onAnimationStart(Animation animation) {
-      }
-
-      @Override
-      public void onAnimationRepeat(Animation animation) {
-      }
-
-      @Override
-      public void onAnimationEnd(Animation animation) {
-        if (enter) {
-          BaseFragment.this.onEnterAnimationEnd();
-        }
-      }
-    });
-
-    return anim;
-  }
-
-  protected void onEnterAnimationEnd() {
-  }
-
   @NonNull
   public NavController findNavController() {
     return NavHostFragment.findNavController(this);
@@ -329,30 +296,6 @@ public class BaseFragment extends Fragment {
 
   public void navigateUp() {
     activity.navigateUp();
-  }
-
-  @Deprecated // Use activity.navigate(NavDirections);
-  public void navigate(NavDirections directions) {
-    activity.navigate(directions);
-  }
-
-  @Deprecated // Use activity.navigateFragment(int);
-  public void navigate(@IdRes int destination) {
-    activity.navigateFragment(destination);
-  }
-
-  @Deprecated // Use activity.navigateFragment(int, Bundle);
-  void navigate(@IdRes int destination, Bundle arguments) {
-    activity.navigateFragment(destination, arguments);
-  }
-
-  @Deprecated // Use activity.navigateDeepLink(Uri.parse(String), boolean);
-  public void navigateDeepLink(@NonNull String uri) {
-    activity.navigateDeepLink(Uri.parse(uri), true);
-  }
-
-  public void navigateDeepLink(@StringRes int uri, @NonNull Bundle args) {
-    activity.navigateDeepLink(getUriWithArgs(getString(uri), args), true);
   }
 
   public void navigateDeepLinkHorizontally(@StringRes int uri, @NonNull Bundle args) {
@@ -485,59 +428,6 @@ public class BaseFragment extends Fragment {
     NavBackStackEntry backStackEntry = findNavController().getPreviousBackStackEntry();
     assert backStackEntry != null;
     return backStackEntry.getDestination();
-  }
-
-  @Deprecated
-  @Nullable
-  public Animation setStatusBarColor(
-      int transit,
-      boolean enter,
-      int nextAnim,
-      MainActivity activity,
-      @ColorRes int color,
-      Runnable onAnimationEnd
-  ) {
-    if (!enter) {
-      return super.onCreateAnimation(transit, false, nextAnim);
-    }
-    if (nextAnim == 0) {
-      // set color of statusBar immediately after popBackStack, when previous fragment appears
-      // activity.setStatusBarColor(color);
-      return super.onCreateAnimation(transit, true, nextAnim);
-    }
-    // set color of statusBar after transition is finished (when shown)
-    Animation anim = AnimationUtils.loadAnimation(requireActivity(), nextAnim);
-    anim.setAnimationListener(new Animation.AnimationListener() {
-      @Override
-      public void onAnimationStart(Animation animation) {
-      }
-
-      @Override
-      public void onAnimationRepeat(Animation animation) {
-      }
-
-      @Override
-      public void onAnimationEnd(Animation animation) {
-        //activity.setStatusBarColor(color);
-        if (onAnimationEnd != null) {
-          onAnimationEnd.run();
-        }
-        BaseFragment.this.onEnterAnimationEnd();
-      }
-    });
-    return anim;
-  }
-
-  @Deprecated
-  @Nullable
-  public Animation setStatusBarColor(
-      int transit,
-      boolean enter,
-      int nextAnim,
-      MainActivity activity,
-      @ColorRes int color
-  ) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, color, null);
   }
 
   public void setOption(Object value, String option) {

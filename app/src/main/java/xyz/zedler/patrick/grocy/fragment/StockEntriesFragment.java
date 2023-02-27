@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -24,7 +24,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,6 +31,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.StockEntryAdapter;
@@ -39,6 +40,7 @@ import xyz.zedler.patrick.grocy.adapter.StockEntryAdapter.StockEntryAdapterListe
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentStockEntriesBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
@@ -51,8 +53,6 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.StockEntriesViewModel;
 
@@ -80,8 +80,7 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
     embeddedFragmentScanner = new EmbeddedFragmentScannerBundle(
         this,
         binding.containerScanner,
-        this,
-        R.color.primary
+        this
     );
     return binding.getRoot();
   }
@@ -116,6 +115,17 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();
+
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.applyAppBarInsetOnContainer(false);
+    systemBarBehavior.applyStatusBarInsetOnContainer(false);
+    systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
+
+    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
 
     // APP BAR BEHAVIOR
 
@@ -178,10 +188,9 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
-            activity.binding.coordinatorMain
-        ));
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
@@ -249,12 +258,13 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI();
-  }
+    // UPDATE UI
 
-  private void updateUI() {
-    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.recycler, true, true
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         false,
         viewModel.hasProductFilter() ? R.menu.menu_empty : R.menu.menu_stock_entries,
@@ -371,11 +381,6 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
     if (viewModel.isScannerVisible()) {
       viewModel.toggleScannerVisibility();
     }
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
   }
 
   @NonNull

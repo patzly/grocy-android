@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -30,7 +30,9 @@ import android.widget.AdapterView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import com.google.android.material.snackbar.Snackbar;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -43,9 +45,6 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ACTION;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditViewModel;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditViewModel.RecipeEditViewModelFactory;
@@ -94,11 +93,11 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipe);
-    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setScroll(binding.scroll, binding.constraint);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
-    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
 
     binding.ingredients.setOnClickListener(v -> {
       if (viewModel.isActionEdit()) {
@@ -108,7 +107,7 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
                 .setRecipe(viewModel.getRecipe())
         );
       } else {
-        activity.showSnackbar(R.string.subtitle_recipe_not_on_server);
+        activity.showSnackbar(R.string.subtitle_recipe_not_on_server, true);
       }
     });
     binding.preparation.setOnClickListener(v -> {
@@ -134,9 +133,9 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        SnackbarMessage message = (SnackbarMessage) event;
-        Snackbar snack = message.getSnackbar(activity, activity.binding.coordinatorMain);
-        activity.showSnackbar(snack);
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       } else if (event.getType() == Event.NAVIGATE_UP) {
         activity.navigateUp();
       } else if (event.getType() == Event.SET_RECIPE_ID) {
@@ -202,6 +201,7 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
 
     // UPDATE UI
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, false, false
     );

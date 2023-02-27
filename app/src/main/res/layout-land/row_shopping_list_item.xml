@@ -14,24 +14,14 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/container_row"
-  android:orientation="horizontal"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:minHeight="56dp"
-  android:clickable="true"
-  android:focusable="true"
-  android:background="@drawable/ripple_list_item_swipeable"
-  android:paddingStart="16dp"
-  android:paddingEnd="24dp"
-  android:paddingTop="8dp"
-  android:paddingBottom="8dp"
-  android:gravity="center_vertical">
+  style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
+  android:background="@drawable/ripple_list_item_swipeable">
 
   <TextView
     android:id="@+id/name"
@@ -68,14 +58,32 @@
     android:layout_height="wrap_content"
     android:singleLine="true" />
 
-  <TextView
-    android:id="@+id/extra_field"
-    style="@style/Widget.Grocy.TextView.LabelSmall"
+  <LinearLayout
+    android:id="@+id/extra_field_container"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:layout_marginStart="16dp"
-    android:singleLine="true"
-    android:visibility="gone"
-    android:textColor="?attr/colorOnSurfaceVariant" />
+    android:layout_gravity="top"
+    android:visibility="gone">
+
+    <TextView
+      android:id="@+id/extra_field"
+      style="@style/Widget.Grocy.TextView.LabelSmall"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="end"
+      android:textColor="?attr/colorOnSurfaceVariant" />
+
+    <TextView
+      android:id="@+id/extra_field_subtitle"
+      style="@style/Widget.Grocy.TextView.LabelSmall"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="end"
+      android:visibility="gone"
+      android:textColor="?attr/colorOnSurfaceVariant" />
+
+  </LinearLayout>
 
 </LinearLayout>

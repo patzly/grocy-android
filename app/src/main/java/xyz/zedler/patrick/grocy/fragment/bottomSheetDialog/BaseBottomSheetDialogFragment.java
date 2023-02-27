@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
@@ -23,37 +23,26 @@ import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.PaintDrawable;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat.Type;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
-import androidx.navigation.NavOptions;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback;
 import com.google.android.material.bottomsheet.CustomBottomSheetDialog;
 import com.google.android.material.bottomsheet.CustomBottomSheetDialogFragment;
 import com.google.android.material.elevation.SurfaceColors;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -104,8 +93,7 @@ public class BaseBottomSheetDialogFragment extends CustomBottomSheetDialogFragme
             setCornerRadius(background, radius);
             sheet.setBackground(background);
 
-            int peakHeightHalf = UiUtil.getDisplayHeight(requireContext()) / 2
-                + UiUtil.dpToPx(activity, 64); // height of bottom sheet top bar
+            int peakHeightHalf = UiUtil.getDisplayHeight(requireContext()) / 2;
 
             BottomSheetBehavior<View> behavior = BottomSheetBehavior.from(sheet);
 
@@ -266,77 +254,5 @@ public class BaseBottomSheetDialogFragment extends CustomBottomSheetDialogFragme
   }
 
   public void applyBottomInset(int bottom) {
-  }
-
-  // METHODS FROM OLD BaseBottomSheetDialogFragment, TODO: replace all navigate() with activity.navigate()
-
-  @NonNull
-  public NavController findNavController() {
-    return NavHostFragment.findNavController(this);
-  }
-
-  public void navigate(NavDirections directions) {
-    findNavController().navigate(directions);
-  }
-
-  public void navigate(NavDirections directions, @NonNull NavOptions navOptions) {
-    findNavController().navigate(directions, navOptions);
-  }
-
-  public void navigateDeepLink(@StringRes int uri) {
-    navigateDeepLink(Uri.parse(getString(uri)));
-  }
-
-  public void navigateDeepLink(@StringRes int uri, @NonNull Bundle args) {
-    navigateDeepLink(getUriWithArgs(getString(uri), args));
-  }
-
-  private void navigateDeepLink(@NonNull Uri uri) {
-    NavOptions.Builder builder = new NavOptions.Builder();
-    builder.setEnterAnim(R.anim.slide_in_up)
-        .setPopExitAnim(R.anim.slide_out_down)
-        .setExitAnim(R.anim.slide_no);
-    findNavController().navigate(uri, builder.build());
-  }
-
-  public static Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
-    String[] parts = uri.split("\\?");
-    if (parts.length == 1) {
-      return Uri.parse(uri);
-    }
-    String linkPart = parts[0];
-    String argsPart = parts[parts.length - 1];
-    String[] pairs = argsPart.split("&");
-    StringBuilder finalDeepLink = new StringBuilder(linkPart + "?");
-    for (int i = 0; i <= pairs.length - 1; i++) {
-      String pair = pairs[i];
-      String key = pair.split("=")[0];
-      Object valueBundle = argsBundle.get(key);
-      if (valueBundle == null) {
-        continue;
-      }
-      try {
-        String encoded;
-        if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
-          encoded = URLEncoder.encode(valueBundle.toString(), StandardCharsets.UTF_8);
-        } else {
-          encoded = URLEncoder.encode(valueBundle.toString(), "UTF-8");
-        }
-        finalDeepLink.append(key).append("=").append(encoded);
-      } catch (Throwable ignore) {
-      }
-      if (i != pairs.length - 1) {
-        finalDeepLink.append("&");
-      }
-    }
-    return Uri.parse(finalDeepLink.toString());
-  }
-
-  public void showMessage(@StringRes int msg) {
-    activity.showSnackbar(msg);
-  }
-
-  public void showToast(@StringRes int msg) {
-    Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
   }
 }

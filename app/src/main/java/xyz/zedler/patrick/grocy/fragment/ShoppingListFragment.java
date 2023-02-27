@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -33,7 +33,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -81,7 +80,6 @@ public class ShoppingListFragment extends BaseFragment implements
   private FragmentShoppingListBinding binding;
   private InfoFullscreenHelper infoFullscreenHelper;
   private PluralUtil pluralUtil;
-  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(
@@ -118,11 +116,14 @@ public class ShoppingListFragment extends BaseFragment implements
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
-    systemBarBehavior = new SystemBarBehavior(activity);
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipeShoppingList);
     systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.applyAppBarInsetOnContainer(false);
+    systemBarBehavior.applyStatusBarInsetOnContainer(false);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
     binding.toolbar.setOnClickListener(v -> showShoppingListsBottomSheet());
@@ -215,10 +216,9 @@ public class ShoppingListFragment extends BaseFragment implements
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
-            activity.binding.coordinatorMain
-        ));
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       }
     });
 
@@ -269,13 +269,14 @@ public class ShoppingListFragment extends BaseFragment implements
 
     // UPDATE UI
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.recycler, true, true
     );
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
-        !viewModel.isOffline(),
-        viewModel.isOffline() ? R.menu.menu_shopping_list_offline : R.menu.menu_shopping_list,
+        true,
+        R.menu.menu_shopping_list,
         getBottomMenuClickListener()
     );
     activity.updateFab(
@@ -360,7 +361,7 @@ public class ShoppingListFragment extends BaseFragment implements
 
   private boolean showOfflineError() {
     if (viewModel.isOffline()) {
-      showMessage(getString(R.string.error_offline));
+      activity.showSnackbar(R.string.error_offline, false);
       return true;
     }
     return false;
@@ -415,17 +416,17 @@ public class ShoppingListFragment extends BaseFragment implements
         ArrayList<ShoppingListItem> shoppingListItemsSelected
             = viewModel.getFilteredShoppingListItemsLive().getValue();
         if (shoppingListItemsSelected == null) {
-          showMessage(activity.getString(R.string.error_undefined));
+          activity.showSnackbar(R.string.error_undefined, false);
           return true;
         }
         if (shoppingListItemsSelected.isEmpty()) {
-          showMessage(activity.getString(R.string.error_empty_shopping_list));
+          activity.showSnackbar(R.string.error_empty_shopping_list, false);
           return true;
         }
         ArrayList<ShoppingListItem> listItems = new ArrayList<>(shoppingListItemsSelected);
         HashMap<Integer, String> productNamesHashMap = viewModel.getProductNamesHashMap();
         if (productNamesHashMap == null) {
-          showMessage(activity.getString(R.string.error_undefined));
+          activity.showSnackbar(R.string.error_undefined, false);
           return true;
         }
         SortUtil.sortShoppingListItemsByName(listItems, productNamesHashMap, true);
@@ -444,17 +445,17 @@ public class ShoppingListFragment extends BaseFragment implements
         ArrayList<ShoppingListItem> shoppingListItemsSelected
             = viewModel.getFilteredShoppingListItemsLive().getValue();
         if (shoppingListItemsSelected == null) {
-          showMessage(activity.getString(R.string.error_undefined));
+          activity.showSnackbar(R.string.error_undefined, false);
           return true;
         }
         if (shoppingListItemsSelected.isEmpty()) {
-          showMessage(activity.getString(R.string.error_empty_shopping_list));
+          activity.showSnackbar(R.string.error_empty_shopping_list, false);
           return true;
         }
         ArrayList<ShoppingListItem> listItems = new ArrayList<>(shoppingListItemsSelected);
         HashMap<Integer, String> productNamesHashMap = viewModel.getProductNamesHashMap();
         if (productNamesHashMap == null) {
-          showMessage(activity.getString(R.string.error_undefined));
+          activity.showSnackbar(R.string.error_undefined, false);
           return true;
         }
         ArrayList<ShoppingListItem> doneItems = new ArrayList<>();
@@ -462,7 +463,7 @@ public class ShoppingListFragment extends BaseFragment implements
           if (!tempItem.isUndone()) doneItems.add(tempItem);
         }
         if (doneItems.isEmpty()) {
-          showMessage(activity.getString(R.string.error_no_done_items));
+          activity.showSnackbar(R.string.error_no_done_items, false);
           return true;
         }
         SortUtil.sortShoppingListItemsByName(doneItems, productNamesHashMap, true);
@@ -489,7 +490,7 @@ public class ShoppingListFragment extends BaseFragment implements
         ViewUtil.startIcon(item);
         ShoppingList shoppingList = viewModel.getSelectedShoppingList();
         if (shoppingList == null) {
-          showMessage(activity.getString(R.string.error_undefined));
+          activity.showSnackbar(R.string.error_undefined, false);
           return true;
         }
         Bundle bundle = new Bundle();
@@ -548,14 +549,6 @@ public class ShoppingListFragment extends BaseFragment implements
     if (isOnline) {
       viewModel.downloadData();
     }
-    if (isOnline) {
-      activity.updateBottomAppBar(
-          true,
-          R.menu.menu_shopping_list,
-          getBottomMenuClickListener()
-      );
-    }
-    systemBarBehavior.refresh();
   }
 
   private void hideDisabledFeatures() {
@@ -622,12 +615,6 @@ public class ShoppingListFragment extends BaseFragment implements
     activity.hideKeyboard();
     binding.editTextShoppingListSearch.setText("");
     viewModel.setIsSearchVisible(false);
-  }
-
-  private void showMessage(String msg) {
-    activity.showSnackbar(
-        Snackbar.make(activity.binding.coordinatorMain, msg, Snackbar.LENGTH_SHORT)
-    );
   }
 
   private boolean isFeatureMultipleListsDisabled() {

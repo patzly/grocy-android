@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
@@ -22,35 +22,29 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.transition.TransitionManager;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetScanModeConfirmBinding;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static int CONFIRMATION_DURATION = 3000;
   private final static String TAG = QuickModeConfirmBottomSheet.class.getSimpleName();
 
+  private FragmentBottomsheetScanModeConfirmBinding binding;
   private MainActivity activity;
-
-  private ProgressBar progressTimeout;
   private ValueAnimator confirmProgressAnimator;
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
+  private boolean openAction = false;
+  private boolean progressStopped = false;
 
   @Override
   public View onCreateView(
@@ -58,33 +52,76 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    View view = inflater.inflate(
-        R.layout.fragment_bottomsheet_scan_mode_confirm, container, false
+    binding = FragmentBottomsheetScanModeConfirmBinding.inflate(
+        inflater, container, false
     );
 
     activity = (MainActivity) requireActivity();
     Bundle args = requireArguments();
 
-    view.findViewById(R.id.header).setOnClickListener(v -> hideAndStopProgress());
-    view.findViewById(R.id.container).setOnClickListener(v -> hideAndStopProgress());
-    view.findViewById(R.id.button_cancel).setOnClickListener(v -> {
+    binding.toolbar.setOnClickListener(v -> hideAndStopProgress());
+    binding.container.setOnClickListener(v -> hideAndStopProgress());
+
+    if (args.containsKey(ARGUMENT.ACTION)) {
+      openAction = args.getString(ARGUMENT.ACTION).equals(ACTION.OPEN);
+      binding.toggleGroupConsumeType.setVisibility(View.VISIBLE);
+      updateToggleGroup();
+    } else {
+      binding.toggleGroupConsumeType.setVisibility(View.GONE);
+    }
+
+    if (savedInstanceState != null) {
+      openAction = savedInstanceState.getBoolean("open");
+      progressStopped = savedInstanceState.getBoolean("stopped");
+    }
+
+    binding.toggleConsume.setOnClickListener(v -> {
+      openAction = false;
+      updateToggleGroup();
+      binding.text.setText(openAction
+          ? args.getString(ARGUMENT.TEXT_ALTERNATIVE)
+          : args.getString(ARGUMENT.TEXT));
+    });
+    binding.toggleOpen.setOnClickListener(v -> {
+      openAction = true;
+      updateToggleGroup();
+      binding.text.setText(openAction
+          ? args.getString(ARGUMENT.TEXT_ALTERNATIVE)
+          : args.getString(ARGUMENT.TEXT));
+    });
+
+    binding.buttonCancel.setOnClickListener(v -> {
       activity.getCurrentFragment().interruptCurrentProductFlow();
       dismiss();
     });
-    view.findViewById(R.id.button_proceed).setOnClickListener(v -> {
+    binding.buttonProceed.setOnClickListener(v -> {
       activity.getCurrentFragment().startTransaction();
       dismiss();
     });
 
-    String msg = args.getString(Constants.ARGUMENT.TEXT);
-    ((TextView) view.findViewById(R.id.text)).setText(msg);
+    if (args.containsKey(ARGUMENT.ACTION)) {
+      binding.text.setText(openAction
+          ? args.getString(ARGUMENT.TEXT_ALTERNATIVE)
+          : args.getString(ARGUMENT.TEXT));
+    } else {
+      binding.text.setText(args.getString(Constants.ARGUMENT.TEXT));
+    }
 
-    progressTimeout = view.findViewById(R.id.progress_timeout);
-    startProgress();
+    if (!progressStopped) {
+      startProgress();
+    } else {
+      binding.progressTimeout.setVisibility(View.GONE);
+    }
 
     setCancelable(false);
 
-    return view;
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    binding = null;
   }
 
   @Override
@@ -96,10 +133,27 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
     super.onDestroyView();
   }
 
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putBoolean("open", openAction);
+    outState.putBoolean("stopped", progressStopped);
+  }
+
+  private void updateToggleGroup() {
+    if (openAction) {
+      binding.toggleConsume.setChecked(false);
+      binding.toggleOpen.setChecked(true);
+    } else {
+      binding.toggleConsume.setChecked(true);
+      binding.toggleOpen.setChecked(false);
+    }
+  }
+
   private void startProgress() {
     int startValue = 0;
     if (confirmProgressAnimator != null) {
-      startValue = progressTimeout.getProgress();
+      startValue = binding.progressTimeout.getProgress();
       if (startValue == 100) {
         startValue = 0;
       }
@@ -107,17 +161,20 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
       confirmProgressAnimator.cancel();
       confirmProgressAnimator = null;
     }
-    confirmProgressAnimator = ValueAnimator.ofInt(startValue, progressTimeout.getMax());
+    confirmProgressAnimator = ValueAnimator.ofInt(startValue, binding.progressTimeout.getMax());
     confirmProgressAnimator.setDuration((long) CONFIRMATION_DURATION
-        * (progressTimeout.getMax() - startValue) / progressTimeout.getMax());
+        * (binding.progressTimeout.getMax() - startValue) / binding.progressTimeout.getMax());
     confirmProgressAnimator.addUpdateListener(
-        animation -> progressTimeout.setProgress((Integer) animation.getAnimatedValue())
+        animation -> binding.progressTimeout.setProgress((Integer) animation.getAnimatedValue())
     );
     confirmProgressAnimator.addListener(new AnimatorListenerAdapter() {
       @Override
       public void onAnimationEnd(Animator animation) {
-        if (progressTimeout.getProgress() != progressTimeout.getMax()) {
+        if (binding.progressTimeout.getProgress() != binding.progressTimeout.getMax()) {
           return;
+        }
+        if (binding.toggleGroupConsumeType.getVisibility() == View.VISIBLE) {
+          activity.getCurrentFragment().setMarkAsOpenToggle(openAction);
         }
         activity.getCurrentFragment().startTransaction();
         dismiss();
@@ -129,7 +186,18 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
   private void hideAndStopProgress() {
     confirmProgressAnimator.cancel();
     TransitionManager.beginDelayedTransition((ViewGroup) requireView());
-    progressTimeout.setVisibility(View.GONE);
+    binding.progressTimeout.setVisibility(View.GONE);
+    progressStopped = true;
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.container.setPadding(
+        binding.container.getPaddingLeft(),
+        binding.container.getPaddingTop(),
+        binding.container.getPaddingRight(),
+        UiUtil.dpToPx(activity, 12) + bottom
+    );
   }
 
   @NonNull

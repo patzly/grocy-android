@@ -14,12 +14,13 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <layout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
 
   <data>
     <variable
@@ -33,9 +34,8 @@
     android:orientation="vertical">
 
     <com.google.android.material.appbar.MaterialToolbar
-      style="@style/Widget.Grocy.Toolbar"
-      app:title="@string/title_unknown_input"
-      app:titleCentered="false" />
+      style="@style/Widget.Grocy.Toolbar.Start"
+      app:title="@string/title_unknown_input" />
 
     <com.google.android.material.divider.MaterialDivider
       style="@style/Widget.Grocy.Divider" />
@@ -47,6 +47,7 @@
       android:overScrollMode="ifContentScrolls">
 
       <LinearLayout
+        android:id="@+id/linear_container_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -59,15 +60,29 @@
           android:layout_marginBottom="16dp"
           android:text="@string/description_input_product_part1" />
 
-        <TextView
-          android:id="@+id/input"
-          style="@style/Widget.Grocy.TextView"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+        <com.google.android.material.card.MaterialCardView
+          android:id="@+id/card"
+          android:layout_width="wrap_content"
+          android:layout_height="32dp"
           android:layout_marginBottom="16dp"
-          android:textSize="16sp"
-          android:textAlignment="center"
-          android:gravity="center" />
+          android:layout_gravity="center_horizontal"
+          app:contentPaddingLeft="12dp"
+          app:contentPaddingRight="12dp"
+          app:cardCornerRadius="8dp"
+          app:strokeWidth="1dp"
+          app:strokeColor="?attr/colorOutline"
+          app:cardElevation="0dp"
+          app:cardBackgroundColor="@color/transparent">
+
+          <TextView
+            android:id="@+id/input"
+            style="@style/TextAppearance.Grocy.LabelLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textColor="?attr/colorOnSurface" />
+
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
           style="@style/Widget.Grocy.TextView"
@@ -77,28 +92,25 @@
           android:text="@string/description_input_product_part2" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
-          style="@style/Widget.Grocy.RadioButton.BottomSheet"
+          style="@style/Widget.Grocy.RadioButton"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:textColor="@color/on_background"
           android:text="@string/description_input_product_option1"
           android:checked="@{bottomsheet.selectionLive == 1}"
           android:onClick="@{v -> bottomsheet.setSelectionLive(1)}" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
-          style="@style/Widget.Grocy.RadioButton.BottomSheet"
+          style="@style/Widget.Grocy.RadioButton"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:textColor="@color/on_background"
           android:text="@string/description_input_product_option2"
           android:checked="@{bottomsheet.selectionLive == 2}"
           android:onClick="@{v -> bottomsheet.setSelectionLive(2)}" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
-          style="@style/Widget.Grocy.RadioButton.BottomSheet"
+          style="@style/Widget.Grocy.RadioButton"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:textColor="@color/on_background"
           android:text="@string/description_input_product_option3"
           android:checked="@{bottomsheet.selectionLive == 3}"
           android:onClick="@{v -> bottomsheet.setSelectionLive(3)}" />
@@ -112,18 +124,12 @@
           <com.google.android.material.button.MaterialButton
             android:id="@+id/button_cancel"
             style="@style/Widget.Grocy.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/action_cancel"
-            android:textColor="@color/on_background_secondary"
-            android:onClick="@{v -> bottomsheet.dismiss()}"
-            app:rippleColor="@color/highlight" />
+            android:onClick="@{v -> bottomsheet.dismiss()}" />
 
           <com.google.android.material.button.MaterialButton
             android:id="@+id/button_proceed"
             style="@style/Widget.Grocy.Button.UnelevatedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/action_proceed"
             android:onClick="@{v -> bottomsheet.proceed()}" />

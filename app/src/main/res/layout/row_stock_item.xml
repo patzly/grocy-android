@@ -14,56 +14,39 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/linear_container"
-  android:orientation="horizontal"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:minHeight="72dp"
-  android:clickable="true"
-  android:focusable="true"
-  android:background="@drawable/ripple_list_item_swipeable"
-  android:paddingStart="16dp"
-  android:paddingEnd="24dp"
-  android:paddingTop="8dp"
-  android:paddingBottom="8dp"
-  android:gravity="center_vertical"
-  android:baselineAligned="false">
+  style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+  android:background="@drawable/ripple_list_item_swipeable">
 
-  <LinearLayout
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_weight="1">
+  <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+    <FrameLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content">
 
       <TextView
-          android:id="@+id/text_name"
-          style="@style/Widget.Grocy.TextView.ListItem.Title"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical"
-          android:singleLine="true" />
+        android:id="@+id/text_name"
+        style="@style/Widget.Grocy.TextView.ListItem.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="11dp"
+        android:singleLine="true" />
 
       <View
-          android:id="@+id/view_on_shopping_list"
-          android:layout_width="5dp"
-          android:layout_height="5dp"
-          android:layout_gravity="center_vertical"
-          android:layout_marginTop="1dp"
-          android:layout_marginStart="6dp"
-          android:visibility="gone"
-          android:background="@drawable/shape_circle" />
+        android:id="@+id/view_on_shopping_list"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginTop="1dp"
+        android:visibility="gone"
+        android:background="@drawable/shape_circle" />
 
-    </LinearLayout>
+    </FrameLayout>
 
     <TextView
       android:id="@+id/text_amount"

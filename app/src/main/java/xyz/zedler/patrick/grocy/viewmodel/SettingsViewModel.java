@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.viewmodel;
@@ -23,27 +23,11 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.Arrays;
-import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BarcodeFormatsBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RestartBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShortcutsBottomSheet;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.Location;
-import xyz.zedler.patrick.grocy.model.ProductGroup;
-import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.ShoppingList;
-import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.PREF;
@@ -57,6 +41,22 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS.SHOPPING_LIST;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.SHOPPING_MODE;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BarcodeFormatsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShortcutsBottomSheet;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.ShoppingList;
+import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ReminderUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -178,13 +178,17 @@ public class SettingsViewModel extends BaseViewModel {
     showBottomSheet(bottomSheet, bundle);
   }
 
-  public void reloadConfiguration() {
+  public void reloadConfiguration(
+      @Nullable Runnable runnableSuccess, @Nullable Runnable runnableError
+  ) {
     ConfigUtil.loadInfo(
-        dlHelper,
-        grocyApi,
-        sharedPrefs,
-        () -> showBottomSheet(new RestartBottomSheet(), null),
-        this::showErrorMessage
+        dlHelper, grocyApi, sharedPrefs, runnableSuccess,
+        volleyError -> {
+          if (runnableError != null) {
+            runnableError.run();
+          }
+          showErrorMessage();
+        }
     );
   }
 
@@ -321,6 +325,18 @@ public class SettingsViewModel extends BaseViewModel {
   public void setKeepScreenOnRecipesEnabled(boolean enabled) {
     sharedPrefs.edit()
             .putBoolean(Constants.SETTINGS.RECIPES.KEEP_SCREEN_ON, enabled).apply();
+  }
+
+  public boolean getCopyBarcodeNoteEnabled() {
+    return sharedPrefs.getBoolean(
+        BEHAVIOR.COPY_BARCODE_NOTE,
+        SETTINGS_DEFAULT.BEHAVIOR.COPY_BARCODE_NOTE
+    );
+  }
+
+  public void setCopyBarcodeNoteEnabled(boolean enabled) {
+    sharedPrefs.edit()
+        .putBoolean(Constants.SETTINGS.BEHAVIOR.COPY_BARCODE_NOTE, enabled).apply();
   }
 
   public boolean getFrontCamEnabled() {

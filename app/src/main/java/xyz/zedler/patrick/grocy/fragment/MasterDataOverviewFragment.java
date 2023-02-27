@@ -14,12 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.animation.LayoutTransition;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,16 +26,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterDataOverviewBinding;
-import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.Constants.PREF;
-import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterDataOverviewViewModel;
 
 public class MasterDataOverviewFragment extends BaseFragment {
@@ -46,8 +43,6 @@ public class MasterDataOverviewFragment extends BaseFragment {
   private MainActivity activity;
   private FragmentMasterDataOverviewBinding binding;
   private MasterDataOverviewViewModel viewModel;
-  private InfoFullscreenHelper infoFullscreenHelper;
-  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(
@@ -64,10 +59,6 @@ public class MasterDataOverviewFragment extends BaseFragment {
   @Override
   public void onDestroyView() {
     super.onDestroyView();
-    if (infoFullscreenHelper != null) {
-      infoFullscreenHelper.destroyInstance();
-      infoFullscreenHelper = null;
-    }
     if (binding != null) {
       binding = null;
     }
@@ -76,18 +67,21 @@ public class MasterDataOverviewFragment extends BaseFragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-
     viewModel = new ViewModelProvider(this).get(MasterDataOverviewViewModel.class);
     viewModel.setOfflineLive(!activity.isOnline());
+    binding.setViewModel(viewModel);
+    binding.setLifecycleOwner(getViewLifecycleOwner());
 
-    systemBarBehavior = new SystemBarBehavior(activity);
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipe);
-    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setScroll(binding.scroll, binding.constraint);
+    systemBarBehavior.applyAppBarInsetOnContainer(false);
+    systemBarBehavior.applyStatusBarInsetOnContainer(false);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
-    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
 
     binding.linearProducts.setOnClickListener(v -> activity.navigateFragment(
         MasterDataOverviewFragmentDirections
@@ -139,20 +133,11 @@ public class MasterDataOverviewFragment extends BaseFragment {
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
-            activity.binding.coordinatorMain
-        ));
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       }
     });
-
-    infoFullscreenHelper = new InfoFullscreenHelper(binding.frameContainer);
-    viewModel.getInfoFullscreenLive().observe(
-        getViewLifecycleOwner(),
-        infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
-    );
-
-    viewModel.getOfflineLive().observe(getViewLifecycleOwner(), this::appBarOfflineInfo);
 
     viewModel.getProductsLive().observe(
         getViewLifecycleOwner(),
@@ -200,9 +185,6 @@ public class MasterDataOverviewFragment extends BaseFragment {
         )
     );
 
-    // for offline info in app bar
-    binding.swipe.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
-
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
     }
@@ -211,6 +193,7 @@ public class MasterDataOverviewFragment extends BaseFragment {
 
     // UPDATE UI
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, false
     );
@@ -239,17 +222,8 @@ public class MasterDataOverviewFragment extends BaseFragment {
       return;
     }
     viewModel.setOfflineLive(!online);
-    viewModel.downloadData();
-  }
-
-  private void appBarOfflineInfo(boolean visible) {
-    boolean currentState = binding.linearOfflineError.getVisibility() == View.VISIBLE;
-    if (visible == currentState) {
-      return;
-    }
-    binding.linearOfflineError.setVisibility(visible ? View.VISIBLE : View.GONE);
-    if (systemBarBehavior != null) {
-      systemBarBehavior.refresh();
+    if (online) {
+      viewModel.downloadData();
     }
   }
 

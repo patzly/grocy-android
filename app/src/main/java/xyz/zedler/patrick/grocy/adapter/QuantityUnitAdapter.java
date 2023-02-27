@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.adapter;
@@ -98,6 +98,7 @@ public class QuantityUnitAdapter extends RecyclerView.Adapter<QuantityUnitAdapte
       holder.imageViewSelected.setVisibility(View.VISIBLE);
       holder.linearLayoutContainer.setBackground(ViewUtil.getBgListItemSelected(context));
     } else {
+      holder.imageViewSelected.setVisibility(View.INVISIBLE);
       holder.linearLayoutContainer.setBackground(ViewUtil.getRippleBgListItemSurface(context));
     }
 

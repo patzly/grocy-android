@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <layout
@@ -42,60 +42,31 @@
   <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="?android:attr/colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/app_bar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      android:background="@color/primary">
+      android:layout_height="wrap_content">
 
-      <LinearLayout
+      <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <FrameLayout
-          android:id="@+id/frame_master_product_simple_cancel"
-          android:layout_width="48dp"
-          android:layout_height="48dp"
-          android:layout_marginStart="4dp"
-          android:layout_marginEnd="20dp"
-          android:background="?attr/actionBarItemBackground"
-          android:clickable="true"
-          android:gravity="center"
-          android:contentDescription="@string/action_back"
-          android:tooltipText="@string/action_back"
-          android:focusable="true"
-          tools:targetApi="o"
-          android:onClick="@{() -> activity.onBackPressed()}">
-
-          <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_arrow_back" />
-
-        </FrameLayout>
-
-        <TextView
-          style="@style/Widget.Grocy.TextView.Toolbar"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:text="@string/title_product_cat_location"
-          android:layout_marginEnd="16dp" />
+        <com.google.android.material.appbar.MaterialToolbar
+          android:id="@+id/toolbar"
+          style="@style/Widget.Grocy.Toolbar.Back"
+          app:title="@string/title_product_cat_location" />
 
         <FrameLayout
           android:id="@+id/frame_help"
           android:layout_width="48dp"
           android:layout_height="48dp"
-          android:layout_marginStart="4dp"
           android:layout_marginEnd="4dp"
           android:background="?attr/actionBarItemBackground"
           android:clickable="true"
           android:gravity="center"
+          android:layout_gravity="end|center_vertical"
           android:contentDescription="@string/action_display_help"
           android:tooltipText="@string/action_display_help"
           android:focusable="true"
@@ -103,15 +74,14 @@
           android:onClick="@{() -> formData.toggleDisplayHelpLive()}">
 
           <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            style="@style/Widget.Grocy.ImageView.Icon"
             android:layout_gravity="center"
             android:importantForAccessibility="no"
-            android:src="@{formData.displayHelpLive ? @drawable/ic_round_help_anim : @drawable/ic_round_help_outline_anim}" />
+            android:src="@{formData.displayHelpLive ? @drawable/ic_round_help : @drawable/ic_round_help_outline_anim}" />
 
         </FrameLayout>
 
-      </LinearLayout>
+      </FrameLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -121,8 +91,6 @@
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never"
-      app:progressBackgroundColor="@{@color/surface}"
-      app:progressForegroundColor="@{@color/secondary}"
       app:setRefreshing="@{viewModel.isLoadingLive}"
       app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
 
@@ -137,159 +105,162 @@
           android:layout_height="match_parent"
           android:overScrollMode="never">
 
-          <LinearLayout
+          <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
-            android:paddingBottom="90dp"
-            android:orientation="vertical"
-            android:animateLayoutChanges="true"
-            app:transitionTypeChanging="@{true}">
+            android:paddingBottom="@dimen/global_scroll_bottom_padding">
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-              android:onClick="@{() -> fragment.showLocationsBottomSheet(false)}">
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:animateLayoutChanges="true"
+              app:transitionTypeChanging="@{true}"
+              app:layout_constraintTop_toTopOf="parent"
+              app:layout_constraintWidth_max="@dimen/max_content_width"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintEnd_toEndOf="parent">
 
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_place"
-                tools:ignore="ContentDescription" />
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+                android:onClick="@{() -> fragment.showLocationsBottomSheet(false)}">
 
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_place"
+                  tools:ignore="ContentDescription" />
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                  android:text="@string/property_location_default"
-                  android:textColor="@{formData.locationErrorLive ? @color/retro_red : @color/on_background_secondary}" />
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@{formData.locationNameLive ?? @string/subtitle_none_selected}" />
+                  <TextView
+                    android:id="@+id/text_location"
+                    style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                    android:text="@string/property_location_default" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@{formData.locationNameLive ?? @string/subtitle_none_selected}" />
+
+                </LinearLayout>
 
               </LinearLayout>
 
-            </LinearLayout>
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card.Text"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
 
-            <com.google.android.material.card.MaterialCardView
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginStart="16dp"
-              android:layout_marginEnd="16dp"
-              android:layout_marginTop="8dp"
-              android:layout_marginBottom="8dp"
-              app:contentPadding="16dp"
-              app:cardElevation="0dp"
-              app:cardCornerRadius="12dp"
-              app:cardBackgroundColor="@color/on_background_variant"
-              android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="?attr/colorOnSurfaceVariant"
+                  android:text="@string/msg_help_consume_location" />
 
-              <TextView
-                style="@style/Widget.Grocy.TextView.Paragraph"
+              </com.google.android.material.card.MaterialCardView>
+
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+                android:onClick="@{() -> fragment.showLocationsBottomSheet(true)}"
+                android:visibility="@{viewModel.showConsumeLocationOption() ? View.VISIBLE : View.GONE}">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_place"
+                  tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                    android:text="@string/property_location_consume_default"/>
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@{formData.locationConsumeNameLive ?? @string/subtitle_none_selected}" />
+
+                </LinearLayout>
+
+              </LinearLayout>
+
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card.Text"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="@{formData.displayHelpLive &amp;&amp; formData.showMoveOnOpen ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="?attr/colorOnSurfaceVariant"
+                  android:text="@string/msg_help_move_on_open" />
+
+              </com.google.android.material.card.MaterialCardView>
+
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/msg_help_consume_location" />
+                android:onClick="@{() -> formData.toggleMoveOnOpenLive()}"
+                android:visibility="@{formData.showMoveOnOpen ? View.VISIBLE : View.GONE}"
+                android:alpha="@{formData.moveOnOpenDisabledLive ? 0.38f : 1.0f}"
+                app:enabled="@{!formData.moveOnOpenDisabledLive}">
 
-            </com.google.android.material.card.MaterialCardView>
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  tools:ignore="ContentDescription"
+                  android:src="@drawable/ic_round_open" />
 
-            <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-              android:onClick="@{() -> fragment.showLocationsBottomSheet(true)}"
-              android:visibility="@{viewModel.showConsumeLocationOption() ? View.VISIBLE : View.GONE}">
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_place"
-                tools:ignore="ContentDescription" />
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:maxLines="3"
+                    android:text="@string/property_move_on_open" />
 
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+                </LinearLayout>
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                  android:text="@string/property_location_consume_default"/>
+                <com.google.android.material.materialswitch.MaterialSwitch
+                  style="@style/Widget.Grocy.Switch.Dense"
+                  android:checked="@={formData.moveOnOpenLive}"
+                  android:clickable="@{!formData.moveOnOpenDisabledLive}"/>
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@{formData.locationConsumeNameLive ?? @string/subtitle_none_selected}" />
+              </LinearLayout>
+
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+                android:onClick="@{() -> fragment.showStoresBottomSheet()}">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_store"
+                  tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                    android:text="@string/property_store_default" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@{formData.storeNameLive ?? @string/subtitle_none_selected}" />
+
+                </LinearLayout>
 
               </LinearLayout>
 
             </LinearLayout>
 
-            <com.google.android.material.card.MaterialCardView
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginStart="16dp"
-              android:layout_marginEnd="16dp"
-              android:layout_marginTop="8dp"
-              android:layout_marginBottom="8dp"
-              app:contentPadding="16dp"
-              app:cardElevation="0dp"
-              app:cardCornerRadius="12dp"
-              app:cardBackgroundColor="@color/on_background_variant"
-              android:visibility="@{formData.displayHelpLive &amp;&amp; formData.showMoveOnOpen ? View.VISIBLE : View.GONE}">
-
-              <TextView
-                style="@style/Widget.Grocy.TextView.Paragraph"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/msg_help_move_on_open" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:onClick="@{() -> formData.toggleMoveOnOpenLive()}"
-              android:visibility="@{formData.showMoveOnOpen ? View.VISIBLE : View.GONE}"
-              android:alpha="@{formData.moveOnOpenDisabledLive ? 0.5f : 1.0f}"
-              app:enabled="@{!formData.moveOnOpenDisabledLive}">
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                tools:ignore="ContentDescription"
-                android:src="@drawable/ic_round_open" />
-
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:maxLines="3"
-                  android:text="@string/property_move_on_open" />
-
-              </LinearLayout>
-
-              <com.google.android.material.switchmaterial.SwitchMaterial
-                style="@style/Widget.Grocy.Switch"
-                android:checked="@={formData.moveOnOpenLive}"
-                android:clickable="@{!formData.moveOnOpenDisabledLive}"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-              android:onClick="@{() -> fragment.showStoresBottomSheet()}">
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_store"
-                tools:ignore="ContentDescription" />
-
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                  android:text="@string/property_store_default" />
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@{formData.storeNameLive ?? @string/subtitle_none_selected}" />
-
-              </LinearLayout>
-
-            </LinearLayout>
-
-          </LinearLayout>
+          </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
 

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.model;
@@ -37,6 +37,8 @@ public abstract class Event {
   public final static int CONSUME_SUCCESS = 22;
   public final static int CHOOSE_PRODUCT = 24;
   public final static int SET_RECIPE_ID = 26;
+  public final static int CONFIRM_FREEZING = 28;
+  public final static int FOCUS_AMOUNT_FIELD = 30;
 
   abstract public int getType();
 

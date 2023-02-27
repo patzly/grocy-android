@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
@@ -88,7 +88,7 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
     }
 
     binding.textListSelectionTitle.setText(activity.getString(R.string.property_shopping_lists));
-    ViewUtil.centerTextOnLargeScreens(binding.textListSelectionTitle);
+    ViewUtil.centerText(binding.textListSelectionTitle);
 
     binding.recyclerListSelection.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
@@ -191,13 +191,15 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
   @Override
   public void onClickEdit(ShoppingList shoppingList) {
     if (!activity.isOnline()) {
-      showMessage(R.string.error_offline);
+      activity.showSnackbar(R.string.error_offline, false);
       return;
     }
     dismiss();
-    navigate(ShoppingListFragmentDirections
-        .actionShoppingListFragmentToShoppingListEditFragment()
-        .setShoppingList(shoppingList));
+    activity.navigateFragment(
+        ShoppingListFragmentDirections
+            .actionShoppingListFragmentToShoppingListEditFragment()
+            .setShoppingList(shoppingList)
+    );
   }
 
   @Override

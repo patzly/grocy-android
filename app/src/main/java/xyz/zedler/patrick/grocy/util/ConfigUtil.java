@@ -14,13 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.util;
 
 import android.content.SharedPreferences;
 import android.util.Log;
+import androidx.annotation.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
@@ -40,8 +41,8 @@ public class ConfigUtil {
       DownloadHelper dlHelper,
       GrocyApi api,
       SharedPreferences prefs,
-      Runnable onSuccessAction,
-      DownloadHelper.OnErrorListener onError
+      @Nullable Runnable onSuccessAction,
+      @Nullable DownloadHelper.OnErrorListener onError
   ) {
 
     boolean debug = prefs.getBoolean(
@@ -120,6 +121,10 @@ public class ConfigUtil {
               jsonObject.getBoolean("FEATURE_FLAG_STOCK_PRODUCT_OPENED_TRACKING")
           )
           .putBoolean(
+              PREF.FEATURE_RECIPES,
+              jsonObject.getBoolean("FEATURE_FLAG_RECIPES")
+          )
+          .putBoolean(
               PREF.FEATURE_TASKS,
               jsonObject.getBoolean("FEATURE_FLAG_TASKS")
           )
@@ -130,6 +135,9 @@ public class ConfigUtil {
           .putBoolean(
               PREF.FEATURE_CHORES_ASSIGNMENTS,
               jsonObject.getBoolean("FEATURE_FLAG_CHORES_ASSIGNMENTS")
+          ).putBoolean(
+              PREF.FEATURE_LABEL_PRINTER,
+              jsonObject.getBoolean("FEATURE_FLAG_LABEL_PRINTER")
           ).apply();
       if (jsonObject.has("FEATURE_FLAG_STOCK_PRODUCT_FREEZING")) {
         prefs.edit().putBoolean(

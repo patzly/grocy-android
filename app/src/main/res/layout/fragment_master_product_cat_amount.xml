@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <layout
@@ -42,50 +42,22 @@
   <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="?android:attr/colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/app_bar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      android:background="@color/primary">
+      android:layout_height="wrap_content">
 
-      <LinearLayout
+      <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <FrameLayout
-          android:id="@+id/frame_master_product_simple_cancel"
-          android:layout_width="48dp"
-          android:layout_height="48dp"
-          android:layout_marginStart="4dp"
-          android:layout_marginEnd="20dp"
-          android:background="?attr/actionBarItemBackground"
-          android:clickable="true"
-          android:gravity="center"
-          android:contentDescription="@string/action_back"
-          android:tooltipText="@string/action_back"
-          android:focusable="true"
-          tools:targetApi="o"
-          android:onClick="@{() -> activity.onBackPressed()}">
-
-          <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_arrow_back" />
-
-        </FrameLayout>
-
-        <TextView
-          style="@style/Widget.Grocy.TextView.Toolbar"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:text="@string/title_product_cat_amount"
-          android:layout_marginEnd="16dp" />
+        <com.google.android.material.appbar.MaterialToolbar
+          android:id="@+id/toolbar"
+          style="@style/Widget.Grocy.Toolbar.Back"
+          app:title="@string/title_product_cat_amount"
+          app:titleCentered="true" />
 
         <FrameLayout
           android:id="@+id/frame_help"
@@ -93,6 +65,7 @@
           android:layout_height="48dp"
           android:layout_marginStart="4dp"
           android:layout_marginEnd="4dp"
+          android:layout_gravity="center_vertical|end"
           android:background="?attr/actionBarItemBackground"
           android:clickable="true"
           android:gravity="center"
@@ -103,358 +76,358 @@
           android:onClick="@{() -> formData.toggleDisplayHelpLive()}">
 
           <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            style="@style/Widget.Grocy.ImageView.Icon"
             android:layout_gravity="center"
             android:importantForAccessibility="no"
-            android:src="@{formData.displayHelpLive ? @drawable/ic_round_help_anim : @drawable/ic_round_help_outline_anim}" />
+            android:src="@{formData.displayHelpLive ? @drawable/ic_round_help : @drawable/ic_round_help_outline_anim}" />
 
         </FrameLayout>
 
-      </LinearLayout>
+      </FrameLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
       android:id="@+id/container"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_marginTop="?attr/actionBarSize">
+      android:layout_height="match_parent">
 
       <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never">
+        android:overScrollMode="never"
+        android:layout_marginTop="?attr/actionBarSize">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+          android:id="@+id/constraint"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:paddingTop="8dp"
-          android:paddingBottom="90dp"
-          android:orientation="vertical"
-          android:animateLayoutChanges="true">
+          android:paddingBottom="@dimen/global_scroll_bottom_padding">
 
           <LinearLayout
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-            android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.MIN_AMOUNT, imageMinAmount)}">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:animateLayoutChanges="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="@dimen/max_content_width"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-            <ImageView
-              android:id="@+id/image_min_amount"
-              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              android:src="@drawable/ic_round_scatter_plot_anim"
-              tools:ignore="ContentDescription" />
+            <LinearLayout
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+              android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.MIN_AMOUNT, imageMinAmount)}">
 
-            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+              <ImageView
+                android:id="@+id/image_min_amount"
+                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                android:src="@drawable/ic_round_scatter_plot_anim"
+                tools:ignore="ContentDescription" />
 
-              <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                android:singleLine="false"
-                android:text="@string/property_amount_min_stock" />
+              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
-              <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:text="@{formData.minAmountLive}" />
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                  android:singleLine="false"
+                  android:text="@string/property_amount_min_stock" />
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.Title"
+                  android:text="@{formData.minAmountLive}" />
+
+              </LinearLayout>
 
             </LinearLayout>
 
-          </LinearLayout>
-
-          <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:contentPadding="16dp"
-            app:cardElevation="0dp"
-            app:cardCornerRadius="12dp"
-            app:cardBackgroundColor="@color/on_background_variant"
-            android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.Paragraph"
+            <com.google.android.material.card.MaterialCardView
+              style="@style/Widget.Grocy.Card.Text"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:text="@string/msg_help_accumulate_min_amount" />
-
-          </com.google.android.material.card.MaterialCardView>
-
-          <LinearLayout
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> switchAccumulateAmount.setChecked(!switchAccumulateAmount.isChecked())}">
-
-            <ImageView
-              android:id="@+id/image_accumulate_amount"
-              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              tools:ignore="ContentDescription"
-              android:src="@drawable/ic_round_factor"
-              android:rotation="180" />
-
-            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+              android:layout_marginStart="16dp"
+              android:layout_marginEnd="16dp"
+              android:layout_marginTop="8dp"
+              android:layout_marginBottom="8dp"
+              android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
 
               <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:maxLines="4"
-                android:text="@string/property_accumulate_amount" />
+                style="@style/Widget.Grocy.TextView.Paragraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:text="@string/msg_help_accumulate_min_amount" />
 
-            </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.materialswitch.MaterialSwitch
-              android:id="@+id/switch_accumulate_amount"
-              style="@style/Widget.Grocy.Switch"
-              android:checked="@={formData.accumulateMinAmount}"
-              android:onCheckedChanged="@{() -> activity.startIconAnimation(imageAccumulateAmount, true)}" />
-
-          </LinearLayout>
-
-          <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:contentPadding="16dp"
-            app:cardElevation="0dp"
-            app:cardCornerRadius="12dp"
-            app:cardBackgroundColor="@color/on_background_variant"
-            android:visibility="@{formData.displayHelpLive &amp;&amp; formData.treatOpenedAsOutOfStockVisible ? View.VISIBLE : View.GONE}">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.Paragraph"
+            <LinearLayout
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:text="@string/msg_help_treat_opened_as_out_of_stock" />
+              android:onClick="@{() -> switchAccumulateAmount.setChecked(!switchAccumulateAmount.isChecked())}">
 
-          </com.google.android.material.card.MaterialCardView>
+              <ImageView
+                android:id="@+id/image_accumulate_amount"
+                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                tools:ignore="ContentDescription"
+                android:src="@drawable/ic_round_factor"
+                android:rotation="180" />
 
-          <LinearLayout
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> switchTreatOpened.setChecked(!switchTreatOpened.isChecked())}"
-            android:visibility="@{formData.treatOpenedAsOutOfStockVisible ? View.VISIBLE : View.GONE}">
+              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
-            <ImageView
-              android:id="@+id/image_treat_opened"
-              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              tools:ignore="ContentDescription"
-              android:src="@drawable/ic_round_open" />
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.Title"
+                  android:maxLines="4"
+                  android:text="@string/property_accumulate_amount" />
 
-            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+              </LinearLayout>
 
-              <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:maxLines="4"
-                android:text="@string/setting_treat_opened_as_out_of_stock" />
+              <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switch_accumulate_amount"
+                style="@style/Widget.Grocy.Switch"
+                android:checked="@={formData.accumulateMinAmount}"
+                android:onCheckedChanged="@{() -> activity.startIconAnimation(imageAccumulateAmount, true)}" />
 
             </LinearLayout>
 
-            <com.google.android.material.materialswitch.MaterialSwitch
-              android:id="@+id/switch_treat_opened"
-              style="@style/Widget.Grocy.Switch"
-              android:checked="@={formData.treatOpenedAsOutOfStock}"
-              android:onCheckedChanged="@{() -> activity.startIconAnimation(imageTreatOpened, true)}" />
-
-          </LinearLayout>
-
-          <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:contentPadding="16dp"
-            app:cardElevation="0dp"
-            app:cardCornerRadius="12dp"
-            app:cardBackgroundColor="@color/on_background_variant"
-            android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.Paragraph"
+            <com.google.android.material.card.MaterialCardView
+              style="@style/Widget.Grocy.Card.Text"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:text="@string/msg_help_quick_consume_amount" />
-
-          </com.google.android.material.card.MaterialCardView>
-
-          <LinearLayout
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-            android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.QUICK_CONSUME_AMOUNT)}">
-
-            <ImageView
-              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              android:src="@drawable/ic_round_consume_product"
-              tools:ignore="ContentDescription" />
-
-            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+              android:layout_marginStart="16dp"
+              android:layout_marginEnd="16dp"
+              android:layout_marginTop="8dp"
+              android:layout_marginBottom="8dp"
+              android:visibility="@{formData.displayHelpLive &amp;&amp; formData.treatOpenedAsOutOfStockVisible ? View.VISIBLE : View.GONE}">
 
               <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                android:singleLine="false"
-                android:text="@{formData.quickConsumeAmountTitleLive}" />
+                style="@style/Widget.Grocy.TextView.Paragraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:text="@string/msg_help_treat_opened_as_out_of_stock" />
 
-              <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:text="@{formData.quickConsumeAmountLive}" />
+            </com.google.android.material.card.MaterialCardView>
 
-            </LinearLayout>
-
-          </LinearLayout>
-
-          <LinearLayout
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-            android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.FACTOR_AMOUNT)}">
-
-            <ImageView
-              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              android:src="@drawable/ic_round_factor"
-              tools:ignore="ContentDescription" />
-
-            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-              <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                android:singleLine="false"
-                android:text="@string/property_qu_factor" />
-
-              <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:text="@{formData.factorPurchaseToStockLive}" />
-
-            </LinearLayout>
-
-          </LinearLayout>
-
-          <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:contentPadding="16dp"
-            app:cardElevation="0dp"
-            app:cardCornerRadius="12dp"
-            app:cardBackgroundColor="@color/on_background_variant"
-            android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.Paragraph"
+            <LinearLayout
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:text="@string/msg_help_tare_weight" />
+              android:onClick="@{() -> switchTreatOpened.setChecked(!switchTreatOpened.isChecked())}"
+              android:visibility="@{formData.treatOpenedAsOutOfStockVisible ? View.VISIBLE : View.GONE}">
 
-          </com.google.android.material.card.MaterialCardView>
+              <ImageView
+                android:id="@+id/image_treat_opened"
+                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                tools:ignore="ContentDescription"
+                android:src="@drawable/ic_round_open" />
 
-          <LinearLayout
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> switchTareWeight.setChecked(!switchTareWeight.isChecked())}">
+              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
-            <ImageView
-              android:id="@+id/image_tare_weight"
-              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              tools:ignore="ContentDescription"
-              android:src="@drawable/ic_round_scale_anim" />
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.Title"
+                  android:maxLines="4"
+                  android:text="@string/setting_treat_opened_as_out_of_stock" />
 
-            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+              </LinearLayout>
 
-              <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:maxLines="4"
-                android:text="@string/property_enable_tare_weight" />
-
-            </LinearLayout>
-
-            <com.google.android.material.materialswitch.MaterialSwitch
-              android:id="@+id/switch_tare_weight"
-              style="@style/Widget.Grocy.Switch"
-              android:checked="@={formData.enableTareWeightHandlingLive}"
-              android:onCheckedChanged="@{() -> activity.startIconAnimation(imageTareWeight, true)}" />
-
-          </LinearLayout>
-
-          <LinearLayout
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-            android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.TARE_WEIGHT)}"
-            android:visibility="@{formData.enableTareWeightHandlingLive ? View.VISIBLE : View.GONE}">
-
-            <ImageView
-              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              tools:ignore="ContentDescription" />
-
-            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-              <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                android:singleLine="false"
-                android:text="@{formData.tareWeightTitleLive}"
-                android:textColor="@{formData.tareWeightErrorLive ? @color/retro_red : @color/on_background_secondary}" />
-
-              <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:text="@{formData.tareWeightLive ?? @string/error_empty}" />
+              <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switch_treat_opened"
+                style="@style/Widget.Grocy.Switch"
+                android:checked="@={formData.treatOpenedAsOutOfStock}"
+                android:onCheckedChanged="@{() -> activity.startIconAnimation(imageTreatOpened, true)}" />
 
             </LinearLayout>
 
-          </LinearLayout>
-
-          <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:contentPadding="16dp"
-            app:cardElevation="0dp"
-            app:cardCornerRadius="12dp"
-            app:cardBackgroundColor="@color/on_background_variant"
-            android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.Paragraph"
+            <com.google.android.material.card.MaterialCardView
+              style="@style/Widget.Grocy.Card.Text"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:text="@string/msg_help_disable_stock_check" />
-
-          </com.google.android.material.card.MaterialCardView>
-
-          <LinearLayout
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> switchStockCheck.setChecked(!switchStockCheck.isChecked())}">
-
-            <ImageView
-              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              tools:ignore="ContentDescription"
-              android:src="@drawable/ic_round_category" />
-
-            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+              android:layout_marginStart="16dp"
+              android:layout_marginEnd="16dp"
+              android:layout_marginTop="8dp"
+              android:layout_marginBottom="8dp"
+              android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
 
               <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:maxLines="4"
-                android:text="@string/property_disable_stock_check" />
+                style="@style/Widget.Grocy.TextView.Paragraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:text="@string/msg_help_quick_consume_amount" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+              android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.QUICK_CONSUME_AMOUNT)}">
+
+              <ImageView
+                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                android:src="@drawable/ic_round_consume_product"
+                tools:ignore="ContentDescription" />
+
+              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                  android:singleLine="false"
+                  android:text="@{formData.quickConsumeAmountTitleLive}" />
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.Title"
+                  android:text="@{formData.quickConsumeAmountLive}" />
+
+              </LinearLayout>
 
             </LinearLayout>
 
-            <com.google.android.material.materialswitch.MaterialSwitch
-              android:id="@+id/switch_stock_check"
-              style="@style/Widget.Grocy.Switch"
-              android:checked="@={formData.disableStockCheckLive}" />
+            <LinearLayout
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+              android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.FACTOR_AMOUNT)}">
+
+              <ImageView
+                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                android:src="@drawable/ic_round_factor"
+                tools:ignore="ContentDescription" />
+
+              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                  android:singleLine="false"
+                  android:text="@string/property_qu_factor" />
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.Title"
+                  android:text="@{formData.factorPurchaseToStockLive}" />
+
+              </LinearLayout>
+
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+              style="@style/Widget.Grocy.Card.Text"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="16dp"
+              android:layout_marginEnd="16dp"
+              android:layout_marginTop="8dp"
+              android:layout_marginBottom="8dp"
+              android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.Paragraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:text="@string/msg_help_tare_weight" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:onClick="@{() -> switchTareWeight.setChecked(!switchTareWeight.isChecked())}">
+
+              <ImageView
+                android:id="@+id/image_tare_weight"
+                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                tools:ignore="ContentDescription"
+                android:src="@drawable/ic_round_scale_anim" />
+
+              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.Title"
+                  android:maxLines="4"
+                  android:text="@string/property_enable_tare_weight" />
+
+              </LinearLayout>
+
+              <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switch_tare_weight"
+                style="@style/Widget.Grocy.Switch"
+                android:checked="@={formData.enableTareWeightHandlingLive}"
+                android:onCheckedChanged="@{() -> activity.startIconAnimation(imageTareWeight, true)}" />
+
+            </LinearLayout>
+
+            <LinearLayout
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+              android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.TARE_WEIGHT)}"
+              android:visibility="@{formData.enableTareWeightHandlingLive ? View.VISIBLE : View.GONE}">
+
+              <ImageView
+                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                tools:ignore="ContentDescription" />
+
+              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+                <TextView
+                  android:id="@+id/text_tare_weight_label"
+                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                  android:singleLine="false"
+                  android:text="@{formData.tareWeightTitleLive}" />
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.Title"
+                  android:text="@{formData.tareWeightLive ?? @string/error_empty}" />
+
+              </LinearLayout>
+
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+              style="@style/Widget.Grocy.Card.Text"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="16dp"
+              android:layout_marginEnd="16dp"
+              android:layout_marginTop="8dp"
+              android:layout_marginBottom="8dp"
+              android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.Paragraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:text="@string/msg_help_disable_stock_check" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:onClick="@{() -> switchStockCheck.setChecked(!switchStockCheck.isChecked())}">
+
+              <ImageView
+                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                tools:ignore="ContentDescription"
+                android:src="@drawable/ic_round_category" />
+
+              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.Title"
+                  android:maxLines="4"
+                  android:text="@string/property_disable_stock_check" />
+
+              </LinearLayout>
+
+              <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switch_stock_check"
+                style="@style/Widget.Grocy.Switch"
+                android:checked="@={formData.disableStockCheckLive}" />
+
+            </LinearLayout>
 
           </LinearLayout>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
       </androidx.core.widget.NestedScrollView>
 

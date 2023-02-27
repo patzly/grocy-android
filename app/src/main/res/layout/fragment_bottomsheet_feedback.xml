@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <LinearLayout
@@ -26,7 +26,7 @@
   android:orientation="vertical">
 
   <com.google.android.material.appbar.MaterialToolbar
-    style="@style/Widget.Grocy.Toolbar.Centered"
+    style="@style/Widget.Grocy.Toolbar"
     app:title="@string/title_feedback" />
 
   <com.google.android.material.divider.MaterialDivider
@@ -58,7 +58,7 @@
 
       <LinearLayout
         android:id="@+id/linear_feedback_issue"
-        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable">
+        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
 
         <ImageView
           android:id="@+id/image_feedback_issue"
@@ -82,7 +82,7 @@
 
       <LinearLayout
         android:id="@+id/linear_feedback_rate"
-        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable">
+        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
 
         <ImageView
           android:id="@+id/image_feedback_rate"
@@ -106,7 +106,7 @@
 
       <LinearLayout
         android:id="@+id/linear_feedback_share"
-        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable">
+        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
 
         <ImageView
           style="@style/Widget.Grocy.ImageView.ListItem.Icon"

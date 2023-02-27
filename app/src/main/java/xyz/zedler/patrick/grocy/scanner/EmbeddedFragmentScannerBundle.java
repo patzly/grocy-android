@@ -14,18 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.scanner;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import androidx.annotation.ColorRes;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
-import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 
@@ -38,7 +36,6 @@ public class EmbeddedFragmentScannerBundle extends EmbeddedFragmentScanner {
       Fragment fragment,
       CoordinatorLayout containerScanner,
       BarcodeListener barcodeListener,
-      @ColorRes int viewfinderMaskColorZXing,
       boolean qrCodeFormat,
       boolean takeSmallQrCodeFormat
   ) {
@@ -47,25 +44,8 @@ public class EmbeddedFragmentScannerBundle extends EmbeddedFragmentScanner {
         fragment,
         containerScanner,
         barcodeListener,
-        viewfinderMaskColorZXing,
         qrCodeFormat,
         takeSmallQrCodeFormat
-    );
-  }
-
-  public EmbeddedFragmentScannerBundle(
-      Fragment fragment,
-      CoordinatorLayout containerScanner,
-      BarcodeListener barcodeListener,
-      @ColorRes int viewfinderMaskColorZXing
-  ) {
-    this(
-        fragment,
-        containerScanner,
-        barcodeListener,
-        viewfinderMaskColorZXing,
-        useScannerFormat2d(fragment),
-        true
     );
   }
 
@@ -78,7 +58,6 @@ public class EmbeddedFragmentScannerBundle extends EmbeddedFragmentScanner {
         fragment,
         containerScanner,
         barcodeListener,
-        R.color.background,
         useScannerFormat2d(fragment),
         true
     );

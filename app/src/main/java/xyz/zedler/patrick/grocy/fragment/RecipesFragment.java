@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -25,13 +25,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
@@ -72,7 +70,6 @@ public class RecipesFragment extends BaseFragment implements
   private SwipeBehavior swipeBehavior;
   private FragmentRecipesBinding binding;
   private InfoFullscreenHelper infoFullscreenHelper;
-  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(
@@ -112,11 +109,14 @@ public class RecipesFragment extends BaseFragment implements
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();
 
-    systemBarBehavior = new SystemBarBehavior(activity);
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.applyAppBarInsetOnContainer(false);
+    systemBarBehavior.applyStatusBarInsetOnContainer(false);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
 
@@ -187,10 +187,9 @@ public class RecipesFragment extends BaseFragment implements
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
-            activity.binding.coordinatorMain
-        ));
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       }
     });
 
@@ -223,23 +222,9 @@ public class RecipesFragment extends BaseFragment implements
                 new Handler().postDelayed(() -> {
                   Recipe recipe = displayedItems.get(pos);
                   consumeRecipe(recipe.getId());
-                  activity.showSnackbar(getString(R.string.msg_recipe_consumed, recipe.getName()));
-                }, 100);
-              }
-          ));
-
-          underlayButtons.add(new UnderlayButton(
-              activity,
-              R.drawable.ic_round_add_shopping_cart,
-              pos -> {
-                if (pos >= displayedItems.size()) {
-                  return;
-                }
-                swipeBehavior.recoverLatestSwipedItem();
-                new Handler().postDelayed(() -> {
-                  Recipe recipe = displayedItems.get(pos);
-                  addNotFulfilledProductsToCartForRecipe(recipe.getId());
-                  activity.showSnackbar(getString(R.string.msg_recipe_added_to_cart));
+                  activity.showSnackbar(
+                      getString(R.string.msg_recipe_consumed, recipe.getName()), true
+                  );
                 }, 100);
               }
           ));
@@ -254,6 +239,7 @@ public class RecipesFragment extends BaseFragment implements
 
     // UPDATE UI
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.recycler, true, true
     );
@@ -279,11 +265,11 @@ public class RecipesFragment extends BaseFragment implements
   }
 
   @Override
-  public void addNotFulfilledProductsToCartForRecipe(int recipeId) {
+  public void addNotFulfilledProductsToCartForRecipe(int recipeId, int[] excludedProductIds) {
     if (showOfflineError()) {
       return;
     }
-    viewModel.addNotFulfilledProductsToCartForRecipe(recipeId);
+    viewModel.addNotFulfilledProductsToCartForRecipe(recipeId, excludedProductIds);
   }
 
   @Override
@@ -327,7 +313,7 @@ public class RecipesFragment extends BaseFragment implements
 
   private boolean showOfflineError() {
     if (viewModel.isOffline()) {
-      showMessage(getString(R.string.error_offline));
+      activity.showSnackbar(R.string.error_offline, false);
       return true;
     }
     return false;
@@ -379,7 +365,6 @@ public class RecipesFragment extends BaseFragment implements
     if (isOnline) {
       viewModel.downloadData();
     }
-    systemBarBehavior.refresh();
   }
 
   private void setUpSearch() {
@@ -404,17 +389,6 @@ public class RecipesFragment extends BaseFragment implements
     activity.hideKeyboard();
     binding.editTextSearch.setText("");
     viewModel.setIsSearchVisible(false);
-  }
-
-  private void showMessage(String msg) {
-    activity.showSnackbar(
-        Snackbar.make(activity.binding.coordinatorMain, msg, Snackbar.LENGTH_SHORT)
-    );
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
   }
 
   @NonNull

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy;
@@ -53,6 +53,7 @@ public final class Constants {
     public final static String FEATURE_TASKS = "feature_tasks";
     public final static String FEATURE_CHORES = "feature_chores";
     public final static String FEATURE_CHORES_ASSIGNMENTS = "feature_chores_assignments";
+    public final static String FEATURE_LABEL_PRINTER = "feature_label_printer";
 
     public final static String STOCK_SORT_MODE = "stock_sort_mode";
     public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";
@@ -111,7 +112,8 @@ public final class Constants {
     public final static String INTRO_SHOWN = "intro_shown";
     public final static String VERSION_COMPATIBILITY_IGNORED = "version_ignored_compatibility";
     public final static String UPDATE_INFO_READ = "update_info_read";
-    public static final String RUN_AS_SUPER_CLASS = "run_as_super_class";
+    public final static String LAST_VERSION = "last_version";
+    public final static String OVERVIEW_FAB_INFO_SHOWN = "overview_fab_info_shown";
   }
 
   public final static class SETTINGS {
@@ -140,12 +142,14 @@ public final class Constants {
     public final static class BEHAVIOR {
 
       public final static String BEGINNER_MODE = "beginner_mode";
+      public final static String HAPTIC = "haptic";
       public final static String FOOD_FACTS = "food_facts";
       public final static String EXPAND_BOTTOM_SHEETS = "expand_bottom_sheets";
       public final static String SPEED_UP_START = "speed_up_start";
       public final static String DATE_KEYBOARD_INPUT = "date_keyboard_input";
       public final static String DATE_KEYBOARD_REVERSE = "date_keyboard_reverse";
       public final static String MESSAGE_DURATION = "message_duration";
+      public final static String COPY_BARCODE_NOTE = "copy_barcode_note";
     }
 
     public final static class SCANNER {
@@ -241,12 +245,14 @@ public final class Constants {
     public final static class BEHAVIOR {
 
       public final static boolean BEGINNER_MODE = true;
+      public final static boolean HAPTIC = true;
       public final static boolean FOOD_FACTS = false;
       public final static boolean EXPAND_BOTTOM_SHEETS = false;
       public final static boolean SPEED_UP_START = false;
       public final static boolean DATE_KEYBOARD_INPUT = false;
       public final static boolean DATE_KEYBOARD_REVERSE = false;
       public final static int MESSAGE_DURATION = 10;
+      public final static boolean COPY_BARCODE_NOTE = false;
     }
 
     public final static class SCANNER {
@@ -349,12 +355,6 @@ public final class Constants {
     public final static String BARCODE_FORMAT_RSSE = "barcode_format_rsse";  // only ZXing
   }
 
-  public final static class URL {
-
-    public final static String FAQ = "https://github.com/patzly/grocy-android/blob/master/FAQ.md";
-    public final static String HELP = "https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-pagetop";
-  }
-
   public final static class DATE {
 
     public final static String NEVER_OVERDUE = "2999-12-31";
@@ -423,6 +423,7 @@ public final class Constants {
     public final static String DEFAULT_DAYS_FROM_NOW = "default_best_before_days";
     public final static String NUMBER = "number";
     public final static String TEXT = "text";
+    public final static String TEXT_ALTERNATIVE = "text_alt";
     public final static String FILE = "file";
     public final static String LINK = "link";
     public final static String HTML = "html";
@@ -453,13 +454,6 @@ public final class Constants {
   }
 
   public final static class FAB {
-
-    public final static class POSITION {
-
-      public final static int GONE = 0;
-      public final static int CENTER = 1;
-      public final static int END = 2;
-    }
 
     public final static class TAG {
 

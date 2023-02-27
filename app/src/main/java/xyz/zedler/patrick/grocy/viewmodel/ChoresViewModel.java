@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.viewmodel;
@@ -153,22 +153,28 @@ public class ChoresViewModel extends BaseViewModel {
     });
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
+  public void downloadData(@Nullable String dbChangedTime, boolean skipOfflineCheck) {
     if (currentQueueLoading != null) {
       currentQueueLoading.reset(true);
       currentQueueLoading = null;
     }
-    if (isOffline()) { // skip downloading and update recyclerview
+    if (!skipOfflineCheck && isOffline()) { // skip downloading and update recyclerview
       isLoadingLive.setValue(false);
       updateFilteredChoreEntries();
       return;
     }
     if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
+      dlHelper.getTimeDbChanged(
+          time -> downloadData(time, skipOfflineCheck),
+          () -> onDownloadError(null)
+      );
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(this::updateFilteredChoreEntries, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(() -> {
+      setOfflineLive(false);
+      updateFilteredChoreEntries();
+    }, this::onDownloadError);
     queue.append(
         dlHelper.updateChoreEntries(dbChangedTime, choreEntries -> {
           this.choreEntries = choreEntries;
@@ -219,7 +225,7 @@ public class ChoresViewModel extends BaseViewModel {
   }
 
   public void downloadData() {
-    downloadData(null);
+    downloadData(null, false);
   }
 
   public void downloadDataForceUpdate() {
@@ -228,17 +234,15 @@ public class ChoresViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_CHORES, null);
     editPrefs.putString(PREF.DB_LAST_TIME_USERS, null);
     editPrefs.apply();
-    downloadData();
+    downloadData(null, true);
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
     if (debug) {
       Log.e(TAG, "onError: VolleyError: " + error);
     }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
+    showNetworkErrorMessage(error);
+    if (!isOffline()) setOfflineLive(true);
   }
 
   public void updateFilteredChoreEntries() {
@@ -319,7 +323,7 @@ public class ChoresViewModel extends BaseViewModel {
           }
         },
         error -> {
-          showErrorMessage(error);
+          showNetworkErrorMessage(error);
           if (debug) {
             Log.i(TAG, "executeChore: " + error);
           }

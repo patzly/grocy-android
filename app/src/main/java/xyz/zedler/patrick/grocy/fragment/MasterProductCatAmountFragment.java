@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -26,9 +26,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import com.google.android.material.snackbar.Snackbar;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatAmountBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
@@ -36,9 +39,7 @@ import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatAmount;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ACTION;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatAmountViewModel;
 
@@ -83,11 +84,22 @@ public class MasterProductCatAmountFragment extends BaseFragment {
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setScroll(binding.scroll, binding.constraint);
+    systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
+
+    binding.toolbar.setNavigationOnClickListener(v -> {
+      onBackPressed();
+      activity.navigateUp();
+    });
+
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        SnackbarMessage message = (SnackbarMessage) event;
-        Snackbar snack = message.getSnackbar(activity, activity.binding.coordinatorMain);
-        activity.showSnackbar(snack);
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       } else if (event.getType() == Event.NAVIGATE_UP) {
         activity.navigateUp();
       } else if (event.getType() == Event.SET_SHOPPING_LIST_ID) {
@@ -111,16 +123,25 @@ public class MasterProductCatAmountFragment extends BaseFragment {
       }
     });
 
+    viewModel.getFormData().getTareWeightErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textTareWeightLabel.setTextColor(
+            ResUtil.getColorAttr(
+                activity, value == null ? R.attr.colorError : R.attr.colorOnSurfaceVariant
+            )
+        )
+    );
+
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI(savedInstanceState == null);
-  }
+    // UPDATE UI
 
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.scroll, false
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,
         viewModel.isActionEdit()
@@ -152,7 +173,7 @@ public class MasterProductCatAmountFragment extends BaseFragment {
         R.drawable.ic_round_backup,
         R.string.action_save_close,
         Constants.FAB.TAG.SAVE,
-        animated,
+        savedInstanceState == null,
         () -> {
           setForDestination(
               R.id.masterProductFragment,

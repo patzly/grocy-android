@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
@@ -31,7 +31,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.TooltipCompat;
 import androidx.core.view.MenuCompat;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
@@ -42,6 +41,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -60,11 +61,10 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -144,8 +144,6 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     refreshItems();
 
     binding.textName.setText(product.getName());
-    ViewUtil.centerTextOnLargeScreens(binding.textName);
-    ViewUtil.centerTextOnLargeScreens(binding.textDescription);
 
     // TOOLBAR
 
@@ -158,7 +156,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     );
     binding.toolbar.setOnMenuItemClickListener(item -> {
       if (item.getItemId() == R.id.action_add_to_shopping_list) {
-        navigateDeepLink(R.string.deep_link_shoppingListItemEditFragment,
+        activity.navigateDeepLink(R.string.deep_link_shoppingListItemEditFragment,
             new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
                 .setProductId(String.valueOf(product.getId())).build().toBundle());
         dismiss();
@@ -179,20 +177,30 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
         return true;
       } else if (item.getItemId() == R.id.action_edit_product) {
         String productId = String.valueOf(product.getId());
-        navigateDeepLink(R.string.deep_link_masterProductFragment,
+        activity.navigateDeepLink(R.string.deep_link_masterProductFragment,
             new MasterProductFragmentArgs.Builder(Constants.ACTION.EDIT)
                 .setProductId(productId).build().toBundle());
         dismiss();
         return true;
       } else if (item.getItemId() == R.id.action_stock_entries) {
         String productId = String.valueOf(product.getId());
-        navigateDeepLink(R.string.deep_link_stockEntriesFragment,
+        activity.navigateDeepLink(R.string.deep_link_stockEntriesFragment,
             new StockEntriesFragmentArgs.Builder().setProductId(productId).build().toBundle());
         dismiss();
         return true;
       }
       return false;
     });
+
+    // ACTIONS
+    if (!showActions) {
+      // hide actions when set up with productDetails
+      binding.linearActionContainer.setVisibility(View.GONE);
+      // set info menu
+      binding.toolbar.getMenu().clear();
+      binding.toolbar.inflateMenu(R.menu.menu_actions_product_overview_info);
+    }
+    ResUtil.tintMenuItemIcons(activity, binding.toolbar.getMenu());
 
     ColorStateList colorSurface3 = ColorStateList.valueOf(
         SurfaceColors.SURFACE_3.getColor(activity)
@@ -259,16 +267,6 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       binding.description.setHtml(description);
     }
 
-    // ACTIONS
-
-    if (!showActions) {
-      // hide actions when set up with productDetails
-      binding.linearActionContainer.setVisibility(View.GONE);
-      // set info menu
-      binding.toolbar.getMenu().clear();
-      binding.toolbar.inflateMenu(R.menu.menu_actions_product_overview_info);
-    }
-
     refreshButtonStates();
     binding.buttonConsume.setOnClickListener(v -> {
       disableActions();
@@ -281,13 +279,13 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       dismiss();
     });
     // tooltips
-    TooltipCompat.setTooltipText(
+    ViewUtil.setTooltipText(
         binding.buttonConsume,
         activity.getString(
             R.string.action_consume_one, quantityUnitStock.getName(), product.getName()
         )
     );
-    TooltipCompat.setTooltipText(
+    ViewUtil.setTooltipText(
         binding.buttonOpen,
         activity.getString(
             R.string.action_open_one, quantityUnitStock.getName(), product.getName()
@@ -335,11 +333,14 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     AmountUtil.addStockAmountNormalInfo(activity, pluralUtil, amountNormal, stockItem,
         quantityUnitStock, maxDecimalPlacesAmount);
     AmountUtil.addStockAmountAggregatedInfo(activity, pluralUtil, amountAggregated, stockItem,
-        quantityUnitStock, maxDecimalPlacesAmount);
+        quantityUnitStock, maxDecimalPlacesAmount, false);
     binding.itemAmount.setText(
         activity.getString(R.string.property_amount),
-        amountNormal.toString(),
-        amountAggregated.toString().isEmpty() ? null : amountAggregated.toString().trim()
+        product.getNoOwnStockBoolean()
+            ? !amountAggregated.toString().isBlank() ? amountAggregated.toString() : getString(R.string.subtitle_none)
+            : amountNormal.toString(),
+        amountAggregated.toString().isEmpty() || product.getNoOwnStockBoolean() ?
+            null : amountAggregated.toString()
     );
     binding.itemAmount.setSingleLine(false);
 
@@ -487,11 +488,18 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       if (hasDetails()) {
         location = productDetails.getLocation(); // refresh
       }
-      StringBuilder locationsString = new StringBuilder();
+
+      ArrayList<String> stockLocationNames = new ArrayList<>();
       for (StockLocation stockLocation : stockLocations) {
-        locationsString.append(stockLocation.getLocationName());
-        if (stockLocation.getLocationId() != stockLocations.get(stockLocations.size() - 1)
-            .getLocationId()) {
+        if (stockLocationNames.contains(stockLocation.getLocationName())) {
+          continue;
+        }
+        stockLocationNames.add(stockLocation.getLocationName());
+      }
+      StringBuilder locationsString = new StringBuilder();
+      for (String name : stockLocationNames) {
+        locationsString.append(name);
+        if (!name.equals(stockLocationNames.get(stockLocationNames.size() - 1))) {
           locationsString.append(", ");
         }
       }

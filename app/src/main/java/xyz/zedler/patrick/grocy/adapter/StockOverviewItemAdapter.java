@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.adapter;
@@ -225,7 +225,9 @@ public class StockOverviewItemAdapter extends
         groupString = group;
       }
       GroupHeader groupHeader = new GroupHeader(groupString);
-      groupHeader.setDisplayDivider(!ungroupedItems.isEmpty() || !groupsSorted.get(0).equals(group));
+      groupHeader.setDisplayDivider(
+          !ungroupedItems.isEmpty() || !groupsSorted.get(0).equals(group)
+      );
       groupedListItems.add(groupHeader);
       sortStockItems(context, itemsFromGroup, sortMode, sortAscending);
       groupedListItems.addAll(itemsFromGroup);
@@ -344,24 +346,30 @@ public class StockOverviewItemAdapter extends
 
     // AMOUNT
 
-    QuantityUnit quantityUnitStock = quantityUnitHashMap.get(stockItem.getProduct().getQuIdStockInt());
-    holder.binding.textAmount.setText(
-        AmountUtil.getStockAmountInfo(context, pluralUtil, stockItem, quantityUnitStock, maxDecimalPlacesAmount)
+    QuantityUnit quantityUnitStock = quantityUnitHashMap.get(
+        stockItem.getProduct().getQuIdStockInt()
     );
+    String stockAmountInfo = AmountUtil.getStockAmountInfo(
+        context, pluralUtil, stockItem, quantityUnitStock, maxDecimalPlacesAmount
+    );
+    if (stockAmountInfo.isBlank()) {
+      holder.binding.textAmount.setVisibility(View.GONE);
+    } else {
+      holder.binding.textAmount.setText(stockAmountInfo);
+      holder.binding.textAmount.setVisibility(View.VISIBLE);
+    }
     if (missingItemsProductIds.contains(stockItem.getProductId())) {
       holder.binding.textAmount.setTypeface(
           ResourcesCompat.getFont(context, R.font.jost_medium)
       );
       holder.binding.textAmount.setTextColor(colorBlue.getAccent());
-      holder.binding.textAmount.setAlpha(1);
     } else {
       holder.binding.textAmount.setTypeface(
           ResourcesCompat.getFont(context, R.font.jost_book)
       );
       holder.binding.textAmount.setTextColor(
-          ResUtil.getColorAttr(context, R.attr.colorOnBackground)
+          ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant)
       );
-      holder.binding.textAmount.setAlpha(0.61f);
     }
 
     // BEST BEFORE
@@ -381,7 +389,8 @@ public class StockOverviewItemAdapter extends
     ) {
       holder.binding.linearDays.setVisibility(View.VISIBLE);
       holder.binding.textDays.setText(dateUtil.getHumanForDaysFromNow(date));
-      if (Integer.parseInt(days) <= daysExpiringSoon) {
+      if (Integer.parseInt(days) <= daysExpiringSoon
+          && !stockItem.getProduct().getNoOwnStockBoolean()) {  // don't color days text if product has no own stock (children will be colored)
         colorDays = true;
       }
       if (holder.binding.linearDays.getChildCount() == 1) { // not in landscape/tablet mode
@@ -409,15 +418,13 @@ public class StockOverviewItemAdapter extends
         color = ResUtil.getColorAttr(context, R.attr.colorError);
       }
       holder.binding.textDays.setTextColor(color);
-      holder.binding.textDays.setAlpha(1);
     } else {
       holder.binding.textDays.setTypeface(
           ResourcesCompat.getFont(context, R.font.jost_book)
       );
       holder.binding.textDays.setTextColor(
-          ResUtil.getColorAttr(context, R.attr.colorOnBackground)
+          ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant)
       );
-      holder.binding.textDays.setAlpha(0.61f);
     }
 
     double factorPurchaseToStock = stockItem.getProduct().getQuFactorPurchaseToStockDouble();
@@ -426,7 +433,9 @@ public class StockOverviewItemAdapter extends
     switch (extraField) {
       case FilterChipLiveDataStockExtraField.EXTRA_FIELD_VALUE:
         if (NumUtil.isStringDouble(stockItem.getValue())) {
-          extraFieldText = NumUtil.trimPrice(NumUtil.toDouble(stockItem.getValue()), decimalPlacesPriceDisplay);
+          extraFieldText = NumUtil.trimPrice(
+              NumUtil.toDouble(stockItem.getValue()), decimalPlacesPriceDisplay
+          );
         }
         if (currency != null && !currency.isEmpty()) {
           extraFieldSubtitleText = currency;
@@ -448,7 +457,9 @@ public class StockOverviewItemAdapter extends
       case FilterChipLiveDataStockExtraField.EXTRA_FIELD_AVERAGE_PRICE:
         String avg = productAveragePriceHashMap.get(stockItem.getProductId());
         if (NumUtil.isStringDouble(avg)) {
-          extraFieldText = NumUtil.trimPrice(NumUtil.toDouble(avg) * factorPurchaseToStock, decimalPlacesPriceDisplay);
+          extraFieldText = NumUtil.trimPrice(
+              NumUtil.toDouble(avg) * factorPurchaseToStock, decimalPlacesPriceDisplay
+          );
           QuantityUnit quantityUnitPurchase = quantityUnitHashMap
               .get(stockItem.getProduct().getQuIdPurchaseInt());
           if (quantityUnitPurchase != null && quantityUnitStock != null
@@ -720,7 +731,8 @@ public class StockOverviewItemAdapter extends
           ProductLastPurchased purchasedNew = productLastPurchasedHashMapNew
               .get(newItem.getProductId());
           if (purchasedOld == null && purchasedNew != null
-              || purchasedOld != null && purchasedNew != null && !purchasedOld.equals(purchasedNew)) {
+              || purchasedOld != null && purchasedNew != null
+              && !purchasedOld.equals(purchasedNew)) {
             return false;
           }
         }

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -26,16 +26,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentLoginIntroBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.util.NetUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class LoginIntroFragment extends BaseFragment {
 
@@ -61,30 +59,42 @@ public class LoginIntroFragment extends BaseFragment {
   @Override
   public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
+    binding.setActivity(activity);
     binding.setFragment(this);
     binding.setClickUtil(new ClickUtil());
+
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
+
+    binding.imageLogo.setOnClickListener(v -> ViewUtil.startIcon(binding.imageLogo));
+
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
+    activity.getScrollBehavior().setProvideTopScroll(false);
+    activity.getScrollBehavior().setCanBottomAppBarBeVisible(false);
+    activity.getScrollBehavior().setBottomBarVisibility(false, true, false);
   }
 
   public void loginDemoInstance() {
-    navigate(LoginIntroFragmentDirections.actionLoginIntroFragmentToLoginRequestFragment(
-        getString(R.string.url_grocy_demo),
-        ""
-    ));
+    activity.navigateFragment(
+        LoginIntroFragmentDirections.actionLoginIntroFragmentToLoginRequestFragment(
+            getString(R.string.url_grocy_demo),
+            ""
+        )
+    );
   }
 
   public void loginOwnInstance() {
     PackageManager pm = activity.getPackageManager();
     if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-      navigate(LoginIntroFragmentDirections.actionLoginIntroFragmentToLoginApiQrCodeFragment());
+      activity.navigateFragment(
+          LoginIntroFragmentDirections.actionLoginIntroFragmentToLoginApiQrCodeFragment()
+      );
     } else {
-      navigate(LoginIntroFragmentDirections.actionLoginIntroFragmentToLoginApiFormFragment());
-    }
-  }
-
-  public void openHelpWebsite() {
-    boolean success = NetUtil.openURL(requireContext(), Constants.URL.HELP);
-    if (!success) {
-      activity.showSnackbar(R.string.error_no_browser);
+      activity.navigateFragment(
+          LoginIntroFragmentDirections.actionLoginIntroFragmentToLoginApiFormFragment()
+      );
     }
   }
 
@@ -92,18 +102,9 @@ public class LoginIntroFragment extends BaseFragment {
     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_grocy))));
   }
 
-  public void showFeedbackBottomSheet() {
-    activity.showBottomSheet(new FeedbackBottomSheet());
-  }
-
   @Override
   public boolean onBackPressed() {
     activity.finish();
     return true;
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.background);
   }
 }

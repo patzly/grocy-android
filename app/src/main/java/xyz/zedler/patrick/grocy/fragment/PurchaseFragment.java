@@ -14,12 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,12 +30,16 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.color.ColorRoles;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentPurchaseBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
@@ -50,10 +56,9 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.PurchaseViewModel;
 
@@ -109,14 +114,23 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     binding.setFormData(viewModel.getFormData());
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setScroll(binding.scroll, binding.constraint);
+    systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
 
     // INITIALIZE VIEWS
 
     if (args.getShoppingListItems() != null) {
       binding.containerBatchMode.setVisibility(View.VISIBLE);
-      binding.linearBatchItem.containerRow.setBackground(
-          ContextCompat.getDrawable(activity, R.drawable.bg_list_item_visible_ripple)
+      binding.linearBatchItem.containerRow.setBackgroundResource(
+          R.drawable.ripple_list_item_bg_selected
       );
     }
 
@@ -125,14 +139,13 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
     viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isDownloading ->
-        binding.swipePurchase.setRefreshing(isDownloading)
+        binding.swipe.setRefreshing(isDownloading)
     );
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
-            activity.binding.coordinatorMain
-        ));
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       } else if (event.getType() == Event.TRANSACTION_SUCCESS) {
         assert getArguments() != null;
         if (viewModel.hasStoredPurchase()) {
@@ -162,9 +175,18 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
         embeddedFragmentScanner.startScannerIfVisible();
       } else if (event.getType() == Event.CHOOSE_PRODUCT) {
         String barcode = event.getBundle().getString(ARGUMENT.BARCODE);
-        navigate(PurchaseFragmentDirections
+        activity.navigateFragment(PurchaseFragmentDirections
             .actionPurchaseFragmentToChooseProductFragment(barcode)
             .setPendingProductsActive(viewModel.isQuickModeEnabled()));
+      } else if (event.getType() == Event.CONFIRM_FREEZING) {
+        new MaterialAlertDialogBuilder(activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution)
+            .setTitle(R.string.title_confirmation)
+            .setMessage(getString(R.string.msg_should_not_be_frozen))
+            .setPositiveButton(R.string.action_proceed, (dialog, which) -> {
+              performHapticClick();
+              viewModel.purchaseProduct(true);
+            }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
+            .setOnCancelListener(dialog -> performHapticClick()).create().show();
       }
     });
 
@@ -176,9 +198,11 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     Integer productIdSavedSate = (Integer) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID);
     if (productIdSavedSate != null) {
       removeForThisDestination(Constants.ARGUMENT.PRODUCT_ID);
-      viewModel.setQueueEmptyAction(() -> viewModel.setProduct(
-          productIdSavedSate, null, null
-      ));
+      viewModel.setProductWillBeFilled(true);
+      viewModel.setQueueEmptyAction(() -> {
+        viewModel.setProduct(productIdSavedSate, null, null);
+        viewModel.setProductWillBeFilled(false);
+      });
     } else if (NumUtil.isStringInt(args.getProductId())) {
       int productId = Integer.parseInt(args.getProductId());
       setArguments(new PurchaseFragmentArgs.Builder(args)
@@ -225,8 +249,28 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     embeddedFragmentScanner.setScannerVisibilityLive(
         viewModel.getFormData().getScannerVisibilityLive(),
         backFromChooseProductPage != null
-            && viewModel.getFormData().getProductDetailsLive().getValue() != null
+            && (viewModel.getFormData().getProductDetailsLive().getValue() != null
+            || viewModel.isProductWillBeFilled())
             ? backFromChooseProductPage : false
+    );
+
+    ColorRoles roles = ResUtil.getHarmonizedRoles(activity, R.color.blue);
+    viewModel.getQuickModeEnabled().observe(
+        getViewLifecycleOwner(), value -> binding.toolbar.setTitleTextColor(
+            value ? roles.getAccent() : ResUtil.getColorAttr(activity, R.attr.colorOnSurface)
+        )
+    );
+    binding.textInputAmount.setHelperTextColor(ColorStateList.valueOf(roles.getAccent()));
+    binding.textInputPurchasePrice.setHelperTextColor(ColorStateList.valueOf(roles.getAccent()));
+    viewModel.getFormData().getDueDateErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textDueDate.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+        )
+    );
+    viewModel.getFormData().getQuantityUnitErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textQuantityUnit.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+        )
     );
 
     // following lines are necessary because no observers are set in Views
@@ -241,14 +285,11 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
 
     focusProductInputIfNecessary();
 
-    setHasOptionsMenu(true);
+    // UPDATE UI
 
-    updateUI(args.getAnimateStart() && savedInstanceState == null);
-  }
-
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll_purchase);
-    activity.getScrollBehaviorOld().setHideOnScroll(false);
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
+    activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,
         args.getShoppingListItems() != null
@@ -261,7 +302,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
             : R.drawable.ic_round_local_grocery_store,
         R.string.action_purchase,
         Constants.FAB.TAG.PURCHASE,
-        animated,
+        args.getAnimateStart() && savedInstanceState == null,
         () -> {
           if (viewModel.isQuickModeEnabled()
               && viewModel.getFormData().isCurrentProductFlowNotInterrupted()) {
@@ -279,7 +320,8 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   public void onResume() {
     super.onResume();
     if (backFromChooseProductPage != null && backFromChooseProductPage
-        && viewModel.getFormData().getProductDetailsLive().getValue() != null) {
+        && (viewModel.getFormData().getProductDetailsLive().getValue() != null
+        || viewModel.isProductWillBeFilled())) {
       backFromChooseProductPage = false;
       return;
     }
@@ -340,6 +382,12 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   }
 
   @Override
+  public void selectProduct(Product product) {
+    clearInputFocus();
+    viewModel.setProduct(product.getId(), null, null);
+  }
+
+  @Override
   public void addBarcodeToExistingProduct(String barcode) {
     viewModel.addBarcodeToExistingProduct(barcode);
     binding.autoCompletePurchaseProduct.requestFocus();
@@ -364,14 +412,16 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   }
 
   public void clearInputFocus() {
-    activity.hideKeyboard();
-    binding.dummyFocusView.requestFocus();
-    binding.autoCompletePurchaseProduct.clearFocus();
-    binding.quantityUnitContainer.clearFocus();
-    binding.textInputAmount.clearFocus();
-    binding.linearDueDate.clearFocus();
-    binding.textInputPurchasePrice.clearFocus();
-    binding.textInputPurchaseNote.clearFocus();
+    new Handler().postDelayed(() -> {
+      activity.hideKeyboard();
+      binding.dummyFocusView.requestFocus();
+      binding.autoCompletePurchaseProduct.clearFocus();
+      binding.quantityUnitContainer.clearFocus();
+      binding.textInputAmount.clearFocus();
+      binding.linearDueDate.clearFocus();
+      binding.textInputPurchasePrice.clearFocus();
+      binding.textInputPurchaseNote.clearFocus();
+    }, 50);
   }
 
   public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
@@ -385,7 +435,9 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   }
 
   public void navigateToPendingProductsPage() {
-    navigate(PurchaseFragmentDirections.actionPurchaseFragmentToPendingPurchasesFragment());
+    activity.navigateFragment(
+        PurchaseFragmentDirections.actionPurchaseFragmentToPendingPurchasesFragment()
+    );
   }
 
   public void clearFocusAndCheckProductInput() {

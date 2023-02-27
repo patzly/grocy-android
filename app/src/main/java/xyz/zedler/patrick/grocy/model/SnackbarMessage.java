@@ -14,12 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.model;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -55,11 +54,6 @@ public class SnackbarMessage extends Event {
     this.duration = String.valueOf(duration * 1000);
   }
 
-  @Deprecated // Use getSnackbar(View)
-  public Snackbar getSnackbar(Context context, View view) {
-    return getSnackbar(view);
-  }
-
   public Snackbar getSnackbar(View view) {
     Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
     if (actionText != null) {
@@ -70,7 +64,7 @@ public class SnackbarMessage extends Event {
     }
     View v = snackbar.getView();
     TextView text = v.findViewById(com.google.android.material.R.id.snackbar_text);
-    text.setMaxLines(3);
+    text.setMaxLines(4);
     return snackbar;
   }
 

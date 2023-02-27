@@ -14,36 +14,30 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetMasterDeleteBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
-import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class MasterDeleteBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = MasterDeleteBottomSheet.class.getSimpleName();
 
   private MainActivity activity;
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
+  private FragmentBottomsheetMasterDeleteBinding binding;
 
   @Override
   public View onCreateView(
@@ -51,12 +45,11 @@ public class MasterDeleteBottomSheet extends BaseBottomSheetDialogFragment {
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    View view = inflater.inflate(
-        R.layout.fragment_bottomsheet_master_delete, container, false
+    binding = FragmentBottomsheetMasterDeleteBinding.inflate(
+        inflater, container, false
     );
 
-    activity = (MainActivity) getActivity();
-    assert activity != null;
+    activity = (MainActivity) requireActivity();
 
     String entity = requireArguments().getString(Constants.ARGUMENT.ENTITY);
     String textName = requireArguments().getString(Constants.ARGUMENT.OBJECT_NAME);
@@ -84,16 +77,15 @@ public class MasterDeleteBottomSheet extends BaseBottomSheetDialogFragment {
     }
     String entityText = getString(entityStrId);
 
-    TextView textView = view.findViewById(R.id.text_master_delete_question);
     if (entity.equals(GrocyApi.ENTITY.PRODUCTS)) {
-      textView.setText(
+      binding.textMasterDeleteQuestion.setText(
           activity.getString(
               R.string.msg_master_delete_product,
               textName
           )
       );
     } else {
-      textView.setText(
+      binding.textMasterDeleteQuestion.setText(
           activity.getString(
               R.string.msg_master_delete,
               entityText,
@@ -102,15 +94,31 @@ public class MasterDeleteBottomSheet extends BaseBottomSheetDialogFragment {
       );
     }
 
-    view.findViewById(R.id.button_master_delete_delete).setOnClickListener(v -> {
+    binding.buttonMasterDeleteDelete.setOnClickListener(v -> {
       BaseFragment currentFragment = activity.getCurrentFragment();
       currentFragment.deleteObject(objectId);
       dismiss();
     });
 
-    view.findViewById(R.id.button_master_delete_cancel).setOnClickListener(v -> dismiss());
+    binding.buttonMasterDeleteCancel.setOnClickListener(v -> dismiss());
 
-    return view;
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    binding = null;
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.linearContainerScroll.setPadding(
+        binding.linearContainerScroll.getPaddingLeft(),
+        binding.linearContainerScroll.getPaddingTop(),
+        binding.linearContainerScroll.getPaddingRight(),
+        UiUtil.dpToPx(activity, 12) + bottom
+    );
   }
 
   @NonNull

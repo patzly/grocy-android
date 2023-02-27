@@ -14,12 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,7 +28,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -41,12 +42,11 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
-import xyz.zedler.patrick.grocy.Constants.ACTION;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class StockEntryBottomSheet extends BaseBottomSheetDialogFragment {
 
@@ -55,12 +55,6 @@ public class StockEntryBottomSheet extends BaseBottomSheetDialogFragment {
   private MainActivity activity;
   private FragmentBottomsheetStockEntryBinding binding;
   private int decimalPlacesPriceDisplay;
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
 
   @Override
   public View onCreateView(
@@ -93,7 +87,7 @@ public class StockEntryBottomSheet extends BaseBottomSheetDialogFragment {
     Location location = bundle.getParcelable(ARGUMENT.LOCATION);
     Store store = bundle.getParcelable(ARGUMENT.STORE);
     if (stockEntry == null || product == null) {
-      showMessage(R.string.error_undefined);
+      activity.showSnackbar(R.string.error_undefined, false);
       dismiss();
       return;
     }
@@ -199,6 +193,7 @@ public class StockEntryBottomSheet extends BaseBottomSheetDialogFragment {
       binding.purchasedDate.setVisibility(View.GONE);
     }
 
+    ResUtil.tintMenuItemIcons(activity, binding.toolbar.getMenu());
     binding.toolbar.setOnMenuItemClickListener(item -> {
       if (item.getItemId() == R.id.action_consume) {
         activity.getCurrentFragment().performAction(ACTION.CONSUME, stockEntry);
@@ -222,6 +217,16 @@ public class StockEntryBottomSheet extends BaseBottomSheetDialogFragment {
     if (stockEntry.getOpen() == 1 || product.getEnableTareWeightHandlingBoolean()) {
       binding.toolbar.getMenu().findItem(R.id.action_open).setVisible(false);
     }
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.linearContainerScroll.setPadding(
+        binding.linearContainerScroll.getPaddingLeft(),
+        binding.linearContainerScroll.getPaddingTop(),
+        binding.linearContainerScroll.getPaddingRight(),
+        UiUtil.dpToPx(activity, 8) + bottom
+    );
   }
 
   @NonNull

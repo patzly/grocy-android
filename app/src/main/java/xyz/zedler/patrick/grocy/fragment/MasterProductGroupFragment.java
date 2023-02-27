@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -23,6 +23,7 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,24 +31,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductGroupBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -55,6 +56,8 @@ import xyz.zedler.patrick.grocy.util.ViewUtil;
 public class MasterProductGroupFragment extends BaseFragment {
 
   private final static String TAG = MasterProductGroupFragment.class.getSimpleName();
+
+  private static final String DIALOG_DELETE = "dialog_delete";
 
   private MainActivity activity;
   private Gson gson;
@@ -65,6 +68,7 @@ public class MasterProductGroupFragment extends BaseFragment {
   private ArrayList<ProductGroup> productGroups;
   private ArrayList<String> productGroupNames;
   private ProductGroup editProductGroup;
+  private AlertDialog dialogDelete;
 
   private boolean isRefresh;
   private boolean debug;
@@ -84,6 +88,12 @@ public class MasterProductGroupFragment extends BaseFragment {
   @Override
   public void onDestroyView() {
     super.onDestroyView();
+
+    if (dialogDelete != null) {
+      // Else it throws an leak exception because the context is somehow from the activity
+      dialogDelete.dismiss();
+    }
+
     binding = null;
     dlHelper.destroy();
   }
@@ -117,15 +127,16 @@ public class MasterProductGroupFragment extends BaseFragment {
 
     // VIEWS
 
-    binding.frameMasterProductGroupCancel.setOnClickListener(v -> activity.onBackPressed());
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipeMasterProductGroup);
+    systemBarBehavior.setScroll(binding.scrollMasterProductGroup, binding.constraint);
+    systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
 
     // swipe refresh
-    binding.swipeMasterProductGroup.setProgressBackgroundColorSchemeColor(
-        ContextCompat.getColor(activity, R.color.surface)
-    );
-    binding.swipeMasterProductGroup.setColorSchemeColors(
-        ContextCompat.getColor(activity, R.color.secondary)
-    );
     binding.swipeMasterProductGroup.setOnRefreshListener(this::refresh);
 
     // name
@@ -166,14 +177,12 @@ public class MasterProductGroupFragment extends BaseFragment {
     }
 
     // UPDATE UI
-    updateUI((getArguments() == null
-        || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
-        && savedInstanceState == null);
-  }
 
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll_master_product_group);
-    activity.getScrollBehaviorOld().setHideOnScroll(false);
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.scrollMasterProductGroup, true
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,
         editProductGroup != null ? R.menu.menu_master_item_edit : R.menu.menu_empty,
@@ -183,9 +192,17 @@ public class MasterProductGroupFragment extends BaseFragment {
         R.drawable.ic_round_backup,
         R.string.action_save,
         Constants.FAB.TAG.SAVE,
-        animated,
+        (getArguments() == null
+            || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+            && savedInstanceState == null,
         this::saveProductGroup
     );
+
+    if (savedInstanceState != null && savedInstanceState.getBoolean(DIALOG_DELETE)) {
+      new Handler(Looper.getMainLooper()).postDelayed(
+          this::showDeleteConfirmationDialog, 1
+      );
+    }
   }
 
   @Override
@@ -193,6 +210,9 @@ public class MasterProductGroupFragment extends BaseFragment {
     if (isHidden()) {
       return;
     }
+
+    boolean isShowing = dialogDelete != null && dialogDelete.isShowing();
+    outState.putBoolean(DIALOG_DELETE, isShowing);
 
     outState.putParcelableArrayList("productGroups", productGroups);
     outState.putStringArrayList("productGroupNames", productGroupNames);
@@ -240,12 +260,8 @@ public class MasterProductGroupFragment extends BaseFragment {
     } else {
       binding.swipeMasterProductGroup.setRefreshing(false);
       activity.showSnackbar(
-          Snackbar.make(
-              activity.binding.coordinatorMain,
-              activity.getString(R.string.msg_no_connection),
-              Snackbar.LENGTH_SHORT
-          ).setAction(
-              activity.getString(R.string.action_retry),
+          activity.getSnackbar(R.string.msg_no_connection, false).setAction(
+              R.string.action_retry,
               v1 -> refresh()
           )
       );
@@ -283,12 +299,8 @@ public class MasterProductGroupFragment extends BaseFragment {
         error -> {
           binding.swipeMasterProductGroup.setRefreshing(false);
           activity.showSnackbar(
-              Snackbar.make(
-                  activity.binding.coordinatorMain,
-                  getErrorMessage(error),
-                  Snackbar.LENGTH_SHORT
-              ).setAction(
-                  activity.getString(R.string.action_retry),
+              activity.getSnackbar(getErrorMessage(error), false).setAction(
+                  R.string.action_retry,
                   v1 -> download()
               )
           );
@@ -427,41 +439,46 @@ public class MasterProductGroupFragment extends BaseFragment {
     binding.editTextMasterProductGroupDescription.setText(null);
   }
 
-  public void deleteProductGroupSafely() {
-    if (editProductGroup == null) {
-      return;
-    }
-    Bundle bundle = new Bundle();
-    bundle.putString(Constants.ARGUMENT.ENTITY, GrocyApi.ENTITY.PRODUCT_GROUPS);
-    bundle.putInt(Constants.ARGUMENT.OBJECT_ID, editProductGroup.getId());
-    bundle.putString(Constants.ARGUMENT.OBJECT_NAME, editProductGroup.getName());
-    activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
-  }
-
   @Override
   public void deleteObject(int productGroupId) {
     dlHelper.delete(
         grocyApi.getObject(GrocyApi.ENTITY.PRODUCT_GROUPS, productGroupId),
         response -> activity.navigateUp(),
-        error -> showErrorMessage(error)
+        this::showErrorMessage
     );
   }
 
   private void showErrorMessage(VolleyError volleyError) {
-    activity.showSnackbar(
-        Snackbar.make(
-            activity.binding.coordinatorMain,
-            getErrorMessage(volleyError),
-            Snackbar.LENGTH_SHORT
-        )
-    );
+    activity.showSnackbar(getErrorMessage(volleyError), false);
+  }
+
+  private void showDeleteConfirmationDialog() {
+    dialogDelete = new MaterialAlertDialogBuilder(
+        activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution
+    ).setTitle(R.string.title_confirmation)
+        .setMessage(
+            activity.getString(
+                R.string.msg_master_delete,
+                getString(R.string.property_product_group),
+                editProductGroup.getName()
+            )
+        ).setPositiveButton(R.string.action_delete, (dialog, which) -> {
+          performHapticClick();
+          if (editProductGroup == null) {
+            return;
+          }
+          deleteObject(editProductGroup.getId());
+        }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
+        .setOnCancelListener(dialog -> performHapticClick())
+        .create();
+    dialogDelete.show();
   }
 
   public Toolbar.OnMenuItemClickListener getBottomMenuClickListener() {
     return item -> {
       if (item.getItemId() == R.id.action_delete) {
         ViewUtil.startIcon(item);
-        deleteProductGroupSafely();
+        showDeleteConfirmationDialog();
         return true;
       }
       return false;

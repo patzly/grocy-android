@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.viewmodel;
@@ -192,7 +192,7 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
           jsonObject,
           response -> navigateUp(),
           error -> {
-            showErrorMessage(error);
+            showNetworkErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveItem: " + error);
             }
@@ -204,7 +204,7 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
           jsonObject,
           response -> navigateUp(),
           error -> {
-            showErrorMessage(error);
+            showNetworkErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveItem: " + error);
             }
@@ -265,7 +265,7 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
             conversion.getId()
         ),
         response -> navigateUp(),
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -27,7 +27,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import com.google.android.material.snackbar.Snackbar;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -37,10 +39,8 @@ import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ACTION;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductViewModel;
 
 public class MasterProductFragment extends BaseFragment {
@@ -93,8 +93,9 @@ public class MasterProductFragment extends BaseFragment {
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipeMasterProductSimple);
-    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setScroll(binding.scroll, binding.constraint);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
@@ -120,7 +121,7 @@ public class MasterProductFragment extends BaseFragment {
         .setProduct(viewModel.getFilledProduct())));
     binding.categoryBarcodes.setOnClickListener(v -> {
       if (!viewModel.isActionEdit()) {
-        activity.showSnackbar(R.string.subtitle_product_not_on_server);
+        activity.showSnackbar(R.string.subtitle_product_not_on_server, true);
         return;
       }
       activity.navigateFragment(MasterProductFragmentDirections
@@ -129,7 +130,7 @@ public class MasterProductFragment extends BaseFragment {
     });
     binding.categoryQuConversions.setOnClickListener(v -> {
       if (!viewModel.isActionEdit()) {
-        activity.showSnackbar(R.string.subtitle_product_not_on_server);
+        activity.showSnackbar(R.string.subtitle_product_not_on_server, true);
         return;
       }
       activity.navigateFragment(MasterProductFragmentDirections
@@ -145,9 +146,9 @@ public class MasterProductFragment extends BaseFragment {
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        SnackbarMessage message = (SnackbarMessage) event;
-        Snackbar snack = message.getSnackbar(activity, activity.binding.coordinatorMain);
-        activity.showSnackbar(snack);
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       } else if (event.getType() == Event.NAVIGATE_UP) {
         activity.navigateUp();
       } else if (event.getType() == Event.SET_PRODUCT_ID) {
@@ -198,9 +199,31 @@ public class MasterProductFragment extends BaseFragment {
       }
     }
 
-    viewModel.getIsOnlineLive().observe(getViewLifecycleOwner(), isOnline -> {
-      //if(isOnline ) viewModel.downloadData();
-    });
+    viewModel.getFormData().getCatOptionalErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textCatOptional.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
+        )
+    );
+    viewModel.getFormData().getCatLocationErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textCatLocation.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
+        )
+    );
+    viewModel.getFormData().getCatDueDateErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textCatDueDate.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
+        )
+    );
+    viewModel.getFormData().getCatQuErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textCatQu.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
+        )
+    );
+    viewModel.getFormData().getCatAmountErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textCatAmount.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
+        )
+    );
 
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
@@ -208,6 +231,7 @@ public class MasterProductFragment extends BaseFragment {
 
     // UPDATE UI
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, false
     );
@@ -246,6 +270,17 @@ public class MasterProductFragment extends BaseFragment {
   @Override
   public void deleteObject(int objectId) {
     viewModel.deleteProduct(objectId);
+  }
+
+  @Override
+  public void updateConnectivity(boolean online) {
+    if (!online == viewModel.isOffline()) {
+      return;
+    }
+    viewModel.setOfflineLive(!online);
+    if (online) {
+      viewModel.downloadData();
+    }
   }
 
   @NonNull

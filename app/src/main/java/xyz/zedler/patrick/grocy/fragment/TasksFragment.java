@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -25,21 +25,23 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.TaskEntryAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentTasksBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TaskEntryBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
@@ -50,9 +52,6 @@ import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ACTION;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.TasksViewModel;
@@ -107,6 +106,17 @@ public class TasksFragment extends BaseFragment implements
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();
+
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.applyAppBarInsetOnContainer(false);
+    systemBarBehavior.applyStatusBarInsetOnContainer(false);
+    systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
+
+    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
 
     // APP BAR BEHAVIOR
 
@@ -181,10 +191,9 @@ public class TasksFragment extends BaseFragment implements
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
-            activity.binding.coordinatorMain
-        ));
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       }
     });
 
@@ -228,24 +237,22 @@ public class TasksFragment extends BaseFragment implements
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI(savedInstanceState == null);
-  }
+    // UPDATE UI
 
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
-    activity.updateBottomAppBar(
-        true,
-        R.menu.menu_tasks,
-        this::onMenuItemClick
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.recycler, true, true
     );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(true, R.menu.menu_tasks, this::onMenuItemClick);
     activity.updateFab(
         R.drawable.ic_round_add_anim,
         R.string.action_add,
         Constants.FAB.TAG.ADD,
-        animated,
-        () -> navigate(TasksFragmentDirections
-            .actionTasksFragmentToTaskEntryEditFragment(ACTION.CREATE))
+        savedInstanceState == null,
+        () -> activity.navigateFragment(
+            TasksFragmentDirections.actionTasksFragmentToTaskEntryEditFragment(ACTION.CREATE)
+        )
     );
   }
 
@@ -254,14 +261,6 @@ public class TasksFragment extends BaseFragment implements
     if (appBarBehavior != null) {
       appBarBehavior.saveInstanceState(outState);
     }
-  }
-
-  private boolean showOfflineError() {
-    if (viewModel.isOffline()) {
-      showMessage(getString(R.string.error_offline));
-      return true;
-    }
-    return false;
   }
 
   private boolean onMenuItemClick(MenuItem item) {
@@ -304,8 +303,11 @@ public class TasksFragment extends BaseFragment implements
 
   @Override
   public void editTask(Task task) {
-    navigate(TasksFragmentDirections
-        .actionTasksFragmentToTaskEntryEditFragment(ACTION.EDIT).setTaskEntry(task));
+    activity.navigateFragment(
+        TasksFragmentDirections
+            .actionTasksFragmentToTaskEntryEditFragment(ACTION.EDIT)
+            .setTaskEntry(task)
+    );
   }
 
   @Override
@@ -349,17 +351,6 @@ public class TasksFragment extends BaseFragment implements
     activity.hideKeyboard();
     binding.editTextSearch.setText("");
     viewModel.setIsSearchVisible(false);
-  }
-
-  private void showMessage(String msg) {
-    activity.showSnackbar(
-        Snackbar.make(activity.binding.coordinatorMain, msg, Snackbar.LENGTH_SHORT)
-    );
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
   }
 
   @NonNull

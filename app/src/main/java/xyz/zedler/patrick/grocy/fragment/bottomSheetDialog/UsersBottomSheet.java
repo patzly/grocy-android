@@ -14,12 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +27,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.ArrayList;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.UserAdapter;
@@ -37,8 +36,8 @@ import xyz.zedler.patrick.grocy.adapter.UserAdapter.UserAdapterListener;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetListSelectionBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.User;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class UsersBottomSheet extends BaseBottomSheetDialogFragment
@@ -49,20 +48,15 @@ public class UsersBottomSheet extends BaseBottomSheetDialogFragment
   private MainActivity activity;
   private FragmentBottomsheetListSelectionBinding binding;
 
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
-
   @Override
   public View onCreateView(
       @NonNull LayoutInflater inflater,
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    binding = FragmentBottomsheetListSelectionBinding
-        .inflate(inflater, container, false);
+    binding = FragmentBottomsheetListSelectionBinding.inflate(
+        inflater, container, false
+    );
     return binding.getRoot();
   }
 
@@ -85,7 +79,7 @@ public class UsersBottomSheet extends BaseBottomSheetDialogFragment
     }
     int selected = bundle.getInt(ARGUMENT.SELECTED_ID, -1);
 
-    ViewUtil.centerTextOnLargeScreens(binding.textListSelectionTitle);
+    ViewUtil.centerText(binding.textListSelectionTitle);
     binding.textListSelectionTitle.setText(activity.getString(R.string.property_users));
     binding.recyclerListSelection.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
@@ -99,6 +93,16 @@ public class UsersBottomSheet extends BaseBottomSheetDialogFragment
     BaseFragment currentFragment = activity.getCurrentFragment();
     currentFragment.selectUser(user);
     dismiss();
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.recyclerListSelection.setPadding(
+        binding.recyclerListSelection.getPaddingLeft(),
+        binding.recyclerListSelection.getPaddingTop(),
+        binding.recyclerListSelection.getPaddingRight(),
+        UiUtil.dpToPx(activity, 8) + bottom
+    );
   }
 
   @NonNull

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -25,13 +25,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import com.google.android.material.snackbar.Snackbar;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
@@ -47,9 +47,6 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ACTION;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.viewmodel.StoredPurchasesViewModel;
 
 public class StoredPurchasesFragment extends BaseFragment
@@ -102,10 +99,6 @@ public class StoredPurchasesFragment extends BaseFragment
       }
     });
     binding.swipe.setOnRefreshListener(() -> viewModel.downloadDataForceUpdate());
-    binding.swipe.setProgressBackgroundColorSchemeColor(
-        ContextCompat.getColor(activity, R.color.surface)
-    );
-    binding.swipe.setColorSchemeColors(ContextCompat.getColor(activity, R.color.secondary));
 
     viewModel.getDisplayedItemsLive().observe(getViewLifecycleOwner(), items -> {
       if (items == null) {
@@ -126,9 +119,9 @@ public class StoredPurchasesFragment extends BaseFragment
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        SnackbarMessage msg = (SnackbarMessage) event;
-        Snackbar snackbar = msg.getSnackbar(activity, activity.binding.coordinatorMain);
-        activity.showSnackbar(snackbar);
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
@@ -142,9 +135,9 @@ public class StoredPurchasesFragment extends BaseFragment
       // product id.
       removeForThisDestination(ARGUMENT.PENDING_PRODUCT_ID);
       removeForThisDestination(ARGUMENT.PRODUCT_ID);
-      viewModel.setQueueEmptyAction(() -> {
-        viewModel.setPendingProductNameToOnlineProductName(pendingProductId, productId);
-      });
+      viewModel.setQueueEmptyAction(
+          () -> viewModel.setPendingProductNameToOnlineProductName(pendingProductId, productId)
+      );
     }
 
     // INITIALIZE VIEWS
@@ -162,13 +155,13 @@ public class StoredPurchasesFragment extends BaseFragment
     }
 
     // UPDATE UI
-    activity.getScrollBehaviorOld().setUpScroll(binding.scroll);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
-    activity.updateBottomAppBar(
-        false,
-        R.menu.menu_empty,
-        (OnMenuItemClickListener) null
-    );
+
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
+    /*activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.recycler, true, true
+    );*/
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(false, R.menu.menu_empty, null);
   }
 
   public void clearInputFocus() {
@@ -208,8 +201,11 @@ public class StoredPurchasesFragment extends BaseFragment
               .setPendingProductId(String.valueOf(((Product) item).getPendingProductId()))
               .build().toBundle());
     } else if (item instanceof StoredPurchase) {
-      navigate(StoredPurchasesFragmentDirections.actionStoredPurchasesFragmentToPurchaseFragment()
-          .setStoredPurchaseId(String.valueOf(((StoredPurchase) item).getId())));
+      activity.navigateFragment(
+          StoredPurchasesFragmentDirections
+              .actionStoredPurchasesFragmentToPurchaseFragment()
+              .setStoredPurchaseId(String.valueOf(((StoredPurchase) item).getId()))
+      );
     }
 
   }

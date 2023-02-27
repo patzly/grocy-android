@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.viewmodel;
@@ -94,6 +94,7 @@ public class TransferViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> quickModeEnabled;
 
   private Runnable queueEmptyAction;
+  private boolean productWillBeFilled;
   private final int maxDecimalPlacesAmount;
 
   public TransferViewModel(@NonNull Application application, TransferFragmentArgs args) {
@@ -146,10 +147,6 @@ public class TransferViewModel extends BaseViewModel {
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
-        /*if(isOffline()) { // skip downloading
-            isLoadingLive.setValue(false);
-            return;
-        }*/
     if (dbChangedTime == null) {
       dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
       return;
@@ -178,8 +175,6 @@ public class TransferViewModel extends BaseViewModel {
       }
       return;
     }
-
-    //currentQueueLoading = queue;
     queue.start();
   }
 
@@ -419,6 +414,10 @@ public class TransferViewModel extends BaseViewModel {
   }
 
   public void transferProduct() {
+    transferProduct(false);
+  }
+
+  public void transferProduct(boolean confirmed) {
     if (!formData.isFormValid()) {
       showMessage(R.string.error_missing_information);
       return;
@@ -431,6 +430,14 @@ public class TransferViewModel extends BaseViewModel {
     assert formData.getProductDetailsLive().getValue() != null;
     Product product = formData.getProductDetailsLive().getValue().getProduct();
     JSONObject body = formData.getFilledJSONObject();
+
+    if (!confirmed && product.getShouldNotBeFrozenBoolean()
+        && formData.getToLocationLive().getValue() != null
+        && formData.getToLocationLive().getValue().getIsFreezerInt() == 1) {
+      sendEvent(Event.CONFIRM_FREEZING);
+      return;
+    }
+
     dlHelper.postWithArray(grocyApi.transferProduct(product.getId()),
         body,
         response -> {
@@ -473,7 +480,7 @@ public class TransferViewModel extends BaseViewModel {
           sendEvent(Event.CONSUME_SUCCESS);
         },
         error -> {
-          showErrorMessage(error);
+          showNetworkErrorMessage(error);
           if (debug) {
             Log.i(TAG, "transferProduct: " + error);
           }
@@ -490,7 +497,7 @@ public class TransferViewModel extends BaseViewModel {
             Log.i(TAG, "undoTransaction: undone");
           }
         },
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 
@@ -624,6 +631,14 @@ public class TransferViewModel extends BaseViewModel {
 
   public void setQueueEmptyAction(Runnable queueEmptyAction) {
     this.queueEmptyAction = queueEmptyAction;
+  }
+
+  public void setProductWillBeFilled(boolean productWillBeFilled) {
+    this.productWillBeFilled = productWillBeFilled;
+  }
+
+  public boolean isProductWillBeFilled() {
+    return productWillBeFilled;
   }
 
   public boolean isQuickModeEnabled() {

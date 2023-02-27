@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
@@ -74,7 +74,7 @@ public class QuantityUnitsBottomSheet extends BaseBottomSheetDialogFragment
     int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
     binding.textListSelectionTitle.setText(activity.getString(R.string.property_quantity_units));
-    ViewUtil.centerTextOnLargeScreens(binding.textListSelectionTitle);
+    ViewUtil.centerText(binding.textListSelectionTitle);
 
     binding.recyclerListSelection.setLayoutManager(
         new LinearLayoutManager(

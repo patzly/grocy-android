@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <layout
@@ -33,9 +33,8 @@
     android:orientation="vertical">
 
     <com.google.android.material.appbar.MaterialToolbar
-      style="@style/Widget.Grocy.Toolbar"
-      app:title="@string/title_input"
-      app:titleCentered="false" />
+      style="@style/Widget.Grocy.Toolbar.Start"
+      app:title="@string/title_input" />
 
     <com.google.android.material.divider.MaterialDivider
       style="@style/Widget.Grocy.Divider" />
@@ -47,11 +46,12 @@
       android:overScrollMode="ifContentScrolls">
 
       <LinearLayout
+        android:id="@+id/linear_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingStart="16dp"
-        android:paddingEnd="0dp"
+        android:paddingEnd="16dp"
         android:paddingTop="16dp"
         android:paddingBottom="12dp">
 
@@ -60,9 +60,7 @@
           android:layout_height="wrap_content"
           android:orientation="horizontal"
           android:gravity="center_vertical"
-          android:layout_marginBottom="12dp"
-          android:paddingStart="0dp"
-          android:paddingEnd="4dp">
+          android:layout_marginBottom="12dp">
 
           <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input"
@@ -74,9 +72,7 @@
               android:id="@+id/edit_text"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:textColor="@color/on_background"
               android:imeOptions="actionDone"
-              android:maxLength="10"
               android:text="@={bottomsheet.inputLive}"
               app:onDoneClickInSoftKeyboard="@{() -> bottomsheet.dismiss()}" />
 
@@ -92,7 +88,7 @@
           <com.google.android.material.button.MaterialButton
             android:id="@+id/less"
             style="@style/Widget.Grocy.Button.IconButton"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="0dp"
             android:onClick="@{() -> bottomsheet.less()}"
             app:icon="@drawable/ic_round_expand_more" />
 
@@ -118,7 +114,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="0dp"
             android:text="@string/action_save"
             android:onClick="@{() -> bottomsheet.dismiss()}" />
 

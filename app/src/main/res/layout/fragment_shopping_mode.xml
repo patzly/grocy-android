@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <layout>
@@ -31,19 +31,21 @@
       type="xyz.zedler.patrick.grocy.fragment.ShoppingModeFragment" />
   </data>
 
-  <androidx.coordinatorlayout.widget.CoordinatorLayout
+  <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/colorBackground">
+    android:background="?android:attr/colorBackground"
+    android:animateLayoutChanges="true"
+    app:transitionTypeChanging="@{true}">
 
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
-      android:animateLayoutChanges="true">
+      android:layout_alignParentTop="true">
 
       <FrameLayout
         android:layout_width="match_parent"
@@ -66,23 +68,23 @@
 
       </FrameLayout>
 
-      <LinearLayout
+      <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="?attr/colorError"
-        android:gravity="center"
-        android:visibility="@{viewModel.offlineLive ? View.VISIBLE : View.GONE}">
+        android:background="?attr/colorError">
 
         <TextView
-          style="@style/Widget.Grocy.TextView.OfflineIndicator"
+          style="@style/Widget.Grocy.TextView.LabelLarge"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="4dp"
           android:layout_marginBottom="4dp"
+          android:layout_gravity="center"
+          android:visibility="@{viewModel.offlineLive ? View.VISIBLE : View.GONE}"
+          android:textColor="?attr/colorOnError"
           android:text="@string/error_offline" />
 
-      </LinearLayout>
+      </FrameLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -90,10 +92,8 @@
       android:id="@+id/swipe"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginTop="?attr/actionBarSize"
+      android:layout_below="@+id/app_bar"
       android:overScrollMode="never"
-      android:animateLayoutChanges="true"
-      app:transitionTypeChanging="@{true}"
       app:setRefreshing="@{viewModel.isLoadingLive}"
       app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
 
@@ -116,5 +116,5 @@
 
     </xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout>
 
-  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+  </RelativeLayout>
 </layout>

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.util;
@@ -51,13 +51,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.TooltipCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.transition.TransitionManager;
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.elevation.SurfaceColors;
 import java.util.Arrays;
@@ -270,15 +272,18 @@ public class ViewUtil {
 
   // Toolbar
 
-  public static void centerToolbarTitleOnLargeScreens(MaterialToolbar toolbar) {
-    toolbar.setTitleCentered(!UiUtil.isFullWidth(toolbar.getContext()));
-  }
-
   public static void centerTextOnLargeScreens(TextView textView) {
     if (UiUtil.isFullWidth(textView.getContext())) {
       textView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
       textView.setGravity(Gravity.START);
     } else {
+      textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+      textView.setGravity(Gravity.CENTER_HORIZONTAL);
+    }
+  }
+
+  public static void centerText(TextView... textViews) {
+    for (TextView textView : textViews) {
       textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
       textView.setGravity(Gravity.CENTER_HORIZONTAL);
     }
@@ -336,32 +341,6 @@ public class ViewUtil {
     return layers;
   }
 
-  public static Drawable getRippleBgListItemSurfaceRecyclerItem(Context context) {
-    return getRippleBgListItemSurfaceRecyclerItem(context, 8, 8);
-  }
-
-  public static Drawable getRippleBgListItemSurfaceRecyclerItem(
-      Context context, float paddingStart, float paddingEnd
-  ) {
-    boolean isRtl = UiUtil.isLayoutRtl(context);
-    float[] radii = new float[8];
-    Arrays.fill(radii, UiUtil.dpToPx(context, 16));
-    RoundRectShape rect = new RoundRectShape(radii, null, null);
-    ShapeDrawable shape = new ShapeDrawable(rect);
-    shape.getPaint().setColor(SurfaceColors.SURFACE_3.getColor(context));
-    LayerDrawable layers = new LayerDrawable(new ShapeDrawable[]{shape});
-    layers.setLayerInset(
-        0,
-        UiUtil.dpToPx(context, isRtl ? paddingEnd : paddingStart),
-        UiUtil.dpToPx(context, 2),
-        UiUtil.dpToPx(context, isRtl ? paddingStart : paddingEnd),
-        UiUtil.dpToPx(context, 2)
-    );
-    return new RippleDrawable(
-        ColorStateList.valueOf(ResUtil.getColorHighlight(context)), null, layers
-    );
-  }
-
   // Enable/disable views
 
   public static void setEnabled(boolean enabled, View... views) {
@@ -387,6 +366,14 @@ public class ViewUtil {
             ? View.OVER_SCROLL_IF_CONTENT_SCROLLS
             : View.OVER_SCROLL_NEVER
     );
+  }
+
+  public static void setTooltipText(@NonNull View view, @StringRes int resId) {
+    TooltipCompat.setTooltipText(view, view.getContext().getString(resId));
+  }
+
+  public static void setTooltipText(@NonNull View view, @Nullable String text) {
+    TooltipCompat.setTooltipText(view, text);
   }
 
   // TouchProgressBar
@@ -427,14 +414,14 @@ public class ViewUtil {
 
     public void onTouchDelete(View view, MotionEvent event) {
       if (event.getAction() == MotionEvent.ACTION_DOWN) {
-        showAndStartProgress(view, null);
+        showAndStartProgress((MaterialButton) view, null);
       } else if (event.getAction() == MotionEvent.ACTION_UP
           || event.getAction() == MotionEvent.ACTION_CANCEL) {
         hideAndStopProgress();
       }
     }
 
-    public void showAndStartProgress(View buttonView, @Nullable Object objectOptional) {
+    public void showAndStartProgress(MaterialButton button, @Nullable Object objectOptional) {
       TransitionManager.beginDelayedTransition((ViewGroup) progressConfirm.getParent());
       progressConfirm.setVisibility(View.VISIBLE);
       int startValue = 0;
@@ -460,10 +447,7 @@ public class ViewUtil {
           if (currentProgress == progressConfirm.getMax()) {
             TransitionManager.beginDelayedTransition((ViewGroup) progressConfirm.getParent());
             progressConfirm.setVisibility(View.GONE);
-            ImageView buttonImage = buttonView.findViewById(R.id.image_action_button);
-            if (buttonImage != null) {
-              ((Animatable) buttonImage.getDrawable()).start();
-            }
+            ViewUtil.startIcon(button.getIcon());
             onConfirmedListener.onConfirmed(objectOptional);
             return;
           }

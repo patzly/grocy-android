@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.viewmodel;
@@ -36,6 +36,10 @@ import java.util.HashMap;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -60,9 +64,6 @@ import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.repository.ConsumeRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -91,6 +92,7 @@ public class ConsumeViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> quickModeEnabled;
 
   private Runnable queueEmptyAction;
+  private boolean productWillBeFilled;
   private final int maxDecimalPlacesAmount;
 
   public ConsumeViewModel(@NonNull Application application, ConsumeFragmentArgs args) {
@@ -144,10 +146,6 @@ public class ConsumeViewModel extends BaseViewModel {
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
-        /*if(isOffline()) { // skip downloading
-            isLoadingLive.setValue(false);
-            return;
-        }*/
     if (dbChangedTime == null) {
       dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
       return;
@@ -174,8 +172,6 @@ public class ConsumeViewModel extends BaseViewModel {
       }
       return;
     }
-
-    //currentQueueLoading = queue;
     queue.start();
   }
 
@@ -259,16 +255,26 @@ public class ConsumeViewModel extends BaseViewModel {
           formData.getAmountLive().setValue(NumUtil.trimAmount(productDetails.getStockAmount(), maxDecimalPlacesAmount));
         }
       } else if (!isTareWeightEnabled && !isQuickModeEnabled()) {
-        String defaultAmount = sharedPrefs.getString(
-            Constants.SETTINGS.STOCK.DEFAULT_CONSUME_AMOUNT,
-            Constants.SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT
+        boolean useQuickConsumeAmount = sharedPrefs.getBoolean(
+            Constants.SETTINGS.STOCK.USE_QUICK_CONSUME_AMOUNT,
+            Constants.SETTINGS_DEFAULT.STOCK.USE_QUICK_CONSUME_AMOUNT
         );
-        if (NumUtil.isStringDouble(defaultAmount)) {
-          defaultAmount = NumUtil.trimAmount(Double.parseDouble(defaultAmount), maxDecimalPlacesAmount);
+        String amount = null;
+        if (useQuickConsumeAmount) {
+          amount = product.getQuickConsumeAmount();
         }
-        if (NumUtil.isStringDouble(defaultAmount)
-            && Double.parseDouble(defaultAmount) > 0) {
-          formData.getAmountLive().setValue(defaultAmount);
+        if (!useQuickConsumeAmount || amount == null) {
+          amount = sharedPrefs.getString(
+              Constants.SETTINGS.STOCK.DEFAULT_CONSUME_AMOUNT,
+              Constants.SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT
+          );
+        }
+        if (NumUtil.isStringDouble(amount)) {
+          amount = NumUtil.trimAmount(Double.parseDouble(amount), maxDecimalPlacesAmount);
+        }
+        if (NumUtil.isStringDouble(amount)
+            && Double.parseDouble(amount) > 0) {
+          formData.getAmountLive().setValue(amount);
         }
       } else if (!isTareWeightEnabled) {
         // if quick mode enabled, always fill with amount 1
@@ -492,7 +498,7 @@ public class ConsumeViewModel extends BaseViewModel {
           sendEvent(Event.CONSUME_SUCCESS);
         },
         error -> {
-          showErrorMessage(error);
+          showNetworkErrorMessage(error);
           if (debug) {
             Log.i(TAG, "consumeProduct: " + error);
           }
@@ -509,7 +515,7 @@ public class ConsumeViewModel extends BaseViewModel {
             Log.i(TAG, "undoTransaction: undone");
           }
         },
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 
@@ -598,7 +604,16 @@ public class ConsumeViewModel extends BaseViewModel {
 
   public void showConfirmationBottomSheet() {
     Bundle bundle = new Bundle();
-    bundle.putString(Constants.ARGUMENT.TEXT, formData.getConfirmationText());
+    bundle.putString(Constants.ARGUMENT.TEXT, formData.getConfirmationText(false));
+    if (formData.getOpenVisibilityLive().getValue() != null
+        && formData.getOpenVisibilityLive().getValue()) {
+      bundle.putString(ARGUMENT.TEXT_ALTERNATIVE, formData.getConfirmationText(true));
+      bundle.putString(
+          Constants.ARGUMENT.ACTION,
+          formData.getOpenLive().getValue() != null && formData.getOpenLive().getValue()
+              ? ACTION.OPEN : ACTION.CONSUME
+      );
+    }
     showBottomSheet(new QuickModeConfirmBottomSheet(), bundle);
   }
 
@@ -624,6 +639,14 @@ public class ConsumeViewModel extends BaseViewModel {
 
   public void setQueueEmptyAction(Runnable queueEmptyAction) {
     this.queueEmptyAction = queueEmptyAction;
+  }
+
+  public void setProductWillBeFilled(boolean productWillBeFilled) {
+    this.productWillBeFilled = productWillBeFilled;
+  }
+
+  public boolean isProductWillBeFilled() {
+    return productWillBeFilled;
   }
 
   public boolean isQuickModeEnabled() {

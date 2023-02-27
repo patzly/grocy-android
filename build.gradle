@@ -34,8 +34,8 @@ buildscript {
         maven { url "https://a8c-libs.s3.amazonaws.com/android" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.1'
-        classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.5.2'
+        classpath 'com.android.tools.build:gradle:7.4.1'
+        classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.5.3'
     }
 }
 

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
@@ -29,11 +29,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.FrameLayout.LayoutParams;
 import androidx.annotation.NonNull;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetFeedbackBinding;
 import xyz.zedler.patrick.grocy.util.ResUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class FeedbackBottomSheet extends BaseBottomSheetDialogFragment implements OnClickListener {
@@ -118,9 +118,12 @@ public class FeedbackBottomSheet extends BaseBottomSheetDialogFragment implement
 
   @Override
   public void applyBottomInset(int bottom) {
-    LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-    params.setMargins(0, 0, 0, bottom);
-    binding.linearFeedbackContainer.setLayoutParams(params);
+    binding.linearFeedbackContainer.setPadding(
+        binding.linearFeedbackContainer.getPaddingLeft(),
+        binding.linearFeedbackContainer.getPaddingTop(),
+        binding.linearFeedbackContainer.getPaddingRight(),
+        UiUtil.dpToPx(requireContext(), 8) + bottom
+    );
   }
 
   @NonNull

@@ -14,12 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.animation.LayoutTransition;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -36,7 +35,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
@@ -78,7 +76,6 @@ public class MasterObjectListFragment extends BaseFragment
   private InfoFullscreenHelper infoFullscreenHelper;
   private FragmentMasterObjectListBinding binding;
   private MasterObjectListViewModel viewModel;
-  private SystemBarBehavior systemBarBehavior;
 
   private String entity;
 
@@ -134,17 +131,21 @@ public class MasterObjectListFragment extends BaseFragment
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
     clickUtil = new ClickUtil();
-
-    systemBarBehavior = new SystemBarBehavior(activity);
-    systemBarBehavior.setAppBar(binding.appBar);
-    systemBarBehavior.setContainer(binding.swipe);
-    systemBarBehavior.setRecycler(binding.recycler);
-    systemBarBehavior.setUp();
-
     viewModel = new ViewModelProvider(this, new MasterObjectListViewModel
         .MasterObjectListViewModelFactory(activity.getApplication(), entity)
     ).get(MasterObjectListViewModel.class);
     viewModel.setOfflineLive(!activity.isOnline());
+    binding.setViewModel(viewModel);
+    binding.setLifecycleOwner(getViewLifecycleOwner());
+
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.applyAppBarInsetOnContainer(false);
+    systemBarBehavior.applyStatusBarInsetOnContainer(false);
+    systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
       binding.swipe.setRefreshing(state);
@@ -153,8 +154,6 @@ public class MasterObjectListFragment extends BaseFragment
       }
     });
     binding.swipe.setOnRefreshListener(() -> viewModel.downloadDataForceUpdate());
-    // for offline info in app bar
-    binding.swipe.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
 
     viewModel.getDisplayedItemsLive().observe(getViewLifecycleOwner(), objects -> {
       if (objects == null) {
@@ -207,16 +206,14 @@ public class MasterObjectListFragment extends BaseFragment
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        SnackbarMessage msg = (SnackbarMessage) event;
-        Snackbar snackbar = msg.getSnackbar(activity, activity.binding.coordinatorMain);
-        activity.showSnackbar(snackbar);
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
       }
     });
-
-    viewModel.getOfflineLive().observe(getViewLifecycleOwner(), this::appBarOfflineInfo);
 
     if (savedInstanceState == null) {
       viewModel.deleteSearch(); // delete search if navigating back from other fragment
@@ -279,6 +276,7 @@ public class MasterObjectListFragment extends BaseFragment
 
     // UPDATE UI
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.recycler, true, true
     );
@@ -298,27 +296,27 @@ public class MasterObjectListFragment extends BaseFragment
         () -> {
           switch (entity) {
             case GrocyApi.ENTITY.QUANTITY_UNITS:
-              navigate(MasterObjectListFragmentDirections
+              activity.navigateFragment(MasterObjectListFragmentDirections
                   .actionMasterObjectListFragmentToMasterQuantityUnitFragment());
               break;
             case GrocyApi.ENTITY.PRODUCT_GROUPS:
-              navigate(MasterObjectListFragmentDirections
+              activity.navigateFragment(MasterObjectListFragmentDirections
                   .actionMasterObjectListFragmentToMasterProductGroupFragment());
               break;
             case GrocyApi.ENTITY.LOCATIONS:
-              navigate(MasterObjectListFragmentDirections
+              activity.navigateFragment(MasterObjectListFragmentDirections
                   .actionMasterObjectListFragmentToMasterLocationFragment());
               break;
             case GrocyApi.ENTITY.STORES:
-              navigate(MasterObjectListFragmentDirections
+              activity.navigateFragment(MasterObjectListFragmentDirections
                   .actionMasterObjectListFragmentToMasterStoreFragment());
               break;
             case GrocyApi.ENTITY.PRODUCTS:
-              navigate(MasterObjectListFragmentDirections
+              activity.navigateFragment(MasterObjectListFragmentDirections
                   .actionMasterObjectListFragmentToMasterProductFragment(Constants.ACTION.CREATE));
               break;
             case ENTITY.TASK_CATEGORIES:
-              navigate(MasterObjectListFragmentDirections
+              activity.navigateFragment(MasterObjectListFragmentDirections
                   .actionMasterObjectListFragmentToMasterTaskCategoryFragment());
               break;
           }
@@ -353,7 +351,7 @@ public class MasterObjectListFragment extends BaseFragment
             });
           }
         } else {
-          activity.showSnackbar(R.string.error_undefined);
+          activity.showSnackbar(R.string.error_undefined, false);
         }
         return true;
       } else if (item.getItemId() == R.id.action_sort_ascending) {
@@ -379,27 +377,27 @@ public class MasterObjectListFragment extends BaseFragment
     }
     switch (entity) {
       case GrocyApi.ENTITY.QUANTITY_UNITS:
-        navigate(MasterObjectListFragmentDirections
+        activity.navigateFragment(MasterObjectListFragmentDirections
             .actionMasterObjectListFragmentToMasterQuantityUnitFragment()
             .setQuantityUnit((QuantityUnit) object));
         break;
       case GrocyApi.ENTITY.PRODUCT_GROUPS:
-        navigate(MasterObjectListFragmentDirections
+        activity.navigateFragment(MasterObjectListFragmentDirections
             .actionMasterObjectListFragmentToMasterProductGroupFragment()
             .setProductGroup((ProductGroup) object));
         break;
       case GrocyApi.ENTITY.LOCATIONS:
-        navigate(MasterObjectListFragmentDirections
+        activity.navigateFragment(MasterObjectListFragmentDirections
             .actionMasterObjectListFragmentToMasterLocationFragment()
             .setLocation((Location) object));
         break;
       case GrocyApi.ENTITY.STORES:
-        navigate(MasterObjectListFragmentDirections
+        activity.navigateFragment(MasterObjectListFragmentDirections
             .actionMasterObjectListFragmentToMasterStoreFragment()
             .setStore((Store) object));
         break;
       case GrocyApi.ENTITY.TASK_CATEGORIES:
-        navigate(MasterObjectListFragmentDirections
+        activity.navigateFragment(MasterObjectListFragmentDirections
             .actionMasterObjectListFragmentToMasterTaskCategoryFragment()
             .setTaskCategory((TaskCategory) object));
         break;
@@ -461,22 +459,13 @@ public class MasterObjectListFragment extends BaseFragment
     viewModel.deleteObject(objectId);
   }
 
-  private void appBarOfflineInfo(boolean visible) {
-    boolean currentState = binding.linearOfflineError.getVisibility() == View.VISIBLE;
-    if (visible == currentState) {
-      return;
-    }
-    binding.linearOfflineError.setVisibility(visible ? View.VISIBLE : View.GONE);
-  }
-
   @Override
   public void updateConnectivity(boolean online) {
     if (!online == viewModel.isOffline()) {
       return;
     }
     viewModel.setOfflineLive(!online);
-    viewModel.downloadData();
-    systemBarBehavior.refresh();
+    if (online) viewModel.downloadData();
   }
 
   @NonNull

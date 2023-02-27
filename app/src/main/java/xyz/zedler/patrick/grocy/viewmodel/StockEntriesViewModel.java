@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.viewmodel;
@@ -151,14 +151,17 @@ public class StockEntriesViewModel extends BaseViewModel {
     });
   }
 
-  public void downloadData() {
-    if (isOffline()) { // skip downloading and update recyclerview
+  public void downloadData(boolean skipOfflineCheck) {
+    if (!skipOfflineCheck && isOffline()) { // skip downloading and update recyclerview
       isLoadingLive.setValue(false);
       updateFilteredStockEntries();
       return;
     }
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        () -> {
+          if (isOffline()) setOfflineLive(false);
+          loadFromDatabase(false);
+        },
         this::onDownloadError,
         QuantityUnit.class,
         StockEntry.class,
@@ -167,6 +170,10 @@ public class StockEntriesViewModel extends BaseViewModel {
         Location.class,
         Store.class
     );
+  }
+
+  public void downloadData() {
+    downloadData(false);
   }
 
   public void downloadDataForceUpdate() {
@@ -178,17 +185,15 @@ public class StockEntriesViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_LOCATIONS, null);
     editPrefs.putString(PREF.DB_LAST_TIME_STORES, null);
     editPrefs.apply();
-    downloadData();
+    downloadData(true);
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
     if (debug) {
       Log.e(TAG, "onError: VolleyError: " + error);
     }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
+    showNetworkErrorMessage(error);
+    if (!isOffline()) setOfflineLive(true);
   }
 
   public void updateFilteredStockEntries() {
@@ -344,7 +349,7 @@ public class StockEntriesViewModel extends BaseViewModel {
                     Log.i(TAG, "consumeEntry: undone");
                   }
                 },
-                this::showErrorMessage
+                this::showNetworkErrorMessage
             ));
           }
           downloadData();
@@ -356,7 +361,7 @@ public class StockEntriesViewModel extends BaseViewModel {
           }
         },
         error -> {
-          showErrorMessage(error);
+          showNetworkErrorMessage(error);
           if (debug) {
             Log.i(TAG, "consumeEntry: " + error);
           }
@@ -418,7 +423,7 @@ public class StockEntriesViewModel extends BaseViewModel {
                     Log.i(TAG, "openEntry: undone");
                   }
                 },
-                this::showErrorMessage
+                this::showNetworkErrorMessage
             ));
           }
           downloadData();
@@ -430,7 +435,7 @@ public class StockEntriesViewModel extends BaseViewModel {
           }
         },
         error -> {
-          showErrorMessage(error);
+          showNetworkErrorMessage(error);
           if (debug) {
             Log.i(TAG, "openEntry: " + error);
           }

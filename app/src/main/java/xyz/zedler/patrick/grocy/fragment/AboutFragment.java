@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -28,14 +28,11 @@ import android.view.ViewGroup;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentAboutBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextBottomSheet;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class AboutFragment extends BaseFragment implements View.OnClickListener {
@@ -70,10 +67,10 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
 
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBarAbout);
-    systemBarBehavior.setScroll(binding.scrollAbout, binding.linearAboutContainer);
+    systemBarBehavior.setScroll(binding.scrollAbout, binding.constraint);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
-    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbarAbout);
     binding.toolbarAbout.setNavigationOnClickListener(v -> activity.navigateUp());
 
     setOnClickListeners(
@@ -93,16 +90,12 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         R.id.linear_license_xzing_android
     );
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(
-        binding.appBarAbout, true, binding.scrollAbout
+        binding.appBarAbout, false, binding.scrollAbout
     );
-    boolean showBottomBar = activity.binding.bottomAppBar.getVisibility() == View.VISIBLE;
-    activity.getScrollBehavior().setBottomBarVisibility(showBottomBar, !showBottomBar);
-    if (showBottomBar) {
-      activity.updateBottomAppBar(false, R.menu.menu_empty);
-    } else {
-      activity.binding.fabMain.hide();
-    }
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(false, R.menu.menu_empty);
   }
 
   private void setOnClickListeners(View view, @IdRes int... viewIds) {
@@ -119,7 +112,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
 
     if (v.getId() == R.id.linear_intro) {
       ViewUtil.startIcon(binding.imageIntro);
-      navigate(R.id.onboardingFragment);
+      activity.navigateFragment(R.id.onboardingFragment);
     } else if (v.getId() == R.id.linear_changelog) {
       ViewUtil.startIcon(binding.imageChangelog);
       activity.showChangelogBottomSheet();
@@ -136,77 +129,67 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
       ));
     } else if (v.getId() == R.id.linear_license_conscrypt) {
       ViewUtil.startIcon(binding.imageLicenseConscrypt);
-      showTextBottomSheet(
+      activity.showTextBottomSheet(
           R.raw.license_apache,
           R.string.license_conscrypt,
           R.string.url_conscrypt
       );
     } else if (v.getId() == R.id.linear_license_fuzzywuzzy) {
       ViewUtil.startIcon(binding.imageLicenseFuzzywuzzy);
-      showTextBottomSheet(
+      activity.showTextBottomSheet(
           R.raw.license_gpl,
           R.string.license_fuzzywuzzy,
           R.string.url_fuzzywuzzy
       );
     } else if (v.getId() == R.id.linear_license_gson) {
       ViewUtil.startIcon(binding.imageLicenseGson);
-      showTextBottomSheet(
+      activity.showTextBottomSheet(
           R.raw.license_apache,
           R.string.license_gson,
           R.string.url_gson
       );
     } else if (v.getId() == R.id.linear_license_jost) {
       ViewUtil.startIcon(binding.imageLicenseJost);
-      showTextBottomSheet(
+      activity.showTextBottomSheet(
           R.raw.license_ofl,
           R.string.license_jost,
           R.string.url_jost
       );
     } else if (v.getId() == R.id.linear_license_material_components) {
       ViewUtil.startIcon(binding.imageLicenseMaterialComponents);
-      showTextBottomSheet(
+      activity.showTextBottomSheet(
           R.raw.license_apache,
           R.string.license_material_components,
           R.string.url_material_components
       );
     } else if (v.getId() == R.id.linear_license_material_icons) {
       ViewUtil.startIcon(binding.imageLicenseMaterialIcons);
-      showTextBottomSheet(
+      activity.showTextBottomSheet(
           R.raw.license_apache,
           R.string.license_material_icons,
           R.string.url_material_icons
       );
     } else if (v.getId() == R.id.linear_license_netcipher) {
       ViewUtil.startIcon(binding.imageLicenseNetcipher);
-      showTextBottomSheet(
+      activity.showTextBottomSheet(
           R.raw.license_apache,
           R.string.license_netcipher,
           R.string.url_netcipher
       );
     } else if (v.getId() == R.id.linear_license_volley) {
       ViewUtil.startIcon(binding.imageLicenseVolley);
-      showTextBottomSheet(
+      activity.showTextBottomSheet(
           R.raw.license_apache,
           R.string.license_volley,
           R.string.url_volley
       );
     } else if (v.getId() == R.id.linear_license_xzing_android) {
       ViewUtil.startIcon(binding.imageLicenseXzingAndroid);
-      showTextBottomSheet(
+      activity.showTextBottomSheet(
           R.raw.license_apache,
           R.string.license_xzing_android,
           R.string.url_zxing_android
       );
     }
-  }
-
-  private void showTextBottomSheet(int file, @StringRes int title, @StringRes int link) {
-    Bundle bundle = new Bundle();
-    bundle.putInt(Constants.ARGUMENT.TITLE, title);
-    bundle.putInt(Constants.ARGUMENT.FILE, file);
-    if (link != 0) {
-      bundle.putInt(Constants.ARGUMENT.LINK, link);
-    }
-    activity.showBottomSheet(new TextBottomSheet(), bundle);
   }
 }

@@ -14,84 +14,13 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
-  <color name="retro_red_fg">@color/retro_red_bg_black</color>
-  <color name="retro_red_only_day">@color/on_background_variant</color>
-  <color name="retro_yellow_fg">@color/retro_yellow_bg</color>
-  <color name="retro_dirt_fg">@color/retro_dirt</color>
-  <color name="retro_green_fg">@color/retro_green_bg_black</color>
-  <color name="retro_green_fg_invert">#60837a</color>
-  <color name="retro_blue_fg">@color/retro_blue_bg</color>
-  <color name="retro_dark_fg">#527b6e</color>
-
-  <!-- PRIMARY -->
-
-  <color name="primary">#313235</color>
-  <color name="primary_variant">#313235</color>
-  <color name="on_primary">#ddd</color>
-
-  <!-- SECONDARY -->
-
-  <color name="secondary_dark">#97b7a5</color>
-
-  <!-- BACKGROUND -->
-
-  <color name="background">#1e1f22</color>
-  <color name="background_dark">@color/background</color>
-  <color name="on_background">@color/grey100</color>
-  <color name="on_background_variant">#292a2e</color>
-  <color name="on_background_secondary">@color/grey600</color>
-  <color name="on_background_tertiary">@color/grey800</color>
-
-  <!-- SURFACE -->
-
-  <color name="surface">#303030</color>
-  <color name="surface_secondary">#2e2e2e</color>
-  <color name="on_surface">#fff</color>
-  <color name="on_surface_secondary">#404040</color>
-
-  <!-- TOOLTIP -->
-
-  <color name="tooltip_background">#ddffffff</color>
-  <color name="tooltip_text">@color/black</color>
-
-  <!-- FILTER CHIPS -->
-
-  <color name="filter_chip_background_inactive">@color/grey700</color>
-  <color name="filter_chip_background_active">@color/retro_blue</color>
-  <color name="filter_chip_stroke_inactive">@color/filter_chip_background_inactive</color>
-  <color name="filter_chip_stroke_active">@color/filter_chip_background_active</color>
-  <color name="filter_chip_text_inactive">@color/white</color>
-  <color name="filter_chip_text_active">@color/white</color>
-  <color name="filter_chip_expand_inactive">@color/grey400</color>
-  <color name="filter_chip_expand_active">@color/grey200</color>
-
-  <!-- HIGHLIGHT -->
-
-  <color name="highlight">#11bdbdbd</color>
-  <color name="highlight_secondary">#11bdbdbd</color>
-
-  <!-- STROKES -->
-
-  <color name="stroke_primary">@color/grey600</color>
-  <color name="stroke_secondary">#3a3b3e</color>
-  <color name="stroke_tertiary">@color/grey800</color>
-
-  <!-- ICONS -->
-
-  <color name="icon">@color/grey400</color>
-  <color name="icon_grayed_out">@color/grey700</color>
-
-  <color name="logo">@color/retro_green</color>
-
-  <!-- TEXT INPUT LAYOUT -->
-
-  <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">
-    @color/stroke_primary
-  </color>
+  <color name="logo_yellow">@color/custom_yellow_50</color>
+  <color name="logo_green">@color/custom_green_50</color>
+  <color name="logo_red">@color/custom_red_35</color>
 
 </resources>

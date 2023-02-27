@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.model;
@@ -129,7 +129,7 @@ public class StockEntry extends GroupedListItem implements Parcelable {
     dest.writeString(note);
   }
 
-  public static final Creator<StockEntry> CREATOR = new Creator<StockEntry>() {
+  public static final Creator<StockEntry> CREATOR = new Creator<>() {
 
     @Override
     public StockEntry createFromParcel(Parcel in) {

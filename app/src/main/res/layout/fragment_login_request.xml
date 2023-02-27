@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <layout
@@ -41,9 +41,11 @@
   <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:id="@+id/coordinate_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
 
     <androidx.core.widget.NestedScrollView
+      android:id="@+id/scroll"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_gravity="center"
@@ -51,32 +53,34 @@
       android:fillViewport="true">
 
       <LinearLayout
+        android:id="@+id/linear_container_scroll"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingTop="32dp"
-        android:paddingBottom="32dp"
-        android:layout_marginStart="@dimen/main_side_margin"
-        android:layout_marginEnd="@dimen/main_side_margin"
+        android:paddingTop="16dp"
+        android:paddingBottom="12dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:animateLayoutChanges="true"
         transitionTypeChanging="@{true}">
 
         <ImageView
-          android:layout_width="56dp"
-          android:layout_height="56dp"
+          android:id="@+id/image_logo"
+          android:layout_width="90dp"
+          android:layout_height="90dp"
           android:scaleType="centerCrop"
           android:src="@drawable/ic_round_grocy_anim"
           tools:ignore="ContentDescription" />
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
-          android:layout_width="120dp"
+          android:layout_width="140dp"
           android:layout_height="wrap_content"
-          android:layout_marginTop="16dp"
+          android:layout_marginTop="12dp"
           android:indeterminate="true"
           android:visibility="@{viewModel.isLoadingLive ? View.VISIBLE : View.GONE}"
-          app:trackColor="@color/secondary_translucent"
-          app:indicatorColor="@color/secondary"
+          app:trackColor="?attr/colorSurfaceVariant"
+          app:indicatorColor="?attr/colorPrimary"
           app:trackCornerRadius="2dp"
           app:trackThickness="4dp" />
 
@@ -88,84 +92,55 @@
           android:layout_marginTop="16dp">
 
           <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            app:contentPadding="16dp"
-            app:cardElevation="0dp"
-            app:cardCornerRadius="12dp"
-            app:cardBackgroundColor="@color/on_background_variant"
+            style="@style/Widget.Grocy.Card.Text.Error"
+            android:layout_marginBottom="8dp"
             android:visibility="@{viewModel.loginErrorMsg != null ? View.VISIBLE : View.GONE}">
 
             <TextView
-              style="@style/Widget.Grocy.TextView.Paragraph"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              style="@style/Widget.Grocy.TextView.Paragraph.Card.Error"
               android:text="@{viewModel.loginErrorMsg}" />
 
           </com.google.android.material.card.MaterialCardView>
 
           <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            app:contentPadding="16dp"
-            app:cardElevation="0dp"
-            app:cardCornerRadius="12dp"
-            app:cardBackgroundColor="@color/on_background_variant"
+            style="@style/Widget.Grocy.Card.Text.Error"
+            android:layout_marginBottom="8dp"
             android:visibility="@{viewModel.loginErrorExactMsg != null ? View.VISIBLE : View.GONE}">
 
             <TextView
-              style="@style/Widget.Grocy.TextView.Paragraph"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              style="@style/Widget.Grocy.TextView.Paragraph.Card.Error"
               android:text="@{viewModel.loginErrorExactMsg}" />
 
           </com.google.android.material.card.MaterialCardView>
 
           <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            app:contentPadding="16dp"
-            app:cardElevation="0dp"
-            app:cardCornerRadius="12dp"
-            app:cardBackgroundColor="@color/on_background_variant"
+            style="@style/Widget.Grocy.Card.Text.Error"
+            android:layout_marginBottom="8dp"
             android:visibility="@{viewModel.loginErrorHassMsg != null ? View.VISIBLE : View.GONE}">
 
             <TextView
-              style="@style/Widget.Grocy.TextView.Paragraph"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              style="@style/Widget.Grocy.TextView.Paragraph.Card.Error"
               android:text="@{viewModel.loginErrorHassMsg}" />
 
           </com.google.android.material.card.MaterialCardView>
 
           <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
 
             <com.google.android.material.button.MaterialButton
               style="@style/Widget.Grocy.Button.OutlinedButton"
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
               android:layout_marginEnd="4dp"
-              android:layout_weight="1"
-              android:layout_gravity="center_horizontal"
-              android:gravity="center"
               android:text="@string/action_back"
               android:onClick="@{() -> activity.navigateUp()}"
               app:clickUtil="@{clickUtil}" />
 
             <com.google.android.material.button.MaterialButton
               style="@style/Widget.Grocy.Button.UnelevatedButton"
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
               android:layout_marginStart="4dp"
-              android:layout_gravity="center_horizontal"
-              android:layout_weight="1"
-              android:gravity="center"
               android:text="@string/action_try_again"
               android:onClick="@{() -> fragment.login(true)}"
               app:clickUtil="@{clickUtil}" />

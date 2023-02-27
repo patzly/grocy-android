@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.adapter;
@@ -26,14 +26,13 @@ import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
@@ -43,6 +42,7 @@ import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 
 public class TaskEntryAdapter extends
     RecyclerView.Adapter<TaskEntryAdapter.ViewHolder> {
@@ -160,21 +160,24 @@ public class TaskEntryAdapter extends
       holder.binding.days.setTypeface(
           ResourcesCompat.getFont(context, R.font.jost_medium)
       );
-      @ColorRes int color;
+
+      ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
+      ColorRoles colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
+      int color;
       if (days < 0) {
-        color = R.color.retro_red_fg;
+        color = ResUtil.getColorAttr(context, R.attr.colorError);
       } else if (days == 0) {
-        color = R.color.retro_blue_fg;
+        color = colorBlue.getAccent();
       } else {
-        color = R.color.retro_yellow;
+        color = colorYellow.getAccent();
       }
-      holder.binding.days.setTextColor(ContextCompat.getColor(context, color));
+      holder.binding.days.setTextColor(color);
     } else {
       holder.binding.days.setTypeface(
           ResourcesCompat.getFont(context, R.font.jost_book)
       );
       holder.binding.days.setTextColor(
-          ContextCompat.getColor(context, R.color.on_background_secondary)
+          ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant)
       );
     }
 

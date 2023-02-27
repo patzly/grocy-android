@@ -14,92 +14,94 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/linear_recipe_position_container"
+  style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
   android:orientation="vertical"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:minHeight="48dp"
-  android:clickable="true"
-  android:focusable="true"
-  android:gravity="center_vertical">
-
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-
-    <LinearLayout
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      android:layout_weight="1">
-
-      <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <TextView
-          android:id="@+id/amount"
-          style="@style/Widget.Grocy.TextView.ListItem.Title"
-          android:layout_width="wrap_content"
-          android:layout_height="match_parent"
-          android:layout_gravity="center_vertical"
-          android:layout_marginEnd="8dp"
-          android:fontFamily="@font/jost_medium" />
-
-        <TextView
-          android:id="@+id/quantity_unit"
-          style="@style/Widget.Grocy.TextView.ListItem.Title"
-          android:layout_width="wrap_content"
-          android:layout_height="match_parent"
-          android:layout_gravity="center_vertical" />
-      </LinearLayout>
-
-      <TextView
-        android:id="@+id/variable_amount"
-        style="@style/Widget.Grocy.TextView.ListItem.Description"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:textSize="12sp"
-        android:text="@string/property_variable_amount" />
-
-    </LinearLayout>
-
-    <LinearLayout
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      android:gravity="end">
-
-      <TextView
-        android:id="@+id/title"
-        style="@style/Widget.Grocy.TextView.ListItem.Title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="viewEnd" />
-
-    </LinearLayout>
-  </LinearLayout>
+  android:paddingStart="16dp"
+  android:paddingEnd="16dp">
 
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:gravity="end">
+    android:baselineAligned="false">
+
+    <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+      <TextView
+        android:id="@+id/ingredient"
+        style="@style/Widget.Grocy.TextView.ListItem.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical" />
+
+    </LinearLayout>
 
     <TextView
-      android:id="@+id/note"
+      android:id="@+id/variable_amount"
       style="@style/Widget.Grocy.TextView.ListItem.Description"
       android:layout_width="wrap_content"
-      android:layout_height="wrap_content" />
+      android:layout_height="match_parent"
+      android:layout_gravity="start"
+      android:layout_marginStart="12dp"
+      android:text="@string/property_variable_amount" />
 
   </LinearLayout>
+
+  <LinearLayout
+    android:id="@+id/fulfillment"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
+
+      <TextView
+        android:id="@+id/fulfilled"
+        style="@style/Widget.Grocy.TextView.ListItem.Description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:singleLine="false"
+        android:maxLines="2"
+        android:layout_weight="1" />
+
+      <ImageView
+        android:id="@+id/image_fulfillment"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="4dp"
+        android:visibility="visible"
+        tools:ignore="ContentDescription" />
+
+    </LinearLayout>
+
+    <TextView
+      android:id="@+id/missing"
+      style="@style/Widget.Grocy.TextView.ListItem.Description"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
+      android:singleLine="false"
+      android:maxLines="5" />
+
+  </LinearLayout>
+
+  <TextView
+    android:id="@+id/note"
+    style="@style/Widget.Grocy.TextView.ListItem.Description"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="end"
+    android:textStyle="italic"/>
 
 </LinearLayout>

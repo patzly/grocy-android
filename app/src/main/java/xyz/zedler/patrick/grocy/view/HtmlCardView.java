@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.view;
@@ -33,6 +33,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
@@ -88,7 +89,7 @@ public class HtmlCardView extends LinearLayout {
   @SuppressLint("ClickableViewAccessibility")
   public void setHtml(String html) {
     if (html != null) {
-      html = html.replaceAll("<[/]?font[^>]*>", ""); // remove font
+      html = html.replaceAll("</?font[^>]*>", ""); // remove font
       html = html.replaceAll(
           "<p[^>]*> *(<br ?/>)*</p[^>]*>[\\n\\r\\s]*$", "" // trim empty paragraphs at end
       );
@@ -105,10 +106,13 @@ public class HtmlCardView extends LinearLayout {
 
       binding.webview.setBackgroundColor(Color.TRANSPARENT);
       binding.webview.setOnTouchListener((v, event) -> binding.card.onTouchEvent(event));
-      /*binding.webview.setWebViewClient(new WebViewClient() {
+      binding.webview.setWebViewClient(new WebViewClient() {
         @Override
-        public void onPageFinished(WebView view, String url) {*/
+        public void onPageFinished(WebView view, String url) {
           new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if (binding == null) {
+              return;
+            }
             ViewTreeObserver observer = binding.webview.getViewTreeObserver();
             observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
               @Override
@@ -139,8 +143,8 @@ public class HtmlCardView extends LinearLayout {
               }
             });
           }, 100);
-        /*}
-      });*/
+        }
+      });
       binding.card.setOnClickListener(v -> showHtmlDialog());
     } else {
       setVisibility(View.GONE);

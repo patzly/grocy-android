@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.model;
@@ -84,7 +84,7 @@ public class TaskCategory extends GroupedListItem implements Parcelable {
     dest.writeInt(displayDivider);
   }
 
-  public static final Creator<TaskCategory> CREATOR = new Creator<TaskCategory>() {
+  public static final Creator<TaskCategory> CREATOR = new Creator<>() {
 
     @Override
     public TaskCategory createFromParcel(Parcel in) {

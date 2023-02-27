@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.fragment;
@@ -33,6 +33,7 @@ import com.google.android.material.timepicker.TimeFormat;
 import java.util.Locale;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentChoreEntryRescheduleBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
@@ -54,6 +55,7 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
   private FragmentChoreEntryRescheduleBinding binding;
   private ChoreEntryRescheduleViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
+  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(
@@ -84,12 +86,20 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
+    systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setScroll(binding.scroll, binding.constraint);
+    systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
-            activity.binding.coordinatorMain
-        ));
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       } else if (event.getType() == Event.NAVIGATE_UP) {
         activity.navigateUp();
       } else if (event.getType() == Event.BOTTOM_SHEET) {
@@ -122,19 +132,20 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI(ShoppingListEditFragmentArgs.fromBundle(requireArguments())
-        .getAnimateStart() && savedInstanceState == null);
-  }
+    // UPDATE UI
 
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
-    activity.updateBottomAppBar(true, R.menu.menu_empty);
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.scroll, true
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(true, R.menu.menu_empty, null);
     activity.updateFab(
         R.drawable.ic_round_backup,
         R.string.action_save,
         Constants.FAB.TAG.SAVE,
-        animated,
+        ShoppingListEditFragmentArgs.fromBundle(requireArguments())
+            .getAnimateStart() && savedInstanceState == null,
         () -> viewModel.rescheduleChore()
     );
   }
@@ -161,7 +172,7 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
         .setTitleText(R.string.property_next_estimated_tracking_time)
         .setNegativeButtonText(R.string.action_cancel)
         .setPositiveButtonText(R.string.action_save)
-        .setTheme(R.style.Theme_Grocy_TimePicker)
+        .setTheme(R.style.ThemeOverlay_Grocy_TimePicker)
         .build();
 
     picker.addOnPositiveButtonClickListener(v -> viewModel.getNextTrackingTimeLive().setValue(
@@ -177,7 +188,7 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
         .setTitleText(R.string.property_next_estimated_tracking)
         .setNegativeButtonText(R.string.action_cancel)
         .setPositiveButtonText(R.string.action_save)
-        .setTheme(R.style.Theme_Grocy_DatePicker)
+        .setTheme(R.style.ThemeOverlay_Grocy_DatePicker)
         .build();
 
     picker.addOnPositiveButtonClickListener(v -> {
@@ -198,6 +209,7 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
       return;
     }
     viewModel.setOfflineLive(!isOnline);
+    systemBarBehavior.refresh();
     if (isOnline) {
       viewModel.downloadData();
     }

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.model;
@@ -83,7 +83,7 @@ public class QuantityUnit implements Parcelable {
     dest.writeString(pluralForms);
   }
 
-  public static final Creator<QuantityUnit> CREATOR = new Creator<QuantityUnit>() {
+  public static final Creator<QuantityUnit> CREATOR = new Creator<>() {
 
     @Override
     public QuantityUnit createFromParcel(Parcel in) {

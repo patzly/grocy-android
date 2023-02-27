@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <LinearLayout
@@ -24,44 +24,66 @@
   android:layout_height="wrap_content"
   android:orientation="vertical">
 
-  <TextView
-    android:id="@+id/text_master_delete_question"
-    style="@style/Widget.Grocy.TextView.Title.BottomSheet"
+  <com.google.android.material.appbar.MaterialToolbar
+    style="@style/Widget.Grocy.Toolbar"
+    app:title="@string/title_confirmation" />
+
+  <com.google.android.material.divider.MaterialDivider
+    style="@style/Widget.Grocy.Divider" />
+
+  <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    android:paddingTop="16dp"
-    android:textAlignment="viewStart"
-    android:textSize="16sp" />
+    android:scrollbars="none"
+    android:overScrollMode="ifContentScrolls">
 
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:orientation="horizontal"
-    android:gravity="end">
-
-    <com.google.android.material.button.MaterialButton
-      android:id="@+id/button_master_delete_cancel"
-      style="@style/Widget.Grocy.Button.TextButton"
-      android:layout_width="wrap_content"
+    <LinearLayout
+      android:id="@+id/linear_container_scroll"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:text="@string/action_cancel"
-      android:textColor="@color/on_background_secondary"
-      app:rippleColor="@color/highlight" />
+      android:orientation="vertical"
+      android:paddingStart="16dp"
+      android:paddingEnd="16dp"
+      android:paddingTop="16dp"
+      android:paddingBottom="12dp">
 
-    <com.google.android.material.button.MaterialButton
-      android:id="@+id/button_master_delete_delete"
-      style="@style/Widget.Grocy.Button.UnelevatedButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="8dp"
-      android:text="@string/action_delete"
-      android:textColor="@color/white"
-      app:rippleColor="@color/highlight_on_secondary"
-      app:backgroundTint="@color/retro_red_bg_white" />
+      <TextView
+        android:id="@+id/text_master_delete_question"
+        style="@style/Widget.Grocy.TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp" />
 
-  </LinearLayout>
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/button_master_delete_cancel"
+          style="@style/Widget.Grocy.Button.TextButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/action_cancel"
+          android:textColor="?attr/colorError"
+          app:rippleColor="@color/selector_highlight_error" />
+
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/button_master_delete_delete"
+          style="@style/Widget.Grocy.Button.UnelevatedButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="8dp"
+          android:text="@string/action_delete"
+          android:textColor="?attr/colorOnError"
+          app:backgroundTint="?attr/colorError"
+          app:rippleColor="@color/selector_highlight_on_error" />
+
+      </LinearLayout>
+
+    </LinearLayout>
+
+  </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

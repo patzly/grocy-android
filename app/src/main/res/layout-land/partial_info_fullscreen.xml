@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
+  -->
+
+<androidx.core.widget.NestedScrollView
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="?android:attr/colorBackground"
+  android:fillViewport="true">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:weightSum="1"
+    android:layout_marginBottom="?attr/actionBarSize"
+    android:baselineAligned="false"
+    android:paddingTop="32dp"
+    android:paddingBottom="32dp">
+
+    <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      android:layout_weight="0.5"
+      android:gravity="center"
+      android:paddingStart="16dp"
+      android:paddingEnd="16dp">
+
+      <ImageView
+        android:id="@+id/image"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription" />
+
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      android:layout_weight="0.5"
+      android:gravity="center"
+      android:paddingStart="16dp"
+      android:paddingEnd="16dp">
+
+      <TextView
+        android:id="@+id/title"
+        style="@style/Widget.Grocy.TextView.HeadlineSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center" />
+
+      <TextView
+        android:id="@+id/subtitle"
+        style="@style/Widget.Grocy.TextView.ListItem.Description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textAlignment="center" />
+
+      <com.google.android.material.button.MaterialButton
+        android:id="@+id/retry"
+        style="@style/Widget.Grocy.Button.UnelevatedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/action_retry" />
+
+      <TextView
+        android:id="@+id/exact"
+        style="@style/Widget.Grocy.TextView.ListItem.Description"
+        android:textSize="12sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone" />
+
+    </LinearLayout>
+
+  </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

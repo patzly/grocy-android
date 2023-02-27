@@ -14,10 +14,10 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in purchase screen for example. -->
@@ -176,7 +176,6 @@
   <string name="msg_feedback">Masz jakieś życzenia, pytania, bądź błędy? Skontaktuj się i pomóż nam pomóc!\nW innym wypadku będziemy bardzo szczęśliwi za fajną recenzję w Play Store.</string>
   <string name="msg_point_at_barcode">Skieruj swój aparat na kod kreskowy</string>
   <string name="msg_press_hold_confirm">Naciśnij i przytrzymaj aby potwierdzić</string>
-  <string name="msg_welcome_to_grocy">Witaj w Grocy Android!\n\nAby używac grocy produktywnie, potrzebujesz swojego serwera, lub dodatku grocy do Home Assistant.\nJeżeli chcesz po prostu spróbować tej aplikacji możesz użyć serwera demonstracyjnego od Bernda Bestela, twórcy grocy.</string>
   <string name="msg_choose_option_below">Wybierz z poniższych jedna opcję.</string>
   <string name="msg_qr_code_scan">Odwiedź stronę grocy na innym urządzeniu i przejdź do strony \"Zarządzaj kluczami API\". Kliknij na \"Dodaj\", następnie kliknij na mały symbol kodu QR i zeskanuj kod QR.</string>
   <string name="msg_not_implemented_yet">Niedługo zostanie to zaimplementowane. Na razie używaj interfejsu serwera.</string>

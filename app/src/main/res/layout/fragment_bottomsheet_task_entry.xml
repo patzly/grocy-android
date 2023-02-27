@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <LinearLayout
@@ -34,34 +34,28 @@
       android:orientation="horizontal"
       android:gravity="center_vertical">
 
-      <TextView
-        style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:text="@string/title_task_entry" />
-
       <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
-        android:layout_width="wrap_content"
+        style="@style/Widget.Grocy.Toolbar.Start"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:contentInsetStart="12dp"
+        android:layout_weight="1"
+        app:title="@string/title_task_entry"
         app:menu="@menu/menu_task_entry" />
 
-      <xyz.zedler.patrick.grocy.view.ActionButton
+      <com.google.android.material.button.MaterialButton
         android:id="@+id/delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/Widget.Grocy.Button.IconButton"
         android:layout_gravity="end|center_vertical"
-        app:icon="@drawable/ic_round_delete_anim"
-        app:tint="@color/icon" />
+        android:layout_marginEnd="8dp"
+        app:icon="@drawable/ic_round_delete_anim" />
 
     </LinearLayout>
 
     <ProgressBar
       android:id="@+id/progress_confirmation"
       android:layout_width="match_parent"
-      style="@style/Widget.Grocy.ProgressBar.Horizontal.Red"
+      style="@style/Widget.Grocy.ProgressBar.Horizontal.Error"
       android:layout_gravity="bottom"
       android:indeterminate="false"
       android:max="100"
@@ -79,6 +73,7 @@
     android:overScrollMode="ifContentScrolls">
 
     <LinearLayout
+      android:id="@+id/linear_container_scroll"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"

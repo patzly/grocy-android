@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <layout
@@ -58,8 +58,7 @@
         <com.google.android.material.appbar.MaterialToolbar
           android:id="@+id/toolbar"
           style="@style/Widget.Grocy.Toolbar.Back"
-          app:title="@{viewModel.actionEditLive ? @string/title_product_edit : @string/title_product_create}"
-          app:titleCentered="true" />
+          app:title="@{viewModel.actionEditLive ? @string/title_product_edit : @string/title_product_create}" />
 
         <FrameLayout
           android:id="@+id/frame_help"
@@ -109,310 +108,320 @@
           android:layout_height="match_parent"
           android:overScrollMode="never">
 
-          <LinearLayout
-            android:id="@+id/linear_container_scroll"
+          <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="16dp"
-            android:paddingBottom="90dp"
-            android:orientation="vertical"
-            android:animateLayoutChanges="true"
-            app:transitionTypeChanging="@{true}">
+            android:paddingBottom="@dimen/global_scroll_bottom_padding">
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem"
-              android:paddingTop="0dp"
-              android:paddingBottom="0dp">
-
-              <ImageView
-                android:id="@+id/image_master_product_simple_name"
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_label_anim"
-                android:layout_marginBottom="10dp"
-                tools:ignore="ContentDescription" />
-
-              <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_name"
-                style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                android:hint="@string/property_name"
-                app:helperTextEnabled="true"
-                app:helperText=" "
-                app:errorText="@{formData.nameErrorLive}">
-
-                <com.google.android.material.textfield.TextInputEditText
-                  android:id="@+id/edit_text_name"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:inputType="text|textCapSentences|textNoSuggestions"
-                  android:imeOptions="actionDone"
-                  android:text="@={formData.nameLive}"
-                  app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}" />
-
-              </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-              android:id="@+id/category_optional"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
-              android:layout_width="match_parent"
+              android:layout_width="0dp"
               android:layout_height="wrap_content"
+              android:orientation="vertical"
               android:animateLayoutChanges="true"
-              android:paddingTop="@{formData.displayHelpLive ? UiUtil.dpToPx(activity, 12) : UiUtil.dpToPx(activity, 8)}"
-              android:paddingBottom="@{formData.displayHelpLive ? UiUtil.dpToPx(activity, 12) : UiUtil.dpToPx(activity, 8)}"
-              app:transitionTypeChanging="@{true}">
+              app:transitionTypeChanging="@{true}"
+              app:layout_constraintTop_toTopOf="parent"
+              app:layout_constraintWidth_max="@dimen/max_content_width"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintEnd_toEndOf="parent">
 
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_subject_anim"
-                tools:ignore="ContentDescription" />
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp">
 
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+                <ImageView
+                  android:id="@+id/image_master_product_simple_name"
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_label_anim"
+                  android:layout_marginBottom="10dp"
+                  tools:ignore="ContentDescription" />
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@string/title_product_cat_optional"
-                  android:textColor="@{formData.catOptionalErrorLive ? @color/retro_red : @color/on_background}" />
+                <com.google.android.material.textfield.TextInputLayout
+                  android:id="@+id/text_input_name"
+                  style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+                  android:hint="@string/property_name"
+                  app:helperTextEnabled="true"
+                  app:helperText=" "
+                  app:errorText="@{formData.nameErrorLive}">
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Description"
-                  android:text="@string/subtitle_product_optional_properties"
-                  android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
+                  <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text|textCapSentences|textNoSuggestions"
+                    android:imeOptions="actionDone"
+                    android:text="@={formData.nameLive}"
+                    app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}" />
 
-              </LinearLayout>
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.Icon"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/ic_round_chevron_right"
-                tools:ignore="ContentDescription" />
-
-            </LinearLayout>
-
-            <LinearLayout
-              android:id="@+id/category_location"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:paddingTop="@{formData.displayHelpLive ? UiUtil.dpToPx(activity, 12) : UiUtil.dpToPx(activity, 8)}"
-              android:paddingBottom="@{formData.displayHelpLive ? UiUtil.dpToPx(activity, 12) : UiUtil.dpToPx(activity, 8)}"
-              android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) ? View.VISIBLE : View.GONE}"
-              android:animateLayoutChanges="true"
-              app:transitionTypeChanging="@{true}">
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_place"
-                tools:ignore="ContentDescription" />
-
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@string/title_product_cat_location"
-                  android:textColor="@{formData.catLocationErrorLive ? @color/retro_red : @color/on_background}" />
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Description"
-                  android:text="@string/subtitle_product_default_location"
-                  android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
+                </com.google.android.material.textfield.TextInputLayout>
 
               </LinearLayout>
 
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.Icon"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/ic_round_chevron_right"
-                tools:ignore="ContentDescription" />
+              <LinearLayout
+                android:id="@+id/category_optional"
+                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:paddingTop="@{formData.displayHelpLive ? UiUtil.dpToPx(activity, 12) : UiUtil.dpToPx(activity, 8)}"
+                android:paddingBottom="@{formData.displayHelpLive ? UiUtil.dpToPx(activity, 12) : UiUtil.dpToPx(activity, 8)}"
+                app:transitionTypeChanging="@{true}">
 
-            </LinearLayout>
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_subject_anim"
+                  tools:ignore="ContentDescription" />
 
-            <LinearLayout
-              android:id="@+id/category_due_date"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:paddingTop="@{formData.displayHelpLive ? UiUtil.dpToPx(activity, 12) : UiUtil.dpToPx(activity, 8)}"
-              android:paddingBottom="@{formData.displayHelpLive ? UiUtil.dpToPx(activity, 12) : UiUtil.dpToPx(activity, 8)}"
-              android:animateLayoutChanges="true"
-              android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING) ? View.VISIBLE : View.GONE}"
-              app:transitionTypeChanging="@{true}">
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_date_range"
-                tools:ignore="ContentDescription" />
+                  <TextView
+                    android:id="@+id/text_cat_optional"
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@string/title_product_cat_optional" />
 
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Description"
+                    android:text="@string/subtitle_product_optional_properties"
+                    android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@string/title_product_cat_due_date"
-                  android:textColor="@{formData.catDueDateErrorLive ? @color/retro_red : @color/on_background}" />
+                </LinearLayout>
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Description"
-                  android:text="@string/subtitle_product_due_date"
-                  android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
-
-              </LinearLayout>
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.Icon"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/ic_round_chevron_right"
-                tools:ignore="ContentDescription" />
-
-            </LinearLayout>
-
-            <LinearLayout
-              android:id="@+id/category_quantity_unit"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:paddingTop="@{formData.displayHelpLive ? UiUtil.dpToPx(activity, 12) : UiUtil.dpToPx(activity, 8)}"
-              android:paddingBottom="@{formData.displayHelpLive ? UiUtil.dpToPx(activity, 12) : UiUtil.dpToPx(activity, 8)}"
-              android:animateLayoutChanges="true"
-              app:transitionTypeChanging="@{true}">
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_weights"
-                tools:ignore="ContentDescription" />
-
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@string/title_product_cat_quantity_unit"
-                  android:textColor="@{formData.catQuErrorLive ? @color/retro_red : @color/on_background}" />
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Description"
-                  android:text="@string/subtitle_product_quantity_unit"
-                  android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.Icon"
+                  android:layout_marginStart="16dp"
+                  android:src="@drawable/ic_round_chevron_right"
+                  tools:ignore="ContentDescription" />
 
               </LinearLayout>
 
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.Icon"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/ic_round_chevron_right"
-                tools:ignore="ContentDescription" />
+              <LinearLayout
+                android:id="@+id/category_location"
+                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@{formData.displayHelpLive ? UiUtil.dpToPx(activity, 12) : UiUtil.dpToPx(activity, 8)}"
+                android:paddingBottom="@{formData.displayHelpLive ? UiUtil.dpToPx(activity, 12) : UiUtil.dpToPx(activity, 8)}"
+                android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) ? View.VISIBLE : View.GONE}"
+                android:animateLayoutChanges="true"
+                app:transitionTypeChanging="@{true}">
 
-            </LinearLayout>
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_place"
+                  tools:ignore="ContentDescription" />
 
-            <LinearLayout
-              android:id="@+id/category_amount"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:paddingTop="@{formData.displayHelpLive ? UiUtil.dpToPx(activity, 12) : UiUtil.dpToPx(activity, 8)}"
-              android:paddingBottom="@{formData.displayHelpLive ? UiUtil.dpToPx(activity, 12) : UiUtil.dpToPx(activity, 8)}"
-              android:animateLayoutChanges="true"
-              app:transitionTypeChanging="@{true}">
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_scatter_plot_anim"
-                tools:ignore="ContentDescription" />
+                  <TextView
+                    android:id="@+id/text_cat_location"
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@string/title_product_cat_location" />
 
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Description"
+                    android:text="@string/subtitle_product_default_location"
+                    android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@string/title_product_cat_amount"
-                  android:textColor="@{formData.catAmountErrorLive ? @color/retro_red : @color/on_background}" />
+                </LinearLayout>
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Description"
-                  android:text="@string/subtitle_product_amount"
-                  android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
-
-              </LinearLayout>
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.Icon"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/ic_round_chevron_right"
-                tools:ignore="ContentDescription" />
-
-            </LinearLayout>
-
-            <LinearLayout
-              android:id="@+id/category_barcodes"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:alpha="@{viewModel.actionEditLive ? 1.0f : 0.38f}">
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_barcode"
-                tools:ignore="ContentDescription" />
-
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@string/title_product_cat_barcodes" />
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Description"
-                  android:text="@string/subtitle_product_not_on_server"
-                  android:textColor="?attr/colorError"
-                  android:visibility="@{viewModel.actionEditLive ? View.GONE : View.VISIBLE}" />
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Description"
-                  android:text="@string/subtitle_barcodes_will_be_added"
-                  android:visibility="@{viewModel.pendingProductBarcodesLive != null ? View.VISIBLE : View.GONE}" />
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.Icon"
+                  android:layout_marginStart="16dp"
+                  android:src="@drawable/ic_round_chevron_right"
+                  tools:ignore="ContentDescription" />
 
               </LinearLayout>
 
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.Icon"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/ic_round_chevron_right"
-                tools:ignore="ContentDescription" />
+              <LinearLayout
+                android:id="@+id/category_due_date"
+                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@{formData.displayHelpLive ? UiUtil.dpToPx(activity, 12) : UiUtil.dpToPx(activity, 8)}"
+                android:paddingBottom="@{formData.displayHelpLive ? UiUtil.dpToPx(activity, 12) : UiUtil.dpToPx(activity, 8)}"
+                android:animateLayoutChanges="true"
+                android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING) ? View.VISIBLE : View.GONE}"
+                app:transitionTypeChanging="@{true}">
 
-            </LinearLayout>
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_date_range"
+                  tools:ignore="ContentDescription" />
 
-            <LinearLayout
-              android:id="@+id/category_qu_conversions"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:alpha="@{viewModel.actionEditLive ? 1.0f : 0.38f}">
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_scale_anim"
-                tools:ignore="ContentDescription" />
+                  <TextView
+                    android:id="@+id/text_cat_due_date"
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@string/title_product_cat_due_date" />
 
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Description"
+                    android:text="@string/subtitle_product_due_date"
+                    android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@string/title_product_cat_qu_conversions" />
+                </LinearLayout>
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Description"
-                  android:text="@string/subtitle_product_not_on_server"
-                  android:textColor="?attr/colorError"
-                  android:visibility="@{viewModel.actionEditLive ? View.GONE : View.VISIBLE}" />
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.Icon"
+                  android:layout_marginStart="16dp"
+                  android:src="@drawable/ic_round_chevron_right"
+                  tools:ignore="ContentDescription" />
 
               </LinearLayout>
 
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.Icon"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/ic_round_chevron_right"
-                tools:ignore="ContentDescription" />
+              <LinearLayout
+                android:id="@+id/category_quantity_unit"
+                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@{formData.displayHelpLive ? UiUtil.dpToPx(activity, 12) : UiUtil.dpToPx(activity, 8)}"
+                android:paddingBottom="@{formData.displayHelpLive ? UiUtil.dpToPx(activity, 12) : UiUtil.dpToPx(activity, 8)}"
+                android:animateLayoutChanges="true"
+                app:transitionTypeChanging="@{true}">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_weights"
+                  tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                  <TextView
+                    android:id="@+id/text_cat_qu"
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@string/title_product_cat_quantity_unit" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Description"
+                    android:text="@string/subtitle_product_quantity_unit"
+                    android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
+
+                </LinearLayout>
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.Icon"
+                  android:layout_marginStart="16dp"
+                  android:src="@drawable/ic_round_chevron_right"
+                  tools:ignore="ContentDescription" />
+
+              </LinearLayout>
+
+              <LinearLayout
+                android:id="@+id/category_amount"
+                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@{formData.displayHelpLive ? UiUtil.dpToPx(activity, 12) : UiUtil.dpToPx(activity, 8)}"
+                android:paddingBottom="@{formData.displayHelpLive ? UiUtil.dpToPx(activity, 12) : UiUtil.dpToPx(activity, 8)}"
+                android:animateLayoutChanges="true"
+                app:transitionTypeChanging="@{true}">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_scatter_plot_anim"
+                  tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                  <TextView
+                    android:id="@+id/text_cat_amount"
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@string/title_product_cat_amount" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Description"
+                    android:text="@string/subtitle_product_amount"
+                    android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
+
+                </LinearLayout>
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.Icon"
+                  android:layout_marginStart="16dp"
+                  android:src="@drawable/ic_round_chevron_right"
+                  tools:ignore="ContentDescription" />
+
+              </LinearLayout>
+
+              <LinearLayout
+                android:id="@+id/category_barcodes"
+                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha="@{viewModel.actionEditLive ? 1.0f : 0.38f}">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_barcode"
+                  tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@string/title_product_cat_barcodes" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Description"
+                    android:text="@string/subtitle_product_not_on_server"
+                    android:textColor="?attr/colorError"
+                    android:visibility="@{viewModel.actionEditLive ? View.GONE : View.VISIBLE}" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Description"
+                    android:text="@string/subtitle_barcodes_will_be_added"
+                    android:visibility="@{viewModel.pendingProductBarcodesLive != null ? View.VISIBLE : View.GONE}" />
+
+                </LinearLayout>
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.Icon"
+                  android:layout_marginStart="16dp"
+                  android:src="@drawable/ic_round_chevron_right"
+                  tools:ignore="ContentDescription" />
+
+              </LinearLayout>
+
+              <LinearLayout
+                android:id="@+id/category_qu_conversions"
+                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha="@{viewModel.actionEditLive ? 1.0f : 0.38f}">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_scale_anim"
+                  tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@string/title_product_cat_qu_conversions" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Description"
+                    android:text="@string/subtitle_product_not_on_server"
+                    android:textColor="?attr/colorError"
+                    android:visibility="@{viewModel.actionEditLive ? View.GONE : View.VISIBLE}" />
+
+                </LinearLayout>
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.Icon"
+                  android:layout_marginStart="16dp"
+                  android:src="@drawable/ic_round_chevron_right"
+                  tools:ignore="ContentDescription" />
+
+              </LinearLayout>
 
             </LinearLayout>
 
-          </LinearLayout>
+          </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
 

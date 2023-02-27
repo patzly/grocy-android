@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <layout
@@ -60,156 +60,174 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
-      android:id="@+id/scroll"
+    <xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout
+      android:id="@+id/swipe"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never">
 
-      <LinearLayout
-        android:id="@+id/linear_container"
+      <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="8dp"
-        android:paddingBottom="@dimen/global_scroll_bottom_padding"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:overScrollMode="never">
 
-        <com.google.android.material.card.MaterialCardView
-          style="@style/Widget.Grocy.Card.Text.Error"
-          android:layout_marginStart="16dp"
-          android:layout_marginEnd="16dp"
-          android:layout_marginTop="8dp"
-          android:layout_marginBottom="8dp"
-          android:visibility="@{viewModel.isDemoInstance ? View.VISIBLE : View.GONE}">
+        <androidx.constraintlayout.widget.ConstraintLayout
+          android:id="@+id/constraint"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:paddingTop="8dp"
+          android:paddingBottom="@dimen/global_scroll_bottom_padding">
 
-          <TextView
-            style="@style/Widget.Grocy.TextView.Paragraph"
-            android:layout_width="match_parent"
+          <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="?attr/colorOnErrorContainer"
-            android:text="@string/msg_logout_demo" />
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="@dimen/max_content_width"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-        </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+              style="@style/Widget.Grocy.Card.Text.Error"
+              android:layout_marginStart="16dp"
+              android:layout_marginEnd="16dp"
+              android:layout_marginTop="8dp"
+              android:layout_marginBottom="8dp"
+              android:visibility="@{viewModel.isDemoInstance ? View.VISIBLE : View.GONE}">
 
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:onClick="@{v -> fragment.openServerWebsite()}"
-          app:clickUtil="@{clickUtil}">
+              <TextView
+                style="@style/Widget.Grocy.TextView.Paragraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnErrorContainer"
+                android:text="@string/msg_logout_demo" />
 
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            tools:ignore="ContentDescription"
-            android:src="@drawable/ic_round_settings_system" />
+            </com.google.android.material.card.MaterialCardView>
 
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+            <LinearLayout
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:onClick="@{v -> fragment.openServerWebsite()}"
+              app:clickUtil="@{clickUtil}">
 
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-              android:text="@string/hint_server" />
+              <ImageView
+                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                tools:ignore="ContentDescription"
+                android:src="@drawable/ic_round_settings_system" />
 
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@{sharedPrefs.getString(Constants.PREF.SERVER_URL, fragment.getString(R.string.subtitle_unknown))}"
-              android:maxLines="6" />
+              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                  android:text="@string/hint_server" />
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.Title"
+                  android:text="@{sharedPrefs.getString(Constants.PREF.SERVER_URL, fragment.getString(R.string.subtitle_unknown))}"
+                  android:maxLines="6" />
+
+              </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+              android:visibility="@{viewModel.serverUrl != null ? View.VISIBLE : View.GONE}"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:onClick="@{v -> viewModel.showCompatibilityBottomSheet()}"
+              app:clickUtil="@{clickUtil}">
+
+              <ImageView
+                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                tools:ignore="ContentDescription"
+                android:src="@drawable/ic_round_grocy_official" />
+
+              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                  android:text="@string/info_grocy_version" />
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.Title"
+                  android:text="@{sharedPrefs.getString(Constants.PREF.GROCY_VERSION, fragment.getString(R.string.subtitle_unknown))}" />
+
+                <TextView
+                  android:id="@+id/text_compatible"
+                  style="@style/Widget.Grocy.TextView.ListItem.Description"
+                  android:text="@{viewModel.versionCompatible ? @string/subtitle_supported : @string/subtitle_not_supported}"
+                  android:fontFamily="@font/jost_medium"
+                  android:alpha="1" />
+
+              </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+              android:id="@+id/linear_setting_reload_config"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+              android:visibility="@{viewModel.serverUrl != null ? View.VISIBLE : View.GONE}"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+              <ImageView
+                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                tools:ignore="ContentDescription"
+                android:src="@drawable/ic_round_sync_anim" />
+
+              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.Title"
+                  android:text="@string/setting_reload_config" />
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.Description"
+                  android:text="@string/setting_reload_config_description" />
+
+              </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+              android:visibility="@{viewModel.serverUrl != null ? View.VISIBLE : View.GONE}"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:onClick="@{v -> fragment.showLogoutDialog(viewModel.isDemoInstance)}"
+              app:clickUtil="@{clickUtil}">
+
+              <ImageView
+                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                tools:ignore="ContentDescription"
+                android:src="@drawable/ic_round_logout" />
+
+              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.Title"
+                  android:text="@string/setting_logout" />
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.Description"
+                  android:text="@string/setting_logout_description" />
+
+              </LinearLayout>
+
+            </LinearLayout>
 
           </LinearLayout>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
-          android:visibility="@{viewModel.serverUrl != null ? View.VISIBLE : View.GONE}"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:onClick="@{v -> viewModel.showCompatibilityBottomSheet()}"
-          app:clickUtil="@{clickUtil}">
+      </androidx.core.widget.NestedScrollView>
 
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            tools:ignore="ContentDescription"
-            android:src="@drawable/ic_round_grocy_official" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-              android:text="@string/info_grocy_version" />
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@{sharedPrefs.getString(Constants.PREF.GROCY_VERSION, fragment.getString(R.string.subtitle_unknown))}" />
-
-            <TextView
-              android:id="@+id/text_compatible"
-              style="@style/Widget.Grocy.TextView.ListItem.Description"
-              android:text="@{viewModel.versionCompatible ? @string/subtitle_supported : @string/subtitle_not_supported}"
-              android:fontFamily="@font/jost_medium"
-              android:alpha="1" />
-
-          </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-          android:visibility="@{viewModel.serverUrl != null ? View.VISIBLE : View.GONE}"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:onClick="@{v -> viewModel.reloadConfiguration()}"
-          app:clickUtil="@{clickUtil}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            tools:ignore="ContentDescription"
-            android:src="@drawable/ic_round_sync_anim" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@string/setting_reload_config" />
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Description"
-              android:text="@string/setting_reload_config_description" />
-
-          </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-          android:visibility="@{viewModel.serverUrl != null ? View.VISIBLE : View.GONE}"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:onClick="@{v -> fragment.showLogoutDialog(viewModel.isDemoInstance)}"
-          app:clickUtil="@{clickUtil}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            tools:ignore="ContentDescription"
-            android:src="@drawable/ic_round_logout" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@string/setting_logout" />
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Description"
-              android:text="@string/setting_logout_description" />
-
-          </LinearLayout>
-
-        </LinearLayout>
-
-      </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
+    </xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout>
 
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

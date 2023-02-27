@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <resources>
@@ -43,5 +43,5 @@
   <string name="deep_link_recipeEditIngredientEditFragment">grocy://recipeEditIngredientEditFragment</string>
   <string name="deep_link_recipeEditIngredientListFragment">grocy://masterRecipeEditIngredientListFragment?recipeId={recipeId}</string>
   <string name="deep_link_recipeEditFragment">grocy://recipeEditFragment?action={action}</string>
-
+  <string name="deep_link_chooseProductFragment">grocy://chooseProductFragment?barcode={barcode}&amp;forbidCreateProduct={forbidCreateProduct}&amp;pendingProductsActive={pendingProductsActive}</string>
 </resources>

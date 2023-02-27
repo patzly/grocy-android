@@ -14,11 +14,10 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
 <menu
-  xmlns:tools="http://schemas.android.com/tools"
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -26,7 +25,6 @@
     android:id="@+id/action_toggle_flash"
     android:title="@string/action_toggle_flash"
     android:icon="@drawable/ic_round_flash_on_to_off"
-    app:showAsAction="always"
-    tools:ignore="AlwaysShowAction" />
+    app:showAsAction="always" />
 
 </menu>

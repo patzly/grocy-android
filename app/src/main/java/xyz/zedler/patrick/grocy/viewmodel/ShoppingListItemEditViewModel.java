@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.viewmodel;
@@ -33,6 +33,7 @@ import com.android.volley.VolleyError;
 import java.util.HashMap;
 import java.util.List;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -42,6 +43,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomShe
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataShoppingListItemEdit;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -73,7 +75,6 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
 
   private List<ShoppingList> shoppingLists;
   private List<Product> products;
@@ -109,7 +110,6 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
 
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
   }
 
   public FormDataShoppingListItemEdit getFormData() {
@@ -138,10 +138,6 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     if (currentQueueLoading != null) {
       currentQueueLoading.reset(true);
       currentQueueLoading = null;
-    }
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
     }
     if (dbChangedTime == null) {
       dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
@@ -192,9 +188,6 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
   }
 
   private void onQueueEmpty() {
-    if (isOffline()) {
-      setOfflineLive(false);
-    }
     if (queueEmptyAction != null) {
       queueEmptyAction.run();
       queueEmptyAction = null;
@@ -207,10 +200,13 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     if (debug) {
       Log.e(TAG, "onError: VolleyError: " + error);
     }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
+    String exact = error == null ? null : error.getLocalizedMessage();
+    infoFullscreenLive.setValue(
+        new InfoFullscreen(InfoFullscreen.ERROR_NETWORK, exact, () -> {
+          infoFullscreenLive.setValue(null);
+          downloadDataForceUpdate();
+        })
+    );
   }
 
   public void saveItem() {
@@ -233,7 +229,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
           jsonObject,
           response -> saveProductBarcodeAndNavigateUp(),
           error -> {
-            showErrorMessage(error);
+            showNetworkErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveItem: " + error);
             }
@@ -245,7 +241,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
           jsonObject,
           response -> saveProductBarcodeAndNavigateUp(),
           error -> {
-            showErrorMessage(error);
+            showNetworkErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveItem: " + error);
             }
@@ -296,15 +292,8 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
         formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
 
         quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
-        if (quantityUnit != null && unitFactors.containsKey(quantityUnit)) {
-          Double factor = unitFactors.get(quantityUnit);
-          assert factor != null;
-          if (factor != -1 && quantityUnit.getId() == product.getQuIdPurchaseInt()) {
-            amount = amount / factor;
-          } else if (factor != -1) {
-            amount = amount * factor;
-          }
-        }
+        amount = QuantityUnitConversionUtil
+            .getAmountRelativeToUnit(unitFactors, product, quantityUnit, amount);
       } catch (IllegalArgumentException e) {
         showMessage(e.getMessage());
         return;
@@ -317,7 +306,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     formData.setFilledWithShoppingListItem(true);
   }
 
-  public void setProduct(Product product) {
+  public void setProduct(Product product, boolean explicitlyFocusAmountField) {
     if (product == null) {
       return;
     }
@@ -341,7 +330,11 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     QuantityUnit purchase = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
     formData.getQuantityUnitLive().setValue(purchase);
 
-    formData.isFormValid();
+    if (explicitlyFocusAmountField) {
+      sendEvent(Event.FOCUS_AMOUNT_FIELD);
+    } else {
+      formData.isFormValid();
+    }
   }
 
   public void setProduct(int productId) {
@@ -352,7 +345,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     if (product == null) {
       return;
     }
-    setProduct(product);
+    setProduct(product, false);
   }
 
   public void onBarcodeRecognized(String barcode) {
@@ -374,10 +367,11 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       product = Product.getProductFromBarcode(products, barcodes, barcode);
     }
     if (product != null) {
-      setProduct(product);
+      setProduct(product, true);
     } else {
-      formData.getBarcodeLive().setValue(barcode);
-      formData.isFormValid();
+      Bundle bundle = new Bundle();
+      bundle.putString(ARGUMENT.BARCODE, barcode);
+      sendEvent(Event.CHOOSE_PRODUCT, bundle);
     }
   }
 
@@ -405,7 +399,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
             shoppingListItem.getId()
         ),
         response -> navigateUp(),
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 
@@ -423,7 +417,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     }
 
     if (product != null) {
-      setProduct(product);
+      setProduct(product, false);
     } else {
       Bundle bundle = new Bundle();
       bundle.putString(Constants.ARGUMENT.PRODUCT_INPUT, input);
@@ -473,19 +467,6 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     return sharedPrefs.getBoolean(
         Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true
     );
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull
