@@ -198,7 +198,9 @@
                     android:onItemClick="@{(parent, view, pos, id) -> fragment.onItemAutoCompleteClick(parent, pos)}"
                     android:afterTextChanged="@{() -> formData.isProductNameValid()}"
                     app:productList="@{formData.productsLive}"
-                    app:onNextClickInSoftKeyboard="@{() -> fragment.onProductInputNextClick()}" />
+                    app:onNextClickInSoftKeyboard="@{() -> fragment.onProductInputNextClick()}"
+                    app:onTabPressListener="@{() -> fragment.clearFocusAndCheckProductInputExternal()}"
+                    app:onEnterPressListener="@{() -> fragment.clearFocusAndCheckProductInputExternal()}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

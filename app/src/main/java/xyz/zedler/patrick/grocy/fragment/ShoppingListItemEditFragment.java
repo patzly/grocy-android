@@ -123,6 +123,14 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
+      } else if (event.getType() == Event.CHOOSE_PRODUCT) {
+        String barcode = event.getBundle().getString(ARGUMENT.BARCODE);
+        activity.navigateFragment(
+            R.id.chooseProductFragment,
+            new ChooseProductFragmentArgs.Builder(barcode).build().toBundle()
+        );
+      } else if (event.getType() == Event.FOCUS_AMOUNT_FIELD) {
+        clearAmountFieldAndFocusIt();
       }
     });
 
@@ -154,6 +162,15 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
         viewModel.setCurrentQueueLoading(null);
       }
     });
+
+    Boolean backFromChooseProductPage = (Boolean)
+        getFromThisDestinationNow(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE);
+    if (backFromChooseProductPage != null) {
+      removeForThisDestination(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE);
+      if (backFromChooseProductPage) {
+        clearAmountFieldAndFocusIt();
+      }
+    }
 
     ColorRoles roles = ResUtil.getHarmonizedRoles(activity, R.color.blue);
     binding.textInputAmount.setHelperTextColor(ColorStateList.valueOf(roles.getAccent()));
@@ -299,13 +316,20 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
 
   public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
     Product product = (Product) adapterView.getItemAtPosition(pos);
-    viewModel.setProduct(product);
+    viewModel.setProduct(product, false);
     focusNextView();
   }
 
   public void onProductInputNextClick() {
     viewModel.checkProductInput();
     focusNextView();
+  }
+
+  public void clearFocusAndCheckProductInputExternal() {
+    clearInputFocus();
+    String input = viewModel.getFormData().getProductNameLive().getValue();
+    if (input == null || input.isEmpty()) return;
+    viewModel.onBarcodeRecognized(viewModel.getFormData().getProductNameLive().getValue());
   }
 
   public void focusNextView() {

@@ -15,6 +15,7 @@
 - Improved: App now supports disabled stock feature and hides stock parts, same with recipes (#647)
 - Improved: When adding an unknown barcode through purchase or inventory, note is saved (#644, #619)
 - Improved: When adding an unknown barcode through purchase, amount and unit is saved (#644)
+- Improved: Shopping list item page now also uses "Choose product" page for unknown barcodes
 - Fixed: Recipe actions throwing errors (thanks @timhae!) (#646)
 - Fixed: Simultaneous display of recipe photos and placeholder images
 - Fixed: Behavior option "reduce app startup time" not working on Android 12+
@@ -30,6 +31,7 @@
 - Fixed: Amount of products without own stock not hidden on stock overview page (#654)
 - Fixed: Navigation bar color on devices without gesture navigation
 - Fixed: Default due days after freezing applied on purchase when freezer location is set (#593)
+- Fixed: External scanner for adding items to shopping list didn't work (#656)
 - Fixed: Quick mode scanner started again just after navigating back from "choose product" page
 - Fixed: (not F-Droid) Crash with ML Kit scanner after barcode was scanned
 - Fixed: (not F-Droid) Crash with ML Kit scanner after transaction was successful (#639)

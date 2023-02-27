@@ -33,6 +33,7 @@ import com.android.volley.VolleyError;
 import java.util.HashMap;
 import java.util.List;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -42,6 +43,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomShe
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataShoppingListItemEdit;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -304,7 +306,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     formData.setFilledWithShoppingListItem(true);
   }
 
-  public void setProduct(Product product) {
+  public void setProduct(Product product, boolean explicitlyFocusAmountField) {
     if (product == null) {
       return;
     }
@@ -328,7 +330,11 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     QuantityUnit purchase = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
     formData.getQuantityUnitLive().setValue(purchase);
 
-    formData.isFormValid();
+    if (explicitlyFocusAmountField) {
+      sendEvent(Event.FOCUS_AMOUNT_FIELD);
+    } else {
+      formData.isFormValid();
+    }
   }
 
   public void setProduct(int productId) {
@@ -339,7 +345,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     if (product == null) {
       return;
     }
-    setProduct(product);
+    setProduct(product, false);
   }
 
   public void onBarcodeRecognized(String barcode) {
@@ -361,10 +367,11 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       product = Product.getProductFromBarcode(products, barcodes, barcode);
     }
     if (product != null) {
-      setProduct(product);
+      setProduct(product, true);
     } else {
-      formData.getBarcodeLive().setValue(barcode);
-      formData.isFormValid();
+      Bundle bundle = new Bundle();
+      bundle.putString(ARGUMENT.BARCODE, barcode);
+      sendEvent(Event.CHOOSE_PRODUCT, bundle);
     }
   }
 
@@ -410,7 +417,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     }
 
     if (product != null) {
-      setProduct(product);
+      setProduct(product, false);
     } else {
       Bundle bundle = new Bundle();
       bundle.putString(Constants.ARGUMENT.PRODUCT_INPUT, input);
