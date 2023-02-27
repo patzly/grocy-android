@@ -65,7 +65,7 @@ Thanks for your contributions!
 
 ## About
 
-This app is a project of my brother and me. We started working on it during the first months of the Corona pandemic in Germany, just before our Abitur, when the schools had to close.
+This app is a project of my brother [Dominic Zedler](https://github.com/dominiczedler) and me, [Patrick Zedler](https://github.com/patzly). We started working on it during the first months of the Corona pandemic in Germany, just before our Abitur in 2020, when the schools had to close.
 
 We'd like to thank the developer of grocy, [Bernd Bestel](https://berrnd.de/), without whose great work this app would never have been possible.
 
