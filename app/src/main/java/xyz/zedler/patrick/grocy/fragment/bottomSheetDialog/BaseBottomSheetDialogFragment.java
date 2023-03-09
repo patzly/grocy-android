@@ -107,9 +107,12 @@ public class BaseBottomSheetDialogFragment extends CustomBottomSheetDialogFragme
             boolean isPortrait = UiUtil.isOrientationPortrait(requireContext());
             if (isPortrait && skipCollapsedStateInPortrait) {
               behavior.setSkipCollapsed(true);
+              behavior.setPeekHeight(BottomSheetBehavior.PEEK_HEIGHT_AUTO);
             } else if (isPortrait) {
+              behavior.setSkipCollapsed(false);
               behavior.setPeekHeight(peakHeightHalf);
             } else { // landscape
+              behavior.setSkipCollapsed(false);
               behavior.setPeekHeight(
                   expandBottomSheets
                       ? UiUtil.getDisplayHeight(requireActivity())
@@ -165,8 +168,22 @@ public class BaseBottomSheetDialogFragment extends CustomBottomSheetDialogFragme
               );
               if (isImeVisible) {
                 behavior.setSkipCollapsed(true);
+                behavior.setPeekHeight(BottomSheetBehavior.PEEK_HEIGHT_AUTO);
               } else {
-                behavior.setSkipCollapsed(isPortrait && skipCollapsedStateInPortrait);
+                if (isPortrait && skipCollapsedStateInPortrait) {
+                  behavior.setSkipCollapsed(true);
+                  behavior.setPeekHeight(BottomSheetBehavior.PEEK_HEIGHT_AUTO);
+                } else if (isPortrait) {
+                  behavior.setSkipCollapsed(false);
+                  behavior.setPeekHeight(peakHeightHalf);
+                } else { // landscape
+                  behavior.setSkipCollapsed(false);
+                  behavior.setPeekHeight(
+                      expandBottomSheets
+                          ? UiUtil.getDisplayHeight(requireActivity())
+                          : UiUtil.getDisplayHeight(requireActivity()) / 2
+                  );
+                }
               }
               return insets;
             });
