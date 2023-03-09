@@ -431,7 +431,7 @@ public class CustomBottomSheetDialog extends AppCompatDialog {
             bottomSheet.getPaddingLeft(),
             insetsCompat.getInsets(Type.systemBars()).top - bottomSheet.getTop(),
             bottomSheet.getPaddingRight(),
-            0
+            bottomSheet.getPaddingBottom()
         );
       } else if (bottomSheet.getTop() != 0) {
         // Reset the status bar icons to the original color because the bottomSheet is not under the
@@ -441,7 +441,7 @@ public class CustomBottomSheetDialog extends AppCompatDialog {
             bottomSheet.getPaddingLeft(),
             0,
             bottomSheet.getPaddingRight(),
-            0
+            bottomSheet.getPaddingBottom()
         );
       }
     }

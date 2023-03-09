@@ -106,7 +106,6 @@ public class BaseBottomSheetDialogFragment extends CustomBottomSheetDialogFragme
 
             boolean isPortrait = UiUtil.isOrientationPortrait(requireContext());
             if (isPortrait && skipCollapsedStateInPortrait) {
-              //behavior.setPeekHeight(UiUtil.getDisplayHeight(requireActivity()));
               behavior.setSkipCollapsed(true);
             } else if (isPortrait) {
               behavior.setPeekHeight(peakHeightHalf);
@@ -151,6 +150,24 @@ public class BaseBottomSheetDialogFragment extends CustomBottomSheetDialogFragme
                 }
               });
 
+              return insets;
+            });
+
+            ViewCompat.setOnApplyWindowInsetsListener(sheet, (view, insets) -> {
+              int insetImeBottom = insets.getInsets(Type.ime()).bottom;
+              int insetNavBottom = insets.getInsets(Type.systemBars()).bottom;
+              boolean isImeVisible = insets.isVisible(Type.ime());
+              view.setPadding(
+                  view.getPaddingLeft(),
+                  view.getPaddingTop(),
+                  view.getPaddingRight(),
+                  isImeVisible ? insetImeBottom - insetNavBottom : insetImeBottom
+              );
+              if (isImeVisible) {
+                behavior.setSkipCollapsed(true);
+              } else {
+                behavior.setSkipCollapsed(isPortrait && skipCollapsedStateInPortrait);
+              }
               return insets;
             });
 
