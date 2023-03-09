@@ -106,11 +106,13 @@ public class BaseBottomSheetDialogFragment extends CustomBottomSheetDialogFragme
 
             boolean isPortrait = UiUtil.isOrientationPortrait(requireContext());
             if (isPortrait && skipCollapsedStateInPortrait) {
-              //behavior.setPeekHeight(UiUtil.getDisplayHeight(requireActivity()));
               behavior.setSkipCollapsed(true);
+              behavior.setPeekHeight(BottomSheetBehavior.PEEK_HEIGHT_AUTO);
             } else if (isPortrait) {
+              behavior.setSkipCollapsed(false);
               behavior.setPeekHeight(peakHeightHalf);
             } else { // landscape
+              behavior.setSkipCollapsed(false);
               behavior.setPeekHeight(
                   expandBottomSheets
                       ? UiUtil.getDisplayHeight(requireActivity())
@@ -151,6 +153,38 @@ public class BaseBottomSheetDialogFragment extends CustomBottomSheetDialogFragme
                 }
               });
 
+              return insets;
+            });
+
+            ViewCompat.setOnApplyWindowInsetsListener(sheet, (view, insets) -> {
+              int insetImeBottom = insets.getInsets(Type.ime()).bottom;
+              int insetNavBottom = insets.getInsets(Type.systemBars()).bottom;
+              boolean isImeVisible = insets.isVisible(Type.ime());
+              view.setPadding(
+                  view.getPaddingLeft(),
+                  view.getPaddingTop(),
+                  view.getPaddingRight(),
+                  isImeVisible ? insetImeBottom - insetNavBottom : insetImeBottom
+              );
+              if (isImeVisible) {
+                behavior.setSkipCollapsed(true);
+                behavior.setPeekHeight(BottomSheetBehavior.PEEK_HEIGHT_AUTO);
+              } else {
+                if (isPortrait && skipCollapsedStateInPortrait) {
+                  behavior.setSkipCollapsed(true);
+                  behavior.setPeekHeight(BottomSheetBehavior.PEEK_HEIGHT_AUTO);
+                } else if (isPortrait) {
+                  behavior.setSkipCollapsed(false);
+                  behavior.setPeekHeight(peakHeightHalf);
+                } else { // landscape
+                  behavior.setSkipCollapsed(false);
+                  behavior.setPeekHeight(
+                      expandBottomSheets
+                          ? UiUtil.getDisplayHeight(requireActivity())
+                          : UiUtil.getDisplayHeight(requireActivity()) / 2
+                  );
+                }
+              }
               return insets;
             });
 
