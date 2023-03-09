@@ -16,6 +16,7 @@
 - Improved: When adding an unknown barcode through purchase or inventory, note is saved (#644, #619)
 - Improved: When adding an unknown barcode through purchase, amount and unit is saved (#644)
 - Improved: Shopping list item page now also uses "Choose product" page for unknown barcodes
+- Improved: Bottom dialog behavior when keyboard is shown
 - Fixed: Recipe actions throwing errors (thanks @timhae!) (#646)
 - Fixed: Simultaneous display of recipe photos and placeholder images
 - Fixed: Behavior option "reduce app startup time" not working on Android 12+
