@@ -1,3 +1,6 @@
+## 3.1.1
+- Fixed: Home Assistant core update broke session authentication, this fix can be a bit buggy (#670)
+
 ## 3.1.0
 
 - New: Fulfillment check for every ingredient on recipe page

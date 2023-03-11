@@ -27,7 +27,6 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.preference.PreferenceManager;
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -86,7 +85,6 @@ import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.model.VolatileItem;
-import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.CustomJsonArrayRequest;
 import xyz.zedler.patrick.grocy.web.CustomJsonObjectRequest;
@@ -105,14 +103,11 @@ public class DownloadHelper {
   private final String uuidHelper;
   private final OnLoadingListener onLoadingListener;
   private final SharedPreferences sharedPrefs;
-  private final DateUtil dateUtil;
   private final AppDatabase appDatabase;
 
   private final ArrayList<NetworkQueue> queueArrayList;
   private final String tag;
   private final String apiKey;
-  private final String hassServerUrl;
-  private final String hassLongLivedAccessToken;
   private final boolean debug;
   private final int timeoutSeconds;
   private int loadingRequests;
@@ -126,20 +121,11 @@ public class DownloadHelper {
     this.tag = tag;
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
-    dateUtil = new DateUtil(application);
     appDatabase = AppDatabase.getAppDatabase(application.getApplicationContext());
     gson = new GsonBuilder().registerTypeAdapter(Double.class, new BadDoubleDeserializer()).create();
     requestQueue = RequestQueueSingleton.getInstance(application).getRequestQueue();
     grocyApi = new GrocyApi(application);
     apiKey = sharedPrefs.getString(Constants.PREF.API_KEY, "");
-    hassServerUrl = sharedPrefs.getString(
-        Constants.PREF.HOME_ASSISTANT_SERVER_URL,
-        null
-    );
-    hassLongLivedAccessToken = sharedPrefs.getString(
-        Constants.PREF.HOME_ASSISTANT_LONG_LIVED_TOKEN,
-        null
-    );
     uuidHelper = UUID.randomUUID().toString();
     queueArrayList = new ArrayList<>();
     loadingRequests = 0;
@@ -154,8 +140,6 @@ public class DownloadHelper {
       Application application,
       String serverUrl,
       String apiKey,
-      String hassServerUrl,
-      String hassLongLivedAccessToken,
       String tag,
       OnLoadingListener onLoadingListener
   ) {
@@ -164,14 +148,11 @@ public class DownloadHelper {
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
     gson = new GsonBuilder().registerTypeAdapter(Double.class, new BadDoubleDeserializer()).create();
-    dateUtil = new DateUtil(application);
     appDatabase = AppDatabase.getAppDatabase(application.getApplicationContext());
     RequestQueueSingleton.getInstance(application).newRequestQueue();
     requestQueue = RequestQueueSingleton.getInstance(application).getRequestQueue();
     grocyApi = new GrocyApi(application, serverUrl);
     this.apiKey = apiKey;
-    this.hassServerUrl = hassServerUrl;
-    this.hassLongLivedAccessToken = hassLongLivedAccessToken;
     uuidHelper = UUID.randomUUID().toString();
     queueArrayList = new ArrayList<>();
     loadingRequests = 0;
@@ -222,21 +203,21 @@ public class DownloadHelper {
       OnStringResponseListener onResponse,
       OnErrorListener onError
   ) {
-    validateHassIngressSessionIfNecessary(sessionKey -> {
-      CustomStringRequest request = new CustomStringRequest(
-          Request.Method.GET,
-          url,
-          apiKey,
-          sessionKey,
-          onResponse::onResponse,
-          onError::onError,
-          this::onRequestFinished,
-          timeoutSeconds,
-          tag
-      );
-      onRequestLoading();
-      requestQueue.add(request);
-    });
+    String sessionKey = sharedPrefs
+        .getString(Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY, null);
+    CustomStringRequest request = new CustomStringRequest(
+        Request.Method.GET,
+        url,
+        apiKey,
+        sessionKey,
+        onResponse::onResponse,
+        onError::onError,
+        this::onRequestFinished,
+        timeoutSeconds,
+        tag
+    );
+    onRequestLoading();
+    requestQueue.add(request);
   }
 
   // for requests without loading progress (set noLoadingProgress=true)
@@ -247,25 +228,25 @@ public class DownloadHelper {
       OnErrorListener onError,
       boolean noLoadingProgress
   ) {
-    validateHassIngressSessionIfNecessary(sessionKey -> {
-      CustomStringRequest request = new CustomStringRequest(
-          Request.Method.GET,
-          url,
-          apiKey,
-          sessionKey,
-          onResponse::onResponse,
-          onError::onError,
-          this::onRequestFinished,
-          timeoutSeconds,
-          tag,
-          noLoadingProgress,
-          onLoadingListener
-      );
-      if (!noLoadingProgress) {
-        onRequestLoading();
-      }
-      requestQueue.add(request);
-    });
+    String sessionKey = sharedPrefs
+        .getString(Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY, null);
+    CustomStringRequest request = new CustomStringRequest(
+        Request.Method.GET,
+        url,
+        apiKey,
+        sessionKey,
+        onResponse::onResponse,
+        onError::onError,
+        this::onRequestFinished,
+        timeoutSeconds,
+        tag,
+        noLoadingProgress,
+        onLoadingListener
+    );
+    if (!noLoadingProgress) {
+      onRequestLoading();
+    }
+    requestQueue.add(request);
   }
 
   // for single requests without a queue
@@ -284,22 +265,22 @@ public class DownloadHelper {
       OnErrorListener onError,
       String userAgent
   ) {
-    validateHassIngressSessionIfNecessary(sessionKey -> {
-      CustomStringRequest request = new CustomStringRequest(
-          Request.Method.GET,
-          url,
-          apiKey,
-          sessionKey,
-          onResponse::onResponse,
-          onError::onError,
-          this::onRequestFinished,
-          timeoutSeconds,
-          uuidHelper,
-          userAgent
-      );
-      onRequestLoading();
-      requestQueue.add(request);
-    });
+    String sessionKey = sharedPrefs
+        .getString(Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY, null);
+    CustomStringRequest request = new CustomStringRequest(
+        Request.Method.GET,
+        url,
+        apiKey,
+        sessionKey,
+        onResponse::onResponse,
+        onError::onError,
+        this::onRequestFinished,
+        timeoutSeconds,
+        uuidHelper,
+        userAgent
+    );
+    onRequestLoading();
+    requestQueue.add(request);
   }
 
   public void post(
@@ -308,22 +289,22 @@ public class DownloadHelper {
       OnJSONResponseListener onResponse,
       OnErrorListener onError
   ) {
-    validateHassIngressSessionIfNecessary(sessionKey -> {
-      CustomJsonObjectRequest request = new CustomJsonObjectRequest(
-          Request.Method.POST,
-          url,
-          apiKey,
-          sessionKey,
-          json,
-          onResponse::onResponse,
-          onError::onError,
-          this::onRequestFinished,
-          timeoutSeconds,
-          uuidHelper
-      );
-      onRequestLoading();
-      requestQueue.add(request);
-    });
+    String sessionKey = sharedPrefs
+        .getString(Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY, null);
+    CustomJsonObjectRequest request = new CustomJsonObjectRequest(
+        Request.Method.POST,
+        url,
+        apiKey,
+        sessionKey,
+        json,
+        onResponse::onResponse,
+        onError::onError,
+        this::onRequestFinished,
+        timeoutSeconds,
+        uuidHelper
+    );
+    onRequestLoading();
+    requestQueue.add(request);
   }
 
   public void postWithArray(
@@ -332,52 +313,32 @@ public class DownloadHelper {
       OnJSONArrayResponseListener onResponse,
       OnErrorListener onError
   ) {
-    validateHassIngressSessionIfNecessary(sessionKey -> {
-      CustomJsonArrayRequest request = new CustomJsonArrayRequest(
-          Request.Method.POST,
-          url,
-          apiKey,
-          sessionKey,
-          json,
-          onResponse::onResponse,
-          onError::onError,
-          this::onRequestFinished,
-          timeoutSeconds,
-          uuidHelper
-      );
-      onRequestLoading();
-      requestQueue.add(request);
-    });
+    String sessionKey = sharedPrefs
+        .getString(Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY, null);
+    CustomJsonArrayRequest request = new CustomJsonArrayRequest(
+        Request.Method.POST,
+        url,
+        apiKey,
+        sessionKey,
+        json,
+        onResponse::onResponse,
+        onError::onError,
+        this::onRequestFinished,
+        timeoutSeconds,
+        uuidHelper
+    );
+    onRequestLoading();
+    requestQueue.add(request);
   }
 
   public void post(String url, OnStringResponseListener onResponse, OnErrorListener onError) {
-    validateHassIngressSessionIfNecessary(sessionKey -> {
-      CustomStringRequest request = new CustomStringRequest(
-          Request.Method.POST,
-          url,
-          apiKey,
-          sessionKey,
-          onResponse::onResponse,
-          onError::onError,
-          this::onRequestFinished,
-          timeoutSeconds,
-          uuidHelper
-      );
-      onRequestLoading();
-      requestQueue.add(request);
-    });
-  }
-
-  public void postHassIngress(
-      String url,
-      JSONObject json,
-      OnJSONResponseListener onResponse,
-      OnErrorListener onError
-  ) {
-    CustomJsonObjectRequest request = new CustomJsonObjectRequest(
+    String sessionKey = sharedPrefs
+        .getString(Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY, null);
+    CustomStringRequest request = new CustomStringRequest(
+        Request.Method.POST,
         url,
-        hassLongLivedAccessToken,
-        json,
+        apiKey,
+        sessionKey,
         onResponse::onResponse,
         onError::onError,
         this::onRequestFinished,
@@ -394,22 +355,22 @@ public class DownloadHelper {
       OnJSONResponseListener onResponse,
       OnErrorListener onError
   ) {
-    validateHassIngressSessionIfNecessary(sessionKey -> {
-      CustomJsonObjectRequest request = new CustomJsonObjectRequest(
-          Request.Method.PUT,
-          url,
-          apiKey,
-          sessionKey,
-          json,
-          onResponse::onResponse,
-          onError::onError,
-          this::onRequestFinished,
-          timeoutSeconds,
-          uuidHelper
-      );
-      onRequestLoading();
-      requestQueue.add(request);
-    });
+    String sessionKey = sharedPrefs
+        .getString(Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY, null);
+    CustomJsonObjectRequest request = new CustomJsonObjectRequest(
+        Request.Method.PUT,
+        url,
+        apiKey,
+        sessionKey,
+        json,
+        onResponse::onResponse,
+        onError::onError,
+        this::onRequestFinished,
+        timeoutSeconds,
+        uuidHelper
+    );
+    onRequestLoading();
+    requestQueue.add(request);
   }
 
   public void delete(
@@ -418,21 +379,21 @@ public class DownloadHelper {
       OnStringResponseListener onResponse,
       OnErrorListener onError
   ) {
-    validateHassIngressSessionIfNecessary(sessionKey -> {
-      CustomStringRequest request = new CustomStringRequest(
-          Request.Method.DELETE,
-          url,
-          apiKey,
-          sessionKey,
-          onResponse::onResponse,
-          onError::onError,
-          this::onRequestFinished,
-          timeoutSeconds,
-          tag
-      );
-      onRequestLoading();
-      requestQueue.add(request);
-    });
+    String sessionKey = sharedPrefs
+        .getString(Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY, null);
+    CustomStringRequest request = new CustomStringRequest(
+        Request.Method.DELETE,
+        url,
+        apiKey,
+        sessionKey,
+        onResponse::onResponse,
+        onError::onError,
+        this::onRequestFinished,
+        timeoutSeconds,
+        tag
+    );
+    onRequestLoading();
+    requestQueue.add(request);
   }
 
   public void delete(
@@ -2933,118 +2894,6 @@ public class DownloadHelper {
 
   public QueueItem getStringData(String url, OnStringResponseListener onResponseListener) {
     return getStringData(url, onResponseListener, null);
-  }
-
-  public void checkHassLongLivedToken(OnStringResponseListener onResponseListener) {
-    postHassIngress(
-        hassServerUrl + "/api/hassio/ingress/session",
-        null,
-        response -> {
-          try {
-            boolean isOk = response.get("result").equals("ok");
-            onResponseListener.onResponse(isOk ? (String) response.get("result") : null);
-          } catch (JSONException e) {
-            Log.e(tag,
-                "checkHassLongLivedToken (/api/hassio/ingress/session): JSONException:");
-            e.printStackTrace();
-            onResponseListener.onResponse(null);
-          }
-        },
-        error -> {
-          Log.e(tag, "checkHassLongLivedToken (/api/hassio/ingress/session): error: " + error);
-          onResponseListener.onResponse(null);
-        }
-    );
-  }
-
-  public void validateHassIngressSessionIfNecessary(OnStringResponseListener onFinishedListener) {
-    validateHassIngressSessionIfNecessary(onFinishedListener, onFinishedListener);
-  }
-
-  public void validateHassIngressSessionIfNecessary(
-      OnStringResponseListener onSuccessListener,
-      OnStringResponseListener onErrorListener
-  ) {
-    if (hassServerUrl == null || hassServerUrl.isEmpty()) {
-      onSuccessListener.onResponse(null);
-      return;
-    }
-
-    String sessionKey = sharedPrefs
-        .getString(Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY, null);
-    String sessionKeyTimeStr = sharedPrefs
-        .getString(Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY_TIME, null);
-
-    if (sessionKey != null && dateUtil.isTimeLessThanOneMinuteAway(sessionKeyTimeStr)) {
-      onSuccessListener.onResponse(sessionKey);
-      return;
-    }
-
-    homeAssistantSessionAuth(sessionKey, onSuccessListener, onErrorListener);
-  }
-
-  private void homeAssistantSessionAuth(
-      String sessionOld,
-      OnStringResponseListener onSuccessListener,
-      OnStringResponseListener onErrorListener
-  ) {
-    String hassUrlExtension;
-    JSONObject jsonObject = null;
-    if (sessionOld != null) {
-      hassUrlExtension = "/api/hassio/ingress/validate_session";
-      try {
-        jsonObject = new JSONObject();
-        jsonObject.put("session", sessionOld);
-      } catch (JSONException e) {
-        Log.e(tag, "homeAssistantSessionAuth: JSONException1:");
-        e.printStackTrace();
-      }
-    } else {
-      hassUrlExtension = "/api/hassio/ingress/session";
-    }
-
-    postHassIngress(
-        hassServerUrl + hassUrlExtension,
-        jsonObject,
-        response -> {
-          try {
-            boolean isOk = response.get("result").equals("ok");
-            JSONObject data = isOk && response.has("data") ? response.getJSONObject("data") : null;
-            String session = data != null && data.has("session") ? data.getString("session") : null;
-            if (session != null) {
-              sharedPrefs.edit().putString(
-                  Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY,
-                  session
-              ).putString(
-                  Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY_TIME,
-                  dateUtil.getCurrentDateWithTimeStr()
-              ).apply();
-              onSuccessListener.onResponse(session);
-            } else if (isOk && sessionOld != null) {
-              sharedPrefs.edit().putString(
-                  Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY_TIME,
-                  dateUtil.getCurrentDateWithTimeStr()
-              ).apply();
-              onSuccessListener.onResponse(sessionOld);
-            } else {
-              Log.e(tag, "homeAssistantSessionAuth: " + hassUrlExtension + ": bad response: " + response);
-              onErrorListener.onResponse(null);
-            }
-          } catch (JSONException e) {
-            Log.e(tag, "homeAssistantSessionAuth: " + hassUrlExtension + ": JSONException2: ");
-            e.printStackTrace();
-            onErrorListener.onResponse(null);
-          }
-        },
-        error -> {
-          Log.e(tag, "homeAssistantSessionAuth: " + hassUrlExtension + ": error: " + error);
-          if (sessionOld != null && error instanceof AuthFailureError) {
-            homeAssistantSessionAuth(null, onSuccessListener, onErrorListener);
-            return;
-          }
-          onErrorListener.onResponse(null);
-        }
-    );
   }
 
   public NetworkQueue newQueue(
