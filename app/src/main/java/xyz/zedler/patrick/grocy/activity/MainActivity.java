@@ -90,8 +90,11 @@ import com.google.android.material.color.HarmonizedColorsOptions;
 import com.google.android.material.elevation.SurfaceColors;
 import com.google.android.material.math.MathUtils;
 import com.google.android.material.snackbar.Snackbar;
+import dev.gustavoavila.websocketclient.WebSocketClient;
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 import java.lang.reflect.Field;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
@@ -101,9 +104,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
 import org.conscrypt.Conscrypt;
+import org.json.JSONException;
+import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.BuildConfig;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
@@ -144,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
   private SharedPreferences sharedPrefs;
   private FragmentManager fragmentManager;
   private GrocyApi grocyApi;
+  private WebSocketClient webSocketClient;
   private MainRepository repository;
   private ClickUtil clickUtil;
   private NetUtil netUtil;
@@ -153,6 +161,9 @@ public class MainActivity extends AppCompatActivity {
   private BottomScrollBehavior scrollBehavior;
   private SystemBarBehavior systemBarBehavior;
   private HapticUtil hapticUtil;
+  private Timer hassSessionTimer;
+  private TimerTask hassSessionTimerTask;
+  private int hassWebsocketIdCounter;
   private boolean runAsSuperClass;
   private boolean debug;
   private boolean wasKeyboardOpened;
@@ -311,6 +322,8 @@ public class MainActivity extends AppCompatActivity {
     if (useTor && !OrbotHelper.get(this).init()) {
       OrbotHelper.get(this).installOrbot(this);
     }
+
+    createWebSocketClient();
 
     // API
 
@@ -529,7 +542,16 @@ public class MainActivity extends AppCompatActivity {
     if (networkReceiver != null) {
       unregisterReceiver(networkReceiver);
     }
+    if (webSocketClient != null) webSocketClient.close();
     super.onDestroy();
+  }
+
+  @Override
+  protected void onPause() {
+    if (hassSessionTimer != null) {
+      hassSessionTimer.cancel();
+    }
+    super.onPause();
   }
 
   @Override
@@ -538,6 +560,8 @@ public class MainActivity extends AppCompatActivity {
     if (runAsSuperClass) {
       return;
     }
+    createWebSocketClient();
+    resetHassSessionTimer();
     if (!sharedPrefs.contains(Constants.SETTINGS.BEHAVIOR.HAPTIC)) {
       hapticUtil.setEnabled(HapticUtil.areSystemHapticsTurnedOn(this));
     }
@@ -1186,6 +1210,149 @@ public class MainActivity extends AppCompatActivity {
 
   public void updateGrocyApi() {
     grocyApi = new GrocyApi(getApplication());
+  }
+
+  public void createWebSocketClient() {
+    String hassLongLivedAccessToken = sharedPrefs
+        .getString(PREF.HOME_ASSISTANT_LONG_LIVED_TOKEN, null);
+    String hassServerUrl = sharedPrefs.getString(PREF.HOME_ASSISTANT_SERVER_URL, null);
+    if (hassLongLivedAccessToken == null || hassLongLivedAccessToken.isEmpty()
+        || hassServerUrl == null || hassServerUrl.isEmpty()) {
+      return;
+    }
+    if (webSocketClient != null) webSocketClient.close();
+
+    URI uri;
+    try {
+      String hassWebSocketUrl = hassServerUrl
+          .replaceFirst("https", "wss")
+          .replaceFirst("http", "ws");
+      uri = new URI(hassWebSocketUrl + "/api/websocket");
+      uri = new URI("ws://192.168.178.95:8123/api/websocket");
+    }
+    catch (URISyntaxException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    hassWebsocketIdCounter = 1;
+    webSocketClient = new WebSocketClient(uri) {
+      @Override
+      public void onOpen() {}
+      @Override
+      public void onPingReceived(byte[] data) {}
+      @Override
+      public void onPongReceived(byte[] data) {}
+      @Override
+      public void onBinaryReceived(byte[] data) {}
+
+      @Override
+      public void onTextReceived(String message) {
+        if (message.contains("auth_required")) {
+          String hassLongLivedAccessToken = sharedPrefs
+              .getString(PREF.HOME_ASSISTANT_LONG_LIVED_TOKEN, null);
+          if (hassLongLivedAccessToken == null || hassLongLivedAccessToken.isEmpty()) return;
+          try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("type", "auth");
+            jsonObject.put("access_token", hassLongLivedAccessToken);
+            webSocketClient.send(jsonObject.toString());
+          } catch (JSONException e) {
+            Log.e(TAG, "createWebSocketClient: onTextReceived: " + e);
+          }
+        } else if (message.contains("auth_ok")) {
+          try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("type", "supervisor/api");
+            jsonObject.put("endpoint", "/ingress/session");
+            jsonObject.put("method", "post");
+            jsonObject.put("id", hassWebsocketIdCounter);
+            webSocketClient.send(jsonObject.toString());
+            hassWebsocketIdCounter++;
+          } catch (JSONException e) {
+            Log.e(TAG, "createWebSocketClient: onTextReceived: " + e);
+          }
+        } else if (message.contains("result")) {
+          try {
+            JSONObject jsonObject = new JSONObject(message);
+            if (jsonObject.getBoolean("success")) {
+              if (jsonObject.has("result")
+                  && jsonObject.getJSONObject("result").has("session")) {
+                sharedPrefs.edit().putString(
+                    PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY,
+                    jsonObject.getJSONObject("result").getString("session")
+                ).apply();
+              } else {
+                if (debug) Log.i(TAG, "onTextReceived: " + message);
+              }
+            } else {
+              Log.e(TAG, "createWebSocketClient: onTextReceived: " + message);
+            }
+
+
+          } catch (JSONException e) {
+            Log.e(TAG, "createWebSocketClient: onTextReceived: " + e);
+          }
+        } else {
+          if (debug) Log.i(TAG, "createWebSocketClient: onTextReceived: " + message);
+        }
+      }
+
+      @Override
+      public void onException(Exception e) {
+        Log.e(TAG, "createWebSocketClient: onException: " + e.getMessage());
+      }
+
+      @Override
+      public void onCloseReceived() {
+        if (debug) Log.i(TAG, "createWebSocketClient: onCloseReceived");
+        new Handler().postDelayed(() -> webSocketClient.connect(), 5000);
+      }
+    };
+
+    webSocketClient.setConnectTimeout(10000);
+    webSocketClient.setReadTimeout(60000);
+    webSocketClient.enableAutomaticReconnection(5000);
+    webSocketClient.connect();
+  }
+
+  public void resetHassSessionTimer() {
+    String hassLongLivedAccessToken = sharedPrefs
+        .getString(PREF.HOME_ASSISTANT_LONG_LIVED_TOKEN, null);
+    if (hassLongLivedAccessToken == null || hassLongLivedAccessToken.isEmpty()) {
+      return;
+    }
+    hassSessionTimer = new Timer();
+    if (hassSessionTimerTask != null) {
+      hassSessionTimerTask.cancel();
+    }
+    hassSessionTimerTask = new TimerTask() {
+      @Override
+      public void run() {
+        if (debug) {
+          Log.i(TAG, "Home Assistant session: validate session token");
+        }
+        if (webSocketClient != null) {
+          String sessionToken = sharedPrefs
+              .getString(PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY, null);
+          try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("type", "supervisor/api");
+            jsonObject.put("endpoint", "/ingress/validate_session");
+            jsonObject.put("method", "post");
+            JSONObject innerJsonObject = new JSONObject();
+            innerJsonObject.put("session", sessionToken);
+            jsonObject.put("data", innerJsonObject);
+            jsonObject.put("id", hassWebsocketIdCounter);
+            webSocketClient.send(jsonObject.toString());
+            hassWebsocketIdCounter++;
+          } catch (JSONException e) {
+            Log.e(TAG, "createWebSocketClient: onTextReceived: " + e);
+          }
+        }
+      }
+    };
+    hassSessionTimer.schedule(hassSessionTimerTask, 60 * 1000L, 60 * 1000L);
   }
 
   @NonNull

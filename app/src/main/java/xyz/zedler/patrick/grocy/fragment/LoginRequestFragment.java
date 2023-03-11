@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,7 +86,9 @@ public class LoginRequestFragment extends BaseFragment {
         activity.getScrollBehavior().setCanBottomAppBarBeVisible(true);
 
         activity.updateGrocyApi();
-        navigateToStartDestination();
+        activity.createWebSocketClient();
+        activity.resetHassSessionTimer();
+        new Handler().postDelayed(this::navigateToStartDestination, 500);
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
