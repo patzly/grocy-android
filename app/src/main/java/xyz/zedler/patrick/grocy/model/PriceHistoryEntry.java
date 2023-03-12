@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.model;
 
 import androidx.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class PriceHistoryEntry {
 
@@ -41,7 +42,7 @@ public class PriceHistoryEntry {
     if (price == null || price.isEmpty()) {
       return 0;
     } else {
-      return Double.parseDouble(price);
+      return NumUtil.toDouble(price);
     }
   }
 

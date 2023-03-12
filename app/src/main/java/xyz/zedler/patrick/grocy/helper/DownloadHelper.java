@@ -85,6 +85,7 @@ import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.model.VolatileItem;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.CustomJsonArrayRequest;
 import xyz.zedler.patrick.grocy.web.CustomJsonObjectRequest;
@@ -3207,7 +3208,7 @@ public class DownloadHelper {
     @Override
     public Double deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
       try {
-        return Double.parseDouble(element.getAsString().replace(',', '.'));
+        return NumUtil.toDouble(element.getAsString());
       } catch (NumberFormatException e) {
         throw new JsonParseException(e);
       }

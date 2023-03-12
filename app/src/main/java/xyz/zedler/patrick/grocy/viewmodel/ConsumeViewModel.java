@@ -270,10 +270,10 @@ public class ConsumeViewModel extends BaseViewModel {
           );
         }
         if (NumUtil.isStringDouble(amount)) {
-          amount = NumUtil.trimAmount(Double.parseDouble(amount), maxDecimalPlacesAmount);
+          amount = NumUtil.trimAmount(NumUtil.toDouble(amount), maxDecimalPlacesAmount);
         }
         if (NumUtil.isStringDouble(amount)
-            && Double.parseDouble(amount) > 0) {
+            && NumUtil.toDouble(amount) > 0) {
           formData.getAmountLive().setValue(amount);
         }
       } else if (!isTareWeightEnabled) {

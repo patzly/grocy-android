@@ -296,7 +296,7 @@ public class FormDataConsume {
       return null;
     }
     HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-    double amount = Double.parseDouble(amountLive.getValue());
+    double amount = NumUtil.toDouble(amountLive.getValue());
     Object currentFactor = hashMap.get(current);
     if (currentFactor == null) {
       return null;
@@ -323,7 +323,7 @@ public class FormDataConsume {
     return application.getString(
         R.string.subtitle_amount_compare,
         amountStockLive.getValue(),
-        pluralUtil.getQuantityUnitPlural(stock, Double.parseDouble(amountStockLive.getValue()))
+        pluralUtil.getQuantityUnitPlural(stock, NumUtil.toDouble(amountStockLive.getValue()))
     );
   }
 
@@ -337,7 +337,7 @@ public class FormDataConsume {
             .getProduct().getTareWeightDouble() + 1, maxDecimalPlacesAmount));
       }
     } else {
-      double amountNew = Double.parseDouble(amountLive.getValue()) + 1;
+      double amountNew = NumUtil.toDouble(amountLive.getValue()) + 1;
       amountLive.setValue(NumUtil.trimAmount(amountNew, maxDecimalPlacesAmount));
     }
   }
@@ -345,7 +345,7 @@ public class FormDataConsume {
   public void lessAmount(ImageView view) {
     ViewUtil.startIcon(view);
     if (amountLive.getValue() != null && !amountLive.getValue().isEmpty()) {
-      double amountCurrent = Double.parseDouble(amountLive.getValue());
+      double amountCurrent = NumUtil.toDouble(amountLive.getValue());
       Double amountNew = null;
       if (amountCurrent > 1) {
         amountNew = amountCurrent - 1;
@@ -476,13 +476,13 @@ public class FormDataConsume {
       return false;
     }
     // below
-    if (!isTareWeightEnabled() && Double.parseDouble(amountLive.getValue()) <= 0) {
+    if (!isTareWeightEnabled() && NumUtil.toDouble(amountLive.getValue()) <= 0) {
       amountErrorLive.setValue(application.getString(
           R.string.error_bounds_higher, String.valueOf(0)
       ));
       return false;
     } else if (isTareWeightEnabled() && productDetailsLive.getValue() != null
-        && Double.parseDouble(amountLive.getValue())
+        && NumUtil.toDouble(amountLive.getValue())
         < productDetailsLive.getValue().getProduct().getTareWeightDouble()
     ) {
       amountErrorLive.setValue(application.getString(
@@ -525,13 +525,13 @@ public class FormDataConsume {
       maxAmount = stockAmount * currentFactor;
     }
 
-    if (!isTareWeightEnabled() && Double.parseDouble(amountLive.getValue()) > maxAmount) {
+    if (!isTareWeightEnabled() && NumUtil.toDouble(amountLive.getValue()) > maxAmount) {
       amountErrorLive.setValue(application.getString(
           R.string.error_bounds_max, NumUtil.trimAmount(maxAmount, maxDecimalPlacesAmount)
       ));
       return false;
     } else if (isTareWeightEnabled() && productDetailsLive.getValue() != null
-        && Double.parseDouble(amountLive.getValue())
+        && NumUtil.toDouble(amountLive.getValue())
         > productDetailsLive.getValue().getProduct().getTareWeightDouble() + stockAmount
     ) {
       amountErrorLive.setValue(application.getString(
@@ -556,10 +556,10 @@ public class FormDataConsume {
     ProductDetails productDetails = productDetailsLive.getValue();
     assert productDetails != null && amountStockLive.getValue() != null
         && openLive.getValue() != null;
-    double amountRemoved = Double.parseDouble(amountStockLive.getValue());
+    double amountRemoved = NumUtil.toDouble(amountStockLive.getValue());
     if (isTareWeightEnabled()) {
       amountRemoved = productDetails.getStockAmount();
-      amountRemoved -= Double.parseDouble(amountStockLive.getValue());
+      amountRemoved -= NumUtil.toDouble(amountStockLive.getValue());
       amountRemoved += productDetails.getProduct().getTareWeightDouble();
     }
     QuantityUnit qU = quantityUnitLive.getValue();

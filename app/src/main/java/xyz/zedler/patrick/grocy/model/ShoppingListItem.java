@@ -170,7 +170,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
   }
 
   public double getAmountDouble() {
-    return NumUtil.isStringDouble(amount) ? Double.parseDouble(amount) : 0;
+    return NumUtil.isStringDouble(amount) ? NumUtil.toDouble(amount) : 0;
   }
 
   public void setAmount(String amount) {

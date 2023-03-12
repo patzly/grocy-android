@@ -171,25 +171,25 @@ public class FormDataMasterProductCatAmount {
     String number = NumUtil.isStringDouble(input) ? input : String.valueOf(0);
     int type = argsBundle.getInt(AMOUNT_ARG);
     if (type == MIN_AMOUNT) {
-      if (Double.parseDouble(number) < 0) {
+      if (NumUtil.toDouble(number) < 0) {
         minAmountLive.setValue(String.valueOf(0));
       } else {
         minAmountLive.setValue(number);
       }
     } else if (type == QUICK_CONSUME_AMOUNT) {
-      if (Double.parseDouble(number) <= 0) {
+      if (NumUtil.toDouble(number) <= 0) {
         quickConsumeAmountLive.setValue(String.valueOf(1));
       } else {
         quickConsumeAmountLive.setValue(number);
       }
     } else if (type == FACTOR_AMOUNT) {
-      if (Double.parseDouble(number) <= 0) {
+      if (NumUtil.toDouble(number) <= 0) {
         factorPurchaseToStockLive.setValue(String.valueOf(1));
       } else {
         factorPurchaseToStockLive.setValue(number);
       }
     } else { // TARE_WEIGHT
-      if (Double.parseDouble(number) < 0) {
+      if (NumUtil.toDouble(number) < 0) {
         tareWeightLive.setValue(String.valueOf(0));
       } else {
         tareWeightLive.setValue(number);
@@ -210,7 +210,7 @@ public class FormDataMasterProductCatAmount {
     }
     double number = 0;
     if (NumUtil.isStringDouble(numberString)) {
-      number = Double.parseDouble(numberString);
+      number = NumUtil.toDouble(numberString);
     }
     return number;
   }
@@ -231,7 +231,7 @@ public class FormDataMasterProductCatAmount {
     boolean valid = !product.getEnableTareWeightHandlingBoolean()
         || product.getEnableTareWeightHandlingBoolean()
         && tareWeight != null && !tareWeight.isEmpty()
-        && NumUtil.isStringDouble(tareWeight) && Double.parseDouble(tareWeight) >= 0;
+        && NumUtil.isStringDouble(tareWeight) && NumUtil.toDouble(tareWeight) >= 0;
     return !valid;
   }
 

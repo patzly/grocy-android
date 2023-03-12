@@ -381,7 +381,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
           && NumUtil.isStringDouble(productDetails.getStockValue())) {
         binding.itemValue.setText(
             activity.getString(R.string.property_stock_value),
-            NumUtil.trimPrice(Double.parseDouble(productDetails.getStockValue()), decimalPlacesPriceDisplay)
+            NumUtil.trimPrice(NumUtil.toDouble(productDetails.getStockValue()), decimalPlacesPriceDisplay)
                 + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, "")
         );
       }
@@ -420,14 +420,14 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
             activity.getString(R.string.property_last_price),
             activity.getString(
                 R.string.property_price_unit_insert,
-                NumUtil.trimPrice(Double.parseDouble(lastPrice)
+                NumUtil.trimPrice(NumUtil.toDouble(lastPrice)
                     * productDetails.getProduct().getQuFactorPurchaseToStockDouble(), decimalPlacesPriceDisplay)
                     + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
                 quantityUnitPurchase.getName()
             ),
             quantityUnitsAreNotEqual ? activity.getString(
                 R.string.property_price_unit_insert,
-                NumUtil.trimPrice(Double.parseDouble(lastPrice), decimalPlacesPriceDisplay)
+                NumUtil.trimPrice(NumUtil.toDouble(lastPrice), decimalPlacesPriceDisplay)
                     + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
                 quantityUnitStock.getName()
             ) : null
@@ -442,14 +442,14 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
             activity.getString(R.string.property_price_average),
             activity.getString(
                 R.string.property_price_unit_insert,
-                NumUtil.trimPrice(Double.parseDouble(averagePrice)
+                NumUtil.trimPrice(NumUtil.toDouble(averagePrice)
                     * productDetails.getProduct().getQuFactorPurchaseToStockDouble(), decimalPlacesPriceDisplay)
                     + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
                 quantityUnitPurchase.getName()
             ),
             quantityUnitsAreNotEqual ? activity.getString(
                 R.string.property_price_unit_insert,
-                NumUtil.trimPrice(Double.parseDouble(averagePrice), decimalPlacesPriceDisplay)
+                NumUtil.trimPrice(NumUtil.toDouble(averagePrice), decimalPlacesPriceDisplay)
                     + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
                 quantityUnitStock.getName()
             ) : null

@@ -742,11 +742,11 @@ public class SettingsViewModel extends BaseViewModel {
         SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT
     );
     if (NumUtil.isStringDouble(amount)) {
-      bundle.putDouble(ARGUMENT.NUMBER, Double.parseDouble(amount));
+      bundle.putDouble(ARGUMENT.NUMBER, NumUtil.toDouble(amount));
     } else {
       bundle.putDouble(
           ARGUMENT.NUMBER,
-          Double.parseDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT)
+          NumUtil.toDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT)
       );
     }
     bundle.putString(ARGUMENT.TYPE, STOCK.DEFAULT_PURCHASE_AMOUNT);
@@ -761,9 +761,9 @@ public class SettingsViewModel extends BaseViewModel {
     );
     double amountDouble;
     if (NumUtil.isStringDouble(amount)) {
-      amountDouble = Double.parseDouble(amount);
+      amountDouble = NumUtil.toDouble(amount);
     } else {
-      amountDouble = Double.parseDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT);
+      amountDouble = NumUtil.toDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT);
     }
     return NumUtil.trimAmount(amountDouble, allowedDecimalPlacesAmount);
   }
@@ -775,7 +775,7 @@ public class SettingsViewModel extends BaseViewModel {
   public void setDefaultPurchaseAmount(String text) {
     double amount = 0;
     if (NumUtil.isStringDouble(text)) {
-      amount = Double.parseDouble(text);
+      amount = NumUtil.toDouble(text);
       if (amount < 0) {
         amount = 0;
       }
@@ -805,11 +805,11 @@ public class SettingsViewModel extends BaseViewModel {
         SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT
     );
     if (NumUtil.isStringDouble(amount)) {
-      bundle.putDouble(ARGUMENT.NUMBER, Double.parseDouble(amount));
+      bundle.putDouble(ARGUMENT.NUMBER, NumUtil.toDouble(amount));
     } else {
       bundle.putDouble(
           ARGUMENT.NUMBER,
-          Double.parseDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT)
+          NumUtil.toDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT)
       );
     }
     bundle.putString(ARGUMENT.TYPE, STOCK.DEFAULT_CONSUME_AMOUNT);
@@ -824,9 +824,9 @@ public class SettingsViewModel extends BaseViewModel {
     );
     double amountDouble;
     if (NumUtil.isStringDouble(amount)) {
-      amountDouble = Double.parseDouble(amount);
+      amountDouble = NumUtil.toDouble(amount);
     } else {
-      amountDouble = Double.parseDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT);
+      amountDouble = NumUtil.toDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT);
     }
     return NumUtil.trimAmount(amountDouble, allowedDecimalPlacesAmount);
   }
@@ -838,7 +838,7 @@ public class SettingsViewModel extends BaseViewModel {
   public void setDefaultConsumeAmount(String text) {
     double amount = 0;
     if (NumUtil.isStringDouble(text)) {
-      amount = Double.parseDouble(text);
+      amount = NumUtil.toDouble(text);
       if (amount < 0) {
         amount = 0;
       }

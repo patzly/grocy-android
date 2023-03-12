@@ -165,19 +165,19 @@ public class ProductDetails implements Parcelable {
   }
 
   public double getStockAmount() {
-    return NumUtil.isStringDouble(stockAmount) ? Double.parseDouble(stockAmount) : 0;
+    return NumUtil.isStringDouble(stockAmount) ? NumUtil.toDouble(stockAmount) : 0;
   }
 
   public double getStockAmountOpened() {
-    return NumUtil.isStringDouble(stockAmountOpened) ? Double.parseDouble(stockAmountOpened) : 0;
+    return NumUtil.isStringDouble(stockAmountOpened) ? NumUtil.toDouble(stockAmountOpened) : 0;
   }
 
   public double getStockAmountAggregated() {
-    return NumUtil.isStringDouble(stockAmountAggregated) ? Double.parseDouble(stockAmountAggregated) : 0;
+    return NumUtil.isStringDouble(stockAmountAggregated) ? NumUtil.toDouble(stockAmountAggregated) : 0;
   }
 
   public double getStockAmountOpenedAggregated() {
-    return NumUtil.isStringDouble(stockAmountOpenedAggregated) ? Double.parseDouble(stockAmountOpenedAggregated) : 0;
+    return NumUtil.isStringDouble(stockAmountOpenedAggregated) ? NumUtil.toDouble(stockAmountOpenedAggregated) : 0;
   }
 
   public QuantityUnit getQuantityUnitPurchase() {
@@ -208,7 +208,7 @@ public class ProductDetails implements Parcelable {
     if (spoilRatePercent == null || spoilRatePercent.isEmpty()) {
       return 0;
     } else {
-      return Double.parseDouble(spoilRatePercent);
+      return NumUtil.toDouble(spoilRatePercent);
     }
   }
 

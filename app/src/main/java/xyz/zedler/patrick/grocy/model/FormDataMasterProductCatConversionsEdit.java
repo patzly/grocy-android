@@ -107,7 +107,7 @@ public class FormDataMasterProductCatConversionsEdit {
     if (factorLive.getValue() == null || factorLive.getValue().isEmpty()) {
       factorLive.setValue(String.valueOf(1));
     } else {
-      double factorNew = Double.parseDouble(factorLive.getValue()) + 1;
+      double factorNew = NumUtil.toDouble(factorLive.getValue()) + 1;
       factorLive.setValue(NumUtil.trimAmount(factorNew, maxDecimalPlacesAmount));
     }
   }
@@ -115,7 +115,7 @@ public class FormDataMasterProductCatConversionsEdit {
   public void lessFactor(ImageView view) {
     ViewUtil.startIcon(view);
     if (factorLive.getValue() != null && !factorLive.getValue().isEmpty()) {
-      double factorNew = Double.parseDouble(factorLive.getValue()) - 1;
+      double factorNew = NumUtil.toDouble(factorLive.getValue()) - 1;
       if (factorNew >= 1) {
         factorLive.setValue(NumUtil.trimAmount(factorNew, maxDecimalPlacesAmount));
       }
@@ -158,7 +158,7 @@ public class FormDataMasterProductCatConversionsEdit {
     return application.getString(
         R.string.subtitle_factor_means,
         application.getString(R.string.subtitle_amount, "1", pluralUtil.getQuantityUnitPlural(quantityUnitFromLive.getValue(), 1)),
-        application.getString(R.string.subtitle_amount, NumUtil.trimAmount(Double.parseDouble(factorLive.getValue()), maxDecimalPlacesAmount), pluralUtil.getQuantityUnitPlural(quantityUnitToLive.getValue(), Double.parseDouble(factorLive.getValue())))
+        application.getString(R.string.subtitle_amount, NumUtil.trimAmount(NumUtil.toDouble(factorLive.getValue()), maxDecimalPlacesAmount), pluralUtil.getQuantityUnitPlural(quantityUnitToLive.getValue(), NumUtil.toDouble(factorLive.getValue())))
     );
   }
 
@@ -179,7 +179,7 @@ public class FormDataMasterProductCatConversionsEdit {
       factorErrorLive.setValue(getString(R.string.error_invalid_factor));
       return false;
     }
-    if (Double.parseDouble(factorLive.getValue()) <= 0) {
+    if (NumUtil.toDouble(factorLive.getValue()) <= 0) {
       factorErrorLive.setValue(application.getString(
           R.string.error_bounds_higher, String.valueOf(0)
       ));
@@ -219,7 +219,7 @@ public class FormDataMasterProductCatConversionsEdit {
     conversion.setProductId(String.valueOf(product.getId()));
     conversion.setFromQuId(quantityUnitFromLive.getValue().getId());
     conversion.setToQuId(quantityUnitToLive.getValue().getId());
-    conversion.setFactor(Double.parseDouble(factorLive.getValue()));
+    conversion.setFactor(NumUtil.toDouble(factorLive.getValue()));
     return conversion;
   }
 

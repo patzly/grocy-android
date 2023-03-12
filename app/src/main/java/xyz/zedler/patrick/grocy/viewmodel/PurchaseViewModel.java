@@ -361,10 +361,10 @@ public class PurchaseViewModel extends BaseViewModel {
             Constants.SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT
         );
         if (NumUtil.isStringDouble(defaultAmount)) {
-          defaultAmount = NumUtil.trimAmount(Double.parseDouble(defaultAmount), maxDecimalPlacesAmount);
+          defaultAmount = NumUtil.trimAmount(NumUtil.toDouble(defaultAmount), maxDecimalPlacesAmount);
         }
         if (NumUtil.isStringDouble(defaultAmount)
-            && Double.parseDouble(defaultAmount) > 0) {
+            && NumUtil.toDouble(defaultAmount) > 0) {
           formData.getAmountLive().setValue(defaultAmount);
         }
       } else if (!isTareWeightEnabled) {
@@ -399,7 +399,7 @@ public class PurchaseViewModel extends BaseViewModel {
         } else {
           lastPrice = productDetails.getLastPrice();
           if (lastPrice != null && !lastPrice.isEmpty()) {
-            lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice) / initialUnitFactor, decimalPlacesPriceInput);
+            lastPrice = NumUtil.trimPrice(NumUtil.toDouble(lastPrice) / initialUnitFactor, decimalPlacesPriceInput);
           }
         }
         formData.getPriceLive().setValue(lastPrice);
@@ -485,7 +485,7 @@ public class PurchaseViewModel extends BaseViewModel {
         lastPrice = barcode.getLastPrice();
       }
       if (lastPrice != null && !lastPrice.isEmpty()) {
-        lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice), decimalPlacesPriceInput);
+        lastPrice = NumUtil.trimPrice(NumUtil.toDouble(lastPrice), decimalPlacesPriceInput);
       }
       formData.getPriceLive().setValue(lastPrice);
     }
@@ -799,7 +799,7 @@ public class PurchaseViewModel extends BaseViewModel {
     repository.insertStoredPurchase(productPurchase, id -> {
       SnackbarMessage snackbarMessage = new SnackbarMessage(
           formData.getTransactionSuccessMsg(NumUtil.isStringDouble(productPurchase.getAmount())
-              ? Double.parseDouble(productPurchase.getAmount()) : 0)
+              ? NumUtil.toDouble(productPurchase.getAmount()) : 0)
       );
       snackbarMessage.setAction(
           getString(R.string.action_undo),

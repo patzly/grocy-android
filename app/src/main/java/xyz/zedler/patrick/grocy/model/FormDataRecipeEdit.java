@@ -224,7 +224,7 @@ public class FormDataRecipeEdit {
       return false;
     }
 
-    double baseServings = Double.parseDouble(baseServingsLive.getValue());
+    double baseServings = NumUtil.toDouble(baseServingsLive.getValue());
     if (baseServings <= 0) {
       baseServingsErrorLive.setValue(R.string.error_invalid_base_servings);
       return false;
@@ -238,7 +238,7 @@ public class FormDataRecipeEdit {
     if (baseServingsLive.getValue() == null || baseServingsLive.getValue().isEmpty()) {
       baseServingsLive.setValue(NumUtil.trimAmount(1.0, maxDecimalPlacesAmount));
     } else {
-      double currentValue = Double.parseDouble(baseServingsLive.getValue());
+      double currentValue = NumUtil.toDouble(baseServingsLive.getValue());
       baseServingsLive.setValue(NumUtil.trimAmount(currentValue + 1, maxDecimalPlacesAmount));
     }
   }
@@ -248,7 +248,7 @@ public class FormDataRecipeEdit {
     if (baseServingsLive.getValue() == null || baseServingsLive.getValue().isEmpty()) {
       baseServingsLive.setValue(NumUtil.trimAmount(1.0, maxDecimalPlacesAmount));
     } else {
-      double currentValue = Double.parseDouble(baseServingsLive.getValue());
+      double currentValue = NumUtil.toDouble(baseServingsLive.getValue());
 
       if (currentValue == 1)
         return;
@@ -270,7 +270,7 @@ public class FormDataRecipeEdit {
     if (baseServingsLive.getValue() == null || baseServingsLive.getValue().isEmpty()) {
       recipe.setBaseServings(1.0);
     } else {
-      recipe.setBaseServings(Double.parseDouble(baseServingsLive.getValue()));
+      recipe.setBaseServings(NumUtil.toDouble(baseServingsLive.getValue()));
     }
 
     recipe.setNotCheckShoppingList(notCheckShoppingListLive.getValue() != null ? notCheckShoppingListLive.getValue() : false);

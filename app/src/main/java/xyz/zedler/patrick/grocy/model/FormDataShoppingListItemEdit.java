@@ -192,7 +192,7 @@ public class FormDataShoppingListItemEdit {
     if (amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
       amountLive.setValue(String.valueOf(1));
     } else {
-      double amountNew = Double.parseDouble(amountLive.getValue()) + 1;
+      double amountNew = NumUtil.toDouble(amountLive.getValue()) + 1;
       amountLive.setValue(NumUtil.trimAmount(amountNew, maxDecimalPlacesAmount));
     }
   }
@@ -200,7 +200,7 @@ public class FormDataShoppingListItemEdit {
   public void lessAmount(ImageView view) {
     ViewUtil.startIcon(view);
     if (amountLive.getValue() != null && !amountLive.getValue().isEmpty()) {
-      double amountNew = Double.parseDouble(amountLive.getValue()) - 1;
+      double amountNew = NumUtil.toDouble(amountLive.getValue()) - 1;
       if (amountNew >= 1) {
         amountLive.setValue(NumUtil.trimAmount(amountNew, maxDecimalPlacesAmount));
       }
@@ -252,7 +252,7 @@ public class FormDataShoppingListItemEdit {
 
     if (stock != null && current != null && stock.getId() != current.getId()) {
       HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-      double amount = Double.parseDouble(amountLive.getValue());
+      double amount = NumUtil.toDouble(amountLive.getValue());
       Object currentFactor = hashMap.get(current);
       if (currentFactor == null) {
         amountHelperLive.setValue(null);
@@ -279,7 +279,7 @@ public class FormDataShoppingListItemEdit {
     return application.getString(
         R.string.subtitle_amount_compare,
         amountStockLive.getValue(),
-        pluralUtil.getQuantityUnitPlural(stock, Double.parseDouble(amountStockLive.getValue()))
+        pluralUtil.getQuantityUnitPlural(stock, NumUtil.toDouble(amountStockLive.getValue()))
     );
   }
 
@@ -354,7 +354,7 @@ public class FormDataShoppingListItemEdit {
       ));
       return false;
     }
-    if (Double.parseDouble(amountLive.getValue()) <= 0) {
+    if (NumUtil.toDouble(amountLive.getValue()) <= 0) {
       amountErrorLive.setValue(application.getString(
           R.string.error_bounds_higher, String.valueOf(0)
       ));
@@ -400,7 +400,7 @@ public class FormDataShoppingListItemEdit {
     item.setProductId(product != null ? String.valueOf(product.getId()) : null);
     item.setQuId(unit != null ? String.valueOf(unit.getId()) : null);
     item.setAmountDouble(amountStock != null
-        ? Double.parseDouble(amountStock) : Double.parseDouble(amount), maxDecimalPlacesAmount);
+        ? NumUtil.toDouble(amountStock) : NumUtil.toDouble(amount), maxDecimalPlacesAmount);
     item.setNote(note != null ? note.trim() : null);
     return item;
   }
