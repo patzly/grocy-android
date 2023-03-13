@@ -273,10 +273,10 @@ public class TransferViewModel extends BaseViewModel {
             Constants.SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT
         );
         if (NumUtil.isStringDouble(defaultAmount)) {
-          defaultAmount = NumUtil.trimAmount(Double.parseDouble(defaultAmount), maxDecimalPlacesAmount);
+          defaultAmount = NumUtil.trimAmount(NumUtil.toDouble(defaultAmount), maxDecimalPlacesAmount);
         }
         if (NumUtil.isStringDouble(defaultAmount)
-            && Double.parseDouble(defaultAmount) > 0) {
+            && NumUtil.toDouble(defaultAmount) > 0) {
           formData.getAmountLive().setValue(defaultAmount);
         }
       } else {

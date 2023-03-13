@@ -420,7 +420,7 @@ public class Product extends GroupedListItem implements Parcelable {
 
   public double getQuFactorPurchaseToStockDouble() {
     return NumUtil.isStringDouble(quFactorPurchaseToStock)
-        ? Double.parseDouble(quFactorPurchaseToStock)
+        ? NumUtil.toDouble(quFactorPurchaseToStock)
         : 1;
   }
 
@@ -437,7 +437,7 @@ public class Product extends GroupedListItem implements Parcelable {
   }
 
   public double getMinStockAmountDouble() {
-    return NumUtil.isStringDouble(minStockAmount) ? Double.parseDouble(minStockAmount) : 0;
+    return NumUtil.isStringDouble(minStockAmount) ? NumUtil.toDouble(minStockAmount) : 0;
   }
 
   public void setMinStockAmount(String minStockAmount) {
@@ -518,7 +518,7 @@ public class Product extends GroupedListItem implements Parcelable {
   }
 
   public double getTareWeightDouble() {
-    return NumUtil.isStringDouble(tareWeight) ? Double.parseDouble(tareWeight) : 0;
+    return NumUtil.isStringDouble(tareWeight) ? NumUtil.toDouble(tareWeight) : 0;
   }
 
   public void setTareWeight(String tareWeight) {
@@ -555,7 +555,7 @@ public class Product extends GroupedListItem implements Parcelable {
   }
 
   public double getCaloriesDouble() {
-    return NumUtil.isStringDouble(calories) ? Double.parseDouble(calories) : 0;
+    return NumUtil.isStringDouble(calories) ? NumUtil.toDouble(calories) : 0;
   }
 
   public void setCalories(String calories) {
@@ -600,7 +600,7 @@ public class Product extends GroupedListItem implements Parcelable {
   }
 
   public double getQuickConsumeAmountDouble() {
-    return NumUtil.isStringDouble(quickConsumeAmount) ? Double.parseDouble(quickConsumeAmount) : 1;
+    return NumUtil.isStringDouble(quickConsumeAmount) ? NumUtil.toDouble(quickConsumeAmount) : 1;
   }
 
   public void setQuickConsumeAmount(String quickConsumeAmount) {

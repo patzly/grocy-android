@@ -419,7 +419,7 @@ public class FormDataPurchase {
       return null;
     }
     HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-    double amount = Double.parseDouble(amountLive.getValue());
+    double amount = NumUtil.toDouble(amountLive.getValue());
     Object currentFactor = hashMap.get(current);
     if (currentFactor == null) {
       return null;
@@ -446,7 +446,7 @@ public class FormDataPurchase {
     return application.getString(
         R.string.subtitle_amount_compare,
         amountStockLive.getValue(),
-        pluralUtil.getQuantityUnitPlural(stock, Double.parseDouble(amountStockLive.getValue()))
+        pluralUtil.getQuantityUnitPlural(stock, NumUtil.toDouble(amountStockLive.getValue()))
     );
   }
 
@@ -461,7 +461,7 @@ public class FormDataPurchase {
             + productDetailsLive.getValue().getStockAmount() + 1, maxDecimalPlacesAmount));
       }
     } else {
-      double amountNew = Double.parseDouble(amountLive.getValue()) + 1;
+      double amountNew = NumUtil.toDouble(amountLive.getValue()) + 1;
       amountLive.setValue(NumUtil.trimAmount(amountNew, maxDecimalPlacesAmount));
     }
   }
@@ -469,7 +469,7 @@ public class FormDataPurchase {
   public void lessAmount(ImageView view) {
     ViewUtil.startIcon(view);
     if (amountLive.getValue() != null && !amountLive.getValue().isEmpty()) {
-      double amountCurrent = Double.parseDouble(amountLive.getValue());
+      double amountCurrent = NumUtil.toDouble(amountLive.getValue());
       Double amountNew = null;
       if (amountCurrent > 1) {
         amountNew = amountCurrent - 1;
@@ -541,8 +541,8 @@ public class FormDataPurchase {
       return null;
     }
 
-    double amount = Double.parseDouble(amountString);
-    double price = Double.parseDouble(priceString);
+    double amount = NumUtil.toDouble(amountString);
+    double price = NumUtil.toDouble(priceString);
     Object currentFactor = hashMap.get(current);
     if (currentFactor == null) {
       return null;
@@ -732,13 +732,13 @@ public class FormDataPurchase {
       ));
       return false;
     }
-    if (!isTareWeightEnabled() && Double.parseDouble(amountLive.getValue()) <= 0) {
+    if (!isTareWeightEnabled() && NumUtil.toDouble(amountLive.getValue()) <= 0) {
       amountErrorLive.setValue(application.getString(
           R.string.error_bounds_higher, String.valueOf(0)
       ));
       return false;
     } else if (isTareWeightEnabled() && productDetailsLive.getValue() != null
-        && Double.parseDouble(amountLive.getValue())
+        && NumUtil.toDouble(amountLive.getValue())
         <= productDetailsLive.getValue().getProduct().getTareWeightDouble()
         + productDetailsLive.getValue().getStockAmount()
     ) {
@@ -802,8 +802,8 @@ public class FormDataPurchase {
             || NumUtil.isStringDouble(amountLive.getValue());
     assert amountLive.getValue() != null;
     double amountAdded = amountStockLive.getValue() != null
-            ? Double.parseDouble(amountStockLive.getValue())
-            : Double.parseDouble(amountLive.getValue());
+            ? NumUtil.toDouble(amountStockLive.getValue())
+            : NumUtil.toDouble(amountLive.getValue());
     if (details != null && isTareWeightEnabled()) {
       amountAdded -= details.getStockAmount();
       amountAdded -= details.getProduct().getTareWeightDouble();
@@ -813,7 +813,7 @@ public class FormDataPurchase {
     if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
       price = priceLive.getValue();
       if (NumUtil.isStringDouble(price)) {
-        price = NumUtil.trimPrice(Double.parseDouble(price), decimalPlacesPriceDisplay);
+        price = NumUtil.trimPrice(NumUtil.toDouble(price), decimalPlacesPriceDisplay);
         if (currency != null && !currency.isEmpty()) {
           price += " " + currency;
         }

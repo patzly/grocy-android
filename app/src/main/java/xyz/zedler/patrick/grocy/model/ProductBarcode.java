@@ -169,7 +169,7 @@ public class ProductBarcode implements Parcelable {
   }
 
   public double getAmountDouble() {
-    return hasAmount() ? Double.parseDouble(amount) : 0;
+    return hasAmount() ? NumUtil.toDouble(amount) : 0;
   }
 
   public void setAmount(String amount) {
@@ -201,7 +201,7 @@ public class ProductBarcode implements Parcelable {
   }
 
   public double getLastPriceDouble() {
-    return hasLastPrice() ? Double.parseDouble(lastPrice) : 0;
+    return hasLastPrice() ? NumUtil.toDouble(lastPrice) : 0;
   }
 
   public void setLastPrice(String lastPrice) {

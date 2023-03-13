@@ -263,7 +263,7 @@ public class FormDataTransfer {
       return null;
     }
     HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-    double amount = Double.parseDouble(amountLive.getValue());
+    double amount = NumUtil.toDouble(amountLive.getValue());
     Object currentFactor = hashMap.get(current);
     if (currentFactor == null) {
       return null;
@@ -290,7 +290,7 @@ public class FormDataTransfer {
     return application.getString(
         R.string.subtitle_amount_compare,
         amountStockLive.getValue(),
-        pluralUtil.getQuantityUnitPlural(stock, Double.parseDouble(amountStockLive.getValue()))
+        pluralUtil.getQuantityUnitPlural(stock, NumUtil.toDouble(amountStockLive.getValue()))
     );
   }
 
@@ -301,7 +301,7 @@ public class FormDataTransfer {
         amountLive.setValue(String.valueOf(1));
       }
     } else {
-      double amountNew = Double.parseDouble(amountLive.getValue()) + 1;
+      double amountNew = NumUtil.toDouble(amountLive.getValue()) + 1;
       amountLive.setValue(NumUtil.trimAmount(amountNew, maxDecimalPlacesAmount));
     }
   }
@@ -309,7 +309,7 @@ public class FormDataTransfer {
   public void lessAmount(ImageView view) {
     ViewUtil.startIcon(view);
     if (amountLive.getValue() != null && !amountLive.getValue().isEmpty()) {
-      double amountCurrent = Double.parseDouble(amountLive.getValue());
+      double amountCurrent = NumUtil.toDouble(amountLive.getValue());
       Double amountNew = null;
       if (amountCurrent > 1) {
         amountNew = amountCurrent - 1;
@@ -440,7 +440,7 @@ public class FormDataTransfer {
       return false;
     }
     // below
-    if (Double.parseDouble(amountLive.getValue()) <= 0) {
+    if (NumUtil.toDouble(amountLive.getValue()) <= 0) {
       amountErrorLive.setValue(application.getString(
           R.string.error_bounds_higher, String.valueOf(0)
       ));
@@ -475,7 +475,7 @@ public class FormDataTransfer {
       maxAmount = stockAmount * currentFactor;
     }
 
-    if (Double.parseDouble(amountLive.getValue()) > maxAmount) {
+    if (NumUtil.toDouble(amountLive.getValue()) > maxAmount) {
       amountErrorLive.setValue(application.getString(
           R.string.error_bounds_max, NumUtil.trimAmount(maxAmount, maxDecimalPlacesAmount)
       ));
@@ -511,7 +511,7 @@ public class FormDataTransfer {
   public String getConfirmationText() {
     ProductDetails productDetails = productDetailsLive.getValue();
     assert productDetails != null && amountStockLive.getValue() != null;
-    double amountRemoved = Double.parseDouble(amountStockLive.getValue());
+    double amountRemoved = NumUtil.toDouble(amountStockLive.getValue());
     QuantityUnit qU = quantityUnitLive.getValue();
     StockLocation fromLocation = fromLocationLive.getValue();
     Location toLocation = toLocationLive.getValue();

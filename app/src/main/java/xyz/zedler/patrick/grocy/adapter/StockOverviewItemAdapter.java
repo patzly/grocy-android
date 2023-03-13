@@ -170,7 +170,7 @@ public class StockOverviewItemAdapter extends
             ? stockItem.getProduct().getCalories() : null;
       } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_CALORIES)) {
         groupName = NumUtil.isStringDouble(stockItem.getProduct().getCalories())
-            ? NumUtil.trimAmount(Double.parseDouble(stockItem.getProduct().getCalories())
+            ? NumUtil.trimAmount(NumUtil.toDouble(stockItem.getProduct().getCalories())
             * stockItem.getAmountDouble(), maxDecimalPlacesAmount) : null;
       } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_DUE_DATE)) {
         groupName = stockItem.getBestBeforeDate();
@@ -449,7 +449,7 @@ public class StockOverviewItemAdapter extends
         break;
       case FilterChipLiveDataStockExtraField.EXTRA_FIELD_CALORIES_TOTAL:
         if (NumUtil.isStringDouble(stockItem.getProduct().getCalories())) {
-          extraFieldText = NumUtil.trimAmount(Double.parseDouble(stockItem.getProduct()
+          extraFieldText = NumUtil.trimAmount(NumUtil.toDouble(stockItem.getProduct()
               .getCalories()) * stockItem.getAmountDouble(), maxDecimalPlacesAmount);
           extraFieldSubtitleText = "kcal";
         }

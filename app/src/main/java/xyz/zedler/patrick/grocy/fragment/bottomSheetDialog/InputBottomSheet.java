@@ -123,7 +123,7 @@ public class InputBottomSheet extends BaseBottomSheetDialogFragment {
     if (!NumUtil.isStringNum(currentInput)) {
       nextInput = String.valueOf(1);
     } else {
-      nextInput = NumUtil.trimAmount(Double.parseDouble(currentInput) + 1, maxDecimalPlacesAmount);
+      nextInput = NumUtil.trimAmount(NumUtil.toDouble(currentInput) + 1, maxDecimalPlacesAmount);
     }
     inputLive.setValue(nextInput);
   }
@@ -133,7 +133,7 @@ public class InputBottomSheet extends BaseBottomSheetDialogFragment {
     if (!NumUtil.isStringNum(currentInput)) {
       return;
     }
-    String nextInput = NumUtil.trimAmount(Double.parseDouble(currentInput) - 1, maxDecimalPlacesAmount);
+    String nextInput = NumUtil.trimAmount(NumUtil.toDouble(currentInput) - 1, maxDecimalPlacesAmount);
     inputLive.setValue(nextInput);
   }
 

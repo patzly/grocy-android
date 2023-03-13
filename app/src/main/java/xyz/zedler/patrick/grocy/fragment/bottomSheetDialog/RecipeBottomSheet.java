@@ -394,7 +394,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
     if (!NumUtil.isStringDouble(servingsDesiredLive.getValue())) {
       servingsDesiredLive.setValue(String.valueOf(1));
     } else {
-      double servings = Double.parseDouble(servingsDesiredLive.getValue());
+      double servings = NumUtil.toDouble(servingsDesiredLive.getValue());
       double servingsNew = more ? servings + 1 : servings - 1;
       if (servingsNew <= 0) servingsNew = 1;
       servingsDesiredLive.setValue(NumUtil.trimAmount(servingsNew, maxDecimalPlacesAmount));

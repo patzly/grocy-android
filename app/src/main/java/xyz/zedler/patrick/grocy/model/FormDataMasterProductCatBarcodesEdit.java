@@ -157,7 +157,7 @@ public class FormDataMasterProductCatBarcodesEdit {
     if (amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
       amountLive.setValue(String.valueOf(1));
     } else {
-      double amountNew = Double.parseDouble(amountLive.getValue()) + 1;
+      double amountNew = NumUtil.toDouble(amountLive.getValue()) + 1;
       amountLive.setValue(NumUtil.trimAmount(amountNew, maxDecimalPlacesAmount));
     }
   }
@@ -165,7 +165,7 @@ public class FormDataMasterProductCatBarcodesEdit {
   public void lessAmount(ImageView view) {
     ViewUtil.startIcon(view);
     if (amountLive.getValue() != null && !amountLive.getValue().isEmpty()) {
-      double amountNew = Double.parseDouble(amountLive.getValue()) - 1;
+      double amountNew = NumUtil.toDouble(amountLive.getValue()) - 1;
       if (amountNew >= 1) {
         amountLive.setValue(NumUtil.trimAmount(amountNew, maxDecimalPlacesAmount));
       }
@@ -217,7 +217,7 @@ public class FormDataMasterProductCatBarcodesEdit {
 
     if (purchase != null && current != null && purchase.getId() != current.getId()) {
       HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-      double amount = Double.parseDouble(amountLive.getValue());
+      double amount = NumUtil.toDouble(amountLive.getValue());
       Object currentFactor = hashMap.get(current);
       if (currentFactor == null) {
         amountHelperLive.setValue(null);
@@ -241,7 +241,7 @@ public class FormDataMasterProductCatBarcodesEdit {
     return application.getString(
         R.string.subtitle_amount_compare,
         amountPurchaseLive.getValue(),
-        pluralUtil.getQuantityUnitPlural(purchase, Double.parseDouble(amountPurchaseLive.getValue()))
+        pluralUtil.getQuantityUnitPlural(purchase, NumUtil.toDouble(amountPurchaseLive.getValue()))
     );
   }
 
@@ -289,7 +289,7 @@ public class FormDataMasterProductCatBarcodesEdit {
       ));
       return false;
     }
-    if (Double.parseDouble(amountLive.getValue()) <= 0) {
+    if (NumUtil.toDouble(amountLive.getValue()) <= 0) {
       amountErrorLive.setValue(application.getString(
           R.string.error_bounds_higher, String.valueOf(0)
       ));

@@ -92,7 +92,7 @@ public class MissingItem implements Parcelable {
     if (amountMissing == null || amountMissing.isEmpty()) {
       return 0;
     } else {
-      return Double.parseDouble(amountMissing);
+      return NumUtil.toDouble(amountMissing);
     }
   }
 

@@ -270,7 +270,7 @@ public class InventoryViewModel extends BaseViewModel {
       if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
         String lastPrice = productDetails.getLastPrice();
         if (lastPrice != null && !lastPrice.isEmpty()) {
-          lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice), decimalPlacesPriceInput);
+          lastPrice = NumUtil.trimPrice(NumUtil.toDouble(lastPrice), decimalPlacesPriceInput);
         }
         formData.getPriceLive().setValue(lastPrice);
       }

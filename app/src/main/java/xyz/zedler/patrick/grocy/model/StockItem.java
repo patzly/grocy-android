@@ -161,7 +161,7 @@ public class StockItem extends GroupedListItem implements Parcelable {
     if (amountAggregated == null || amountAggregated.isEmpty()) {
       return 0;
     } else {
-      return Double.parseDouble(amountAggregated);
+      return NumUtil.toDouble(amountAggregated);
     }
   }
 
@@ -170,7 +170,7 @@ public class StockItem extends GroupedListItem implements Parcelable {
   }
 
   public double getValueDouble() {
-    return NumUtil.isStringDouble(value) ? Double.parseDouble(value) : 0;
+    return NumUtil.isStringDouble(value) ? NumUtil.toDouble(value) : 0;
   }
 
   public String getBestBeforeDate() {
@@ -181,7 +181,7 @@ public class StockItem extends GroupedListItem implements Parcelable {
     if (amountOpenedAggregated == null || amountOpenedAggregated.isEmpty()) {
       return 0;
     } else {
-      return Double.parseDouble(amountOpenedAggregated);
+      return NumUtil.toDouble(amountOpenedAggregated);
     }
   }
 
@@ -205,7 +205,7 @@ public class StockItem extends GroupedListItem implements Parcelable {
     if (amount == null || amount.isEmpty()) {
       return 0;
     } else {
-      return Double.parseDouble(amount);
+      return NumUtil.toDouble(amount);
     }
   }
 
@@ -213,7 +213,7 @@ public class StockItem extends GroupedListItem implements Parcelable {
     if (amountOpened == null || amountOpened.isEmpty()) {
       return 0;
     } else {
-      return Double.parseDouble(amountOpened);
+      return NumUtil.toDouble(amountOpened);
     }
   }
 

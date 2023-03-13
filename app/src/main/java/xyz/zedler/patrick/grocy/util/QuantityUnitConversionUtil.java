@@ -108,7 +108,7 @@ public class QuantityUnitConversionUtil {
 
     if (stock != null && current != null && stock.getId() != current.getId()) {
       HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-      double amount = Double.parseDouble(amountLive.getValue());
+      double amount = NumUtil.toDouble(amountLive.getValue());
       Object currentFactor = hashMap.get(current);
       if (currentFactor == null) {
         //amountHelperLive.setValue(null);

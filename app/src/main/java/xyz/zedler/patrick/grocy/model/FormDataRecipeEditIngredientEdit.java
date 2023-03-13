@@ -219,7 +219,7 @@ public class FormDataRecipeEditIngredientEdit {
 
     if (stock != null && current != null && stock.getId() != current.getId()) {
       HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-      double amount = Double.parseDouble(amountLive.getValue());
+      double amount = NumUtil.toDouble(amountLive.getValue());
       Object currentFactor = hashMap.get(current);
       if (currentFactor == null) {
         amountHelperLive.setValue(null);
@@ -246,7 +246,7 @@ public class FormDataRecipeEditIngredientEdit {
     return application.getString(
         R.string.subtitle_amount_compare,
         amountStockLive.getValue(),
-        pluralUtil.getQuantityUnitPlural(stock, Double.parseDouble(amountStockLive.getValue()))
+        pluralUtil.getQuantityUnitPlural(stock, NumUtil.toDouble(amountStockLive.getValue()))
     );
   }
 
@@ -340,7 +340,7 @@ public class FormDataRecipeEditIngredientEdit {
       return false;
     }
 
-    double baseServings = Double.parseDouble(amountLive.getValue());
+    double baseServings = NumUtil.toDouble(amountLive.getValue());
     if (baseServings <= 0) {
       amountErrorLive.setValue(application.getString(R.string.error_invalid_base_servings));
       return false;
@@ -354,7 +354,7 @@ public class FormDataRecipeEditIngredientEdit {
     if (amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
       amountLive.setValue(NumUtil.trimAmount(1.0, maxDecimalPlacesAmount));
     } else {
-      double currentValue = Double.parseDouble(amountLive.getValue());
+      double currentValue = NumUtil.toDouble(amountLive.getValue());
       amountLive.setValue(NumUtil.trimAmount(currentValue + 1, maxDecimalPlacesAmount));
     }
   }
@@ -364,7 +364,7 @@ public class FormDataRecipeEditIngredientEdit {
     if (amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
       amountLive.setValue(NumUtil.trimAmount(1.0, maxDecimalPlacesAmount));
     } else {
-      double currentValue = Double.parseDouble(amountLive.getValue());
+      double currentValue = NumUtil.toDouble(amountLive.getValue());
 
       if (currentValue == 1)
         return;
@@ -385,8 +385,8 @@ public class FormDataRecipeEditIngredientEdit {
     recipePosition.setProductId(productDetailsLive.getValue().getProduct().getId());
     recipePosition.setOnlyCheckSingleUnitInStock(onlyCheckSingleUnitInStockLive.getValue());
     recipePosition.setAmount(NumUtil.isStringDouble(amountStockLive.getValue()) && !onlyCheckSingleUnitInStockLive.getValue()
-        ? Double.parseDouble(amountStockLive.getValue())
-        : Double.parseDouble(amountLive.getValue()));
+        ? NumUtil.toDouble(amountStockLive.getValue())
+        : NumUtil.toDouble(amountLive.getValue()));
     recipePosition.setQuantityUnitId(quantityUnitLive.getValue().getId());
     recipePosition.setVariableAmount(variableAmountLive.getValue());
     recipePosition.setNotCheckStockFulfillment(notCheckStockFulfillmentLive.getValue());

@@ -116,7 +116,7 @@ public class PendingProductBarcode extends ProductBarcode {
 
     @Override
     public double getAmountDouble() {
-        return hasAmount() ? Double.parseDouble(amount) : 0;
+        return hasAmount() ? NumUtil.toDouble(amount) : 0;
     }
 
     public void setAmount(String amount) {
