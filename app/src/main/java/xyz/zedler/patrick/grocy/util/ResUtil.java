@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.util;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -167,9 +166,7 @@ public class ResUtil {
     if (item == null || item.getIcon() == null) {
       return;
     }
-    item.getIcon().setTintList(
-        ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant))
-    );
+    item.getIcon().setTint(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant));
   }
 
   public static void tintMenuItemIcons(Context context, Menu menu) {
