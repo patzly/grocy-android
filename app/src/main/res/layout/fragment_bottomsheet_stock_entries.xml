@@ -48,7 +48,8 @@
         android:id="@+id/recycler_stock_entries"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:overScrollMode="never" />
+        android:overScrollMode="ifContentScrolls"
+        android:scrollbars="none" />
 
     </LinearLayout>
 
