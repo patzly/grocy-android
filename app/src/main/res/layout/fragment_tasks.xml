@@ -202,14 +202,13 @@
 
         <androidx.recyclerview.widget.RecyclerView
           android:id="@+id/recycler"
+          style="@style/Widget.Grocy.RecyclerView"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:paddingTop="8dp"
           android:paddingBottom="@dimen/global_scroll_bottom_padding"
-          android:overScrollMode="never"
           android:clipToPadding="false"
-          android:layoutAnimation="@anim/recycler_layout"
-          android:scrollbarStyle="outsideOverlay"/>
+          android:layoutAnimation="@anim/recycler_layout" />
 
       </FrameLayout>
 

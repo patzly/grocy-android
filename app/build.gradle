@@ -97,21 +97,21 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'androidx.browser:browser:1.5.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
 
     // Navigation framework for easy navigation control using XML
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
     implementation 'androidx.navigation:navigation-ui:2.5.3'
 
     // Android Room for database and RxJava for Async access of database
-    implementation 'androidx.room:room-runtime:2.5.0'
-    implementation 'androidx.room:room-rxjava3:2.5.0'
-    annotationProcessor 'androidx.room:room-compiler:2.5.0'
+    implementation 'androidx.room:room-runtime:2.5.1'
+    implementation 'androidx.room:room-rxjava3:2.5.1'
+    annotationProcessor 'androidx.room:room-compiler:2.5.1'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
 
     // Nice material views
-    implementation 'com.google.android.material:material:1.9.0-alpha02'
+    implementation 'com.google.android.material:material:1.9.0-beta01'
 
     // Volley for all general network requests and Glide for image loading
     // Netcipher for Tor support and Conscrypt for new TLS support on old Android devices
@@ -128,9 +128,9 @@ dependencies {
     implementation 'me.xdrop:fuzzywuzzy:1.4.0'
 
     // Work for daily notifications
-    implementation 'androidx.work:work-runtime:2.8.0'
+    implementation 'androidx.work:work-runtime:2.8.1'
 
-    implementation 'androidx.webkit:webkit:1.6.0'
+    implementation 'androidx.webkit:webkit:1.6.1'
 
     // ZXing for barcode scanning
     //noinspection GradleDependency

@@ -73,14 +73,13 @@
         android:animateLayoutChanges="true">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="8dp"
-            android:paddingBottom="@dimen/global_scroll_bottom_padding"
-            android:overScrollMode="never"
-            android:clipToPadding="false"
-            android:scrollbarStyle="outsideOverlay"/>
+          android:id="@+id/recycler"
+          style="@style/Widget.Grocy.RecyclerView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:paddingTop="8dp"
+          android:paddingBottom="@dimen/global_scroll_bottom_padding"
+          android:clipToPadding="false" />
 
       </LinearLayout>
 

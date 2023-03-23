@@ -1201,7 +1201,7 @@
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://en.demo.grocy.info</string>
   <string name="url_grocy" translatable="false">https://grocy.info</string>
-  <string name="url_developer" translatable="false">http://play.google.com/store/apps/dev?id=8122479227040208191</string>
+  <string name="url_developer" translatable="false">http://play.google.com/store/apps/dev?id=5870283381366287608</string>
   <string name="url_github" translatable="false">https://github.com/patzly/grocy-android/</string>
   <string name="url_github_issues" translatable="false">https://github.com/patzly/grocy-android/issues/</string>
 

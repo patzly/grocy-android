@@ -1,3 +1,8 @@
+## 3.1.2
+
+- Improved: Scrollbar is shown in scrollable lists
+- Fixed: Deprecated Google Play developer profile link
+
 ## 3.1.1
 
 - Fixed: Home Assistant core update broke session authentication, this fix can be a bit buggy (#670)
