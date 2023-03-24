@@ -1228,7 +1228,6 @@ public class MainActivity extends AppCompatActivity {
           .replaceFirst("https", "wss")
           .replaceFirst("http", "ws");
       uri = new URI(hassWebSocketUrl + "/api/websocket");
-      uri = new URI("ws://192.168.178.95:8123/api/websocket");
     }
     catch (URISyntaxException e) {
       e.printStackTrace();
