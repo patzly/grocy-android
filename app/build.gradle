@@ -43,8 +43,7 @@ android {
         targetSdkVersion 33
         versionCode 45
         versionName "3.1.1"
-        resConfigs 'cs', 'de', 'en', 'es', 'fr', 'hu', 'it', 'iw', 'nb', 'nl', 'pl', 'pt-rPT', 'ru',
-                'sk', 'sv', 'uk', 'zh-rCN', 'zh-rTW'
+        resourceConfigurations += ['cs', 'de', 'en', 'es', 'fr', 'hu', 'it', 'iw', 'nb', 'nl', 'pl', 'pt-rPT', 'ru', 'sk', 'sv', 'uk', 'zh-rCN', 'zh-rTW']
 
         javaCompileOptions {
             annotationProcessorOptions {
