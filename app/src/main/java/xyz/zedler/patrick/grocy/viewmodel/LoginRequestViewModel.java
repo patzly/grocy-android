@@ -253,7 +253,9 @@ public class LoginRequestViewModel extends BaseViewModel {
     if (homeAssistantLongLivedToken == null || homeAssistantLongLivedToken.isEmpty()) {
       return;
     }
-    if (webSocketClient != null) webSocketClient.close();
+    if (webSocketClient != null) {
+      webSocketClient.close(0, 0, "recreate websocket client");
+    }
 
     URI uri;
     try {
@@ -325,8 +327,8 @@ public class LoginRequestViewModel extends BaseViewModel {
       }
 
       @Override
-      public void onCloseReceived() {
-        if (debug) Log.i(TAG, "createWebSocketClient: onCloseReceived");
+      public void onCloseReceived(int reason, String description) {
+        if (debug) Log.i(TAG, "createWebSocketClient: onCloseReceived: " + description);
         new Handler().postDelayed(() -> webSocketClient.connect(), 5000);
       }
     };
@@ -379,7 +381,9 @@ public class LoginRequestViewModel extends BaseViewModel {
   @Override
   protected void onCleared() {
     dlHelper.destroy();
-    if (webSocketClient != null) webSocketClient.close();
+    if (webSocketClient != null) {
+      webSocketClient.close(0, 0, "viewmodel cleared");
+    }
     super.onCleared();
   }
 

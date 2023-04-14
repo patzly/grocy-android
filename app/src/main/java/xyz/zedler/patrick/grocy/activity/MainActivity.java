@@ -541,7 +541,9 @@ public class MainActivity extends AppCompatActivity {
     if (networkReceiver != null) {
       unregisterReceiver(networkReceiver);
     }
-    if (webSocketClient != null) webSocketClient.close();
+    if (webSocketClient != null) {
+      webSocketClient.close(0, 0, "fragment destroyed");
+    }
     super.onDestroy();
   }
 
@@ -1219,7 +1221,9 @@ public class MainActivity extends AppCompatActivity {
         || hassServerUrl == null || hassServerUrl.isEmpty()) {
       return;
     }
-    if (webSocketClient != null) webSocketClient.close();
+    if (webSocketClient != null) {
+      webSocketClient.close(0, 0, "recreate websocket client");
+    }
 
     URI uri;
     try {
@@ -1302,8 +1306,8 @@ public class MainActivity extends AppCompatActivity {
       }
 
       @Override
-      public void onCloseReceived() {
-        if (debug) Log.i(TAG, "createWebSocketClient: onCloseReceived");
+      public void onCloseReceived(int reason, String description) {
+        if (debug) Log.i(TAG, "createWebSocketClient: onCloseReceived: " + description);
         new Handler().postDelayed(() -> webSocketClient.connect(), 5000);
       }
     };
