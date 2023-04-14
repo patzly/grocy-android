@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,8 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 
 public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListener {
+
+  private final static String TAG = LoginApiQrCodeFragment.class.getSimpleName();
 
   private static final int SCAN_GROCY_KEY = 0;
   private static final int SCAN_HASS_TOKEN = 1;
@@ -60,7 +63,8 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
         binding.containerScanner,
         this,
         true,
-        false
+        false,
+        true
     );
     return binding.getRoot();
   }
@@ -169,6 +173,7 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
       String[] resultSplit = rawValue.split("\\.");
       if (resultSplit.length != 3) {
         activity.showSnackbar(R.string.error_token_qr_code, true);
+        Log.e(TAG, "onBarcodeRecognized: not a HASS Token QR code: " + rawValue);
         embeddedFragmentScanner.startScannerIfVisible();
         return;
       }

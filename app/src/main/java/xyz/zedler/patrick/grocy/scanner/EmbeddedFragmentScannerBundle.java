@@ -37,7 +37,8 @@ public class EmbeddedFragmentScannerBundle extends EmbeddedFragmentScanner {
       CoordinatorLayout containerScanner,
       BarcodeListener barcodeListener,
       boolean qrCodeFormat,
-      boolean takeSmallQrCodeFormat
+      boolean takeSmallQrCodeFormat,
+      boolean qrCodeFilter
   ) {
     super(fragment.requireActivity());
     if (useMlKitScanner(fragment)) {
@@ -46,16 +47,17 @@ public class EmbeddedFragmentScannerBundle extends EmbeddedFragmentScanner {
           containerScanner,
           barcodeListener,
           qrCodeFormat,
-          takeSmallQrCodeFormat
+          takeSmallQrCodeFormat,
+          qrCodeFilter
       );
     } else {
       embeddedFragmentScanner = new EmbeddedFragmentScannerZXing(
           fragment,
           containerScanner,
           barcodeListener,
-
           qrCodeFormat,
-          takeSmallQrCodeFormat
+          takeSmallQrCodeFormat,
+          qrCodeFilter
       );
     }
   }
@@ -70,7 +72,8 @@ public class EmbeddedFragmentScannerBundle extends EmbeddedFragmentScanner {
         containerScanner,
         barcodeListener,
         useScannerFormat2d(fragment),
-        true
+        true,
+        false
     );
   }
 

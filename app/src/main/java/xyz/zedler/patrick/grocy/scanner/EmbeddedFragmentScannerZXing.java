@@ -66,19 +66,22 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
   private final SharedPreferences sharedPrefs;
   private boolean suppressNextScanStart = false;
   private final boolean qrCodeFormat;
+  private final boolean qrCodeFilter;
 
   public EmbeddedFragmentScannerZXing(
       Fragment fragment,
       CoordinatorLayout containerScanner,
       BarcodeListener barcodeListener,
       boolean qrCodeFormat,
-      boolean takeSmallQrCodeFormat
+      boolean takeSmallQrCodeFormat,
+      boolean qrCodeFilter
   ) {
     super(fragment.requireActivity());
     this.fragment = fragment;
     this.barcodeListener = barcodeListener;
     this.sharedPrefs = PreferenceManager.getDefaultSharedPreferences(fragment.requireContext());
     this.qrCodeFormat = qrCodeFormat;
+    this.qrCodeFilter = qrCodeFilter;
 
     // set container size
     int width, height;
@@ -244,7 +247,7 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
         SCANNER.BARCODE_FORMATS,
         SETTINGS_DEFAULT.SCANNER.BARCODE_FORMATS
     );
-    if (!enabledBarcodeFormatsSet.isEmpty()) {
+    if (!enabledBarcodeFormatsSet.isEmpty() && !qrCodeFilter) {
       for (String barcodeFormat : enabledBarcodeFormatsSet) {
         switch (barcodeFormat) {
           case BarcodeFormats.BARCODE_FORMAT_CODE128:
@@ -289,7 +292,7 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
         }
       }
     }
-    if (qrCodeFormat && !enabledBarcodeFormats.contains(IntentIntegrator.QR_CODE)) {
+    if (qrCodeFormat && !enabledBarcodeFormats.contains(IntentIntegrator.QR_CODE) || qrCodeFilter) {
       enabledBarcodeFormats.add(IntentIntegrator.QR_CODE);
     }
     String[] mStringArray = new String[enabledBarcodeFormats.size()];
