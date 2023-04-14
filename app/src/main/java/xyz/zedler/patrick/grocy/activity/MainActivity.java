@@ -479,7 +479,6 @@ public class MainActivity extends AppCompatActivity {
         // then the bottom bar should not stay hidden when the keyboard disappears
         if (wasKeyboardOpened) {
           wasKeyboardOpened = false;
-          Log.i(TAG, "onCreate: hello");
           scrollBehavior.setBottomBarVisibility(true);
         }
       }
