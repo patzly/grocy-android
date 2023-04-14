@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -68,6 +69,7 @@ public class LoginRequestViewModel extends BaseViewModel {
   private final MutableLiveData<String> loginErrorMsg;
   private final MutableLiveData<String> loginErrorExactMsg;
   private final MutableLiveData<String> loginErrorHassMsg;
+  private final MutableLiveData<String> loginErrorHassLog;
 
   private final String serverUrl;
   private final String homeAssistantServerUrl;
@@ -106,8 +108,7 @@ public class LoginRequestViewModel extends BaseViewModel {
     loginErrorMsg = new MutableLiveData<>();
     loginErrorExactMsg = new MutableLiveData<>();
     loginErrorHassMsg = new MutableLiveData<>();
-
-    createWebSocketClient();
+    loginErrorHassLog = new MutableLiveData<>();
   }
 
   public void login(boolean checkVersion) {
@@ -116,13 +117,23 @@ public class LoginRequestViewModel extends BaseViewModel {
     loginErrorExactMsg.setValue(null);
     loginErrorHassMsg.setValue(null);
 
+    if (useHassLoginFlow
+        && sharedPrefs.getString(PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY, null) == null) {
+      appendHassLog("Home Assistant needs authentication over WebSocket.\n");
+      createWebSocketClient();
+      return;
+    }
+
+    appendHassLog("Sending test request to grocy...");
     dlHelper.getSystemInfo(
         response -> {
           if (!response.contains("grocy_version")) {
+            appendHassLog(" Error.\n");
             loginErrorOccurred.setValue(true);
             loginErrorMsg.setValue(getString(R.string.error_not_grocy_instance));
             return;
           }
+          appendHassLog(" Success.\n");
           try {
             String grocyVersion = new JSONObject(response)
                 .getJSONObject("grocy_version")
@@ -181,22 +192,8 @@ public class LoginRequestViewModel extends BaseViewModel {
           loginErrorOccurred.setValue(true);
           if (error instanceof AuthFailureError) {
             loginErrorExactMsg.setValue(error.toString());
-            if(useHassLoginFlow) {
-              loginErrorMsg.setValue(getString(R.string.error_api_not_working));
-              loginErrorHassMsg.setValue("Please check the grocy API key on the previous page. ");
-              if (webSocketClient != null) {
-                try {
-                  JSONObject jsonObject = new JSONObject();
-                  jsonObject.put("type", "auth");
-                  jsonObject.put("access_token", homeAssistantLongLivedToken);
-                  webSocketClient.send(jsonObject.toString());
-                } catch (JSONException e) {
-                  Log.e(TAG, "createWebSocketClient: onTextReceived: " + e);
-                }
-              }
-            } else {
-              loginErrorMsg.setValue(getString(R.string.error_api_not_working));
-            }
+            loginErrorMsg.setValue(getString(R.string.error_api_not_working));
+            loginErrorHassMsg.setValue("Please check the grocy API key on the previous page. ");
           } else if (error instanceof NoConnectionError) {
             if (error.toString().contains("SSLHandshakeException")) {
               showMessage("SSLHandshakeException");
@@ -254,7 +251,9 @@ public class LoginRequestViewModel extends BaseViewModel {
       return;
     }
     if (webSocketClient != null) {
+      appendHassLog("Closing previous WebSocket client...");
       webSocketClient.close(0, 0, "recreate websocket client");
+      appendHassLog(" Done.\n");
     }
 
     URI uri;
@@ -265,13 +264,17 @@ public class LoginRequestViewModel extends BaseViewModel {
       uri = new URI(hassWebSocketUrl + "/api/websocket");
     }
     catch (URISyntaxException e) {
+      appendHassLog("Error while creating WebSocket URI.\n");
       e.printStackTrace();
       return;
     }
 
+    appendHassLog("Creating WebSocket client...");
     webSocketClient = new WebSocketClient(uri) {
       @Override
-      public void onOpen() {}
+      public void onOpen() {
+        appendHassLog("WebSocket connection is now open.\n");
+      }
       @Override
       public void onPingReceived(byte[] data) {}
       @Override
@@ -283,15 +286,19 @@ public class LoginRequestViewModel extends BaseViewModel {
       public void onTextReceived(String message) {
         if (debug) Log.i(TAG, "createWebSocketClient: onTextReceived: " + message);
         if (message.contains("auth_required")) {
+          appendHassLog("Received auth_required message. Sending HA token...");
           try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("type", "auth");
             jsonObject.put("access_token", homeAssistantLongLivedToken);
             webSocketClient.send(jsonObject.toString());
+            appendHassLog(" Done.\n");
           } catch (JSONException e) {
             Log.e(TAG, "createWebSocketClient: onTextReceived: " + e);
+            appendHassLog("Error: " + e + "\n");
           }
         } else if (message.contains("auth_ok")) {
+          appendHassLog("Authentication was successful. Requesting session token...");
           try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("type", "supervisor/api");
@@ -299,12 +306,17 @@ public class LoginRequestViewModel extends BaseViewModel {
             jsonObject.put("method", "post");
             jsonObject.put("id", 1);
             webSocketClient.send(jsonObject.toString());
+            appendHassLog(" Done.\n");
           } catch (JSONException e) {
             Log.e(TAG, "createWebSocketClient: onTextReceived: " + e);
+            appendHassLog("Error: " + e + "\n");
           }
         } else if (message.contains("auth_invalid")) {
-          loginErrorHassMsg.setValue("Please check the Home Assistant long-lived token on the previous page.");
+          appendHassLog("Authentication failed.\n");
+          loginErrorOccurred.postValue(true);
+          loginErrorHassMsg.postValue("Please check the Home Assistant long-lived token on the previous page.");
         } else if (message.contains("result")) {
+          appendHassLog("Received result. Extracting session token...");
           try {
             JSONObject jsonObject = new JSONObject(message);
             if (jsonObject.getBoolean("success")) {
@@ -312,10 +324,14 @@ public class LoginRequestViewModel extends BaseViewModel {
                   PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY,
                   jsonObject.getJSONObject("result").getString("session")
               ).apply();
+              appendHassLog(" Success.\n");
+              new Handler(getApplication().getMainLooper()).post(() -> login(true));
             } else {
+              appendHassLog(" Error: " + message + "\n");
               Log.e(TAG, "createWebSocketClient: onTextReceived: " + message);
             }
           } catch (JSONException e) {
+            appendHassLog(" Error: " + e + "\n");
             Log.e(TAG, "createWebSocketClient: onTextReceived: " + e);
           }
         }
@@ -328,10 +344,15 @@ public class LoginRequestViewModel extends BaseViewModel {
 
       @Override
       public void onCloseReceived(int reason, String description) {
+        appendHassLog("Connection was closed.");
         if (debug) Log.i(TAG, "createWebSocketClient: onCloseReceived: " + description);
-        new Handler().postDelayed(() -> webSocketClient.connect(), 5000);
+        new Handler().postDelayed(() -> {
+          appendHassLog(" Reconnecting...\n");
+          webSocketClient.connect();
+        }, 1000);
       }
     };
+    appendHassLog(" Done.\n");
 
     webSocketClient.setConnectTimeout(10000);
     webSocketClient.setReadTimeout(60000);
@@ -339,8 +360,10 @@ public class LoginRequestViewModel extends BaseViewModel {
     webSocketClient.connect();
   }
 
-  private void showCompatibilityBottomSheet(ArrayList<String> supportedVersions,
-      String grocyVersion) {
+  private void showCompatibilityBottomSheet(
+      ArrayList<String> supportedVersions,
+      String grocyVersion
+  ) {
     sharedPrefs.edit().remove(Constants.PREF.VERSION_COMPATIBILITY_IGNORED).apply();
     Bundle bundle = new Bundle();
     bundle.putString(Constants.ARGUMENT.VERSION, grocyVersion);
@@ -362,6 +385,25 @@ public class LoginRequestViewModel extends BaseViewModel {
 
   public MutableLiveData<String> getLoginErrorHassMsg() {
     return loginErrorHassMsg;
+  }
+
+  public MutableLiveData<String> getLoginErrorHassLog() {
+    return loginErrorHassLog;
+  }
+
+  private void appendHassLog(String append) {
+    String log = loginErrorHassLog.getValue();
+    if (log == null) log = "";
+    log += append;
+    if (Looper.myLooper() == Looper.getMainLooper()) {
+      loginErrorHassLog.setValue(log);
+    } else {
+      loginErrorHassLog.postValue(log);
+    }
+  }
+
+  public void clearHassData() {
+    sharedPrefs.edit().putString(PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY, null).apply();
   }
 
   private boolean isDemoServer() {

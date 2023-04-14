@@ -121,6 +121,7 @@ public class LoginRequestFragment extends BaseFragment {
 
   @Override
   public void login(boolean checkVersion) {
+    viewModel.clearHassData();
     viewModel.login(checkVersion);
   }
 

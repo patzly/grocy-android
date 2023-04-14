@@ -149,6 +149,20 @@
 
         </LinearLayout>
 
+        <com.google.android.material.card.MaterialCardView
+          style="@style/Widget.Grocy.Card.Text"
+          android:layout_marginBottom="8dp"
+          android:layout_marginTop="16dp"
+          android:visibility="@{viewModel.loginErrorHassLog != null ? View.VISIBLE : View.GONE}">
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.Paragraph.Card"
+            android:text="@{viewModel.loginErrorHassLog}"
+            android:textSize="11sp"
+            android:lineSpacingMultiplier="1"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
       </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
