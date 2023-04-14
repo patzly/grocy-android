@@ -77,6 +77,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
   private final BarcodeListener barcodeListener;
   private boolean suppressNextScanStart = false;
   private final boolean qrCodeFormat;
+  private final boolean qrCodeFilter;
   private final int strokeWidth;
 
   public EmbeddedFragmentScannerMLKit(
@@ -84,13 +85,15 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
       CoordinatorLayout containerScanner,
       BarcodeListener barcodeListener,
       boolean qrCodeFormat,
-      boolean takeSmallQrCodeFormat
+      boolean takeSmallQrCodeFormat,
+      boolean qrCodeFilter
   ) {
     super(fragment.requireActivity());
     this.fragment = fragment;
     this.activity = (MainActivity) fragment.requireActivity();
     this.barcodeListener = barcodeListener;
     this.qrCodeFormat = qrCodeFormat;
+    this.qrCodeFilter = qrCodeFilter;
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(fragment.requireContext());
 
     // set container size
@@ -298,7 +301,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
         SCANNER.BARCODE_FORMATS,
         SETTINGS_DEFAULT.SCANNER.BARCODE_FORMATS
     );
-    if (!enabledBarcodeFormatsSet.isEmpty()) {
+    if (!enabledBarcodeFormatsSet.isEmpty() && !qrCodeFilter) {
       for (String barcodeFormat : enabledBarcodeFormatsSet) {
         switch (barcodeFormat) {
           case BarcodeFormats.BARCODE_FORMAT_CODE128:
@@ -343,7 +346,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
         }
       }
     }
-    if (qrCodeFormat && !enabledBarcodeFormats.contains(Barcode.FORMAT_QR_CODE)) {
+    if (qrCodeFormat && !enabledBarcodeFormats.contains(Barcode.FORMAT_QR_CODE) || qrCodeFilter) {
       enabledBarcodeFormats.add(Barcode.FORMAT_QR_CODE);
     }
     return enabledBarcodeFormats;
