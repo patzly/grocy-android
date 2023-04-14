@@ -479,7 +479,6 @@ public class MainActivity extends AppCompatActivity {
         // then the bottom bar should not stay hidden when the keyboard disappears
         if (wasKeyboardOpened) {
           wasKeyboardOpened = false;
-          Log.i(TAG, "onCreate: hello");
           scrollBehavior.setBottomBarVisibility(true);
         }
       }
@@ -542,7 +541,9 @@ public class MainActivity extends AppCompatActivity {
     if (networkReceiver != null) {
       unregisterReceiver(networkReceiver);
     }
-    if (webSocketClient != null) webSocketClient.close();
+    if (webSocketClient != null) {
+      webSocketClient.close(0, 0, "fragment destroyed");
+    }
     super.onDestroy();
   }
 
@@ -1220,7 +1221,9 @@ public class MainActivity extends AppCompatActivity {
         || hassServerUrl == null || hassServerUrl.isEmpty()) {
       return;
     }
-    if (webSocketClient != null) webSocketClient.close();
+    if (webSocketClient != null) {
+      webSocketClient.close(0, 0, "recreate websocket client");
+    }
 
     URI uri;
     try {
@@ -1228,7 +1231,6 @@ public class MainActivity extends AppCompatActivity {
           .replaceFirst("https", "wss")
           .replaceFirst("http", "ws");
       uri = new URI(hassWebSocketUrl + "/api/websocket");
-      uri = new URI("ws://192.168.178.95:8123/api/websocket");
     }
     catch (URISyntaxException e) {
       e.printStackTrace();
@@ -1304,8 +1306,8 @@ public class MainActivity extends AppCompatActivity {
       }
 
       @Override
-      public void onCloseReceived() {
-        if (debug) Log.i(TAG, "createWebSocketClient: onCloseReceived");
+      public void onCloseReceived(int reason, String description) {
+        if (debug) Log.i(TAG, "createWebSocketClient: onCloseReceived: " + description);
         new Handler().postDelayed(() -> webSocketClient.connect(), 5000);
       }
     };
