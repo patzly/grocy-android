@@ -158,8 +158,7 @@
           <TextView
             style="@style/Widget.Grocy.TextView.Paragraph.Card"
             android:text="@{viewModel.loginErrorHassLog}"
-            android:textSize="11sp"
-            android:lineSpacingMultiplier="1"/>
+            android:textAppearance="?attr/textAppearanceBodySmall" />
 
         </com.google.android.material.card.MaterialCardView>
 
