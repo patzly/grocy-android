@@ -116,7 +116,7 @@ dependencies {
     // Volley for all general network requests and Glide for image loading
     // Netcipher for Tor support and Conscrypt for new TLS support on old Android devices
     implementation 'com.android.volley:volley:1.2.1'
-    implementation 'com.github.bumptech.glide:glide:4.15.0'
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
     implementation 'info.guardianproject.netcipher:netcipher:2.1.0'
     implementation 'org.conscrypt:conscrypt-android:2.5.2'
     implementation 'dev.gustavoavila:java-android-websocket-client:2.0.2'
@@ -139,5 +139,5 @@ dependencies {
     // https://github.com/journeyapps/zxing-android-embedded#option-2-desugaring-advanced
     // prevents bug https://github.com/patzly/grocy-android/issues/425
     //noinspection GradleDependency
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 }
