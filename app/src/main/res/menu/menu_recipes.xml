@@ -25,6 +25,12 @@
     android:id="@+id/action_search"
     android:title="@string/action_search"
     android:icon="@drawable/ic_round_search_anim"
-    app:showAsAction="always" />
+    app:showAsAction="ifRoom" />
+
+  <item
+    android:id="@+id/action_import"
+    android:title="@string/action_import"
+    android:icon="@drawable/ic_round_download"
+    app:showAsAction="ifRoom" />
 
 </menu>

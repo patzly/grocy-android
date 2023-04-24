@@ -324,6 +324,12 @@ public class RecipesFragment extends BaseFragment implements
       ViewUtil.startIcon(item);
       setUpSearch();
       return true;
+    } else if (item.getItemId() == R.id.action_import) {
+      activity.navigateFragment(
+          RecipesFragmentDirections
+              .actionRecipesFragmentToRecipeImportFragment()
+      );
+      return true;
     }
     return false;
   }

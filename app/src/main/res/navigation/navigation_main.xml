@@ -1247,6 +1247,9 @@
         app:enterAnim="@anim/slide_in_up"
         app:exitAnim="@anim/slide_no"
         app:popExitAnim="@anim/slide_out_down"/>
+    <action
+      android:id="@+id/action_recipesFragment_to_recipeImportFragment"
+      app:destination="@id/recipeImportFragment" />
   </fragment>
   <fragment
       android:id="@+id/recipeEditFragment"
@@ -1385,4 +1388,9 @@
   <action
     android:id="@+id/action_global_text_dialog"
     app:destination="@id/textBottomSheetDialogFragment"/>
+  <fragment
+    android:id="@+id/recipeImportFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.RecipeImportFragment"
+    android:label="RecipeImportFragment"
+    tools:layout="@layout/fragment_recipe_import"/>
 </navigation>
