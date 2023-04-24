@@ -52,7 +52,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomShe
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockLocationsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.FormDataConsume;
+import xyz.zedler.patrick.grocy.form.FormDataConsume;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;

@@ -17,7 +17,7 @@
  * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
-package xyz.zedler.patrick.grocy.model;
+package xyz.zedler.patrick.grocy.form;
 
 import android.app.Application;
 import android.content.SharedPreferences;
@@ -36,62 +36,50 @@ import java.util.Map;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductBarcode;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
-public class FormDataShoppingListItemEdit {
+public class FormDataMasterProductCatBarcodesEdit {
 
   private final Application application;
+  private final Product product;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
-  private final MutableLiveData<ShoppingList> shoppingListLive;
-  private final LiveData<String> shoppingListNameLive;
-  private final MutableLiveData<Integer> shoppingListIdLive;
-  private final MutableLiveData<ArrayList<Product>> productsLive;
-  private final MutableLiveData<Product> productLive;
-  private final MutableLiveData<String> productNameLive;
-  private final MutableLiveData<Integer> productNameErrorLive;
   private final MutableLiveData<String> barcodeLive;
+  private final MutableLiveData<Integer> barcodeErrorLive;
   private final MutableLiveData<String> amountLive;
   private final MutableLiveData<String> amountErrorLive;
   private final MediatorLiveData<String> amountHelperLive;
   private final LiveData<String> amountHintLive;
-  private final MediatorLiveData<String> amountStockLive;
+  private final MediatorLiveData<String> amountPurchaseLive;
   private final MutableLiveData<HashMap<QuantityUnit, Double>> quantityUnitsFactorsLive;
   private final LiveData<ArrayList<QuantityUnit>> quantityUnitsLive;
   private final MutableLiveData<QuantityUnit> quantityUnitLive;
   private final LiveData<String> quantityUnitNameLive;
-  private final MutableLiveData<Boolean> quantityUnitErrorLive;
-  private final MutableLiveData<Boolean> useMultilineNoteLive;
+  private final MutableLiveData<Store> storeLive;
+  private final LiveData<String> storeNameLive;
   private final MutableLiveData<String> noteLive;
-  private final MutableLiveData<Integer> noteErrorLive;
   private final PluralUtil pluralUtil;
-  private boolean filledWithShoppingListItem;
+  private boolean filledWithProductBarcode;
+  private QuantityUnit quantityUnitPurchase;
   private final int maxDecimalPlacesAmount;
 
-  public FormDataShoppingListItemEdit(Application application) {
+  public FormDataMasterProductCatBarcodesEdit(Application application, Product product) {
     this.application = application;
+    this.product = product;
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
     maxDecimalPlacesAmount = sharedPrefs.getInt(
         STOCK.DECIMAL_PLACES_AMOUNT,
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
     );
     scannerVisibilityLive = new MutableLiveData<>(false);
-    shoppingListLive = new MutableLiveData<>();
-    shoppingListNameLive = Transformations.map(
-        shoppingListLive,
-        shoppingList -> shoppingList != null ? shoppingList.getName() : null
-    );
-    shoppingListIdLive = (MutableLiveData<Integer>) Transformations.map(
-        shoppingListLive,
-        shoppingList -> shoppingList != null ? shoppingList.getId() : -1
-    );
-    productsLive = new MutableLiveData<>(new ArrayList<>());
-    productLive = new MutableLiveData<>();
-    productNameLive = new MutableLiveData<>();
-    productNameErrorLive = new MutableLiveData<>();
     barcodeLive = new MutableLiveData<>();
-    amountLive = new MutableLiveData<>(String.valueOf(1));
+    barcodeErrorLive = new MutableLiveData<>();
+    amountLive = new MutableLiveData<>();
     amountErrorLive = new MutableLiveData<>();
     quantityUnitsFactorsLive = new MutableLiveData<>();
     quantityUnitsLive = Transformations.map(
@@ -99,14 +87,11 @@ public class FormDataShoppingListItemEdit {
         quantityUnitsFactors -> quantityUnitsFactors != null
             ? new ArrayList<>(quantityUnitsFactors.keySet()) : null
     );
+    quantityUnitPurchase = null;
     quantityUnitLive = new MutableLiveData<>();
     quantityUnitNameLive = Transformations.map(
         quantityUnitLive,
         quantityUnit -> quantityUnit != null ? quantityUnit.getName() : null
-    );
-    quantityUnitErrorLive = (MutableLiveData<Boolean>) Transformations.map(
-        quantityUnitLive,
-        quantityUnit -> !isQuantityUnitValid()
     );
     amountHintLive = Transformations.map(
         quantityUnitLive,
@@ -115,19 +100,23 @@ public class FormDataShoppingListItemEdit {
             quantityUnit.getNamePlural()
         ) : null
     );
-    amountStockLive = new MediatorLiveData<>();
-    amountStockLive.addSource(amountLive, i -> amountStockLive.setValue(getAmountStock()));
-    amountStockLive.addSource(quantityUnitLive, i -> amountStockLive.setValue(getAmountStock()));
+    amountPurchaseLive = new MediatorLiveData<>();
+    amountPurchaseLive.addSource(amountLive, i -> amountPurchaseLive.setValue(getAmountPurchase()));
+    amountPurchaseLive.addSource(quantityUnitLive, i -> amountPurchaseLive.setValue(
+        getAmountPurchase()));
     amountHelperLive = new MediatorLiveData<>();
     amountHelperLive
-        .addSource(amountStockLive, i -> amountHelperLive.setValue(getAmountHelpText()));
+        .addSource(amountPurchaseLive, i -> amountHelperLive.setValue(getAmountHelpText()));
     amountHelperLive
         .addSource(quantityUnitsFactorsLive, i -> amountHelperLive.setValue(getAmountHelpText()));
-    useMultilineNoteLive = new MutableLiveData<>(false);
+    storeLive = new MutableLiveData<>();
+    storeNameLive = Transformations.map(
+        storeLive,
+        store -> store != null ? store.getName() : null
+    );
     noteLive = new MutableLiveData<>();
-    noteErrorLive = new MutableLiveData<>();
     pluralUtil = new PluralUtil(application);
-    filledWithShoppingListItem = false;
+    filledWithProductBarcode = false;
   }
 
   public MutableLiveData<Boolean> getScannerVisibilityLive() {
@@ -143,32 +132,12 @@ public class FormDataShoppingListItemEdit {
     scannerVisibilityLive.setValue(!isScannerVisible());
   }
 
-  public MutableLiveData<ShoppingList> getShoppingListLive() {
-    return shoppingListLive;
-  }
-
-  public LiveData<String> getShoppingListNameLive() {
-    return shoppingListNameLive;
-  }
-
-  public MutableLiveData<Integer> getShoppingListIdLive() {
-    return shoppingListIdLive;
-  }
-
-  public MutableLiveData<Product> getProductLive() {
-    return productLive;
-  }
-
-  public MutableLiveData<String> getProductNameLive() {
-    return productNameLive;
-  }
-
-  public MutableLiveData<Integer> getProductNameErrorLive() {
-    return productNameErrorLive;
-  }
-
   public MutableLiveData<String> getBarcodeLive() {
     return barcodeLive;
+  }
+
+  public MutableLiveData<Integer> getBarcodeErrorLive() {
+    return barcodeErrorLive;
   }
 
   public MutableLiveData<String> getAmountLive() {
@@ -215,16 +184,16 @@ public class FormDataShoppingListItemEdit {
     return quantityUnitsLive;
   }
 
+  public void setQuantityUnitPurchase(QuantityUnit quantityUnitPurchase) {
+    this.quantityUnitPurchase = quantityUnitPurchase;
+  }
+
   public MutableLiveData<QuantityUnit> getQuantityUnitLive() {
     return quantityUnitLive;
   }
 
   public LiveData<String> getQuantityUnitNameLive() {
     return quantityUnitNameLive;
-  }
-
-  public MutableLiveData<Boolean> getQuantityUnitErrorLive() {
-    return quantityUnitErrorLive;
   }
 
   private QuantityUnit getStockQuantityUnit() {
@@ -240,8 +209,8 @@ public class FormDataShoppingListItemEdit {
     return null;
   }
 
-  private String getAmountStock() {
-    QuantityUnit stock = getStockQuantityUnit();
+  private String getAmountPurchase() {
+    QuantityUnit purchase = quantityUnitPurchase;
     QuantityUnit current = quantityUnitLive.getValue();
     if (!NumUtil.isStringDouble(amountLive.getValue())
         || quantityUnitsFactorsLive.getValue() == null
@@ -250,7 +219,7 @@ public class FormDataShoppingListItemEdit {
     }
     assert amountLive.getValue() != null;
 
-    if (stock != null && current != null && stock.getId() != current.getId()) {
+    if (purchase != null && current != null && purchase.getId() != current.getId()) {
       HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
       double amount = NumUtil.toDouble(amountLive.getValue());
       Object currentFactor = hashMap.get(current);
@@ -258,11 +227,8 @@ public class FormDataShoppingListItemEdit {
         amountHelperLive.setValue(null);
         return null;
       }
-      double amountMultiplied;
-      if (productLive.getValue() != null
-          && current.getId() == productLive.getValue().getQuIdPurchaseInt()) {
-        amountMultiplied = amount * (double) currentFactor;
-      } else {
+      double amountMultiplied = amount;
+      if (product != null) {
         amountMultiplied = amount / (double) currentFactor;
       }
       return NumUtil.trimAmount(amountMultiplied, maxDecimalPlacesAmount);
@@ -272,77 +238,50 @@ public class FormDataShoppingListItemEdit {
   }
 
   private String getAmountHelpText() {
-    QuantityUnit stock = getStockQuantityUnit();
-    if (stock == null || !NumUtil.isStringDouble(amountStockLive.getValue())) {
+    QuantityUnit purchase = quantityUnitPurchase;
+    if (purchase == null || !NumUtil.isStringDouble(amountPurchaseLive.getValue())) {
       return null;
     }
     return application.getString(
         R.string.subtitle_amount_compare,
-        amountStockLive.getValue(),
-        pluralUtil.getQuantityUnitPlural(stock, NumUtil.toDouble(amountStockLive.getValue()))
+        amountPurchaseLive.getValue(),
+        pluralUtil.getQuantityUnitPlural(purchase, NumUtil.toDouble(amountPurchaseLive.getValue()))
     );
   }
 
-  public MutableLiveData<Boolean> getUseMultilineNoteLive() {
-    return useMultilineNoteLive;
+  public MutableLiveData<Store> getStoreLive() {
+    return storeLive;
   }
 
-  public void setUseMultilineNoteLive(boolean useMultiline) {
-    useMultilineNoteLive.setValue(useMultiline);
+  public LiveData<String> getStoreNameLive() {
+    return storeNameLive;
   }
 
   public MutableLiveData<String> getNoteLive() {
     return noteLive;
   }
 
-  public MutableLiveData<Integer> getNoteErrorLive() {
-    return noteErrorLive;
+  public boolean isFilledWithProductBarcode() {
+    return filledWithProductBarcode;
   }
 
-  public MutableLiveData<ArrayList<Product>> getProductsLive() {
-    return productsLive;
+  public void setFilledWithProductBarcode(boolean filled) {
+    this.filledWithProductBarcode = filled;
   }
 
-  public boolean isFilledWithShoppingListItem() {
-    return filledWithShoppingListItem;
-  }
-
-  public void setFilledWithShoppingListItem(boolean filled) {
-    this.filledWithShoppingListItem = filled;
-  }
-
-  public boolean isProductNameValid() {
-    if (productNameLive.getValue() != null && productNameLive.getValue().isEmpty()) {
-      if (productLive.getValue() != null) {
-        productLive.setValue(null);
-      }
-      if (quantityUnitLive.getValue() != null) {
-        quantityUnitLive.setValue(null);
-      }
-    }
-    if (barcodeLive.getValue() != null && productLive.getValue() == null) {
-      productNameErrorLive.setValue(R.string.error_empty);
+  public boolean isBarcodeValid() {
+    if (barcodeLive.getValue() == null || barcodeLive.getValue().isEmpty()) {
+      barcodeErrorLive.setValue(R.string.error_empty);
       return false;
     }
-    if ((noteLive.getValue() == null || noteLive.getValue().isEmpty())
-        && productLive.getValue() == null) {
-      productNameErrorLive.setValue(R.string.error_empty);
-      return false;
-    }
-    productNameErrorLive.setValue(null);
+    barcodeErrorLive.setValue(null);
     return true;
   }
 
   public boolean isAmountValid() {
-    if (productLive.getValue() == null
-        && (noteLive.getValue() == null || noteLive.getValue().isEmpty())
-    ) {
+    if (amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
       amountErrorLive.setValue(null);
       return true;
-    }
-    if (amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
-      amountErrorLive.setValue(getString(R.string.error_empty));
-      return false;
     }
     if (!NumUtil.isStringDouble(amountLive.getValue())) {
       amountErrorLive.setValue(getString(R.string.error_invalid_amount));
@@ -364,77 +303,59 @@ public class FormDataShoppingListItemEdit {
     return true;
   }
 
-  private boolean isQuantityUnitValid() {
-    if (productLive.getValue() != null && quantityUnitLive.getValue() == null) {
-      quantityUnitErrorLive.setValue(true);
-      return false;
-    }
-    quantityUnitErrorLive.setValue(false);
-    return true;
-  }
-
   public boolean isFormValid() {
-    boolean valid = shoppingListLive.getValue() != null;
-    valid = isProductNameValid() && valid;
+    boolean valid = isBarcodeValid();
     valid = isAmountValid() && valid;
-    valid = isQuantityUnitValid() && valid;
     return valid;
-  }
-
-  public ShoppingListItem fillShoppingListItem(@Nullable ShoppingListItem item) {
-    if (!isFormValid()) {
-      return null;
-    }
-    ShoppingList shoppingList = shoppingListLive.getValue();
-    Product product = productLive.getValue();
-    String amountStock = amountStockLive.getValue();
-    String amount = amountLive.getValue();
-    String note = noteLive.getValue();
-    QuantityUnit unit = quantityUnitLive.getValue();
-
-    assert shoppingList != null;
-    if (item == null) {
-      item = new ShoppingListItem();
-    }
-    item.setShoppingListId(shoppingList.getId());
-    item.setProductId(product != null ? String.valueOf(product.getId()) : null);
-    item.setQuId(unit != null ? String.valueOf(unit.getId()) : null);
-    item.setAmountDouble(amountStock != null
-        ? NumUtil.toDouble(amountStock) : NumUtil.toDouble(amount), maxDecimalPlacesAmount);
-    item.setNote(note != null ? note.trim() : null);
-    return item;
   }
 
   public ProductBarcode fillProductBarcode(@Nullable ProductBarcode productBarcode) {
     if (!isFormValid()) {
       return null;
     }
-    String barcode = barcodeLive.getValue();
-    Product product = productLive.getValue();
-
     if (productBarcode == null) {
       productBarcode = new ProductBarcode();
     }
-    if (product == null) {
-      return productBarcode;
-    }
     productBarcode.setProductIdInt(product.getId());
-    productBarcode.setBarcode(barcode);
+
+    if (barcodeLive.getValue() != null && !barcodeLive.getValue().trim().isEmpty()) {
+      productBarcode.setBarcode(barcodeLive.getValue().trim());
+    } else {
+      productBarcode.setBarcode(null);
+    }
+    if (NumUtil.isStringDouble(amountLive.getValue())) {
+      productBarcode.setAmount(amountLive.getValue().trim());
+    } else {
+      productBarcode.setAmount(null);
+    }
+    if (quantityUnitLive.getValue() != null) {
+      productBarcode.setQuId(String.valueOf(quantityUnitLive.getValue().getId()));
+    } else {
+      productBarcode.setQuId(null);
+    }
+    if (storeLive.getValue() != null) {
+      productBarcode.setStoreId(String.valueOf(storeLive.getValue().getId()));
+    } else {
+      productBarcode.setStoreId(null);
+    }
+    if (noteLive.getValue() != null && !noteLive.getValue().trim().isEmpty()) {
+      productBarcode.setNote(noteLive.getValue());
+    } else {
+      productBarcode.setNote(null);
+    }
     return productBarcode;
   }
 
   public void clearForm() {
     barcodeLive.setValue(null);
+    barcodeErrorLive.setValue(null);
     amountLive.setValue(null);
     quantityUnitLive.setValue(null);
     quantityUnitsFactorsLive.setValue(null);
-    productLive.setValue(null);
-    productNameLive.setValue(null);
     barcodeLive.setValue(null);
     noteLive.setValue(null);
     new Handler().postDelayed(() -> {
-      productNameErrorLive.setValue(null);
-      quantityUnitErrorLive.setValue(false);
+      barcodeErrorLive.setValue(null);
       amountErrorLive.setValue(null);
     }, 50);
   }

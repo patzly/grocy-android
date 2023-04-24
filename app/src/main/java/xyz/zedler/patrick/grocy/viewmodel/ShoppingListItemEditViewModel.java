@@ -44,7 +44,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottom
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.FormDataShoppingListItemEdit;
+import xyz.zedler.patrick.grocy.form.FormDataShoppingListItemEdit;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;

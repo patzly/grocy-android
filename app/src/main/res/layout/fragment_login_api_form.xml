@@ -37,7 +37,7 @@
       type="xyz.zedler.patrick.grocy.viewmodel.LoginApiFormViewModel" />
     <variable
       name="formData"
-      type="xyz.zedler.patrick.grocy.model.FormDataLoginApiForm" />
+      type="xyz.zedler.patrick.grocy.form.FormDataLoginApiForm" />
   </data>
 
   <androidx.coordinatorlayout.widget.CoordinatorLayout

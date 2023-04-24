@@ -28,7 +28,7 @@
     <import type="xyz.zedler.patrick.grocy.Constants" />
     <variable
       name="formData"
-      type="xyz.zedler.patrick.grocy.model.FormDataMasterProductCatDueDate" />
+      type="xyz.zedler.patrick.grocy.form.FormDataMasterProductCatDueDate" />
     <variable
       name="viewModel"
       type="xyz.zedler.patrick.grocy.viewmodel.MasterProductCatDueDateViewModel" />
