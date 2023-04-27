@@ -1076,8 +1076,8 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <plurals name="date_years_ago">
     <item quantity="one">Před %d rokem</item>
     <item quantity="few">Před %d roky</item>
-    <item quantity="many">Před %d léty</item>
-    <item quantity="other">Před %d léty</item>
+    <item quantity="many">Před %d lety</item>
+    <item quantity="other">Před %d lety</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_days_from_now">
