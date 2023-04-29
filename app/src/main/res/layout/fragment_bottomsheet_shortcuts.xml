@@ -36,9 +36,27 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <com.google.android.material.appbar.MaterialToolbar
-      style="@style/Widget.Grocy.Toolbar"
-      app:title="@string/setting_manage_shortcuts" />
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical">
+
+      <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.Grocy.Toolbar.Start"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        app:title="@string/setting_manage_shortcuts" />
+
+      <com.google.android.material.button.MaterialButton
+        android:id="@+id/save"
+        style="@style/Widget.Grocy.Button.UnelevatedButton"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="12dp"
+        android:text="@string/action_save"
+        android:onClick="@{() -> sheet.saveShortcuts()}" />
+
+    </LinearLayout>
 
     <com.google.android.material.divider.MaterialDivider
       style="@style/Widget.Grocy.Divider" />
@@ -160,28 +178,6 @@
             android:layout_height="wrap_content"
             android:text="@string/title_recipes"
             android:onCheckedChanged="@{() -> sheet.checkLimitReached()}" />
-
-        </LinearLayout>
-
-        <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="horizontal"
-          android:gravity="end"
-          android:layout_marginTop="8dp">
-
-          <com.google.android.material.button.MaterialButton
-            android:id="@+id/cancel"
-            style="@style/Widget.Grocy.Button.TextButton"
-            android:text="@string/action_cancel"
-            android:onClick="@{() -> sheet.dismiss()}" />
-
-          <com.google.android.material.button.MaterialButton
-            android:id="@+id/save"
-            style="@style/Widget.Grocy.Button.UnelevatedButton"
-            android:layout_marginStart="8dp"
-            android:text="@string/action_save"
-            android:onClick="@{() -> sheet.saveShortcuts()}" />
 
         </LinearLayout>
 
