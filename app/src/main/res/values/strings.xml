@@ -1046,6 +1046,10 @@
   <string name="category_network">Network</string>
   <string name="category_network_proxy">Proxy</string>
   <string name="category_behavior">Behavior</string>
+  <string name="category_display_behavior">Display behavior</string>
+  <string name="category_input_behavior">Input behavior</string>
+  <string name="category_additional_services">Additional services</string>
+  <string name="category_other_behavior">Other behavior</string>
   <string name="category_debugging">Debugging</string>
   <string name="category_new_product">New product</string>
   <string name="category_existing_products">Existing products</string>
