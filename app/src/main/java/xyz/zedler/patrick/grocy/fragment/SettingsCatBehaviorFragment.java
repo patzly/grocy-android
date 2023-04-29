@@ -92,6 +92,8 @@ public class SettingsCatBehaviorFragment extends BaseFragment {
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
+      } else if (event.getType() == Event.UPDATE_BOTTOM_APP_BAR) {
+        activity.updateBottomNavigationMenuButton();
       }
     });
 

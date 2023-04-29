@@ -142,6 +142,7 @@ public final class Constants {
       public final static String BEGINNER_MODE = "beginner_mode";
       public final static String HAPTIC = "haptic";
       public final static String FOOD_FACTS = "food_facts";
+      public final static String SHOW_MAIN_MENU_BUTTON = "show_main_menu_button";
       public final static String EXPAND_BOTTOM_SHEETS = "expand_bottom_sheets";
       public final static String SPEED_UP_START = "speed_up_start";
       public final static String TURN_ON_QUICK_MODE = "turn_on_quick_mode";
@@ -246,6 +247,7 @@ public final class Constants {
       public final static boolean BEGINNER_MODE = true;
       public final static boolean HAPTIC = true;
       public final static boolean FOOD_FACTS = false;
+      public final static boolean SHOW_MAIN_MENU_BUTTON = true;
       public final static boolean EXPAND_BOTTOM_SHEETS = false;
       public final static boolean SPEED_UP_START = false;
       public final static boolean TURN_ON_QUICK_MODE = true;

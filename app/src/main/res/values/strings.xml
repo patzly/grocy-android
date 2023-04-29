@@ -1133,6 +1133,8 @@
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">Expand bottom sheets</string>
   <string name="setting_expand_bottom_sheets_description">In landscape mode</string>
+  <string name="setting_bottom_menu_button">Show main menu button</string>
+  <string name="setting_bottom_menu_button_description">In bottom app bar</string>
   <string name="setting_turn_on_quick_mode">Turn on quick mode by default</string>
   <string name="setting_turn_on_quick_mode_description">When using scan button on overview page</string>
   <string name="setting_speed_up_start">Reduce app startup time</string>

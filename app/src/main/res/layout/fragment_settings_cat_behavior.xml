@@ -123,6 +123,38 @@
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="@{v -> switchBottomMenu.setChecked(!switchBottomMenu.isChecked())}">
+
+            <ImageView
+              android:id="@+id/image_bottom_menu"
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              tools:ignore="ContentDescription"
+              android:src="@drawable/ic_round_menu_anim" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/setting_bottom_menu_button" />
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Description"
+                android:text="@string/setting_bottom_menu_button_description" />
+
+            </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+              android:id="@+id/switch_bottom_menu"
+              style="@style/Widget.Grocy.Switch"
+              android:onCheckedChanged="@{() -> activity.startIconAnimation(imageBottomMenu, true)}"
+              android:checked="@={viewModel.showMainMenuButtonEnabled}" />
+
+          </LinearLayout>
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:onClick="@{v -> switchExpand.setChecked(!switchExpand.isChecked())}">
 
             <ImageView

@@ -52,6 +52,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSh
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShortcutsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -265,6 +266,19 @@ public class SettingsViewModel extends BaseViewModel {
   public void setUseOpenFoodFactsEnabled(boolean enabled) {
     sharedPrefs.edit()
         .putBoolean(Constants.SETTINGS.BEHAVIOR.FOOD_FACTS, enabled).apply();
+  }
+
+  public boolean getShowMainMenuButtonEnabled() {
+    return sharedPrefs.getBoolean(
+        BEHAVIOR.SHOW_MAIN_MENU_BUTTON,
+        Constants.SETTINGS_DEFAULT.BEHAVIOR.SHOW_MAIN_MENU_BUTTON
+    );
+  }
+
+  public void setShowMainMenuButtonEnabled(boolean enabled) {
+    sharedPrefs.edit()
+        .putBoolean(Constants.SETTINGS.BEHAVIOR.SHOW_MAIN_MENU_BUTTON, enabled).apply();
+    sendEvent(Event.UPDATE_BOTTOM_APP_BAR);
   }
 
   public boolean getExpandBottomSheetsEnabled() {
