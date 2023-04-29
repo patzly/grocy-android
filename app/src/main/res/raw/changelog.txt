@@ -4,6 +4,7 @@
 - Improved: Better logic on login page for receiving Home Assistant session token (#670)
 - Improved: Logging on login page for Home Assistant connection (#670)
 - Improved: Moved shortcuts option from behavior to appearance settings
+- Improved: Added option for quick mode state when using scan button on overview page (#540, #648)
 - Fixed: Home Assistant offline error (#670)
 - Fixed: On login pages all barcode formats were allowed, now only QR code format is recognized
 - Fixed: Deprecated Google Play developer profile link

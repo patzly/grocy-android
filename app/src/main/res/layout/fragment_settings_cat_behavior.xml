@@ -218,6 +218,36 @@
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="@{v -> switchTurnOnQuickMode.setChecked(!switchTurnOnQuickMode.isChecked())}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              tools:ignore="ContentDescription"
+              android:src="@drawable/ic_round_directions_run" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/setting_turn_on_quick_mode" />
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Description"
+                android:text="@string/setting_turn_on_quick_mode_description" />
+
+            </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+              android:id="@+id/switch_turn_on_quick_mode"
+              style="@style/Widget.Grocy.Switch"
+              android:checked="@={viewModel.turnOnQuickModeEnabled}" />
+
+          </LinearLayout>
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:onClick="@{v -> switchDateKeyboardInput.setChecked(!switchDateKeyboardInput.isChecked())}">
 
             <ImageView

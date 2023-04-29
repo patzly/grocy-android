@@ -152,7 +152,10 @@ public class PurchaseViewModel extends BaseViewModel {
     infoFullscreenLive = new MutableLiveData<>();
     boolean quickModeStart;
     if (args.getStartWithScanner()) {
-      quickModeStart = true;
+      quickModeStart = sharedPrefs.getBoolean(
+          BEHAVIOR.TURN_ON_QUICK_MODE,
+          Constants.SETTINGS_DEFAULT.BEHAVIOR.TURN_ON_QUICK_MODE
+      );
     } else if (!args.getCloseWhenFinished()) {
       quickModeStart = sharedPrefs.getBoolean(
           Constants.PREF.QUICK_MODE_ACTIVE_PURCHASE,

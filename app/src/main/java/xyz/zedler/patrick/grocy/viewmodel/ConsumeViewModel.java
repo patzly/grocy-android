@@ -40,6 +40,7 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -114,7 +115,10 @@ public class ConsumeViewModel extends BaseViewModel {
     infoFullscreenLive = new MutableLiveData<>();
     boolean quickModeStart;
     if (args.getStartWithScanner()) {
-      quickModeStart = true;
+      quickModeStart = sharedPrefs.getBoolean(
+          BEHAVIOR.TURN_ON_QUICK_MODE,
+          Constants.SETTINGS_DEFAULT.BEHAVIOR.TURN_ON_QUICK_MODE
+      );
     } else if (!args.getCloseWhenFinished()) {
       quickModeStart = sharedPrefs.getBoolean(
           PREF.QUICK_MODE_ACTIVE_CONSUME,
