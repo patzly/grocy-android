@@ -72,6 +72,29 @@ Every time you open or broach something, you mark one of it in grocy as open. Wa
 - <b>Shortcut:</b> Tap on the <b>consume</b> shortcut of Grocy in your app launcher on Android 7.1+ and continue as described previously
 - <b>Consume page:</b> Open the <b>consume</b> page in the bottom drawer or on the overview page and fill out the form, then check <b>Mark as opened</b> and tap on the big button at the bottom
 
+## Deeplinks
+
+You can open a desired page of the app using an URI. This could be written e.g. into a NFC tag for easy navigation to the consume page or other pages in the app using physical interaction.
+
+#### URIs:
+
+- grocy://stockOverviewFragment
+- grocy://stockOverviewFragment?statusFilterId={statusFilterId}
+- grocy://shoppingListFragment
+- grocy://shoppingModeFragment
+- grocy://purchaseFragment
+- grocy://consumeFragment
+- grocy://transferFragment
+- grocy://inventoryFragment
+- grocy://settingsFragment
+- grocy://tasksFragment
+- grocy://choresFragment
+- grocy://recipesFragment
+- grocy://masterDataOverviewFragment
+- grocy://stockEntriesFragment
+
+The value of parameter statusFilterId for the second URI can be 0 for all items, 1 for due soon, 3 for overdue, 4 for expired, 5 for in stock, 6 for opened and 7 for "not fresh" combination.
+
 ## Support
 
 Please go to our project page on GitHub (patzy/grocy-android) and open a new issue with your question.
