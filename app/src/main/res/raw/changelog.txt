@@ -1,5 +1,6 @@
 ## 3.2.0
 
+- New: Product pictures on stock overview list and master products list (#536)
 - New: Many pages of the app now can be opened using NFC tags with URI (thanks @codesalatdev) (#676)
 - Improved: In-app help now contains a list of the supported URIs that can be used for Intents
 - Improved: Menu button in bottom app bar now can be hidden in behavior settings
