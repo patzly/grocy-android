@@ -259,7 +259,7 @@ public class RecipeEntryAdapter extends
 
       Glide.with(context)
           .load(
-              new GlideUrl(grocyApi.getRecipePicture(recipe.getPictureFileName()), grocyAuthHeaders)
+              new GlideUrl(grocyApi.getRecipePicture(pictureFileName), grocyAuthHeaders)
           ).transform(
               new CenterCrop(), new RoundedCorners(UiUtil.dpToPx(context, 12))
           ).transition(DrawableTransitionOptions.withCrossFade())
@@ -287,7 +287,6 @@ public class RecipeEntryAdapter extends
       holder.binding.picture.setVisibility(View.GONE);
       holder.binding.picturePlaceholder.setVisibility(View.GONE);
     }
-
 
     // CONTAINER
 

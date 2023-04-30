@@ -23,37 +23,9 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:id="@+id/linear_recipe_entry_container"
   style="@style/Widget.Grocy.LinearLayout.ListItem.ThreeLine.Clickable"
+  android:paddingStart="16dp"
+  android:paddingEnd="16dp"
   android:background="@drawable/ripple_list_item_swipeable">
-
-  <ImageView
-    android:id="@+id/picture"
-    android:layout_width="56dp"
-    android:layout_height="56dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginTop="4dp"
-    android:layout_gravity="top"
-    tools:ignore="ContentDescription" />
-
-  <com.google.android.material.card.MaterialCardView
-    android:id="@+id/picture_placeholder"
-    android:layout_width="56dp"
-    android:layout_height="56dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginTop="4dp"
-    android:layout_gravity="top"
-    android:visibility="gone"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="0dp"
-    app:strokeWidth="0dp"
-    app:cardBackgroundColor="?attr/colorSurfaceVariant">
-
-    <ImageView
-      style="@style/Widget.Grocy.ImageView.Icon"
-      android:src="@drawable/ic_round_image"
-      android:layout_gravity="center"
-      tools:ignore="ContentDescription" />
-
-  </com.google.android.material.card.MaterialCardView>
 
   <LinearLayout
     android:id="@+id/linear_text_container"
@@ -115,7 +87,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_marginStart="16dp"
-    android:layout_gravity="top"
+    android:layout_gravity="center_vertical"
     android:visibility="gone">
 
     <TextView
@@ -136,5 +108,33 @@
       android:textColor="?attr/colorOnSurfaceVariant" />
 
   </LinearLayout>
+
+  <ImageView
+    android:id="@+id/picture"
+    android:layout_width="56dp"
+    android:layout_height="56dp"
+    android:layout_marginStart="16dp"
+    android:layout_gravity="center_vertical"
+    tools:ignore="ContentDescription" />
+
+  <com.google.android.material.card.MaterialCardView
+    android:id="@+id/picture_placeholder"
+    android:layout_width="56dp"
+    android:layout_height="56dp"
+    android:layout_marginStart="16dp"
+    android:layout_gravity="center_vertical"
+    android:visibility="gone"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="0dp"
+    app:cardBackgroundColor="?attr/colorSurfaceVariant">
+
+    <ImageView
+      style="@style/Widget.Grocy.ImageView.Icon"
+      android:src="@drawable/ic_round_image"
+      android:layout_gravity="center"
+      tools:ignore="ContentDescription" />
+
+  </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>
