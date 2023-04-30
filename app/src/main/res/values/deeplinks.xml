@@ -33,6 +33,7 @@
   <string name="deep_link_settingsCatScannerFragment" translatable="false">grocy://settingsCatScannerFragment</string>
   <string name="deep_link_tasksFragment" translatable="false">grocy://tasksFragment</string>
   <string name="deep_link_taskEntryEditFragment" translatable="false">grocy://taskEntryEditFragment?action={action}</string>
+  <string name="deep_link_taskEntryEditFragmentCreate" translatable="false">grocy://taskEntryEditFragment?action=create</string>
   <string name="deep_link_choresFragment" translatable="false">grocy://choresFragment</string>
   <string name="deep_link_recipesFragment" translatable="false">grocy://recipesFragment</string>
   <string name="deep_link_aboutFragment" translatable="false">grocy://aboutFragment</string>

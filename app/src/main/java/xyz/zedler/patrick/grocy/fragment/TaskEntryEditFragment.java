@@ -149,7 +149,7 @@ public class TaskEntryEditFragment extends BaseFragment {
 
     ViewUtil.setTooltipText(binding.buttonDeleteDueDate, R.string.action_delete);
 
-    if (savedInstanceState == null && args.getAction().equals(ACTION.CREATE)) {
+    if (savedInstanceState == null && !args.getAction().equals(ACTION.EDIT)) {
       if (binding.editTextName.getText() == null || binding.editTextName.getText().length() == 0) {
         new Handler().postDelayed(() -> activity.showKeyboard(binding.editTextName), 50);
       }

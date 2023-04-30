@@ -747,6 +747,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
+                app:contentPaddingBottom="12dp"
                 android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_TASKS) ? View.VISIBLE : View.GONE}"
                 android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_tasksFragment)}"
                 app:clickUtil="@{clickUtil}">
@@ -842,6 +843,15 @@
                       android:text="@{viewModel.tasksUserDescriptionTextLive}" />
 
                   </LinearLayout>
+
+                  <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.Grocy.Button.OutlinedButton.Icon"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/title_task_add"
+                    android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_taskEntryEditFragmentCreate)}"
+                    app:clickUtil="@{clickUtil}"
+                    app:icon="@drawable/ic_round_add_anim" />
 
                 </LinearLayout>
 
