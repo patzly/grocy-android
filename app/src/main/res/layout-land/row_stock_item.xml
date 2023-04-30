@@ -25,6 +25,34 @@
   style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
   android:background="@drawable/ripple_list_item_swipeable">
 
+  <ImageView
+    android:id="@+id/picture"
+    android:layout_width="56dp"
+    android:layout_height="56dp"
+    android:layout_marginEnd="16dp"
+    android:layout_gravity="center_vertical"
+    tools:ignore="ContentDescription" />
+
+  <com.google.android.material.card.MaterialCardView
+    android:id="@+id/picture_placeholder"
+    android:layout_width="56dp"
+    android:layout_height="56dp"
+    android:layout_marginEnd="16dp"
+    android:layout_gravity="center_vertical"
+    android:visibility="gone"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="0dp"
+    app:cardBackgroundColor="?attr/colorSurfaceVariant">
+
+    <ImageView
+      style="@style/Widget.Grocy.ImageView.Icon"
+      android:src="@drawable/ic_round_image"
+      android:layout_gravity="center"
+      tools:ignore="ContentDescription" />
+
+  </com.google.android.material.card.MaterialCardView>
+
   <LinearLayout
     style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch"
     android:orientation="horizontal"
@@ -115,33 +143,5 @@
       android:textColor="?attr/colorOnSurfaceVariant" />
 
   </LinearLayout>
-
-  <ImageView
-    android:id="@+id/picture"
-    android:layout_width="56dp"
-    android:layout_height="56dp"
-    android:layout_marginStart="16dp"
-    android:layout_gravity="center_vertical|end"
-    tools:ignore="ContentDescription" />
-
-  <com.google.android.material.card.MaterialCardView
-    android:id="@+id/picture_placeholder"
-    android:layout_width="56dp"
-    android:layout_height="56dp"
-    android:layout_marginStart="16dp"
-    android:layout_gravity="center_vertical|end"
-    android:visibility="gone"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="0dp"
-    app:strokeWidth="0dp"
-    app:cardBackgroundColor="?attr/colorSurfaceVariant">
-
-    <ImageView
-      style="@style/Widget.Grocy.ImageView.Icon"
-      android:src="@drawable/ic_round_image"
-      android:layout_gravity="center"
-      tools:ignore="ContentDescription" />
-
-  </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>
