@@ -26,8 +26,10 @@
   android:orientation="vertical">
 
   <LinearLayout
-    android:id="@+id/linear_recipe_entry_container"
+    android:id="@+id/container"
     style="@style/Widget.Grocy.LinearLayout.ListItem.ThreeLine.Clickable"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
     android:background="@drawable/ripple_list_item_swipeable">
 
     <ImageView
@@ -147,7 +149,7 @@
   <com.google.android.material.divider.MaterialDivider
     android:id="@+id/divider"
     style="@style/Widget.Grocy.Divider.Margin"
-    android:layout_marginHorizontal="16dp"
+    android:layout_marginHorizontal="8dp"
     android:layout_marginVertical="4dp"/>
 
 </LinearLayout>
