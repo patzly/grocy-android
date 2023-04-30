@@ -1168,6 +1168,8 @@
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">Développer les fiches déroulantes du bas</string>
   <string name="setting_expand_bottom_sheets_description">En mode paysage</string>
+  <string name="setting_bottom_menu_button">Afficher le bouton du menu principal</string>
+  <string name="setting_bottom_menu_button_description">Dans la barre inférieure de l\'application</string>
   <string name="setting_turn_on_quick_mode">Activer le mode rapide par défaut</string>
   <string name="setting_turn_on_quick_mode_description">Lors de l\'utilisation du scanner de code barres sur la page d\'accueil</string>
   <string name="setting_speed_up_start">Réduire le temps de chargement de l\'application</string>
