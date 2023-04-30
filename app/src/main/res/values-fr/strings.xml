@@ -101,6 +101,7 @@
   <!-- Short form for "Link barcode to existing product and clear form", this should fit into a button so keep it short -->
   <string name="action_link_and_clear">Lien &amp; Clair</string>
   <string name="action_toggle_done">Basculer la coche</string>
+  <string name="action_change_layout">Changer la disposition</string>
   <string name="action_edit_notes">Modifier les notes</string>
   <string name="action_add_missing">Ajouter des produits manquants</string>
   <string name="action_purchase_done_items">Acheter les articles cochés</string>
