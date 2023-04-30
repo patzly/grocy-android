@@ -27,4 +27,10 @@
     android:icon="@drawable/ic_round_search_anim"
     app:showAsAction="always" />
 
+  <item
+    android:id="@+id/action_layout"
+    android:title="@string/action_change_layout"
+    android:icon="@drawable/ic_round_mosaic"
+    app:showAsAction="ifRoom" />
+
 </menu>

@@ -19,6 +19,8 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -30,6 +32,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
@@ -132,6 +135,8 @@ public class RecipesFragment extends BaseFragment implements
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
+    binding.recycler.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+
     binding.recycler.setAdapter(new MasterPlaceholderAdapter());
 
     if (savedInstanceState == null) {
@@ -173,7 +178,7 @@ public class RecipesFragment extends BaseFragment implements
         binding.recycler.setAdapter(
             new RecipeEntryAdapter(
                 requireContext(),
-                (LinearLayoutManager) binding.recycler.getLayoutManager(),
+                binding.recycler.getLayoutManager(),
                 items,
                 viewModel.getRecipeFulfillments(),
                 this,
@@ -256,6 +261,34 @@ public class RecipesFragment extends BaseFragment implements
     );
   }
 
+  private void toggleLayoutManager() {
+    fadeOutRecyclerView(() -> {
+      RecyclerView.LayoutManager layoutManager = binding.recycler.getLayoutManager();
+      if (layoutManager instanceof StaggeredGridLayoutManager) {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
+        binding.recycler.setLayoutManager(linearLayoutManager);
+      } else {
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        binding.recycler.setLayoutManager(staggeredGridLayoutManager);
+      }
+      binding.recycler.setAdapter(
+          new RecipeEntryAdapter(
+              requireContext(),
+              binding.recycler.getLayoutManager(),
+              viewModel.getFilteredRecipesLive().getValue(),
+              viewModel.getRecipeFulfillments(),
+              this,
+              viewModel.getSortMode(),
+              viewModel.isSortAscending(),
+              viewModel.getExtraField()
+          )
+      );
+      binding.recycler.scheduleLayoutAnimation();
+      fadeInRecyclerView();
+    });
+  }
+
+
   @Override
   public void consumeRecipe(int recipeId) {
     if (showOfflineError()) {
@@ -324,6 +357,9 @@ public class RecipesFragment extends BaseFragment implements
       ViewUtil.startIcon(item);
       setUpSearch();
       return true;
+    } else if (item.getItemId() == R.id.action_layout) {
+      toggleLayoutManager();
+      return true;
     }
     return false;
   }
@@ -389,6 +425,28 @@ public class RecipesFragment extends BaseFragment implements
     activity.hideKeyboard();
     binding.editTextSearch.setText("");
     viewModel.setIsSearchVisible(false);
+  }
+
+  private void fadeOutRecyclerView(final Runnable onAnimationEnd) {
+    binding.recycler.animate()
+        .alpha(0f)
+        .setDuration(150)
+        .setListener(new AnimatorListenerAdapter() {
+          @Override
+          public void onAnimationEnd(Animator animation) {
+            if (onAnimationEnd != null) {
+              onAnimationEnd.run();
+            }
+          }
+        });
+  }
+
+  private void fadeInRecyclerView() {
+    binding.recycler.setAlpha(0f);
+    binding.recycler.animate()
+        .alpha(1f)
+        .setDuration(150)
+        .setListener(null);
   }
 
   @NonNull

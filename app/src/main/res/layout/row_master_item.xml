@@ -26,28 +26,20 @@
   android:paddingStart="16dp"
   android:paddingEnd="16dp">
 
-  <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-    <TextView
-      android:id="@+id/text_master_item_name"
-      style="@style/Widget.Grocy.TextView.ListItem.Title" />
-
-  </LinearLayout>
-
   <ImageView
     android:id="@+id/picture"
     android:layout_width="56dp"
     android:layout_height="56dp"
-    android:layout_marginStart="16dp"
-    android:layout_gravity="center_vertical|end"
+    android:layout_marginEnd="16dp"
+    android:layout_gravity="center_vertical"
     tools:ignore="ContentDescription" />
 
   <com.google.android.material.card.MaterialCardView
     android:id="@+id/picture_placeholder"
     android:layout_width="56dp"
     android:layout_height="56dp"
-    android:layout_marginStart="16dp"
-    android:layout_gravity="center_vertical|end"
+    android:layout_marginEnd="16dp"
+    android:layout_gravity="center_vertical"
     android:visibility="gone"
     app:cardCornerRadius="12dp"
     app:cardElevation="0dp"
@@ -61,5 +53,13 @@
       tools:ignore="ContentDescription" />
 
   </com.google.android.material.card.MaterialCardView>
+
+  <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+    <TextView
+      android:id="@+id/text_master_item_name"
+      style="@style/Widget.Grocy.TextView.ListItem.Title" />
+
+  </LinearLayout>
 
 </LinearLayout>

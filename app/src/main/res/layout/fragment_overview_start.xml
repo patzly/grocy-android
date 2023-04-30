@@ -509,7 +509,7 @@
                     android:text="@{viewModel.shoppingListDescriptionTextLive}" />
 
                   <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.Grocy.Button.OutlinedButton.Icon"
+                    style="@style/Widget.Grocy.Button.TonalButton.Icon"
                     android:layout_gravity="end"
                     android:layout_marginTop="8dp"
                     android:text="@string/title_shopping_mode"
@@ -845,7 +845,7 @@
                   </LinearLayout>
 
                   <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.Grocy.Button.OutlinedButton.Icon"
+                    style="@style/Widget.Grocy.Button.TonalButton.Icon"
                     android:layout_gravity="end"
                     android:layout_marginTop="8dp"
                     android:text="@string/title_task_add"
