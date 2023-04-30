@@ -41,7 +41,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TaskCategoriesBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.UsersBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.FormDataTaskEntryEdit;
+import xyz.zedler.patrick.grocy.form.FormDataTaskEntryEdit;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;

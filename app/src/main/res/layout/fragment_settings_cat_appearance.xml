@@ -209,6 +209,33 @@
             android:id="@+id/partial_option_transition"
             layout="@layout/partial_option_transition" />
 
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{v -> viewModel.showShortcutsBottomSheet()}"
+            app:clickUtil="@{clickUtil}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              tools:ignore="ContentDescription"
+              android:src="@drawable/ic_round_shortcut" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/setting_manage_shortcuts" />
+
+              <TextView
+                android:id="@+id/subtitle_shortcuts"
+                style="@style/Widget.Grocy.TextView.ListItem.Description"
+                android:text="@string/subtitle_none_selected" />
+
+            </LinearLayout>
+
+          </LinearLayout>
+
         </LinearLayout>
 
       </androidx.constraintlayout.widget.ConstraintLayout>

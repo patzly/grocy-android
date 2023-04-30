@@ -40,6 +40,7 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -52,7 +53,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomShe
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockLocationsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.FormDataConsume;
+import xyz.zedler.patrick.grocy.form.FormDataConsume;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
@@ -114,7 +115,10 @@ public class ConsumeViewModel extends BaseViewModel {
     infoFullscreenLive = new MutableLiveData<>();
     boolean quickModeStart;
     if (args.getStartWithScanner()) {
-      quickModeStart = true;
+      quickModeStart = sharedPrefs.getBoolean(
+          BEHAVIOR.TURN_ON_QUICK_MODE,
+          Constants.SETTINGS_DEFAULT.BEHAVIOR.TURN_ON_QUICK_MODE
+      );
     } else if (!args.getCloseWhenFinished()) {
       quickModeStart = sharedPrefs.getBoolean(
           PREF.QUICK_MODE_ACTIVE_CONSUME,

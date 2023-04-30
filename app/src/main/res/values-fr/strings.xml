@@ -1081,6 +1081,10 @@
   <string name="category_network">Réseau</string>
   <string name="category_network_proxy">Proxy</string>
   <string name="category_behavior">Comportement</string>
+  <string name="category_display_behavior">Comportement d\'affichage</string>
+  <string name="category_input_behavior">Comportement d\'entrée</string>
+  <string name="category_additional_services">Services supplémentaires</string>
+  <string name="category_other_behavior">Autre comportement</string>
   <string name="category_debugging">Débogage</string>
   <string name="category_new_product">Nouveau produit</string>
   <string name="category_existing_products">Produits existants</string>
@@ -1164,6 +1168,8 @@
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">Développer les fiches déroulantes du bas</string>
   <string name="setting_expand_bottom_sheets_description">En mode paysage</string>
+  <string name="setting_turn_on_quick_mode">Activer le mode rapide par défaut</string>
+  <string name="setting_turn_on_quick_mode_description">Lors de l\'utilisation du scanner de code barres sur la page d\'accueil</string>
   <string name="setting_speed_up_start">Réduire le temps de chargement de l\'application</string>
   <string name="setting_speed_up_start_description">N\'a un effet que sur les appareils performants</string>
   <string name="setting_date_keyboard_input">Saisir les dates avec le clavier</string>

@@ -20,24 +20,39 @@
 package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.RowFilterChipsBinding;
+import xyz.zedler.patrick.grocy.databinding.RowMasterItemBinding;
 import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
+import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.util.ObjectUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
+import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class MasterObjectListAdapter extends
     RecyclerView.Adapter<MasterObjectListAdapter.ViewHolder> {
@@ -49,6 +64,9 @@ public class MasterObjectListAdapter extends
   private final MasterObjectListAdapterListener listener;
   private final String entity;
   private final HorizontalFilterBarMulti horizontalFilterBarMulti;
+  private final GrocyApi grocyApi;
+  private final LazyHeaders grocyAuthHeaders;
+  private boolean containsPictures;
 
   public MasterObjectListAdapter(
       Context context,
@@ -62,6 +80,18 @@ public class MasterObjectListAdapter extends
     this.listener = listener;
     this.entity = entity;
     this.horizontalFilterBarMulti = horizontalFilterBarMulti;
+    this.grocyApi = new GrocyApi((Application) context.getApplicationContext());
+    this.grocyAuthHeaders = RequestHeaders.getGlideGrocyAuthHeaders(context);
+
+    containsPictures = false;
+    for (Object object : objects) {
+      if (!(object instanceof Product)) continue;
+      String pictureFileName = ((Product) object).getPictureFileName();
+      if (pictureFileName != null && !pictureFileName.isEmpty()) {
+        containsPictures = true;
+        break;
+      }
+    }
   }
 
   @Override
@@ -79,14 +109,11 @@ public class MasterObjectListAdapter extends
 
   public static class ItemViewHolder extends ViewHolder {
 
-    private final LinearLayout linearLayoutItemContainer;
-    private final TextView textViewName;
+    private final RowMasterItemBinding binding;
 
-    public ItemViewHolder(View view) {
-      super(view);
-
-      linearLayoutItemContainer = view.findViewById(R.id.linear_master_item_container);
-      textViewName = view.findViewById(R.id.text_master_item_name);
+    public ItemViewHolder(RowMasterItemBinding binding) {
+      super(binding.getRoot());
+      this.binding = binding;
     }
   }
 
@@ -152,13 +179,11 @@ public class MasterObjectListAdapter extends
           horizontalFilterBarMulti
       );
     } else {
-      return new ItemViewHolder(
-          LayoutInflater.from(parent.getContext()).inflate(
-              R.layout.row_master_item,
-              parent,
-              false
-          )
-      );
+      return new ItemViewHolder(RowMasterItemBinding.inflate(
+          LayoutInflater.from(parent.getContext()),
+          parent,
+          false
+      ));
     }
   }
 
@@ -180,10 +205,48 @@ public class MasterObjectListAdapter extends
     Object object = objects.get(movedPosition);
 
     // NAME
-    holder.textViewName.setText(ObjectUtil.getObjectName(object, entity));
+    holder.binding.textMasterItemName.setText(ObjectUtil.getObjectName(object, entity));
+
+    // PICTURE
+    String pictureFileName = entity.equals(GrocyApi.ENTITY.PRODUCTS)
+        ? ((Product) object).getPictureFileName()
+        : null;
+    if (pictureFileName != null && !pictureFileName.isEmpty()) {
+      holder.binding.picture.layout(0, 0, 0, 0);
+
+      Glide.with(context)
+          .load(
+              new GlideUrl(grocyApi.getProductPicture(pictureFileName), grocyAuthHeaders)
+          ).transform(
+              new CenterCrop(), new RoundedCorners(UiUtil.dpToPx(context, 12))
+          ).transition(DrawableTransitionOptions.withCrossFade())
+          .listener(new RequestListener<>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                Target<Drawable> target, boolean isFirstResource) {
+              holder.binding.picture.setVisibility(View.GONE);
+              holder.binding.picturePlaceholder.setVisibility(View.VISIBLE);
+              return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
+                DataSource dataSource, boolean isFirstResource) {
+              holder.binding.picture.setVisibility(View.VISIBLE);
+              holder.binding.picturePlaceholder.setVisibility(View.GONE);
+              return false;
+            }
+          }).into(holder.binding.picture);
+    } else if (containsPictures) {
+      holder.binding.picture.setVisibility(View.GONE);
+      holder.binding.picturePlaceholder.setVisibility(View.VISIBLE);
+    } else {
+      holder.binding.picture.setVisibility(View.GONE);
+      holder.binding.picturePlaceholder.setVisibility(View.GONE);
+    }
 
     // CONTAINER
-    holder.linearLayoutItemContainer.setOnClickListener(
+    holder.binding.linearMasterItemContainer.setOnClickListener(
         view -> listener.onItemRowClicked(object)
     );
   }

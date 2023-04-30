@@ -27,11 +27,11 @@
   <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
   <uses-permission android:name="android.permission.VIBRATE" />
   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+  <uses-permission android:name="android.permission.NFC" />
 
   <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
-  <uses-feature
-    android:name="android.hardware.camera"
-    android:required="false" />
+  <uses-feature android:name="android.hardware.camera" android:required="false" />
+  <uses-feature android:name="android.hardware.nfc" android:required="false" />
 
   <queries>
     <package android:name="org.torproject.android" />
@@ -71,13 +71,12 @@
 
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
+        <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
 
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
 
-        <data
-          android:scheme="grocy"
-          android:host="shoppingmodefragment" />
+        <data android:scheme="grocy" />
       </intent-filter>
 
     </activity>

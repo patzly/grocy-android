@@ -17,7 +17,7 @@
  * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
-package xyz.zedler.patrick.grocy.model;
+package xyz.zedler.patrick.grocy.form;
 
 import android.app.Application;
 import android.content.SharedPreferences;
@@ -37,16 +37,23 @@ import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.fragment.TransferFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.ConsumeFragmentArgs;
+import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductBarcode;
+import xyz.zedler.patrick.grocy.model.ProductDetails;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.StockEntry;
+import xyz.zedler.patrick.grocy.model.StockLocation;
+import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
-public class FormDataTransfer {
+public class FormDataConsume {
 
-  private final static String TAG = FormDataTransfer.class.getSimpleName();
+  private final static String TAG = FormDataConsume.class.getSimpleName();
 
   private final Application application;
   private final SharedPreferences sharedPrefs;
@@ -54,8 +61,11 @@ public class FormDataTransfer {
   private final MutableLiveData<Boolean> scannerVisibilityLive;
   private final MutableLiveData<ArrayList<Product>> productsLive;
   private final MutableLiveData<ProductDetails> productDetailsLive;
+  private final LiveData<Boolean> isTareWeightEnabledLive;
   private final MutableLiveData<String> productNameLive;
+  private final LiveData<String> productNameInfoStockLive;
   private final MutableLiveData<Integer> productNameErrorLive;
+  private final MutableLiveData<Boolean> consumeExactAmountLive;
   private final MutableLiveData<String> barcodeLive;
   private final MutableLiveData<HashMap<QuantityUnit, Double>> quantityUnitsFactorsLive;
   private final LiveData<QuantityUnit> quantityUnitStockLive;
@@ -68,11 +78,11 @@ public class FormDataTransfer {
   private final LiveData<String> amountHintLive;
   private final MediatorLiveData<String> amountStockLive;
   private ArrayList<StockLocation> stockLocations;
-  private final MutableLiveData<StockLocation> fromLocationLive;
-  private final LiveData<String> fromLocationNameLive;
-  private final MutableLiveData<Location> toLocationLive;
-  private final LiveData<String> toLocationNameLive;
-  private final MutableLiveData<Boolean> toLocationErrorLive;
+  private final MutableLiveData<StockLocation> stockLocationLive;
+  private final LiveData<String> stockLocationNameLive;
+  private final MutableLiveData<Boolean> spoiledLive;
+  private final MutableLiveData<Boolean> openVisibilityLive;
+  private final MutableLiveData<Boolean> openLive;
   private final MutableLiveData<Boolean> useSpecificLive;
   private ArrayList<StockEntry> stockEntries;
   private final MutableLiveData<StockEntry> specificStockEntryLive;
@@ -80,10 +90,10 @@ public class FormDataTransfer {
   private boolean currentProductFlowInterrupted = false;
   private final int maxDecimalPlacesAmount;
 
-  public FormDataTransfer(
+  public FormDataConsume(
       Application application,
       SharedPreferences sharedPrefs,
-      TransferFragmentArgs args
+      ConsumeFragmentArgs args
   ) {
     this.application = application;
     this.sharedPrefs = sharedPrefs;
@@ -96,15 +106,32 @@ public class FormDataTransfer {
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
     );
     scannerVisibilityLive = new MutableLiveData<>(false);
-    if (getCameraScannerWasVisibleLastTime() && !getExternalScannerEnabled() && !args
+    if (args.getStartWithScanner() && !getExternalScannerEnabled() && !args
+        .getCloseWhenFinished()) {
+      scannerVisibilityLive.setValue(true);
+    } else if (getCameraScannerWasVisibleLastTime() && !getExternalScannerEnabled() && !args
         .getCloseWhenFinished()) {
       scannerVisibilityLive.setValue(true);
     }
+    pluralUtil = new PluralUtil(application);
     productsLive = new MutableLiveData<>(new ArrayList<>());
     productDetailsLive = new MutableLiveData<>();
+    isTareWeightEnabledLive = Transformations.map(
+        productDetailsLive,
+        productDetails -> productDetails != null
+            && productDetails.getProduct().getEnableTareWeightHandlingBoolean()
+    );
     productDetailsLive.setValue(null);
     productNameLive = new MutableLiveData<>();
+    productNameInfoStockLive = Transformations.map(
+        productDetailsLive,
+        productDetails -> {
+          String info = AmountUtil.getStockAmountInfo(application, pluralUtil, productDetails, maxDecimalPlacesAmount);
+          return info != null ? application.getString(R.string.property_in_stock, info) : " ";
+        }
+    );
     productNameErrorLive = new MutableLiveData<>();
+    consumeExactAmountLive = new MutableLiveData<>(false);
     barcodeLive = new MutableLiveData<>();
     quantityUnitsFactorsLive = new MutableLiveData<>();
     quantityUnitStockLive = Transformations.map(
@@ -133,28 +160,23 @@ public class FormDataTransfer {
     amountStockLive = new MediatorLiveData<>();
     amountStockLive.addSource(amountLive, i -> amountStockLive.setValue(getAmountStock()));
     amountStockLive.addSource(quantityUnitLive, i -> amountStockLive.setValue(getAmountStock()));
+    amountStockLive
+        .addSource(consumeExactAmountLive, i -> amountStockLive.setValue(getAmountStock()));
     amountHelperLive = new MediatorLiveData<>();
     amountHelperLive
         .addSource(amountStockLive, i -> amountHelperLive.setValue(getAmountHelpText()));
     amountHelperLive
         .addSource(quantityUnitsFactorsLive, i -> amountHelperLive.setValue(getAmountHelpText()));
-    fromLocationLive = new MutableLiveData<>();
-    fromLocationNameLive = Transformations.map(
-        fromLocationLive,
+    stockLocationLive = new MutableLiveData<>();
+    stockLocationNameLive = Transformations.map(
+        stockLocationLive,
         location -> location != null ? location.getLocationName() : null
     );
-    toLocationLive = new MutableLiveData<>();
-    toLocationNameLive = Transformations.map(
-        toLocationLive,
-        location -> location != null ? location.getName() : null
-    );
-    toLocationErrorLive = (MutableLiveData<Boolean>) Transformations.map(
-        toLocationLive,
-        quantityUnit -> !isToLocationValid()
-    );
+    spoiledLive = new MutableLiveData<>(false);
+    openVisibilityLive = new MutableLiveData<>(true);
+    openLive = new MutableLiveData<>(false);
     useSpecificLive = new MutableLiveData<>(false);
     specificStockEntryLive = new MutableLiveData<>();
-    pluralUtil = new PluralUtil(application);
   }
 
   public MutableLiveData<Boolean> getDisplayHelpLive() {
@@ -178,7 +200,7 @@ public class FormDataTransfer {
   public void toggleScannerVisibility() {
     scannerVisibilityLive.setValue(!isScannerVisible());
     sharedPrefs.edit()
-        .putBoolean(PREF.CAMERA_SCANNER_VISIBLE_TRANSFER, isScannerVisible())
+        .putBoolean(Constants.PREF.CAMERA_SCANNER_VISIBLE_CONSUME, isScannerVisible())
         .apply();
   }
 
@@ -190,8 +212,21 @@ public class FormDataTransfer {
     return productDetailsLive;
   }
 
+  public LiveData<Boolean> getIsTareWeightEnabledLive() {
+    return isTareWeightEnabledLive;
+  }
+
+  public boolean isTareWeightEnabled() {
+    assert isTareWeightEnabledLive.getValue() != null && consumeExactAmountLive.getValue() != null;
+    return isTareWeightEnabledLive.getValue() && !consumeExactAmountLive.getValue();
+  }
+
   public MutableLiveData<String> getProductNameLive() {
     return productNameLive;
+  }
+
+  public LiveData<String> getProductNameInfoStockLive() {
+    return productNameInfoStockLive;
   }
 
   public MutableLiveData<Integer> getProductNameErrorLive() {
@@ -228,6 +263,10 @@ public class FormDataTransfer {
       }
     }
     return null;
+  }
+
+  public MutableLiveData<Boolean> getConsumeExactAmountLive() {
+    return consumeExactAmountLive;
   }
 
   public MutableLiveData<String> getBarcodeLive() {
@@ -269,7 +308,7 @@ public class FormDataTransfer {
       return null;
     }
     double amountMultiplied;
-    if ((double) currentFactor == -1) {
+    if (isTareWeightEnabled() || (double) currentFactor == -1) {
       amountMultiplied = amount;
     } else if (current.getId() == productDetails.getProduct()
         .getQuIdPurchaseInt()) {
@@ -297,8 +336,11 @@ public class FormDataTransfer {
   public void moreAmount(ImageView view) {
     ViewUtil.startIcon(view);
     if (amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
-      if (productDetailsLive.getValue() == null) {
+      if (!isTareWeightEnabled() || productDetailsLive.getValue() == null) {
         amountLive.setValue(String.valueOf(1));
+      } else {
+        amountLive.setValue(NumUtil.trimAmount(productDetailsLive.getValue()
+            .getProduct().getTareWeightDouble() + 1, maxDecimalPlacesAmount));
       }
     } else {
       double amountNew = NumUtil.toDouble(amountLive.getValue()) + 1;
@@ -320,16 +362,28 @@ public class FormDataTransfer {
     }
   }
 
-  public String getTransactionSuccessMsg(double amountTransferred) {
+  public String getTransactionSuccessMsg(boolean isActionOpen, double amountConsumed) {
     ProductDetails productDetails = productDetailsLive.getValue();
     QuantityUnit stock = quantityUnitStockLive.getValue();
     assert productDetails != null && stock != null;
     return application.getString(
-        R.string.msg_transferred,
-        NumUtil.trimAmount(amountTransferred, maxDecimalPlacesAmount),
-        pluralUtil.getQuantityUnitPlural(stock, amountTransferred),
+        isActionOpen ? R.string.msg_opened : R.string.msg_consumed,
+        NumUtil.trimAmount(amountConsumed, maxDecimalPlacesAmount),
+        pluralUtil.getQuantityUnitPlural(stock, amountConsumed),
         productDetails.getProduct().getName()
     );
+  }
+
+  public MutableLiveData<Boolean> getSpoiledLive() {
+    return spoiledLive;
+  }
+
+  public MutableLiveData<Boolean> getOpenVisibilityLive() {
+    return openVisibilityLive;
+  }
+
+  public MutableLiveData<Boolean> getOpenLive() {
+    return openLive;
   }
 
   public MutableLiveData<Boolean> getUseSpecificLive() {
@@ -356,24 +410,12 @@ public class FormDataTransfer {
     this.stockLocations = stockLocations;
   }
 
-  public MutableLiveData<StockLocation> getFromLocationLive() {
-    return fromLocationLive;
+  public MutableLiveData<StockLocation> getStockLocationLive() {
+    return stockLocationLive;
   }
 
-  public LiveData<String> getFromLocationNameLive() {
-    return fromLocationNameLive;
-  }
-
-  public MutableLiveData<Location> getToLocationLive() {
-    return toLocationLive;
-  }
-
-  public LiveData<String> getToLocationNameLive() {
-    return toLocationNameLive;
-  }
-
-  public MutableLiveData<Boolean> getToLocationErrorLive() {
-    return toLocationErrorLive;
+  public LiveData<String> getStockLocationNameLive() {
+    return stockLocationNameLive;
   }
 
   public boolean isCurrentProductFlowNotInterrupted() {
@@ -440,23 +482,35 @@ public class FormDataTransfer {
       return false;
     }
     // below
-    if (NumUtil.toDouble(amountLive.getValue()) <= 0) {
+    if (!isTareWeightEnabled() && NumUtil.toDouble(amountLive.getValue()) <= 0) {
       amountErrorLive.setValue(application.getString(
           R.string.error_bounds_higher, String.valueOf(0)
+      ));
+      return false;
+    } else if (isTareWeightEnabled() && productDetailsLive.getValue() != null
+        && NumUtil.toDouble(amountLive.getValue())
+        < productDetailsLive.getValue().getProduct().getTareWeightDouble()
+    ) {
+      amountErrorLive.setValue(application.getString(
+          R.string.error_bounds_min,
+          NumUtil.trimAmount(productDetailsLive.getValue().getProduct()
+              .getTareWeightDouble(), maxDecimalPlacesAmount)
       ));
       return false;
     }
 
     // over
-    StockLocation currentLocation = fromLocationLive.getValue();
-    if (currentLocation == null) {
+    StockLocation currentLocation = stockLocationLive.getValue();
+    if (currentLocation == null && isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
       amountErrorLive.setValue(null);
       return true;
     }
     double stockAmount;
     StockEntry specificStockEntry = specificStockEntryLive.getValue();
-    if (specificStockEntry == null) {
+    if (specificStockEntry == null && currentLocation != null) {
       stockAmount = currentLocation.getAmountDouble();
+    } else if (specificStockEntry == null) {
+      stockAmount = productDetailsLive.getValue().getStockAmount();
     } else {
       stockAmount = specificStockEntry.getAmount();
     }
@@ -466,7 +520,9 @@ public class FormDataTransfer {
     HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
     Double currentFactor = hashMap != null ? hashMap.get(current) : null;
     double maxAmount;
-    if (currentFactor == null || currentFactor == -1) {
+    if (isTareWeightEnabled() && productDetails != null) {
+      maxAmount = stockAmount + productDetails.getProduct().getTareWeightDouble();
+    } else if (currentFactor == null || currentFactor == -1) {
       maxAmount = stockAmount;
     } else if (current != null && productDetails != null
         && current.getId() == productDetails.getProduct().getQuIdPurchaseInt()) {
@@ -475,9 +531,19 @@ public class FormDataTransfer {
       maxAmount = stockAmount * currentFactor;
     }
 
-    if (NumUtil.toDouble(amountLive.getValue()) > maxAmount) {
+    if (!isTareWeightEnabled() && NumUtil.toDouble(amountLive.getValue()) > maxAmount) {
       amountErrorLive.setValue(application.getString(
           R.string.error_bounds_max, NumUtil.trimAmount(maxAmount, maxDecimalPlacesAmount)
+      ));
+      return false;
+    } else if (isTareWeightEnabled() && productDetailsLive.getValue() != null
+        && NumUtil.toDouble(amountLive.getValue())
+        > productDetailsLive.getValue().getProduct().getTareWeightDouble() + stockAmount
+    ) {
+      amountErrorLive.setValue(application.getString(
+          R.string.error_bounds_max,
+          NumUtil.trimAmount(productDetailsLive.getValue().getProduct()
+              .getTareWeightDouble() + stockAmount, maxDecimalPlacesAmount)
       ));
       return false;
     }
@@ -485,62 +551,69 @@ public class FormDataTransfer {
     return true;
   }
 
-  public boolean isToLocationValid() {
-    if (toLocationLive.getValue() == null) {
-      toLocationErrorLive.setValue(true);
-      return false;
-    }
-    if (toLocationLive.getValue() != null && fromLocationLive.getValue() != null) {
-      if (toLocationLive.getValue().getId() == fromLocationLive.getValue().getLocationId()) {
-        toLocationErrorLive.setValue(true);
-        return false;
-      }
-    }
-    toLocationErrorLive.setValue(false);
-    return true;
-  }
-
   public boolean isFormValid() {
     boolean valid = isProductNameValid();
     valid = isQuantityUnitValid() && valid;
     valid = isAmountValid() && valid;
-    valid = isToLocationValid() && valid;
     return valid;
   }
 
-  public String getConfirmationText() {
+  public String getConfirmationText(boolean open) {
     ProductDetails productDetails = productDetailsLive.getValue();
-    assert productDetails != null && amountStockLive.getValue() != null;
+    assert productDetails != null && amountStockLive.getValue() != null
+        && openLive.getValue() != null;
     double amountRemoved = NumUtil.toDouble(amountStockLive.getValue());
+    if (isTareWeightEnabled()) {
+      amountRemoved = productDetails.getStockAmount();
+      amountRemoved -= NumUtil.toDouble(amountStockLive.getValue());
+      amountRemoved += productDetails.getProduct().getTareWeightDouble();
+    }
     QuantityUnit qU = quantityUnitLive.getValue();
-    StockLocation fromLocation = fromLocationLive.getValue();
-    Location toLocation = toLocationLive.getValue();
-    assert qU != null && fromLocation != null && toLocation != null;
+    String stockLocationName;
+    if (isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+      StockLocation stockLocation = stockLocationLive.getValue();
+      assert stockLocation != null;
+      stockLocationName = stockLocation.getLocationName();
+    } else {
+      stockLocationName = getString(R.string.subtitle_feature_disabled);
+    }
     return application.getString(
-        R.string.msg_quick_mode_confirm_transfer,
+        open
+            ? R.string.msg_quick_mode_confirm_open
+            : R.string.msg_quick_mode_confirm_consume,
         NumUtil.trimAmount(amountRemoved, maxDecimalPlacesAmount),
-        pluralUtil.getQuantityUnitPlural(qU, amountRemoved),
+        qU != null ? pluralUtil.getQuantityUnitPlural(qU, amountRemoved) : "",
         productDetails.getProduct().getName(),
-        fromLocation.getLocationName(),
-        toLocation.getName()
+        stockLocationName
     );
   }
 
-  public JSONObject getFilledJSONObject() {
+  public JSONObject getFilledJSONObject(boolean isActionOpen) {
     String amount = getAmountStock();
-    assert amount != null;
-    StockLocation fromLocation = fromLocationLive.getValue();
-    Location toLocation = toLocationLive.getValue();
+    assert amount != null && spoiledLive.getValue() != null;
+    assert isTareWeightEnabledLive.getValue() != null;
+    StockLocation location = stockLocationLive.getValue();
     StockEntry stockEntry = specificStockEntryLive.getValue();
-    assert fromLocation != null && toLocation != null;
+    boolean spoiled = !isActionOpen && spoiledLive.getValue();
+    boolean tareWeightEnabled = isTareWeightEnabledLive.getValue();
 
     JSONObject json = new JSONObject();
     try {
       json.put("amount", amount);
-      json.put("location_id_from", String.valueOf(fromLocation.getLocationId()));
-      json.put("location_id_to", String.valueOf(toLocation.getId()));
+      if (isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) && location != null) {
+        json.put("location_id", String.valueOf(location.getLocationId()));
+      }
+      json.put("allow_subproduct_substitution", true);
+      if (tareWeightEnabled) {
+        json.put("exact_amount", consumeExactAmountLive.getValue());
+      }
       if (stockEntry != null) {
         json.put("stock_entry_id", stockEntry.getStockId());
+      }
+      if (spoiled) {
+        json.put("spoiled", true);
+      }
+      if (isRecipesFeatureEnabled()) {
       }
     } catch (JSONException e) {
       if (isDebuggingEnabled()) {
@@ -554,7 +627,6 @@ public class FormDataTransfer {
     if (!isFormValid()) {
       return null;
     }
-    assert productDetailsLive.getValue() != null;
     String barcode = barcodeLive.getValue();
     Product product = productDetailsLive.getValue().getProduct();
 
@@ -572,9 +644,11 @@ public class FormDataTransfer {
     quantityUnitsFactorsLive.setValue(null);
     productDetailsLive.setValue(null);
     productNameLive.setValue(null);
-    fromLocationLive.setValue(null);
-    toLocationLive.setValue(null);
-    toLocationErrorLive.setValue(false);
+    consumeExactAmountLive.setValue(false);
+    stockLocationLive.setValue(null);
+    spoiledLive.setValue(false);
+    openVisibilityLive.setValue(true);
+    openLive.setValue(false);
     useSpecificLive.setValue(false);
     specificStockEntryLive.setValue(null);
     new Handler().postDelayed(() -> {
@@ -593,7 +667,7 @@ public class FormDataTransfer {
 
   public boolean getCameraScannerWasVisibleLastTime() {
     return sharedPrefs.getBoolean(
-        PREF.CAMERA_SCANNER_VISIBLE_TRANSFER,
+        Constants.PREF.CAMERA_SCANNER_VISIBLE_CONSUME,
         false
     );
   }
@@ -603,6 +677,10 @@ public class FormDataTransfer {
         Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER,
         Constants.SETTINGS_DEFAULT.SCANNER.EXTERNAL_SCANNER
     );
+  }
+
+  public boolean isRecipesFeatureEnabled() {
+    return isFeatureEnabled(Constants.PREF.FEATURE_RECIPES);
   }
 
   private boolean isDebuggingEnabled() {

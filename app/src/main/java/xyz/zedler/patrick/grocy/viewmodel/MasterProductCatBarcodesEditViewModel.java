@@ -43,7 +43,7 @@ import xyz.zedler.patrick.grocy.fragment.MasterProductCatBarcodesEditFragmentArg
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatBarcodesEdit;
+import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatBarcodesEdit;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;

@@ -17,11 +17,12 @@
  * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
-package xyz.zedler.patrick.grocy.model;
+package xyz.zedler.patrick.grocy.form;
 
 import androidx.lifecycle.MutableLiveData;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.model.ShoppingList;
 
 public class FormDataShoppingListEdit {
 

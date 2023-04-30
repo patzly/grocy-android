@@ -17,7 +17,7 @@
  * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
-package xyz.zedler.patrick.grocy.model;
+package xyz.zedler.patrick.grocy.form;
 
 import android.app.Application;
 import android.os.Handler;
@@ -27,6 +27,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.model.Task;
+import xyz.zedler.patrick.grocy.model.TaskCategory;
+import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 
 public class FormDataTaskEntryEdit {
