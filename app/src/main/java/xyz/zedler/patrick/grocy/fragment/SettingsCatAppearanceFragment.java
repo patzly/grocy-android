@@ -19,6 +19,8 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -36,6 +38,7 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.divider.MaterialDivider;
+import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS;
@@ -46,6 +49,9 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatAppearanceBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LanguagesBottomSheet;
+import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
+import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
@@ -93,6 +99,17 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
     activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+
+    viewModel.getEventHandler().observe(getViewLifecycleOwner(), event -> {
+      if (event.getType() == Event.SNACKBAR_MESSAGE) {
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
+      } else if (event.getType() == Event.BOTTOM_SHEET) {
+        BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
+        activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
+      }
+    });
 
     setUpThemeSelection();
 
@@ -295,5 +312,29 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
       bundle.putInt(ARGUMENT.SCROLL_POSITION + 1, binding.scrollOtherTheme.getScrollX());
     }
     return bundle;
+  }
+
+  @Override
+  public void updateShortcuts() {
+    String subtitleShortcuts;
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
+      ShortcutManager shortcutManager = activity.getSystemService(ShortcutManager.class);
+      List<ShortcutInfo> shortcutInfos = shortcutManager.getDynamicShortcuts();
+      StringBuilder shortcutLabels = new StringBuilder();
+      for (ShortcutInfo shortcutInfo : shortcutInfos) {
+        shortcutLabels.append(shortcutInfo.getShortLabel());
+        if (shortcutInfo != shortcutInfos.get(shortcutInfos.size() - 1)) {
+          shortcutLabels.append(", ");
+        }
+      }
+      if (shortcutLabels.length() != 0) {
+        subtitleShortcuts = shortcutLabels.toString();
+      } else {
+        subtitleShortcuts = getString(R.string.subtitle_none_selected);
+      }
+    } else {
+      subtitleShortcuts = getString(R.string.subtitle_not_supported);
+    }
+    binding.subtitleShortcuts.setText(subtitleShortcuts);
   }
 }

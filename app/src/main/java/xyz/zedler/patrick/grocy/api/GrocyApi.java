@@ -466,4 +466,13 @@ public class GrocyApi {
         ), StandardCharsets.UTF_8) + "?force_serve_as=picture&best_fit_height=240&best_fit_width=360"
     );
   }
+
+  public String getProductPicture(String filename) {
+    return getUrl(
+        "/files/productpictures/" + new String(Base64.encode(
+            filename.getBytes(StandardCharsets.UTF_8),
+            Base64.DEFAULT
+        ), StandardCharsets.UTF_8) + "?force_serve_as=picture&best_fit_height=240&best_fit_width=360"
+    );
+  }
 }

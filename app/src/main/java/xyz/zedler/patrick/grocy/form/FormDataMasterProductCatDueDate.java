@@ -17,7 +17,7 @@
  * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
-package xyz.zedler.patrick.grocy.model;
+package xyz.zedler.patrick.grocy.form;
 
 import android.app.Application;
 import android.os.Bundle;
@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.MutableLiveData;
+import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class FormDataMasterProductCatDueDate {

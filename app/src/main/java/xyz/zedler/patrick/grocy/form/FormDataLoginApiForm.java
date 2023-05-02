@@ -17,7 +17,7 @@
  * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
-package xyz.zedler.patrick.grocy.model;
+package xyz.zedler.patrick.grocy.form;
 
 import android.app.Application;
 import android.content.Context;

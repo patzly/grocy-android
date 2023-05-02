@@ -26,7 +26,7 @@
     <import type="xyz.zedler.patrick.grocy.R" />
     <variable
       name="formData"
-      type="xyz.zedler.patrick.grocy.model.FormDataRecipeEditIngredientList" />
+      type="xyz.zedler.patrick.grocy.form.FormDataRecipeEditIngredientList" />
     <variable
       name="viewModel"
       type="xyz.zedler.patrick.grocy.viewmodel.RecipeEditIngredientListViewModel" />

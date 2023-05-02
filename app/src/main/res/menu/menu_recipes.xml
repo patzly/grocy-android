@@ -33,4 +33,10 @@
     android:icon="@drawable/ic_round_download"
     app:showAsAction="ifRoom" />
 
+  <item
+    android:id="@+id/action_layout"
+    android:title="@string/action_change_layout"
+    android:icon="@drawable/ic_round_mosaic"
+    app:showAsAction="ifRoom" />
+
 </menu>

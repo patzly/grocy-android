@@ -49,7 +49,7 @@ import xyz.zedler.patrick.grocy.fragment.RecipeEditFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.FormDataRecipeEdit;
+import xyz.zedler.patrick.grocy.form.FormDataRecipeEdit;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;

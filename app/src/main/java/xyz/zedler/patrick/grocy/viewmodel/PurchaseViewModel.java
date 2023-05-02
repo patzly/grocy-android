@@ -53,7 +53,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnJSONArrayResponseListener;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.FormDataPurchase;
+import xyz.zedler.patrick.grocy.form.FormDataPurchase;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
@@ -152,7 +152,10 @@ public class PurchaseViewModel extends BaseViewModel {
     infoFullscreenLive = new MutableLiveData<>();
     boolean quickModeStart;
     if (args.getStartWithScanner()) {
-      quickModeStart = true;
+      quickModeStart = sharedPrefs.getBoolean(
+          BEHAVIOR.TURN_ON_QUICK_MODE,
+          Constants.SETTINGS_DEFAULT.BEHAVIOR.TURN_ON_QUICK_MODE
+      );
     } else if (!args.getCloseWhenFinished()) {
       quickModeStart = sharedPrefs.getBoolean(
           Constants.PREF.QUICK_MODE_ACTIVE_PURCHASE,

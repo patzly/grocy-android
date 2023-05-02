@@ -37,7 +37,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatAmount;
+import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatAmount;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;

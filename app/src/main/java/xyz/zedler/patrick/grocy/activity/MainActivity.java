@@ -60,6 +60,7 @@ import androidx.annotation.RawRes;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -116,6 +117,7 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.NETWORK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.Constants.THEME;
@@ -387,13 +389,7 @@ public class MainActivity extends AppCompatActivity {
       fabBaseY = bottom - bottomInset - (babHeight / 2f) - (fabHeight / 2f);
       return insets;
     });
-    binding.bottomAppBar.setNavigationOnClickListener(v -> {
-      if (clickUtil.isDisabled()) {
-        return;
-      }
-      ViewUtil.startIcon(binding.bottomAppBar.getNavigationIcon());
-      navController.navigate(R.id.action_global_drawerBottomSheetDialogFragment);
-    });
+    updateBottomNavigationMenuButton();
     binding.bottomAppBar.setBackgroundColor(SurfaceColors.SURFACE_2.getColor(this));
     binding.fabMainScroll.setBackgroundTintList(
         ColorStateList.valueOf(SurfaceColors.SURFACE_2.getColor(this))
@@ -1437,6 +1433,24 @@ public class MainActivity extends AppCompatActivity {
       if (debug) {
         Log.i(TAG, "replaceFabIcon: not replaced, tags are identical");
       }
+    }
+  }
+
+  public void updateBottomNavigationMenuButton() {
+    if (sharedPrefs.getBoolean(BEHAVIOR.SHOW_MAIN_MENU_BUTTON,
+        SETTINGS_DEFAULT.BEHAVIOR.SHOW_MAIN_MENU_BUTTON)) {
+      binding.bottomAppBar.setNavigationIcon(
+          AppCompatResources.getDrawable(this, R.drawable.ic_round_menu_anim)
+      );
+      binding.bottomAppBar.setNavigationOnClickListener(v -> {
+        if (clickUtil.isDisabled()) {
+          return;
+        }
+        ViewUtil.startIcon(binding.bottomAppBar.getNavigationIcon());
+        navController.navigate(R.id.action_global_drawerBottomSheetDialogFragment);
+      });
+    } else {
+      binding.bottomAppBar.setNavigationIcon(null);
     }
   }
 

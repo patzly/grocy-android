@@ -213,6 +213,7 @@
           android:layout_height="match_parent"
           android:paddingTop="8dp"
           android:paddingBottom="@dimen/global_scroll_bottom_padding"
+          android:paddingHorizontal="8dp"
           android:clipToPadding="false"
           android:layoutAnimation="@anim/recycler_layout" />
 

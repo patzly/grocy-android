@@ -339,6 +339,7 @@ public class LoginRequestViewModel extends BaseViewModel {
 
       @Override
       public void onException(Exception e) {
+        appendHassLog("Error: " + e + "\n");
         Log.e(TAG, "createWebSocketClient: onException: " + e.getMessage());
       }
 
@@ -391,6 +392,10 @@ public class LoginRequestViewModel extends BaseViewModel {
     return loginErrorHassLog;
   }
 
+  public boolean isUseHassLoginFlow() {
+    return useHassLoginFlow;
+  }
+
   private void appendHassLog(String append) {
     String log = loginErrorHassLog.getValue();
     if (log == null) log = "";
@@ -404,6 +409,7 @@ public class LoginRequestViewModel extends BaseViewModel {
 
   public void clearHassData() {
     sharedPrefs.edit().putString(PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY, null).apply();
+    loginErrorHassLog.setValue("");
   }
 
   private boolean isDemoServer() {

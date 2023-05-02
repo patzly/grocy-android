@@ -17,7 +17,7 @@
  * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
-package xyz.zedler.patrick.grocy.model;
+package xyz.zedler.patrick.grocy.form;
 
 import android.app.Application;
 import android.os.Bundle;
@@ -27,6 +27,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import java.util.List;
+import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 
 public class FormDataMasterProductCatQuantityUnit {
 

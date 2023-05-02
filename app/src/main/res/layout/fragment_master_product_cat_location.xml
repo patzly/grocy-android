@@ -27,7 +27,7 @@
     <import type="xyz.zedler.patrick.grocy.R" />
     <variable
       name="formData"
-      type="xyz.zedler.patrick.grocy.model.FormDataMasterProductCatLocation" />
+      type="xyz.zedler.patrick.grocy.form.FormDataMasterProductCatLocation" />
     <variable
       name="viewModel"
       type="xyz.zedler.patrick.grocy.viewmodel.MasterProductCatLocationViewModel" />

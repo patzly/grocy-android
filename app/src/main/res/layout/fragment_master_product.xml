@@ -29,7 +29,7 @@
     <import type="xyz.zedler.patrick.grocy.Constants" />
     <variable
       name="formData"
-      type="xyz.zedler.patrick.grocy.model.FormDataMasterProduct" />
+      type="xyz.zedler.patrick.grocy.form.FormDataMasterProduct" />
     <variable
       name="viewModel"
       type="xyz.zedler.patrick.grocy.viewmodel.MasterProductViewModel" />

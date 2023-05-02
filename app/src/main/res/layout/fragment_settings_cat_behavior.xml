@@ -83,6 +83,10 @@
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintEnd_toEndOf="parent">
 
+          <TextView
+            style="@style/Widget.Grocy.TextView.Category"
+            android:text="@string/category_display_behavior" />
+
           <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
             android:layout_width="match_parent"
@@ -119,87 +123,31 @@
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{v -> switchHaptic.setChecked(!switchHaptic.isChecked())}">
+            android:onClick="@{v -> switchBottomMenu.setChecked(!switchBottomMenu.isChecked())}">
 
             <ImageView
-              android:id="@+id/image_haptic"
+              android:id="@+id/image_bottom_menu"
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               tools:ignore="ContentDescription"
-              android:src="@drawable/ic_round_vibration_anim" />
+              android:src="@drawable/ic_round_menu_anim" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
               <TextView
                 style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:text="@string/setting_haptic" />
+                android:text="@string/setting_bottom_menu_button" />
 
               <TextView
                 style="@style/Widget.Grocy.TextView.ListItem.Description"
-                android:text="@string/setting_haptic_description" />
+                android:text="@string/setting_bottom_menu_button_description" />
 
             </LinearLayout>
 
             <com.google.android.material.materialswitch.MaterialSwitch
-              android:id="@+id/switch_haptic"
-              style="@style/Widget.Grocy.Switch" />
-
-          </LinearLayout>
-
-          <LinearLayout
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{v -> viewModel.showShortcutsBottomSheet()}"
-            app:clickUtil="@{clickUtil}">
-
-            <ImageView
-              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              tools:ignore="ContentDescription"
-              android:src="@drawable/ic_round_shortcut" />
-
-            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-              <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:text="@string/setting_manage_shortcuts" />
-
-              <TextView
-                android:id="@+id/subtitle_shortcuts"
-                style="@style/Widget.Grocy.TextView.ListItem.Description"
-                android:text="@string/subtitle_none_selected" />
-
-            </LinearLayout>
-
-          </LinearLayout>
-
-          <LinearLayout
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{v -> switchOpenFoodFacts.setChecked(!switchOpenFoodFacts.isChecked())}">
-
-            <ImageView
-              android:id="@+id/image_open_food_facts"
-              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              android:src="@drawable/ic_round_barcode"
-              tools:ignore="ContentDescription" />
-
-            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-              <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:text="@string/setting_open_food_facts" />
-
-              <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.Description"
-                android:text="@string/setting_open_food_facts_description" />
-
-            </LinearLayout>
-
-            <com.google.android.material.materialswitch.MaterialSwitch
-              android:id="@+id/switch_open_food_facts"
+              android:id="@+id/switch_bottom_menu"
               style="@style/Widget.Grocy.Switch"
-              android:checked="@={viewModel.useOpenFoodFactsEnabled}"/>
+              android:onCheckedChanged="@{() -> activity.startIconAnimation(imageBottomMenu, true)}"
+              android:checked="@={viewModel.showMainMenuButtonEnabled}" />
 
           </LinearLayout>
 
@@ -239,29 +187,92 @@
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{v -> switchSpeedUpStart.setChecked(!switchSpeedUpStart.isChecked())}">
+            android:onClick="@{v -> switchKeepScreenOnRecipes.setChecked(!switchKeepScreenOnRecipes.isChecked())}">
 
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               tools:ignore="ContentDescription"
-              android:src="@drawable/ic_round_speed" />
+              android:src="@drawable/ic_round_preview" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
               <TextView
                 style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:text="@string/setting_speed_up_start" />
+                android:text="@string/setting_keep_screen_on" />
 
               <TextView
                 style="@style/Widget.Grocy.TextView.ListItem.Description"
-                android:text="@string/setting_speed_up_start_description" />
+                android:text="@string/setting_keep_screen_on_recipes_description" />
 
             </LinearLayout>
 
             <com.google.android.material.materialswitch.MaterialSwitch
-              android:id="@+id/switch_speed_up_start"
+              android:id="@+id/switch_keep_screen_on_recipes"
               style="@style/Widget.Grocy.Switch"
-              android:checked="@={viewModel.speedUpStartEnabled}" />
+              android:checked="@={viewModel.keepScreenOnRecipesEnabled}" />
+
+          </LinearLayout>
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+            android:onClick="@{() -> viewModel.showMessageDurationBottomSheet()}"
+            clickUtil="@{clickUtil}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              tools:ignore="ContentDescription"
+              android:src="@drawable/ic_round_timelapse"/>
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                android:text="@string/setting_message_duration" />
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:id="@+id/text_message_duration"
+                android:text="@{fragment.messageDuration}"/>
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Description"
+                android:text="@string/setting_message_duration_description" />
+
+            </LinearLayout>
+
+          </LinearLayout>
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.Category"
+            android:text="@string/category_input_behavior" />
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{v -> switchTurnOnQuickMode.setChecked(!switchTurnOnQuickMode.isChecked())}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              tools:ignore="ContentDescription"
+              android:src="@drawable/ic_round_directions_run" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/setting_turn_on_quick_mode" />
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Description"
+                android:text="@string/setting_turn_on_quick_mode_description" />
+
+            </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+              android:id="@+id/switch_turn_on_quick_mode"
+              style="@style/Widget.Grocy.Switch"
+              android:checked="@={viewModel.turnOnQuickModeEnabled}" />
 
           </LinearLayout>
 
@@ -304,7 +315,7 @@
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               tools:ignore="ContentDescription"
-              android:src="@drawable/ic_round_event" />
+              android:src="@drawable/ic_round_swap_horiz" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
@@ -325,61 +336,72 @@
 
           </LinearLayout>
 
+          <TextView
+            style="@style/Widget.Grocy.TextView.Category"
+            android:text="@string/category_additional_services" />
+
           <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{v -> switchKeepScreenOnRecipes.setChecked(!switchKeepScreenOnRecipes.isChecked())}">
+            android:onClick="@{v -> switchOpenFoodFacts.setChecked(!switchOpenFoodFacts.isChecked())}">
 
             <ImageView
+              android:id="@+id/image_open_food_facts"
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              tools:ignore="ContentDescription"
-              android:src="@drawable/ic_round_preview" />
+              android:src="@drawable/ic_round_barcode"
+              tools:ignore="ContentDescription" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
               <TextView
                 style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:text="@string/setting_keep_screen_on" />
+                android:text="@string/setting_open_food_facts" />
 
               <TextView
                 style="@style/Widget.Grocy.TextView.ListItem.Description"
-                android:text="@string/setting_keep_screen_on_recipes_description" />
+                android:text="@string/setting_open_food_facts_description" />
 
             </LinearLayout>
 
             <com.google.android.material.materialswitch.MaterialSwitch
-              android:id="@+id/switch_keep_screen_on_recipes"
+              android:id="@+id/switch_open_food_facts"
               style="@style/Widget.Grocy.Switch"
-              android:checked="@={viewModel.keepScreenOnRecipesEnabled}" />
+              android:checked="@={viewModel.useOpenFoodFactsEnabled}"/>
 
           </LinearLayout>
 
+          <TextView
+            style="@style/Widget.Grocy.TextView.Category"
+            android:text="@string/category_other_behavior" />
+
           <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
-            android:onClick="@{() -> viewModel.showMessageDurationBottomSheet()}"
-            clickUtil="@{clickUtil}">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{v -> switchHaptic.setChecked(!switchHaptic.isChecked())}">
 
             <ImageView
+              android:id="@+id/image_haptic"
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              tools:ignore="ContentDescription" />
+              tools:ignore="ContentDescription"
+              android:src="@drawable/ic_round_vibration_anim" />
 
-            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-              <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                android:text="@string/setting_message_duration" />
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
               <TextView
                 style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:id="@+id/text_message_duration"
-                android:text="@{fragment.messageDuration}"/>
+                android:text="@string/setting_haptic" />
 
               <TextView
                 style="@style/Widget.Grocy.TextView.ListItem.Description"
-                android:text="@string/setting_message_duration_description" />
+                android:text="@string/setting_haptic_description" />
 
             </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+              android:id="@+id/switch_haptic"
+              style="@style/Widget.Grocy.Switch" />
 
           </LinearLayout>
 
@@ -410,6 +432,36 @@
               android:id="@+id/switch_copy_barcode_note"
               style="@style/Widget.Grocy.Switch"
               android:checked="@={viewModel.copyBarcodeNoteEnabled}" />
+
+          </LinearLayout>
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{v -> switchSpeedUpStart.setChecked(!switchSpeedUpStart.isChecked())}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              tools:ignore="ContentDescription"
+              android:src="@drawable/ic_round_speed" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/setting_speed_up_start" />
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Description"
+                android:text="@string/setting_speed_up_start_description" />
+
+            </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+              android:id="@+id/switch_speed_up_start"
+              style="@style/Widget.Grocy.Switch"
+              android:checked="@={viewModel.speedUpStartEnabled}" />
 
           </LinearLayout>
 

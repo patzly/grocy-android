@@ -24,7 +24,7 @@
     <import type="android.view.View" />
     <variable
       name="formData"
-      type="xyz.zedler.patrick.grocy.model.FormDataShoppingListEdit" />
+      type="xyz.zedler.patrick.grocy.form.FormDataShoppingListEdit" />
     <variable
       name="viewModel"
       type="xyz.zedler.patrick.grocy.viewmodel.ShoppingListEditViewModel" />

@@ -20,17 +20,30 @@
 package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +51,7 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowStockItemBinding;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockExtraField;
@@ -58,6 +72,7 @@ import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
+import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class StockOverviewItemAdapter extends
     RecyclerView.Adapter<StockOverviewItemAdapter.ViewHolder> {
@@ -72,6 +87,8 @@ public class StockOverviewItemAdapter extends
   private final PluralUtil pluralUtil;
   private final ArrayList<Integer> missingItemsProductIds;
   private final StockOverviewItemAdapterListener listener;
+  private final GrocyApi grocyApi;
+  private final LazyHeaders grocyAuthHeaders;
   private final boolean showDateTracking;
   private final boolean shoppingListFeatureEnabled;
   private final int daysExpiringSoon;
@@ -83,6 +100,7 @@ public class StockOverviewItemAdapter extends
   private final String currency;
   private final int maxDecimalPlacesAmount;
   private final int decimalPlacesPriceDisplay;
+  private boolean containsPictures;
 
   public StockOverviewItemAdapter(
       Context context,
@@ -112,6 +130,8 @@ public class StockOverviewItemAdapter extends
     this.pluralUtil = new PluralUtil(context);
     this.missingItemsProductIds = new ArrayList<>(missingItemsProductIds);
     this.listener = listener;
+    this.grocyApi = new GrocyApi((Application) context.getApplicationContext());
+    this.grocyAuthHeaders = RequestHeaders.getGlideGrocyAuthHeaders(context);
     this.showDateTracking = showDateTracking;
     this.shoppingListFeatureEnabled = shoppingListFeatureEnabled;
     this.daysExpiringSoon = daysExpiringSoon;
@@ -133,6 +153,16 @@ public class StockOverviewItemAdapter extends
     this.groupedListItems = getGroupedListItems(context, stockItems,
         productGroupHashMap, productHashMap, locationHashMap, currency, dateUtil, sortMode,
         sortAscending, groupingMode, maxDecimalPlacesAmount, decimalPlacesPriceDisplay);
+
+    containsPictures = false;
+    for (StockItem stockItem : stockItems) {
+      if (stockItem.getProduct() == null) continue;
+      String pictureFileName = stockItem.getProduct().getPictureFileName();
+      if (pictureFileName != null && !pictureFileName.isEmpty()) {
+        containsPictures = true;
+        break;
+      }
+    }
   }
 
   static ArrayList<GroupedListItem> getGroupedListItems(
@@ -397,8 +427,11 @@ public class StockOverviewItemAdapter extends
         int dp4 = UiUtil.dpToPx(context, 4);
         boolean isRtl = UiUtil.isLayoutRtl(context);
         holder.binding.linearContainer.setPadding(
-            isRtl ? dp4 * 6 : dp4 * 4, dp4 * 3 , isRtl ? dp4 * 4 : dp4 * 6, dp4 * 3
+            dp4 * 4, dp4 * 3 , dp4 * 4, dp4 * 3
         );
+        /*holder.binding.linearContainer.setPadding(
+            isRtl ? dp4 * 6 : dp4 * 4, dp4 * 3 , isRtl ? dp4 * 4 : dp4 * 6, dp4 * 3
+        );*/
       }
     } else {
       holder.binding.linearDays.setVisibility(View.GONE);
@@ -501,6 +534,41 @@ public class StockOverviewItemAdapter extends
       holder.binding.extraFieldSubtitle.setVisibility(View.VISIBLE);
     } else {
       holder.binding.extraFieldSubtitle.setVisibility(View.GONE);
+    }
+
+    String pictureFileName = stockItem.getProduct().getPictureFileName();
+    if (pictureFileName != null && !pictureFileName.isEmpty()) {
+      holder.binding.picture.layout(0, 0, 0, 0);
+
+      Glide.with(context)
+          .load(
+              new GlideUrl(grocyApi.getProductPicture(pictureFileName), grocyAuthHeaders)
+          ).transform(
+              new CenterCrop(), new RoundedCorners(UiUtil.dpToPx(context, 12))
+          ).transition(DrawableTransitionOptions.withCrossFade())
+          .listener(new RequestListener<>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                Target<Drawable> target, boolean isFirstResource) {
+              holder.binding.picture.setVisibility(View.GONE);
+              holder.binding.picturePlaceholder.setVisibility(View.VISIBLE);
+              return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
+                DataSource dataSource, boolean isFirstResource) {
+              holder.binding.picture.setVisibility(View.VISIBLE);
+              holder.binding.picturePlaceholder.setVisibility(View.GONE);
+              return false;
+            }
+          }).into(holder.binding.picture);
+    } else if (containsPictures) {
+      holder.binding.picture.setVisibility(View.GONE);
+      holder.binding.picturePlaceholder.setVisibility(View.VISIBLE);
+    } else {
+      holder.binding.picture.setVisibility(View.GONE);
+      holder.binding.picturePlaceholder.setVisibility(View.GONE);
     }
 
     // CONTAINER

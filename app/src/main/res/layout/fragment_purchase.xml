@@ -28,7 +28,7 @@
     <import type="xyz.zedler.patrick.grocy.Constants" />
     <variable
       name="formData"
-      type="xyz.zedler.patrick.grocy.model.FormDataPurchase" />
+      type="xyz.zedler.patrick.grocy.form.FormDataPurchase" />
     <variable
       name="viewModel"
       type="xyz.zedler.patrick.grocy.viewmodel.PurchaseViewModel" />
