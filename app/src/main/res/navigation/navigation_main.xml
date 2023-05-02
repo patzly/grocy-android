@@ -1390,7 +1390,11 @@
     app:destination="@id/textBottomSheetDialogFragment"/>
   <fragment
     android:id="@+id/recipeImportFragment"
-    android:name="xyz.zedler.patrick.grocy.fragment.RecipeImportFragment"
     android:label="RecipeImportFragment"
-    tools:layout="@layout/fragment_recipe_import"/>
+    android:name="xyz.zedler.patrick.grocy.fragment.RecipeImportFragment"
+    tools:layout="@layout/fragment_recipe_import">
+    <deepLink
+      android:id="@+id/deepLink20"
+      app:uri="@string/deep_link_recipeImportFragment" />
+  </fragment>
 </navigation>

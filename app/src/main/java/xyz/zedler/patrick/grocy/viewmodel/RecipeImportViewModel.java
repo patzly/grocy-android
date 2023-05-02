@@ -43,16 +43,14 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.form.FormDataTransfer;
 import xyz.zedler.patrick.grocy.fragment.TransferFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuickModeConfirmBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockLocationsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.FormDataTransfer;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -89,6 +87,8 @@ public class RecipeImportViewModel extends BaseViewModel {
   private List<Location> locations;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
 
+  private final MutableLiveData<String> recipeWebsiteLive;
+  private final MutableLiveData<String> recipeWebsiteErrorLive;
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> quickModeEnabled;
@@ -112,6 +112,9 @@ public class RecipeImportViewModel extends BaseViewModel {
     grocyApi = new GrocyApi(getApplication());
     repository = new TransferRepository(application);
     formData = new FormDataTransfer(application, sharedPrefs, args);
+
+    recipeWebsiteLive = new MutableLiveData<>();
+    recipeWebsiteErrorLive = new MutableLiveData<>();
 
     infoFullscreenLive = new MutableLiveData<>();
     boolean quickModeStart;
@@ -544,49 +547,6 @@ public class RecipeImportViewModel extends BaseViewModel {
     showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
   }
 
-  public void showStockEntriesBottomSheet() {
-    if (!formData.isProductNameValid()) {
-      return;
-    }
-    ArrayList<StockEntry> stockEntries = formData.getStockEntries();
-    StockEntry currentStockEntry = formData.getSpecificStockEntryLive().getValue();
-    String selectedId = currentStockEntry != null ? currentStockEntry.getStockId() : null;
-    ArrayList<StockEntry> filteredStockEntries = new ArrayList<>();
-    StockLocation stockLocation = formData.getFromLocationLive().getValue();
-    assert stockLocation != null;
-    int locationId = stockLocation.getLocationId();
-    for (StockEntry stockEntry : stockEntries) {
-      if (stockEntry.getLocationIdInt() == locationId) {
-        filteredStockEntries.add(stockEntry);
-      }
-    }
-    Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(
-        ARGUMENT.STOCK_ENTRIES,
-        filteredStockEntries
-    );
-    bundle.putString(ARGUMENT.SELECTED_ID, selectedId);
-    showBottomSheet(new StockEntriesBottomSheet(), bundle);
-  }
-
-  public void showStockLocationsBottomSheet() {  // from location
-    if (!formData.isProductNameValid()) {
-      return;
-    }
-    ArrayList<StockLocation> stockLocations = formData.getStockLocations();
-    StockLocation currentStockLocation = formData.getFromLocationLive().getValue();
-    int selectedId = currentStockLocation != null ? currentStockLocation.getLocationId() : -1;
-    ProductDetails productDetails = formData.getProductDetailsLive().getValue();
-    QuantityUnit quantityUnitStock = formData.getQuantityUnitStockLive().getValue();
-    Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(ARGUMENT.STOCK_LOCATIONS, stockLocations);
-    bundle.putInt(ARGUMENT.SELECTED_ID, selectedId);
-    bundle.putParcelable(ARGUMENT.PRODUCT_DETAILS, productDetails);
-    bundle.putParcelable(ARGUMENT.QUANTITY_UNIT, quantityUnitStock);
-    bundle.putString(ARGUMENT.TITLE, getString(R.string.title_location_from));
-    showBottomSheet(new StockLocationsBottomSheet(), bundle);
-  }
-
   public void showLocationsBottomSheet(boolean hasFocus) {  // to location
     if (!hasFocus) {
       return;
@@ -659,6 +619,14 @@ public class RecipeImportViewModel extends BaseViewModel {
         .putBoolean(PREF.QUICK_MODE_ACTIVE_TRANSFER, isQuickModeEnabled())
         .apply();
     return true;
+  }
+
+  public MutableLiveData<String> getRecipeWebsiteLive() {
+    return recipeWebsiteLive;
+  }
+
+  public MutableLiveData<String> getRecipeWebsiteErrorLive() {
+    return recipeWebsiteErrorLive;
   }
 
   public boolean isFeatureEnabled(String pref) {

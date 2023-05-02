@@ -19,7 +19,11 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.content.res.ColorStateList;
+import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -27,8 +31,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.color.ColorRoles;
@@ -39,8 +46,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentRecipeImportBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -51,16 +56,12 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockLocation;
-import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
-import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
-import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
-import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeImportViewModel;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeImportViewModel.RecipeImportViewModelFactory;
 
-public class RecipeImportFragment extends BaseFragment implements BarcodeListener {
+public class RecipeImportFragment extends BaseFragment {
 
   private final static String TAG = RecipeImportFragment.class.getSimpleName();
 
@@ -68,8 +69,8 @@ public class RecipeImportFragment extends BaseFragment implements BarcodeListene
   private FragmentRecipeImportBinding binding;
   private RecipeImportViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
-  private EmbeddedFragmentScanner embeddedFragmentScanner;
-  private Boolean backFromChooseProductPage;
+  private ActivityResultLauncher<Intent> jsonFilePickerLauncher;
+  private ActivityResultLauncher<String> requestPermissionLauncher;
 
   @Override
   public View onCreateView(
@@ -78,11 +79,6 @@ public class RecipeImportFragment extends BaseFragment implements BarcodeListene
       Bundle savedInstanceState
   ) {
     binding = FragmentRecipeImportBinding.inflate(inflater, container, false);
-    embeddedFragmentScanner = new EmbeddedFragmentScannerBundle(
-        this,
-        binding.containerScanner,
-        this
-    );
     return binding.getRoot();
   }
 
@@ -133,15 +129,6 @@ public class RecipeImportFragment extends BaseFragment implements BarcodeListene
         activity.showSnackbar(
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
-      } else if (event.getType() == Event.CONSUME_SUCCESS) {
-        assert getArguments() != null;
-        if (PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
-          activity.navigateUp();
-        } else {
-          viewModel.getFormData().clearForm();
-          focusProductInputIfNecessary();
-          embeddedFragmentScanner.startScannerIfVisible();
-        }
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
@@ -151,8 +138,6 @@ public class RecipeImportFragment extends BaseFragment implements BarcodeListene
         focusProductInputIfNecessary();
       } else if (event.getType() == Event.QUICK_MODE_DISABLED) {
         clearInputFocus();
-      } else if (event.getType() == Event.CONTINUE_SCANNING) {
-        embeddedFragmentScanner.startScannerIfVisible();
       } else if (event.getType() == Event.CHOOSE_PRODUCT) {
         String barcode = event.getBundle().getString(ARGUMENT.BARCODE);
         activity.navigateFragment(
@@ -194,34 +179,10 @@ public class RecipeImportFragment extends BaseFragment implements BarcodeListene
       viewModel.addBarcodeToExistingProduct(barcode);
     }
 
-    backFromChooseProductPage = (Boolean)
-        getFromThisDestinationNow(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE);
-    if (backFromChooseProductPage != null) {
-      removeForThisDestination(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE);
-    }
-    embeddedFragmentScanner.setScannerVisibilityLive(
-        viewModel.getFormData().getScannerVisibilityLive(),
-        backFromChooseProductPage != null
-            && (viewModel.getFormData().getProductDetailsLive().getValue() != null
-            || viewModel.isProductWillBeFilled())
-            ? backFromChooseProductPage : false
-    );
-
     ColorRoles roles = ResUtil.getHarmonizedRoles(activity, R.color.blue);
     viewModel.getQuickModeEnabled().observe(
         getViewLifecycleOwner(), value -> binding.toolbar.setTitleTextColor(
             value ? roles.getAccent() : ResUtil.getColorAttr(activity, R.attr.colorOnSurface)
-        )
-    );
-    binding.textInputAmount.setHelperTextColor(ColorStateList.valueOf(roles.getAccent()));
-    viewModel.getFormData().getToLocationErrorLive().observe(
-        getViewLifecycleOwner(), value -> binding.textLocationTo.setTextColor(
-            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
-        )
-    );
-    viewModel.getFormData().getQuantityUnitErrorLive().observe(
-        getViewLifecycleOwner(), value -> binding.textQuantityUnit.setTextColor(
-            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
         )
     );
 
@@ -229,7 +190,8 @@ public class RecipeImportFragment extends BaseFragment implements BarcodeListene
     viewModel.getFormData().getQuantityUnitStockLive().observe(getViewLifecycleOwner(), i -> {
     });
 
-    //hideDisabledFeatures();
+    setupActivityResultLauncher();
+    setupRequestPermissionLauncher();
 
     if (savedInstanceState == null) {
         viewModel.loadFromDatabase(true);
@@ -240,61 +202,16 @@ public class RecipeImportFragment extends BaseFragment implements BarcodeListene
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
     activity.getScrollBehavior().setBottomBarVisibility(true);
-    activity.updateBottomAppBar(true, R.menu.menu_transfer, this::onMenuItemClick);
+    activity.updateBottomAppBar(true, R.menu.menu_recipe_import, this::onMenuItemClick);
     activity.updateFab(
-        R.drawable.ic_round_swap_horiz,
-        R.string.action_transfer,
-        FAB.TAG.TRANSFER,
+        R.drawable.ic_round_download,
+        R.string.action_import,
+        FAB.TAG.IMPORT,
         args.getAnimateStart() && savedInstanceState == null,
         () -> {
-          if (viewModel.isQuickModeEnabled()
-              && viewModel.getFormData().isCurrentProductFlowNotInterrupted()) {
-            focusNextInvalidView();
-          } else if (!viewModel.getFormData().isProductNameValid()) {
-            clearFocusAndCheckProductInput();
-          } else {
-            viewModel.transferProduct();
-          }
+
         }
     );
-
-  }
-
-  @Override
-  public void onResume() {
-    super.onResume();
-    if (backFromChooseProductPage != null && backFromChooseProductPage
-        && (viewModel.getFormData().getProductDetailsLive().getValue() != null
-        || viewModel.isProductWillBeFilled())) {
-      backFromChooseProductPage = false;
-      return;
-    }
-    embeddedFragmentScanner.onResume();
-  }
-
-  @Override
-  public void onPause() {
-    embeddedFragmentScanner.onPause();
-    super.onPause();
-  }
-
-  @Override
-  public void onDestroy() {
-    if (embeddedFragmentScanner != null) embeddedFragmentScanner.onDestroy();
-    super.onDestroy();
-  }
-
-  @Override
-  public void onBarcodeRecognized(String rawValue) {
-    clearInputFocus();
-    if (!viewModel.isQuickModeEnabled()) {
-      viewModel.getFormData().toggleScannerVisibility();
-    }
-    viewModel.onBarcodeRecognized(rawValue);
-  }
-
-  public void toggleTorch() {
-    embeddedFragmentScanner.toggleTorch();
   }
 
   @Override
@@ -326,13 +243,6 @@ public class RecipeImportFragment extends BaseFragment implements BarcodeListene
   }
 
   @Override
-  public void addBarcodeToExistingProduct(String barcode) {
-    viewModel.addBarcodeToExistingProduct(barcode);
-    binding.autoCompleteConsumeProduct.requestFocus();
-    activity.showKeyboard(binding.autoCompleteConsumeProduct);
-  }
-
-  @Override
   public void addBarcodeToNewProduct(String barcode) {
     viewModel.addBarcodeToExistingProduct(barcode);
   }
@@ -344,18 +254,10 @@ public class RecipeImportFragment extends BaseFragment implements BarcodeListene
       }
   }
 
-  public void clearAmountFieldAndFocusIt() {
-    binding.editTextAmount.setText("");
-    activity.showKeyboard(binding.editTextAmount);
-  }
-
   public void clearInputFocus() {
     activity.hideKeyboard();
     binding.dummyFocusView.requestFocus();
-    binding.autoCompleteConsumeProduct.clearFocus();
-    binding.quantityUnitContainer.clearFocus();
     binding.textInputAmount.clearFocus();
-    binding.linearToLocation.clearFocus();
   }
 
   public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
@@ -385,25 +287,12 @@ public class RecipeImportFragment extends BaseFragment implements BarcodeListene
       }
     ProductDetails productDetails = viewModel.getFormData().getProductDetailsLive().getValue();
     String productNameInput = viewModel.getFormData().getProductNameLive().getValue();
-    if (productDetails == null && (productNameInput == null || productNameInput.isEmpty())) {
-      binding.autoCompleteConsumeProduct.requestFocus();
-      if (viewModel.getFormData().getExternalScannerEnabled()) {
-        activity.hideKeyboard();
-      } else {
-        activity.showKeyboard(binding.autoCompleteConsumeProduct);
-      }
-    }
+
   }
 
   public void focusNextInvalidView() {
     View nextView = null;
-    if (!viewModel.getFormData().isProductNameValid()) {
-      nextView = binding.autoCompleteConsumeProduct;
-    } else if (!viewModel.getFormData().isAmountValid()) {
-      nextView = binding.editTextAmount;
-    } else if (!viewModel.getFormData().isToLocationValid()) {
-      nextView = binding.linearToLocation;
-    }
+
     if (nextView == null) {
       clearInputFocus();
       viewModel.showConfirmationBottomSheet();
@@ -427,36 +316,52 @@ public class RecipeImportFragment extends BaseFragment implements BarcodeListene
     viewModel.transferProduct();
   }
 
-  @Override
-  public void interruptCurrentProductFlow() {
-    viewModel.getFormData().setCurrentProductFlowInterrupted(true);
-  }
-
-  @Override
-  public void onBottomSheetDismissed() {
-    clearInputFocusOrFocusNextInvalidView();
-  }
-
   private boolean onMenuItemClick(MenuItem item) {
-    if (item.getItemId() == R.id.action_product_overview) {
-      ViewUtil.startIcon(item);
-        if (!viewModel.getFormData().isProductNameValid()) {
-            return false;
-        }
-      activity.showBottomSheet(
-          new ProductOverviewBottomSheet(),
-          new ProductOverviewBottomSheetArgs.Builder().setProductDetails(
-              viewModel.getFormData().getProductDetailsLive().getValue()
-          ).build().toBundle()
-      );
-      return true;
-    } else if (item.getItemId() == R.id.action_clear_form) {
-      clearInputFocus();
-      viewModel.getFormData().clearForm();
-      embeddedFragmentScanner.startScannerIfVisible();
+    if (item.getItemId() == R.id.action_import_from_file) {
+      requestReadExternalStoragePermission();
       return true;
     }
     return false;
+  }
+
+  public void openSupportedWebsites() {
+    activity.showTextBottomSheet(R.raw.recipe_websites, R.string.title_supported_websites);
+  }
+
+  private void requestReadExternalStoragePermission() {
+    if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+      requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
+    } else {
+      openFilePicker();
+    }
+  }
+
+  private void setupRequestPermissionLauncher() {
+    requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+      if (isGranted) {
+        openFilePicker();
+      } else {
+        activity.showSnackbar("Permission denied", false);
+        // Permission denied
+      }
+    });
+  }
+
+  private void setupActivityResultLauncher() {
+    jsonFilePickerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+        result -> {
+          if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+            Uri jsonFileUri = result.getData().getData();
+            // Handle the JSON file URI
+          }
+        });
+  }
+
+  private void openFilePicker() {
+    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+    intent.addCategory(Intent.CATEGORY_OPENABLE);
+    intent.setType("application/json");
+    jsonFilePickerLauncher.launch(intent);
   }
 
   @NonNull

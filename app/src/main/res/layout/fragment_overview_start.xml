@@ -526,6 +526,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
+                app:contentPaddingBottom="12dp"
                 android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_RECIPES) ? View.VISIBLE : View.GONE}"
                 android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_recipesFragment)}"
                 app:clickUtil="@{clickUtil}">
@@ -547,6 +548,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@{viewModel.recipesDescriptionTextLive}" />
+
+                  <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.Grocy.Button.TonalButton.Icon"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/title_recipe_import"
+                    android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_recipeImportFragment)}"
+                    app:clickUtil="@{clickUtil}"
+                    app:icon="@drawable/ic_round_download" />
 
                 </LinearLayout>
 

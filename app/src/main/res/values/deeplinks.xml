@@ -41,8 +41,9 @@
   <string name="deep_link_masterDataOverviewFragment" translatable="false">grocy://masterDataOverviewFragment</string>
   <string name="deep_link_storedPurchasesFragment" translatable="false">grocy://storedPurchasesFragment</string>
   <string name="deep_link_stockEntriesFragment" translatable="false">grocy://stockEntriesFragment?productId={productId}</string>
-  <string name="deep_link_recipeEditIngredientEditFragment">grocy://recipeEditIngredientEditFragment</string>
-  <string name="deep_link_recipeEditIngredientListFragment">grocy://masterRecipeEditIngredientListFragment?recipeId={recipeId}</string>
-  <string name="deep_link_recipeEditFragment">grocy://recipeEditFragment?action={action}</string>
-  <string name="deep_link_chooseProductFragment">grocy://chooseProductFragment?barcode={barcode}&amp;forbidCreateProduct={forbidCreateProduct}&amp;pendingProductsActive={pendingProductsActive}</string>
+  <string name="deep_link_recipeEditIngredientEditFragment" translatable="false">grocy://recipeEditIngredientEditFragment</string>
+  <string name="deep_link_recipeEditIngredientListFragment" translatable="false">grocy://masterRecipeEditIngredientListFragment?recipeId={recipeId}</string>
+  <string name="deep_link_recipeEditFragment" translatable="false">grocy://recipeEditFragment?action={action}</string>
+  <string name="deep_link_chooseProductFragment" translatable="false">grocy://chooseProductFragment?barcode={barcode}&amp;forbidCreateProduct={forbidCreateProduct}&amp;pendingProductsActive={pendingProductsActive}</string>
+  <string name="deep_link_recipeImportFragment" translatable="false">grocy://recipeImportFragment</string>
 </resources>

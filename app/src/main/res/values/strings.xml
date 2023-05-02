@@ -98,6 +98,7 @@
   <string name="action_import">Import</string>
   <string name="action_create">Create</string>
   <string name="action_link">Link</string>
+  <string name="action_import_from_file">Import from file</string>
   <string name="action_try_again">Try again</string>
   <string name="action_open_scanner">Open scanner</string>
   <string name="action_discard">Discard</string>
@@ -422,6 +423,7 @@
   <string name="msg_help_home_assistant_login_server">In the field below you can also enter your Nabu Casa cloud URL if you\'re using that service. Tap this card to visit the Nabu Casa website.</string>
   <string name="msg_help_home_assistant_login_token">You can create a long-lived access token in your Home Assistant profile settings (last section). Tap here to open the URL from above.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Navigate back or tap this card to scan a QR code which fills the fields below.</string>
+  <string name="msg_help_recipe_import">This tool works with an external service that provides parsing of supported recipe websites and Natural Language Processing (NLP) for parsing ingredients of a recipe. The service is kindly provided by a developer of this app. Mapping with your food data works better the more recipes you have already imported.</string>
   <string name="msg_help_fab_overview_start">The action button on this overview page has two actions:\n\n- Short tap: consume with barcode scanner\n- Long tap: purchase with barcode scanner\n\nWith this button the quick mode on the respective pages is turned on by default. You can change this in behavior settings.</string>
   <string name="msg_share">Check out this Android client for the awesome grocy-project: \nhttps://github.com/patzly/grocy-android</string>
 
@@ -600,6 +602,7 @@
   <string name="title_presets_new_products">Presets for new products</string>
   <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
   <string name="title_ingredient_with_amount">%1$s %2$s of %3$s</string>
+  <string name="title_supported_websites">Supported websites</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
@@ -783,6 +786,7 @@
   <string name="property_product_name">Product name</string>
   <string name="property_parent_product">Parent product</string>
   <string name="property_description">Description</string>
+  <string name="property_recipe_url">Recipe URL</string>
   <string name="property_note">Note</string>
   <string name="property_status">Status</string>
   <string name="property_amount">Amount</string>
