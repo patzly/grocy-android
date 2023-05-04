@@ -23,8 +23,8 @@ public class RecipeParserApi {
 
   private final static String TAG = RecipeParserApi.class.getSimpleName();
 
-  private static String scrapeRecipe() {
-    return "http://localhost:8000/api/v0/scrape_recipe";
+  public static String scrapeRecipe() {
+    return "http://10.0.2.2:8000/api/v0/scrape_recipe";
   }
 
 }

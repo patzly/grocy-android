@@ -99,6 +99,7 @@
   <string name="action_create">Create</string>
   <string name="action_link">Link</string>
   <string name="action_import_from_file">Import from file</string>
+  <string name="action_remove_image">Remove image</string>
   <string name="action_try_again">Try again</string>
   <string name="action_open_scanner">Open scanner</string>
   <string name="action_discard">Discard</string>
@@ -671,6 +672,8 @@
   <string name="subtitle_print_label_per_unit">Per unit</string>
   <!-- %1$s is a price and %2$s is a currency -->
   <string name="subtitle_total_price">Total price: %1$s %2$s</string>
+  <string name="subtitle_recipe_import_general">Step 1 of 4: General</string>
+  <string name="subtitle_recipe_import_mapping">Step 2 of 4: Mapping</string>
 
   <string name="description_input_product_part1">Product field contains:</string>
   <string name="description_input_product_part2">Please choose how to proceed:</string>
@@ -787,6 +790,8 @@
   <string name="property_parent_product">Parent product</string>
   <string name="property_description">Description</string>
   <string name="property_recipe_url">Recipe URL</string>
+  <string name="property_recipe_title">Recipe title</string>
+  <string name="property_recipe_time">Preparation time</string>
   <string name="property_note">Note</string>
   <string name="property_status">Status</string>
   <string name="property_amount">Amount</string>
@@ -912,6 +917,7 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">Accumulate sub products min. stock amount</string>
   <string name="property_picture">Picture</string>
+  <string name="property_extra_info">Extra info</string>
   <string name="property_note_singleline">Single-line note</string>
   <string name="property_note_multiline">Multi-line note</string>
   <!-- like the words 'Single-line' in 'Single-line description'-->
@@ -969,6 +975,10 @@
   <string name="property_variable_amount">Variable amount</string>
   <string name="property_requirements_fulfilled">Requirements fulfilled</string>
   <string name="property_produces_product">Produces product</string>
+  <!-- like the words 'Before text' in 'Insert preparation time before preparation text'-->
+  <string name="property_before_text">Before text</string>
+  <!-- 'Userfield' is a term used on grocy server interface for custom form fields, please look at the server translation for it -->
+  <string name="property_userfield">Userfield</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>
@@ -977,6 +987,10 @@
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Never</string>
 
+  <plurals name="date_minutes">
+    <item quantity="one">%d minute</item>
+    <item quantity="other">%d minutes</item>
+  </plurals>
   <plurals name="date_days">
     <item quantity="one">%d day</item>
     <item quantity="other">%d days</item>

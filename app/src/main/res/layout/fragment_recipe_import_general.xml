@@ -33,7 +33,7 @@
       type="xyz.zedler.patrick.grocy.activity.MainActivity" />
     <variable
       name="fragment"
-      type="xyz.zedler.patrick.grocy.fragment.RecipeImportFragment" />
+      type="xyz.zedler.patrick.grocy.fragment.RecipeImportGeneralFragment" />
   </data>
 
   <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -54,7 +54,10 @@
         <com.google.android.material.appbar.MaterialToolbar
           android:id="@+id/toolbar"
           style="@style/Widget.Grocy.Toolbar.Back"
-          app:title="@string/title_recipe_import" />
+          app:title="@string/title_recipe_import"
+          app:subtitle="@string/subtitle_recipe_import_general"
+          app:subtitleCentered="true"
+          app:subtitleTextAppearance="@style/TextAppearance.Grocy.TitleMedium"/>
 
         <LinearLayout
           android:layout_width="wrap_content"
@@ -118,9 +121,8 @@
 
             <LinearLayout
               android:layout_width="0dp"
-              android:layout_height="wrap_content"
+              android:layout_height="match_parent"
               android:orientation="vertical"
-              android:layout_marginBottom="?attr/actionBarSize"
               android:animateLayoutChanges="true"
               app:transitionTypeChanging="@{true}"
               app:layout_constraintTop_toTopOf="parent"
@@ -128,19 +130,6 @@
               app:layout_constraintWidth_max="@dimen/max_content_width"
               app:layout_constraintStart_toStartOf="parent"
               app:layout_constraintEnd_toEndOf="parent">
-
-              <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Grocy.Card.Text"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="8dp">
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.Paragraph.Card"
-                  android:text="@string/msg_help_recipe_import" />
-
-              </com.google.android.material.card.MaterialCardView>
 
               <View
                 android:id="@+id/dummy_focus_view"
@@ -155,15 +144,15 @@
 
                 <ImageView
                   style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
-                  android:src="@drawable/ic_round_pasta"
+                  android:src="@drawable/ic_round_short_text"
                   android:layout_marginTop="16dp"
                   tools:ignore="ContentDescription" />
 
                 <com.google.android.material.textfield.TextInputLayout
                   android:id="@+id/text_input_website"
                   style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                  android:hint="@string/property_recipe_url"
-                  app:errorText="@{viewModel.recipeWebsiteErrorLive}"
+                  android:hint="@string/property_recipe_title"
+                  app:errorText="@{viewModel.recipeTitleErrorLive}"
                   app:endIconMode="clear_text">
 
                   <com.google.android.material.textfield.TextInputEditText
@@ -172,7 +161,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="text|textUri"
                     android:imeOptions="actionDone"
-                    android:text="@={viewModel.recipeWebsiteLive}"
+                    android:text="@={viewModel.recipeTitleLive}"
                     android:afterTextChanged="@{() -> viewModel.isRecipeWebsiteValid()}"
                     app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}" />
 
@@ -180,15 +169,121 @@
 
               </LinearLayout>
 
-              <com.google.android.material.button.MaterialButton
-                style="@style/Widget.Grocy.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem"
                 android:layout_marginTop="8dp"
+                android:paddingTop="8dp">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
+                  android:src="@drawable/ic_round_timelapse"
+                  android:layout_marginTop="16dp"
+                  tools:ignore="ContentDescription" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                  android:id="@+id/text_input_time"
+                  style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+                  android:hint="@string/property_recipe_time"
+                  app:errorText="@{viewModel.recipeTimeErrorLive}"
+                  app:endIconMode="clear_text">
+
+                  <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text|textUri"
+                    android:imeOptions="actionDone"
+                    android:text="@={viewModel.recipeTimeLive}"
+                    android:afterTextChanged="@{() -> viewModel.isRecipeWebsiteValid()}"
+                    app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+              </LinearLayout>
+
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
                 android:layout_marginStart="56dp"
-                android:layout_gravity="start|center_vertical"
-                android:text="@string/title_supported_websites"
-                android:onClick="@{() -> fragment.openSupportedWebsites()}" />
+                android:weightSum="2">
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                  style="@style/Widget.Grocy.RadioButton"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:paddingEnd="4dp"
+                  android:paddingStart="0dp"
+                  android:text="@string/property_before_text"
+                  android:checked="@{viewModel.insertPreparationTimeInText != null &amp;&amp; viewModel.insertPreparationTimeInText}"
+                  android:onClick="@{() -> viewModel.setInsertPreparationTimeInText(true)}" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                  style="@style/Widget.Grocy.RadioButton"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:paddingEnd="16dp"
+                  android:paddingStart="0dp"
+                  android:text="@string/property_userfield"
+                  android:checked="@{viewModel.insertPreparationTimeInText != null &amp;&amp; !viewModel.insertPreparationTimeInText}"
+                  android:onClick="@{() -> viewModel.setInsertPreparationTimeInText(false)}" />
+
+              </LinearLayout>
+
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card.Text"
+                android:layout_marginStart="56dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="0dp">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph.Card"
+                  android:text="Preparation time will be inserted before preparation text." />
+
+              </com.google.android.material.card.MaterialCardView>
+
+              <LinearLayout
+                android:id="@+id/image_container"
+                android:gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:layout_marginTop="8dp">
+
+                <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+
+                  <ImageView
+                    style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
+                    android:src="@drawable/ic_round_image"
+                    android:layout_marginTop="16dp"
+                    tools:ignore="ContentDescription" />
+
+                  <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:ignore="ContentDescription" />
+
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                  style="@style/Widget.Grocy.Button.TextButton"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="-8dp"
+                  android:layout_marginStart="40dp"
+                  android:layout_gravity="start|center_vertical"
+                  android:text="@string/action_remove_image" />
+
+              </LinearLayout>
 
             </LinearLayout>
 

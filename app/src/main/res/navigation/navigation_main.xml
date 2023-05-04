@@ -1396,5 +1396,34 @@
     <deepLink
       android:id="@+id/deepLink20"
       app:uri="@string/deep_link_recipeImportFragment" />
+    <action
+      android:id="@+id/action_recipeImportFragment_to_recipeImportGeneralFragment"
+      app:destination="@id/recipeImportGeneralFragment" />
+    <argument
+      android:name="url"
+      app:argType="string"
+      app:nullable="true"
+      android:defaultValue="@null" />
+  </fragment>
+  <fragment
+    android:id="@+id/recipeImportGeneralFragment"
+    android:label="RecipeImportGeneralFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.RecipeImportGeneralFragment"
+    tools:layout="@layout/fragment_recipe_import_general">
+    <argument
+      android:name="recipeParsed"
+      app:argType="xyz.zedler.patrick.grocy.model.RecipeParsed" />
+    <action
+      android:id="@+id/action_recipeImportGeneralFragment_to_recipeImportMappingFragment"
+      app:destination="@id/recipeImportMappingFragment" />
+  </fragment>
+  <fragment
+    android:id="@+id/recipeImportMappingFragment"
+    android:label="RecipeImportMappingFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.RecipeImportMappingFragment"
+    tools:layout="@layout/fragment_recipe_import_mapping">
+    <argument
+      android:name="recipeParsed"
+      app:argType="xyz.zedler.patrick.grocy.model.RecipeParsed" />
   </fragment>
 </navigation>

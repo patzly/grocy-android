@@ -56,6 +56,7 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.api.OpenBeautyFactsApi;
 import xyz.zedler.patrick.grocy.api.OpenFoodFactsApi;
+import xyz.zedler.patrick.grocy.api.RecipeParserApi;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.ChoreDetails;
@@ -2845,6 +2846,33 @@ public class DownloadHelper {
           errorListener.onError(error);
         },
         OpenBeautyFactsApi.getUserAgent(application)
+    );
+  }
+
+  public void scrapeRecipe(
+      String url,
+      OnJSONResponseListener successListener,
+      OnErrorListener errorListener
+  ) {
+    JSONObject data = new JSONObject();
+    try {
+      data.put("url", url);
+    } catch (JSONException e) {
+      e.printStackTrace();
+      errorListener.onError(null);
+      return;
+    }
+    post(
+        RecipeParserApi.scrapeRecipe(),
+        data,
+        response -> {
+          successListener.onResponse(response);
+          if(debug) Log.i(tag, "scrapeRecipe: " + response);
+        },
+        error -> {
+          if(debug) Log.e(tag, "scrapeRecipe: can't get recipe scrape result");
+          errorListener.onError(error);
+        }
     );
   }
 

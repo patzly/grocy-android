@@ -23,51 +23,37 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.webkit.URLUtil;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.json.JSONException;
-import org.json.JSONObject;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.form.FormDataTransfer;
-import xyz.zedler.patrick.grocy.fragment.TransferFragmentArgs;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuickModeConfirmBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
-import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
-import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.model.StockEntry;
-import xyz.zedler.patrick.grocy.model.StockLocation;
+import xyz.zedler.patrick.grocy.model.RecipeParsed;
+import xyz.zedler.patrick.grocy.model.RecipeParsed.Ingredient;
+import xyz.zedler.patrick.grocy.model.RecipeParsed.IngredientPart;
 import xyz.zedler.patrick.grocy.repository.TransferRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
-import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
-import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
-import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class RecipeImportViewModel extends BaseViewModel {
@@ -79,25 +65,30 @@ public class RecipeImportViewModel extends BaseViewModel {
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
   private final TransferRepository repository;
-  private final FormDataTransfer formData;
 
   private List<Product> products;
   private List<QuantityUnitConversion> unitConversions;
   private List<ProductBarcode> barcodes;
   private List<Location> locations;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+  private RecipeParsed recipeParsed;
 
   private final MutableLiveData<String> recipeWebsiteLive;
   private final MutableLiveData<String> recipeWebsiteErrorLive;
+  private final MutableLiveData<String> recipeTitleLive;
+  private final MutableLiveData<String> recipeTitleErrorLive;
+  private final MutableLiveData<String> recipeTimeLive;
+  private final MutableLiveData<String> recipeTimeErrorLive;
+  private final MutableLiveData<Boolean> insertPreparationTimeInText;
+  private final MutableLiveData<String> mappingEntityLive;
   private final MutableLiveData<Boolean> isLoadingLive;
+  private final MutableLiveData<Boolean> displayHelpLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> quickModeEnabled;
 
   private Runnable queueEmptyAction;
-  private boolean productWillBeFilled;
   private final int maxDecimalPlacesAmount;
 
-  public RecipeImportViewModel(@NonNull Application application, TransferFragmentArgs args) {
+  public RecipeImportViewModel(@NonNull Application application, Bundle args) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
@@ -111,28 +102,21 @@ public class RecipeImportViewModel extends BaseViewModel {
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     grocyApi = new GrocyApi(getApplication());
     repository = new TransferRepository(application);
-    formData = new FormDataTransfer(application, sharedPrefs, args);
 
     recipeWebsiteLive = new MutableLiveData<>();
     recipeWebsiteErrorLive = new MutableLiveData<>();
-
+    recipeTitleLive = new MutableLiveData<>();
+    recipeTitleErrorLive = new MutableLiveData<>();
+    recipeTimeLive = new MutableLiveData<>();
+    recipeTimeErrorLive = new MutableLiveData<>();
+    insertPreparationTimeInText = new MutableLiveData<>();
+    mappingEntityLive = new MutableLiveData<>(IngredientPart.ENTITY_AMOUNT);
+    displayHelpLive = new MutableLiveData<>(false);
     infoFullscreenLive = new MutableLiveData<>();
-    boolean quickModeStart;
-    if (!args.getCloseWhenFinished()) {
-      quickModeStart = sharedPrefs.getBoolean(
-          PREF.QUICK_MODE_ACTIVE_TRANSFER,
-          false
-      );
-    } else {
-      quickModeStart = false;
+
+    if (args != null && args.containsKey("url")) {
+      recipeWebsiteLive.setValue(args.getString("url"));
     }
-    quickModeEnabled = new MutableLiveData<>(quickModeStart);
-
-    barcodes = new ArrayList<>();
-  }
-
-  public FormDataTransfer getFormData() {
-    return formData;
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
@@ -142,7 +126,6 @@ public class RecipeImportViewModel extends BaseViewModel {
       this.locations = data.getLocations();
       this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
       this.unitConversions = data.getQuantityUnitConversions();
-      formData.getProductsLive().setValue(Product.getActiveAndStockEnabledProductsOnly(products));
       if (downloadAfterLoading) {
         downloadData();
       }
@@ -159,7 +142,6 @@ public class RecipeImportViewModel extends BaseViewModel {
     queue.append(
         dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
-          formData.getProductsLive().setValue(Product.getActiveAndStockEnabledProductsOnly(products));
         }), dlHelper.updateProductBarcodes(
             dbChangedTime, barcodes -> this.barcodes = barcodes
         ), dlHelper.updateLocations(
@@ -210,373 +192,17 @@ public class RecipeImportViewModel extends BaseViewModel {
     showMessage(getString(R.string.msg_no_connection));
   }
 
-  public void setProduct(int productId, ProductBarcode barcode, String stockEntryId) {
-    DownloadHelper.OnQueueEmptyListener onQueueEmptyListener = () -> {
-      ProductDetails productDetails = formData.getProductDetailsLive().getValue();
-      assert productDetails != null;
-      Product product = productDetails.getProduct();
-
-      if (productDetails.getStockAmountAggregated() == 0) {
-        String name = product.getName();
-        showMessageAndContinueScanning(getApplication().getString(R.string.msg_not_in_stock, name));
-        return;
-      }
-      if (productDetails.getProduct().getEnableTareWeightHandlingBoolean()) {
-        showMessageAndContinueScanning(getApplication().getString(R.string.msg_transfer_tare_weight));
-        return;
-      }
-
-      formData.getProductDetailsLive().setValue(productDetails);
-      formData.getProductNameLive().setValue(product.getName());
-
-      // stock location (from location)
-      ArrayList<StockLocation> stockLocations = formData.getStockLocations();
-      StockLocation stockLocation = getStockLocation(
-          stockLocations,
-          product.getLocationIdInt()
-      );
-      if (stockLocation == null && !stockLocations.isEmpty()) {
-        stockLocation = stockLocations.get(stockLocations.size() - 1);
-      }
-      formData.getFromLocationLive().setValue(stockLocation);
-
-      // quantity unit
+  public void scrapeRecipe() {
+    dlHelper.scrapeRecipe(getWebsiteUrlTrimmed(), response -> {
       try {
-        HashMap<QuantityUnit, Double> unitFactors= QuantityUnitConversionUtil.getUnitFactors(
-            getApplication(),
-            quantityUnitHashMap,
-            unitConversions,
-            product
-        );
-        formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
-
-        QuantityUnit barcodeUnit = null;
-        if (barcode != null && barcode.hasQuId()) {
-          barcodeUnit = quantityUnitHashMap.get(barcode.getQuIdInt());
-        }
-        if (barcodeUnit != null && unitFactors.containsKey(barcodeUnit)) {
-          formData.getQuantityUnitLive().setValue(barcodeUnit);
-        } else {
-          QuantityUnit stock = quantityUnitHashMap.get(product.getQuIdStockInt());
-          formData.getQuantityUnitLive().setValue(stock);
-        }
-      } catch (IllegalArgumentException e) {
-        showMessageAndContinueScanning(e.getMessage());
-        return;
+        recipeParsed = RecipeParsed.fromJson(response);
+      } catch (JSONException e) {
+        showMessage(e.getLocalizedMessage());
       }
-
-      // amount
-      if (barcode != null && barcode.hasAmount()) {
-        // if barcode contains amount, take this
-        // quick mode status doesn't matter
-        formData.getAmountLive().setValue(NumUtil.trimAmount(barcode.getAmountDouble(), maxDecimalPlacesAmount));
-      } else if (!isQuickModeEnabled()) {
-        String defaultAmount = sharedPrefs.getString(
-            STOCK.DEFAULT_CONSUME_AMOUNT,
-            SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT
-        );
-        if (NumUtil.isStringDouble(defaultAmount)) {
-          defaultAmount = NumUtil.trimAmount(NumUtil.toDouble(defaultAmount), maxDecimalPlacesAmount);
-        }
-        if (NumUtil.isStringDouble(defaultAmount)
-            && NumUtil.toDouble(defaultAmount) > 0) {
-          formData.getAmountLive().setValue(defaultAmount);
-        }
-      } else {
-        // if quick mode enabled, always fill with amount 1
-        formData.getAmountLive().setValue(NumUtil.trimAmount(1, maxDecimalPlacesAmount));
-      }
-
-      // stock entry
-      StockEntry stockEntry = null;
-      if (stockEntryId != null) {
-        stockEntry = StockEntry.getStockEntryFromId(formData.getStockEntries(), stockEntryId);
-      }
-      if (stockEntryId != null && stockEntry == null) {
-        showMessage(R.string.error_stock_entry_grocycode);
-      }
-      if (stockEntry != null) {
-        formData.getUseSpecificLive().setValue(true);
-        formData.getSpecificStockEntryLive().setValue(stockEntry);
-      } else {
-        formData.getUseSpecificLive().setValue(false);
-        formData.getSpecificStockEntryLive().setValue(null);
-      }
-
-      formData.isFormValid();
-      if (isQuickModeEnabled()) {
-        sendEvent(Event.FOCUS_INVALID_VIEWS);
-      }
-    };
-
-    dlHelper.newQueue(
-        onQueueEmptyListener,
-        error -> showMessageAndContinueScanning(getString(R.string.error_no_product_details))
-    ).append(
-        dlHelper.getProductDetails(
-            productId,
-            productDetails -> formData.getProductDetailsLive().setValue(productDetails)
-        ), dlHelper.getStockLocations(
-            productId,
-            formData::setStockLocations
-        ), dlHelper.getStockEntries(
-            productId,
-            formData::setStockEntries
-        )
-    ).start();
-  }
-
-  public void onBarcodeRecognized(String barcode) {
-    if (formData.getProductDetailsLive().getValue() != null) {
-      if (ProductBarcode.getFromBarcode(barcodes, barcode) == null) {
-        formData.getBarcodeLive().setValue(barcode);
-      } else {
-        showMessage(R.string.msg_clear_form_first);
-      }
-      return;
-    }
-    Product product = null;
-    String stockEntryId = null;
-    Grocycode grocycode = GrocycodeUtil.getGrocycode(barcode);
-    if (grocycode != null && grocycode.isProduct()) {
-      product = Product.getProductFromId(products, grocycode.getObjectId());
-      if (product == null) {
-        showMessageAndContinueScanning(R.string.msg_not_found);
-        return;
-      }
-      stockEntryId = grocycode.getProductStockEntryId();
-    } else if (grocycode != null) {
-      showMessageAndContinueScanning(R.string.error_wrong_grocycode_type);
-      return;
-    }
-    ProductBarcode productBarcode = null;
-    if (product == null) {
-      productBarcode = ProductBarcode.getFromBarcode(barcodes, barcode);
-      product = productBarcode != null
-          ? Product.getProductFromId(products, productBarcode.getProductIdInt()) : null;
-    }
-    if (product != null) {
-      setProduct(product.getId(), productBarcode, stockEntryId);
-    } else {
-      Bundle bundle = new Bundle();
-      bundle.putString(ARGUMENT.BARCODE, barcode);
-      sendEvent(Event.CHOOSE_PRODUCT, bundle);
-    }
-  }
-
-  public void checkProductInput() {
-    formData.isProductNameValid();
-    String input = formData.getProductNameLive().getValue();
-    if (input == null || input.isEmpty()) {
-      return;
-    }
-    Product product = Product.getProductFromName(products, input);
-
-    Grocycode grocycode = GrocycodeUtil.getGrocycode(input.trim());
-    if (grocycode != null && grocycode.isProduct()) {
-      product = Product.getProductFromId(products, grocycode.getObjectId());
-      if (product == null) {
-        showMessageAndContinueScanning(R.string.msg_not_found);
-        return;
-      }
-    } else if (grocycode != null) {
-      showMessageAndContinueScanning(R.string.error_wrong_grocycode_type);
-      return;
-    }
-    if (product == null) {
-      ProductBarcode productBarcode = null;
-      for (ProductBarcode code : barcodes) {
-        if (code.getBarcode().equals(input.trim())) {
-          productBarcode = code;
-          product = Product.getProductFromId(products, code.getProductIdInt());
-        }
-      }
-      if (product != null) {
-        setProduct(product.getId(), productBarcode, null);
-        return;
-      }
-    }
-
-    ProductDetails currentProductDetails = formData.getProductDetailsLive().getValue();
-    Product currentProduct = currentProductDetails != null
-        ? currentProductDetails.getProduct() : null;
-    if (currentProduct != null && product != null && currentProduct.getId() == product.getId()) {
-      return;
-    }
-
-    if (product != null) {
-      setProduct(product.getId(), null, null);
-    } else {
-      showInputProductBottomSheet(input);
-    }
-  }
-
-  public void addBarcodeToExistingProduct(String barcode) {
-    formData.getBarcodeLive().setValue(barcode);
-    formData.getProductNameLive().setValue(null);
-  }
-
-  public void transferProduct() {
-    transferProduct(false);
-  }
-
-  public void transferProduct(boolean confirmed) {
-    if (!formData.isFormValid()) {
-      showMessage(R.string.error_missing_information);
-      return;
-    }
-    if (formData.getBarcodeLive().getValue() != null) {
-      uploadProductBarcode(this::transferProduct);
-      return;
-    }
-
-    assert formData.getProductDetailsLive().getValue() != null;
-    Product product = formData.getProductDetailsLive().getValue().getProduct();
-    JSONObject body = formData.getFilledJSONObject();
-
-    if (!confirmed && product.getShouldNotBeFrozenBoolean()
-        && formData.getToLocationLive().getValue() != null
-        && formData.getToLocationLive().getValue().getIsFreezerInt() == 1) {
-      sendEvent(Event.CONFIRM_FREEZING);
-      return;
-    }
-
-    dlHelper.postWithArray(grocyApi.transferProduct(product.getId()),
-        body,
-        response -> {
-          // UNDO OPTION
-          String transactionId = null;
-          double amountTransferred = 0;
-          try {
-            transactionId = response.getJSONObject(0)
-                .getString("transaction_id");
-            for (int i = 0; i < response.length(); i++) {
-              if (response.getJSONObject(i).getString("transaction_type")
-                  .equals("transfer_from")) {
-                continue;
-              }
-              amountTransferred += response.getJSONObject(i).getDouble("amount");
-            }
-          } catch (JSONException e) {
-            if (debug) {
-              Log.e(TAG, "transferProduct: " + e);
-            }
-          }
-          if (debug) {
-            Log.i(TAG, "transferProduct: transaction successful");
-          }
-
-          SnackbarMessage snackbarMessage = new SnackbarMessage(
-              formData.getTransactionSuccessMsg(amountTransferred)
-          );
-          if (transactionId != null) {
-            String transId = transactionId;
-            snackbarMessage.setAction(
-                getString(R.string.action_undo),
-                v -> undoTransaction(transId)
-            );
-            snackbarMessage.setDurationSecs(sharedPrefs.getInt(
-                    Constants.SETTINGS.BEHAVIOR.MESSAGE_DURATION,
-                    SETTINGS_DEFAULT.BEHAVIOR.MESSAGE_DURATION));
-          }
-          showSnackbar(snackbarMessage);
-          sendEvent(Event.CONSUME_SUCCESS);
-        },
-        error -> {
-          showNetworkErrorMessage(error);
-          if (debug) {
-            Log.i(TAG, "transferProduct: " + error);
-          }
-        }
-    );
-  }
-
-  private void undoTransaction(String transactionId) {
-    dlHelper.post(
-        grocyApi.undoStockTransaction(transactionId),
-        success -> {
-          showMessage(getString(R.string.msg_undone_transaction));
-          if (debug) {
-            Log.i(TAG, "undoTransaction: undone");
-          }
-        },
-        this::showNetworkErrorMessage
-    );
-  }
-
-  private void uploadProductBarcode(Runnable onSuccess) {
-    ProductBarcode productBarcode = formData.fillProductBarcode();
-    JSONObject body = productBarcode.getJsonFromProductBarcode(debug, TAG);
-    dlHelper.addProductBarcode(body, () -> {
-      formData.getBarcodeLive().setValue(null);
-      barcodes.add(productBarcode); // add to list so it will be found on next scan without reload
-      if (onSuccess != null) {
-        onSuccess.run();
-      }
-    }, error -> showMessage(R.string.error_failed_barcode_upload)).perform(dlHelper.getUuid());
-  }
-
-  private StockLocation getStockLocation(ArrayList<StockLocation> locations, int locationId) {
-    for (StockLocation stockLocation : locations) {
-      if (stockLocation.getLocationId() == locationId) {
-        return stockLocation;
-      }
-    }
-    return null;
-  }
-
-  public void showInputProductBottomSheet(@NonNull String input) {
-    Bundle bundle = new Bundle();
-    bundle.putString(ARGUMENT.PRODUCT_INPUT, input);
-    showBottomSheet(new InputProductBottomSheet(), bundle);
-  }
-
-  public void showQuantityUnitsBottomSheet(boolean hasFocus) {
-    if (!hasFocus) {
-      return;
-    }
-    HashMap<QuantityUnit, Double> unitsFactors = getFormData()
-        .getQuantityUnitsFactorsLive().getValue();
-    Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(
-        ARGUMENT.QUANTITY_UNITS,
-        unitsFactors != null ? new ArrayList<>(unitsFactors.keySet()) : null
-    );
-    QuantityUnit quantityUnit = formData.getQuantityUnitLive().getValue();
-    bundle.putInt(ARGUMENT.SELECTED_ID, quantityUnit != null ? quantityUnit.getId() : -1);
-    showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
-  }
-
-  public void showLocationsBottomSheet(boolean hasFocus) {  // to location
-    if (!hasFocus) {
-      return;
-    }
-    if (!formData.isProductNameValid()) {
-      return;
-    }
-    Location currentToLocation = formData.getToLocationLive().getValue();
-    int selectedId = currentToLocation != null ? currentToLocation.getId() : -1;
-    Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(ARGUMENT.LOCATIONS, new ArrayList<>(locations));
-    bundle.putInt(ARGUMENT.SELECTED_ID, selectedId);
-    bundle.putString(ARGUMENT.TITLE, getString(R.string.title_location_to));
-    showBottomSheet(new LocationsBottomSheet(), bundle);
-  }
-
-  public void showConfirmationBottomSheet() {
-    Bundle bundle = new Bundle();
-    bundle.putString(ARGUMENT.TEXT, formData.getConfirmationText());
-    showBottomSheet(new QuickModeConfirmBottomSheet(), bundle);
-  }
-
-  private void showMessageAndContinueScanning(String msg) {
-    formData.clearForm();
-    showMessage(msg);
-    sendEvent(Event.CONTINUE_SCANNING);
-  }
-
-  private void showMessageAndContinueScanning(@StringRes int msg) {
-    showMessageAndContinueScanning(getString(msg));
+      sendEvent(Event.TRANSACTION_SUCCESS);
+    }, volleyError -> {
+      showMessage(R.string.error_undefined);
+    });
   }
 
   @NonNull
@@ -593,40 +219,107 @@ public class RecipeImportViewModel extends BaseViewModel {
     this.queueEmptyAction = queueEmptyAction;
   }
 
-  public void setProductWillBeFilled(boolean productWillBeFilled) {
-    this.productWillBeFilled = productWillBeFilled;
-  }
-
-  public boolean isProductWillBeFilled() {
-    return productWillBeFilled;
-  }
-
-  public boolean isQuickModeEnabled() {
-    if (quickModeEnabled.getValue() == null) {
-      return false;
-    }
-    return quickModeEnabled.getValue();
-  }
-
-  public MutableLiveData<Boolean> getQuickModeEnabled() {
-    return quickModeEnabled;
-  }
-
-  public boolean toggleQuickModeEnabled() {
-    quickModeEnabled.setValue(!isQuickModeEnabled());
-    sendEvent(isQuickModeEnabled() ? Event.QUICK_MODE_ENABLED : Event.QUICK_MODE_DISABLED);
-    sharedPrefs.edit()
-        .putBoolean(PREF.QUICK_MODE_ACTIVE_TRANSFER, isQuickModeEnabled())
-        .apply();
-    return true;
-  }
-
   public MutableLiveData<String> getRecipeWebsiteLive() {
     return recipeWebsiteLive;
   }
 
   public MutableLiveData<String> getRecipeWebsiteErrorLive() {
     return recipeWebsiteErrorLive;
+  }
+
+  public MutableLiveData<String> getRecipeTitleLive() {
+    return recipeTitleLive;
+  }
+
+  public MutableLiveData<String> getRecipeTitleErrorLive() {
+    return recipeTitleErrorLive;
+  }
+
+  public MutableLiveData<String> getRecipeTimeLive() {
+    return recipeTimeLive;
+  }
+
+  public MutableLiveData<String> getRecipeTimeErrorLive() {
+    return recipeTimeErrorLive;
+  }
+
+  public MutableLiveData<Boolean> getInsertPreparationTimeInText() {
+    return insertPreparationTimeInText;
+  }
+
+  public void setInsertPreparationTimeInText(boolean state) {
+    this.insertPreparationTimeInText.setValue(state);
+  }
+
+  public MutableLiveData<String> getMappingEntityLive() {
+    return mappingEntityLive;
+  }
+
+  public void setMappingEntityLive(String entity) {
+    mappingEntityLive.setValue(entity);
+  }
+
+  public void updateAllWordsClickableState() {
+    for (Ingredient ingredient : recipeParsed.getIngredients()) {
+      ingredient.updateWordsClickableState(mappingEntityLive.getValue());
+    }
+  }
+
+  public boolean isRecipeWebsiteValid() {
+    String serverUrl = getWebsiteUrlTrimmed();
+    if (serverUrl.isEmpty()) {
+      recipeWebsiteErrorLive.setValue(getString(R.string.error_empty));
+      return false;
+    } else if (!URLUtil.isHttpUrl(serverUrl) && !URLUtil.isHttpsUrl(serverUrl)) {
+      recipeWebsiteErrorLive.setValue(getString(R.string.error_invalid_url));
+      return false;
+    }
+    recipeWebsiteErrorLive.setValue(null);
+    return true;
+  }
+
+  public boolean isRecipeTitleValid() {
+    if (recipeTitleLive.getValue() == null || recipeTitleLive.getValue().isBlank()) {
+      recipeTitleErrorLive.setValue(getString(R.string.error_empty));
+      return false;
+    }
+    recipeTitleErrorLive.setValue(null);
+    return true;
+  }
+
+  @NonNull
+  public String getWebsiteUrlTrimmed() {
+    if (recipeWebsiteLive.getValue() == null) {
+      return "";
+    }
+    return recipeWebsiteLive.getValue().replaceAll("/+$", "").trim();
+  }
+
+  public RecipeParsed getRecipeParsed() {
+    return recipeParsed;
+  }
+
+  public void setRecipeParsed(RecipeParsed recipeParsed) {
+    this.recipeParsed = recipeParsed;
+    recipeTitleLive.setValue(recipeParsed.getTitle());
+    if (NumUtil.isStringNum(recipeParsed.getTotalTime())) {
+      int time = (int) NumUtil.toDouble(recipeParsed.getTotalTime());
+      recipeTimeLive.setValue(getApplication().getResources()
+          .getQuantityString(R.plurals.date_minutes, time, time));
+    } else {
+      recipeTimeLive.setValue(recipeParsed.getTotalTime());
+    }
+    insertPreparationTimeInText.setValue(true);
+    sendEvent(Event.LOAD_IMAGE);
+  }
+
+  public MutableLiveData<Boolean> getDisplayHelpLive() {
+    return displayHelpLive;
+  }
+
+  public void toggleDisplayHelpLive() {
+    assert displayHelpLive.getValue() != null;
+    displayHelpLive.setValue(!displayHelpLive.getValue());
   }
 
   public boolean isFeatureEnabled(String pref) {
@@ -645,9 +338,9 @@ public class RecipeImportViewModel extends BaseViewModel {
   public static class RecipeImportViewModelFactory implements ViewModelProvider.Factory {
 
     private final Application application;
-    private final TransferFragmentArgs args;
+    private final Bundle args;
 
-    public RecipeImportViewModelFactory(Application application, TransferFragmentArgs args) {
+    public RecipeImportViewModelFactory(Application application, Bundle args) {
       this.application = application;
       this.args = args;
     }

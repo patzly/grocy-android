@@ -81,6 +81,19 @@
 
     </activity>
 
+    <activity
+      android:name=".activity.RecipeImportActivity"
+      android:label="@string/title_recipe_import"
+      android:exported="true">
+
+      <intent-filter>
+        <action android:name="android.intent.action.SEND" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:mimeType="text/plain" />
+      </intent-filter>
+
+    </activity>
+
     <service
       android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
       android:enabled="false"

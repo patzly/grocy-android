@@ -128,6 +128,7 @@ import xyz.zedler.patrick.grocy.behavior.BottomScrollBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
+import xyz.zedler.patrick.grocy.fragment.RecipeImportFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -528,6 +529,16 @@ public class MainActivity extends AppCompatActivity {
       sharedPrefs.edit().putInt(PREF.LAST_VERSION, versionNew).apply();
       new Handler(Looper.getMainLooper()).postDelayed(
           this::showChangelogBottomSheet, 900
+      );
+    }
+
+    // Extract recipe URL from the Intent
+    Intent intent = getIntent();
+    String url = intent.getStringExtra("url");
+    if (url != null) {
+      navigateFragment(
+          R.id.recipeImportFragment,
+          new RecipeImportFragmentArgs.Builder().setUrl(url).build().toBundle()
       );
     }
   }
