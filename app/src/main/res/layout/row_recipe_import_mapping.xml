@@ -32,7 +32,7 @@
     android:paddingHorizontal="8dp"
     app:constraint_referenced_ids=""
     app:flow_horizontalBias="0"
-    app:flow_horizontalGap="16dp"
+    app:flow_horizontalGap="12dp"
     app:flow_horizontalStyle="packed"
     app:flow_verticalBias="0"
     app:flow_verticalGap="8dp"

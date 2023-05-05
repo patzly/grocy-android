@@ -33,6 +33,7 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.HashMap;
 import java.util.List;
+import org.json.JSONArray;
 import org.json.JSONException;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
@@ -195,6 +196,11 @@ public class RecipeImportViewModel extends BaseViewModel {
   public void scrapeRecipe() {
     dlHelper.scrapeRecipe(getWebsiteUrlTrimmed(), response -> {
       try {
+        JSONArray jsonArray = response.getJSONArray("ingredients");
+        jsonArray.put("10 g Eiweiß, frisch");
+        jsonArray.put("50g Äpfel, aus der TK-Truhe, regional");
+        jsonArray.put("10kg Mehl, frisch vom Acker");
+        response.put("ingredients", jsonArray);
         recipeParsed = RecipeParsed.fromJson(response);
       } catch (JSONException e) {
         showMessage(e.getLocalizedMessage());

@@ -158,7 +158,9 @@ public class RecipeParsed implements Parcelable {
       ArrayList<Ingredient> ingredients = new ArrayList<>();
       JSONArray jArray = jsonObject.getJSONArray("ingredients");
       for (int i=0; i<jArray.length(); i++){
-        ingredients.add(new Ingredient(jArray.getString(i)));
+        ingredients.add(new Ingredient(jArray.getString(i)
+            .replaceAll("(\\w)(,)", "$1 $2")
+            .replaceAll("(\\d)(?!\\s)(\\D)", "$1 $2")));
       }
       recipeParsed.setIngredients(ingredients);
     }
@@ -178,7 +180,7 @@ public class RecipeParsed implements Parcelable {
   }
 
   public static class Ingredient {
-    private ArrayList<IngredientWord> ingredientWords;
+    private final ArrayList<IngredientWord> ingredientWords;
     private HashMap<String, IngredientPart> ingredientParts;
 
     public Ingredient(String text) {
@@ -204,21 +206,38 @@ public class RecipeParsed implements Parcelable {
       if (ingredientParts == null) {
         ingredientParts = new HashMap<>();
       }
-      if (ingredientParts.get(entity) == null) {
+      IngredientPart partToDelete = null;
+      for (IngredientPart part : ingredientParts.values()) {
+        if (!entity.equals(part.getEntity()) && word.getStartIndex() >= part.getStartIndex()
+            && word.getEndIndex() <= part.getEndIndex()) {
+          int endIndex = word.getStartIndex()-1;
+          if (endIndex > part.getStartIndex()) {
+            part.setEndIndex(endIndex);
+          } else {
+            partToDelete = part;
+          }
+          break;
+        }
+      }
+      if (partToDelete != null) ingredientParts.remove(partToDelete.getEntity());
+
+      IngredientPart part = ingredientParts.get(entity);
+      if (part == null) {
         ingredientParts.put(entity, new IngredientPart(entity, word.getStartIndex(), word.getEndIndex()));
-      }/* else if (part.start == example.entities[entity].start && part.end == example.entities[entity].end) {
-        delete example.entities[entity];
-      } else if (part.start == example.entities[entity].start && part.end < example.entities[entity].end) {
-        example.entities[entity] = {start: part.start, end: part.end};
-      } else if (part.start <= example.entities[entity].start && part.end <= example.entities[entity].start) {
-        example.entities[entity] = {start: part.start, end: example.entities[entity].end};
-      } else if (part.start >= example.entities[entity].end && part.end > example.entities[entity].end) {
-        example.entities[entity] = {start: example.entities[entity].start, end: part.end};
-      } else if (part.start > example.entities[entity].start && part.end <= example.entities[entity].end) {
-        example.entities[entity] = {start: example.entities[entity].start, end: part.end};
-      }*/
+      } else if (word.getStartIndex() == part.getStartIndex() && word.getEndIndex() == part.getEndIndex()) {
+        ingredientParts.remove(entity);
+      } else if (word.getStartIndex() == part.getStartIndex() && word.getEndIndex() < part.getEndIndex()) {
+        ingredientParts.put(entity, new IngredientPart(entity, word.getStartIndex(), word.getEndIndex()));
+      } else if (word.getStartIndex() < part.getStartIndex() && word.getEndIndex() <= part.getStartIndex()) {
+        ingredientParts.put(entity, new IngredientPart(entity, word.getStartIndex(), part.getEndIndex()));
+      } else if (word.getStartIndex() >= part.getEndIndex() && word.getEndIndex() > part.getEndIndex()) {
+        ingredientParts.put(entity, new IngredientPart(entity, part.getStartIndex(), word.getEndIndex()));
+      } else if (word.getStartIndex() >= part.getStartIndex() && word.getEndIndex() <= part.getEndIndex()) {
+        ingredientParts.put(entity, new IngredientPart(entity, part.getStartIndex(), word.getEndIndex()));
+      }
 
       updateWordColor(word);
+      updateWordsWithEntities();
     }
 
     private void updateWordColor(IngredientWord word) {
@@ -246,6 +265,18 @@ public class RecipeParsed implements Parcelable {
       word.setMarkedColor(markedColor);
     }
 
+    private void updateWordsWithEntities() {
+      for (IngredientWord word : ingredientWords) {
+        for (IngredientPart part : ingredientParts.values()) {
+          if (word.getStartIndex() >= part.getStartIndex()
+              && word.getEndIndex() <= part.getEndIndex()) {
+            word.setEntity(part.getEntity());
+          }
+        }
+        updateWordColor(word);
+      }
+    }
+
     public void updateWordsClickableState(String currentMappingEntity) {
       for (IngredientWord word : ingredientWords) {
         word.setClickable(word.getEntity() == null || word.getEntity() != null
@@ -255,10 +286,10 @@ public class RecipeParsed implements Parcelable {
   }
 
   public static class IngredientWord {
-    private String text;
-    private int startIndex;
-    private int endIndex;
-    private boolean isCard;
+    private final String text;
+    private final int startIndex;
+    private final int endIndex;
+    private final boolean isCard;
     private boolean isClickable;
     private String entity;
     @ColorRes private int markedColor;
@@ -312,7 +343,7 @@ public class RecipeParsed implements Parcelable {
     }
 
     public boolean isMarked() {
-      return markedColor != R.color.white;
+      return markedColor != 0 && markedColor != R.color.white;
     }
   }
 
@@ -322,12 +353,12 @@ public class RecipeParsed implements Parcelable {
     public final static String ENTITY_PRODUCT = "product";
     public final static String ENTITY_EXTRA_INFO = "extra_info";
 
-    private String type;
-    private int startIndex;
+    private final String entity;
+    private final int startIndex;
     private int endIndex;
 
-    public IngredientPart(String type, int startIndex, int endIndex) {
-      this.type = type;
+    public IngredientPart(String entity, int startIndex, int endIndex) {
+      this.entity = entity;
       this.startIndex = startIndex;
       this.endIndex = endIndex;
     }
@@ -338,6 +369,14 @@ public class RecipeParsed implements Parcelable {
 
     public int getEndIndex() {
       return endIndex;
+    }
+
+    public void setEndIndex(int endIndex) {
+      this.endIndex = endIndex;
+    }
+
+    public String getEntity() {
+      return entity;
     }
   }
 }

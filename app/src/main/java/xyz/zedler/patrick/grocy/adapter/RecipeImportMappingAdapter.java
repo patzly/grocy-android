@@ -49,11 +49,8 @@ import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class RecipeImportMappingAdapter extends RecyclerView.Adapter<IngredientViewHolder> {
 
-  private final static String TAG = RecipeImportMappingAdapter.class.getSimpleName();
-
   private final RecipeParsed recipeParsed;
-  private OnWordClickListener onWordClickListener;
-  private String currentMappingEntity;
+  private final OnWordClickListener onWordClickListener;
 
   public RecipeImportMappingAdapter(RecipeParsed recipeParsed, OnWordClickListener onWordClickListener) {
     this.recipeParsed = recipeParsed;
@@ -63,7 +60,7 @@ public class RecipeImportMappingAdapter extends RecyclerView.Adapter<IngredientV
   public static class IngredientViewHolder extends RecyclerView.ViewHolder {
     private final RowRecipeImportMappingBinding binding;
     private final ConstraintLayout constraintLayout;
-    private OnWordClickListener onWordClickListener;
+    private final OnWordClickListener onWordClickListener;
 
     public IngredientViewHolder(RowRecipeImportMappingBinding binding, OnWordClickListener onWordClickListener) {
       super(binding.getRoot());
@@ -81,9 +78,7 @@ public class RecipeImportMappingAdapter extends RecyclerView.Adapter<IngredientV
         constraintLayout.addView(textView);
         ids.add(textView.getId());
 
-        textView.setOnClickListener(v -> {
-          onWordClicked(ingredient, word);
-        });
+        textView.setOnClickListener(v -> onWordClicked(ingredient, word));
       }
 
       binding.flowLayout.setReferencedIds(convertIntArray(ids));
@@ -116,7 +111,7 @@ public class RecipeImportMappingAdapter extends RecyclerView.Adapter<IngredientV
         MaterialShapeDrawable backgroundDrawable = new MaterialShapeDrawable(shapeAppearanceModel);
 
         int baseColor = ContextCompat.getColor(context, word.getMarkedColor());
-        int adjustedColor = adjustBrightness(baseColor, word.isClickable() ? 1.0f : 1.8f); // Increase brightness by 20%
+        int adjustedColor = adjustBrightness(baseColor, word.isClickable() ? 1.0f : 1.8f);
         ColorStateList colorStateList = ColorStateList.valueOf(adjustedColor);
 
         backgroundDrawable.setFillColor(colorStateList);
@@ -135,7 +130,7 @@ public class RecipeImportMappingAdapter extends RecyclerView.Adapter<IngredientV
       }
 
       textView.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical);
-      textView.setTranslationZ(6f);
+      textView.setTranslationZ(word.isClickable() ? 6f : 0f);
       return textView;
     }
 
@@ -183,10 +178,6 @@ public class RecipeImportMappingAdapter extends RecyclerView.Adapter<IngredientV
 
     Ingredient ingredient = this.recipeParsed.getIngredients().get(position);
     holder.bind(ingredient);
-  }
-
-  public void setCurrentMappingEntity(String currentMappingEntity) {
-    this.currentMappingEntity = currentMappingEntity;
   }
 
   @Override
