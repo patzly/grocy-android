@@ -24,6 +24,7 @@ import android.os.Parcelable;
 import android.util.Log;
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +52,8 @@ public class RecipeParsed implements Parcelable {
 
   @SerializedName("ingredients")
   private ArrayList<Ingredient> ingredients;
+
+  private HashMap<String, Integer> assignedUnits;
 
   public RecipeParsed() {
 
@@ -142,6 +145,19 @@ public class RecipeParsed implements Parcelable {
     this.ingredients = ingredients;
   }
 
+  public void storeUnitAssignment(String part, Integer unitId) {
+    if (part == null) return;
+    if (assignedUnits == null) assignedUnits = new HashMap<>();
+    assignedUnits.put(part, unitId);
+  }
+
+  public void updateWordsState() {
+    if (ingredients == null) return;
+    for (Ingredient ingredient : ingredients) {
+      ingredient.updateWordsAssignmentState(assignedUnits);
+    }
+  }
+
   public static RecipeParsed fromJson(JSONObject jsonObject) throws JSONException {
     RecipeParsed recipeParsed = new RecipeParsed();
     if (jsonObject.has("title")) {
@@ -180,10 +196,12 @@ public class RecipeParsed implements Parcelable {
   }
 
   public static class Ingredient {
+    private final String ingredientText;
     private final ArrayList<IngredientWord> ingredientWords;
     private HashMap<String, IngredientPart> ingredientParts;
 
     public Ingredient(String text) {
+      ingredientText = text;
       ingredientWords = new ArrayList<>();
       int currentIndex = 0;
       for (String s : text.split(" ")) {
@@ -277,11 +295,34 @@ public class RecipeParsed implements Parcelable {
       }
     }
 
+    private void updateWordsAssignmentState(HashMap<String, Integer> assignedUnits) {
+      for (IngredientWord word : ingredientWords) {
+        if (word.getEntity() != null && word.getEntity().equals(IngredientPart.ENTITY_UNIT)) {
+          word.setAssignable(true);
+          if (assignedUnits == null) continue;
+          IngredientPart part = getPartFromWord(word);
+          String text = getTextFromPart(part);
+          word.setAssigned(text != null && assignedUnits.containsKey(text));
+        }
+      }
+    }
+
     public void updateWordsClickableState(String currentMappingEntity) {
       for (IngredientWord word : ingredientWords) {
         word.setClickable(word.getEntity() == null || word.getEntity() != null
             && word.getEntity().equals(currentMappingEntity));
       }
+    }
+
+    @Nullable
+    public IngredientPart getPartFromWord(IngredientWord word) {
+      if (word.getEntity() == null) return null;
+      return ingredientParts.get(word.getEntity());
+    }
+
+    public String getTextFromPart(IngredientPart part) {
+      if (part == null) return null;
+      return ingredientText.substring(part.getStartIndex(), part.getEndIndex());
     }
   }
 
@@ -292,6 +333,8 @@ public class RecipeParsed implements Parcelable {
     private final boolean isCard;
     private boolean isClickable;
     private String entity;
+    private boolean isAssignable;
+    private boolean isAssigned;
     @ColorRes private int markedColor;
 
     public IngredientWord(String text, int startIndex, int endIndex, boolean isCard) {
@@ -334,6 +377,22 @@ public class RecipeParsed implements Parcelable {
       return entity;
     }
 
+    public boolean isAssignable() {
+      return isAssignable;
+    }
+
+    public void setAssignable(boolean assignable) {
+      isAssignable = assignable;
+    }
+
+    public boolean isAssigned() {
+      return isAssigned;
+    }
+
+    public void setAssigned(boolean assigned) {
+      isAssigned = assigned;
+    }
+
     public int getMarkedColor() {
       return markedColor;
     }
@@ -356,6 +415,7 @@ public class RecipeParsed implements Parcelable {
     private final String entity;
     private final int startIndex;
     private int endIndex;
+    private Integer assignedGrocyObjectId;
 
     public IngredientPart(String entity, int startIndex, int endIndex) {
       this.entity = entity;
@@ -377,6 +437,14 @@ public class RecipeParsed implements Parcelable {
 
     public String getEntity() {
       return entity;
+    }
+
+    public void setAssignedGrocyObjectId(Integer assignedGrocyObjectId) {
+      this.assignedGrocyObjectId = assignedGrocyObjectId;
+    }
+
+    public Integer getAssignedGrocyObjectId() {
+      return assignedGrocyObjectId;
     }
   }
 }

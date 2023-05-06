@@ -29,4 +29,10 @@
     android:icon="@drawable/ic_round_file_open"
     app:showAsAction="always" />
 
+  <item
+    android:id="@+id/action_assign_quantity_units"
+    android:title="@string/action_assign_quantity_units"
+    android:icon="@drawable/ic_round_weights"
+    app:showAsAction="always" />
+
 </menu>

@@ -31,18 +31,21 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
+import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
@@ -52,7 +55,6 @@ import xyz.zedler.patrick.grocy.model.RecipeParsed;
 import xyz.zedler.patrick.grocy.model.RecipeParsed.Ingredient;
 import xyz.zedler.patrick.grocy.model.RecipeParsed.IngredientPart;
 import xyz.zedler.patrick.grocy.repository.TransferRepository;
-import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
@@ -71,13 +73,14 @@ public class RecipeImportViewModel extends BaseViewModel {
   private List<QuantityUnitConversion> unitConversions;
   private List<ProductBarcode> barcodes;
   private List<Location> locations;
-  private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+  private List<QuantityUnit> quantityUnits;
   private RecipeParsed recipeParsed;
 
   private final MutableLiveData<String> recipeWebsiteLive;
   private final MutableLiveData<String> recipeWebsiteErrorLive;
   private final MutableLiveData<String> recipeTitleLive;
   private final MutableLiveData<String> recipeTitleErrorLive;
+  private final MutableLiveData<Language> recipeLanguageLive;
   private final MutableLiveData<String> recipeTimeLive;
   private final MutableLiveData<String> recipeTimeErrorLive;
   private final MutableLiveData<Boolean> insertPreparationTimeInText;
@@ -108,6 +111,7 @@ public class RecipeImportViewModel extends BaseViewModel {
     recipeWebsiteErrorLive = new MutableLiveData<>();
     recipeTitleLive = new MutableLiveData<>();
     recipeTitleErrorLive = new MutableLiveData<>();
+    recipeLanguageLive = new MutableLiveData<>();
     recipeTimeLive = new MutableLiveData<>();
     recipeTimeErrorLive = new MutableLiveData<>();
     insertPreparationTimeInText = new MutableLiveData<>();
@@ -125,7 +129,7 @@ public class RecipeImportViewModel extends BaseViewModel {
       this.products = data.getProducts();
       this.barcodes = data.getBarcodes();
       this.locations = data.getLocations();
-      this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
+      this.quantityUnits = data.getQuantityUnits();
       this.unitConversions = data.getQuantityUnitConversions();
       if (downloadAfterLoading) {
         downloadData();
@@ -151,7 +155,7 @@ public class RecipeImportViewModel extends BaseViewModel {
             dbChangedTime, conversions -> this.unitConversions = conversions
         ), dlHelper.updateQuantityUnits(
             dbChangedTime,
-            quantityUnits -> quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits)
+            quantityUnits -> this.quantityUnits = quantityUnits
         )
     );
     if (queue.isEmpty()) {
@@ -317,6 +321,12 @@ public class RecipeImportViewModel extends BaseViewModel {
     }
     insertPreparationTimeInText.setValue(true);
     sendEvent(Event.LOAD_IMAGE);
+  }
+
+  public void openQuantityUnitsBottomSheet(IngredientPart part) {
+    Bundle bundle = new Bundle();
+    bundle.putParcelableArrayList(ARGUMENT.QUANTITY_UNITS, new ArrayList<>(quantityUnits));
+    showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
   }
 
   public MutableLiveData<Boolean> getDisplayHelpLive() {

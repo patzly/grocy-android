@@ -151,7 +151,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                   android:id="@+id/text_input_website"
                   style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                  android:hint="@string/property_recipe_title"
+                  android:hint="@string/property_name"
                   app:errorText="@{viewModel.recipeTitleErrorLive}"
                   app:endIconMode="clear_text">
 
@@ -170,8 +170,34 @@
               </LinearLayout>
 
               <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+
+                <ImageView
+                  android:id="@+id/image_language"
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  tools:ignore="ContentDescription"
+                  android:src="@drawable/ic_round_language_anim" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                    android:text="@string/setting_language" />
+
+                  <TextView
+                    android:id="@+id/text_language"
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="None selected" />
+
+                </LinearLayout>
+
+              </LinearLayout>
+
+              <LinearLayout
                 style="@style/Widget.Grocy.LinearLayout.ListItem"
-                android:layout_marginTop="8dp"
                 android:paddingTop="8dp">
 
                 <ImageView

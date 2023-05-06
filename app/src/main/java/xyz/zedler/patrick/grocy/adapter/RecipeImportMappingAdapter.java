@@ -51,6 +51,7 @@ public class RecipeImportMappingAdapter extends RecyclerView.Adapter<IngredientV
 
   private final RecipeParsed recipeParsed;
   private final OnWordClickListener onWordClickListener;
+  private boolean isFragmentInAssignmentState = false;
 
   public RecipeImportMappingAdapter(RecipeParsed recipeParsed, OnWordClickListener onWordClickListener) {
     this.recipeParsed = recipeParsed;
@@ -69,12 +70,12 @@ public class RecipeImportMappingAdapter extends RecyclerView.Adapter<IngredientV
       this.onWordClickListener = onWordClickListener;
     }
 
-    public void bind(Ingredient ingredient) {
+    public void bind(Ingredient ingredient, boolean isFragmentInAssignmentState) {
       clearTextViews();
 
       List<Integer> ids = new ArrayList<>();
       for (IngredientWord word : ingredient.getIngredientWords()) {
-        TextView textView = createTextView(word);
+        TextView textView = createTextView(word, isFragmentInAssignmentState);
         constraintLayout.addView(textView);
         ids.add(textView.getId());
 
@@ -93,7 +94,7 @@ public class RecipeImportMappingAdapter extends RecyclerView.Adapter<IngredientV
       }
     }
 
-    private TextView createTextView(IngredientWord word) {
+    private TextView createTextView(IngredientWord word, boolean isFragmentInAssignmentState) {
       Context context = binding.getRoot().getContext();
       TextView textView = new TextView(context);
       textView.setId(View.generateViewId());
@@ -113,6 +114,13 @@ public class RecipeImportMappingAdapter extends RecyclerView.Adapter<IngredientV
         int baseColor = ContextCompat.getColor(context, word.getMarkedColor());
         int adjustedColor = adjustBrightness(baseColor, word.isClickable() ? 1.0f : 1.8f);
         ColorStateList colorStateList = ColorStateList.valueOf(adjustedColor);
+
+        backgroundDrawable.setStrokeColor(ColorStateList.valueOf(
+            ContextCompat.getColor(context, word.isAssigned() ? R.color.green : R.color.red)
+        ));
+        backgroundDrawable.setStrokeWidth(
+            isFragmentInAssignmentState && word.isAssignable() ? 6.0f : 0.0f
+        );
 
         backgroundDrawable.setFillColor(colorStateList);
         ViewCompat.setBackground(textView, backgroundDrawable);
@@ -176,8 +184,12 @@ public class RecipeImportMappingAdapter extends RecyclerView.Adapter<IngredientV
   public void onBindViewHolder(@NonNull final IngredientViewHolder holder, int positionDoNotUse) {
     int position = holder.getAdapterPosition();
 
-    Ingredient ingredient = this.recipeParsed.getIngredients().get(position);
-    holder.bind(ingredient);
+    Ingredient ingredient = recipeParsed.getIngredients().get(position);
+    holder.bind(ingredient, isFragmentInAssignmentState);
+  }
+
+  public void setFragmentInAssignmentState(boolean fragmentInAssignmentState) {
+    isFragmentInAssignmentState = fragmentInAssignmentState;
   }
 
   @Override

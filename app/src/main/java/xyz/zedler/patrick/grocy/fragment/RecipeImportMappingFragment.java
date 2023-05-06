@@ -38,8 +38,10 @@ import xyz.zedler.patrick.grocy.databinding.FragmentRecipeImportMappingBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.RecipeParsed;
 import xyz.zedler.patrick.grocy.model.RecipeParsed.Ingredient;
+import xyz.zedler.patrick.grocy.model.RecipeParsed.IngredientPart;
 import xyz.zedler.patrick.grocy.model.RecipeParsed.IngredientWord;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeImportViewModel;
@@ -54,6 +56,7 @@ public class RecipeImportMappingFragment extends BaseFragment implements Ingredi
   private RecipeImportViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
   private RecipeImportMappingAdapter adapter;
+  private boolean isFragmentInAssignmentState = false;
 
   @Override
   public View onCreateView(
@@ -137,6 +140,8 @@ public class RecipeImportMappingFragment extends BaseFragment implements Ingredi
       adapter.notifyDataSetChanged();
     });
 
+    if (savedInstanceState == null) viewModel.loadFromDatabase(true);
+
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.recycler);
     activity.getScrollBehavior().setBottomBarVisibility(true);
@@ -147,15 +152,34 @@ public class RecipeImportMappingFragment extends BaseFragment implements Ingredi
         FAB.TAG.IMPORT,
         savedInstanceState == null,
         () -> {
-          activity.showSnackbar("hello", false);
+          isFragmentInAssignmentState = !isFragmentInAssignmentState;
+          adapter.setFragmentInAssignmentState(isFragmentInAssignmentState);
+          activity.showSnackbar("Assignment state changed", false);
+          viewModel.getRecipeParsed().updateWordsState();
+          adapter.notifyDataSetChanged();
         }
     );
   }
 
+  @SuppressLint("NotifyDataSetChanged")
   @Override
   public void onWordClick(Ingredient ingredient, IngredientWord word, int position) {
-    ingredient.markWord(word, viewModel.getMappingEntityLive().getValue());
-    adapter.notifyItemChanged(position);
+    if (!isFragmentInAssignmentState) {
+      ingredient.markWord(word, viewModel.getMappingEntityLive().getValue());
+      adapter.notifyItemChanged(position);
+    } else {
+      if (word.isMarked() && word.getEntity().equals(IngredientPart.ENTITY_UNIT)) {
+        IngredientPart part = ingredient.getPartFromWord(word);
+        viewModel.openQuantityUnitsBottomSheet(part);
+      }
+    }
+  }
+
+  @Override
+  public void selectQuantityUnit(QuantityUnit quantityUnit, Bundle argsBundle) {
+    /*recipe.storeUnitAssignment(ingredient.getTextFromPart(part), 1);
+    recipe.updateWordsState();*/
+    adapter.notifyDataSetChanged();
   }
 
   @NonNull

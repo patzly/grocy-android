@@ -99,6 +99,7 @@
   <string name="action_create">Create</string>
   <string name="action_link">Link</string>
   <string name="action_import_from_file">Import from file</string>
+  <string name="action_assign_quantity_units">Assign quantity units</string>
   <string name="action_remove_image">Remove image</string>
   <string name="action_try_again">Try again</string>
   <string name="action_open_scanner">Open scanner</string>
@@ -790,7 +791,6 @@
   <string name="property_parent_product">Parent product</string>
   <string name="property_description">Description</string>
   <string name="property_recipe_url">Recipe URL</string>
-  <string name="property_recipe_title">Recipe title</string>
   <string name="property_recipe_time">Preparation time</string>
   <string name="property_note">Note</string>
   <string name="property_status">Status</string>
