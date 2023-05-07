@@ -28,7 +28,7 @@
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background = "@drawable/ripple_list_item_bg"
+    android:background = "@drawable/ripple_list_grid_item_bg"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
@@ -41,7 +41,7 @@
       android:layout_marginHorizontal="8dp"
       android:layout_marginVertical="8dp">
 
-      <ImageView
+      <xyz.zedler.patrick.grocy.view.RoundedCornerImageView
         android:id="@+id/picture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -127,33 +127,32 @@
           android:singleLine="false"
           android:maxLines="5"/>
 
-      </LinearLayout>
-
-      <LinearLayout
-        android:id="@+id/extra_field_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginStart="16dp"
-        android:layout_gravity="center_vertical"
-        android:visibility="gone">
-
-        <TextView
-          android:id="@+id/extra_field"
-          style="@style/Widget.Grocy.TextView.LabelSmall"
+        <LinearLayout
+          android:id="@+id/extra_field_container"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_gravity="end"
-          android:textColor="?attr/colorOnSurfaceVariant" />
+          android:orientation="horizontal"
+          android:layout_gravity="center_vertical"
+          android:layout_marginTop="3dp"
+          android:visibility="gone">
 
-        <TextView
-          android:id="@+id/extra_field_subtitle"
-          style="@style/Widget.Grocy.TextView.LabelSmall"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="end"
-          android:visibility="gone"
-          android:textColor="?attr/colorOnSurfaceVariant" />
+          <TextView
+            android:id="@+id/extra_field"
+            style="@style/Widget.Grocy.TextView.LabelSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurfaceVariant" />
+
+          <TextView
+            android:id="@+id/extra_field_subtitle"
+            style="@style/Widget.Grocy.TextView.LabelSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:visibility="gone"
+            android:textColor="?attr/colorOnSurfaceVariant" />
+
+        </LinearLayout>
 
       </LinearLayout>
 
