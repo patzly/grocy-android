@@ -38,6 +38,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
@@ -65,6 +66,8 @@ public class RecipesFragment extends BaseFragment implements
         RecipeEntryAdapter.RecipesItemAdapterListener {
 
   private final static String TAG = TasksFragment.class.getSimpleName();
+  private final static String LAYOUT_LINEAR = "linear";
+  private final static String LAYOUT_GRID = "grid";
 
   private MainActivity activity;
   private RecipesViewModel viewModel;
@@ -132,10 +135,13 @@ public class RecipesFragment extends BaseFragment implements
         savedInstanceState
     );
 
-    binding.recycler.setLayoutManager(
-        new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-    );
-    binding.recycler.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+    if (viewModel.getSharedPrefs().getString(PREF.RECIPES_LIST_LAYOUT, LAYOUT_LINEAR).equals(LAYOUT_LINEAR)) {
+      binding.recycler.setLayoutManager(
+          new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+      );
+    } else {
+      binding.recycler.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+    }
 
     binding.recycler.setAdapter(new MasterPlaceholderAdapter());
 
@@ -267,9 +273,11 @@ public class RecipesFragment extends BaseFragment implements
       if (layoutManager instanceof StaggeredGridLayoutManager) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
         binding.recycler.setLayoutManager(linearLayoutManager);
+        viewModel.getSharedPrefs().edit().putString(PREF.RECIPES_LIST_LAYOUT, LAYOUT_LINEAR).apply();
       } else {
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         binding.recycler.setLayoutManager(staggeredGridLayoutManager);
+        viewModel.getSharedPrefs().edit().putString(PREF.RECIPES_LIST_LAYOUT, LAYOUT_GRID).apply();
       }
       binding.recycler.setAdapter(
           new RecipeEntryAdapter(
