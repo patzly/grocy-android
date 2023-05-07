@@ -28,7 +28,7 @@
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background = "@drawable/ripple_list_item_bg"
+    android:background = "@drawable/ripple_list_grid_item_bg"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
@@ -41,7 +41,7 @@
       android:layout_marginHorizontal="8dp"
       android:layout_marginVertical="8dp">
 
-      <ImageView
+      <xyz.zedler.patrick.grocy.view.RoundedCornerImageView
         android:id="@+id/picture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

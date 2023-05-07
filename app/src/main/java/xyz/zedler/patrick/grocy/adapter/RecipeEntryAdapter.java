@@ -47,7 +47,6 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -66,7 +65,6 @@ import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
-import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class RecipeEntryAdapter extends
@@ -87,6 +85,7 @@ public class RecipeEntryAdapter extends
   private String extraField;
   private final int maxDecimalPlacesAmount;
   private boolean containsPictures;
+  private RecyclerView recyclerView;
 
   public RecipeEntryAdapter(
       Context context,
@@ -327,7 +326,7 @@ public class RecipeEntryAdapter extends
 
       RequestBuilder<Drawable> requestBuilder = Glide.with(context).load(new GlideUrl(grocyApi.getRecipePicture(pictureFileName), grocyAuthHeaders));
       requestBuilder = requestBuilder
-          .transform(new CenterCrop(), new RoundedCorners(UiUtil.dpToPx(context, 12)))
+          .transform(new CenterCrop())
           .transition(DrawableTransitionOptions.withCrossFade());
       if (viewHolder instanceof RecipeGridViewHolder) {
         requestBuilder = requestBuilder.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
@@ -367,16 +366,44 @@ public class RecipeEntryAdapter extends
     if (layoutManager instanceof StaggeredGridLayoutManager
         && viewHolder instanceof RecipeGridViewHolder) {
       int spanCount = ((StaggeredGridLayoutManager) layoutManager).getSpanCount();
-      int spanIndex = ((RecipeGridViewHolder) viewHolder).layoutParams.getSpanIndex();
       int itemCount = getItemCount();
-      if ((position + spanCount - spanIndex) >= itemCount) {
-        // last item in column
-        divider.setVisibility(View.GONE);
-      } else {
-        divider.setVisibility(View.VISIBLE);
+      int[] lastVisiblePositions = getLastVisiblePositions();
+
+      if (lastVisiblePositions != null) {
+        boolean isLastItemInColumn = false;
+        for (int i = 0; i < spanCount; i++) {
+          if (position == lastVisiblePositions[i] || position + spanCount >= itemCount) {
+            isLastItemInColumn = true;
+            break;
+          }
+        }
+        if (isLastItemInColumn) {
+          divider.setVisibility(View.GONE);
+        } else {
+          divider.setVisibility(View.VISIBLE);
+        }
       }
     }
   }
+
+  @Override
+  public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+    super.onAttachedToRecyclerView(recyclerView);
+    this.recyclerView = recyclerView;
+  }
+
+  private int[] getLastVisiblePositions() {
+    if (recyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
+      StaggeredGridLayoutManager layoutManager = (StaggeredGridLayoutManager) recyclerView.getLayoutManager();
+      int spanCount = layoutManager.getSpanCount();
+      int[] lastVisiblePositions = new int[spanCount];
+      layoutManager.findLastVisibleItemPositions(lastVisiblePositions);
+      return lastVisiblePositions;
+    }
+    return null;
+  }
+
+
 
   @Override
   public int getItemCount() {
