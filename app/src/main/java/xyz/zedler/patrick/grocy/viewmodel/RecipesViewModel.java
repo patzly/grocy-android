@@ -339,6 +339,11 @@ public class RecipesViewModel extends BaseViewModel {
     return filterChipLiveDataExtraField.getExtraField();
   }
 
+  @Override
+  public SharedPreferences getSharedPrefs() {
+    return sharedPrefs;
+  }
+
   public void updateSearchInput(String input) {
     this.searchInput = input.toLowerCase();
     updateFilteredRecipes();

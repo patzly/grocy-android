@@ -32,7 +32,7 @@
     android:paddingEnd="8dp"
     android:background="@drawable/ripple_list_item_swipeable">
 
-    <ImageView
+    <xyz.zedler.patrick.grocy.view.RoundedCornerImageView
       android:id="@+id/picture"
       android:layout_width="56dp"
       android:layout_height="56dp"
