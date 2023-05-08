@@ -74,12 +74,14 @@ public class ChooseProductViewModel extends BaseViewModel {
   private final boolean forbidCreateProductInitial;
   private final boolean pendingProductsActive;
   private String nameFromOnlineSource;
+  private boolean hasBarcode;
 
   private NetworkQueue currentQueueLoading;
   private final boolean debug;
 
   public ChooseProductViewModel(
       @NonNull Application application,
+      String searchName,
       String barcode,
       boolean forbidCreateProduct,
       boolean pendingProductsActive
@@ -96,7 +98,7 @@ public class ChooseProductViewModel extends BaseViewModel {
 
     offlineLive = new MutableLiveData<>(false);
     displayedItemsLive = new MutableLiveData<>();
-    productNameLive = new MutableLiveData<>();
+    productNameLive = new MutableLiveData<>(searchName);
     productNameErrorLive = new MutableLiveData<>();
     offHelpText = new MutableLiveData<>();
     createProductTextLive = new MutableLiveData<>(getString(R.string.msg_create_new_product));
@@ -104,8 +106,9 @@ public class ChooseProductViewModel extends BaseViewModel {
             getString(R.string.msg_create_new_pending_product)
     );
     forbidCreateProductLive = new MutableLiveData<>(forbidCreateProduct);
+    hasBarcode = barcode != null;
     productNameHelperTextLive = new MutableLiveData<>(
-        application.getString(R.string.subtitle_barcode, barcode)
+        hasBarcode ? application.getString(R.string.subtitle_barcode, barcode) : null
     );
     existingProductsCategoryTextLive = new MutableLiveData<>(
         getString(R.string.category_existing_products)
@@ -360,6 +363,10 @@ public class ChooseProductViewModel extends BaseViewModel {
     return existingProductsCategoryTextLive;
   }
 
+  public boolean hasBarcode() {
+    return hasBarcode;
+  }
+
   public boolean isPendingProductsActive() {
     return pendingProductsActive;
   }
@@ -389,17 +396,20 @@ public class ChooseProductViewModel extends BaseViewModel {
   public static class ChooseProductViewModelFactory implements ViewModelProvider.Factory {
 
     private final Application application;
+    private final String searchName;
     private final String barcode;
     private final boolean forbidCreateProduct;
     private final boolean pendingProductsActive;
 
     public ChooseProductViewModelFactory(
         Application application,
+        String searchName,
         String barcode,
         boolean forbidCreateProduct,
         boolean pendingProductsActive
     ) {
       this.application = application;
+      this.searchName = searchName;
       this.barcode = barcode;
       this.forbidCreateProduct = forbidCreateProduct;
       this.pendingProductsActive = pendingProductsActive;
@@ -410,7 +420,7 @@ public class ChooseProductViewModel extends BaseViewModel {
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
       return (T) new ChooseProductViewModel(
-              application, barcode, forbidCreateProduct, pendingProductsActive
+              application, searchName, barcode, forbidCreateProduct, pendingProductsActive
       );
     }
   }

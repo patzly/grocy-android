@@ -323,9 +323,10 @@ public class RecipeImportViewModel extends BaseViewModel {
     sendEvent(Event.LOAD_IMAGE);
   }
 
-  public void openQuantityUnitsBottomSheet(IngredientPart part) {
+  public void openQuantityUnitsBottomSheet(Ingredient ingredient, IngredientPart part) {
     Bundle bundle = new Bundle();
     bundle.putParcelableArrayList(ARGUMENT.QUANTITY_UNITS, new ArrayList<>(quantityUnits));
+    bundle.putString(ARGUMENT.TEXT, ingredient.getTextFromPart(part));
     showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
   }
 

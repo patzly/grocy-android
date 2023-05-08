@@ -22,7 +22,8 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:paddingHorizontal="8dp">
+  android:paddingStart="8dp"
+  android:paddingEnd="0dp">
 
   <androidx.constraintlayout.helper.widget.Flow
     android:id="@+id/flow_layout"
@@ -37,7 +38,7 @@
     app:flow_verticalBias="0"
     app:flow_verticalGap="8dp"
     app:flow_wrapMode="chain"
-    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintEnd_toStartOf="@id/toolbar"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,5 +50,30 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"/>
+
+  <com.google.android.material.appbar.MaterialToolbar
+    android:id="@+id/toolbar_info"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:visibility="gone"
+    app:layout_constraintEnd_toStartOf="@id/toolbar"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:contentInsetStart="2dp"
+    app:contentInsetEnd="0dp"
+    app:contentPadding="0dp"
+    app:menu="@menu/menu_recipe_import_tagging_info" />
+
+  <com.google.android.material.appbar.MaterialToolbar
+    android:id="@+id/toolbar"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:contentInsetStart="2dp"
+    app:contentInsetEnd="0dp"
+    app:contentPadding="0dp"
+    app:menu="@menu/menu_recipe_import_tagging" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

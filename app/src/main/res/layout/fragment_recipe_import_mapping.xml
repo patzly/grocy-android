@@ -56,7 +56,7 @@
           android:id="@+id/toolbar"
           style="@style/Widget.Grocy.Toolbar.Back"
           app:title="@string/title_recipe_import"
-          app:subtitle="@string/subtitle_recipe_import_mapping"
+          app:subtitle="@{fragment.assignmentMode ? @string/subtitle_recipe_import_mapping : @string/subtitle_recipe_import_tagging}"
           app:subtitleCentered="true"
           app:subtitleTextAppearance="@style/TextAppearance.Grocy.TitleMedium"/>
 
@@ -98,7 +98,8 @@
         android:overScrollMode="ifContentScrolls"
         android:paddingStart="16dp"
         android:paddingEnd="0dp"
-        android:layout_marginBottom="4dp">
+        android:layout_marginBottom="4dp"
+        android:visibility="@{fragment.assignmentMode ? View.GONE : View.VISIBLE}">
 
         <com.google.android.material.button.MaterialButtonToggleGroup
           android:layout_width="wrap_content"
@@ -117,6 +118,7 @@
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:text="@string/property_amount"
+            android:backgroundTint="@{viewModel.mappingEntityLive == IngredientPart.ENTITY_AMOUNT ? @color/teal_primary_90 : @color/transparent}"
             android:checked="@{viewModel.mappingEntityLive == IngredientPart.ENTITY_AMOUNT}"
             android:onClick="@{v -> viewModel.setMappingEntityLive(IngredientPart.ENTITY_AMOUNT)}"
             tools:ignore="TextContrastCheck" />
@@ -130,6 +132,7 @@
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:text="@string/property_quantity_unit"
+            android:backgroundTint="@{viewModel.mappingEntityLive == IngredientPart.ENTITY_UNIT ? @color/yellow_primary_90 : @color/transparent}"
             android:checked="@{viewModel.mappingEntityLive == IngredientPart.ENTITY_UNIT}"
             android:onClick="@{v -> viewModel.setMappingEntityLive(IngredientPart.ENTITY_UNIT)}"
             tools:ignore="TextContrastCheck" />
@@ -143,6 +146,7 @@
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:text="@string/property_product"
+            android:backgroundTint="@{viewModel.mappingEntityLive == IngredientPart.ENTITY_PRODUCT ? @color/red_primary_90 : @color/transparent}"
             android:checked="@{viewModel.mappingEntityLive == IngredientPart.ENTITY_PRODUCT}"
             android:onClick="@{v -> viewModel.setMappingEntityLive(IngredientPart.ENTITY_PRODUCT)}"
             tools:ignore="TextContrastCheck" />
@@ -156,6 +160,7 @@
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:text="@string/property_extra_info"
+            android:backgroundTint="@{viewModel.mappingEntityLive == IngredientPart.ENTITY_EXTRA_INFO ? @color/green_primary_90 : @color/transparent}"
             android:checked="@{viewModel.mappingEntityLive == IngredientPart.ENTITY_EXTRA_INFO}"
             android:onClick="@{v -> viewModel.setMappingEntityLive(IngredientPart.ENTITY_EXTRA_INFO)}"
             tools:ignore="TextContrastCheck" />
@@ -187,11 +192,14 @@
           android:layout_height="match_parent"
           android:paddingBottom="144dp"
           android:clipToPadding="false"
-          android:layoutAnimation="@anim/recycler_layout" />
+          android:layoutAnimation="@anim/recycler_layout"
+          app:layout_anchor="@+id/swipe"
+          app:layout_anchorGravity="center" />
 
       </FrameLayout>
 
     </xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout>
+
 
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

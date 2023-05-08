@@ -90,11 +90,10 @@ public class ChooseProductFragment extends BaseFragment
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    String barcode = ChooseProductFragmentArgs.fromBundle(requireArguments()).getBarcode();
-    boolean forbidCreateProduct = ChooseProductFragmentArgs.fromBundle(requireArguments())
-        .getForbidCreateProduct();
-    boolean pendingProductsActive = ChooseProductFragmentArgs.fromBundle(requireArguments())
-            .getPendingProductsActive();
+    ChooseProductFragmentArgs args = ChooseProductFragmentArgs.fromBundle(requireArguments());
+    String barcode = args.getBarcode();
+    boolean forbidCreateProduct = args.getForbidCreateProduct();
+    boolean pendingProductsActive = args.getPendingProductsActive();
     Object newProductId = getFromThisDestinationNow(ARGUMENT.PRODUCT_ID);
     if (newProductId != null) {  // if user created a new product and navigates back to this fragment this is the new productId
       setForPreviousDestination(Constants.ARGUMENT.PRODUCT_ID, newProductId);
@@ -106,7 +105,8 @@ public class ChooseProductFragment extends BaseFragment
 
     viewModel = new ViewModelProvider(this, new ChooseProductViewModel
         .ChooseProductViewModelFactory(
-                activity.getApplication(), barcode, forbidCreateProduct, pendingProductsActive
+                activity.getApplication(), args.getSearchName(), barcode,
+        forbidCreateProduct, pendingProductsActive
     )).get(ChooseProductViewModel.class);
     viewModel.setOfflineLive(!activity.isOnline());
 

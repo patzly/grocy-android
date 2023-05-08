@@ -17,16 +17,16 @@
   ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources>
+<menu
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  tools:ignore="AlwaysShowAction">
 
-  <color name="logo_yellow">@color/custom_yellow_50</color>
-  <color name="logo_green">@color/custom_green_50</color>
-  <color name="logo_red">@color/custom_red_35</color>
+  <item
+    android:id="@+id/product_error"
+    android:title="@string/error_no_product_selected"
+    android:icon="@drawable/ic_round_error_outline"
+    app:showAsAction="always" />
 
-
-  <color name="teal_primary_90">#00658F</color>
-  <color name="yellow_primary_90">#6e5e00</color>
-  <color name="red_primary_90">#9c4146</color>
-  <color name="green_primary_90">#386A20</color>
-
-</resources>
+</menu>

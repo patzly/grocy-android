@@ -28,6 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.FAB;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -47,7 +48,8 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeImportViewModel;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeImportViewModel.RecipeImportViewModelFactory;
 
-public class RecipeImportMappingFragment extends BaseFragment implements IngredientViewHolder.OnWordClickListener {
+public class RecipeImportMappingFragment extends BaseFragment
+    implements IngredientViewHolder.OnWordClickListener, IngredientViewHolder.OnPartClickListener {
 
   private final static String TAG = RecipeImportMappingFragment.class.getSimpleName();
 
@@ -56,7 +58,7 @@ public class RecipeImportMappingFragment extends BaseFragment implements Ingredi
   private RecipeImportViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
   private RecipeImportMappingAdapter adapter;
-  private boolean isFragmentInAssignmentState = false;
+  private RecipeImportMappingFragmentArgs args;
 
   @Override
   public View onCreateView(
@@ -64,6 +66,7 @@ public class RecipeImportMappingFragment extends BaseFragment implements Ingredi
       ViewGroup container,
       Bundle savedInstanceState
   ) {
+    args = RecipeImportMappingFragmentArgs.fromBundle(requireArguments());
     binding = FragmentRecipeImportMappingBinding.inflate(inflater, container, false);
     return binding.getRoot();
   }
@@ -82,8 +85,6 @@ public class RecipeImportMappingFragment extends BaseFragment implements Ingredi
   @Override
   public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    RecipeImportGeneralFragmentArgs args = RecipeImportGeneralFragmentArgs
-        .fromBundle(requireArguments());
 
     viewModel = new ViewModelProvider(this, new RecipeImportViewModelFactory(
         activity.getApplication(),
@@ -101,7 +102,7 @@ public class RecipeImportMappingFragment extends BaseFragment implements Ingredi
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-     RecipeParsed recipeParsed = RecipeImportGeneralFragmentArgs
+    RecipeParsed recipeParsed = RecipeImportGeneralFragmentArgs
          .fromBundle(requireArguments()).getRecipeParsed();
     if (viewModel.getRecipeParsed() == null) {
       viewModel.setRecipeParsed(recipeParsed);
@@ -132,12 +133,14 @@ public class RecipeImportMappingFragment extends BaseFragment implements Ingredi
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
-    adapter = new RecipeImportMappingAdapter(viewModel.getRecipeParsed(), this);
+    adapter = new RecipeImportMappingAdapter(
+        viewModel.getRecipeParsed(), this, this, isAssignmentMode()
+    );
     binding.recycler.setAdapter(adapter);
 
     viewModel.getMappingEntityLive().observe(getViewLifecycleOwner(), entity -> {
       viewModel.updateAllWordsClickableState();
-      adapter.notifyDataSetChanged();
+      binding.recycler.smoothScrollToPosition(0);
     });
 
     if (savedInstanceState == null) viewModel.loadFromDatabase(true);
@@ -152,34 +155,51 @@ public class RecipeImportMappingFragment extends BaseFragment implements Ingredi
         FAB.TAG.IMPORT,
         savedInstanceState == null,
         () -> {
-          isFragmentInAssignmentState = !isFragmentInAssignmentState;
-          adapter.setFragmentInAssignmentState(isFragmentInAssignmentState);
-          activity.showSnackbar("Assignment state changed", false);
-          viewModel.getRecipeParsed().updateWordsState();
-          adapter.notifyDataSetChanged();
+          if (!isAssignmentMode()) {
+            if (adapter.isShowErrors()) {
+              viewModel.getRecipeParsed().updateWordsState();
+              activity.navigateFragment(RecipeImportMappingFragmentDirections
+                  .actionRecipeImportMappingFragmentSelf(viewModel.getRecipeParsed())
+                  .setAssigningMode(true));
+            } else {
+              adapter.setShowErrors(true);
+              adapter.notifyDataSetChanged();
+            }
+          }
         }
     );
   }
 
-  @SuppressLint("NotifyDataSetChanged")
   @Override
   public void onWordClick(Ingredient ingredient, IngredientWord word, int position) {
-    if (!isFragmentInAssignmentState) {
+    if (!isAssignmentMode()) {
       ingredient.markWord(word, viewModel.getMappingEntityLive().getValue());
       adapter.notifyItemChanged(position);
-    } else {
-      if (word.isMarked() && word.getEntity().equals(IngredientPart.ENTITY_UNIT)) {
-        IngredientPart part = ingredient.getPartFromWord(word);
-        viewModel.openQuantityUnitsBottomSheet(part);
-      }
     }
   }
 
   @Override
+  public void onPartClick(Ingredient ingredient, IngredientPart part, int position) {
+    if (part.getEntity().equals(IngredientPart.ENTITY_UNIT)) {
+      viewModel.openQuantityUnitsBottomSheet(ingredient, part);
+    } else if (part.getEntity().equals(IngredientPart.ENTITY_PRODUCT)) {
+      activity.navigateFragment(RecipeImportMappingFragmentDirections
+          .actionRecipeImportMappingFragmentToChooseProductFragment()
+          .setSearchName(ingredient.getTextFromPart(part)));
+    }
+  }
+
+  @SuppressLint("NotifyDataSetChanged")
+  @Override
   public void selectQuantityUnit(QuantityUnit quantityUnit, Bundle argsBundle) {
-    /*recipe.storeUnitAssignment(ingredient.getTextFromPart(part), 1);
-    recipe.updateWordsState();*/
+    RecipeParsed recipeParsed = viewModel.getRecipeParsed();
+    recipeParsed.storeUnitAssignment(argsBundle.getString(ARGUMENT.TEXT), quantityUnit.getId());
+    recipeParsed.updateWordsState();
     adapter.notifyDataSetChanged();
+  }
+
+  public boolean isAssignmentMode() {
+    return args.getAssigningMode();
   }
 
   @NonNull

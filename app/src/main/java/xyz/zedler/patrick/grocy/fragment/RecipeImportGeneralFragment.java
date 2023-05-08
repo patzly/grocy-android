@@ -177,7 +177,7 @@ public class RecipeImportGeneralFragment extends BaseFragment {
       binding.image.layout(0, 0, 0, 0);
       RequestBuilder<Drawable> requestBuilder = Glide.with(requireContext()).load(imageUrl);
       requestBuilder = requestBuilder
-          .transform(new CenterCrop(), new RoundedCorners(UiUtil.dpToPx(requireContext(), 12)))
+          .transform(new CenterCrop(), new RoundedCorners(UiUtil.dpToPx(requireContext(), 16)))
           .transition(DrawableTransitionOptions.withCrossFade())
           .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
       requestBuilder.listener(new RequestListener<>() {

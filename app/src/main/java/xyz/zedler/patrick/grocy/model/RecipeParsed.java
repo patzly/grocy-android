@@ -25,7 +25,6 @@ import android.util.Log;
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.json.JSONArray;
@@ -35,66 +34,16 @@ import xyz.zedler.patrick.grocy.R;
 
 public class RecipeParsed implements Parcelable {
 
-  @SerializedName("title")
   private String title;
-
-  @SerializedName("total_time")
   private String totalTime;
-
-  @SerializedName("yields")
   private String yields;
-
-  @SerializedName("instructions")
   private String instructions;
-
-  @SerializedName("image")
   private String image;
-
-  @SerializedName("ingredients")
   private ArrayList<Ingredient> ingredients;
-
   private HashMap<String, Integer> assignedUnits;
 
   public RecipeParsed() {
 
-  }
-
-  public RecipeParsed(Parcel parcel) {
-    title = parcel.readString();
-    totalTime = parcel.readString();
-    yields = parcel.readString();
-    instructions = parcel.readString();
-    image = parcel.readString();
-    ingredients = new ArrayList<>();
-    parcel.readList(ingredients, Ingredient.class.getClassLoader());
-  }
-
-  @Override
-  public void writeToParcel(Parcel dest, int flags) {
-    dest.writeString(title);
-    dest.writeString(totalTime);
-    dest.writeString(yields);
-    dest.writeString(instructions);
-    dest.writeString(image);
-    dest.writeList(ingredients);
-  }
-
-  public static final Creator<RecipeParsed> CREATOR = new Creator<>() {
-
-    @Override
-    public RecipeParsed createFromParcel(Parcel in) {
-      return new RecipeParsed(in);
-    }
-
-    @Override
-    public RecipeParsed[] newArray(int size) {
-      return new RecipeParsed[size];
-    }
-  };
-
-  @Override
-  public int describeContents() {
-    return 0;
   }
 
   public String getTitle() {
@@ -268,16 +217,16 @@ public class RecipeParsed implements Parcelable {
       @ColorRes int markedColor = R.color.white;
       if (amount != null && word.startIndex >= amount.startIndex && word.endIndex <= amount.endIndex) {
         entity = IngredientPart.ENTITY_AMOUNT;
-        markedColor = R.color.blue;
+        markedColor = R.color.teal_primary_90;
       } else if (unit != null && word.startIndex >= unit.startIndex && word.endIndex <= unit.endIndex) {
         entity = IngredientPart.ENTITY_UNIT;
-        markedColor = R.color.red;
+        markedColor = R.color.yellow_primary_90;
       } else if (product != null && word.startIndex >= product.startIndex && word.endIndex <= product.endIndex) {
         entity = IngredientPart.ENTITY_PRODUCT;
-        markedColor = R.color.green;
+        markedColor = R.color.red_primary_90;
       } else if (extraInfo != null && word.startIndex >= extraInfo.startIndex && word.endIndex <= extraInfo.endIndex) {
         entity = IngredientPart.ENTITY_EXTRA_INFO;
-        markedColor = R.color.orange;
+        markedColor = R.color.green_primary_90;
       }
       word.setEntity(entity);
       word.setMarkedColor(markedColor);
@@ -297,7 +246,14 @@ public class RecipeParsed implements Parcelable {
 
     private void updateWordsAssignmentState(HashMap<String, Integer> assignedUnits) {
       for (IngredientWord word : ingredientWords) {
-        if (word.getEntity() != null && word.getEntity().equals(IngredientPart.ENTITY_UNIT)) {
+        if (word.getEntity() != null && word.getEntity().equals(IngredientPart.ENTITY_UNIT)
+            && !word.isAssigned()) {
+          word.setAssignable(true);
+          if (assignedUnits == null) continue;
+          IngredientPart part = getPartFromWord(word);
+          String text = getTextFromPart(part);
+          word.setAssigned(text != null && assignedUnits.containsKey(text));
+        } else if (word.getEntity() != null && word.getEntity().equals(IngredientPart.ENTITY_PRODUCT)) {
           word.setAssignable(true);
           if (assignedUnits == null) continue;
           IngredientPart part = getPartFromWord(word);
@@ -323,6 +279,16 @@ public class RecipeParsed implements Parcelable {
     public String getTextFromPart(IngredientPart part) {
       if (part == null) return null;
       return ingredientText.substring(part.getStartIndex(), part.getEndIndex());
+    }
+
+    public boolean hasNoProductTag() {
+      return ingredientParts == null || !ingredientParts.containsKey(IngredientPart.ENTITY_PRODUCT);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+      return ingredientWords.toString();
     }
   }
 
@@ -404,6 +370,12 @@ public class RecipeParsed implements Parcelable {
     public boolean isMarked() {
       return markedColor != 0 && markedColor != R.color.white;
     }
+
+    @NonNull
+    @Override
+    public String toString() {
+      return text;
+    }
   }
 
   public static class IngredientPart {
@@ -447,4 +419,43 @@ public class RecipeParsed implements Parcelable {
       return assignedGrocyObjectId;
     }
   }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(this.title);
+    dest.writeString(this.totalTime);
+    dest.writeString(this.yields);
+    dest.writeString(this.instructions);
+    dest.writeString(this.image);
+    dest.writeList(this.ingredients);
+    dest.writeSerializable(this.assignedUnits);
+  }
+
+  protected RecipeParsed(Parcel in) {
+    this.title = in.readString();
+    this.totalTime = in.readString();
+    this.yields = in.readString();
+    this.instructions = in.readString();
+    this.image = in.readString();
+    this.ingredients = new ArrayList<>();
+    in.readList(this.ingredients, Ingredient.class.getClassLoader());
+    this.assignedUnits = in.readHashMap(Integer.class.getClassLoader());
+  }
+
+  public static final Creator<RecipeParsed> CREATOR = new Creator<>() {
+    @Override
+    public RecipeParsed createFromParcel(Parcel source) {
+      return new RecipeParsed(source);
+    }
+
+    @Override
+    public RecipeParsed[] newArray(int size) {
+      return new RecipeParsed[size];
+    }
+  };
 }

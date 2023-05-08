@@ -101,6 +101,8 @@
   <string name="action_import_from_file">Import from file</string>
   <string name="action_assign_quantity_units">Assign quantity units</string>
   <string name="action_remove_image">Remove image</string>
+  <string name="action_remove_ingredient">Remove ingredient</string>
+  <string name="action_clear_tags">Clear tags</string>
   <string name="action_try_again">Try again</string>
   <string name="action_open_scanner">Open scanner</string>
   <string name="action_discard">Discard</string>
@@ -674,7 +676,8 @@
   <!-- %1$s is a price and %2$s is a currency -->
   <string name="subtitle_total_price">Total price: %1$s %2$s</string>
   <string name="subtitle_recipe_import_general">Step 1 of 4: General</string>
-  <string name="subtitle_recipe_import_mapping">Step 2 of 4: Mapping</string>
+  <string name="subtitle_recipe_import_tagging">Step 2 of 4: Tagging</string>
+  <string name="subtitle_recipe_import_mapping">Step 3 of 4: Mapping</string>
 
   <string name="description_input_product_part1">Product field contains:</string>
   <string name="description_input_product_part2">Please choose how to proceed:</string>

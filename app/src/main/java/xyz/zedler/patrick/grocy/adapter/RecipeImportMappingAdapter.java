@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,60 +28,113 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.shape.CornerFamily;
-import com.google.android.material.shape.MaterialShapeDrawable;
-import com.google.android.material.shape.ShapeAppearanceModel;
+import androidx.transition.TransitionManager;
+import com.google.android.material.chip.Chip;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.RecipeImportMappingAdapter.IngredientViewHolder;
+import xyz.zedler.patrick.grocy.adapter.RecipeImportMappingAdapter.IngredientViewHolder.OnPartClickListener;
 import xyz.zedler.patrick.grocy.adapter.RecipeImportMappingAdapter.IngredientViewHolder.OnWordClickListener;
 import xyz.zedler.patrick.grocy.databinding.RowRecipeImportMappingBinding;
 import xyz.zedler.patrick.grocy.model.RecipeParsed;
 import xyz.zedler.patrick.grocy.model.RecipeParsed.Ingredient;
+import xyz.zedler.patrick.grocy.model.RecipeParsed.IngredientPart;
 import xyz.zedler.patrick.grocy.model.RecipeParsed.IngredientWord;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class RecipeImportMappingAdapter extends RecyclerView.Adapter<IngredientViewHolder> {
 
   private final RecipeParsed recipeParsed;
   private final OnWordClickListener onWordClickListener;
-  private boolean isFragmentInAssignmentState = false;
+  private final OnPartClickListener onPartClickListener;
+  private final boolean isAssignmentMode;
+  private boolean showErrors = false;
 
-  public RecipeImportMappingAdapter(RecipeParsed recipeParsed, OnWordClickListener onWordClickListener) {
+  public RecipeImportMappingAdapter(
+      RecipeParsed recipeParsed,
+      OnWordClickListener onWordClickListener,
+      OnPartClickListener onPartClickListener,
+      boolean isAssignmentMode
+  ) {
     this.recipeParsed = recipeParsed;
     this.onWordClickListener = onWordClickListener;
+    this.onPartClickListener = onPartClickListener;
+    this.isAssignmentMode = isAssignmentMode;
   }
 
   public static class IngredientViewHolder extends RecyclerView.ViewHolder {
     private final RowRecipeImportMappingBinding binding;
     private final ConstraintLayout constraintLayout;
     private final OnWordClickListener onWordClickListener;
+    private final OnPartClickListener onPartClickListener;
 
-    public IngredientViewHolder(RowRecipeImportMappingBinding binding, OnWordClickListener onWordClickListener) {
+    public IngredientViewHolder(
+        RowRecipeImportMappingBinding binding,
+        OnWordClickListener onWordClickListener,
+        OnPartClickListener onPartClickListener
+    ) {
       super(binding.getRoot());
       this.binding = binding;
       constraintLayout = binding.getRoot();
       this.onWordClickListener = onWordClickListener;
+      this.onPartClickListener = onPartClickListener;
     }
 
-    public void bind(Ingredient ingredient, boolean isFragmentInAssignmentState) {
+    public void bind(Ingredient ingredient, boolean isAssignmentMode, boolean showErrors) {
       clearTextViews();
 
       List<Integer> ids = new ArrayList<>();
+      IngredientPart currentPart = null;
       for (IngredientWord word : ingredient.getIngredientWords()) {
-        TextView textView = createTextView(word, isFragmentInAssignmentState);
-        constraintLayout.addView(textView);
-        ids.add(textView.getId());
-
-        textView.setOnClickListener(v -> onWordClicked(ingredient, word));
+        if (!isAssignmentMode && word.isCard() || isAssignmentMode && word.isMarked()) {
+          Chip chip;
+          if (isAssignmentMode) {
+            IngredientPart part = ingredient.getPartFromWord(word);
+            if (currentPart != null && part == currentPart) {
+              continue;
+            } else if (part == null) {
+              chip = createChip(word.getText(), word, true);
+            } else {
+              currentPart = part;
+              chip = createChip(ingredient.getTextFromPart(part), word, true);
+              chip.setOnClickListener(v -> onPartClicked(ingredient, part));
+            }
+            chip.setEnabled(word.isAssignable());
+            chip.setAlpha(word.isAssignable() ? 1.0f : 0.6f);
+          } else {
+            chip = createChip(word.getText(), word, false);
+            chip.setOnClickListener(v -> onWordClicked(ingredient, word));
+          }
+          constraintLayout.addView(chip);
+          ids.add(chip.getId());
+        } else {
+          TextView textView = createTextView(word);
+          if (isAssignmentMode) textView.setAlpha(0.5f);
+          constraintLayout.addView(textView);
+          ids.add(textView.getId());
+        }
       }
-
       binding.flowLayout.setReferencedIds(convertIntArray(ids));
+
+      ConstraintSet constraintSet = new ConstraintSet();
+      constraintSet.clone(constraintLayout);
+      if (showErrors && ingredient.hasNoProductTag()) {
+        constraintSet.connect(binding.flowLayout.getId(), ConstraintSet.END,
+            binding.toolbarInfo.getId(), ConstraintSet.START, 0);
+        TransitionManager.beginDelayedTransition(constraintLayout);
+        constraintSet.applyTo(constraintLayout);
+        binding.toolbarInfo.setVisibility(View.VISIBLE);
+      } else {
+        constraintSet.connect(binding.flowLayout.getId(), ConstraintSet.END,
+            binding.toolbar.getId(), ConstraintSet.START, 0);
+        constraintSet.applyTo(constraintLayout);
+        binding.toolbarInfo.setVisibility(View.GONE);
+      }
     }
 
     private void clearTextViews() {
@@ -94,60 +146,45 @@ public class RecipeImportMappingAdapter extends RecyclerView.Adapter<IngredientV
       }
     }
 
-    private TextView createTextView(IngredientWord word, boolean isFragmentInAssignmentState) {
+    private Chip createChip(String text, IngredientWord word, boolean isAssignmentMode) {
+      Context context = binding.getRoot().getContext();
+      Chip chip = new Chip(context);
+      chip.setId(View.generateViewId());
+      chip.setText(text);
+      chip.setTypeface(ResourcesCompat.getFont(context, R.font.jost_medium));
+      chip.setChipStartPadding(2);
+      chip.setChipEndPadding(2);
+      chip.setEnsureMinTouchTargetSize(false);
+
+      if (word.isMarked()) {
+        chip.setChipBackgroundColorResource(word.getMarkedColor());
+      }
+      if (isAssignmentMode && word.isAssignable()) {
+        chip.setChipIconVisible(true);
+        chip.setChipIconTint(ColorStateList.valueOf(
+            ResUtil.getColorAttr(context, R.attr.colorOnSecondaryContainer)
+        ));
+        chip.setIconStartPadding(UiUtil.dpToPx(context, 4));
+        chip.setIconEndPadding(UiUtil.dpToPx(context, -2));
+        if (word.isAssigned()) {
+          chip.setChipIconResource(R.drawable.ic_round_done);
+        } else {
+          chip.setChipIconResource(R.drawable.ic_round_error_outline);
+        }
+      }
+      return chip;
+    }
+
+    private TextView createTextView(IngredientWord word) {
       Context context = binding.getRoot().getContext();
       TextView textView = new TextView(context);
       textView.setId(View.generateViewId());
       textView.setText(word.getText());
-      textView.setTypeface(ResourcesCompat.getFont(context, R.font.jost_book));
+      textView.setTypeface(ResourcesCompat.getFont(context, R.font.jost_medium));
       textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
       int paddingVertical = UiUtil.dpToPx(context, 4);
-      int paddingHorizontal;
-
-      if (word.isCard()) {
-        ShapeAppearanceModel shapeAppearanceModel = new ShapeAppearanceModel()
-            .toBuilder()
-            .setAllCorners(CornerFamily.ROUNDED, UiUtil.dpToPx(context, 8))
-            .build();
-        MaterialShapeDrawable backgroundDrawable = new MaterialShapeDrawable(shapeAppearanceModel);
-
-        int baseColor = ContextCompat.getColor(context, word.getMarkedColor());
-        int adjustedColor = adjustBrightness(baseColor, word.isClickable() ? 1.0f : 1.8f);
-        ColorStateList colorStateList = ColorStateList.valueOf(adjustedColor);
-
-        backgroundDrawable.setStrokeColor(ColorStateList.valueOf(
-            ContextCompat.getColor(context, word.isAssigned() ? R.color.green : R.color.red)
-        ));
-        backgroundDrawable.setStrokeWidth(
-            isFragmentInAssignmentState && word.isAssignable() ? 6.0f : 0.0f
-        );
-
-        backgroundDrawable.setFillColor(colorStateList);
-        ViewCompat.setBackground(textView, backgroundDrawable);
-        textView.setClickable(word.isClickable());
-        textView.setFocusable(word.isClickable());
-        paddingHorizontal = UiUtil.dpToPx(context, 8);
-      } else {
-        paddingHorizontal = UiUtil.dpToPx(context, 0);
-      }
-
-      if (word.isMarked()) {
-        textView.setTextColor(ContextCompat.getColorStateList(context, R.color.white));
-      } else {
-        textView.setTextColor(ContextCompat.getColorStateList(context, R.color.black));
-      }
-
-      textView.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical);
-      textView.setTranslationZ(word.isClickable() ? 6f : 0f);
+      textView.setPadding(0, paddingVertical, 0, paddingVertical);
       return textView;
-    }
-
-    public int adjustBrightness(int color, float brightnessFactor) {
-      float[] hsv = new float[3];
-      Color.colorToHSV(color, hsv); // Convert color to HSV format
-      hsv[2] *= brightnessFactor; // Adjust the brightness (value) component
-      hsv[2] = Math.min(hsv[2], 1.0f); // Make sure the brightness doesn't exceed 1.0
-      return Color.HSVToColor(hsv); // Convert the color back to RGB format
     }
 
     private int[] convertIntArray(List<Integer> integers) {
@@ -164,8 +201,18 @@ public class RecipeImportMappingAdapter extends RecyclerView.Adapter<IngredientV
       }
     }
 
+    private void onPartClicked(Ingredient ingredient, IngredientPart part) {
+      if (onPartClickListener != null) {
+        onPartClickListener.onPartClick(ingredient, part, getAdapterPosition());
+      }
+    }
+
     public interface OnWordClickListener {
       void onWordClick(Ingredient ingredient, IngredientWord word, int position);
+    }
+
+    public interface OnPartClickListener {
+      void onPartClick(Ingredient ingredient, IngredientPart part, int position);
     }
   }
 
@@ -176,7 +223,7 @@ public class RecipeImportMappingAdapter extends RecyclerView.Adapter<IngredientV
     return new IngredientViewHolder(
         RowRecipeImportMappingBinding.inflate(
             LayoutInflater.from(parent.getContext()), parent, false
-        ), onWordClickListener
+        ), onWordClickListener, onPartClickListener
     );
   }
 
@@ -185,11 +232,15 @@ public class RecipeImportMappingAdapter extends RecyclerView.Adapter<IngredientV
     int position = holder.getAdapterPosition();
 
     Ingredient ingredient = recipeParsed.getIngredients().get(position);
-    holder.bind(ingredient, isFragmentInAssignmentState);
+    holder.bind(ingredient, isAssignmentMode, showErrors);
   }
 
-  public void setFragmentInAssignmentState(boolean fragmentInAssignmentState) {
-    isFragmentInAssignmentState = fragmentInAssignmentState;
+  public boolean isShowErrors() {
+    return showErrors;
+  }
+
+  public void setShowErrors(boolean showErrors) {
+    this.showErrors = showErrors;
   }
 
   @Override

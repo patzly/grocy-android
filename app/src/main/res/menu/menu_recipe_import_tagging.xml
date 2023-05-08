@@ -17,16 +17,20 @@
   ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources>
+<menu
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  tools:ignore="AlwaysShowAction">
 
-  <color name="logo_yellow">@color/custom_yellow_50</color>
-  <color name="logo_green">@color/custom_green_50</color>
-  <color name="logo_red">@color/custom_red_35</color>
+  <item
+    android:id="@+id/action_clear_tags"
+    android:title="@string/action_clear_tags"
+    app:showAsAction="never" />
 
+  <item
+    android:id="@+id/action_remove"
+    android:title="@string/action_remove_ingredient"
+    app:showAsAction="never" />
 
-  <color name="teal_primary_90">#00658F</color>
-  <color name="yellow_primary_90">#6e5e00</color>
-  <color name="red_primary_90">#9c4146</color>
-  <color name="green_primary_90">#386A20</color>
-
-</resources>
+</menu>

@@ -176,7 +176,8 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
       } else if (event.getType() == Event.CHOOSE_PRODUCT) {
         String barcode = event.getBundle().getString(ARGUMENT.BARCODE);
         activity.navigateFragment(PurchaseFragmentDirections
-            .actionPurchaseFragmentToChooseProductFragment(barcode)
+            .actionPurchaseFragmentToChooseProductFragment()
+            .setBarcode(barcode)
             .setPendingProductsActive(viewModel.isQuickModeEnabled()));
       } else if (event.getType() == Event.CONFIRM_FREEZING) {
         new MaterialAlertDialogBuilder(activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution)

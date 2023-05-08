@@ -127,7 +127,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
         String barcode = event.getBundle().getString(ARGUMENT.BARCODE);
         activity.navigateFragment(
             R.id.chooseProductFragment,
-            new ChooseProductFragmentArgs.Builder(barcode).build().toBundle()
+            new ChooseProductFragmentArgs.Builder().setBarcode(barcode).build().toBundle()
         );
       } else if (event.getType() == Event.FOCUS_AMOUNT_FIELD) {
         clearAmountFieldAndFocusIt();

@@ -158,7 +158,8 @@ public class TransferFragment extends BaseFragment implements BarcodeListener {
         String barcode = event.getBundle().getString(ARGUMENT.BARCODE);
         activity.navigateFragment(
             TransferFragmentDirections
-                .actionTransferFragmentToChooseProductFragment(barcode)
+                .actionTransferFragmentToChooseProductFragment()
+                .setBarcode(barcode)
                 .setForbidCreateProduct(true)
         );
       } else if (event.getType() == Event.CONFIRM_FREEZING) {

@@ -1149,7 +1149,9 @@
     tools:layout="@layout/fragment_choose_product">
     <argument
       android:name="barcode"
-      app:argType="string" />
+      app:argType="string"
+      app:nullable="true"
+      android:defaultValue="@null" />
     <argument
       android:defaultValue="false"
       android:name="forbidCreateProduct"
@@ -1161,6 +1163,11 @@
     <deepLink
       android:id="@+id/deepLink19"
       app:uri="@string/deep_link_chooseProductFragment" />
+    <argument
+      android:name="searchName"
+      app:argType="string"
+      app:nullable="true"
+      android:defaultValue="@null" />
   </fragment>
   <fragment
     android:id="@+id/storedPurchasesFragment"
@@ -1425,5 +1432,15 @@
     <argument
       android:name="recipeParsed"
       app:argType="xyz.zedler.patrick.grocy.model.RecipeParsed" />
+    <action
+      android:id="@+id/action_recipeImportMappingFragment_self"
+      app:destination="@id/recipeImportMappingFragment" />
+    <argument
+      android:name="assigningMode"
+      app:argType="boolean"
+      android:defaultValue="false" />
+    <action
+      android:id="@+id/action_recipeImportMappingFragment_to_chooseProductFragment"
+      app:destination="@id/chooseProductFragment" />
   </fragment>
 </navigation>
