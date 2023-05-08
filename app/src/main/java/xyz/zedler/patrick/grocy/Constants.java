@@ -419,6 +419,7 @@ public final class Constants {
     public final static String SELECTED_ID = "selected_id";
     public final static String PRODUCT_ID = "product_id";
     public final static String DESCRIPTION = "description";
+    public final static String RETURN_STRING = "return_string";
     public final static String SELECTED_DATE = "selected_date";
     public final static String SHOPPING_LIST_ITEM = "shopping_list_item";
     public final static String ACTION = "action";

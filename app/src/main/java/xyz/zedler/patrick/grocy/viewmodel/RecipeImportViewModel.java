@@ -201,15 +201,29 @@ public class RecipeImportViewModel extends BaseViewModel {
     dlHelper.scrapeRecipe(getWebsiteUrlTrimmed(), response -> {
       try {
         JSONArray jsonArray = response.getJSONArray("ingredients");
-        jsonArray.put("10 g Eiweiß, frisch");
-        jsonArray.put("50g Äpfel, aus der TK-Truhe, regional");
-        jsonArray.put("10kg Mehl, frisch vom Acker");
         response.put("ingredients", jsonArray);
         recipeParsed = RecipeParsed.fromJson(response);
+
+        List<String> ingredientStrings = new ArrayList<>();
+        for (Ingredient ingredient : recipeParsed.getIngredients()) {
+          ingredientStrings.add(ingredient.getIngredientText());
+        }
+
+        dlHelper.parseIngredients(ingredientStrings, "de", extract_results -> {
+          try {
+            recipeParsed.setIngredientParts(extract_results);
+            recipeParsed.updateAllWordsWithEntities();
+          } catch (JSONException e) {
+            showMessage(e.getLocalizedMessage());
+          }
+          sendEvent(Event.TRANSACTION_SUCCESS);
+        }, volleyError -> {
+          showMessage(R.string.error_undefined);
+          sendEvent(Event.TRANSACTION_SUCCESS);
+        });
       } catch (JSONException e) {
         showMessage(e.getLocalizedMessage());
       }
-      sendEvent(Event.TRANSACTION_SUCCESS);
     }, volleyError -> {
       showMessage(R.string.error_undefined);
     });
@@ -327,6 +341,9 @@ public class RecipeImportViewModel extends BaseViewModel {
     Bundle bundle = new Bundle();
     bundle.putParcelableArrayList(ARGUMENT.QUANTITY_UNITS, new ArrayList<>(quantityUnits));
     bundle.putString(ARGUMENT.TEXT, ingredient.getTextFromPart(part));
+    if (part.getAssignedGrocyObjectId() != null) {
+      bundle.putInt(ARGUMENT.SELECTED_ID, part.getAssignedGrocyObjectId());
+    }
     showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
   }
 

@@ -104,8 +104,10 @@ public class RecipeImportMappingAdapter extends RecyclerView.Adapter<IngredientV
               chip = createChip(ingredient.getTextFromPart(part), word, true);
               chip.setOnClickListener(v -> onPartClicked(ingredient, part));
             }
-            chip.setEnabled(word.isAssignable());
-            chip.setAlpha(word.isAssignable() ? 1.0f : 0.6f);
+            chip.setEnabled(word.isAssignable()
+                && (word.getEntity().equals(IngredientPart.ENTITY_PRODUCT)
+                || ingredient.hasProductIdAssigned()));
+            chip.setAlpha(chip.isEnabled() ? 1.0f : 0.6f);
           } else {
             chip = createChip(word.getText(), word, false);
             chip.setOnClickListener(v -> onWordClicked(ingredient, word));

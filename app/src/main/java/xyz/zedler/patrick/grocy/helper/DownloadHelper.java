@@ -2876,6 +2876,35 @@ public class DownloadHelper {
     );
   }
 
+  public void parseIngredients(
+      List<String> ingredients,
+      String language,
+      OnJSONResponseListener successListener,
+      OnErrorListener errorListener
+  ) {
+    JSONObject data = new JSONObject();
+    try {
+      data.put("ingredients", new JSONArray(ingredients));
+      data.put("language", language);
+    } catch (JSONException e) {
+      e.printStackTrace();
+      errorListener.onError(null);
+      return;
+    }
+    post(
+        RecipeParserApi.parseIngredients(),
+        data,
+        response -> {
+          successListener.onResponse(response);
+          if(debug) Log.i(tag, "parseIngredients: " + response);
+        },
+        error -> {
+          if(debug) Log.e(tag, "parseIngredients: can't parse ingredient info");
+          errorListener.onError(error);
+        }
+    );
+  }
+
   public QueueItem getStringData(
       String url,
       OnStringResponseListener onResponseListener,

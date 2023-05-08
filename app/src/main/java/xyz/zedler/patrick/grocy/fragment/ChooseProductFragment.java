@@ -57,6 +57,7 @@ public class ChooseProductFragment extends BaseFragment
   private ClickUtil clickUtil;
   private FragmentChooseProductBinding binding;
   private ChooseProductViewModel viewModel;
+  private ChooseProductFragmentArgs args;
 
   @Override
   public View onCreateView(
@@ -90,7 +91,7 @@ public class ChooseProductFragment extends BaseFragment
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    ChooseProductFragmentArgs args = ChooseProductFragmentArgs.fromBundle(requireArguments());
+    args = ChooseProductFragmentArgs.fromBundle(requireArguments());
     String barcode = args.getBarcode();
     boolean forbidCreateProduct = args.getForbidCreateProduct();
     boolean pendingProductsActive = args.getPendingProductsActive();
@@ -99,6 +100,7 @@ public class ChooseProductFragment extends BaseFragment
       setForPreviousDestination(Constants.ARGUMENT.PRODUCT_ID, newProductId);
       setForPreviousDestination(ARGUMENT.BARCODE, barcode);
       setForPreviousDestination(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE, true);
+      setForPreviousDestination(ARGUMENT.RETURN_STRING, args.getReturnString());
       activity.navigateUp();
       return;
     }
@@ -210,7 +212,8 @@ public class ChooseProductFragment extends BaseFragment
     if (product instanceof PendingProduct) {
       setForPreviousDestination(ARGUMENT.PENDING_PRODUCT_ID, product.getId());
     } else {
-      setForPreviousDestination(Constants.ARGUMENT.PRODUCT_ID, product.getId());
+      setForPreviousDestination(ARGUMENT.PRODUCT_ID, product.getId());
+      setForPreviousDestination(ARGUMENT.RETURN_STRING, args.getReturnString());
     }
     String barcode = ChooseProductFragmentArgs.fromBundle(requireArguments()).getBarcode();
     setForPreviousDestination(ARGUMENT.BARCODE, barcode);

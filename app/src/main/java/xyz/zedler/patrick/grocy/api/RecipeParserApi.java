@@ -27,4 +27,8 @@ public class RecipeParserApi {
     return "http://10.0.2.2:8000/api/v0/scrape_recipe";
   }
 
+  public static String parseIngredients() {
+    return "http://10.0.2.2:8000/api/v0/parse_ingredients";
+  }
+
 }

@@ -1168,6 +1168,11 @@
       app:argType="string"
       app:nullable="true"
       android:defaultValue="@null" />
+    <argument
+      android:name="returnString"
+      app:argType="string"
+      app:nullable="true"
+      android:defaultValue="@Null" />
   </fragment>
   <fragment
     android:id="@+id/storedPurchasesFragment"

@@ -28,6 +28,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import java.util.ArrayList;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.FAB;
 import xyz.zedler.patrick.grocy.R;
@@ -139,9 +141,26 @@ public class RecipeImportMappingFragment extends BaseFragment
     binding.recycler.setAdapter(adapter);
 
     viewModel.getMappingEntityLive().observe(getViewLifecycleOwner(), entity -> {
+      if (isAssignmentMode()) return;
       viewModel.updateAllWordsClickableState();
       binding.recycler.smoothScrollToPosition(0);
     });
+
+    Integer productIdSavedSate = (Integer) getFromThisDestinationNow(ARGUMENT.PRODUCT_ID);
+    if (productIdSavedSate != null) {
+      String ingredientPartText = (String) getFromThisDestinationNow(ARGUMENT.RETURN_STRING);
+      removeForThisDestination(Constants.ARGUMENT.PRODUCT_ID);
+      ArrayList<Ingredient> ingredients = viewModel.getRecipeParsed().getIngredients();
+      for (Ingredient ingredient : ingredients) {
+        IngredientPart ingredientPart = ingredient.getIngredientPart(IngredientPart.ENTITY_PRODUCT);
+        if (ingredientPart == null) continue;
+        String textFromProductPart = ingredient.getTextFromPart(ingredientPart);
+        if (textFromProductPart != null && textFromProductPart.equals(ingredientPartText)) {
+          ingredientPart.setAssignedGrocyObjectId(productIdSavedSate);
+        }
+      }
+      viewModel.getRecipeParsed().updateWordsAssignmentState();
+    }
 
     if (savedInstanceState == null) viewModel.loadFromDatabase(true);
 
@@ -157,7 +176,7 @@ public class RecipeImportMappingFragment extends BaseFragment
         () -> {
           if (!isAssignmentMode()) {
             if (adapter.isShowErrors()) {
-              viewModel.getRecipeParsed().updateWordsState();
+              viewModel.getRecipeParsed().updateWordsAssignmentState();
               activity.navigateFragment(RecipeImportMappingFragmentDirections
                   .actionRecipeImportMappingFragmentSelf(viewModel.getRecipeParsed())
                   .setAssigningMode(true));
@@ -185,7 +204,8 @@ public class RecipeImportMappingFragment extends BaseFragment
     } else if (part.getEntity().equals(IngredientPart.ENTITY_PRODUCT)) {
       activity.navigateFragment(RecipeImportMappingFragmentDirections
           .actionRecipeImportMappingFragmentToChooseProductFragment()
-          .setSearchName(ingredient.getTextFromPart(part)));
+          .setSearchName(ingredient.getTextFromPart(part))
+          .setReturnString(ingredient.getTextFromPart(part)));
     }
   }
 
@@ -194,7 +214,8 @@ public class RecipeImportMappingFragment extends BaseFragment
   public void selectQuantityUnit(QuantityUnit quantityUnit, Bundle argsBundle) {
     RecipeParsed recipeParsed = viewModel.getRecipeParsed();
     recipeParsed.storeUnitAssignment(argsBundle.getString(ARGUMENT.TEXT), quantityUnit.getId());
-    recipeParsed.updateWordsState();
+    recipeParsed.updateUnitParts();
+    recipeParsed.updateWordsAssignmentState();
     adapter.notifyDataSetChanged();
   }
 
