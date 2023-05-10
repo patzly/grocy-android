@@ -661,7 +661,7 @@
   <string name="subtitle_synced_with_server">Sincronizado com o servidor</string>
   <string name="subtitle_recipe_not_on_server">A receita não está no servidor</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
-  <string name="subtitle_recipe_due_score">Score previsto: %1$s</string>
+  <string name="subtitle_recipe_due_score">Pontuação: %1$s</string>
   <string name="subtitle_per_serving">por porção</string>
   <string name="subtitle_tap_preparation_mode">Toque aqui para o modo de preparo</string>
   <!-- Context is Label printer -->
@@ -979,7 +979,7 @@
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">Custos</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
-  <string name="property_due_score">Score previsto</string>
+  <string name="property_due_score">Pontuação</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_ingredients">Ingredientes</string>
   <string name="property_only_check_single_unit_in_stock">Verifique apenas se tem quantidade em estoque</string>
