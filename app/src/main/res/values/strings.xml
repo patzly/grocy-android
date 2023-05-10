@@ -337,8 +337,8 @@
   <string name="msg_feedback">Do you have any wishes, questions or errors? Contact us and let us help!\nOtherwise we would be very happy about a nice review in the Play Store.</string>
   <string name="msg_point_at_barcode">Point your camera at a barcode</string>
   <string name="msg_press_hold_confirm">Press and hold to confirm deletion</string>
-  <string name="msg_recipe_consume_ask">Are you sure to consume all ingredients needed by recipe \"%1$s\"? (ingredients marked with \"only check if any amount is in stock\" will be ignored)</string>
-  <string name="msg_recipe_shopping_list_ask">Are you sure to put all missing ingredients for recipe \"%1$s\" on the shopping list?\n\nUncheck ingredients to not put them on the shopping list:</string>
+  <string name="msg_recipe_consume_ask">Are you sure you want to consume all ingredients needed by recipe \"%1$s\"? (ingredients marked with \"only check if any amount is in stock\" will be ignored)</string>
+  <string name="msg_recipe_shopping_list_ask">Are you sure you want to put all missing ingredients for recipe \"%1$s\" on the shopping list?\n\nUncheck ingredients to not put them on the shopping list:</string>
   <string name="msg_welcome">Welcome to Grocy Android!</string>
   <string name="msg_welcome_introduce">To use grocy productively you need your own server or the grocy add-on for Home Assistant.\nIf you just want to try out this app you can use the demo server from Bernd Bestel, the creator of grocy.</string>
   <string name="msg_choose_option_below">Please choose an option below.</string>
@@ -812,10 +812,10 @@
   <string name="property_qu_stock">Quantity unit stock</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Factor purchase to stock quantity unit</string>
-  <!-- This string is part of a pair, there is also 'quantity unit to' -->
-  <string name="property_quantity_unit_from">Quantity unit from</string>
-  <!-- This string is part of a pair, there is also 'quantity unit from' -->
-  <string name="property_quantity_unit_to">Quantity unit to</string>
+  <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
+  <string name="property_quantity_unit_from">Convert from</string>
+  <!-- Example: "Convert to cup"; This string is part of a pair, there is also 'Convert from' -->
+  <string name="property_quantity_unit_to">Convert to</string>
   <string name="property_factor">Factor</string>
   <string name="property_barcode">Barcode</string>
   <string name="property_barcodes">Barcodes</string>
