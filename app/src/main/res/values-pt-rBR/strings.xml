@@ -21,7 +21,7 @@
 
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in purchase screen for example. -->
-  <string name="action_purchase">Comprar</string>
+  <string name="action_purchase">Compras</string>
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in consume screen for example. -->
   <string name="action_consume">Consumir</string>
@@ -125,7 +125,7 @@
   <string name="action_perform">Executar ação</string>
   <string name="action_share">Compartilhar</string>
   <string name="action_share_description">Conte aos seus amigos sobre Grocy Android</string>
-  <string name="action_no_filter">Sem filtro</string>
+  <string name="action_no_filter">Todos</string>
   <string name="action_show_done_tasks">Mostrar tarefas concluídas</string>
   <string name="action_track_chore_execution">Acompanhar execução de tarefa doméstica</string>
   <string name="action_skip_next_chore_schedule">Ignorar a programação da próxima tarefa doméstica</string>
