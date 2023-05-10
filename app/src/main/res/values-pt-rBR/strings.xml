@@ -454,7 +454,7 @@
   <string name="error_empty_stores">Nenhum loja cadastrada</string>
   <string name="error_empty_tasks">Sem tarefas</string>
   <string name="error_empty_task_categories">Nenhuma categoria de tarefas cadastrada</string>
-  <string name="error_empty_unit_conversions">Sem conversões de unidade</string>
+  <string name="error_empty_unit_conversions">Não existem conversões de unidade</string>
   <string name="error_empty_chores">Nenhuma tarefa doméstica cadastrada</string>
   <string name="error_empty_chores_sub">Vá para dados mestre e crie alguns</string>
   <string name="error_empty_recipes">Sem receitas</string>
