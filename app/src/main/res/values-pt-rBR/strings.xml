@@ -386,7 +386,7 @@
   <string name="msg_help_default_due_days_thawing">Ao retirar este produto de um local de congelamento (logo, ao descongelá-lo), a data de validade será substituída por hoje + esta quantidade de dias.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_stock">O estoque da unidade de quantidade não pode ser alterado após a primeira compra.</string>
-  <string name="msg_help_qu_stock_changeable">O estoque de unidades de quantidade só pode ser alterado se existirem conversões de unidades para a unidade de quantidade atual.</string>
+  <string name="msg_help_qu_stock_changeable">O estoque de unidades de quantidade só pode ser alterado se existirem conversões de unidades para a unidade atual.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_purchase">Esta é a unidade pré-definida de quantidade usada ao adicionar este produto à lista de compras.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
