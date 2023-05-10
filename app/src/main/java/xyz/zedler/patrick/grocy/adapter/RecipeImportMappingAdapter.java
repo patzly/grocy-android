@@ -28,10 +28,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.TransitionManager;
 import com.google.android.material.chip.Chip;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,19 +121,15 @@ public class RecipeImportMappingAdapter extends RecyclerView.Adapter<IngredientV
       }
       binding.flowLayout.setReferencedIds(convertIntArray(ids));
 
-      ConstraintSet constraintSet = new ConstraintSet();
-      constraintSet.clone(constraintLayout);
-      if (showErrors && ingredient.hasNoProductTag()) {
-        constraintSet.connect(binding.flowLayout.getId(), ConstraintSet.END,
-            binding.toolbarInfo.getId(), ConstraintSet.START, 0);
-        TransitionManager.beginDelayedTransition(constraintLayout);
-        constraintSet.applyTo(constraintLayout);
-        binding.toolbarInfo.setVisibility(View.VISIBLE);
+      if (isAssignmentMode) {
+        binding.buttonComplete.setVisibility(!showErrors && ingredient.hasProductIdAssigned()
+            ? View.VISIBLE : View.GONE);
+        binding.buttonError.setVisibility(showErrors && !ingredient.hasProductIdAssigned()
+            ? View.VISIBLE : View.GONE);
       } else {
-        constraintSet.connect(binding.flowLayout.getId(), ConstraintSet.END,
-            binding.toolbar.getId(), ConstraintSet.START, 0);
-        constraintSet.applyTo(constraintLayout);
-        binding.toolbarInfo.setVisibility(View.GONE);
+        binding.buttonComplete.setVisibility(View.GONE);
+        binding.buttonError.setVisibility(showErrors && ingredient.hasNoProductTag()
+            ? View.VISIBLE : View.GONE);
       }
     }
 
@@ -166,7 +160,7 @@ public class RecipeImportMappingAdapter extends RecyclerView.Adapter<IngredientV
         chip.setChipIconTint(ColorStateList.valueOf(
             ResUtil.getColorAttr(context, R.attr.colorOnSecondaryContainer)
         ));
-        chip.setIconStartPadding(UiUtil.dpToPx(context, 4));
+        chip.setIconStartPadding(UiUtil.dpToPx(context, 6));
         chip.setIconEndPadding(UiUtil.dpToPx(context, -2));
         if (word.isAssigned()) {
           chip.setChipIconResource(R.drawable.ic_round_done);

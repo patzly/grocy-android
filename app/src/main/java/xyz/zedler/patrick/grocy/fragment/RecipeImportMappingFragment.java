@@ -184,6 +184,13 @@ public class RecipeImportMappingFragment extends BaseFragment
               adapter.setShowErrors(true);
               adapter.notifyDataSetChanged();
             }
+          } else {
+            if (adapter.isShowErrors()) {
+
+            } else {
+              adapter.setShowErrors(true);
+              adapter.notifyDataSetChanged();
+            }
           }
         }
     );

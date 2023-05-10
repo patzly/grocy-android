@@ -20,6 +20,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:paddingStart="8dp"
@@ -38,7 +39,7 @@
     app:flow_verticalBias="0"
     app:flow_verticalGap="8dp"
     app:flow_wrapMode="chain"
-    app:layout_constraintEnd_toStartOf="@id/toolbar"
+    app:layout_constraintEnd_toStartOf="@id/buttons_info"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,18 +52,42 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"/>
 
-  <com.google.android.material.appbar.MaterialToolbar
-    android:id="@+id/toolbar_info"
+  <LinearLayout
+    android:id="@+id/buttons_info"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:visibility="gone"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:paddingStart="4dp"
+    android:paddingEnd="0dp"
     app:layout_constraintEnd_toStartOf="@id/toolbar"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:contentInsetStart="2dp"
-    app:contentInsetEnd="0dp"
-    app:contentPadding="0dp"
-    app:menu="@menu/menu_recipe_import_tagging_info" />
+    app:layout_constraintTop_toTopOf="parent">
+
+    <ImageView
+      android:id="@+id/button_error"
+      android:visibility="gone"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:padding="8dp"
+      android:src="@drawable/ic_round_error_outline"
+      android:background="@drawable/ripple_icon"
+      android:clickable="true"
+      android:focusable="true"
+      tools:ignore="ContentDescription"/>
+
+    <ImageView
+      android:id="@+id/button_complete"
+      android:visibility="gone"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:padding="8dp"
+      android:src="@drawable/ic_round_check_circle_outline"
+      android:background="@drawable/ripple_icon"
+      android:clickable="true"
+      android:focusable="true"
+      tools:ignore="ContentDescription"/>
+
+  </LinearLayout>
 
   <com.google.android.material.appbar.MaterialToolbar
     android:id="@+id/toolbar"
