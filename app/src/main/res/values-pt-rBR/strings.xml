@@ -585,7 +585,7 @@
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
   <string name="title_edit_qu_conversion">Editar conversão de unidade</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
-  <string name="title_create_qu_conversion">Criar conversão de Unid de Quantidade</string>
+  <string name="title_create_qu_conversion">Criar conversão de unidade</string>
   <string name="title_shopping_list_edit">Editar lista de compras</string>
   <string name="title_shopping_list_new">Nova lista de compras</string>
   <string name="title_shopping_mode">Modo de compras</string>
