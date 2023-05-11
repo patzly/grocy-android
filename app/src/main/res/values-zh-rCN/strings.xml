@@ -98,6 +98,8 @@
   <string name="action_open_scanner">打开扫描仪</string>
   <string name="action_discard">丢弃</string>
   <string name="action_clear_form">清除表单</string>
+  <!-- Short form for "Link barcode to existing product and clear form", this should fit into a button so keep it short -->
+  <string name="action_link_and_clear">二维码绑定&清除</string>
   <string name="action_toggle_done">切换完成</string>
   <string name="action_edit_notes">编辑注释</string>
   <string name="action_add_missing">添加缺少的产品</string>
@@ -140,6 +142,14 @@
   <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
   <plurals name="msg_expired_products">
     <item quantity="other">%1$d过期</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_short">
+    <item quantity="other">%1$d不新鲜</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_long">
+    <item quantity="other">%1$d不新鲜（下列所有）</item>
   </plurals>
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
   <plurals name="msg_missing_products">
@@ -197,6 +207,8 @@
   <string name="msg_task_undo">撤销任务</string>
   <string name="msg_recipes_enough_in_stock">库存充足</string>
   <string name="msg_recipes_enough_in_stock_filter">(%1$d)库存充足</string>
+  <!-- %1$s is an amount with quantity unit (e.g. 3 bottles) -->
+  <string name="msg_recipes_enough_in_stock_amount">库存充足 (%1$s)</string>
   <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d)库存不足，已加入购物清单</string>
   <string name="msg_recipes_not_enough_filter">(%1$d)库存不足</string>
   <string name="msg_recipes_not_enough">库存不足</string>
@@ -206,6 +218,7 @@
   <plurals name="msg_recipes_ingredients_missing">
     <item quantity="other">%1$d个食材库存不足</item>
   </plurals>
+  <string name="msg_recipes_ingredient_fulfillment_info_list">丢失: %1$s | 已在购物清单中: %2$s</string>
   <string name="msg_chore_executed">‎跟踪家务的执行‎</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">已购买%3$s中的%1$s%2$s</string>
@@ -225,6 +238,8 @@
   <string name="msg_coming_soon">此功能即将实现</string>
   <string name="msg_undo_transaction">撤销交易？</string>
   <string name="msg_undone_transaction">撤消交易</string>
+  <!-- %1$s is a date -->
+  <string name="msg_undone_transaction_description">未完成%1$s</string>
   <string name="msg_failed_to_sync">同步条目失败</string>
   <string name="msg_synced">条目同步成功</string>
   <!-- %1$s is a shopping list name -->
@@ -249,6 +264,7 @@
     <item quantity="other">%1$s%2$s将从库存删除</item>
   </plurals>
   <string name="msg_transfer_tare_weight">启用皮重处理的物品目前不支持转移</string>
+  <string name="msg_should_not_be_frozen">这个产品不应该冷冻，是否继续？</string>
   <string name="msg_item_marked_as_done">将项目标记为已完成</string>
   <string name="msg_item_marked_as_undone">将项目标记为撤消</string>
   <string name="option_synced_success">选项同步成功</string>
@@ -273,6 +289,8 @@
   <string name="msg_quick_mode_confirm_purchase">将被执行的事务: \n\n 添加%1$s%2$s的%3$s到库存 \n 到期日:%4$s \n 价格:%5$s \n 商店:%6$s \n 位置:%7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">将被执行的事务: \n\n %1$s%2$s的%3$s从库存删除 \n 位置:%4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_open">即将执行:\n\n将 %4$s 的\n%1$s %2$s %3$s 标记未已开封</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">将被执行的事务: \n\n 迁移%1$s%2$s的%3$s \n 从位置:%4$s \n 到位置:%5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
@@ -290,8 +308,6 @@
   <string name="msg_feedback">您有任何愿望，疑问或错误吗？请与我们联系，让我们为您提供帮助！\n我们会对Play商店中的出色评论感到非常高兴。</string>
   <string name="msg_point_at_barcode">将相机对准条形码</string>
   <string name="msg_press_hold_confirm">长按确认删除</string>
-  <string name="msg_recipe_consume_ask">您确定消耗食谱“%1$s”中需要的所有食材吗？（被标记为“仅检查是否有存货”的食材将被忽略）</string>
-  <string name="msg_recipe_shopping_list_ask">您确定将食谱“%1$s”缺少的所有食材都加入购物清单吗？\n\n取消勾选不加入购物清单的食材</string>
   <string name="msg_welcome">欢迎使用Grocy安卓APP</string>
   <string name="msg_welcome_introduce">要高效地使用Grocy，需要您的私有服务器或者基于HomeAssistant的Grocy add-on插件。\n 如果您只想试用这个app，您可以使用创建者Bernd Bestel的演示服务器。</string>
   <string name="msg_choose_option_below">请从以下选项中选择一个</string>
@@ -302,6 +318,8 @@
   <string name="msg_clear_form_first">在扫描另一个已知条形码之前先清空表单</string>
   <string name="msg_not_implemented_yet">本功能即将实施。请暂时使用您的WEB页面。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_stock_label_type">这是在购买时会填入的预设值</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">库存概述页面列出了所有库存产品或低于最小库存的产品。启用此选项可始终隐藏该产品。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_parent_product_deactivated">这个产品不能有一个父产品，因为它已经作为另一个产品的父产品使用。</string>
@@ -311,6 +329,8 @@
   <string name="msg_help_move_on_open">启用后，当产品被标记为已开封，则相应数量的产品将被移动至默认消耗位置。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_own_stock">当启用时，相应的产品不能有自己的库存，意味着它将无法在购买时被选择(有用的父产品，仅用作子产品的汇总/总体视图)。  </string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_should_not_be_frozen">启用后，当移动这个物品到冰箱冷冻时，会显示一个警告。</string>
   <string name="msg_help_due_date_type">根据所选的截止日期类型，库存概览页面上的突出显示会有所不同。 “最佳食用日期”是指产品在到期日过后仍可安全食用。 “保质期”是指产品在到期日之后不能安全食用。</string>
   <string name="msg_help_default_due_days_format">‎您可以长按下面的项目以输入日期而不是数字。‎</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -323,6 +343,7 @@
   <string name="msg_help_default_due_days_thawing">从冰箱位置移动这款产品（因此在解冻时），截止日期将被今天替换为+这一数量的天。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_stock">首次购买后，数量单位库存不能更改。</string>
+  <string name="msg_help_qu_stock_changeable">库存数量单位只能在目前的数量单位存在对应的单位转换时更改</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_purchase">这是将此产品添加到购物清单时使用的默认数量单位。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -340,12 +361,20 @@
   <string name="msg_help_inventory_fields">以下领域适用于新增产品。</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_choose">‎您可以选择条形码扫描仪进行相机条形码扫描。‎</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_zxing">ZXing （“zebra crossing”） 使用相机扫码，然后计算每个条纹的相对宽度。 \n\n- 有时会产生错误的结果\n- 条码必须与扫描器平行\n- 需要良好的对比度及锐度\n- 在装置上完全离线执行\n- 框架是开源的</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit 使用机器学习技术执行条码扫描。 \n\n- 几乎不会产生错误的结果\n- 对模糊或低对比度的条码也适用\n- 在装置上完全离线执行\n- 框架不是开源的</string>
   <string name="msg_help_external_scanner_ready">您可以在下面的字段聚焦且空白时使用外部扫描仪。</string>
   <string name="msg_help_external_scanner_settings">此应用支持外部扫描仪设备，可作为键盘，可以通过USB或蓝牙连接。必须在外部扫描仪中配置以下选项：\n\n Prefix: None \n Suffix: TAB or ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_specific_item">此列表中的第一个项目将由“首先打开，然后先到期，然后先进先出 ”的默认规则。</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">这仅用于统计目的。</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_not_check_shopping_list">在默认状态下，被加到购物清单中的数量为”所需数量 - 库存数量 -购物清单数量”。 启用此选项后，仅根据库存数量而不检查购物清单中已存在的数量。</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_produces_product">当选择一项物品后，在消耗此食谱时将一单位（一份库存数量单位）加到库存中。</string>
   <string name="msg_help_date_chooser">‎您可以在设置中切换到键盘输入，这可以为您提高输入速度。‎</string>
   <string name="msg_help_date_chooser_keyboard">‎如果您所在的国家/地区首选 DDMMYY，则可以在设置中激活反向日期格式。\n要应用输入并关闭此页面，可以使用键盘上的 Done 键。‎</string>
   <string name="msg_help_quick_mode">您可以长按上方的标题栏激活快速模式。在这种模式下，如果输入或扫描了产品，并且所有字段都可以自动填充（按照产品和/或条码默认值），事务将立即执行。</string>
@@ -701,10 +730,6 @@
   <string name="property_qu_stock">数量单位库存</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">库存采购</string>
-  <!-- This string is part of a pair, there is also 'quantity unit to' -->
-  <string name="property_quantity_unit_from">‎数量单位从‎</string>
-  <!-- This string is part of a pair, there is also 'quantity unit from' -->
-  <string name="property_quantity_unit_to">‎数量单位到‎</string>
   <string name="property_factor">‎因素‎</string>
   <string name="property_barcode">条形码</string>
   <string name="property_barcodes">条形码</string>
@@ -720,6 +745,8 @@
   <string name="property_due_type_expiration">到期日</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date">保质期</string>
+  <!-- This string is for due date of task -->
+  <string name="property_due_date_task">到期日</string>
   <!-- %1$s is a due date-->
   <string name="property_due_date_fill">‎期限‎：%1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
