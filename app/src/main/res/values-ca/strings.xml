@@ -312,8 +312,6 @@
   <string name="msg_feedback">Tens algun desig, pregunta o error? Posa\'t en contacte amb nosaltres i deixa\'ns ajudar. \ N En cas contrari, estaríem encantats de rebre una bona revisió a Play Store.</string>
   <string name="msg_point_at_barcode">Apunteu la càmera cap a un codi de barres</string>
   <string name="msg_press_hold_confirm">Prémer i mantenir per a confirmar l\'eliminació</string>
-  <string name="msg_recipe_consume_ask">Estas segur de consumir tots els ingredients necessaris per a la recepta \"%1$s\"? (els ingredients marcats com a \"només comprovar quantitat a l\'inventari\" seran ignorats)</string>
-  <string name="msg_recipe_shopping_list_ask">Estàs segur d\'afegir tots els ingredients faltants de la recepta \"%1$s\" a la llista de la compra?\n\nDesmarca els ingredients per no afegir-los a la llista de la compra:</string>
   <string name="msg_welcome">Benvingut a Grocy Android!</string>
   <string name="msg_welcome_introduce">Per a utilitzar grocy de forma productiva necessites el teu propi servidor o bé l\'add-on de grocy per a Home Assistant.\nSi només vols probar l\'aplicació pots utilitzar el servidor de proves de Bernd Bestel, el creador de grocy.</string>
   <string name="msg_choose_option_below">Si us plau, escull una opció:</string>
@@ -626,7 +624,6 @@
   <string name="subtitle_print_label_per_purchase">Per compra</string>
   <!-- Short form for "One label per unit" -->
   <string name="subtitle_print_label_per_unit">Per unitat</string>
-
   <string name="description_input_product_part1">El camp del producte conté:</string>
   <string name="description_input_product_part2">Si us plau, escull com procedir:</string>
   <string name="description_input_product_option1">Crea un nou producte i utilitza l\'entrada com a nom</string>
@@ -772,10 +769,6 @@
   <string name="property_qu_stock">Unitat de l\'inventari</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Factor de conversió d\'unitat de compra a unitat d\'inventari</string>
-  <!-- This string is part of a pair, there is also 'quantity unit to' -->
-  <string name="property_quantity_unit_from">Desde la unitat</string>
-  <!-- This string is part of a pair, there is also 'quantity unit from' -->
-  <string name="property_quantity_unit_to">A la unitat</string>
   <string name="property_factor">Factor</string>
   <string name="property_barcode">Codi de barres</string>
   <string name="property_barcodes">Codis de barres</string>
@@ -791,6 +784,8 @@
   <string name="property_due_type_expiration">Data de caducitat</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date">Data de consum preferent</string>
+  <!-- This string is for due date of task -->
+  <string name="property_due_date_task">Data de consum preferent</string>
   <!-- %1$s is a due date-->
   <string name="property_due_date_fill">Data de consum preferent:%1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
