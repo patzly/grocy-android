@@ -284,8 +284,6 @@
   <string name="msg_feedback">希望加入什麼新功能，或是遇到任何問題嗎?請聯絡我們以獲得協助\n我們會很高興看到Play商店中的正面評價</string>
   <string name="msg_point_at_barcode">將相機對準條碼</string>
   <string name="msg_press_hold_confirm">按住以確認</string>
-  <string name="msg_recipe_consume_ask">確定要消耗食譜「%1$s」中需要的所有食材嗎（被標記為「僅檢查有無存貨」的食材將被忽略）？</string>
-  <string name="msg_recipe_shopping_list_ask">確定要將食譜「%1$s」中所有庫存不足的食材加入購物清單嗎？\n\n取消勾選不加入購物清單的食材：</string>
   <string name="msg_welcome">歡迎使用 Grocy Android !</string>
   <string name="msg_welcome_introduce">如果要使用Grocy，您需要擁有自己的伺服器或是 Home Assistant 的 Grocy add-on 插件。 \n 如果您只是想試用這個應用程式，可以使用 Grocy 作者 Bernd Bestel 的測試伺服器</string>
   <string name="msg_choose_option_below">請從以下選項中選擇一個</string>
@@ -699,10 +697,6 @@
   <string name="property_qu_stock">庫存數量單位</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">拆分購買數量單位為庫存數量單位</string>
-  <!-- This string is part of a pair, there is also 'quantity unit to' -->
-  <string name="property_quantity_unit_from">來源數量單位</string>
-  <!-- This string is part of a pair, there is also 'quantity unit from' -->
-  <string name="property_quantity_unit_to">目的數量單位</string>
   <string name="property_factor">係數</string>
   <string name="property_barcode">條碼</string>
   <string name="property_barcodes">條碼</string>
@@ -718,6 +712,8 @@
   <string name="property_due_type_expiration">有效期限</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date">到期日</string>
+  <!-- This string is for due date of task -->
+  <string name="property_due_date_task">到期日</string>
   <!-- %1$s is a due date-->
   <string name="property_due_date_fill">到期日:%1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
