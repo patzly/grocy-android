@@ -286,7 +286,9 @@ public class MainActivity extends AppCompatActivity {
       List<Language> languages = LocaleUtil.getLanguages(this);
       String demoDomain = null;
       for (Language language : languages) {
-        if (language.getCode().equals(locale.getLanguage())) {
+        String localeStr = locale.getCountry().isEmpty() ? locale.getLanguage()
+            : locale.getLanguage() + "-" + locale.getCountry();
+        if (language.getCode().equals(localeStr)) {
           demoDomain = language.getDemoDomain();
         }
       }
