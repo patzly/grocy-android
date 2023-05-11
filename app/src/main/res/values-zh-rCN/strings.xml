@@ -99,7 +99,7 @@
   <string name="action_discard">丢弃</string>
   <string name="action_clear_form">清除表单</string>
   <!-- Short form for "Link barcode to existing product and clear form", this should fit into a button so keep it short -->
-  <string name="action_link_and_clear">二维码绑定&清除</string>
+  <string name="action_link_and_clear">二维码绑定&amp;清除</string>
   <string name="action_toggle_done">切换完成</string>
   <string name="action_edit_notes">编辑注释</string>
   <string name="action_add_missing">添加缺少的产品</string>
