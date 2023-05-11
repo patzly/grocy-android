@@ -35,7 +35,7 @@
   <string name="action_consume_all">Consumir todos</string>
 
   <string name="action_consume_spoiled">Definir como estragado</string>
-  <string name="action_consume_one_spoiled">Consumir 1 como estragado</string>
+  <string name="action_consume_one_spoiled">Definir como estragado</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
   <string name="action_consume_one">Consumir 1 %1$s de %2$s</string>
   <string name="action_open">Marcar como aberto</string>
@@ -183,7 +183,7 @@
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Consumido(s) %1$s %2$s de %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
-  <string name="msg_consumed_spoiled">Consumido(s) %1$s %2$s de %3$s como estragado</string>
+  <string name="msg_consumed_spoiled">Definir %1$s %2$s de %3$s como estragado</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Marque %1$s %2$s de %3$s como aberta</string>
   <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
@@ -349,6 +349,8 @@
   <string name="msg_feedback">Você tem algum anseio, questões ou erros? Entre em contato conosco e deixe que ajudemos!\nPara além disso, ficaríamos muito felizes em ter uma boa avaliação na Play Store </string>
   <string name="msg_point_at_barcode">Aponte sua câmera ao código de barras</string>
   <string name="msg_press_hold_confirm">Pressione e segure para confirmar a exclusão</string>
+  <string name="msg_recipe_consume_ask">Deseja consumir todos os ingredientes necessários pela receita \"%1$s\"? (ingredientes marcados com \"Apenas verificar se tem quantidade em estoque\" serão ignorados)</string>
+  <string name="msg_recipe_shopping_list_ask">Tem certeza de que deseja colocar todos os ingredientes que faltam para a receita \"%1$s\" na lista de compras?\n\nDesmarque os ingredientes para não colocá-los na lista de compras:</string>
   <string name="msg_welcome">Bem-vindo ao Grocy Android!</string>
   <string name="msg_welcome_introduce">Para usar o grocy de forma produtiva, você precisa do seu próprio servidor ou do complemento grocy para Home Assistant.\nSe você quiser apenas experimentar este aplicativo, pode usar o servidor de demonstração de Bernd Bestel, o criador do grocy.</string>
   <string name="msg_choose_option_below">Por favor, escolha uma opção abaixo.</string>
@@ -836,6 +838,10 @@
   <string name="property_qu_stock">Quantidade me estoque</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Fator de compra para estoque</string>
+  <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
+  <string name="property_quantity_unit_from">Converter de</string>
+  <!-- Example: "Convert to cup"; This string is part of a pair, there is also 'Convert from' -->
+  <string name="property_quantity_unit_to">Converter para</string>
   <string name="property_factor">Fator</string>
   <string name="property_barcode">Código de barras</string>
   <string name="property_barcodes">Códigos de barra</string>
@@ -891,7 +897,7 @@
   <string name="property_price_insert">Preço: %1$s</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Tempo médio de prateleira</string>
-  <string name="property_spoil_rate">Taxa de estrago</string>
+  <string name="property_spoil_rate">Taxa de desperdício</string>
   <string name="property_price_history">Histórico de preços</string>
   <string name="property_product_group">Grupo de Produtos</string>
   <string name="property_product_groups">Grupos de Produtos</string>
@@ -976,7 +982,7 @@
   <string name="property_due_score">Pontuação</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_ingredients">Ingredientes</string>
-  <string name="property_only_check_single_unit_in_stock">Verifique apenas se tem quantidade em estoque</string>
+  <string name="property_only_check_single_unit_in_stock">Apenas verificar se tem quantidade em estoque</string>
   <!-- See context for this string on the web interface on the recipe ingredients edit page -->
   <string name="property_ingredient_group">Grupo</string>
   <!-- See context for this string on the web interface on the recipe ingredients edit page -->
