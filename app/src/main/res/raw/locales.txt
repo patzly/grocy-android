@@ -1,6 +1,10 @@
+ca
+ca.demo.grocy.info
+blauigris, tmllull, flygorn
+
 cs
 cs.demo.grocy.info
-PavelP, Radimek, InToSSH
+Radimek, InToSSH, PavelP, cniry
 
 de
 de.demo.grocy.info
@@ -12,19 +16,23 @@ Dominic Zedler, Patrick Zedler
 
 es
 es.demo.grocy.info
-recognitium, adrigrillo, rubensancor, tmllull, netsyder, xuko, SackCastellon, martinvolantin, amilustre, ami232
+martinvolantin, recognitium, ami232, adrigrillo, rubensancor, tmllull, netsyder, xuko, SackCastellon, amilustre, flygorn, Londoneye02, BarbarianTarkus
+
+et
+en.demo.grocy.info
+dogyx
 
 fr
 fr.demo.grocy.info
-erobertc, Keeh, prohand, a_nayrat, pellegrin.guillaume, Stack_it_up, choukajohn, aleskx, Clem844, Mquiles, MrAlucardDante, Keiishu, lapourgagner, tesseract241, Zorvalt, voslin
+prohand, Clem844, tesseract241, erobertc, voslin, Zorvalt, lapourgagner, Keiishu, MrAlucardDante, Mquiles, aleskx, choukajohn, Stack_it_up, pellegrin.guillaume, a_nayrat, Keeh
 
 hu
 hu.demo.grocy.info
-Tallyrald, cr0ssmind, infeeeee, jandras, vrnagy
+vrnagy, cr0ssmind, jandras, infeeeee, Tallyrald
 
 it
 it.demo.grocy.info
-nuraiman, wisewtf, silkevicious, sandman91, mellotanica, igi, alex.bernocchi.ab, bonerserk, lucanomax, racerider, iglox, AlessandroSechi, loviuz, tesseract241, Matte23
+Matte23, racerider, nuraiman, alex.bernocchi.ab, tesseract241, mellotanica, sandman91, bonerserk, silkevicious, wisewtf, lucanomax, loviuz, iglox, AlessandroSechi, igi, ant.mar94
 
 iw
 en.demo.grocy.info
@@ -32,15 +40,19 @@ sefi.ninio, Yaron
 
 nb
 no.demo.grocy.info
-teitrand, Ziggiz
+teitrand, Ziggiz, RonnyRusten
 
 nl
 nl.demo.grocy.info
-MaartenSiersema, maarten.paul, 4lloyd, knnnrd, decramy, mcbloch, Llewy, emielverstegen, Wazzaaam
+MaartenSiersema, Wazzaaam, knnnrd, 4lloyd, Llewy, emielverstegen, decramy, mcbloch, maarten.paul, gerba102, AlexInvar
 
 pl
 pl.demo.grocy.info
-hazelnutfox, Moarc, smigima, micwoj92, smiglo
+smiglo, micwoj92, smigima, hazelnutfox, Moarc
+
+pt-BR
+pt-br.demo.grocy.info
+alemoh1234, recognitium, jeffersantoss, JST, edbizarro, fabiosv, ferlbo, albarreto
 
 pt-PT
 pt-pt.demo.grocy.info
@@ -48,24 +60,24 @@ zedascouves, JST
 
 ru
 ru.demo.grocy.info
-SergeyKodolov, iluhis, Moarc, unwarkz, rrader, Dside
+Dside, unwarkz, rrader, SergeyKodolov, iluhis, Moarc
 
 sk
 sk.demo.grocy.info
-LiJu09, PatrikKT, aasami
+LiJu09, aasami, PatrikKT
 
 sv
 sv.demo.grocy.info
-Bllstc, Busan15, duxleon, googleoo, Joakim_S, bexov
+duxleon, Busan15, googleoo, Bllstc, bexov, Joakim_S, lrnflk
 
 uk
 en.demo.grocy.info
-NazimUa, rrader
+NazimUa, rrader, hafanovychvladyslav
 
 zh-CN
 zh-cn.demo.grocy.info
-alei643, LuLuX
+LuLuX, alei643, aleixcox, LilligantMatsuri, Yiming.L, copy00
 
 zh-TW
 zh-tw.demo.grocy.info
-Stillu, knfu, zobuwei, alexli1205, LuLuX
+Stillu, LuLuX, zobuwei, knfu, alexli1205
