@@ -348,8 +348,6 @@
   <string name="msg_feedback">У вас есть пожелания, вопросы или ошибки? Свяжитесь с нами и мы поможем!\nесли нет. мы будем рады положительному отзыву в Play Store</string>
   <string name="msg_point_at_barcode">Направьте камеру на штрихкод</string>
   <string name="msg_press_hold_confirm">Нажмите и удерживайте, чтобы подтвердить удаление</string>
-  <string name="msg_recipe_consume_ask">Использовать все ингредиенты рецепта \"%1$s\"? (ингредиенты с пометкой \"любое количество в запасах\" будут игнорироваться)</string>
-  <string name="msg_recipe_shopping_list_ask">Добавить все недостающие ингредиенты рецепта \"%1$s\" в список покупок?\n\nСнимите галочки с ингредиентов, которые добавлять не нужно:</string>
   <string name="msg_welcome">Добро пожаловать в Grocy Android!</string>
   <string name="msg_welcome_introduce">Для продуктивного использования Grocy вам понадобится собственный сервер или надстройка Grocy для Home Assistant.\nЕсли вы просто хотите опробовать это приложение, вы можете использовать демонстрационный сервер от Бернда Бестела, создателя Grocy.</string>
   <string name="msg_choose_option_below">Пожалуйста, выберите вариант снизу</string>
@@ -659,7 +657,6 @@
   <string name="subtitle_print_label_per_purchase">На покупку</string>
   <!-- Short form for "One label per unit" -->
   <string name="subtitle_print_label_per_unit">На единицу</string>
-
   <string name="description_input_product_part1">Поле продукта содержит:</string>
   <string name="description_input_product_part2">Пожалуйста, выберите, как продолжить:</string>
   <string name="description_input_product_option1">Создать новый продукт и использовать ввод в качестве названия</string>
@@ -845,10 +842,6 @@
   <string name="property_qu_stock">Единица измерения запасов</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Коэффициент закупа к запасам</string>
-  <!-- This string is part of a pair, there is also 'quantity unit to' -->
-  <string name="property_quantity_unit_from">Из ед. измерения</string>
-  <!-- This string is part of a pair, there is also 'quantity unit from' -->
-  <string name="property_quantity_unit_to">К ед. измерения</string>
   <string name="property_factor">Множитель</string>
   <string name="property_barcode">Штрихкод</string>
   <string name="property_barcodes">Штрихкоды</string>
@@ -864,6 +857,8 @@
   <string name="property_due_type_expiration">Обязательный срок годности</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date">Срок годности</string>
+  <!-- This string is for due date of task -->
+  <string name="property_due_date_task">Срок годности</string>
   <!-- %1$s is a due date-->
   <string name="property_due_date_fill">Срок выполнения: %1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
