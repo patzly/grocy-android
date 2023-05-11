@@ -326,8 +326,6 @@
   <string name="msg_feedback">Haben Sie Wünsche, Fragen oder einen Fehler gefunden? Kontaktieren Sie uns und wir helfen Ihnen gerne.\nAnsonsten wären wir sehr glücklich über eine gute Bewertung im Play Store.</string>
   <string name="msg_point_at_barcode">Richten Sie die Kamera auf einen Barcode</string>
   <string name="msg_press_hold_confirm">Drücken und halten, um das Löschen zu bestätigen</string>
-  <string name="msg_recipe_consume_ask">Sicher, dass alle Zutaten, die vom Rezept \"%1$s\" benötigt werden, aus dem Bestand entfernt werden sollen (Zutaten markiert mit \"Nur prüfen, ob eine beliebige Menge im Bestand verfügbar ist\" werden ignoriert)?</string>
-  <string name="msg_recipe_shopping_list_ask">Alle fehlenden Zutaten für Rezept \"%1$s\" wirklich auf den Einkaufszettel setzen?\n\nEntfernen Sie den Haken einer Zutat, um diese nicht auf den Einkaufszettel zu übernehmen:</string>
   <string name="msg_welcome">Willkommen bei Grocy Android!</string>
   <string name="msg_welcome_introduce">Um grocy produktiv nutzen zu können, brauchen Sie Ihren eigenen Server oder das grocy Add-on für Home Assistant.\nWenn Sie diese App nur ausprobieren möchten, können Sie den Demo-Server von Bernd Bestel benutzen, dem Entwickler von grocy.</string>
   <string name="msg_choose_option_below">Bitte wählen Sie eine der Optionen unten aus.</string>
@@ -795,10 +793,6 @@
   <string name="property_qu_stock">Mengeneinheit Bestand</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Faktor Einkauf zu Bestand Mengeneinheit</string>
-  <!-- This string is part of a pair, there is also 'quantity unit to' -->
-  <string name="property_quantity_unit_from">ME von</string>
-  <!-- This string is part of a pair, there is also 'quantity unit from' -->
-  <string name="property_quantity_unit_to">ME nach</string>
   <string name="property_factor">Faktor</string>
   <string name="property_barcode">Barcode</string>
   <string name="property_barcodes">Barcodes</string>
@@ -814,6 +808,8 @@
   <string name="property_due_type_expiration">Verbrauchsdatum</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date">Fälligkeitsdatum</string>
+  <!-- This string is for due date of task -->
+  <string name="property_due_date_task">Fälligkeitsdatum</string>
   <!-- %1$s is a due date-->
   <string name="property_due_date_fill">Fälligkeitsdatum: %1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
