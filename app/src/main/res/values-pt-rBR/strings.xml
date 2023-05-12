@@ -451,7 +451,7 @@
   <string name="error_empty_product_groups">Nenhum grupo de produtos cadastrado</string>
   <string name="error_empty_products">Sem produtos cadastrados</string>
   <string name="error_empty_qu">Sem unidade de medida</string>
-  <string name="error_empty_stores">Nenhum loja cadastrada</string>
+  <string name="error_empty_stores">Nenhum estabelecimento cadastrado</string>
   <string name="error_empty_tasks">Sem tarefas</string>
   <string name="error_empty_task_categories">Nenhuma categoria de tarefas cadastrada</string>
   <string name="error_empty_unit_conversions">Não existem conversões de unidade</string>
@@ -654,7 +654,7 @@
   <string name="subtitle_feature_disabled">Recurso desativado</string>
   <string name="subtitle_date_from_input">Data da entrada:\n%1$s</string>
   <string name="subtitle_product_amount">Estoque mín., consumo rápido, fator, manuseio de peso de tara</string>
-  <string name="subtitle_product_default_location">Localização, Loja</string>
+  <string name="subtitle_product_default_location">Localização, Estabelecimento</string>
   <string name="subtitle_product_due_date">Tipo, dias pré-definidos (após aberto, congelamento, descongelamento)</string>
   <string name="subtitle_product_optional_properties">Estado, Produto Pai, Descrição, Grupo de produtos, Energia, Fmagem</string>
   <string name="subtitle_product_quantity_unit">Estoque, Padrão de compra</string>
@@ -879,11 +879,11 @@
   <string name="property_move_on_open">Mover quando aberto</string>
   <string name="property_notes">Notas</string>
   <string name="property_locations">Localizações</string>
-  <string name="property_store">Loja</string>
-  <string name="property_store_insert">Loja: %1$s</string>
-  <string name="property_store_unknown">Loja desconhecida</string>
-  <string name="property_store_default">Loja pré-definida</string>
-  <string name="property_stores">Lojas</string>
+  <string name="property_store">Estabelecimento</string>
+  <string name="property_store_insert">Estabelecimento: %1$s</string>
+  <string name="property_store_unknown">Estabelecimento desconhecido</string>
+  <string name="property_store_default">Estabelecimento pré-definido</string>
+  <string name="property_stores">Estabelecimentos</string>
   <string name="property_shopping_list">Lista de compras</string>
   <string name="property_shopping_lists">Listas de compras</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
