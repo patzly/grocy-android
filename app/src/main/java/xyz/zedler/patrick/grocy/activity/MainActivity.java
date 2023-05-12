@@ -80,6 +80,7 @@ import androidx.navigation.NavGraph;
 import androidx.navigation.NavInflater;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigator;
+import androidx.navigation.fragment.FragmentNavigator;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -948,6 +949,14 @@ public class MainActivity extends AppCompatActivity {
 
   public void navigateFragment(@IdRes int destination) {
     navigateFragment(destination, (Bundle) null);
+  }
+
+  public void navigateFragment(@IdRes int destination, View view, String transitionName) {
+    FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+        .addSharedElement(view, transitionName)
+        .build();
+
+    navController.navigate(destination, null, null, extras);
   }
 
   public void navigateFragment(@IdRes int destination, @Nullable Bundle arguments) {

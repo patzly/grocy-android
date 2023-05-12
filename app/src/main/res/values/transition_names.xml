@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string name="transition_fab">transition_fab</string>
+  <string name="transition_fab_purchase">transition_fab_purchase</string>
+  <string name="transition_overview_stock">transition_overview_stock</string>
+  <string name="transition_overview_purchase">transition_overview_purchase</string>
+  <string name="transition_stock">transition_stock</string>
+  <string name="transition_purchase">transition_purchase</string>
+</resources>

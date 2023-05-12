@@ -43,7 +43,8 @@
   <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/colorBackground">
+    android:background="?android:attr/colorBackground"
+    android:transitionName="@string/transition_purchase">
 
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"

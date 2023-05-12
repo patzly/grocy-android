@@ -191,11 +191,13 @@
               </LinearLayout>
 
               <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_stock"
                 style="@style/Widget.Grocy.Card.Outlined"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
-                android:onClick="@{() -> activity.navigateFragment(R.id.stockOverviewFragment)}"
+                android:onClick="@{() -> activity.navigateFragment(R.id.stockOverviewFragment, cardStock, @string/transition_stock)}"
+                android:transitionName="@string/transition_overview_stock"
                 app:clickUtil="@{clickUtil}"
                 app:contentPaddingLeft="0dp"
                 app:contentPaddingRight="0dp"
@@ -448,9 +450,11 @@
                         app:icon="@drawable/ic_round_consume_product" />
 
                       <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_purchase"
                         style="@style/Widget.Grocy.Button.TonalButton.Icon"
                         android:text="@string/title_purchase"
-                        android:onClick="@{() -> activity.navigateFragment(R.id.purchaseFragment)}"
+                        android:onClick="@{() -> activity.navigateFragment(R.id.purchaseFragment, buttonPurchase, @string/transition_purchase)}"
+                        android:transitionName="@string/transition_overview_purchase"
                         app:clickUtil="@{clickUtil}"
                         app:icon="@drawable/ic_round_local_grocery_store" />
 

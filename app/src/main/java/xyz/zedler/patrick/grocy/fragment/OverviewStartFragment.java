@@ -142,7 +142,6 @@ public class OverviewStartFragment extends BaseFragment {
         || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
         && savedInstanceState == null;
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
-    activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(viewModel.isFeatureEnabled(PREF.FEATURE_STOCK), R.menu.menu_empty);
     activity.updateFab(
@@ -160,7 +159,8 @@ public class OverviewStartFragment extends BaseFragment {
           );
         }, () -> activity.navigateFragment(
             R.id.purchaseFragment,
-            new PurchaseFragmentArgs.Builder().setStartWithScanner(true).build().toBundle()
+            activity.binding.fabMain,
+            getString(R.string.transition_purchase)
         )
     );
 

@@ -49,6 +49,7 @@
     android:layout_height="wrap_content"
     android:src="@drawable/ic_round_barcode_scan"
     android:contentDescription="@string/action_scan"
+    android:transitionName="@string/transition_fab"
     app:layout_anchor="@id/bottom_app_bar"
     app:fabSize="auto" />
 

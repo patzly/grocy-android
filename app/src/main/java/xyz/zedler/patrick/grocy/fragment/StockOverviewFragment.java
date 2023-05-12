@@ -29,6 +29,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.transition.MaterialContainerTransform;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
@@ -52,6 +53,7 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.StockOverviewViewModel;
 
@@ -69,6 +71,18 @@ public class StockOverviewFragment extends BaseFragment implements
   private FragmentStockOverviewBinding binding;
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
+
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    MaterialContainerTransform materialContainerTransform = new MaterialContainerTransform();
+    materialContainerTransform.setDrawingViewId(R.id.fragment_main_nav_host);
+    materialContainerTransform.setScrimColor(getResources().getColor(R.color.transparent));
+    materialContainerTransform.setAllContainerColors(
+        ResUtil.getColorAttr(requireContext(), R.attr.colorSurface)
+    );
+    setSharedElementEnterTransition(materialContainerTransform);
+  }
 
   @Override
   public View onCreateView(

@@ -34,6 +34,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.transition.MaterialContainerTransform;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
@@ -74,6 +75,18 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   private EmbeddedFragmentScanner embeddedFragmentScanner;
   private PluralUtil pluralUtil;
   private Boolean backFromChooseProductPage;
+
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    MaterialContainerTransform materialContainerTransform = new MaterialContainerTransform();
+    materialContainerTransform.setDrawingViewId(R.id.fragment_main_nav_host);
+    materialContainerTransform.setScrimColor(getResources().getColor(R.color.transparent));
+    materialContainerTransform.setAllContainerColors(
+        ResUtil.getColorAttr(requireContext(), R.attr.colorSurface)
+    );
+    setSharedElementEnterTransition(materialContainerTransform);
+  }
 
   @Override
   public View onCreateView(
