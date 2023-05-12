@@ -196,6 +196,7 @@ public class MasterProductCatConversionsEditFragment extends BaseFragment {
         viewModel.getFormData().getQuantityUnitToLive().setValue(quantityUnit);
       }
     }
+    viewModel.getFormData().isQuanityUnitValid();
   }
 
   private boolean onMenuItemClick(MenuItem item) {
