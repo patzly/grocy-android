@@ -349,8 +349,8 @@
   <string name="msg_feedback">Avez-vous des souhaits, des questions ou des erreurs ? Contactez-nous et laissez-nous vous aider !\nSinon, nous serions très heureux de recevoir une bonne critique sur le Play Store.</string>
   <string name="msg_point_at_barcode">Dirigez votre appareil photo vers un code-barres</string>
   <string name="msg_press_hold_confirm">Appuyez longuement pour confirmer la suppression</string>
-  <string name="msg_recipe_consume_ask">Êtes-vous sûr de vouloir consommer tous les ingrédients nécessaires à la recette \"%1$s\" ? (Les ingrédients marqués avec \"uniquement vérifier si une quantité est en stock\" seront ignorés)</string>
-  <string name="msg_recipe_shopping_list_ask">Êtes-vous sûr de vouloir ajouter tous les ingrédients manquants pour la recette \"%1$s\" sur la liste de courses ?\n\nDécochez les ingrédients pour ne pas les ajouter à la liste de courses :</string>
+  <string name="msg_recipe_consume_ask">Êtes-vous sûr de vouloir consommer tous les ingrédients nécessaires à la recette \"%1$s\" ? (les ingrédients marqués avec \"uniquement vérifier si une quantité est en stock\" seront ignorés)</string>
+  <string name="msg_recipe_shopping_list_ask">Êtes-vous sûr de vouloir mettre tous les ingrédients manquants pour la recette \"%1$s\" sur la liste de courses ?\n\nDécochez les ingrédients pour ne pas les mettre sur la liste de courses :</string>
   <string name="msg_welcome">Bienvenue sur Grocy Android !</string>
   <string name="msg_welcome_introduce">Pour utiliser grocy de manière productive, vous avez besoin de votre propre serveur ou du module complémentaire grocy pour Home Assistant.\nSi vous souhaitez simplement essayer cette application, vous pouvez utiliser le serveur de démonstration de Bernd Bestel, le créateur de grocy.</string>
   <string name="msg_choose_option_below">Veuillez choisir une option ci-dessous.</string>
@@ -838,10 +838,10 @@
   <string name="property_qu_stock">Format au stockage</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Facteur entre la quantité à l\'achat et la quantité en stock</string>
-  <!-- This string is part of a pair, there is also 'quantity unit to' -->
-  <string name="property_quantity_unit_from">Unité de quantité depuis</string>
-  <!-- This string is part of a pair, there is also 'quantity unit from' -->
-  <string name="property_quantity_unit_to">Unité de quantité jusqu\'à</string>
+  <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
+  <string name="property_quantity_unit_from">Convertir de</string>
+  <!-- Example: "Convert to cup"; This string is part of a pair, there is also 'Convert from' -->
+  <string name="property_quantity_unit_to">Convertir en</string>
   <string name="property_factor">Facteur</string>
   <string name="property_barcode">Code-barres</string>
   <string name="property_barcodes">Codes-barres</string>

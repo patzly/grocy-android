@@ -21,10 +21,10 @@
 
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in purchase screen for example. -->
-  <string name="action_purchase">לרכוש</string>
+  <string name="action_purchase">רכישה</string>
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in consume screen for example. -->
-  <string name="action_consume">לצרוך</string>
+  <string name="action_consume">צריכה</string>
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in transfer screen for example. -->
   <string name="action_transfer">העברה</string>
@@ -592,10 +592,6 @@
   <string name="property_qu_stock">יחידת כמות במלאי</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">גורם המרה מרכישה למלאי</string>
-  <!-- This string is part of a pair, there is also 'quantity unit to' -->
-  <string name="property_quantity_unit_from">מיחידת כמות</string>
-  <!-- This string is part of a pair, there is also 'quantity unit from' -->
-  <string name="property_quantity_unit_to">אל יחידת כמות</string>
   <string name="property_factor">גורם</string>
   <string name="property_barcode">ברקוד</string>
   <string name="property_barcodes">ברקודים</string>
@@ -611,6 +607,8 @@
   <string name="property_due_type_expiration">תאריך תפוגה</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date">תאריך בתוקף עד</string>
+  <!-- This string is for due date of task -->
+  <string name="property_due_date_task">תאריך בתוקף עד</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_next">תאריך בתוקף עד הבא</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->

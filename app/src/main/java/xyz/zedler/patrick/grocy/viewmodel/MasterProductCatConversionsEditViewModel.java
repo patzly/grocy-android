@@ -180,6 +180,7 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
 
   public void saveItem() {
     if (!formData.isFormValid()) {
+      showMessage(R.string.error_missing_information);
       return;
     }
 
@@ -221,6 +222,7 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
       QuantityUnit quStock = QuantityUnit
           .getFromId(quantityUnits, args.getProduct().getQuIdStockInt());
       formData.getQuantityUnitFromLive().setValue(quStock);
+      formData.getConversionsLive().setValue(unitConversions);
       return;
     }
 
@@ -228,13 +230,18 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
     assert conversion != null;
 
     formData.getQuantityUnitsLive().setValue(quantityUnits);
-    formData.getQuantityUnitFromLive().setValue(getQuantityUnit(conversion.getFromQuId()));
-    formData.getQuantityUnitToLive().setValue(getQuantityUnit(conversion.getToQuId()));
+    formData.getQuantityUnitFromLive().setValue(
+        QuantityUnit.getFromId(quantityUnits, conversion.getFromQuId())
+    );
+    formData.getQuantityUnitToLive().setValue(
+        QuantityUnit.getFromId(quantityUnits, conversion.getToQuId())
+    );
+    formData.getConversionsLive().setValue(unitConversions);
     formData.getFactorLive().setValue(NumUtil.trimAmount(
         conversion.getFactor(),
         sharedPrefs.getInt(STOCK.DECIMAL_PLACES_AMOUNT, SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT)
     ));
-    formData.setFilledWithConversion(true);
+    formData.setFilledWithConversionId(conversion.getId());
   }
 
   public void showQuantityUnitsBottomSheet(boolean from) {
@@ -267,15 +274,6 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
         response -> navigateUp(),
         this::showNetworkErrorMessage
     );
-  }
-
-  private QuantityUnit getQuantityUnit(int id) {
-    for (QuantityUnit quantityUnit : quantityUnits) {
-      if (quantityUnit.getId() == id) {
-        return quantityUnit;
-      }
-    }
-    return null;
   }
 
   public boolean isActionEdit() {

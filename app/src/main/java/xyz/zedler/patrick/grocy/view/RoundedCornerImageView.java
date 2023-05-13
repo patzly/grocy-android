@@ -28,7 +28,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 public class RoundedCornerImageView extends AppCompatImageView {
 
-  private float radius = 12f;
+  private float radius = 16f;
   private Path path;
   private RectF rect;
 
@@ -51,6 +51,11 @@ public class RoundedCornerImageView extends AppCompatImageView {
     path = new Path();
     rect = new RectF();
     radius = getResources().getDisplayMetrics().density * radius;
+  }
+
+  public void setRadius(float radius) {
+    this.radius = getResources().getDisplayMetrics().density * radius;
+    invalidate();
   }
 
   @Override

@@ -328,7 +328,6 @@
   <string name="msg_feedback">Hai desideri, domande o errori? Contattaci e permettici di aiutarti!\nAltrimenti saremmo molto felici di ricevere una recensione positiva sul Play Store.</string>
   <string name="msg_point_at_barcode">Punta la fotocamera verso il codice a barre</string>
   <string name="msg_press_hold_confirm">Tieni premuto per confermare la cancellazione</string>
-  <string name="msg_recipe_consume_ask">Sei sicuro di voler consumare tutti gli ingredienti necessari dalla ricetta \"%1$s\"? (gli ingredienti ingredients impostati con \"controlla soltanto se qualsiasi quantità è disponibile\" saranno ignorati)</string>
   <string name="msg_welcome">Benvenuto su Grocy Android!</string>
   <string name="msg_welcome_introduce">Per usare Grocy in modo produttivo hai bisogno di un tuo server o dell\'addon Grocy per Home Assistant.\nSe vuoi soltanto provare l\'app puoi usare il server demo di Bernd Bestel, il creatore di Grocy.</string>
   <string name="msg_choose_option_below">Per favore scegli un opzione qui sotto.</string>
@@ -784,10 +783,6 @@
   <string name="property_qu_stock">Unità di dispensa</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Pezzi nella confezione</string>
-  <!-- This string is part of a pair, there is also 'quantity unit to' -->
-  <string name="property_quantity_unit_from">Quantità da</string>
-  <!-- This string is part of a pair, there is also 'quantity unit from' -->
-  <string name="property_quantity_unit_to">Quantità a</string>
   <string name="property_factor">Fattore</string>
   <string name="property_barcode">Codice a barre</string>
   <string name="property_barcodes">Codici a barre</string>
@@ -803,6 +798,8 @@
   <string name="property_due_type_expiration">Da consumarsi prima</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date">Data di scadenza</string>
+  <!-- This string is for due date of task -->
+  <string name="property_due_date_task">Data di scadenza</string>
   <!-- %1$s is a due date-->
   <string name="property_due_date_fill">Data di scadenza: %1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->

@@ -368,8 +368,6 @@
   <string name="msg_feedback">Máte nějaké přání, otázky nebo jste našli chybu? Kontaktujte nás a my vám pomůžeme.\nRádi si od vás přečteme pěknou recenzi na Google Play.</string>
   <string name="msg_point_at_barcode">Namiřte kameru na čárový kód</string>
   <string name="msg_press_hold_confirm">Podržením potvrdíte odstranění</string>
-  <string name="msg_recipe_consume_ask">Opravdu si přejete spotřebovat všechny ingredience receptu „%1$s“? Suroviny označené „Zkontrolovat pouze zda je v zásobě jakékoliv množství“ budou ignorovány.</string>
-  <string name="msg_recipe_shopping_list_ask">Chcete přidat všechny chybějící ingredience z receptu „%1$s“ do nákupního seznamu?\nOdškrtněte ty, které v nákupním seznamu nechcete.</string>
   <string name="msg_welcome">Grocy pro Android vás vítá</string>
   <string name="msg_welcome_introduce">Chcete-li grocy používat, musíte si ji nejprve nainstalovat na svůj server nebo jako grocy add-on pro Home Assistant.\nPokud si jen chcete aplikaci vyzkoušet, můžete použít demo server od Bernda Bestela, tvůrce grocy.</string>
   <string name="msg_choose_option_below">Vyberte si jednu z možností</string>
@@ -881,10 +879,6 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_qu_stock">Měrná jednotka zásoby</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Převodní koeficient (násobek) měrné jednotky nákupu produktu do měrné jednotky zásob</string>
-  <!-- This string is part of a pair, there is also 'quantity unit to' -->
-  <string name="property_quantity_unit_from">Z měrné jednotky</string>
-  <!-- This string is part of a pair, there is also 'quantity unit from' -->
-  <string name="property_quantity_unit_to">Do měrné jednotky</string>
   <string name="property_factor">Násobek</string>
   <string name="property_barcode">Čárový kód</string>
   <string name="property_barcodes">Čárové kódy</string>

@@ -26,7 +26,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -36,27 +35,25 @@ import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.form.FormDataShoppingListEdit;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.form.FormDataShoppingListEdit;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
-import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
-public class ShoppingListEditViewModel extends AndroidViewModel {
+public class ShoppingListEditViewModel extends BaseViewModel {
 
   private static final String TAG = ShoppingListEditViewModel.class.getSimpleName();
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
-  private final EventHandler eventHandler;
   private final ShoppingListRepository repository;
   private final FormDataShoppingListEdit formData;
 
@@ -82,7 +79,6 @@ public class ShoppingListEditViewModel extends AndroidViewModel {
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     grocyApi = new GrocyApi(getApplication());
-    eventHandler = new EventHandler();
     repository = new ShoppingListRepository(application);
     formData = new FormDataShoppingListEdit(startupShoppingList);
 
@@ -180,6 +176,7 @@ public class ShoppingListEditViewModel extends AndroidViewModel {
       return;
     }
     if (!formData.isFormValid()) {
+      showMessage(R.string.error_missing_information);
       return;
     }
 
@@ -343,55 +340,11 @@ public class ShoppingListEditViewModel extends AndroidViewModel {
     currentQueueLoading = queueLoading;
   }
 
-  private void showErrorMessage() {
-    showMessage(getString(R.string.error_undefined));
-  }
-
-  private void showMessage(@NonNull String message) {
-    showSnackbar(new SnackbarMessage(message));
-  }
-
-  private void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
-    eventHandler.setValue(snackbarMessage);
-  }
-
-  private void sendEvent(@SuppressWarnings("SameParameterValue") int type) {
-    eventHandler.setValue(new Event() {
-      @Override
-      public int getType() {
-        return type;
-      }
-    });
-  }
-
-  private void sendEvent(@SuppressWarnings("SameParameterValue") int type, Bundle bundle) {
-    eventHandler.setValue(new Event() {
-      @Override
-      public int getType() {
-        return type;
-      }
-
-      @Override
-      public Bundle getBundle() {
-        return bundle;
-      }
-    });
-  }
-
-  @NonNull
-  public EventHandler getEventHandler() {
-    return eventHandler;
-  }
-
   public boolean isFeatureEnabled(String pref) {
     if (pref == null) {
       return true;
     }
     return sharedPrefs.getBoolean(pref, true);
-  }
-
-  private String getString(@StringRes int resId) {
-    return getApplication().getString(resId);
   }
 
   private String getString(@SuppressWarnings("SameParameterValue") @StringRes int resId, Object... formatArgs) {

@@ -28,60 +28,131 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 public class PluralUtil {
   final LangPluralDetails pluralDetails;
   boolean rulesImplemented = true;
-  
-  // TODO: https://github.com/populov/android-i18n-plurals/tree/master/library/src/main/java/com/seppius/i18n/plurals
 
   public PluralUtil(Context context) {
     String langCode = context.getResources().getConfiguration().locale.getLanguage();
 
     switch (langCode) {
+      case "ar":
+        pluralDetails = new LangPluralDetails(
+            6,
+            n -> n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5
+        );
+        break;
+
+      case "ca":
+      case "da":
+      case "de":
+      case "el":
+      case "et":
+      case "eu":
+      case "fi":
+      case "hu":
+      case "nb":
+      case "nn":
+      case "nl":
+      case "no":
+      case "sv":
+        pluralDetails = new LangPluralDetails(
+            2,
+            n -> (n != 1) ? 1 : 0
+        );
+        break;
+
       case "cs":
         pluralDetails = new LangPluralDetails(
             4,
-            n -> (n == 1 && n % 1 == 0) ? 0
-                : (n >= 2 && n <= 4 && n % 1 == 0) ? 1 : (n % 1 != 0) ? 2 : 3
+            n -> (n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3
         );
         break;
+
+      case "es":
+      case "it":
+        pluralDetails = new LangPluralDetails(
+            3,
+            n -> n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2
+        );
+        break;
+
       case "fr":
       case "pt":
-        pluralDetails = new LangPluralDetails(2, (n) -> (n >= 0 && n < 2) ? 0 : 1);
-        break;
-      case "iw":
         pluralDetails = new LangPluralDetails(
-            4,
-            n -> (n == 1 && n % 1 == 0) ? 0
-                : (n == 2 && n % 1 == 0) ? 1 : (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3
+            3,
+            n -> (n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2
         );
         break;
+
+      case "he":
+        pluralDetails = new LangPluralDetails(
+            4,
+            n -> (n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3
+        );
+        break;
+
+      case "id":
+      case "ja":
+      case "ko":
+      case "zh":
+        pluralDetails = new LangPluralDetails(
+            1,
+            n -> 0
+        );
+        break;
+
+      case "lt":
+        pluralDetails = new LangPluralDetails(
+            4,
+            n -> (n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3)
+        );
+        break;
+
+      case "lv":
+        pluralDetails = new LangPluralDetails(
+            3,
+            n -> (n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2)
+        );
+        break;
+
       case "pl":
         pluralDetails = new LangPluralDetails(
             4,
-            n -> (n == 1 ? 0
-                : (n % 10 >= 2 && n % 10 <= 4) && (n % 100 < 12 || n % 100 > 14) ? 1
-                    : n != 1 && (n % 10 >= 0 && n % 10 <= 1) || (n % 10 >= 5 && n % 10 <= 9)
-                        || (n % 100 >= 12 && n % 100 <= 14) ? 2 : 3)
+            n -> (n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3)
         );
         break;
+
+      case "ro":
+        pluralDetails = new LangPluralDetails(
+            3,
+            n -> (n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1))
+        );
+        break;
+
       case "ru":
+        pluralDetails = new LangPluralDetails(
+            4,
+            n -> (n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3)
+        );
+        break;
+
+      case "sk":
+        pluralDetails = new LangPluralDetails(
+            4,
+            n -> (n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3)
+        );
+        break;
+
+      case "tr":
+        pluralDetails = new LangPluralDetails(
+            2,
+            n -> (n > 1) ? 1 : 0
+        );
+        break;
+
       case "uk":
         pluralDetails = new LangPluralDetails(
             4,
-            n -> (n%10==1 && n%100!=11 ? 0
-                : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1
-                    : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14) ? 2 : 3)
+            n -> (n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3)
         );
-        break;
-      case "zh":
-        pluralDetails = new LangPluralDetails(1, n -> 0);
-        break;
-      case "en":
-      case "de":
-      case "es":
-      case "it":
-      case "nb":
-      case "nl":
-      case "sv":
-        pluralDetails = new LangPluralDetails(2, (n) -> (n != 1) ? 1 : 0);
         break;
       default:  // en de es it nb nl sv
         pluralDetails = new LangPluralDetails(2, (n) -> (n != 1) ? 1 : 0);

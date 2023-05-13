@@ -199,6 +199,7 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
 
   public void saveItem() {
     if (!formData.isFormValid()) {
+      showMessage(R.string.error_missing_information);
       return;
     }
 

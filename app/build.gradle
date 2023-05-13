@@ -43,7 +43,7 @@ android {
         targetSdkVersion 33
         versionCode 45
         versionName "3.1.1"
-        resourceConfigurations += ['cs', 'de', 'en', 'es', 'fr', 'hu', 'it', 'iw', 'nb', 'nl', 'pl', 'pt-rPT', 'ru', 'sk', 'sv', 'uk', 'zh-rCN', 'zh-rTW']
+        resourceConfigurations += ['ca', 'cs', 'de', 'en', 'es', 'et', 'fr', 'hu', 'it', 'iw', 'nb', 'nl', 'pl', 'pt-rBR', 'pt-rPT', 'ru', 'sk', 'sv', 'uk', 'zh-rCN', 'zh-rTW']
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -111,7 +111,7 @@ dependencies {
 
     // Nice material views
     // don't upgrade to 1.10 alpha, only change it to stable 1.9.0 when it has been released
-    implementation 'com.google.android.material:material:1.9.0-rc01'
+    implementation 'com.google.android.material:material:1.9.0'
 
     // Volley for all general network requests and Glide for image loading
     // Netcipher for Tor support and Conscrypt for new TLS support on old Android devices
