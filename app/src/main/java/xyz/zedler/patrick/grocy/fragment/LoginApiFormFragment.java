@@ -79,7 +79,7 @@ public class LoginApiFormFragment extends BaseFragment {
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
     binding.toolbar.setOnMenuItemClickListener(item -> {
       int id = item.getItemId();
       if (id == R.id.action_help) {
@@ -89,9 +89,9 @@ public class LoginApiFormFragment extends BaseFragment {
       } else if (id == R.id.action_website) {
         openGrocyWebsite();
       } else if (id == R.id.action_settings) {
-        activity.navigateDeepLink(R.string.deep_link_settingsFragment);
+        activity.navUtil.navigateDeepLink(R.string.deep_link_settingsFragment);
       } else if (id == R.id.action_about) {
-        activity.navigateDeepLink(R.string.deep_link_aboutFragment);
+        activity.navUtil.navigateDeepLink(R.string.deep_link_aboutFragment);
       }
       return true;
     });
@@ -129,7 +129,7 @@ public class LoginApiFormFragment extends BaseFragment {
     if (ingressProxyId != null) {
       grocyServerUrl += "/api/hassio_ingress/" + ingressProxyId;
     }
-    activity.navigateFragment(
+    activity.navUtil.navigateFragment(
         LoginApiFormFragmentDirections.actionLoginApiFormFragmentToLoginRequestFragment(
             grocyServerUrl,
             viewModel.getFormData().getApiKeyTrimmed()

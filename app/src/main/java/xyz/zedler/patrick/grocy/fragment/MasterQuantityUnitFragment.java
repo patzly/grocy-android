@@ -417,7 +417,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
       dlHelper.put(
           grocyApi.getObject(GrocyApi.ENTITY.QUANTITY_UNITS, editQuantityUnit.getId()),
           jsonObject,
-          response -> activity.navigateUp(),
+          response -> activity.navUtil.navigateUp(),
           error -> {
             showErrorMessage(error);
             if (debug) {
@@ -429,7 +429,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
       dlHelper.post(
           grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
           jsonObject,
-          response -> activity.navigateUp(),
+          response -> activity.navUtil.navigateUp(),
           error -> {
             showErrorMessage(error);
             if (debug) {
@@ -475,7 +475,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
   public void deleteObject(int quantityUnitId) {
     dlHelper.delete(
         grocyApi.getObject(GrocyApi.ENTITY.QUANTITY_UNITS, quantityUnitId),
-        response -> activity.navigateUp(),
+        response -> activity.navUtil.navigateUp(),
         this::showErrorMessage
     );
   }

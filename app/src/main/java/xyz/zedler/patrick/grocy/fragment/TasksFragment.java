@@ -116,7 +116,7 @@ public class TasksFragment extends BaseFragment implements
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     // APP BAR BEHAVIOR
 
@@ -250,7 +250,7 @@ public class TasksFragment extends BaseFragment implements
         R.string.title_task_new,
         Constants.FAB.TAG.ADD,
         savedInstanceState == null,
-        () -> activity.navigateFragment(
+        () -> activity.navUtil.navigateFragment(
             TasksFragmentDirections.actionTasksFragmentToTaskEntryEditFragment(ACTION.CREATE)
         )
     );
@@ -303,7 +303,7 @@ public class TasksFragment extends BaseFragment implements
 
   @Override
   public void editTask(Task task) {
-    activity.navigateFragment(
+    activity.navUtil.navigateFragment(
         TasksFragmentDirections
             .actionTasksFragmentToTaskEntryEditFragment(ACTION.EDIT)
             .setTaskEntry(task)

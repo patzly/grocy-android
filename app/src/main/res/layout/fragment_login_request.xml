@@ -136,7 +136,7 @@
               style="@style/Widget.Grocy.Button.OutlinedButton"
               android:layout_marginEnd="4dp"
               android:text="@string/action_back"
-              android:onClick="@{() -> activity.navigateUp()}"
+              android:onClick="@{() -> activity.navUtil.navigateUp()}"
               app:clickUtil="@{clickUtil}" />
 
             <com.google.android.material.button.MaterialButton
@@ -175,7 +175,7 @@
             style="@style/Widget.Grocy.Button.OutlinedButton"
             android:layout_marginEnd="4dp"
             android:text="@string/action_back"
-            android:onClick="@{() -> activity.navigateUp()}"
+            android:onClick="@{() -> activity.navUtil.navigateUp()}"
             app:clickUtil="@{clickUtil}" />
 
           <com.google.android.material.button.MaterialButton

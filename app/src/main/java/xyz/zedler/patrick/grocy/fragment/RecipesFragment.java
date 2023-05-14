@@ -120,7 +120,7 @@ public class RecipesFragment extends BaseFragment implements
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     // APP BAR BEHAVIOR
 
@@ -217,7 +217,7 @@ public class RecipesFragment extends BaseFragment implements
         R.string.title_recipe_create,
         Constants.FAB.TAG.ADD,
         savedInstanceState == null,
-        () -> activity.navigateFragment(
+        () -> activity.navUtil.navigateFragment(
             RecipesFragmentDirections.actionRecipesFragmentToRecipeEditFragment(ACTION.CREATE)
         )
     );
@@ -274,7 +274,7 @@ public class RecipesFragment extends BaseFragment implements
     if (showOfflineError()) {
       return;
     }
-    activity.navigateFragment(
+    activity.navUtil.navigateFragment(
         RecipesFragmentDirections.actionRecipesFragmentToRecipeEditFragment(ACTION.EDIT)
             .setRecipe(recipe)
     );

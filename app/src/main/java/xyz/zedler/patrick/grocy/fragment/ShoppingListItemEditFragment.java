@@ -108,7 +108,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -116,7 +116,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
       } else if (event.getType() == Event.NAVIGATE_UP) {
-        activity.navigateUp();
+        activity.navUtil.navigateUp();
       } else if (event.getType() == Event.SET_SHOPPING_LIST_ID) {
         int id = event.getBundle().getInt(Constants.ARGUMENT.SELECTED_ID);
         setForDestination(R.id.shoppingListFragment, Constants.ARGUMENT.SELECTED_ID, id);
@@ -125,7 +125,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
       } else if (event.getType() == Event.CHOOSE_PRODUCT) {
         String barcode = event.getBundle().getString(ARGUMENT.BARCODE);
-        activity.navigateFragment(
+        activity.navUtil.navigateFragment(
             R.id.chooseProductFragment,
             new ChooseProductFragmentArgs.Builder(barcode).build().toBundle()
         );

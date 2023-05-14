@@ -109,12 +109,12 @@ public class LoginRequestFragment extends BaseFragment {
   }
 
   private void navigateToStartDestination() {
-    activity.updateStartDestination();
-    NavOptions.Builder builder = activity.getNavOptionsBuilderFragmentFadeOrSlide(
+    activity.navUtil.updateStartDestination();
+    NavOptions.Builder builder = activity.navUtil.getNavOptionsBuilderFragmentFadeOrSlide(
         false
     );
     builder.setPopUpTo(R.id.navigation_main, true);
-    activity.navigateFragment(
+    activity.navUtil.navigateFragment(
         findNavController().getGraph().getStartDestinationId(), builder.build()
     );
   }

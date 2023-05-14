@@ -167,14 +167,14 @@
 
             <com.google.android.material.button.MaterialButton
               style="@style/Widget.Grocy.Button.IconButton"
-              android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_settingsFragment)}"
+              android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_settingsFragment)}"
               app:clickUtil="@{clickUtil}"
               app:tooltipText="@{@string/title_settings}"
               app:icon="@drawable/ic_round_settings_anim" />
 
             <com.google.android.material.button.MaterialButton
               style="@style/Widget.Grocy.Button.IconButton"
-              android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_aboutFragment)}"
+              android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_aboutFragment)}"
               app:clickUtil="@{clickUtil}"
               app:tooltipText="@{@string/title_about}"
               app:icon="@drawable/ic_round_info_outline_anim" />

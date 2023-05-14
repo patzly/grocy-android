@@ -105,7 +105,7 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -113,7 +113,7 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
       } else if (event.getType() == Event.NAVIGATE_UP) {
-        activity.navigateUp();
+        activity.navUtil.navigateUp();
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
@@ -186,7 +186,7 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
         R.string.action_add,
         Constants.FAB.TAG.ADD,
         savedInstanceState == null,
-        () -> activity.navigateFragment(MasterProductCatConversionsFragmentDirections
+        () -> activity.navUtil.navigateFragment(MasterProductCatConversionsFragmentDirections
             .actionMasterProductCatConversionsFragmentToMasterProductCatConversionsEditFragment(
                 viewModel.getFilledProduct()
             )
@@ -198,7 +198,7 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
     if (clickUtil.isDisabled()) {
       return;
     }
-    activity.navigateFragment(MasterProductCatConversionsFragmentDirections
+    activity.navUtil.navigateFragment(MasterProductCatConversionsFragmentDirections
         .actionMasterProductCatConversionsFragmentToMasterProductCatConversionsEditFragment(viewModel.getFilledProduct())
         .setConversion(conversion)
     );

@@ -54,6 +54,7 @@ import xyz.zedler.patrick.grocy.fragment.StockOverviewFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.util.NavUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class DueSoonCheckWorker extends Worker {
@@ -89,7 +90,7 @@ public class DueSoonCheckWorker extends Worker {
 
       Bitmap bitmap = getBitmapFromVectorDrawable(getApplicationContext(), R.drawable.ic_round_grocy);
 
-      Uri uri = MainActivity.getUriWithArgs(
+      Uri uri = NavUtil.getUriWithArgs(
           getApplicationContext().getString(R.string.deep_link_stockOverviewFragment),
           new StockOverviewFragmentArgs.Builder()
               .setStatusFilterId(String.valueOf(FilterChipLiveDataStockStatus.STATUS_DUE_SOON))

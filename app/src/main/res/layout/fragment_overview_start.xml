@@ -195,7 +195,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
-                android:onClick="@{() -> activity.navigateFragment(R.id.stockOverviewFragment)}"
+                android:onClick="@{() -> activity.navUtil.navigateFragment(R.id.stockOverviewFragment)}"
                 app:clickUtil="@{clickUtil}"
                 app:contentPaddingLeft="0dp"
                 app:contentPaddingRight="0dp"
@@ -426,7 +426,7 @@
                         style="@style/Widget.Grocy.Button.OutlinedButton.Icon"
                         android:layout_marginEnd="8dp"
                         android:text="@string/title_inventory"
-                        android:onClick="@{() -> activity.navigateFragment(R.id.inventoryFragment)}"
+                        android:onClick="@{() -> activity.navUtil.navigateFragment(R.id.inventoryFragment)}"
                         app:clickUtil="@{clickUtil}"
                         app:icon="@drawable/ic_round_inventory" />
 
@@ -435,7 +435,7 @@
                         android:layout_marginEnd="8dp"
                         android:text="@string/title_transfer"
                         android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) ? View.VISIBLE : View.GONE}"
-                        android:onClick="@{() -> activity.navigateFragment(R.id.transferFragment)}"
+                        android:onClick="@{() -> activity.navUtil.navigateFragment(R.id.transferFragment)}"
                         app:clickUtil="@{clickUtil}"
                         app:icon="@drawable/ic_round_swap_horiz" />
 
@@ -443,14 +443,14 @@
                         style="@style/Widget.Grocy.Button.TonalButton.Icon"
                         android:layout_marginEnd="8dp"
                         android:text="@string/title_consume"
-                        android:onClick="@{() -> activity.navigateFragment(R.id.consumeFragment)}"
+                        android:onClick="@{() -> activity.navUtil.navigateFragment(R.id.consumeFragment)}"
                         app:clickUtil="@{clickUtil}"
                         app:icon="@drawable/ic_round_consume_product" />
 
                       <com.google.android.material.button.MaterialButton
                         style="@style/Widget.Grocy.Button.TonalButton.Icon"
                         android:text="@string/title_purchase"
-                        android:onClick="@{() -> activity.navigateFragment(R.id.purchaseFragment)}"
+                        android:onClick="@{() -> activity.navUtil.navigateFragment(R.id.purchaseFragment)}"
                         app:clickUtil="@{clickUtil}"
                         app:icon="@drawable/ic_round_local_grocery_store" />
 
@@ -465,7 +465,7 @@
               <com.google.android.material.card.MaterialCardView
                 style="@style/Widget.Grocy.Card.Text.Error"
                 android:visibility="@{viewModel.storedPurchasesOnDevice ? View.VISIBLE : View.GONE}"
-                android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_storedPurchasesFragment)}"
+                android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_storedPurchasesFragment)}"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
@@ -489,7 +489,7 @@
                 app:contentPaddingRight="0dp"
                 app:contentPaddingBottom="12dp"
                 android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST) ? View.VISIBLE : View.GONE}"
-                android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_shoppingListFragment)}"
+                android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_shoppingListFragment)}"
                 app:clickUtil="@{clickUtil}">
 
                 <LinearLayout
@@ -533,7 +533,7 @@
                       <com.google.android.material.button.MaterialButton
                         style="@style/Widget.Grocy.Button.OutlinedButton.Icon"
                         android:text="@string/title_shopping_mode"
-                        android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_shoppingModeFragment)}"
+                        android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_shoppingModeFragment)}"
                         app:clickUtil="@{clickUtil}"
                         app:icon="@drawable/ic_round_storefront" />
 
@@ -541,7 +541,7 @@
                         android:id="@+id/button_add_shopping_list_item"
                         style="@style/Widget.Grocy.Button.TonalButton.Icon"
                         android:text="@string/title_entry_new"
-                        android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_shoppingListItemEditFragmentCreate)}"
+                        android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_shoppingListItemEditFragmentCreate)}"
                         android:layout_marginStart="8dp"
                         app:icon="@drawable/ic_round_add_anim" />
 
@@ -559,7 +559,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
                 android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_RECIPES) ? View.VISIBLE : View.GONE}"
-                android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_recipesFragment)}"
+                android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_recipesFragment)}"
                 app:clickUtil="@{clickUtil}">
 
                 <LinearLayout
@@ -595,7 +595,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
                 android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_CHORES) ? View.VISIBLE : View.GONE}"
-                android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_choresFragment)}"
+                android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_choresFragment)}"
                 app:clickUtil="@{clickUtil}">
 
                 <LinearLayout
@@ -781,7 +781,7 @@
                 android:layout_marginBottom="8dp"
                 app:contentPaddingBottom="12dp"
                 android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_TASKS) ? View.VISIBLE : View.GONE}"
-                android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_tasksFragment)}"
+                android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_tasksFragment)}"
                 app:clickUtil="@{clickUtil}">
 
                 <LinearLayout
@@ -881,7 +881,7 @@
                     android:layout_gravity="end"
                     android:layout_marginTop="8dp"
                     android:text="@string/title_task_new"
-                    android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_taskEntryEditFragmentCreate)}"
+                    android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_taskEntryEditFragmentCreate)}"
                     app:clickUtil="@{clickUtil}"
                     app:icon="@drawable/ic_round_add_anim" />
 
@@ -899,7 +899,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_masterDataOverviewFragment)}"
+                android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_masterDataOverviewFragment)}"
                 app:clickUtil="@{clickUtil}">
 
                 <LinearLayout

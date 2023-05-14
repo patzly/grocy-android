@@ -30,21 +30,14 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -53,7 +46,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.DrawableRes;
-import androidx.annotation.IdRes;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -75,33 +67,16 @@ import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
-import androidx.navigation.NavGraph;
-import androidx.navigation.NavInflater;
-import androidx.navigation.NavOptions;
-import androidx.navigation.Navigator;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.android.material.color.DynamicColors;
-import com.google.android.material.color.DynamicColorsOptions;
-import com.google.android.material.color.HarmonizedColors;
-import com.google.android.material.color.HarmonizedColorsOptions;
 import com.google.android.material.elevation.SurfaceColors;
 import com.google.android.material.math.MathUtils;
 import com.google.android.material.snackbar.Snackbar;
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 import java.lang.reflect.Field;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
-import xyz.zedler.patrick.grocy.BuildConfig;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.PREF;
@@ -109,7 +84,6 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.NETWORK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
-import xyz.zedler.patrick.grocy.Constants.THEME;
 import xyz.zedler.patrick.grocy.NavigationMainDirections;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -117,21 +91,21 @@ import xyz.zedler.patrick.grocy.behavior.BottomScrollBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.repository.MainRepository;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.HapticUtil;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
+import xyz.zedler.patrick.grocy.util.NavUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
 import xyz.zedler.patrick.grocy.util.ShortcutUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class MainActivity extends AppCompatActivity {
@@ -144,13 +118,12 @@ public class MainActivity extends AppCompatActivity {
   private GrocyApi grocyApi;
   private MainRepository repository;
   private ClickUtil clickUtil;
+  public NavUtil navUtil;
   public NetUtil netUtil;
-  private Locale locale;
-  private NavController navController;
   private BroadcastReceiver networkReceiver;
   private BottomScrollBehavior scrollBehavior;
   private SystemBarBehavior systemBarBehavior;
-  private HapticUtil hapticUtil;
+  public HapticUtil hapticUtil;
   private boolean runAsSuperClass;
   private boolean debug;
   private boolean wasKeyboardOpened;
@@ -170,121 +143,32 @@ public class MainActivity extends AppCompatActivity {
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
-    // DARK MODE
+    // DARK MODE AND THEME
 
     // this has to be placed before super.onCreate(savedInstanceState);
     // https://stackoverflow.com/a/53356918
-    int modeNight = sharedPrefs.getInt(
-        SETTINGS.APPEARANCE.DARK_MODE, SETTINGS_DEFAULT.APPEARANCE.DARK_MODE
-    );
-    int uiMode = getResources().getConfiguration().uiMode;
-    switch (modeNight) {
-      case AppCompatDelegate.MODE_NIGHT_NO:
-        uiMode = Configuration.UI_MODE_NIGHT_NO;
-        break;
-      case AppCompatDelegate.MODE_NIGHT_YES:
-        uiMode = Configuration.UI_MODE_NIGHT_YES;
-        break;
-    }
+    int modeNight = PrefsUtil.getModeNight(sharedPrefs);
     AppCompatDelegate.setDefaultNightMode(modeNight);
+    ResUtil.applyConfigToResources(this, modeNight);
 
-    // APPLY CONFIG TO RESOURCES
-
-    // base
-    Resources resBase = getBaseContext().getResources();
-    Configuration configBase = resBase.getConfiguration();
-    configBase.uiMode = uiMode;
-    resBase.updateConfiguration(configBase, resBase.getDisplayMetrics());
-    // app
-    Resources resApp = getApplicationContext().getResources();
-    Configuration configApp = resApp.getConfiguration();
-    resApp.updateConfiguration(configApp, getResources().getDisplayMetrics());
-
-    switch (sharedPrefs.getString(SETTINGS.APPEARANCE.THEME, SETTINGS_DEFAULT.APPEARANCE.THEME)) {
-      case THEME.RED:
-        setTheme(R.style.Theme_Grocy_Red);
-        break;
-      case THEME.YELLOW:
-        setTheme(R.style.Theme_Grocy_Yellow);
-        break;
-      case THEME.LIME:
-        setTheme(R.style.Theme_Grocy_Lime);
-        break;
-      case THEME.GREEN:
-        setTheme(R.style.Theme_Grocy_Green);
-        break;
-      case THEME.TURQUOISE:
-        setTheme(R.style.Theme_Grocy_Turquoise);
-        break;
-      case THEME.TEAL:
-        setTheme(R.style.Theme_Grocy_Teal);
-        break;
-      case THEME.BLUE:
-        setTheme(R.style.Theme_Grocy_Blue);
-        break;
-      case THEME.PURPLE:
-        setTheme(R.style.Theme_Grocy_Purple);
-        break;
-      default:
-        if (DynamicColors.isDynamicColorAvailable()) {
-          DynamicColors.applyToActivityIfAvailable(
-              this,
-              new DynamicColorsOptions.Builder().setOnAppliedCallback(
-                  activity -> HarmonizedColors.applyToContextIfAvailable(
-                      this, HarmonizedColorsOptions.createMaterialDefaults()
-                  )
-              ).build()
-          );
-        } else {
-          setTheme(R.style.Theme_Grocy_Green);
-        }
-        break;
-    }
+    UiUtil.setTheme(this, sharedPrefs);
 
     Bundle bundleInstanceState = getIntent().getBundleExtra(ARGUMENT.INSTANCE_STATE);
     super.onCreate(bundleInstanceState != null ? bundleInstanceState : savedInstanceState);
 
     // UTILS
 
-    hapticUtil = new HapticUtil(this);
-    hapticUtil.setEnabled(
-        sharedPrefs.getBoolean(
-            Constants.SETTINGS.BEHAVIOR.HAPTIC, HapticUtil.areSystemHapticsTurnedOn(this)
-        )
-    );
-
     clickUtil = new ClickUtil();
+    hapticUtil = new HapticUtil(this);
+    hapticUtil.setEnabled(PrefsUtil.areHapticsEnabled(sharedPrefs, this));
     netUtil = new NetUtil(this, sharedPrefs, debug, TAG);
     netUtil.insertConscrypt();
     netUtil.createWebSocketClient();
 
     // LANGUAGE
 
-    locale = LocaleUtil.getLocale();
-
-    // refresh shortcut language
-    ShortcutUtil.refreshShortcuts(this);
-
-    // set localized demo instance
-    String serverUrl = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
-    if (serverUrl != null && serverUrl.contains("demo.grocy.info")
-        && !serverUrl.contains("test-")) {
-      List<Language> languages = LocaleUtil.getLanguages(this);
-      String demoDomain = null;
-      for (Language language : languages) {
-        String localeStr = locale.getCountry().isEmpty() ? locale.getLanguage()
-            : locale.getLanguage() + "-" + locale.getCountry();
-        if (language.getCode().equals(localeStr)) {
-          demoDomain = language.getDemoDomain();
-        }
-      }
-      if (demoDomain != null && !serverUrl.contains(demoDomain)) {
-        serverUrl = serverUrl.replaceAll(
-            "[a-z]+-?[a-z]*\\.demo\\.grocy\\.info", demoDomain
-        );
-        sharedPrefs.edit().putString(Constants.PREF.SERVER_URL, serverUrl).apply();
-      }
-    }
+    LocaleUtil.setLocalizedGrocyDemoInstance(this, sharedPrefs);  // set localized demo instance
+    ShortcutUtil.refreshShortcuts(this);  // refresh shortcut language
 
     // COLOR
 
@@ -314,29 +198,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // API
-
     updateGrocyApi();
     repository = new MainRepository(getApplication());
 
     // VIEWS
-
     binding = ActivityMainBinding.inflate(getLayoutInflater());
     setContentView(binding.getRoot());
 
+    // NAVIGATION
     fragmentManager = getSupportFragmentManager();
-
-    NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
-        .findFragmentById(R.id.fragment_main_nav_host);
-    assert navHostFragment != null;
-    navController = navHostFragment.getNavController();
-
-    updateStartDestination();
-
-    navController.addOnDestinationChangedListener((controller, dest, args) -> {
-      if (isServerUrlEmpty()) {
+    navUtil = new NavUtil(this, (controller, dest, args) -> {
+      if (PrefsUtil.isServerUrlEmpty(sharedPrefs)) {
         binding.fabMain.hide();
       }
-    });
+    }, sharedPrefs, TAG);
+    navUtil.updateStartDestination();
 
     // BOTTOM APP BAR
 
@@ -501,54 +377,19 @@ public class MainActivity extends AppCompatActivity {
     });
     ViewCompat.setWindowInsetsAnimationCallback(binding.coordinatorMain, callback);
 
-    // SUPPORTED GROCY VERSIONS
-
-    Runnable onSuccessConfigLoad = () -> {
-      String version = sharedPrefs.getString(Constants.PREF.GROCY_VERSION, null);
-      if (version == null || version.isEmpty()) {
-        return;
-      }
-      ArrayList<String> supportedVersions = new ArrayList<>(
-          Arrays.asList(getResources().getStringArray(R.array.compatible_grocy_versions))
-      );
-      if (supportedVersions.contains(version)) {
-        return;
-      }
-
-      // If user already ignored warning, do not display again
-      String ignoredVersion = sharedPrefs.getString(
-          Constants.PREF.VERSION_COMPATIBILITY_IGNORED, null
-      );
-      if (ignoredVersion != null && ignoredVersion.equals(version)) {
-        return;
-      }
-
-      Bundle bundle = new Bundle();
-      bundle.putString(Constants.ARGUMENT.VERSION, version);
-      bundle.putStringArrayList(Constants.ARGUMENT.SUPPORTED_VERSIONS, supportedVersions);
-      showBottomSheet(new CompatibilityBottomSheet(), bundle);
-    };
-    if (!isServerUrlEmpty()) {
+    // UPDATE CONFIG | CHECK GROCY COMPATIBILITY
+    if (!PrefsUtil.isServerUrlEmpty(sharedPrefs)) {
       ConfigUtil.loadInfo(
           new DownloadHelper(this, TAG),
           grocyApi,
           sharedPrefs,
-          onSuccessConfigLoad,
+          () -> VersionUtil.showCompatibilityBottomSheetIfNecessary(this, sharedPrefs),
           null
       );
     }
 
     // Show changelog if app was updated
-    int versionNew = BuildConfig.VERSION_CODE;
-    int versionOld = sharedPrefs.getInt(PREF.LAST_VERSION, 0);
-    if (versionOld == 0) {
-      sharedPrefs.edit().putInt(PREF.LAST_VERSION, versionNew).apply();
-    } else if (versionOld != versionNew) {
-      sharedPrefs.edit().putInt(PREF.LAST_VERSION, versionNew).apply();
-      new Handler(Looper.getMainLooper()).postDelayed(
-          this::showChangelogBottomSheet, 900
-      );
-    }
+    VersionUtil.showVersionChangelogIfAppUpdated(this, sharedPrefs);
   }
 
   @Override
@@ -608,20 +449,6 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
-  public void updateStartDestination() {
-    NavInflater navInflater = navController.getNavInflater();
-    NavGraph graph = navInflater.inflate(R.navigation.navigation_main);
-    boolean introShown = sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false);
-    if (!introShown) {
-      graph.setStartDestination(R.id.onboardingFragment);
-    } else if (isServerUrlEmpty()) {
-      graph.setStartDestination(R.id.navigation_login);
-    } else {
-      graph.setStartDestination(R.id.overviewStartFragment);
-    }
-    navController.setGraph(graph);
-  }
-
   public BottomScrollBehavior getScrollBehavior() {
     return scrollBehavior;
   }
@@ -635,133 +462,8 @@ public class MainActivity extends AppCompatActivity {
       @MenuRes int newMenuId,
       @Nullable OnMenuItemClickListener onMenuItemClickListener
   ) {
-    // Handler with postDelayed is necessary for workaround of issue #552
-    new Handler().postDelayed(() -> {
-      if (showFab && !binding.fabMain.isShown() && !isServerUrlEmpty()) {
-        binding.fabMain.show();
-      } else if (!showFab && binding.fabMain.isShown()) {
-        binding.fabMain.hide();
-      }
-
-      Drawable overflowIcon = binding.bottomAppBar.getOverflowIcon();
-
-      // IF ANIMATIONS DISABLED
-      if (!UiUtil.areAnimationsEnabled(this)) {
-        binding.bottomAppBar.replaceMenu(newMenuId);
-        Menu menu = binding.bottomAppBar.getMenu();
-        int tint = ResUtil.getColorAttr(this, R.attr.colorOnSurfaceVariant);
-        for (int i = 0; i < menu.size(); i++) {
-          MenuItem item = menu.getItem(i);
-          if (item.getIcon() != null) {
-            item.getIcon().mutate();
-            item.getIcon().setAlpha(255);
-            item.getIcon().setTint(tint);
-          }
-        }
-        if (overflowIcon != null && overflowIcon.isVisible()) {
-          overflowIcon.setAlpha(255);
-          overflowIcon.setTint(tint);
-        }
-        binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
-        return;
-      }
-
-      long iconFadeOutDuration = 150;
-      long iconFadeInDuration = 300;
-
-      int alphaFrom = 255;
-      // get better start value if animation was not finished yet
-      if (binding.bottomAppBar.getMenu() != null
-          && binding.bottomAppBar.getMenu().size() > 0
-          && binding.bottomAppBar.getMenu().getItem(0) != null
-          && binding.bottomAppBar.getMenu().getItem(0).getIcon() != null) {
-        alphaFrom = binding.bottomAppBar.getMenu().getItem(0).getIcon().getAlpha();
-      }
-      ValueAnimator animatorFadeOut = ValueAnimator.ofInt(alphaFrom, 0);
-      animatorFadeOut.addUpdateListener(animation -> {
-        for (int i = 0; i < binding.bottomAppBar.getMenu().size(); i++) {
-          MenuItem item = binding.bottomAppBar.getMenu().getItem(i);
-          if (item.getIcon() != null && item.isVisible()) {
-            item.getIcon().setAlpha((int) animation.getAnimatedValue());
-          }
-        }
-        if (overflowIcon != null && overflowIcon.isVisible()) {
-          overflowIcon.setAlpha((int) animation.getAnimatedValue());
-        }
-      });
-      animatorFadeOut.setDuration(iconFadeOutDuration);
-      animatorFadeOut.setInterpolator(new FastOutSlowInInterpolator());
-      animatorFadeOut.start();
-
-      new Handler(Looper.getMainLooper()).postDelayed(() -> {
-        binding.bottomAppBar.replaceMenu(newMenuId);
-
-        int iconIndex = 0;
-        int overflowCount = 0;
-        int tint = ResUtil.getColorAttr(this, R.attr.colorOnSurfaceVariant);
-        for (int i = 0; i < binding.bottomAppBar.getMenu().size(); i++) {
-          MenuItem item = binding.bottomAppBar.getMenu().getItem(i);
-          if (item.getIcon() == null || !item.isVisible()) {
-            if (item.isVisible()) {
-              overflowCount++;
-            }
-            continue;
-          }
-          iconIndex++;
-          int index = iconIndex;
-          item.getIcon().mutate();
-          item.getIcon().setTint(tint);
-          item.getIcon().setAlpha(0);
-          new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            Rect bounds = item.getIcon().copyBounds();
-            int top = bounds.top;
-            int offset = UiUtil.dpToPx(this, 12);
-            ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
-            animator.addUpdateListener(animation -> {
-              bounds.offsetTo(
-                  0,
-                  (int) (top + (float) animation.getAnimatedValue() * offset)
-              );
-              item.getIcon().setBounds(bounds);
-              item.getIcon().setAlpha(255 - (int) ((float) animation.getAnimatedValue() * 255));
-              item.getIcon().invalidateSelf();
-            });
-            animator.setDuration(iconFadeInDuration - index * 50L);
-            animator.setInterpolator(new FastOutSlowInInterpolator());
-            animator.start();
-          }, index * 90L);
-        }
-        if (overflowCount > 0) {
-          Drawable overflowIconNew = binding.bottomAppBar.getOverflowIcon();
-          if (overflowIconNew == null || !overflowIconNew.isVisible()) {
-            return;
-          }
-          iconIndex++;
-          int index = iconIndex;
-          overflowIconNew.setTint(tint);
-          overflowIconNew.setAlpha(0);
-          new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            Rect bounds = overflowIconNew.copyBounds();
-            int top = bounds.top;
-            int offset = UiUtil.dpToPx(this, 12);
-            ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
-            animator.addUpdateListener(animation -> {
-              bounds.offsetTo(
-                  0,
-                  (int) (top + (float) animation.getAnimatedValue() * offset)
-              );
-              overflowIconNew.setBounds(bounds);
-              overflowIconNew.setAlpha(255 - (int) ((float) animation.getAnimatedValue() * 255));
-              overflowIconNew.invalidateSelf();
-            });
-            animator.setDuration(iconFadeInDuration - index * 50L);
-            animator.setInterpolator(new FastOutSlowInInterpolator());
-            animator.start();
-          }, index * 90L);
-        }
-        binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
-      }, iconFadeOutDuration);
-    }, 10);
+    UiUtil.updateBottomAppBar(binding, this, sharedPrefs, showFab,
+        newMenuId, onMenuItemClickListener);
   }
 
   public void updateBottomAppBar(boolean showFab, @MenuRes int newMenuId) {
@@ -843,7 +545,7 @@ public class MainActivity extends AppCompatActivity {
       if (!handled) {
         super.onBackPressed();
       }
-      if (!isServerUrlEmpty()) {
+      if (!PrefsUtil.isServerUrlEmpty(sharedPrefs)) {
         binding.bottomAppBar.performShow();
         //isScrollRestored = true;
       }
@@ -871,205 +573,6 @@ public class MainActivity extends AppCompatActivity {
       Log.e(TAG, "onKeyUp: fragmentManager or currentFragment is null");
       return false;
     }
-  }
-
-  // NAVIGATION
-
-  public NavOptions.Builder getNavOptionsBuilderFragmentFadeOrSlide(boolean slideVertically) {
-    if (UiUtil.areAnimationsEnabled(this)) {
-      boolean useSliding = getSharedPrefs().getBoolean(
-          Constants.SETTINGS.APPEARANCE.USE_SLIDING,
-          Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
-      );
-      if (useSliding) {
-        if (slideVertically) {
-          return new NavOptions.Builder()
-              .setEnterAnim(R.anim.slide_in_up)
-              .setPopExitAnim(R.anim.slide_out_down)
-              .setExitAnim(R.anim.slide_no);
-        } else {
-          return new NavOptions.Builder()
-              .setEnterAnim(R.anim.slide_from_end)
-              .setPopExitAnim(R.anim.slide_to_end)
-              .setPopEnterAnim(R.anim.slide_from_start)
-              .setExitAnim(R.anim.slide_to_start);
-        }
-      } else {
-        return new NavOptions.Builder()
-            .setEnterAnim(R.anim.enter_end_fade)
-            .setExitAnim(R.anim.exit_start_fade)
-            .setPopEnterAnim(R.anim.enter_start_fade)
-            .setPopExitAnim(R.anim.exit_end_fade);
-      }
-    } else {
-      return new NavOptions.Builder()
-          .setEnterAnim(R.anim.fade_in_a11y)
-          .setExitAnim(R.anim.fade_out_a11y)
-          .setPopEnterAnim(R.anim.fade_in_a11y)
-          .setPopExitAnim(R.anim.fade_out_a11y);
-    }
-  }
-
-  public void navigate(NavDirections directions) {
-    if (navController == null || directions == null) {
-      Log.e(TAG, "navigate: controller or direction is null");
-      return;
-    }
-    try {
-      navController.navigate(directions);
-    } catch (IllegalArgumentException e) {
-      Log.e(TAG, "navigate: " + directions, e);
-    }
-  }
-
-  public void navigate(NavDirections directions, @NonNull NavOptions navOptions) {
-    if (navController == null || directions == null) {
-      Log.e(TAG, "navigate: controller or direction is null");
-      return;
-    }
-    try {
-      navController.navigate(directions, navOptions);
-    } catch (IllegalArgumentException e) {
-      Log.e(TAG, "navigate: " + directions, e);
-    }
-  }
-
-  public void navigate(NavDirections directions, @NonNull Navigator.Extras navigatorExtras) {
-    if (navController == null || directions == null) {
-      Log.e(TAG, "navigate: controller or direction is null");
-      return;
-    }
-    try {
-      navController.navigate(directions, navigatorExtras);
-    } catch (IllegalArgumentException e) {
-      Log.e(TAG, "navigate: " + directions, e);
-    }
-  }
-
-  public void navigateUp() {
-    if (navController == null) {
-      NavHostFragment navHostFragment = (NavHostFragment) fragmentManager.findFragmentById(
-          R.id.fragment_main_nav_host
-      );
-      assert navHostFragment != null;
-      navController = navHostFragment.getNavController();
-    }
-    navController.navigateUp();
-    binding.bottomAppBar.performShow();
-    hideKeyboard();
-  }
-
-  public void navigateFragment(@IdRes int destination) {
-    navigateFragment(destination, (Bundle) null);
-  }
-
-  public void navigateFragment(@IdRes int destination, @Nullable Bundle arguments) {
-    if (navController == null ) {
-      Log.e(TAG, "navigateFragment: controller is null");
-      return;
-    }
-    try {
-      navController.navigate(
-          destination, arguments, getNavOptionsBuilderFragmentFadeOrSlide(true).build()
-      );
-    } catch (IllegalArgumentException e) {
-      Log.e(TAG, "navigateFragment: ", e);
-    }
-  }
-
-  public void navigateFragment(NavDirections directions) {
-    if (navController == null || directions == null) {
-      Log.e(TAG, "navigateFragment: controller or direction is null");
-      return;
-    }
-    try {
-      navController.navigate(
-          directions, getNavOptionsBuilderFragmentFadeOrSlide(true).build()
-      );
-    } catch (IllegalArgumentException e) {
-      Log.e(TAG, "navigateFragment: " + directions, e);
-    }
-  }
-
-  public void navigateFragment(@IdRes int destination, @NonNull NavOptions navOptions) {
-    if (navController == null ) {
-      Log.e(TAG, "navigateFragment: controller is null");
-      return;
-    }
-    try {
-      navController.navigate(destination, null, navOptions);
-    } catch (IllegalArgumentException e) {
-      Log.e(TAG, "navigateFragment: ", e);
-    }
-  }
-
-  public void navigateDeepLink(@NonNull Uri uri, boolean slideVertically) {
-    if (navController == null ) {
-      Log.e(TAG, "navigateDeepLink: controller is null");
-      return;
-    }
-    try {
-      navController.navigate(uri, getNavOptionsBuilderFragmentFadeOrSlide(slideVertically).build());
-    } catch (IllegalArgumentException e) {
-      Log.e(TAG, "navigateDeepLink: ", e);
-    }
-  }
-
-  public void navigateDeepLink(@NonNull Uri uri, @NonNull NavOptions navOptions) {
-    if (navController == null ) {
-      Log.e(TAG, "navigateDeepLink: controller is null");
-      return;
-    }
-    try {
-      navController.navigate(uri, navOptions);
-    } catch (IllegalArgumentException e) {
-      Log.e(TAG, "navigateDeepLink: ", e);
-    }
-  }
-
-  public void navigateDeepLink(String uri) {
-    navigateDeepLink(Uri.parse(uri), true);
-  }
-
-  public void navigateDeepLink(@StringRes int uri) {
-    navigateDeepLink(Uri.parse(getString(uri)), true);
-  }
-
-  public void navigateDeepLink(@StringRes int uri, @NonNull Bundle args) {
-    navigateDeepLink(getUriWithArgs(getString(uri), args), true);
-  }
-
-  public static Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
-    String[] parts = uri.split("\\?");
-    if (parts.length == 1) {
-      return Uri.parse(uri);
-    }
-    String linkPart = parts[0];
-    String argsPart = parts[parts.length - 1];
-    String[] pairs = argsPart.split("&");
-    StringBuilder finalDeepLink = new StringBuilder(linkPart + "?");
-    for (int i = 0; i <= pairs.length - 1; i++) {
-      String pair = pairs[i];
-      String key = pair.split("=")[0];
-      Object valueBundle = argsBundle.get(key);
-      if (valueBundle == null) {
-        continue;
-      }
-      try {
-        String encoded;
-        if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
-          encoded = URLEncoder.encode(valueBundle.toString(), StandardCharsets.UTF_8);
-        } else {
-          encoded = URLEncoder.encode(valueBundle.toString(), "UTF-8");
-        }
-        finalDeepLink.append(key).append("=").append(encoded);
-      } catch (Throwable ignore) {
-      }
-      if (i != pairs.length - 1) {
-        finalDeepLink.append("&");
-      }
-    }
-    return Uri.parse(finalDeepLink.toString());
   }
 
   public boolean isOnline() {
@@ -1135,10 +638,6 @@ public class MainActivity extends AppCompatActivity {
     showBottomSheet(bottomSheet);
   }
 
-  public void showTextBottomSheet(@RawRes int file, @StringRes int title) {
-    showTextBottomSheet(file, title, 0);
-  }
-
   public void showTextBottomSheet(@RawRes int file, @StringRes int title, @StringRes int link) {
     NavigationMainDirections.ActionGlobalTextDialog action
         = NavigationMainDirections.actionGlobalTextDialog();
@@ -1147,28 +646,15 @@ public class MainActivity extends AppCompatActivity {
     if (link != 0) {
       action.setLink(link);
     }
-    navigate(action);
-  }
-
-  public void showChangelogBottomSheet() {
-    NavigationMainDirections.ActionGlobalTextDialog action
-        = NavigationMainDirections.actionGlobalTextDialog();
-    action.setTitle(R.string.info_changelog);
-    action.setFile(R.raw.changelog);
-    action.setHighlights(new String[]{"New:", "Improved:", "Fixed:"});
-    navigate(action);
+    navUtil.navigate(action);
   }
 
   public void showHelpBottomSheet() {
-    showTextBottomSheet(R.raw.help, R.string.title_help);
+    showTextBottomSheet(R.raw.help, R.string.title_help, 0);
   }
 
   public void showFeedbackBottomSheet() {
     showBottomSheet(new FeedbackBottomSheet());
-  }
-
-  public Locale getLocale() {
-    return locale;
   }
 
   public SharedPreferences getSharedPrefs() {
@@ -1193,11 +679,6 @@ public class MainActivity extends AppCompatActivity {
             findViewById(android.R.id.content).getWindowToken(),
             0
         );
-  }
-
-  private boolean isServerUrlEmpty() {
-    String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
-    return server == null || server.isEmpty();
   }
 
   public GrocyApi getGrocyApi() {
@@ -1302,7 +783,7 @@ public class MainActivity extends AppCompatActivity {
           return;
         }
         ViewUtil.startIcon(binding.bottomAppBar.getNavigationIcon());
-        navController.navigate(R.id.action_global_drawerBottomSheetDialogFragment);
+        navUtil.navigate(NavigationMainDirections.actionGlobalDrawerBottomSheetDialogFragment());
       });
     } else {
       binding.bottomAppBar.setNavigationIcon(null);
@@ -1318,14 +799,6 @@ public class MainActivity extends AppCompatActivity {
 
   public void setHapticEnabled(boolean enabled) {
     hapticUtil.setEnabled(enabled);
-  }
-
-  public void performHapticClick() {
-    hapticUtil.click();
-  }
-
-  public void performHapticHeavyClick() {
-    hapticUtil.heavyClick();
   }
 
   public void saveInstanceState(Bundle outState) {

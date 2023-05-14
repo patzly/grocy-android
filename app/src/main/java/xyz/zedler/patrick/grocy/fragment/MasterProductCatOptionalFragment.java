@@ -106,7 +106,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
 
     binding.toolbar.setNavigationOnClickListener(v -> {
       onBackPressed();
-      activity.navigateUp();
+      activity.navUtil.navigateUp();
     });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
@@ -115,7 +115,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
       } else if (event.getType() == Event.NAVIGATE_UP) {
-        activity.navigateUp();
+        activity.navUtil.navigateUp();
       } else if (event.getType() == Event.SET_SHOPPING_LIST_ID) {
         int id = event.getBundle().getInt(Constants.ARGUMENT.SELECTED_ID);
         setForDestination(R.id.shoppingListFragment, Constants.ARGUMENT.SELECTED_ID, id);
@@ -253,13 +253,13 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
 
   public void navigateToHtmlEditor() {
     if (viewModel.getFormData().getDescriptionLive().getValue() != null) {
-      activity.navigateFragment(
+      activity.navUtil.navigateFragment(
           MasterProductCatOptionalFragmentDirections
               .actionMasterProductCatOptionalFragmentToEditorHtmlFragment()
               .setText(viewModel.getFormData().getDescriptionLive().getValue())
       );
     } else {
-      activity.navigateFragment(
+      activity.navUtil.navigateFragment(
           MasterProductCatOptionalFragmentDirections
               .actionMasterProductCatOptionalFragmentToEditorHtmlFragment()
       );

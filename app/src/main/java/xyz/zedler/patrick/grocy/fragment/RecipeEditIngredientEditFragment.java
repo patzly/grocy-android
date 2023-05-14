@@ -101,7 +101,7 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     binding.categoryQuantityUnit.setOnClickListener(v -> {
       ArrayList<QuantityUnit> quantityUnits = viewModel.getQuantityUnits();
@@ -133,7 +133,7 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
       } else if (event.getType() == Event.NAVIGATE_UP) {
-        activity.navigateUp();
+        activity.navUtil.navigateUp();
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());

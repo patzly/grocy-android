@@ -33,6 +33,7 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentAboutBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class AboutFragment extends BaseFragment implements View.OnClickListener {
@@ -71,7 +72,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbarAbout.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbarAbout.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     setOnClickListeners(
         view,
@@ -112,10 +113,10 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
 
     if (v.getId() == R.id.linear_intro) {
       ViewUtil.startIcon(binding.imageIntro);
-      activity.navigateFragment(R.id.onboardingFragment);
+      activity.navUtil.navigateFragment(R.id.onboardingFragment);
     } else if (v.getId() == R.id.linear_changelog) {
       ViewUtil.startIcon(binding.imageChangelog);
-      activity.showChangelogBottomSheet();
+      VersionUtil.showChangelogBottomSheet(activity);
     } else if (v.getId() == R.id.linear_developers) {
       ViewUtil.startIcon(binding.imageDevelopers);
       startActivity(new Intent(

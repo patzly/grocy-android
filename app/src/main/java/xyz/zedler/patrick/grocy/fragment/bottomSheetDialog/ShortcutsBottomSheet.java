@@ -41,6 +41,7 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetShortcutsBinding;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.TaskEntryEditFragmentArgs;
+import xyz.zedler.patrick.grocy.util.NavUtil;
 import xyz.zedler.patrick.grocy.util.ShortcutUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 
@@ -147,7 +148,7 @@ public class ShortcutsBottomSheet extends BaseBottomSheetDialogFragment {
       } else if (checkBox.getId() == R.id.shopping_list) {
         shortcutInfos.add(ShortcutUtil.createShortcutShoppingList(context, checkBox.getText()));
       } else if (checkBox.getId() == R.id.add_to_shopping_list) {
-        Uri uriWithArgs = MainActivity.getUriWithArgs(
+        Uri uriWithArgs = NavUtil.getUriWithArgs(
             getString(R.string.deep_link_shoppingListItemEditFragment),
             new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
                 .build()
@@ -169,7 +170,7 @@ public class ShortcutsBottomSheet extends BaseBottomSheetDialogFragment {
       } else if (checkBox.getId() == R.id.tasks) {
         shortcutInfos.add(ShortcutUtil.createShortcutTasks(context, checkBox.getText()));
       } else if (checkBox.getId() == R.id.task_add) {
-        Uri uriWithArgs = MainActivity.getUriWithArgs(
+        Uri uriWithArgs = NavUtil.getUriWithArgs(
             getString(R.string.deep_link_taskEntryEditFragment),
             new TaskEntryEditFragmentArgs.Builder(Constants.ACTION.CREATE)
                 .build()

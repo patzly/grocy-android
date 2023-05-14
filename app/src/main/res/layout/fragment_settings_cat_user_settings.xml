@@ -98,7 +98,7 @@
             style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{v -> activity.navigateFragment(SettingsCatUserSettingsFragmentDirections.actionSettingsCatUserSettingsFragmentToSettingsCatStockFragment())}"
+            android:onClick="@{v -> activity.navUtil.navigateFragment(SettingsCatUserSettingsFragmentDirections.actionSettingsCatUserSettingsFragmentToSettingsCatStockFragment())}"
             app:clickUtil="@{clickUtil}">
 
             <ImageView
@@ -124,7 +124,7 @@
             style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{v -> activity.navigateFragment(SettingsCatUserSettingsFragmentDirections.actionSettingsCatUserSettingsFragmentToSettingsCatShoppingListFragment())}"
+            android:onClick="@{v -> activity.navUtil.navigateFragment(SettingsCatUserSettingsFragmentDirections.actionSettingsCatUserSettingsFragmentToSettingsCatShoppingListFragment())}"
             app:clickUtil="@{clickUtil}">
 
             <ImageView

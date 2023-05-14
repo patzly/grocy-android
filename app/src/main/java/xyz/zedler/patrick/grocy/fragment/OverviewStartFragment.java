@@ -133,11 +133,11 @@ public class OverviewStartFragment extends BaseFragment {
     binding.toolbar.setOnMenuItemClickListener(item -> {
       int id = item.getItemId();
       if (id == R.id.action_settings) {
-        activity.navigateDeepLink(getString(R.string.deep_link_settingsFragment));
+        activity.navUtil.navigateDeepLink(getString(R.string.deep_link_settingsFragment));
       } else if (id == R.id.action_help) {
         activity.showHelpBottomSheet();
       } else if (id == R.id.action_about) {
-        activity.navigateDeepLink(getString(R.string.deep_link_aboutFragment));
+        activity.navUtil.navigateDeepLink(getString(R.string.deep_link_aboutFragment));
       } else if (id == R.id.action_feedback) {
         activity.showBottomSheet(new FeedbackBottomSheet());
       }
@@ -166,11 +166,11 @@ public class OverviewStartFragment extends BaseFragment {
           if (showFabInfoDialogIfAppropriate()) {
             return;
           }
-          activity.navigateFragment(
+          activity.navUtil.navigateFragment(
               R.id.consumeFragment,
               new ConsumeFragmentArgs.Builder().setStartWithScanner(true).build().toBundle()
           );
-        }, () -> activity.navigateFragment(
+        }, () -> activity.navUtil.navigateFragment(
             R.id.purchaseFragment,
             new PurchaseFragmentArgs.Builder().setStartWithScanner(true).build().toBundle()
         )
@@ -193,7 +193,7 @@ public class OverviewStartFragment extends BaseFragment {
     Bundle bundle = new SettingsFragmentArgs.Builder()
         .setShowCategory(Constants.SETTINGS.BEHAVIOR.class.getSimpleName())
         .build().toBundle();
-    activity.navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
+    activity.navUtil.navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
   }
 
   public void navigateToSettingsCatServer() {
@@ -201,9 +201,9 @@ public class OverviewStartFragment extends BaseFragment {
       Bundle bundle = new SettingsFragmentArgs.Builder()
           .setShowCategory(Constants.SETTINGS.SERVER.class.getSimpleName())
           .build().toBundle();
-      activity.navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
+      activity.navUtil.navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
     } else {
-      activity.navigateDeepLink(getString(R.string.deep_link_settingsCatServerFragment));
+      activity.navUtil.navigateDeepLink(getString(R.string.deep_link_settingsCatServerFragment));
     }
   }
 
@@ -212,9 +212,9 @@ public class OverviewStartFragment extends BaseFragment {
       Bundle bundle = new SettingsFragmentArgs.Builder()
           .setShowCategory(Constants.SETTINGS.SERVER.class.getSimpleName())
           .build().toBundle();
-      activity.navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
+      activity.navUtil.navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
     } else {
-      activity.navigateDeepLink(getString(R.string.deep_link_settingsCatServerFragment));
+      activity.navUtil.navigateDeepLink(getString(R.string.deep_link_settingsCatServerFragment));
     }
   }
 
@@ -236,7 +236,7 @@ public class OverviewStartFragment extends BaseFragment {
         .setPositiveButton(R.string.title_consume, (dialog, which) -> {
           performHapticClick();
           viewModel.setOverviewFabInfoShown();
-          activity.navigateFragment(
+          activity.navUtil.navigateFragment(
               R.id.consumeFragment,
               new ConsumeFragmentArgs.Builder()
                   .setStartWithScanner(true).build().toBundle()
@@ -244,7 +244,7 @@ public class OverviewStartFragment extends BaseFragment {
         }).setNegativeButton(R.string.title_purchase, (dialog, which) -> {
           performHapticClick();
           viewModel.setOverviewFabInfoShown();
-          activity.navigateFragment(
+          activity.navUtil.navigateFragment(
               R.id.purchaseFragment,
               new PurchaseFragmentArgs.Builder()
                   .setStartWithScanner(true).build().toBundle()

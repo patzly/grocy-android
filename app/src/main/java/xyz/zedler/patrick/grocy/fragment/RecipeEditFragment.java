@@ -97,11 +97,11 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     binding.ingredients.setOnClickListener(v -> {
       if (viewModel.isActionEdit()) {
-        activity.navigateFragment(
+        activity.navUtil.navigateFragment(
             RecipeEditFragmentDirections
                 .actionRecipeEditFragmentToRecipeEditIngredientListFragment(viewModel.getAction())
                 .setRecipe(viewModel.getRecipe())
@@ -112,13 +112,13 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     });
     binding.preparation.setOnClickListener(v -> {
       if (viewModel.getFormData().getPreparationLive().getValue() != null) {
-        activity.navigateFragment(
+        activity.navUtil.navigateFragment(
             RecipeEditFragmentDirections.actionRecipeEditFragmentToEditorHtmlFragment2().setText(
                 viewModel.getFormData().getPreparationLive().getValue()
             )
         );
       } else {
-        activity.navigateFragment(
+        activity.navUtil.navigateFragment(
             RecipeEditFragmentDirections.actionRecipeEditFragmentToEditorHtmlFragment2()
         );
       }
@@ -137,7 +137,7 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
       } else if (event.getType() == Event.NAVIGATE_UP) {
-        activity.navigateUp();
+        activity.navUtil.navigateUp();
       } else if (event.getType() == Event.SET_RECIPE_ID) {
         int id = event.getBundle().getInt(Constants.ARGUMENT.RECIPE_ID);
         setForPreviousDestination(Constants.ARGUMENT.RECIPE_ID, id);

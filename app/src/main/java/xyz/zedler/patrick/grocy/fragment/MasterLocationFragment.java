@@ -401,7 +401,7 @@ public class MasterLocationFragment extends BaseFragment {
       dlHelper.put(
           grocyApi.getObject(GrocyApi.ENTITY.LOCATIONS, editLocation.getId()),
           jsonObject,
-          response -> activity.navigateUp(),
+          response -> activity.navUtil.navigateUp(),
           error -> {
             showErrorMessage(error);
             if (debug) {
@@ -413,7 +413,7 @@ public class MasterLocationFragment extends BaseFragment {
       dlHelper.post(
           grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
           jsonObject,
-          response -> activity.navigateUp(),
+          response -> activity.navUtil.navigateUp(),
           error -> {
             showErrorMessage(error);
             if (debug) {
@@ -456,7 +456,7 @@ public class MasterLocationFragment extends BaseFragment {
   public void deleteObject(int locationId) {
     dlHelper.delete(
         grocyApi.getObject(GrocyApi.ENTITY.LOCATIONS, locationId),
-        response -> activity.navigateUp(),
+        response -> activity.navUtil.navigateUp(),
         this::showErrorMessage
     );
   }
