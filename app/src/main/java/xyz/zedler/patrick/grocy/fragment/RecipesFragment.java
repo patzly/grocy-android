@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,7 +33,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import java.util.ArrayList;
-import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
@@ -44,7 +42,6 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.RecipeEntryAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
-import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentRecipesBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RecipeBottomSheet;
@@ -73,7 +70,6 @@ public class RecipesFragment extends BaseFragment implements
   private RecipesViewModel viewModel;
   private AppBarBehavior appBarBehavior;
   private ClickUtil clickUtil;
-  private SwipeBehavior swipeBehavior;
   private FragmentRecipesBinding binding;
   private InfoFullscreenHelper infoFullscreenHelper;
 
@@ -203,46 +199,6 @@ public class RecipesFragment extends BaseFragment implements
         );
       }
     });
-
-    if (swipeBehavior == null) {
-      swipeBehavior = new SwipeBehavior(
-          activity,
-          swipeStarted -> binding.swipe.setEnabled(!swipeStarted)
-      ) {
-        @Override
-        public void instantiateUnderlayButton(
-            RecyclerView.ViewHolder viewHolder,
-            List<UnderlayButton> underlayButtons
-        ) {
-          int position = viewHolder.getAdapterPosition();
-          ArrayList<Recipe> displayedItems = viewModel.getFilteredRecipesLive()
-              .getValue();
-          if (displayedItems == null || position < 0
-              || position >= displayedItems.size()) {
-            return;
-          }
-
-          underlayButtons.add(new UnderlayButton(
-              activity,
-              R.drawable.ic_round_restaurant_menu,
-              pos -> {
-                if (pos >= displayedItems.size()) {
-                  return;
-                }
-                swipeBehavior.recoverLatestSwipedItem();
-                new Handler().postDelayed(() -> {
-                  Recipe recipe = displayedItems.get(pos);
-                  consumeRecipe(recipe.getId());
-                  activity.showSnackbar(
-                      getString(R.string.msg_recipe_consumed, recipe.getName()), true
-                  );
-                }, 100);
-              }
-          ));
-        }
-      };
-    }
-    swipeBehavior.attachToRecyclerView(binding.recycler);
 
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
@@ -379,9 +335,6 @@ public class RecipesFragment extends BaseFragment implements
     }
     if (recipe == null) {
       return;
-    }
-    if (swipeBehavior != null) {
-      swipeBehavior.recoverLatestSwipedItem();
     }
 
     RecipeFulfillment recipeFulfillment = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(viewModel.getRecipeFulfillments(), recipe.getId());
