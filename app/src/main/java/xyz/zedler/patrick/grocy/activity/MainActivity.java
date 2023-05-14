@@ -46,6 +46,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -170,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
   private boolean debug;
   private boolean wasKeyboardOpened;
   private float fabBaseY;
+  private int focusedScrollOffset;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -408,6 +410,7 @@ public class MainActivity extends AppCompatActivity {
       WindowInsetsAnimationCompat animation;
       int bottomInsetStart, bottomInsetEnd;
       float yStart, yEnd;
+      int yScrollStart, yScrollEnd;
 
       @Override
       public void onPrepare(@NonNull WindowInsetsAnimationCompat animation) {
@@ -416,6 +419,11 @@ public class MainActivity extends AppCompatActivity {
           bottomInsetStart = systemBarBehavior.getAdditionalBottomInset();
         }
         yStart = binding.fabMain.getY();
+        // scroll offset to keep focused view visible
+        ViewGroup scrollView = scrollBehavior.getScrollView();
+        if (scrollView != null) {
+          yScrollStart = scrollView.getScrollY();
+        }
       }
 
       @NonNull
@@ -429,6 +437,11 @@ public class MainActivity extends AppCompatActivity {
         }
         yEnd = binding.fabMain.getY();
         binding.fabMain.setY(yStart);
+        // scroll offset to keep focused view visible
+        ViewGroup scrollView = scrollBehavior.getScrollView();
+        if (scrollView != null) {
+          yScrollEnd = yScrollStart + focusedScrollOffset;
+        }
         return bounds;
       }
 
@@ -446,6 +459,13 @@ public class MainActivity extends AppCompatActivity {
           systemBarBehavior.refresh(false);
         }
         binding.fabMain.setY(MathUtils.lerp(yStart, yEnd, animation.getInterpolatedFraction()));
+        // scroll offset to keep focused view visible
+        ViewGroup scrollView = scrollBehavior.getScrollView();
+        if (scrollView != null) {
+          scrollView.setScrollY(
+              (int) MathUtils.lerp(yScrollStart, yScrollEnd, animation.getInterpolatedFraction())
+          );
+        }
         return insets;
       }
     };
@@ -467,6 +487,19 @@ public class MainActivity extends AppCompatActivity {
         float elevation = UiUtil.dpToPx(this, 6);
         ViewCompat.setElevation(binding.fabMain, elevation);
         binding.fabMain.setCompatElevation(elevation);
+
+        // scroll offset to keep focused view visible
+        View focused = getCurrentFocus();
+        if (focused != null) {
+          int[] location = new int[2];
+          focused.getLocationInWindow(location);
+          location[1] += focused.getHeight();
+          int screenHeight = UiUtil.getDisplayHeight(this);
+          int bottomSpace = screenHeight - location[1];
+          focusedScrollOffset = bottomInset - bottomSpace;
+        } else {
+          focusedScrollOffset = 0;
+        }
       } else {
         binding.fabMain.setY(fabBaseY);
         scrollBehavior.updateSnackbarAnchor();
@@ -479,6 +512,8 @@ public class MainActivity extends AppCompatActivity {
           wasKeyboardOpened = false;
           scrollBehavior.setBottomBarVisibility(true);
         }
+        // scroll offset to keep focused view visible
+        focusedScrollOffset = 0;
       }
       return insets;
     });
