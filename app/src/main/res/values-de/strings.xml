@@ -98,7 +98,11 @@
   <string name="action_open_scanner">Scanner öffnen</string>
   <string name="action_discard">Verwerfen</string>
   <string name="action_clear_form">Formular leeren</string>
+  <!-- Short form for "Only link barcode to existing product", this should fit into a
+  button so keep it short. -->
+  <string name="action_link_and_clear">Nur verlinken</string>
   <string name="action_toggle_done">Status wechseln</string>
+  <string name="action_change_layout">Layout wechseln</string>
   <string name="action_edit_notes">Notizen bearbeiten</string>
   <string name="action_add_missing">Fehlende Produkte hinzufügen</string>
   <string name="action_purchase_done_items">Erledigte Einträge einkaufen</string>
@@ -326,6 +330,8 @@
   <string name="msg_feedback">Haben Sie Wünsche, Fragen oder einen Fehler gefunden? Kontaktieren Sie uns und wir helfen Ihnen gerne.\nAnsonsten wären wir sehr glücklich über eine gute Bewertung im Play Store.</string>
   <string name="msg_point_at_barcode">Richten Sie die Kamera auf einen Barcode</string>
   <string name="msg_press_hold_confirm">Drücken und halten, um das Löschen zu bestätigen</string>
+  <string name="msg_recipe_consume_ask">Sicher, dass alle Zutaten, die vom Rezept für \"%1$s\" benötigt werden, aus dem Bestand entfernt werden sollen? (Zutaten markiert mit \"Nur prüfen, ob eine beliebige Menge im Bestand verfügbar ist\" werden ignoriert)</string>
+  <string name="msg_recipe_shopping_list_ask">Alle fehlenden Zutaten vom Rezept für \"%1$s\" wirklich auf den Einkaufszettel setzen?\n\nEntfernen Sie den Haken einer Zutat, um diese nicht auf den Einkaufszettel zu übernehmen:</string>
   <string name="msg_welcome">Willkommen bei Grocy Android!</string>
   <string name="msg_welcome_introduce">Um grocy produktiv nutzen zu können, brauchen Sie Ihren eigenen Server oder das grocy Add-on für Home Assistant.\nWenn Sie diese App nur ausprobieren möchten, können Sie den Demo-Server von Bernd Bestel benutzen, dem Entwickler von grocy.</string>
   <string name="msg_choose_option_below">Bitte wählen Sie eine der Optionen unten aus.</string>
@@ -500,7 +506,6 @@
   <string name="title_product_edit">Produkt bearbeiten</string>
   <string name="title_tasks">Aufgaben</string>
   <string name="title_task_entry">Aufgabe</string>
-  <string name="title_task_add">Aufgabe hinzufügen</string>
   <string name="title_master_data">Stammdaten</string>
   <string name="title_stock_entries">Bestandseinträge</string>
   <string name="title_stock_entry">Bestandseintrag</string>
@@ -531,10 +536,16 @@
   <string name="title_chores">Hausarbeiten</string>
   <string name="title_chore">Hausarbeit</string>
   <string name="title_recipes">Rezepte</string>
-  <string name="title_recipe_create">Rezept erstellen</string>
-  <string name="title_recipe_edit">Rezept bearbeiten</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Editor</string>
+  <string name="title_task_new">Neue Aufgabe</string>
+  <string name="title_task_edit">Aufgabe bearbeiten</string>
+  <string name="title_entry_new">Neuer Eintrag</string>
+  <string name="title_entry_edit">Eintrag bearbeiten</string>
+  <string name="title_ingredient_new">Neue Zutat</string>
+  <string name="title_ingredient_edit">Zutat bearbeiten</string>
+  <string name="title_recipe_create">Neues Rezept</string>
+  <string name="title_recipe_edit">Rezept bearbeiten</string>
 
   <string name="title_spoiled">Verdorben</string>
   <string name="title_use_specific">Bestimmten Bestandseintrag verwenden</string>
@@ -553,8 +564,6 @@
   <string name="title_unit_price_specific">%1$s Preis</string>
   <string name="title_stock_entry_no_specific">Kein bestimmter Eintrag</string>
   <string name="title_list_entry">Eintrag</string>
-  <string name="title_edit_list_entry">Eintrag bearbeiten</string>
-  <string name="title_create_list_entry">Eintrag erstellen</string>
   <string name="title_edit_barcode">Barcode bearbeiten</string>
   <string name="title_create_barcode">Barcode erstellen</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
@@ -793,6 +802,10 @@
   <string name="property_qu_stock">Mengeneinheit Bestand</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Faktor Einkauf zu Bestand Mengeneinheit</string>
+  <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
+  <string name="property_quantity_unit_from">Konvertieren von</string>
+  <!-- Example: "Convert to cup"; This string is part of a pair, there is also 'Convert from' -->
+  <string name="property_quantity_unit_to">Konvertieren zu</string>
   <string name="property_factor">Faktor</string>
   <string name="property_barcode">Barcode</string>
   <string name="property_barcodes">Barcodes</string>
@@ -1024,6 +1037,10 @@
   <string name="category_network">Netzwerk</string>
   <string name="category_network_proxy">Proxy</string>
   <string name="category_behavior">Verhalten</string>
+  <string name="category_display_behavior">Anzeigeverhalten</string>
+  <string name="category_input_behavior">Eingabeverhalten</string>
+  <string name="category_additional_services">Zusätzliche Dienste</string>
+  <string name="category_other_behavior">Sonstiges Verhalten</string>
   <string name="category_debugging">Fehlersuche</string>
   <string name="category_new_product">Neues Produkt</string>
   <string name="category_existing_products">Vorhandene Produkte</string>
@@ -1107,6 +1124,10 @@
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">Bottom sheets vollständig ausfahren</string>
   <string name="setting_expand_bottom_sheets_description">Im Querformat</string>
+  <string name="setting_bottom_menu_button">Knopf für Hauptmenü anzeigen</string>
+  <string name="setting_bottom_menu_button_description">In unterer App-Leiste</string>
+  <string name="setting_turn_on_quick_mode">Schnellmodus standardmäßig anschalten</string>
+  <string name="setting_turn_on_quick_mode_description">Wenn der Scan-Knopf auf der Übersichtsseite verwendet wird</string>
   <string name="setting_speed_up_start">App-Start beschleunigen</string>
   <string name="setting_speed_up_start_description">Hat nur auf schnellen Geräten eine Auswirkung</string>
   <string name="setting_date_keyboard_input">Datum mit Tastatur eingeben</string>

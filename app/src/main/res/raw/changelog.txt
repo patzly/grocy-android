@@ -18,6 +18,7 @@
 - Fixed: On login pages all barcode formats were allowed, now only QR code format is recognized
 - Fixed: Deprecated Google Play developer profile link
 - Fixed: Demo domain change with translation which has a specific region
+- Fixed: Focused input field covered by keyboard
 
 ## 3.1.1
 

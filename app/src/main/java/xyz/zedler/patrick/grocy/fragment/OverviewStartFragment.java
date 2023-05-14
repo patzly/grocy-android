@@ -96,11 +96,23 @@ public class OverviewStartFragment extends BaseFragment {
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    ViewUtil.setOnlyOverScrollStretchEnabled(binding.scrollHorizActions);
-    binding.scrollHorizActions.post(
+    ViewUtil.setOnlyOverScrollStretchEnabled(binding.scrollHorizActionsStockOverview);
+    binding.scrollHorizActionsStockOverview.post(
         () -> {
           if (binding == null) return;
-          binding.scrollHorizActions.fullScroll(
+          binding.scrollHorizActionsStockOverview.fullScroll(
+              UiUtil.isLayoutRtl(activity)
+                  ? HorizontalScrollView.FOCUS_LEFT
+                  : HorizontalScrollView.FOCUS_RIGHT
+          );
+        }
+    );
+
+    ViewUtil.setOnlyOverScrollStretchEnabled(binding.scrollHorizActionsShoppingList);
+    binding.scrollHorizActionsShoppingList.post(
+        () -> {
+          if (binding == null) return;
+          binding.scrollHorizActionsShoppingList.fullScroll(
               UiUtil.isLayoutRtl(activity)
                   ? HorizontalScrollView.FOCUS_LEFT
                   : HorizontalScrollView.FOCUS_RIGHT

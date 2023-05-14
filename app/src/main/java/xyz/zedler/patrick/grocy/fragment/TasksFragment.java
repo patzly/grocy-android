@@ -247,7 +247,7 @@ public class TasksFragment extends BaseFragment implements
     activity.updateBottomAppBar(true, R.menu.menu_tasks, this::onMenuItemClick);
     activity.updateFab(
         R.drawable.ic_round_add_anim,
-        R.string.action_add,
+        R.string.title_task_new,
         Constants.FAB.TAG.ADD,
         savedInstanceState == null,
         () -> activity.navigateFragment(

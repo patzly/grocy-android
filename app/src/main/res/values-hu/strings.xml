@@ -419,8 +419,6 @@
   <string name="title_unit_price_specific">%1$s ár</string>
   <string name="title_stock_entry_no_specific">Nincs megadott bejegyzés</string>
   <string name="title_list_entry">Lista bejegyzés</string>
-  <string name="title_edit_list_entry">Lista bejegyzés módosítás</string>
-  <string name="title_create_list_entry">Lista bejegyzés létrehozás</string>
   <string name="title_edit_barcode">Vonalkód módosítása</string>
   <string name="title_create_barcode">Vonalkód létrehozása</string>
   <string name="title_shopping_list_edit">Bevásárlólista módosítás</string>

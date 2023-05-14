@@ -517,7 +517,6 @@
   <string name="title_product_edit">Редактировать продукт</string>
   <string name="title_tasks">Задачи</string>
   <string name="title_task_entry">Ввод задачи</string>
-  <string name="title_task_add">Добавить задачу</string>
   <string name="title_master_data">Основные данные</string>
   <string name="title_stock_entries">Список запасов</string>
   <string name="title_stock_entry">Ввод запасов</string>
@@ -570,8 +569,6 @@
   <string name="title_unit_price_specific">Цена за %1$s</string>
   <string name="title_stock_entry_no_specific">Неопределенный запас</string>
   <string name="title_list_entry">Элемент списка</string>
-  <string name="title_edit_list_entry">Редактировать элемент списка</string>
-  <string name="title_create_list_entry">Создать элемент списка</string>
   <string name="title_edit_barcode">Изменить штрихкод</string>
   <string name="title_create_barcode">Создать штрихкод</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
