@@ -331,8 +331,6 @@
   <string name="title_unit_price_specific">%1$s cena</string>
   <string name="title_stock_entry_no_specific">Brak konkretnego wpisu</string>
   <string name="title_list_entry">Wpis listy</string>
-  <string name="title_edit_list_entry">Edytuj wpis listy</string>
-  <string name="title_create_list_entry">Utwórz wpis listy</string>
   <string name="title_shopping_list_edit">Edytuj listę zakupów</string>
   <string name="title_shopping_list_new">Utwórz nową listę zakupów</string>
   <string name="title_shopping_mode">Tryb zakupów</string>

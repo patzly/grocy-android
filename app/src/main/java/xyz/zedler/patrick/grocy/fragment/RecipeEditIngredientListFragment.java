@@ -213,7 +213,7 @@ public class RecipeEditIngredientListFragment extends BaseFragment
     activity.updateBottomAppBar(true, R.menu.menu_empty);
     activity.updateFab(
         R.drawable.ic_round_add_anim,
-        R.string.action_add,
+        R.string.title_ingredient_new,
         Constants.FAB.TAG.ADD,
         savedInstanceState == null,
         () -> activity.navigateFragment(RecipeEditIngredientListFragmentDirections

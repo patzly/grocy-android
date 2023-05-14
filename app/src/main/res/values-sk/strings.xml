@@ -495,7 +495,6 @@
   <string name="title_product_edit">Upraviť výrobok</string>
   <string name="title_tasks">Úlohy</string>
   <string name="title_task_entry">Úloha</string>
-  <string name="title_task_add">Pridať úlohu</string>
   <string name="title_master_data">Hlavné údaje</string>
   <string name="title_stock_entries">Položky z zásobe</string>
   <string name="title_shopping_list">Nákupný zoznam</string>
@@ -540,8 +539,6 @@
   <string name="title_unit_price_specific">%1$s cena</string>
   <string name="title_stock_entry_no_specific">Žiadna konkrétna položka</string>
   <string name="title_list_entry">Položka v zozname</string>
-  <string name="title_edit_list_entry">Upraviť položku v zozname</string>
-  <string name="title_create_list_entry">Vytvoriť položku v zozname</string>
   <string name="title_edit_barcode">Upraviť čiarový kód</string>
   <string name="title_create_barcode">Vytvorť čiarový kód</string>
   <string name="title_shopping_list_edit">Upraviť nákupný zoznam</string>

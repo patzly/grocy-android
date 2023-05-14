@@ -513,7 +513,6 @@
   <string name="title_product_edit">Edit product</string>
   <string name="title_tasks">Tasks</string>
   <string name="title_task_entry">Task entry</string>
-  <string name="title_task_add">Add task</string>
   <string name="title_master_data">Master data</string>
   <string name="title_stock_entries">Stock entries</string>
   <string name="title_stock_entry">Stock entry</string>
@@ -544,10 +543,16 @@
   <string name="title_chores">Chores</string>
   <string name="title_chore">Chore</string>
   <string name="title_recipes">Recipes</string>
-  <string name="title_recipe_create">Create recipe</string>
-  <string name="title_recipe_edit">Edit recipe</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Editor</string>
+  <string name="title_task_new">New task</string>
+  <string name="title_task_edit">Edit task</string>
+  <string name="title_entry_new">New entry</string>
+  <string name="title_entry_edit">Edit entry</string>
+  <string name="title_ingredient_new">New ingredient</string>
+  <string name="title_ingredient_edit">Edit ingredient</string>
+  <string name="title_recipe_create">New recipe</string>
+  <string name="title_recipe_edit">Edit recipe</string>
 
   <string name="title_home_assistant" translatable="false">Home Assistant</string>
   <string name="title_grocy" translatable="false">grocy</string>
@@ -572,8 +577,6 @@
   <string name="title_unit_price_specific">%1$s price</string>
   <string name="title_stock_entry_no_specific">No specific entry</string>
   <string name="title_list_entry">List entry</string>
-  <string name="title_edit_list_entry">Edit list entry</string>
-  <string name="title_create_list_entry">Create list entry</string>
   <string name="title_edit_barcode">Edit barcode</string>
   <string name="title_create_barcode">Create barcode</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->

@@ -489,7 +489,6 @@
   <string name="title_product_edit">Modifica prodotto</string>
   <string name="title_tasks">Attività</string>
   <string name="title_task_entry">Inserimento attività</string>
-  <string name="title_task_add">Aggiungi attività</string>
   <string name="title_master_data">Dati</string>
   <string name="title_stock_entries">Voci nella dispensa</string>
   <string name="title_stock_entry">Voce nella dispensa</string>
@@ -542,8 +541,6 @@
   <string name="title_unit_price_specific">%1$s prezzo</string>
   <string name="title_stock_entry_no_specific">È il prezzo totale</string>
   <string name="title_list_entry">Voce della lista</string>
-  <string name="title_edit_list_entry">Modifica voce della lista</string>
-  <string name="title_create_list_entry">Crea una voce nella lista</string>
   <string name="title_edit_barcode">Modifica codice a barre</string>
   <string name="title_create_barcode">Crea codice a barre</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->

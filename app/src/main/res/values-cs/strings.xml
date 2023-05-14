@@ -546,7 +546,6 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="title_product_edit">Upravit produkt</string>
   <string name="title_tasks">Úkoly</string>
   <string name="title_task_entry">Úkol</string>
-  <string name="title_task_add">Přidat úkol</string>
   <string name="title_master_data">Základní data</string>
   <string name="title_stock_entries">Položky zásob</string>
   <string name="title_stock_entry">Položka zásob</string>
@@ -599,8 +598,6 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="title_unit_price_specific">Cena za %1$s</string>
   <string name="title_stock_entry_no_specific">Nespecifikovaná položka</string>
   <string name="title_list_entry">Seznam položek</string>
-  <string name="title_edit_list_entry">Upravit seznam položek</string>
-  <string name="title_create_list_entry">Vytvořit seznam položek</string>
   <string name="title_edit_barcode">Upravit čárový kód</string>
   <string name="title_create_barcode">Vytvořit čárový kód</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->

@@ -482,7 +482,6 @@
   <string name="title_product_edit">Muuda toodet</string>
   <string name="title_tasks">Ülesanded</string>
   <string name="title_task_entry">Ülesande sisend</string>
-  <string name="title_task_add">Lisa ülesanne</string>
   <string name="title_master_data">Põhiandmed</string>
   <string name="title_stock_entries">Varude sisendid</string>
   <string name="title_stock_entry">Varude sisend</string>
@@ -535,8 +534,6 @@
   <string name="title_unit_price_specific">%1$s hind</string>
   <string name="title_stock_entry_no_specific">Spetsiifiline sisend puudub</string>
   <string name="title_list_entry">Nimekirja sisend</string>
-  <string name="title_edit_list_entry">Muuda nimekirja sisendit</string>
-  <string name="title_create_list_entry">Loo nimekirja sisend</string>
   <string name="title_edit_barcode">Muuda triipkoodi</string>
   <string name="title_create_barcode">Loo triipkood</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->

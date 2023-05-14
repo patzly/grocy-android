@@ -258,7 +258,7 @@ public class RecipesFragment extends BaseFragment implements
     activity.updateBottomAppBar(true, R.menu.menu_recipes, this::onMenuItemClick);
     activity.updateFab(
         R.drawable.ic_round_add_anim,
-        R.string.action_add,
+        R.string.title_recipe_create,
         Constants.FAB.TAG.ADD,
         savedInstanceState == null,
         () -> activity.navigateFragment(

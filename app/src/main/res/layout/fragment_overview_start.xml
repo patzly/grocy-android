@@ -540,9 +540,9 @@
                       <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_add_shopping_list_item"
                         style="@style/Widget.Grocy.Button.TonalButton.Icon"
-                        android:text="@string/action_add"
+                        android:text="@string/title_entry_new"
+                        android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_shoppingListItemEditFragmentCreate)}"
                         android:layout_marginStart="8dp"
-                        android:visibility="gone"
                         app:icon="@drawable/ic_round_add_anim" />
 
                     </LinearLayout>
@@ -880,7 +880,7 @@
                     style="@style/Widget.Grocy.Button.TonalButton.Icon"
                     android:layout_gravity="end"
                     android:layout_marginTop="8dp"
-                    android:text="@string/title_task_add"
+                    android:text="@string/title_task_new"
                     android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_taskEntryEditFragmentCreate)}"
                     app:clickUtil="@{clickUtil}"
                     app:icon="@drawable/ic_round_add_anim" />

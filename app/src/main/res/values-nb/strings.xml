@@ -333,8 +333,6 @@
   <string name="title_unit_price_specific">%1$s pris</string>
   <string name="title_stock_entry_no_specific">Ingen spesiell oppføring</string>
   <string name="title_list_entry">Listeoppføring</string>
-  <string name="title_edit_list_entry">Endre listeoppføring</string>
-  <string name="title_create_list_entry">Lag listeoppføring</string>
   <string name="title_shopping_list_edit">Endre handleliste</string>
   <string name="title_shopping_list_new">Ny handleliste</string>
   <string name="title_shopping_mode">Handlemodus</string>

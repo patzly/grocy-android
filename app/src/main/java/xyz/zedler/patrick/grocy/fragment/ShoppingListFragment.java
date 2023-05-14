@@ -281,7 +281,7 @@ public class ShoppingListFragment extends BaseFragment implements
     );
     activity.updateFab(
         R.drawable.ic_round_add_anim,
-        R.string.action_add,
+        R.string.title_entry_new,
         Constants.FAB.TAG.ADD,
         ShoppingListFragmentArgs.fromBundle(requireArguments()).getAnimateStart()
             && savedInstanceState == null,

@@ -107,7 +107,7 @@ public class ShortcutUtil {
         ));
       } else if (shortcutInfo.getId().equals(ADD_TASK)) {
         newShortcutInfos.add(createShortcutTasks(
-            context, context.getString(R.string.title_task_add)
+            context, context.getString(R.string.title_task_new)
         ));
       } else if (shortcutInfo.getId().equals(RECIPES)) {
         newShortcutInfos.add(createShortcutRecipes(
