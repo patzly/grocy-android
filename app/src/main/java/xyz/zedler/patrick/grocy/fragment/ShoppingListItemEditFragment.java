@@ -209,6 +209,16 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
     viewModel.getFormData().getQuantityUnitsLive().observe(getViewLifecycleOwner(), qUs -> {
     });
 
+    if (savedInstanceState == null && !args.getAction().equals(ACTION.EDIT)) {
+      if (binding.autoCompleteProduct.getText() == null
+          || binding.autoCompleteProduct.getText().length() == 0) {
+        new Handler().postDelayed(
+            () -> activity.showKeyboard(binding.autoCompleteProduct),
+            50
+        );
+      }
+    }
+
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
     }
