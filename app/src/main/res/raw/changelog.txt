@@ -14,6 +14,7 @@
 - Improved: Added separate buttons for shopping mode and new task to overview start page
 - Improved: Updated plural rules for quantity units in all project languages from Transifex
 - Improved: Better indication of invalid fields on unit conversion edit page (#682)
+- Improved: themed icon support for app shortcuts
 - Fixed: Home Assistant offline error (#670)
 - Fixed: On login pages all barcode formats were allowed, now only QR code format is recognized
 - Fixed: Deprecated Google Play developer profile link
