@@ -172,7 +172,7 @@
             <TextView
               style="@style/Widget.Grocy.TextView.Paragraph.Card"
               android:text="@{viewModel.loginErrorHassLog}"
-              android:textAppearance="?attr/textAppearanceBodySmall" />
+              android:textAppearance="?attr/textAppearanceBodyMedium" />
 
           </com.google.android.material.card.MaterialCardView>
 
