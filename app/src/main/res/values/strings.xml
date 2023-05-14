@@ -101,9 +101,9 @@
   <string name="action_open_scanner">Open scanner</string>
   <string name="action_discard">Discard</string>
   <string name="action_clear_form">Clear form</string>
-  <!-- Short form for "Link barcode to existing product and clear form", this should fit into a
-  button so keep it short. &amp; is the escaped version of & symbol, you must also use it -->
-  <string name="action_link_and_clear">Link &amp; Clear</string>
+  <!-- Short form for "Only link barcode to existing product", this should fit into a
+  button so keep it short. -->
+  <string name="action_link_and_clear">Link only</string>
   <string name="action_toggle_done">Toggle done</string>
   <string name="action_change_layout">Change layout</string>
   <string name="action_edit_notes">Edit notes</string>
