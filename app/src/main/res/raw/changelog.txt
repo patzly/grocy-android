@@ -20,6 +20,7 @@
 - Fixed: Deprecated Google Play developer profile link
 - Fixed: Demo domain change with translation which has a specific region
 - Fixed: Focused input field covered by keyboard
+- Fixed: Crashes where parsing a wrong formatted decimal number was the reason (again #652)
 
 ## 3.1.1
 

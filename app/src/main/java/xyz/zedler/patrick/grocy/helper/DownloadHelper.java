@@ -123,7 +123,8 @@ public class DownloadHelper {
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
     appDatabase = AppDatabase.getAppDatabase(application.getApplicationContext());
-    gson = new GsonBuilder().registerTypeAdapter(Double.class, new BadDoubleDeserializer()).create();
+    gson = new GsonBuilder().registerTypeAdapter(Double.class, new BadDoubleDeserializer())
+        .registerTypeAdapter(double.class, new CustomDoubleDeserializer()).create();
     requestQueue = RequestQueueSingleton.getInstance(application).getRequestQueue();
     grocyApi = new GrocyApi(application);
     apiKey = sharedPrefs.getString(Constants.PREF.API_KEY, "");
@@ -3215,4 +3216,19 @@ public class DownloadHelper {
     }
 
   }
+
+  public class CustomDoubleDeserializer implements JsonDeserializer<Double> {
+    @Override
+    public Double deserialize(JsonElement element, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+      try {
+        // Ersetze Komma durch Punkt
+        String value = element.getAsString();
+        value = value.replace(',', '.');
+        return Double.parseDouble(value);
+      } catch (NumberFormatException e) {
+        throw new JsonParseException(e);
+      }
+    }
+  }
+
 }
