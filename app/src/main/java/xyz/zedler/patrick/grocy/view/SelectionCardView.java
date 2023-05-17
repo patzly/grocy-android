@@ -76,6 +76,7 @@ public class SelectionCardView extends MaterialCardView {
     innerCard.setLayoutParams(innerParams);
     innerCard.setRadius(innerSize / 2f);
     innerCard.setStrokeWidth(UiUtil.dpToPx(context, 1));
+    innerCard.setStrokeColor(ResUtil.getColorAttr(context, R.attr.colorOutline));
     innerCard.setCheckable(false);
     addView(innerCard);
   }
