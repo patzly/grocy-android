@@ -97,26 +97,26 @@ public class MasterProductFragment extends BaseFragment {
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     binding.categoryOptional.setOnClickListener(
-        v -> activity.navigateFragment(MasterProductFragmentDirections
+        v -> activity.navUtil.navigateFragment(MasterProductFragmentDirections
         .actionMasterProductFragmentToMasterProductCatOptionalFragment(viewModel.getAction())
         .setProduct(viewModel.getFilledProduct())));
     binding.categoryLocation.setOnClickListener(
-        v -> activity.navigateFragment(MasterProductFragmentDirections
+        v -> activity.navUtil.navigateFragment(MasterProductFragmentDirections
         .actionMasterProductFragmentToMasterProductCatLocationFragment(viewModel.getAction())
         .setProduct(viewModel.getFilledProduct())));
     binding.categoryDueDate.setOnClickListener(
-        v -> activity.navigateFragment(MasterProductFragmentDirections
+        v -> activity.navUtil.navigateFragment(MasterProductFragmentDirections
         .actionMasterProductFragmentToMasterProductCatDueDateFragment(viewModel.getAction())
         .setProduct(viewModel.getFilledProduct())));
     binding.categoryAmount.setOnClickListener(
-        v -> activity.navigateFragment(MasterProductFragmentDirections
+        v -> activity.navUtil.navigateFragment(MasterProductFragmentDirections
         .actionMasterProductFragmentToMasterProductCatAmountFragment(viewModel.getAction())
         .setProduct(viewModel.getFilledProduct())));
     binding.categoryQuantityUnit.setOnClickListener(
-        v -> activity.navigateFragment(MasterProductFragmentDirections
+        v -> activity.navUtil.navigateFragment(MasterProductFragmentDirections
         .actionMasterProductFragmentToMasterProductCatQuantityUnitFragment(viewModel.getAction())
         .setProduct(viewModel.getFilledProduct())));
     binding.categoryBarcodes.setOnClickListener(v -> {
@@ -124,7 +124,7 @@ public class MasterProductFragment extends BaseFragment {
         activity.showSnackbar(R.string.subtitle_product_not_on_server, true);
         return;
       }
-      activity.navigateFragment(MasterProductFragmentDirections
+      activity.navUtil.navigateFragment(MasterProductFragmentDirections
           .actionMasterProductFragmentToMasterProductCatBarcodesFragment(viewModel.getAction())
           .setProduct(viewModel.getFilledProduct()));
     });
@@ -133,7 +133,7 @@ public class MasterProductFragment extends BaseFragment {
         activity.showSnackbar(R.string.subtitle_product_not_on_server, true);
         return;
       }
-      activity.navigateFragment(MasterProductFragmentDirections
+      activity.navUtil.navigateFragment(MasterProductFragmentDirections
           .actionMasterProductFragmentToMasterProductCatConversionsFragment(viewModel.getAction())
           .setProduct(viewModel.getFilledProduct()));
     });
@@ -150,7 +150,7 @@ public class MasterProductFragment extends BaseFragment {
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
       } else if (event.getType() == Event.NAVIGATE_UP) {
-        activity.navigateUp();
+        activity.navUtil.navigateUp();
       } else if (event.getType() == Event.SET_PRODUCT_ID) {
         int id = event.getBundle().getInt(Constants.ARGUMENT.PRODUCT_ID);
         setForPreviousDestination(Constants.ARGUMENT.PRODUCT_ID, id);

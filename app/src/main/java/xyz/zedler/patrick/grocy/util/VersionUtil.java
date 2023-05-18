@@ -20,8 +20,19 @@
 package xyz.zedler.patrick.grocy.util;
 
 import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import androidx.annotation.NonNull;
+import java.util.ArrayList;
+import java.util.Arrays;
+import xyz.zedler.patrick.grocy.BuildConfig;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.NavigationMainDirections;
+import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
 
 public class VersionUtil {
 
@@ -51,6 +62,60 @@ public class VersionUtil {
     } catch (IllegalArgumentException e) {
       return true;
     }
+  }
+
+  public static void showCompatibilityBottomSheetIfNecessary(
+      MainActivity mainActivity,
+      SharedPreferences sharedPrefs
+  ) {
+    String version = sharedPrefs.getString(Constants.PREF.GROCY_VERSION, null);
+    if (version == null || version.isEmpty()) {
+      return;
+    }
+    ArrayList<String> supportedVersions = new ArrayList<>(
+        Arrays.asList(mainActivity.getResources().getStringArray(R.array.compatible_grocy_versions))
+    );
+    if (supportedVersions.contains(version)) {
+      return;
+    }
+
+    // If user already ignored warning, do not display again
+    String ignoredVersion = sharedPrefs.getString(
+        Constants.PREF.VERSION_COMPATIBILITY_IGNORED, null
+    );
+    if (ignoredVersion != null && ignoredVersion.equals(version)) {
+      return;
+    }
+
+    Bundle bundle = new Bundle();
+    bundle.putString(Constants.ARGUMENT.VERSION, version);
+    bundle.putStringArrayList(Constants.ARGUMENT.SUPPORTED_VERSIONS, supportedVersions);
+    mainActivity.showBottomSheet(new CompatibilityBottomSheet(), bundle);
+  }
+
+  public static void showVersionChangelogIfAppUpdated(
+      MainActivity mainActivity,
+      SharedPreferences sharedPrefs
+  ) {
+    int versionNew = BuildConfig.VERSION_CODE;
+    int versionOld = sharedPrefs.getInt(PREF.LAST_VERSION, 0);
+    if (versionOld == 0) {
+      sharedPrefs.edit().putInt(PREF.LAST_VERSION, versionNew).apply();
+    } else if (versionOld != versionNew) {
+      sharedPrefs.edit().putInt(PREF.LAST_VERSION, versionNew).apply();
+      new Handler(Looper.getMainLooper()).postDelayed(
+          () -> showChangelogBottomSheet(mainActivity), 900
+      );
+    }
+  }
+
+  public static void showChangelogBottomSheet(MainActivity mainActivity) {
+    xyz.zedler.patrick.grocy.NavigationMainDirections.ActionGlobalTextDialog action
+        = NavigationMainDirections.actionGlobalTextDialog();
+    action.setTitle(R.string.info_changelog);
+    action.setFile(R.raw.changelog);
+    action.setHighlights(new String[]{"New:", "Improved:", "Fixed:"});
+    mainActivity.navUtil.navigate(action);
   }
 
   private static class Version implements Comparable<Version> {

@@ -121,7 +121,7 @@
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{v -> activity.navigateFragment(SettingsCatDebuggingFragmentDirections.actionSettingsCatDebuggingFragmentToLogFragment())}"
+            android:onClick="@{v -> activity.navUtil.navigateFragment(SettingsCatDebuggingFragmentDirections.actionSettingsCatDebuggingFragmentToLogFragment())}"
             app:clickUtil="@{clickUtil}">
 
             <ImageView

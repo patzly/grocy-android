@@ -105,7 +105,7 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -113,7 +113,7 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
       } else if (event.getType() == Event.NAVIGATE_UP) {
-        activity.navigateUp();
+        activity.navUtil.navigateUp();
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
@@ -188,7 +188,7 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
         R.string.action_add,
         Constants.FAB.TAG.ADD,
         savedInstanceState == null,
-        () -> activity.navigateFragment(MasterProductCatBarcodesFragmentDirections
+        () -> activity.navUtil.navigateFragment(MasterProductCatBarcodesFragmentDirections
             .actionMasterProductCatBarcodesFragmentToMasterProductCatBarcodesEditFragment(
                 viewModel.getFilledProduct()
             )
@@ -201,7 +201,7 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
     if (clickUtil.isDisabled()) {
       return;
     }
-    activity.navigateFragment(MasterProductCatBarcodesFragmentDirections
+    activity.navUtil.navigateFragment(MasterProductCatBarcodesFragmentDirections
         .actionMasterProductCatBarcodesFragmentToMasterProductCatBarcodesEditFragment(viewModel.getFilledProduct())
         .setProductBarcode(productBarcode)
     );

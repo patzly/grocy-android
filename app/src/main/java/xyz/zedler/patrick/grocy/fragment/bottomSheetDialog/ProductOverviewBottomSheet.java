@@ -156,7 +156,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     );
     binding.toolbar.setOnMenuItemClickListener(item -> {
       if (item.getItemId() == R.id.action_add_to_shopping_list) {
-        activity.navigateDeepLink(R.string.deep_link_shoppingListItemEditFragment,
+        activity.navUtil.navigateDeepLink(R.string.deep_link_shoppingListItemEditFragment,
             new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
                 .setProductId(String.valueOf(product.getId())).build().toBundle());
         dismiss();
@@ -177,14 +177,14 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
         return true;
       } else if (item.getItemId() == R.id.action_edit_product) {
         String productId = String.valueOf(product.getId());
-        activity.navigateDeepLink(R.string.deep_link_masterProductFragment,
+        activity.navUtil.navigateDeepLink(R.string.deep_link_masterProductFragment,
             new MasterProductFragmentArgs.Builder(Constants.ACTION.EDIT)
                 .setProductId(productId).build().toBundle());
         dismiss();
         return true;
       } else if (item.getItemId() == R.id.action_stock_entries) {
         String productId = String.valueOf(product.getId());
-        activity.navigateDeepLink(R.string.deep_link_stockEntriesFragment,
+        activity.navUtil.navigateDeepLink(R.string.deep_link_stockEntriesFragment,
             new StockEntriesFragmentArgs.Builder().setProductId(productId).build().toBundle());
         dismiss();
         return true;

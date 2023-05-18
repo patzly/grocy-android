@@ -72,7 +72,7 @@ public class ShortcutUtil {
             context, context.getString(R.string.title_shopping_list)
         ));
       } else if (shortcutInfo.getId().equals(ADD_TO_SHOPPING_LIST)) {
-        Uri uriAddToShoppingListDeepLink = MainActivity.getUriWithArgs(
+        Uri uriAddToShoppingListDeepLink = NavUtil.getUriWithArgs(
             context.getString(R.string.deep_link_shoppingListItemEditFragment),
             new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
                 .build().toBundle()

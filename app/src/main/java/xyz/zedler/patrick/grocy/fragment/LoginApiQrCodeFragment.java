@@ -92,7 +92,7 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
     binding.toolbar.setOnMenuItemClickListener(item -> {
       int id = item.getItemId();
       if (id == R.id.action_help) {
@@ -102,9 +102,9 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
       } else if (id == R.id.action_website) {
         openGrocyWebsite();
       } else if (id == R.id.action_settings) {
-        activity.navigateDeepLink(R.string.deep_link_settingsFragment);
+        activity.navUtil.navigateDeepLink(R.string.deep_link_settingsFragment);
       } else if (id == R.id.action_about) {
-        activity.navigateDeepLink(R.string.deep_link_aboutFragment);
+        activity.navUtil.navigateDeepLink(R.string.deep_link_aboutFragment);
       }
       return true;
     });
@@ -160,10 +160,10 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
       String apiKey = resultSplit[1];
 
       if (ingressProxyId == null) {
-        activity.navigateFragment(LoginApiQrCodeFragmentDirections
+        activity.navUtil.navigateFragment(LoginApiQrCodeFragmentDirections
             .actionLoginApiQrCodeFragmentToLoginRequestFragment(serverURL, apiKey));
       } else { // grocy home assistant add-on used
-        activity.navigateFragment(LoginApiQrCodeFragmentDirections
+        activity.navUtil.navigateFragment(LoginApiQrCodeFragmentDirections
             .actionLoginApiQrCodeFragmentSelf()
             .setServerURL(serverURLHomeAssistant)
             .setGrocyIngressProxyId(ingressProxyId)
@@ -177,7 +177,7 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
         embeddedFragmentScanner.startScannerIfVisible();
         return;
       }
-      activity.navigateFragment(LoginApiQrCodeFragmentDirections
+      activity.navUtil.navigateFragment(LoginApiQrCodeFragmentDirections
           .actionLoginApiQrCodeFragmentToLoginApiFormFragment()
           .setServerUrl(args.getServerURL())
           .setGrocyIngressProxyId(args.getGrocyIngressProxyId())
@@ -191,7 +191,7 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
   }
 
   public void enterDataManually() {
-    activity.navigateFragment(
+    activity.navUtil.navigateFragment(
         LoginApiQrCodeFragmentDirections.actionLoginApiQrCodeFragmentToLoginApiFormFragment()
     );
   }

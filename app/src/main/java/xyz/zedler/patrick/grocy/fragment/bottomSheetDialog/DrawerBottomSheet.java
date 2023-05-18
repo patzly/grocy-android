@@ -125,7 +125,7 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
     );
 
     binding.buttonDrawerShoppingMode.setOnClickListener(
-        v -> activity.navigateDeepLink(R.string.deep_link_shoppingModeFragment)
+        v -> activity.navUtil.navigateDeepLink(R.string.deep_link_shoppingModeFragment)
     );
     ViewUtil.setTooltipText(binding.buttonDrawerShoppingMode, R.string.title_shopping_mode);
     ViewUtil.setTooltipText(binding.buttonDrawerConsume, R.string.title_consume);
@@ -285,12 +285,12 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
   }
 
   private void navigateCustom(NavDirections directions) {
-    NavOptions.Builder builder = activity.getNavOptionsBuilderFragmentFadeOrSlide(true);
+    NavOptions.Builder builder = activity.navUtil.getNavOptionsBuilderFragmentFadeOrSlide(true);
     builder.setPopUpTo(R.id.overviewStartFragment, false);
     if (activity.getCurrentFragment() instanceof OverviewStartFragment) {
       builder.setExitAnim(R.anim.slide_no);
     }
-    activity.navigate(directions, builder.build());
+    activity.navUtil.navigate(directions, builder.build());
     dismiss();
   }
 

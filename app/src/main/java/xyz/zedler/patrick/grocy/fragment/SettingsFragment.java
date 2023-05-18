@@ -73,7 +73,7 @@ public class SettingsFragment extends BaseFragment {
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(
@@ -114,12 +114,12 @@ public class SettingsFragment extends BaseFragment {
         if (shouldNavigateToBehavior()) {
           setArguments(new SettingsFragmentArgs.Builder(args)
               .setShowCategory(null).build().toBundle());
-          new Handler().postDelayed(() -> activity.navigateFragment(SettingsFragmentDirections
+          new Handler().postDelayed(() -> activity.navUtil.navigateFragment(SettingsFragmentDirections
               .actionSettingsFragmentToSettingsCatBehaviorFragment()), 200);
         } else if (shouldNavigateToServer()) {
           setArguments(new SettingsFragmentArgs.Builder(args)
               .setShowCategory(null).build().toBundle());
-          new Handler().postDelayed(() -> activity.navigateFragment(SettingsFragmentDirections
+          new Handler().postDelayed(() -> activity.navUtil.navigateFragment(SettingsFragmentDirections
               .actionSettingsFragmentToSettingsCatServerFragment()), 200);
         }
       }

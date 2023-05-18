@@ -23,6 +23,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 
 public class PrefsUtil {
 
@@ -35,5 +37,22 @@ public class PrefsUtil {
 
   public static boolean isDebuggingEnabled(Context context) {
     return isDebuggingEnabled(PreferenceManager.getDefaultSharedPreferences(context));
+  }
+
+  public static boolean isServerUrlEmpty(SharedPreferences sharedPrefs) {
+    String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
+    return server == null || server.isEmpty();
+  }
+
+  public static int getModeNight(SharedPreferences sharedPrefs) {
+    return sharedPrefs.getInt(
+        SETTINGS.APPEARANCE.DARK_MODE, SETTINGS_DEFAULT.APPEARANCE.DARK_MODE
+    );
+  }
+
+  public static boolean areHapticsEnabled(SharedPreferences sharedPrefs, Context context) {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.BEHAVIOR.HAPTIC, HapticUtil.areSystemHapticsTurnedOn(context)
+    );
   }
 }

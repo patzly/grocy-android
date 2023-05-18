@@ -98,8 +98,9 @@
   <string name="action_open_scanner">Ouvrir le scanner</string>
   <string name="action_discard">Jeter</string>
   <string name="action_clear_form">Effacer le formulaire</string>
-  <!-- Short form for "Link barcode to existing product and clear form", this should fit into a button so keep it short -->
-  <string name="action_link_and_clear">Lien &amp; Clair</string>
+  <!-- Short form for "Only link barcode to existing product", this should fit into a
+  button so keep it short. -->
+  <string name="action_link_and_clear">Lien seul.</string>
   <string name="action_toggle_done">Basculer la coche</string>
   <string name="action_change_layout">Changer la disposition</string>
   <string name="action_edit_notes">Modifier les notes</string>
@@ -350,7 +351,7 @@
   <string name="msg_point_at_barcode">Dirigez votre appareil photo vers un code-barres</string>
   <string name="msg_press_hold_confirm">Appuyez longuement pour confirmer la suppression</string>
   <string name="msg_recipe_consume_ask">Êtes-vous sûr de vouloir consommer tous les ingrédients nécessaires à la recette \"%1$s\" ? (les ingrédients marqués avec \"uniquement vérifier si une quantité est en stock\" seront ignorés)</string>
-  <string name="msg_recipe_shopping_list_ask">Êtes-vous sûr de vouloir mettre tous les ingrédients manquants pour la recette \"%1$s\" sur la liste de courses ?\n\nDécochez les ingrédients pour ne pas les mettre sur la liste de courses :</string>
+  <string name="msg_recipe_shopping_list_ask">Êtes-vous sûr de vouloir mettre tous les ingrédients manquants nécessaires à la recette \"%1$s\" sur la liste de courses ?\n\nDécochez les ingrédients pour ne pas les mettre sur la liste de courses :</string>
   <string name="msg_welcome">Bienvenue sur Grocy Android !</string>
   <string name="msg_welcome_introduce">Pour utiliser grocy de manière productive, vous avez besoin de votre propre serveur ou du module complémentaire grocy pour Home Assistant.\nSi vous souhaitez simplement essayer cette application, vous pouvez utiliser le serveur de démonstration de Bernd Bestel, le créateur de grocy.</string>
   <string name="msg_choose_option_below">Veuillez choisir une option ci-dessous.</string>
@@ -555,10 +556,16 @@
   <string name="title_chores">Corvées</string>
   <string name="title_chore">Corvée</string>
   <string name="title_recipes">Recettes</string>
-  <string name="title_recipe_create">Créer une recette</string>
-  <string name="title_recipe_edit">Modifier la recette</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Éditeur</string>
+  <string name="title_task_new">Nouvelle tâche</string>
+  <string name="title_task_edit">Modifier la tâche</string>
+  <string name="title_entry_new">Nouvelle entrée</string>
+  <string name="title_entry_edit">Modifier l\'entrée</string>
+  <string name="title_ingredient_new">Nouvel ingrédient</string>
+  <string name="title_ingredient_edit">Modifier l\'ingrédient</string>
+  <string name="title_recipe_create">Nouvelle recette</string>
+  <string name="title_recipe_edit">Modifier la recette</string>
 
   <string name="title_spoiled">Périmé</string>
   <string name="title_use_specific">Utiliser un article en stock spécifique</string>

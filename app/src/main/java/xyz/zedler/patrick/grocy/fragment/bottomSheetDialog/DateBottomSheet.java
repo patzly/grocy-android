@@ -475,7 +475,7 @@ public class DateBottomSheet extends BaseBottomSheetDialogFragment {
 
   public void navigateToSettingsCatBehavior() {
     dismiss();
-    activity.navigateDeepLink(R.string.deep_link_settingsCatBehaviorFragment);
+    activity.navUtil.navigateDeepLink(R.string.deep_link_settingsCatBehaviorFragment);
   }
 
   @Override

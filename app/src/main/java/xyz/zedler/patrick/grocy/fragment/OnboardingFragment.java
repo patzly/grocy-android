@@ -181,7 +181,7 @@ public class OnboardingFragment extends BaseFragment {
       sharedPrefs.edit().putBoolean(Constants.PREF.INTRO_SHOWN, true).apply();
     }
     if (findNavController().getBackQueue().getSize() == 2) { // TODO: Better condition
-      activity.navigate(OnboardingFragmentDirections.actionOnboardingFragmentToNavigationLogin());
+      activity.navUtil.navigate(OnboardingFragmentDirections.actionOnboardingFragmentToNavigationLogin());
       return true;
     } else {
       return false;

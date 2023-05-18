@@ -96,7 +96,7 @@ public class ShoppingListEditFragment extends BaseFragment {
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
       } else if (event.getType() == Event.NAVIGATE_UP) {
-        activity.navigateUp();
+        activity.navUtil.navigateUp();
       } else if (event.getType() == Event.SET_SHOPPING_LIST_ID) {
         int id = event.getBundle().getInt(Constants.ARGUMENT.SELECTED_ID);
         setForDestination(R.id.shoppingListFragment, Constants.ARGUMENT.SELECTED_ID, id);

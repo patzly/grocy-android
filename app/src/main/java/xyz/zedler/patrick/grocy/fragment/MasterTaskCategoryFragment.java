@@ -366,7 +366,7 @@ public class MasterTaskCategoryFragment extends BaseFragment {
       dlHelper.put(
           grocyApi.getObject(ENTITY.TASK_CATEGORIES, editTaskCategory.getId()),
           jsonObject,
-          response -> activity.navigateUp(),
+          response -> activity.navUtil.navigateUp(),
           error -> {
             showErrorMessage(error);
             if (debug) {
@@ -378,7 +378,7 @@ public class MasterTaskCategoryFragment extends BaseFragment {
       dlHelper.post(
           grocyApi.getObjects(ENTITY.TASK_CATEGORIES),
           jsonObject,
-          response -> activity.navigateUp(),
+          response -> activity.navUtil.navigateUp(),
           error -> {
             showErrorMessage(error);
             if (debug) {
@@ -418,7 +418,7 @@ public class MasterTaskCategoryFragment extends BaseFragment {
   public void deleteObject(int taskCategoryId) {
     dlHelper.delete(
         grocyApi.getObject(ENTITY.TASK_CATEGORIES, taskCategoryId),
-        response -> activity.navigateUp(),
+        response -> activity.navUtil.navigateUp(),
         this::showErrorMessage
     );
   }

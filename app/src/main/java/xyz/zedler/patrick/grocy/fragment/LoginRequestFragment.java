@@ -86,8 +86,8 @@ public class LoginRequestFragment extends BaseFragment {
         activity.getScrollBehavior().setCanBottomAppBarBeVisible(true);
 
         activity.updateGrocyApi();
-        activity.createWebSocketClient();
-        activity.resetHassSessionTimer();
+        activity.netUtil.createWebSocketClient();
+        activity.netUtil.resetHassSessionTimer();
         new Handler().postDelayed(this::navigateToStartDestination, 500);
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
@@ -109,12 +109,12 @@ public class LoginRequestFragment extends BaseFragment {
   }
 
   private void navigateToStartDestination() {
-    activity.updateStartDestination();
-    NavOptions.Builder builder = activity.getNavOptionsBuilderFragmentFadeOrSlide(
+    activity.navUtil.updateStartDestination();
+    NavOptions.Builder builder = activity.navUtil.getNavOptionsBuilderFragmentFadeOrSlide(
         false
     );
     builder.setPopUpTo(R.id.navigation_main, true);
-    activity.navigateFragment(
+    activity.navUtil.navigateFragment(
         findNavController().getGraph().getStartDestinationId(), builder.build()
     );
   }

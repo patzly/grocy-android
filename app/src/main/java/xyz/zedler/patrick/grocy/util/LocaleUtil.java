@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.util;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
@@ -32,6 +33,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.Language;
 
@@ -107,6 +109,29 @@ public class LocaleUtil {
       return codeParts[0];
     } else {
       return languageCode;
+    }
+  }
+
+  public static void setLocalizedGrocyDemoInstance(Context context, SharedPreferences sharedPrefs) {
+    Locale locale = LocaleUtil.getLocale();
+    String serverUrl = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
+    if (serverUrl != null && serverUrl.contains("demo.grocy.info")
+        && !serverUrl.contains("test-")) {
+      List<Language> languages = LocaleUtil.getLanguages(context);
+      String demoDomain = null;
+      for (Language language : languages) {
+        String localeStr = locale.getCountry().isEmpty() ? locale.getLanguage()
+            : locale.getLanguage() + "-" + locale.getCountry();
+        if (language.getCode().equals(localeStr)) {
+          demoDomain = language.getDemoDomain();
+        }
+      }
+      if (demoDomain != null && !serverUrl.contains(demoDomain)) {
+        serverUrl = serverUrl.replaceAll(
+            "[a-z]+-?[a-z]*\\.demo\\.grocy\\.info", demoDomain
+        );
+        sharedPrefs.edit().putString(Constants.PREF.SERVER_URL, serverUrl).apply();
+      }
     }
   }
 }

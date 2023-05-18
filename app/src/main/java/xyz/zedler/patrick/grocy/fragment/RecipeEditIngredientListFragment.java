@@ -104,7 +104,7 @@ public class RecipeEditIngredientListFragment extends BaseFragment
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
 
@@ -158,7 +158,7 @@ public class RecipeEditIngredientListFragment extends BaseFragment
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
       } else if (event.getType() == Event.NAVIGATE_UP) {
-        activity.navigateUp();
+        activity.navUtil.navigateUp();
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
@@ -216,7 +216,7 @@ public class RecipeEditIngredientListFragment extends BaseFragment
         R.string.title_ingredient_new,
         Constants.FAB.TAG.ADD,
         savedInstanceState == null,
-        () -> activity.navigateFragment(RecipeEditIngredientListFragmentDirections
+        () -> activity.navUtil.navigateFragment(RecipeEditIngredientListFragmentDirections
             .actionRecipeEditIngredientListFragmentToRecipeEditIngredientEditFragment(
                 ACTION.CREATE,
                 viewModel.getAction()
@@ -228,7 +228,7 @@ public class RecipeEditIngredientListFragment extends BaseFragment
 
   @Override
   public void onItemRowClicked(RecipePosition recipePosition, int position) {
-    activity.navigateFragment(
+    activity.navUtil.navigateFragment(
         RecipeEditIngredientListFragmentDirections
             .actionRecipeEditIngredientListFragmentToRecipeEditIngredientEditFragment(
                     ACTION.EDIT,

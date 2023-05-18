@@ -280,11 +280,11 @@ public class BaseBottomSheetDialogFragment extends CustomBottomSheetDialogFragme
   }
 
   public void performHapticClick() {
-    activity.performHapticClick();
+    activity.hapticUtil.click();
   }
 
   public void performHapticHeavyClick() {
-    activity.performHapticHeavyClick();
+    activity.hapticUtil.heavyClick();
   }
 
   public void applyBottomInset(int bottom) {

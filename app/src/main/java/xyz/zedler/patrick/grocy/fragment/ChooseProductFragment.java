@@ -100,7 +100,7 @@ public class ChooseProductFragment extends BaseFragment
       setForPreviousDestination(Constants.ARGUMENT.PRODUCT_ID, newProductId);
       setForPreviousDestination(ARGUMENT.BARCODE, barcode);
       setForPreviousDestination(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE, true);
-      activity.navigateUp();
+      activity.navUtil.navigateUp();
       return;
     }
 
@@ -215,7 +215,7 @@ public class ChooseProductFragment extends BaseFragment
     String barcode = ChooseProductFragmentArgs.fromBundle(requireArguments()).getBarcode();
     setForPreviousDestination(ARGUMENT.BARCODE, barcode);
     setForPreviousDestination(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE, true);
-    activity.navigateUp();
+    activity.navUtil.navigateUp();
   }
 
   public void createNewProduct() {
@@ -231,7 +231,7 @@ public class ChooseProductFragment extends BaseFragment
       String barcode = ChooseProductFragmentArgs.fromBundle(requireArguments()).getBarcode();
       setForPreviousDestination(ARGUMENT.BARCODE, barcode);
       setForPreviousDestination(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE, true);
-      activity.navigateUp();
+      activity.navUtil.navigateUp();
     });
   }
 

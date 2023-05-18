@@ -67,7 +67,7 @@ public class EditorHtmlFragment extends BaseFragment {
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(
@@ -82,13 +82,13 @@ public class EditorHtmlFragment extends BaseFragment {
         true,
         () -> {
           setForPreviousDestination(Constants.ARGUMENT.DESCRIPTION, binding.summernote.getText());
-          activity.navigateUp();
+          activity.navUtil.navigateUp();
         }
     );
 
     binding.summernote.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
-    EditorHtmlFragmentArgs args = EditorHtmlFragmentArgs.fromBundle(getArguments());
+    EditorHtmlFragmentArgs args = EditorHtmlFragmentArgs.fromBundle(requireArguments());
     if (args.getText() != null && savedInstanceState == null) {
       binding.summernote.setText(args.getText());
     } else if (savedInstanceState != null) {
