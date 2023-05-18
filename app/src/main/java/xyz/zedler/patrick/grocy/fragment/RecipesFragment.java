@@ -131,12 +131,16 @@ public class RecipesFragment extends BaseFragment implements
         savedInstanceState
     );
 
-    if (viewModel.getSharedPrefs().getString(PREF.RECIPES_LIST_LAYOUT, LAYOUT_LINEAR).equals(LAYOUT_LINEAR)) {
+    boolean isGrid = viewModel.getSharedPrefs()
+        .getString(PREF.RECIPES_LIST_LAYOUT, LAYOUT_LINEAR).equals(LAYOUT_LINEAR);
+    if (isGrid) {
       binding.recycler.setLayoutManager(
           new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
       );
     } else {
-      binding.recycler.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+      binding.recycler.setLayoutManager(
+          new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+      );
     }
 
     binding.recycler.setAdapter(new MasterPlaceholderAdapter());
