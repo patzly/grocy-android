@@ -245,7 +245,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
     }
 
     binding.toolbar.setOnMenuItemClickListener(item -> {
-      if (item.getItemId() == R.id.action_preparation_mode) {
+      if (item.getItemId() == R.id.action_edit_recipe) {
         openPreparationMode();
         return true;
       } else if (item.getItemId() == R.id.action_edit_recipe) {

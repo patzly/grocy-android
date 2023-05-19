@@ -17,25 +17,11 @@
   ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
-<menu
+<WebView
   xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-  <item
-    android:id="@+id/action_edit_recipe"
-    android:title="@string/action_edit_recipe"
-    android:icon="@drawable/ic_round_edit"
-    app:showAsAction="ifRoom" />
-
-  <item
-    android:id="@+id/action_delete_recipe"
-    android:title="@string/action_delete_recipe"
-    android:icon="@drawable/ic_round_delete_anim"
-    app:showAsAction="ifRoom" />
-
-  <item
-    android:id="@+id/action_copy_recipe"
-    android:title="@string/action_copy_recipe"
-    app:showAsAction="never" />
-
-</menu>
+  android:id="@+id/webview"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="@color/transparent"
+  android:scrollbars="none"
+  android:scrollbarStyle="insideOverlay"/>

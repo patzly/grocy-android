@@ -1242,11 +1242,14 @@
         android:id="@+id/deepLink16"
         app:uri="@string/deep_link_recipesFragment" />
     <action
-        android:id="@+id/action_recipesFragment_to_recipeEditFragment"
-        app:destination="@id/recipeEditFragment"
-        app:enterAnim="@anim/slide_in_up"
-        app:exitAnim="@anim/slide_no"
-        app:popExitAnim="@anim/slide_out_down"/>
+      android:id="@+id/action_recipesFragment_to_recipeFragment"
+      app:destination="@id/recipeFragment" />
+    <action
+      android:id="@+id/action_recipesFragment_to_recipeEditFragment"
+      app:destination="@id/recipeEditFragment"
+      app:enterAnim="@anim/slide_in_up"
+      app:exitAnim="@anim/slide_no"
+      app:popExitAnim="@anim/slide_out_down"/>
   </fragment>
   <fragment
       android:id="@+id/recipeEditFragment"
@@ -1385,4 +1388,19 @@
   <action
     android:id="@+id/action_global_text_dialog"
     app:destination="@id/textBottomSheetDialogFragment"/>
+  <fragment
+    android:id="@+id/recipeFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.RecipeFragment"
+    android:label="RecipeFragment"
+    tools:layout="@layout/fragment_recipe">
+    <argument
+      android:name="recipeId"
+      app:argType="integer" />
+    <action
+      android:id="@+id/action_recipeFragment_to_recipeEditFragment"
+      app:destination="@id/recipeEditFragment"
+      app:enterAnim="@anim/slide_in_up"
+      app:exitAnim="@anim/slide_no"
+      app:popExitAnim="@anim/slide_out_down"/>
+  </fragment>
 </navigation>

@@ -62,7 +62,7 @@ import xyz.zedler.patrick.grocy.viewmodel.RecipesViewModel;
 public class RecipesFragment extends BaseFragment implements
         RecipeEntryAdapter.RecipesItemAdapterListener {
 
-  private final static String TAG = TasksFragment.class.getSimpleName();
+  private final static String TAG = RecipesFragment.class.getSimpleName();
   private final static String LAYOUT_LINEAR = "linear";
   private final static String LAYOUT_GRID = "grid";
 
@@ -336,6 +336,11 @@ public class RecipesFragment extends BaseFragment implements
     if (recipe == null) {
       return;
     }
+
+    activity.navUtil.navigateFragment(RecipesFragmentDirections
+        .actionRecipesFragmentToRecipeFragment(recipe.getId()));
+
+    if (true) return;
 
     RecipeFulfillment recipeFulfillment = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(viewModel.getRecipeFulfillments(), recipe.getId());
     ArrayList<RecipePosition> recipePositions = (ArrayList<RecipePosition>) RecipePosition.getRecipePositionsFromRecipeId(viewModel.getRecipePositions(), recipe.getId());
