@@ -89,7 +89,7 @@ public class SettingsCatScannerChooseFragment extends BaseFragment {
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     binding.formattedMlKitIntro.setTextColor(
         ResUtil.getColorAttr(activity, R.attr.colorOnSurfaceVariant)
@@ -167,7 +167,7 @@ public class SettingsCatScannerChooseFragment extends BaseFragment {
           Uri.parse("https://play.google.com/store/apps/details?id=" + UnlockUtil.PACKAGE)
       ));
     }
-    activity.navigateUp();
+    activity.navUtil.navigateUp();
   }
 
   public void openGitHub() {
@@ -175,6 +175,6 @@ public class SettingsCatScannerChooseFragment extends BaseFragment {
         Intent.ACTION_VIEW,
         Uri.parse("https://github.com/patzly/grocy-android-unlock/releases/")
     ));
-    activity.navigateUp();
+    activity.navUtil.navigateUp();
   }
 }

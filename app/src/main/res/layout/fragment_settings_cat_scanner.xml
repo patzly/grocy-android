@@ -93,7 +93,7 @@
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{v -> activity.navigateFragment(SettingsCatScannerFragmentDirections.actionSettingsCatScannerFragmentToSettingsCatScannerToolFragment())}"
+            android:onClick="@{v -> activity.navUtil.navigateFragment(SettingsCatScannerFragmentDirections.actionSettingsCatScannerFragmentToSettingsCatScannerToolFragment())}"
             app:clickUtil="@{clickUtil}">
 
             <ImageView
