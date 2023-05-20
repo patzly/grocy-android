@@ -900,7 +900,7 @@
   <string name="property_last_price_total">Último preço (total)</string>
   <string name="property_price_insert">Preço: %1$s</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_average_shelf_life">Tempo médio de prateleira</string>
+  <string name="property_average_shelf_life">Prazo médio de validade</string>
   <string name="property_spoil_rate">Taxa de desperdício</string>
   <string name="property_price_history">Histórico de preços</string>
   <string name="property_product_group">Grupo de Produtos</string>
