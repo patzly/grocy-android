@@ -904,7 +904,7 @@
   <string name="property_spoil_rate">Taxa de desperdício</string>
   <string name="property_price_history">Histórico de preços</string>
   <string name="property_product_group">Grupo</string>
-  <string name="property_product_groups">Grupos de Produtos</string>
+  <string name="property_product_groups">Grupos</string>
   <string name="property_assignment">Atribuição</string>
   <string name="property_value">Valor</string>
   <string name="property_stock_value">Valor em estoque</string>
