@@ -50,12 +50,6 @@ public class ListItem extends LinearLayout {
     );
   }
 
-  @Override
-  protected void onDetachedFromWindow() {
-    super.onDetachedFromWindow();
-    binding = null;
-  }
-
   public void setText(String property, String value) {
     setText(property, value, null);
   }

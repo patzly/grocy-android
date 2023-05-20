@@ -1,6 +1,7 @@
 ## 3.2.1
 
 - Fixed: Random crash with no reason (#699)
+- Fixed: Prevent another crash after reopening app from background (#697)
 
 ## 3.2.0
 
