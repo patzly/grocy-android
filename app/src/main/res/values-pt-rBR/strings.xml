@@ -98,13 +98,14 @@
   <string name="action_open_scanner">Abrir scanner</string>
   <string name="action_discard">Descartar</string>
   <string name="action_clear_form">Limpar formulário</string>
-  <!-- Short form for "Link barcode to existing product and clear form", this should fit into a button so keep it short -->
-  <string name="action_link_and_clear">Link &amp; Limpar</string>
-  <string name="action_toggle_done">Alternar concluído</string>
+  <!-- Short form for "Only link barcode to existing product", this should fit into a
+  button so keep it short. -->
+  <string name="action_link_and_clear">Link apenas</string>
+  <string name="action_toggle_done">Alternar seleção</string>
   <string name="action_change_layout">Mudar layout</string>
   <string name="action_edit_notes">Editar notas</string>
   <string name="action_add_missing">Adicionar produto não encontrado</string>
-  <string name="action_purchase_done_items">Comprar itens marcados</string>
+  <string name="action_purchase_done_items">Comprar itens selecionados</string>
   <string name="action_purchase_all_items">Comprar todos os itens</string>
   <string name="action_skip_entry">Pular entrada</string>
   <string name="action_toggle_flash">Liga/Desliga Flash</string>
@@ -117,7 +118,7 @@
   <!-- This string should follow the equality between "all" and "Clear all items" -->
   <string name="action_clear_all">Todos</string>
   <!-- This string should follow the equality between "done" and "Clear done items" -->
-  <string name="action_clear_done">Marcado</string>
+  <string name="action_clear_done">Selecionado</string>
   <string name="action_display_help">Exibir texto de ajuda</string>
   <string name="action_demo_server">Servidor de demonstração</string>
   <string name="action_own_server">Servidor pessoal</string>
@@ -127,8 +128,8 @@
   <string name="action_share_description">Conte aos seus amigos sobre Grocy Android</string>
   <string name="action_no_filter">Todos</string>
   <string name="action_show_done_tasks">Mostrar tarefas concluídas</string>
-  <string name="action_track_chore_execution">Acompanhar execução de tarefa doméstica</string>
-  <string name="action_skip_next_chore_schedule">Ignorar a programação da próxima tarefa doméstica</string>
+  <string name="action_track_chore_execution">Acompanhar execução de atividade doméstica</string>
+  <string name="action_skip_next_chore_schedule">Ignorar a programação da próxima atividade doméstica</string>
   <string name="action_reschedule_next_execution">Reprogramar a próxima execução</string>
   <string name="action_put_missing_products_on_shopping_list">Colocar produtos em falta na lista de compras</string>
 
@@ -188,21 +189,21 @@
   <string name="msg_opened">Marque %1$s %2$s de %3$s como aberta</string>
   <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
   <plurals name="msg_undone_items">
-    <item quantity="one">%1$d desfeito</item>
-    <item quantity="many">%1$d desfeitos</item>
-    <item quantity="other">%1$d não marcado</item>
+    <item quantity="one">%1$d não selecionado</item>
+    <item quantity="many">%1$d não selecionados</item>
+    <item quantity="other">%1$d não selecionados</item>
   </plurals>
   <!-- %1$s is the number of done items in shopping list. This string is the short form of e.g. "3 done items are in shopping list" -> "3 done" -->
   <plurals name="msg_done_items">
-    <item quantity="one">%1$d concluído</item>
-    <item quantity="many">%1$d concluídos</item>
-    <item quantity="other">%1$d marcado</item>
+    <item quantity="one">%1$d selecionado</item>
+    <item quantity="many">%1$d selecionados</item>
+    <item quantity="other">%1$d selecionados</item>
   </plurals>
   <!-- %1$s is the number of tasks which are done. This string is the short form of e.g. "3 tasks are done" -> "3 done" -->
   <plurals name="msg_done_tasks">
-    <item quantity="one">%1$d concluído</item>
-    <item quantity="many">%1$d concluídos</item>
-    <item quantity="other">%1$d concluídos</item>
+    <item quantity="one">%1$d concluída</item>
+    <item quantity="many">%1$d concluídas</item>
+    <item quantity="other">%1$d concluídas</item>
   </plurals>
   <!-- %1$s is the number of tasks which are not done. This string is the short form of e.g. "3 tasks are not done" -> "3 not done" -->
   <plurals name="msg_not_done_tasks">
@@ -256,7 +257,7 @@
     <item quantity="other">%1$d ingredientes faltando</item>
   </plurals>
   <string name="msg_recipes_ingredient_fulfillment_info_list">Faltando: %1$s | Já na lista de compras: %2$s</string>
-  <string name="msg_chore_executed">Acompanhamento de execução de tarefas domésticas</string>
+  <string name="msg_chore_executed">Acompanhamento de execução de atividades domésticas</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Comprado(s) %1$s %2$s de %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -276,7 +277,7 @@
   <string name="msg_undo_transaction">Desfazer transação?</string>
   <string name="msg_undone_transaction">Transação desfeita</string>
   <!-- %1$s is a date -->
-  <string name="msg_undone_transaction_description">Deselecionado em %1$s</string>
+  <string name="msg_undone_transaction_description">Desfeita em %1$s</string>
   <string name="msg_failed_to_sync">Falha ao sincronizar entradas</string>
   <string name="msg_synced">Entradas sincronizadas com êxito</string>
   <!-- %1$s is a shopping list name -->
@@ -349,8 +350,8 @@
   <string name="msg_feedback">Você tem algum anseio, questões ou erros? Entre em contato conosco e deixe que ajudemos!\nPara além disso, ficaríamos muito felizes em ter uma boa avaliação na Play Store </string>
   <string name="msg_point_at_barcode">Aponte sua câmera ao código de barras</string>
   <string name="msg_press_hold_confirm">Pressione e segure para confirmar a exclusão</string>
-  <string name="msg_recipe_consume_ask">Tem certeza de que deseja consumir todos os ingredientes necessários pela receita \"%1$s\"? (ingredientes marcados com \"Apenas verificar se tem quantidade em estoque\" serão ignorados)</string>
-  <string name="msg_recipe_shopping_list_ask">Tem certeza de que deseja colocar todos os ingredientes que faltam para a receita \"%1$s\" na lista de compras?\n\nDesmarque os ingredientes para não colocá-los na lista de compras:</string>
+  <string name="msg_recipe_consume_ask">Tem certeza de que deseja consumir todos os ingredientes necessários para a receita \"%1$s\"? (ingredientes marcados com \"Apenas verificar se tem quantidade em estoque\" serão ignorados)</string>
+  <string name="msg_recipe_shopping_list_ask">Tem certeza de que deseja colocar todos os ingredientes que faltam na receita \"%1$s\" na lista de compras?\n\nDesmarque os ingredientes para não colocá-los na lista de compras:</string>
   <string name="msg_welcome">Bem-vindo ao Grocy Android!</string>
   <string name="msg_welcome_introduce">Para usar o grocy de forma produtiva, você precisa do seu próprio servidor ou do complemento grocy para Home Assistant.\nSe você quiser apenas experimentar este aplicativo, pode usar o servidor de demonstração de Bernd Bestel, o criador do grocy.</string>
   <string name="msg_choose_option_below">Por favor, escolha uma opção abaixo.</string>
@@ -455,7 +456,7 @@
   <string name="error_empty_tasks">Sem tarefas</string>
   <string name="error_empty_task_categories">Nenhuma categoria de tarefas cadastrada</string>
   <string name="error_empty_unit_conversions">Não existem conversões de unidade</string>
-  <string name="error_empty_chores">Nenhuma tarefa doméstica cadastrada</string>
+  <string name="error_empty_chores">Nenhuma atividade doméstica cadastrada</string>
   <string name="error_empty_chores_sub">Vá para dados mestre e crie alguns</string>
   <string name="error_empty_recipes">Sem receitas</string>
   <string name="error_empty_ingredients">Sem ingredientes</string>
@@ -552,13 +553,19 @@
   <string name="title_choose_product">Escolher produto</string>
   <string name="title_pending_products">Produtos pendentes</string>
   <string name="title_stored_purchases">Compras armazenadas</string>
-  <string name="title_chores">Tarefas domésticas</string>
-  <string name="title_chore">Tarefa doméstica</string>
+  <string name="title_chores">Atividades domésticas</string>
+  <string name="title_chore">Atividade doméstica</string>
   <string name="title_recipes">Receitas</string>
-  <string name="title_recipe_create">Criar receita</string>
-  <string name="title_recipe_edit">Editar receita</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Editor</string>
+  <string name="title_task_new">Nova tarefa</string>
+  <string name="title_task_edit">Editar tarefa</string>
+  <string name="title_entry_new">Adicionar</string>
+  <string name="title_entry_edit">Editar entrada</string>
+  <string name="title_ingredient_new">Novo ingrediente</string>
+  <string name="title_ingredient_edit">Editar ingrediente</string>
+  <string name="title_recipe_create">Nova receita</string>
+  <string name="title_recipe_edit">Editar receita</string>
 
   <string name="title_spoiled">Estragado</string>
   <string name="title_use_specific">Usar entrada de estoque específica</string>
@@ -570,7 +577,7 @@
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_location_to">Para localização</string>
   <string name="title_recipe">Receita</string>
-  <string name="title_preparation_mode">Modo de preparar</string>
+  <string name="title_preparation_mode">Modo de preparo</string>
   <string name="title_total_price">Preço total</string>
   <string name="title_unit_price">Preço Unitário</string>
   <!-- %1$s is a quantity unit -->
@@ -585,7 +592,7 @@
   <string name="title_create_qu_conversion">Criar conversão de unidade</string>
   <string name="title_shopping_list_edit">Editar lista de compras</string>
   <string name="title_shopping_list_new">Nova lista de compras</string>
-  <string name="title_shopping_mode">Modo de compras</string>
+  <string name="title_shopping_mode">Modo compras</string>
   <string name="title_batch_mode_shopping_list">Lista de compras em modo de lote</string>
   <string name="title_product_cat_optional">Propriedades opcionais</string>
   <string name="title_product_cat_location">Localização padrão</string>
@@ -694,9 +701,9 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_overdue">
-    <item quantity="one">%1$d produto está vencido.</item>
-    <item quantity="many">%1$d produtos estão vencidos.</item>
-    <item quantity="other">%1$d produtos estão vencidos.</item>
+    <item quantity="one">%1$d produto vencido.</item>
+    <item quantity="many">%1$d produtos vencidos.</item>
+    <item quantity="other">%1$d produtos vencidos.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_expired">
@@ -706,21 +713,21 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing">
-    <item quantity="one">%1$d produto está abaixo da quantidade mínima definida de estoque.</item>
-    <item quantity="many">%1$d produtos estão abaixo da quantidade mínima definida de estoque.</item>
-    <item quantity="other">%1$d produtos estão abaixo da quantidade mínima definida de estoque.</item>
+    <item quantity="one">%1$d produto abaixo da quantidade mínima. </item>
+    <item quantity="many">%1$d produtos abaixo da quantidade mínima. </item>
+    <item quantity="other">%1$d produtos abaixo da quantidade mínima. </item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_single">
-    <item quantity="one">%1$d dele está na lista de compras.</item>
-    <item quantity="many">%1$d deles estão na lista de compras.</item>
-    <item quantity="other">%1$d deles estão na lista de compras.</item>
+    <item quantity="one">%1$d está na lista de compras.</item>
+    <item quantity="many">%1$d estão na lista de compras.</item>
+    <item quantity="other">%1$d estão na lista de compras.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_multi">
-    <item quantity="one">%1$d dele está nas listas de compras.</item>
-    <item quantity="many">%1$d deles estão nas listas de compras.</item>
-    <item quantity="other">%1$d deles estão nas listas de compras.</item>
+    <item quantity="one">%1$d está nas listas de compras.</item>
+    <item quantity="many">%1$d estão nas listas de compras.</item>
+    <item quantity="other">%1$d estão nas listas de compras.</item>
   </plurals>
   <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
   <plurals name="description_overview_stock_value">
@@ -750,25 +757,25 @@
   <plurals name="description_overview_chores_due_soon">
     <item quantity="one">%1$d tarefa doméstica para ser feita nos próximos %2$d dias, está atrasada.</item>
     <item quantity="many">%1$d tarefas domésticas para serem feitas nos próximos %2$d dias, estão atrasadas.</item>
-    <item quantity="other">%1$d tarefas domésticas para serem feitas nos próximos %2$d dias, estão atrasadas.</item>
+    <item quantity="other">%1$d atividade domésticas para serem feitas nos próximos %2$d dias, estão atrasadas.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_overdue">
     <item quantity="one">%1$d  tarefa doméstica está atrasada para ser feita.</item>
     <item quantity="many">%1$d tarefas domésticas estão atrasadas para serem feitas.</item>
-    <item quantity="other">%1$d tarefas domésticas estão atrasadas para serem feitas.</item>
+    <item quantity="other">%1$d atividades domésticas estão atrasadas para serem feitas.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_due_today">
     <item quantity="one">%1$d tarefas domésticas, previstas para hoje, estão atrasadas.</item>
     <item quantity="many">%1$d tarefas domésticas, previstas para hoje, estão atrasadas.</item>
-    <item quantity="other">%1$d tarefas domésticas, previstas para hoje, estão atrasadas.</item>
+    <item quantity="other">%1$d atividades domésticas, previstas para hoje, estão atrasadas.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_assigned">
     <item quantity="one">%1$d tarefa doméstica está atribuída a você.</item>
     <item quantity="many">%1$d tarefas domésticas estão atribuídas a você.</item>
-    <item quantity="other">%1$d tarefas domésticas estão atribuídas a você.</item>
+    <item quantity="other">%1$d atividades domésticas estão atribuídas a você.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks">
@@ -972,7 +979,7 @@
   <string name="property_not_check_shopping_list">Não verificar a lista de compras</string>
   <string name="property_not_check_shopping_list_description">Ao adicionar itens esgotados</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
-  <string name="property_preparation">Modo de prepado</string>
+  <string name="property_preparation">Preparo</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">Custos</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
@@ -1125,11 +1132,11 @@
   <string name="setting_logout">Encerrar sessão</string>
   <string name="setting_logout_description">Voltar à página de início de sessão</string>
   <string name="setting_manage_shortcuts">Gerenciar atalhos</string>
-  <string name="setting_list_indicator">Indicar lista de entradas</string>
+  <string name="setting_list_indicator">Indicar lista de compras</string>
   <string name="setting_list_indicator_description">Mostrar bola azul se o produto estiver em uma lista de compras</string>
   <string name="setting_shopping_mode_update_interval">Intervalo de atualização do modo de compra</string>
   <string name="setting_keep_screen_on">Manter a tela ligada</string>
-  <string name="setting_keep_screen_on_description">Ao estar no modo de compras</string>
+  <string name="setting_keep_screen_on_description">Ao estar no Modo Compras</string>
   <string name="setting_show_done_items">Mostrar itens concluídos</string>
   <string name="setting_show_done_items_description">No final</string>
   <string name="setting_smaller_font">Usar fonte pequena</string>
@@ -1197,7 +1204,7 @@
   few days and therefore should be consumed in the next few days. -->
   <string name="setting_notifications_due_soon">Itens que vencem em breve</string>
   <string name="setting_notifications_due_soon_description">Verifica o estoque diariamente e avisa quando os produtos vencem em breve</string>
-  <string name="setting_notifications_chores_description">Verifica as tarefas domésticas diariamente e avisa sobre as tarefas previstas hoje</string>
+  <string name="setting_notifications_chores_description">Verifica as atividades domésticas diariamente e avisa sobre as tarefas previstas hoje</string>
   <string name="setting_notification_time">Tempo de notificação</string>
   <!-- the description of the notification time preference.
   With the "Due soon" check enabled, the user will be notified every day at the selected time how
