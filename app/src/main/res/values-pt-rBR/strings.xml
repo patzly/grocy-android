@@ -617,7 +617,7 @@
   <string name="subtitle_amount_opened">(%1$s abertos)</string>
   <!-- %1$s is a product name -->
   <string name="subtitle_stock_locations">Onde %1$s há no estoque</string>
-  <string name="subtitle_none_selected">Nenhum selecionado</string>
+  <string name="subtitle_none_selected">Nenhum informado</string>
   <!-- Should follow the equality between 'None' and 'None selected' -->
   <string name="subtitle_none">Nenhum</string>
   <string name="subtitle_empty">Vazio</string>
