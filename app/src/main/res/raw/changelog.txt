@@ -1,3 +1,7 @@
+## 3.2.1
+
+- Fixed: Random crash with no reason (#699)
+
 ## 3.2.0
 
 - New: Catalan, Estonian and Portuguese (Brazil) translations. Many thanks for your contributions!
