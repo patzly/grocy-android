@@ -506,7 +506,9 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       binding.itemLocation.setText(
           activity.getString(R.string.property_locations),
           locationsString.toString(),
-          getString(R.string.property_location_default_insert, location.getName())
+          location != null
+              ? getString(R.string.property_location_default_insert, location.getName())
+              : null
       );
     }).perform(dlHelper.getUuid());
   }
