@@ -282,7 +282,7 @@ public class StockOverviewFragment extends BaseFragment implements
 
     hideDisabledFeatures();
 
-    if (savedInstanceState == null) {
+    if (savedInstanceState == null || !viewModel.isAlreadyLoadedFromDatabase()) {
       viewModel.loadFromDatabase(true);
     }
 

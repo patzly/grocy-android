@@ -144,7 +144,7 @@ public class OverviewStartFragment extends BaseFragment {
       return false;
     });
 
-    if (savedInstanceState == null) {
+    if (savedInstanceState == null || !viewModel.isAlreadyLoadedFromDatabase()) {
       viewModel.loadFromDatabase(true);
     }
 
