@@ -101,6 +101,7 @@ public class OverviewStartViewModel extends BaseViewModel {
   private final LiveData<String> masterDataDescriptionTextLive;
   private final MutableLiveData<Integer> currentUserIdLive;
   private List<ShoppingList> shoppingLists;
+  private boolean alreadyLoadedFromDatabase;
   private final boolean debug;
 
   public OverviewStartViewModel(@NonNull Application application) {
@@ -137,6 +138,7 @@ public class OverviewStartViewModel extends BaseViewModel {
     choreEntriesLive = new MutableLiveData<>();
     tasksLive = new MutableLiveData<>();
     currentUserIdLive = new MutableLiveData<>(sharedPrefs.getInt(PREF.CURRENT_USER_ID, 1));
+    alreadyLoadedFromDatabase = false;
 
     stockDescriptionTextLive = new MediatorLiveData<>();
     stockDescriptionTextLive.addSource(
@@ -482,6 +484,7 @@ public class OverviewStartViewModel extends BaseViewModel {
       choresDueSoonCountLive.setValue(choresDueSoonCount);
       choresDueTodayCountLive.setValue(choresDueTodayCount);
 
+      alreadyLoadedFromDatabase = true;
       if (downloadAfterLoading) {
         downloadData(false);
       }
@@ -640,6 +643,10 @@ public class OverviewStartViewModel extends BaseViewModel {
 
   public MutableLiveData<Boolean> getStoredPurchasesOnDevice() {
     return storedPurchasesOnDevice;
+  }
+
+  public boolean isAlreadyLoadedFromDatabase() {
+    return alreadyLoadedFromDatabase;
   }
 
   public boolean isFeatureEnabled(String pref) {

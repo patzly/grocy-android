@@ -79,7 +79,6 @@ public class HtmlCardView extends LinearLayout {
     if (dialog != null && dialog.isShowing()) {
       dialog.dismiss();
     }
-    binding = null;
   }
 
   public void setDialogTitle(@StringRes int titleResId) {

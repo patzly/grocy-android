@@ -1,3 +1,11 @@
+## 3.2.1
+
+- Fixed: Random crash with no reason (#699)
+- Fixed: Prevent another crash after reopening app from background (#697)
+- Fixed: Product pictures not loading (with Home Assistant or not, we don't know) (#700)
+- Fixed: Overview and stock page not populated after theme change or other cases (#692, #695)
+- Fixed: Crash on stock page with opened product overview sheet in some cases (#673)
+
 ## 3.2.0
 
 - New: Catalan, Estonian and Portuguese (Brazil) translations. Many thanks for your contributions!

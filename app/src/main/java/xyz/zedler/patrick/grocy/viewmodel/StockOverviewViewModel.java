@@ -114,6 +114,7 @@ public class StockOverviewViewModel extends BaseViewModel {
   private ArrayList<String> searchResultsFuzzy;
   private final boolean debug;
   private final int maxDecimalPlacesAmount;
+  private boolean alreadyLoadedFromDatabase;
 
   public StockOverviewViewModel(@NonNull Application application, StockOverviewFragmentArgs args) {
     super(application);
@@ -124,6 +125,7 @@ public class StockOverviewViewModel extends BaseViewModel {
         STOCK.DECIMAL_PLACES_AMOUNT,
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
     );
+    alreadyLoadedFromDatabase = false;
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
@@ -259,6 +261,7 @@ public class StockOverviewViewModel extends BaseViewModel {
           .setOpenedCount(itemsOpenedCount)
           .emitCounts();
       updateFilteredStockItems();
+      alreadyLoadedFromDatabase = true;
       if (downloadAfterLoading) {
         downloadData(false);
       }
@@ -722,6 +725,10 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   public void toggleScannerVisibility() {
     scannerVisibilityLive.setValue(!isScannerVisible());
+  }
+
+  public boolean isAlreadyLoadedFromDatabase() {
+    return alreadyLoadedFromDatabase;
   }
 
   @NonNull
