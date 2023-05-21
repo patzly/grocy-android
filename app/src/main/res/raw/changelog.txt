@@ -2,6 +2,7 @@
 
 - Fixed: Random crash with no reason (#699)
 - Fixed: Prevent another crash after reopening app from background (#697)
+- Fixed: Product pictures not loading (with Home Assistant or not, we don't know) (#700)
 
 ## 3.2.0
 
