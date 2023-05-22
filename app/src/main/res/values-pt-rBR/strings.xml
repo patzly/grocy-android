@@ -1148,7 +1148,7 @@
   <string name="setting_default_amount_purchase">Quantidade pré-definida para compra</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">Valor pré-definido para consumo</string>
-  <string name="setting_treat_opened_as_out_of_stock">Tratar aberto como esgotado</string>
+  <string name="setting_treat_opened_as_out_of_stock">Se \'aberto\', remover do estoque</string>
   <string name="setting_purchased_date">Solicitar data de compra</string>
   <string name="setting_purchased_date_description">Na página de compras e inventário</string>
   <string name="setting_use_quick_consume_amount">Usar a \"Quantidade de consumo rápido\" do produto</string>
