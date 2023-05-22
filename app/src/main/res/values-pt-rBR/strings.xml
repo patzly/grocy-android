@@ -779,9 +779,9 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks">
-    <item quantity="one">%1$d tarefa deve ser concluída.</item>
-    <item quantity="many">%1$d tarefas devem ser concluídas.</item>
-    <item quantity="other">%1$d tarefas a serem concluídas.</item>
+    <item quantity="one">%1$d tarefa a ser concluída</item>
+    <item quantity="many">%1$d tarefas a serem concluídas</item>
+    <item quantity="other">%1$d tarefas a serem concluídas</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks_user">
