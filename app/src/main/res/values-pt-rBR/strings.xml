@@ -733,7 +733,7 @@
   <plurals name="description_overview_stock_value">
     <item quantity="one">Você tem %1$d produto em estoque com o valor de %2$s %3$s.</item>
     <item quantity="many">Você tem %1$d produtos em estoque com o valor de %2$s %3$s.</item>
-    <item quantity="other">Você tem %1$d produtos em estoque com o valor de %2$s %3$s.</item>
+    <item quantity="other">Você tem %1$d produtos em estoque no valor de %2$s %3$s.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list_multi">
