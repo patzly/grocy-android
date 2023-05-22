@@ -751,7 +751,7 @@
   <plurals name="description_overview_recipes">
     <item quantity="one">Você tem %1$d receita.</item>
     <item quantity="many">Você tem %1$d receitas.</item>
-    <item quantity="other">Você tem %1$d receitas.</item>
+    <item quantity="other">Você tem %1$d receitas</item>
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_chores_due_soon">
