@@ -785,7 +785,7 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks_user">
-    <item quantity="one">Você foi atribuído a %1$d tarefa</item>
+    <item quantity="one">%1$d tarefa atribuída a você</item>
     <item quantity="many">%1$d tarefas atribuídas a você</item>
     <item quantity="other">%1$d tarefas atribuídas a você</item>
   </plurals>
