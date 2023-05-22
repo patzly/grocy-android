@@ -791,9 +791,9 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
-    <item quantity="one">Seu banco de dados contém %1$d produto.</item>
-    <item quantity="many">Seu banco de dados contém %1$d produtos.</item>
-    <item quantity="other">Seu banco de dados contém %1$d produtos.</item>
+    <item quantity="one">O banco de dados contém %1$d produto.</item>
+    <item quantity="many">O banco de dados contém %1$d produtos.</item>
+    <item quantity="other">O banco de dados contém %1$d produtos.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="error_max_decimal_places">
