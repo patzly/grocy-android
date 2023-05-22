@@ -703,7 +703,7 @@
   <plurals name="description_overview_stock_overdue">
     <item quantity="one">%1$d produto vencido.</item>
     <item quantity="many">%1$d produtos vencidos.</item>
-    <item quantity="other">%1$d produtos vencidos.</item>
+    <item quantity="other">%1$d produtos vencidos</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_expired">
