@@ -719,8 +719,8 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_single">
-    <item quantity="one">%1$d está na lista de compras.</item>
-    <item quantity="many">%1$d estão na lista de compras.</item>
+    <item quantity="one">%1$d está na lista de compras</item>
+    <item quantity="many">%1$d estão na lista de compras</item>
     <item quantity="other">%1$d estão na lista de compras</item>
   </plurals>
   <!-- %1$s is a number -->
