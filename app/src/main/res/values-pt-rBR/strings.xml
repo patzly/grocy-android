@@ -756,8 +756,8 @@
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_chores_due_soon">
     <item quantity="one">%1$d atividade doméstica para ser feita nos próximos %2$d dias, está atrasada.</item>
-    <item quantity="many">%1$d atividades domésticas a serem feitas nos próximos %2$d dias, estão atrasadas.</item>
-    <item quantity="other">%1$d atividades domésticas a serem feitas nos próximos %2$d dias, estão atrasadas.</item>
+    <item quantity="many">%1$d atividades domésticas a serem feitas nos próximos %2$d dias, estão atrasadas</item>
+    <item quantity="other">%1$d atividades domésticas a serem feitas nos próximos %2$d dias, estão atrasadas</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_overdue">
