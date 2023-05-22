@@ -1133,7 +1133,7 @@
   <string name="setting_logout_description">Voltar à página de início de sessão</string>
   <string name="setting_manage_shortcuts">Gerenciar atalhos</string>
   <string name="setting_list_indicator">Indicar lista de compras</string>
-  <string name="setting_list_indicator_description">Mostrar bola azul se o produto estiver em uma lista de compras</string>
+  <string name="setting_list_indicator_description">Mostrar ponto azul, se o produto estiver em uma Lista de Compras</string>
   <string name="setting_shopping_mode_update_interval">Intervalo de atualização do modo de compra</string>
   <string name="setting_keep_screen_on">Manter a tela ligada</string>
   <string name="setting_keep_screen_on_description">Ao estar no Modo Compras</string>
