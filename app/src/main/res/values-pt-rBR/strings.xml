@@ -627,7 +627,7 @@
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="subtitle_never_overdue">Nunca perde a validade</string>
   <string name="subtitle_selected">Selecionado</string>
-  <string name="subtitle_stock_entry_no_specific">Os que perdem a validade primeiro, então os primeiros en - são primeiros a sair</string>
+  <string name="subtitle_stock_entry_no_specific">Inicialmente os abertos, próximo a vencer e, por fim, o primeiro a entrar é o primeiro a sair</string>
   <!-- %1$s is a purchase date -->
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="subtitle_stock_entry_name">Comprados: %1$s</string>
