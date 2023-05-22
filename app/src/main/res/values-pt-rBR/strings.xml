@@ -872,7 +872,7 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_opened">Dias de validade após abertura (padrão)</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_days_default_freezing">Dias de vencimento pré-definido após o congelamento</string>
+  <string name="property_due_days_default_freezing">Dias de validade após o congelamento (padrão)</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">Dias de vencimento pré-definido após o descongelamento</string>
   <string name="property_location">Localização</string>
