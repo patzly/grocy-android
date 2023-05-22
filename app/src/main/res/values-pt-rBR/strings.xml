@@ -763,7 +763,7 @@
   <plurals name="description_overview_chores_overdue">
     <item quantity="one">%1$d  tarefa doméstica está atrasada para ser feita.</item>
     <item quantity="many">%1$d tarefas domésticas estão atrasadas para serem feitas.</item>
-    <item quantity="other">%1$d atividades domésticas estão atrasadas para serem feitas.</item>
+    <item quantity="other">%1$d atividades domésticas estão atrasadas.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_due_today">
