@@ -507,7 +507,7 @@
   <string name="error_barcode_not_linked">O código de barras não está vinculado a um produto</string>
   <string name="error_no_product_details">Não foi possível obter detalhes do produto</string>
   <string name="error_failed_barcode_upload">Não foi possível carregar o código de barras</string>
-  <string name="error_wrong_grocycode_type">grocycode contém tipo de entidade errado</string>
+  <string name="error_wrong_grocycode_type">grocycode contém tipo de entidade incorreto</string>
   <string name="error_stock_entry_grocycode">Entrada de estoque do grocycode não encontrada</string>
   <string name="error_permission">Sem permissão para esta ação</string>
   <string name="error_undefined">Ocorreu um erro</string>
