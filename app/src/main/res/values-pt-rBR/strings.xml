@@ -697,7 +697,7 @@
   <plurals name="description_overview_stock_due_soon">
     <item quantity="one">%1$d produto vencerá nos próximos %2$d dias.</item>
     <item quantity="many">%1$d produtos vencerão nos próximos %2$d dias.</item>
-    <item quantity="other">%1$d produtos vencerão nos próximos %2$d dias.</item>
+    <item quantity="other">%1$d produtos vencerão nos próximos %2$d dias</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_overdue">
