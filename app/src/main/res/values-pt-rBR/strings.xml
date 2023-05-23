@@ -837,7 +837,7 @@
   <string name="property_quantity_unit">Unidade</string>
   <string name="property_quantity_units">Unidades</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_default_qu_purchase">Quantidade de compra</string>
+  <string name="property_default_qu_purchase">Unidade de medida usada na compra</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_stock">Unidade de medida</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
