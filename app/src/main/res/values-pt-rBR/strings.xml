@@ -839,7 +839,7 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_default_qu_purchase">Quantidade de compra</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_qu_stock">Quantidade me estoque</string>
+  <string name="property_qu_stock">Unidade de medida</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Fator de compra para estoque</string>
   <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
