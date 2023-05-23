@@ -951,8 +951,8 @@
   <string name="property_ungrouped">Desagrupado</string>
   <!-- %1$s is a property like "product group" or "due date" -->
   <string name="property_extra_field">Campo extra: %1$s</string>
-  <string name="property_task_category">Categoria da tarefa</string>
-  <string name="property_task_categories">Categorias da tarefa</string>
+  <string name="property_task_category">Categoria das tarefas</string>
+  <string name="property_task_categories">Categorias de tarefas</string>
   <string name="property_calories">Calorias</string>
   <string name="property_calories_unit">Calorias (unidade)</string>
   <string name="property_calories_total">Calorias (total)</string>
