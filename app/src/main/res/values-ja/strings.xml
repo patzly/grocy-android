@@ -380,7 +380,7 @@
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_produces_product">製品が選択されると、このレシピを消費した際に1 単位 (在庫数量単位で 1 食分あたり) が在庫に追加されます。</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_only_check_any_amount">在庫確認の際、以下で異なる数量/単位を使用することができます。その製品の数量が十分であれば、在庫確認できます。</string>
+  <string name="msg_help_only_check_any_amount">在庫確認の際、以下の数量/単位を使用します。その製品の数量が十分であれば在庫確認しますが、不足している場合は確認しません。</string>
   <string name="msg_help_date_chooser">設定からキーボードによる入力を選択できます。入力スピードを向上できます。</string>
   <string name="msg_help_date_chooser_keyboard">お住まいの国で DDMMYY が使用されている場合は、設定で逆順日付形式を有効化できます。\n入力を適用してこのページを閉じるには、キーボードの「完了」キーを使用できます。</string>
   <string name="msg_help_quick_mode">上のタイトル バーを長押しすると、クイック モードが起動します。 このモードでは、製品が入力またはスキャンされ、すべてのフィールド (製品および/またはバーコードのデフォルト値) が自動的に入力され、トランザクションがすぐに実行されます。</string>
