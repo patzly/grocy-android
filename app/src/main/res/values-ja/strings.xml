@@ -310,7 +310,7 @@
   <string name="msg_feedback">ご要望、ご質問、間違いなどございましたら私たちにご連絡ください。お手伝いいたします!\nまたはPlay ストアで素敵なレビューをいただければ幸いです。</string>
   <string name="msg_point_at_barcode">カメラをバーコードに向けます</string>
   <string name="msg_press_hold_confirm">長押しして削除</string>
-  <string name="msg_recipe_consume_ask">レシピ「%1$s」に必要な材料をすべて消費しますか？ （「在庫があるかどうかのみ確認する」とマークされている食材は無視されます）</string>
+  <string name="msg_recipe_consume_ask">レシピ「%1$s」に必要な材料をすべて消費しますか？ （「在庫が存在する場合のみチェック」がチェックされている食材は無視されます）</string>
   <string name="msg_recipe_shopping_list_ask">レシピ「%1$s」に必要な不足材料をすべて買い物リストに追加してもよろしいですか?\n\n材料を買い物リストに追加しない場合は、材料のチェックを外してください:</string>
   <string name="msg_welcome">Grocy Android へようこそ!</string>
   <string name="msg_welcome_introduce">grocy を生産的に使用するには、独自のサーバーまたは Home Assistant 用の grocy アドオンが必要です。\nこのアプリを試してみたいだけの場合は、grocy の作成者 Bernd Bestel のデモ サーバーを使用できます。</string>
