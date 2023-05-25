@@ -335,7 +335,7 @@
   <string name="msg_help_disable_own_stock">有効にすると、対応する製品は独自の在庫を持つことができなくなり、購入時に選択できなくなります (サブ製品の概要/全体ビューとしてのみ使用される親製品に役立ちます)。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_should_not_be_frozen">有効にすると、この製品を冷凍庫の場所に移動するとき (冷凍するとき)警告が表示されます。</string>
-  <string name="msg_help_due_date_type">選択した期日のタイプに基づいて、在庫概要ページの強調表示が変化します。 「賞味期限(Best before date)」とは、期限に達した後も製品がまだ安全に摂取できる可能性があることを意味します。 「消費期限(Expiration date)」とは、期限を過ぎた製品は安全に摂取できないことを意味します。</string>
+  <string name="msg_help_due_date_type">選択した期日のタイプに基づいて、在庫概要ページの強調表示が変化します。 「賞味期限（Best before date）」とは、期限に達した後も製品がまだ安全に摂取できる可能性があることを意味します。 「消費期限（Expiration date）」とは、期限を過ぎた製品は安全に摂取できないことを意味します。</string>
   <string name="msg_help_default_due_days_format">以下項目を長押しすると、数字の代わりに日付を入力できます</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days">購入時に、今日からこの日数が経過した日を期限としてサジェストします (-1 を設定すると期限がない商品を登録できます)</string>
