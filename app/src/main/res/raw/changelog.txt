@@ -1,3 +1,7 @@
+## 3.3.0
+
+- Improved: Database exceptions are now caught and displayed (#698)
+
 ## 3.2.1
 
 - Fixed: Random crash with no reason (#699)

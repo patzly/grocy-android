@@ -27,6 +27,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -49,6 +50,10 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.LoginRequestFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
@@ -125,8 +130,7 @@ public class LoginRequestViewModel extends BaseViewModel {
     }
 
     appendHassLog("Sending test request to grocy...");
-    dlHelper.getSystemInfo(
-        response -> {
+    getSystemInfo(dlHelper, response -> {
           if (!response.contains("grocy_version")) {
             appendHassLog(" Error.\n");
             loginErrorOccurred.setValue(true);
@@ -433,6 +437,45 @@ public class LoginRequestViewModel extends BaseViewModel {
       webSocketClient.close(0, 0, "viewmodel cleared");
     }
     super.onCleared();
+  }
+
+  public static QueueItem getSystemInfo(
+      DownloadHelper dlHelper,
+      OnStringResponseListener onResponseListener,
+      OnErrorListener onErrorListener
+  ) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnMultiTypeErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        dlHelper.get(
+            dlHelper.grocyApi.getSystemInfo(),
+            uuid,
+            response -> {
+              if (dlHelper.debug) {
+                Log.i(dlHelper.tag, "get systemInfo: " + response);
+              }
+              if (onResponseListener != null) {
+                onResponseListener.onResponse(response);
+              }
+              if (responseListener != null) {
+                responseListener.onResponse(response);
+              }
+            },
+            error -> {
+              if (onErrorListener != null) {
+                onErrorListener.onError(error);
+              }
+              if (errorListener != null) {
+                errorListener.onError(error);
+              }
+            }
+        );
+      }
+    };
   }
 
   public static class LoginViewModelFactory implements ViewModelProvider.Factory {

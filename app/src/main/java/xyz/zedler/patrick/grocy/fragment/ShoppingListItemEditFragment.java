@@ -48,6 +48,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSh
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
@@ -155,6 +156,14 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
       ) {
         showInitialKeyboardIfConditionsAreMet();
       }
+    });
+
+    viewModel.getOfflineLive().observe(getViewLifecycleOwner(), offline -> {
+      InfoFullscreen infoFullscreen = offline ? new InfoFullscreen(
+          InfoFullscreen.ERROR_OFFLINE,
+          () -> updateConnectivity(true)
+      ) : null;
+      viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
     });
 
     viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {

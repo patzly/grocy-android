@@ -21,17 +21,16 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -41,8 +40,6 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class MasterProductCatConversionsViewModel extends BaseViewModel {
@@ -57,7 +54,6 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<ArrayList<QuantityUnitConversion>> quantityUnitConversionsLive;
 
   private List<QuantityUnitConversion> unitConversions;
@@ -65,7 +61,6 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
 
   private NetworkQueue currentQueueLoading;
-  private final boolean debug;
 
   public MasterProductCatConversionsViewModel(
       @NonNull Application application,
@@ -74,7 +69,6 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
@@ -84,7 +78,6 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
 
     quantityUnitConversionsLive = new MutableLiveData<>();
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
   }
 
   public Product getFilledProduct() {
@@ -100,7 +93,7 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
@@ -113,16 +106,17 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
       return;
     }
     if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
+      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, null));
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, null));
     queue.append(
-        dlHelper.updateQuantityUnits(dbChangedTime, qUs -> {
+        QuantityUnit.updateQuantityUnits(dlHelper, dbChangedTime, qUs -> {
           this.quantityUnits = qUs;
           this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
-        }), dlHelper.updateQuantityUnitConversions(
+        }), QuantityUnitConversion.updateQuantityUnitConversions(
+            dlHelper,
             dbChangedTime,
             conversions -> this.unitConversions = conversions
         )
@@ -154,16 +148,6 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
     quantityUnitConversionsLive.setValue(filterConversions(unitConversions));
   }
 
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
-  }
-
   private ArrayList<QuantityUnitConversion> filterConversions(List<QuantityUnitConversion> conversions) {
     ArrayList<QuantityUnitConversion> filteredConversions = new ArrayList<>();
     assert args.getProduct() != null;
@@ -182,19 +166,6 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
 
   public HashMap<Integer, QuantityUnit> getQuantityUnitHashMap() {
     return quantityUnitHashMap;
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

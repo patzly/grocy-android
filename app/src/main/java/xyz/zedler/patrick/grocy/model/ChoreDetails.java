@@ -21,10 +21,20 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.Ignore;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
 import java.util.Objects;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 
 public class ChoreDetails implements Parcelable {
 
@@ -170,5 +180,56 @@ public class ChoreDetails implements Parcelable {
   @Override
   public String toString() {
     return "ChoreDetails(" + chore.getName() + ")";
+  }
+
+  public static QueueItem getChoreDetails(
+      DownloadHelper dlHelper,
+      int choreId,
+      OnObjectResponseListener<ChoreDetails> onResponseListener,
+      OnErrorListener onErrorListener
+  ) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnMultiTypeErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        dlHelper.get(
+            dlHelper.grocyApi.getChores(choreId),
+            uuid,
+            response -> {
+              Type type = new TypeToken<ChoreDetails>() {
+              }.getType();
+              ChoreDetails choreDetails = dlHelper.gson.fromJson(response, type);
+              if (dlHelper.debug) {
+                Log.i(dlHelper.tag, "download ChoreDetails: " + choreDetails);
+              }
+              if (onResponseListener != null) {
+                onResponseListener.onResponse(choreDetails);
+              }
+              if (responseListener != null) {
+                responseListener.onResponse(response);
+              }
+            },
+            error -> {
+              if (onErrorListener != null) {
+                onErrorListener.onError(error);
+              }
+              if (errorListener != null) {
+                errorListener.onError(error);
+              }
+            }
+        );
+      }
+    };
+  }
+
+  public static QueueItem getChoreDetails(
+      DownloadHelper dlHelper,
+      int choreId,
+      OnObjectResponseListener<ChoreDetails> onResponseListener
+  ) {
+    return getChoreDetails(dlHelper, choreId, onResponseListener, null);
   }
 }

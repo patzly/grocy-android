@@ -30,18 +30,21 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.form.FormDataPurchase;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
@@ -52,8 +55,8 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuickModeConfirmBotto
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnJSONArrayResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectResponseListener;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.form.FormDataPurchase;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
@@ -70,9 +73,6 @@ import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.repository.PurchaseRepository;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
@@ -203,41 +203,42 @@ public class PurchaseViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
     if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
+      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, null));
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, null));
     queue.append(
-        dlHelper.updateProducts(dbChangedTime, products -> {
+        Product.updateProducts(dlHelper, dbChangedTime, products -> {
           this.products = products;
           productHashMap = ArrayUtil.getProductsHashMap(products);
           formData.getProductsLive().setValue(
                   appendPendingProducts(Product.getActiveProductsOnly(products), pendingProducts)
           );
-        }), dlHelper.updateQuantityUnitConversions(dbChangedTime, conversions -> {
+        }), QuantityUnitConversion.updateQuantityUnitConversions(dlHelper, dbChangedTime,
+            conversions -> {
           this.unitConversions = conversions;
           unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(unitConversions);
-        }), dlHelper.updateProductBarcodes(dbChangedTime,
+        }), ProductBarcode.updateProductBarcodes(dlHelper, dbChangedTime,
             barcodes -> this.barcodes = appendPendingProductBarcodes(
                 barcodes, pendingProductBarcodes
             )
-        ), dlHelper.updateQuantityUnits(dbChangedTime, quantityUnits -> {
+        ), QuantityUnit.updateQuantityUnits(dlHelper, dbChangedTime, quantityUnits -> {
           this.quantityUnits = quantityUnits;
           quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
-        }), dlHelper.updateStores(
-            dbChangedTime, stores -> this.stores = stores
-        ), dlHelper.updateLocations(
-            dbChangedTime, locations -> this.locations = locations
+        }), Store.updateStores(
+            dlHelper, dbChangedTime, stores -> this.stores = stores
+        ), Location.updateLocations(
+            dlHelper, dbChangedTime, locations -> this.locations = locations
         )
     );
     if (batchShoppingListItemIds != null) {
-      dlHelper.updateShoppingListItems(dbChangedTime, (items) -> {
+      ShoppingListItem.updateShoppingListItems(dlHelper, dbChangedTime, (items) -> {
         this.shoppingListItems = items;
         shoppingListItemHashMap = ArrayUtil.getShoppingListItemHashMap(shoppingListItems);
       });
@@ -277,13 +278,6 @@ public class PurchaseViewModel extends BaseViewModel {
     }
   }
 
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showMessage(getString(R.string.msg_no_connection));
-  }
-
   public void setProduct(
       @Nullable Integer productId,
       @Nullable ProductBarcode barcode,
@@ -296,7 +290,7 @@ public class PurchaseViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.OnProductDetailsResponseListener listener = productDetails -> {
+    OnObjectResponseListener<ProductDetails> listener = productDetails -> {
       Product updatedProduct = productDetails.getProduct();
 
       if (updatedProduct.getNoOwnStockBoolean()) {
@@ -456,7 +450,8 @@ public class PurchaseViewModel extends BaseViewModel {
       formData.getAmountLive().setValue(NumUtil.trimAmount(shoppingListItem.getAmountDouble(), maxDecimalPlacesAmount));
       return;
     }
-    dlHelper.getProductDetails(
+    ProductDetails.getProductDetails(
+        dlHelper,
         productId,
         listener,
         error -> showMessageAndContinueScanning(getString(R.string.error_no_product_details))
@@ -788,7 +783,7 @@ public class PurchaseViewModel extends BaseViewModel {
     }
     ProductBarcode productBarcode = formData.fillProductBarcode();
     JSONObject body = productBarcode.getJsonFromProductBarcode(debug, TAG);
-    dlHelper.addProductBarcode(body, () -> {
+    ProductBarcode.addProductBarcode(dlHelper, body, () -> {
       formData.getBarcodeLive().setValue(null);
       barcodes.add(productBarcode); // add to list so it will be found on next scan without reload
       if (onSuccess != null) {

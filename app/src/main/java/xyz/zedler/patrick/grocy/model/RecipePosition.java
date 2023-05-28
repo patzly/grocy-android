@@ -24,6 +24,7 @@ import android.os.Parcelable;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -31,12 +32,23 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import com.google.gson.reflect.TypeToken;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import java.lang.reflect.Type;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 
 @Entity(tableName = "recipe_pos_table")
 public class RecipePosition implements Parcelable {
@@ -330,5 +342,79 @@ public class RecipePosition implements Parcelable {
   @Override
   public String toString() {
     return "RecipePosition(" + id + ")";
+  }
+
+  public static QueueItem updateRecipePositions(
+      DownloadHelper dlHelper,
+      String dbChangedTime,
+      OnObjectsResponseListener<RecipePosition> onResponseListener
+  ) {
+    String lastTime = dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
+        PREF.DB_LAST_TIME_RECIPE_POSITIONS, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnMultiTypeErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          dlHelper.get(
+              dlHelper.grocyApi.getRecipePositions(),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<RecipePosition>>() {
+                }.getType();
+                ArrayList<RecipePosition> recipePositions = dlHelper.gson.fromJson(response, type);
+                if (dlHelper.debug) {
+                  Log.i(dlHelper.tag, "download RecipePositions: " + recipePositions);
+                }
+                // fix crash, amount can be NaN according to a user
+                for (int i = 0; i < recipePositions.size(); i++) {
+                  RecipePosition recipePos = recipePositions.get(i);
+                  if (Double.isNaN(recipePos.getAmount())) {
+                    recipePos.setAmount(0);
+                  }
+                }
+                Single.fromCallable(() -> {
+                  dlHelper.appDatabase.recipePositionDao()
+                      .deleteRecipePositions().blockingSubscribe();
+                  dlHelper.appDatabase.recipePositionDao()
+                      .insertRecipePositions(recipePositions).blockingSubscribe();
+                  dlHelper.sharedPrefs.edit()
+                      .putString(PREF.DB_LAST_TIME_RECIPE_POSITIONS, dbChangedTime).apply();
+                  return true;
+                })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnError(throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    })
+                    .doFinally(() -> {
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(recipePositions);
+                      }
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    }).subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
+    } else {
+      if (dlHelper.debug) {
+        Log.i(dlHelper.tag, "downloadData: skipped Recipe positions download");
+      }
+      return null;
+    }
   }
 }

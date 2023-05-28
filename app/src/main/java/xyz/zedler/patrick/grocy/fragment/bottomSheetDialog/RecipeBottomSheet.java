@@ -311,7 +311,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
         stockItemHashMap = ArrayUtil.getStockItemHashMap(data.getStockItems());
         shoppingListItems = data.getShoppingListItems();
         updateDataWithServings();
-      }), 500);
+      }, error -> {}), 500);
     }
   }
 
@@ -356,7 +356,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       }
 
       updateDataWithServings();
-    });
+    }, error -> {});
   }
 
   public void onItemRowClicked(RecipePosition recipePosition, int position) {
@@ -584,7 +584,8 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       return;
     }
 
-    dlHelper.editRecipe(
+    Recipe.editRecipe(
+        dlHelper,
         recipe.getId(),
         body,
         response -> dlHelper.updateData(

@@ -126,6 +126,7 @@
   <string name="action_demo_server">Demo server</string>
   <string name="action_own_server">Own server</string>
   <string name="action_enter_data_manually">Enter data manually</string>
+  <string name="action_details">Details</string>
   <string name="action_perform">Perform action</string>
   <!-- Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="action_play_store" translatable="false">Play Store</string>
@@ -481,6 +482,10 @@
   <string name="error_network">Network error</string>
   <string name="error_network_subtitle">The required data could not be loaded completely</string>
   <string name="error_network_exact">Network error: %1$s</string>
+  <string name="error_database">Database error</string>
+  <string name="error_database_exact">Database error: %1$s</string>
+  <string name="error_database_object_too_large">Database error</string>
+  <string name="error_details">Error details</string>
   <string name="error_unknown">Oops!</string>
   <string name="error_not_grocy_instance">Not a valid grocy instance</string>
   <string name="error_timeout">Timeout error</string>

@@ -21,16 +21,13 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.PluralsRes;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,12 +45,12 @@ import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.Task;
+import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.model.VolatileItem;
 import xyz.zedler.patrick.grocy.repository.OverviewStartRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
-import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
 public class OverviewStartViewModel extends BaseViewModel {
 
@@ -64,8 +61,6 @@ public class OverviewStartViewModel extends BaseViewModel {
   private final OverviewStartRepository repository;
 
   private final MutableLiveData<Boolean> isLoadingLive;
-  private final MutableLiveData<Boolean> offlineLive;
-
   private final MutableLiveData<List<StockItem>> stockItemsLive;
   private final MutableLiveData<List<ShoppingListItem>> shoppingListItemsLive;
   private final MutableLiveData<List<Product>> productsLive;
@@ -102,13 +97,11 @@ public class OverviewStartViewModel extends BaseViewModel {
   private final MutableLiveData<Integer> currentUserIdLive;
   private List<ShoppingList> shoppingLists;
   private boolean alreadyLoadedFromDatabase;
-  private final boolean debug;
 
   public OverviewStartViewModel(@NonNull Application application) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
     int decimalPlacesPriceDisplay = sharedPrefs.getInt(
         STOCK.DECIMAL_PLACES_PRICES_DISPLAY,
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_DISPLAY
@@ -118,7 +111,6 @@ public class OverviewStartViewModel extends BaseViewModel {
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     repository = new OverviewStartRepository(application);
 
-    offlineLive = new MutableLiveData<>(false);
     stockItemsLive = new MutableLiveData<>();
     itemsDueNextCountLive = new MutableLiveData<>();
     itemsOverdueCountLive = new MutableLiveData<>();
@@ -406,7 +398,9 @@ public class OverviewStartViewModel extends BaseViewModel {
           .getStockItemHashMap(data.getStockItems());
       for (VolatileItem volatileItem : data.getVolatileItems()) {
         StockItem stockItem = stockItemHashMap.get(volatileItem.getProductId());
-        if (stockItem == null) continue;
+        if (stockItem == null) {
+          continue;
+        }
         if (volatileItem.getVolatileType() == VolatileItem.TYPE_DUE) {
           stockItem.setItemDue(true);
           itemsDueCount++;
@@ -488,7 +482,7 @@ public class OverviewStartViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData(false);
       }
-    });
+    }, this::showDatabaseErrorMessage);
   }
 
   public void downloadData(boolean skipOfflineCheck) {
@@ -498,7 +492,7 @@ public class OverviewStartViewModel extends BaseViewModel {
     }
     dlHelper.updateData(
         this::onQueueEmpty,
-        this::onDownloadError,
+        error -> onError(error, TAG),
         StockItem.class,
         ShoppingListItem.class,
         ShoppingList.class,
@@ -528,7 +522,7 @@ public class OverviewStartViewModel extends BaseViewModel {
     if (isOffline()) setOfflineLive(false);
 
     if (sharedPrefs.getInt(PREF.CURRENT_USER_ID, -1) == -1) {
-      dlHelper.getCurrentUserId(id -> {
+      User.getCurrentUserId(dlHelper, id -> {
         if (id != -1) {
           sharedPrefs.edit().putInt(PREF.CURRENT_USER_ID, id).apply();
           currentUserIdLive.setValue(id);
@@ -553,27 +547,6 @@ public class OverviewStartViewModel extends BaseViewModel {
     } else {
       loadFromDatabase(false);
     }
-  }
-
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showNetworkErrorMessage(error);
-    if (!isOffline()) setOfflineLive(true);
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

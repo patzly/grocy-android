@@ -29,7 +29,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONException;
@@ -38,15 +37,16 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.form.FormDataMasterProduct;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.form.FormDataMasterProduct;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
+import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -65,7 +65,6 @@ public class MasterProductViewModel extends BaseViewModel {
   private final MutableLiveData<List<PendingProductBarcode>> pendingProductBarcodesLive;
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
 
   private List<Product> products;
 
@@ -95,7 +94,6 @@ public class MasterProductViewModel extends BaseViewModel {
 
     pendingProductBarcodesLive = new MutableLiveData<>();
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
 
     if (isActionEdit()) {
       if (args.getProduct() != null) {
@@ -103,7 +101,7 @@ public class MasterProductViewModel extends BaseViewModel {
       } else {
         assert args.getProductId() != null;
         int productId = Integer.parseInt(args.getProductId());
-        extraQueueItem = dlHelper.getProductDetails(productId, productDetails -> {
+        extraQueueItem = ProductDetails.getProductDetails(dlHelper, productId, productDetails -> {
           extraQueueItem = null;
           setCurrentProduct(productDetails.getProduct());
           if (products != null) {
@@ -173,7 +171,7 @@ public class MasterProductViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
@@ -186,16 +184,24 @@ public class MasterProductViewModel extends BaseViewModel {
       return;
     }
     if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
+      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, TAG));
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(() -> {}, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(() -> {
+      if (isOffline()) {
+        setOfflineLive(false);
+      }
+    }, error -> onError(error, TAG));
     queue.append(
-        dlHelper.updateProducts(dbChangedTime, products -> {
+        Product.updateProducts(dlHelper, dbChangedTime, products -> {
           this.products = products;
           formData.getProductNamesLive().setValue(getProductNames(products));
-        }), dlHelper.updateProductBarcodes(dbChangedTime, this::removeBarcodesWhichExistOnline)
+        }), ProductBarcode.updateProductBarcodes(
+            dlHelper,
+            dbChangedTime,
+            this::removeBarcodesWhichExistOnline
+        )
     );
     if (extraQueueItem != null) {
       queue.append(extraQueueItem);
@@ -218,13 +224,6 @@ public class MasterProductViewModel extends BaseViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
     editPrefs.apply();
     downloadData();
-  }
-
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showMessage(getString(R.string.msg_no_connection));
   }
 
   private ArrayList<String> getProductNames(List<Product> products) {
@@ -318,7 +317,8 @@ public class MasterProductViewModel extends BaseViewModel {
     );
     for (PendingProductBarcode pendingProductBarcode : pendingProductBarcodes) {
       pendingProductBarcode.setPendingProductId(productId);
-      queue.append(dlHelper.addProductBarcode(
+      queue.append(ProductBarcode.addProductBarcode(
+          dlHelper,
           pendingProductBarcode.getJsonFromProductBarcode(debug, TAG),
           null, null
       ));
@@ -384,19 +384,6 @@ public class MasterProductViewModel extends BaseViewModel {
     } else {
       pendingProductBarcodesLive.setValue(filteredBarcodes);
     }
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

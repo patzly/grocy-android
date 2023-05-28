@@ -23,12 +23,10 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +35,10 @@ import me.xdrop.fuzzywuzzy.FuzzySearch;
 import me.xdrop.fuzzywuzzy.model.BoundExtractedResult;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.StockOverviewFragmentArgs;
@@ -64,10 +66,6 @@ import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.VolatileItem;
 import xyz.zedler.patrick.grocy.repository.StockOverviewRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.PREF;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -86,7 +84,6 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<ArrayList<StockItem>> filteredStockItemsLive;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
   private final FilterChipLiveDataStockStatus filterChipLiveDataStatus;
@@ -134,7 +131,6 @@ public class StockOverviewViewModel extends BaseViewModel {
     pluralUtil = new PluralUtil(application);
 
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
     filteredStockItemsLive = new MutableLiveData<>();
     scannerVisibilityLive = new MutableLiveData<>(false);
 
@@ -265,7 +261,7 @@ public class StockOverviewViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData(false);
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(boolean skipOfflineCheck) {
@@ -279,7 +275,7 @@ public class StockOverviewViewModel extends BaseViewModel {
           if (isOffline()) setOfflineLive(false);
           loadFromDatabase(false);
         },
-        this::onDownloadError,
+        error -> onError(error, TAG),
         QuantityUnit.class,
         ProductGroup.class,
         StockItem.class,
@@ -304,22 +300,15 @@ public class StockOverviewViewModel extends BaseViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_STOCK_ITEMS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS_AVERAGE_PRICE, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
+    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS_AVERAGE_PRICE, null);
+    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS_LAST_PURCHASED, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_STOCK_LOCATIONS, null);
     editPrefs.apply();
     downloadData(true);
-  }
-
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showNetworkErrorMessage(error);
-    if (!isOffline()) setOfflineLive(true);
   }
 
   public void updateFilteredStockItems() {
@@ -729,19 +718,6 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   public boolean isAlreadyLoadedFromDatabase() {
     return alreadyLoadedFromDatabase;
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull
