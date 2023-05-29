@@ -412,7 +412,9 @@ public class MainActivity extends AppCompatActivity {
     if (networkReceiver != null) {
       unregisterReceiver(networkReceiver);
     }
-    netUtil.closeWebSocketClient("fragment destroyed");
+    if (netUtil != null) {
+      netUtil.closeWebSocketClient("fragment destroyed");
+    }
     super.onDestroy();
   }
 
