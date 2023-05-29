@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +31,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.CursorWindow;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
@@ -173,6 +175,19 @@ public class MainActivity extends AppCompatActivity {
     // COLOR
 
     ResUtil.applyColorHarmonization(this);
+
+    // DATABASE
+
+    // Workaround for issue #698
+    // https://github.com/andpor/react-native-sqlite-storage/issues/364#issuecomment-526423153
+    try {
+      @SuppressLint("PrivateApi") Field field = CursorWindow.class
+          .getDeclaredField("sCursorWindowSize");
+      field.setAccessible(true);
+      field.set(null, 10 * 1024 * 1024); // 10MB is the new size
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
     // WEB
 
