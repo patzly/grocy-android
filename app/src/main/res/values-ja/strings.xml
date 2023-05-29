@@ -123,6 +123,7 @@
   <string name="action_demo_server">デモサーバー</string>
   <string name="action_own_server">自前サーバー</string>
   <string name="action_enter_data_manually">手動でデータ入力</string>
+  <string name="action_details">詳細</string>
   <string name="action_perform">実行</string>
   <string name="action_share">シェア</string>
   <string name="action_share_description">友人にGrocy Androidを紹介</string>
@@ -453,6 +454,10 @@
   <string name="error_network">ネットワークエラー</string>
   <string name="error_network_subtitle">必要なデータを完全にはロードできませんでした</string>
   <string name="error_network_exact">ネットワークエラー：%1$s</string>
+  <string name="error_database">データベースエラー</string>
+  <string name="error_database_exact">データベースエラー：%1$s</string>
+  <string name="error_database_object_too_large">データベースエラー</string>
+  <string name="error_details">エラーの詳細</string>
   <string name="error_unknown">おっと！</string>
   <string name="error_not_grocy_instance">無効なgrocyインスタンスです</string>
   <string name="error_timeout">タイムアウトエラー</string>
