@@ -20,7 +20,6 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -143,10 +142,7 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
     if (savedInstanceState == null && args.getAction().equals(ACTION.CREATE)) {
       if (binding.autoCompleteProduct.getText() == null
           || binding.autoCompleteProduct.getText().length() == 0) {
-        new Handler().postDelayed(
-            () -> activity.showKeyboard(binding.autoCompleteProduct),
-            50
-        );
+        activity.showKeyboard(binding.autoCompleteProduct);
       }
     }
 

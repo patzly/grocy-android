@@ -20,7 +20,6 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -37,7 +37,6 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingListEditViewModel;
 
@@ -128,10 +127,7 @@ public class ShoppingListEditFragment extends BaseFragment {
     }
 
     if (startUpShoppingList == null && savedInstanceState == null) {
-      new Handler().postDelayed(
-          () -> activity.showKeyboard(binding.editTextName),
-          50
-      );
+      activity.showKeyboard(binding.editTextName);
     }
 
     // UPDATE UI

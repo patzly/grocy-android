@@ -60,7 +60,6 @@ import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsAnimationCompat;
 import androidx.core.view.WindowInsetsAnimationCompat.BoundsCompat;
 import androidx.core.view.WindowInsetsAnimationCompat.Callback;
@@ -78,7 +77,6 @@ import com.google.android.material.snackbar.Snackbar;
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Objects;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.PREF;
@@ -683,19 +681,14 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void showKeyboard(EditText editText) {
-    new Handler().postDelayed(() -> {
-      editText.requestFocus();
-      WindowCompat.getInsetsController(getWindow(), editText).show(Type.ime());
-    }, 100);
+    editText.requestFocus();
+    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
   }
 
   public void hideKeyboard() {
-    ((InputMethodManager) Objects
-        .requireNonNull(getSystemService(Context.INPUT_METHOD_SERVICE)))
-        .hideSoftInputFromWindow(
-            findViewById(android.R.id.content).getWindowToken(),
-            0
-        );
+    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm.hideSoftInputFromWindow(findViewById(android.R.id.content).getWindowToken(), 0);
   }
 
   public GrocyApi getGrocyApi() {

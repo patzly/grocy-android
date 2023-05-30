@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.InputType;
 import android.view.FocusFinder;
 import android.view.LayoutInflater;
@@ -221,10 +220,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
     if (savedInstanceState == null && !args.getAction().equals(ACTION.EDIT)) {
       if (binding.autoCompleteProduct.getText() == null
           || binding.autoCompleteProduct.getText().length() == 0) {
-        new Handler().postDelayed(
-            () -> activity.showKeyboard(binding.autoCompleteProduct),
-            50
-        );
+        activity.showKeyboard(binding.autoCompleteProduct);
       }
     }
 
@@ -326,10 +322,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
   private void showInitialKeyboardIfConditionsAreMet() {
     if (binding.autoCompleteProduct.getText() == null
         || binding.autoCompleteProduct.getText().length() == 0) {
-      new Handler().postDelayed(() -> {
-        if (viewModel.getInfoFullscreenLive().getValue() != null) return;
-        activity.showKeyboard(binding.autoCompleteProduct);
-      }, 50);
+      activity.showKeyboard(binding.autoCompleteProduct);
     }
   }
 

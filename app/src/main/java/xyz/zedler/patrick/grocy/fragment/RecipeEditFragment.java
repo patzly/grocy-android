@@ -163,7 +163,7 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
 
     if (savedInstanceState == null && args.getAction().equals(ACTION.CREATE)) {
       if (binding.editTextName.getText() == null || binding.editTextName.getText().length() == 0) {
-        new Handler().postDelayed(() -> activity.showKeyboard(binding.editTextName), 50);
+        activity.showKeyboard(binding.editTextName);
       }
     }
 
