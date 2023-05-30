@@ -21,23 +21,19 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.form.FormDataRecipeEditIngredientList;
 import xyz.zedler.patrick.grocy.fragment.RecipeEditIngredientListFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.form.FormDataRecipeEditIngredientList;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -59,16 +55,13 @@ public class RecipeEditIngredientListViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
-
-  private final String action;
-  private final Recipe recipe;
 
   private ArrayList<RecipePosition> recipePositions;
   private List<Product> products;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
   private List<QuantityUnitConversion> unitConversions;
 
+  private final Recipe recipe;
   private final boolean isActionEdit;
 
   public RecipeEditIngredientListViewModel(
@@ -85,11 +78,7 @@ public class RecipeEditIngredientListViewModel extends BaseViewModel {
     formData = new FormDataRecipeEditIngredientList(application, prefs, getBeginnerModeEnabled());
     args = startupArgs;
     isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
-
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
-
-    action = args.getAction();
     recipe = args.getRecipe();
   }
 
@@ -118,26 +107,23 @@ public class RecipeEditIngredientListViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
+  public void downloadData() {
     if (isOffline()) { // skip downloading
       isLoadingLive.setValue(false);
       return;
     }
 
     dlHelper.updateData(
-            () -> loadFromDatabase(false),
-            this::onDownloadError,
-            RecipePosition.class,
-            Product.class,
-            QuantityUnit.class
+        () -> loadFromDatabase(false),
+        error -> onError(error, TAG),
+        RecipePosition.class,
+        Product.class,
+        QuantityUnit.class,
+        QuantityUnitConversion.class
     );
-  }
-
-  public void downloadData() {
-    downloadData(null);
   }
 
   public void downloadDataForceUpdate() {
@@ -148,29 +134,6 @@ public class RecipeEditIngredientListViewModel extends BaseViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
     editPrefs.apply();
     downloadData();
-  }
-
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (isDebuggingEnabled()) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

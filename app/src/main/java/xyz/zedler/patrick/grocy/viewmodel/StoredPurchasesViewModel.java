@@ -21,16 +21,14 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
@@ -39,8 +37,6 @@ import xyz.zedler.patrick.grocy.model.PendingProductInfo;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.repository.StoredPurchasesRepository;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class StoredPurchasesViewModel extends BaseViewModel {
@@ -53,7 +49,6 @@ public class StoredPurchasesViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> displayHelpLive;
   private final MutableLiveData<Boolean> isLoadingLive;
-  private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<List<GroupedListItem>> displayedItemsLive;
 
   private List<Product> products;
@@ -67,22 +62,18 @@ public class StoredPurchasesViewModel extends BaseViewModel {
 
   private Runnable queueEmptyAction;
   private NetworkQueue currentQueueLoading;
-  private final boolean debug;
 
   public StoredPurchasesViewModel(@NonNull Application application) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     displayHelpLive = new MutableLiveData<>(false);
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     repository = new StoredPurchasesRepository(application);
 
-    offlineLive = new MutableLiveData<>(false);
     displayedItemsLive = new MutableLiveData<>();
-
     productHashMap = new HashMap<>();
     pendingProductHashMap = new HashMap<>();
     productBarcodeHashMap = new HashMap<>();
@@ -129,7 +120,7 @@ public class StoredPurchasesViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
@@ -144,13 +135,13 @@ public class StoredPurchasesViewModel extends BaseViewModel {
     if (dbChangedTime == null) {
       dlHelper.getTimeDbChanged(
           this::downloadData,
-          () -> onDownloadError(null)
+          error -> onError(error, TAG)
       );
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
-    queue.append(dlHelper.updateProducts(dbChangedTime, products -> {
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
+    queue.append(Product.updateProducts(dlHelper, dbChangedTime, products -> {
       this.products = products;
       productHashMap.clear();
       for (Product product : products) {
@@ -192,16 +183,6 @@ public class StoredPurchasesViewModel extends BaseViewModel {
     displayItems();
   }
 
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
-  }
-
   public void displayItems() {
     boolean firstElement = true;
     ArrayList<GroupedListItem> items = new ArrayList<>();
@@ -238,19 +219,6 @@ public class StoredPurchasesViewModel extends BaseViewModel {
           showErrorMessage();
           displayItems();
         });
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

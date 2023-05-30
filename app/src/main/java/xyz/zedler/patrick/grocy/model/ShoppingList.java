@@ -21,12 +21,29 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 
 @Entity(tableName = "shopping_list_table")
 public class ShoppingList implements Parcelable {
@@ -110,5 +127,113 @@ public class ShoppingList implements Parcelable {
   @Override
   public String toString() {
     return "ShoppingListEntity{id=" + id + ", name='" + name + "', notes='" + notes + "'}";
+  }
+
+  public static QueueItem getShoppingLists(
+      DownloadHelper dlHelper,
+      OnObjectsResponseListener<ShoppingList> onResponseListener,
+      OnErrorListener onErrorListener
+  ) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnMultiTypeErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        dlHelper.get(
+            dlHelper.grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LISTS),
+            uuid,
+            response -> {
+              Type type = new TypeToken<List<ShoppingList>>() {
+              }.getType();
+              ArrayList<ShoppingList> shoppingLists = dlHelper.gson.fromJson(response, type);
+              if (dlHelper.debug) {
+                Log.i(dlHelper.tag, "download ShoppingLists: " + shoppingLists);
+              }
+              onResponseListener.onResponse(shoppingLists);
+              if (responseListener != null) {
+                responseListener.onResponse(response);
+              }
+            },
+            error -> {
+              if (onErrorListener != null) {
+                onErrorListener.onError(error);
+              }
+              if (errorListener != null) {
+                errorListener.onError(error);
+              }
+            }
+        );
+      }
+    };
+  }
+
+  public static QueueItem updateShoppingLists(
+      DownloadHelper dlHelper,
+      String dbChangedTime,
+      OnObjectsResponseListener<ShoppingList> onResponseListener
+  ) {
+    String lastTime = dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
+        Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnMultiTypeErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          dlHelper.get(
+              dlHelper.grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LISTS),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<ShoppingList>>() {
+                }.getType();
+                ArrayList<ShoppingList> shoppingLists = dlHelper.gson.fromJson(response, type);
+                if (dlHelper.debug) {
+                  Log.i(dlHelper.tag, "download ShoppingLists: " + shoppingLists);
+                }
+                Single.fromCallable(() -> {
+                  dlHelper.appDatabase.shoppingListDao()
+                      .deleteShoppingLists().blockingSubscribe();
+                  dlHelper.appDatabase.shoppingListDao()
+                      .insertShoppingLists(shoppingLists).blockingSubscribe();
+                  dlHelper.sharedPrefs.edit()
+                      .putString(PREF.DB_LAST_TIME_SHOPPING_LISTS, dbChangedTime).apply();
+                  return true;
+                })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnError(throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    })
+                    .doFinally(() -> {
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(shoppingLists);
+                      }
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
+    } else {
+      if (dlHelper.debug) {
+        Log.i(dlHelper.tag, "downloadData: skipped ShoppingLists download");
+      }
+      return null;
+    }
   }
 }

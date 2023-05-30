@@ -20,7 +20,6 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -151,7 +150,7 @@ public class TaskEntryEditFragment extends BaseFragment {
 
     if (savedInstanceState == null && !args.getAction().equals(ACTION.EDIT)) {
       if (binding.editTextName.getText() == null || binding.editTextName.getText().length() == 0) {
-        new Handler().postDelayed(() -> activity.showKeyboard(binding.editTextName), 50);
+        activity.showKeyboard(binding.editTextName);
       }
     }
 

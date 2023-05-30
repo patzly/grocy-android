@@ -22,18 +22,18 @@ package xyz.zedler.patrick.grocy.model;
 import android.app.Application;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.api.OpenBeautyFactsApi;
 import xyz.zedler.patrick.grocy.api.OpenFoodFactsApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectResponseListener;
 
-public class OpenFoodFactsProduct {
+public class OpenBeautyFactsProduct {
 
   private JSONObject productJson;
 
@@ -42,10 +42,6 @@ public class OpenFoodFactsProduct {
 
   @SerializedName("product_name")
   private String productName;
-
-  @Nullable
-  @SerializedName("nutriments")
-  private OpenFoodFactsNutriments nutriments;
 
   public void setProductJson(JSONObject productJson) {
     this.productJson = productJson;
@@ -79,84 +75,37 @@ public class OpenFoodFactsProduct {
     return name.isEmpty() ? this.productName : name;
   }
 
-  public double getEnergy100g() {
-    if (nutriments == null) {
-      return 0;
-    }
-    if (nutriments.energyKcal100g != 0) {
-      return nutriments.energyKcal100g;
-    } else if (nutriments.energyKcalValue != 0) {
-      return nutriments.energyKcalValue;
-    } else {
-      return nutriments.energyKcal;
-    }
-  }
-
-  @Nullable
-  public String getHumanReadableEnergy100g() {
-    double energy100g = getEnergy100g();
-    if (energy100g == 0 || nutriments == null) {
-      return null;
-    }
-    return energy100g + " " + nutriments.energyKcalUnit;
-  }
-
-  @Nullable
-  public String getHumanReadableEnergyServing() {
-    if (nutriments == null || nutriments.energyKcalServing == 0) {
-      return null;
-    }
-    return nutriments.energyKcalServing + " " + nutriments.energyKcalUnit;
-  }
-
-  public static class OpenFoodFactsNutriments {
-    @SerializedName("energy-kcal")
-    private double energyKcal;
-
-    @SerializedName("energy-kcal_100g")
-    private double energyKcal100g;
-
-    @SerializedName("energy-kcal_serving")
-    private double energyKcalServing;
-
-    @SerializedName("energy-kcal_unit")
-    private String energyKcalUnit;
-
-    @SerializedName("energy-kcal_value")
-    private double energyKcalValue;
-  }
-
   @NonNull
   @Override
   public String toString() {
-    return "OpenFoodFactsProduct(" + productName + ")";
+    return "OpenBeautyFactsProduct(" + productName + ")";
   }
 
-  public static void getOpenFoodFactsProduct(
+  public static void getOpenBeautyFactsProduct(
       DownloadHelper dlHelper,
       String barcode,
-      OnObjectResponseListener<OpenFoodFactsProduct> successListener,
+      OnObjectResponseListener<OpenBeautyFactsProduct> successListener,
       OnErrorListener errorListener
   ) {
     dlHelper.get(
-        OpenFoodFactsApi.getProduct(barcode),
+        OpenBeautyFactsApi.getProduct(barcode),
         response -> {
           try {
             JSONObject jsonObject = new JSONObject(response);
             JSONObject jsonProduct = jsonObject.getJSONObject("product");
-            Type type = new TypeToken<OpenFoodFactsProduct>(){}.getType();
-            OpenFoodFactsProduct product = dlHelper.gson.fromJson(jsonProduct.toString(), type);
+            Type type = new TypeToken<OpenBeautyFactsProduct>(){}.getType();
+            OpenBeautyFactsProduct product = dlHelper.gson.fromJson(jsonProduct.toString(), type);
             product.setProductJson(jsonProduct);
             successListener.onResponse(product);
-            if(dlHelper.debug) Log.i(dlHelper.tag, "getOpenFoodFactsProduct: " + product);
+            if(dlHelper.debug) Log.i(dlHelper.tag, "getOpenBeautyFactsProduct: " + product);
           } catch (JSONException e) {
-            if(dlHelper.debug) Log.e(dlHelper.tag, "getOpenFoodFactsProduct: " + e);
+            if(dlHelper.debug) Log.e(dlHelper.tag, "getOpenBeautyFactsProduct: " + e);
             errorListener.onError(null);
           }
         },
         error -> {
-          if(dlHelper.debug) Log.e(dlHelper.tag, "getOpenFoodFactsProduct: "
-              + "can't get OpenFoodFacts product");
+          if(dlHelper.debug) Log.e(dlHelper.tag, "getOpenBeautyFactsProduct: "
+              + "can't get OpenBeautyFacts product");
           errorListener.onError(error);
         },
         OpenFoodFactsApi.getUserAgent(dlHelper.application)

@@ -24,6 +24,7 @@ import android.os.Parcelable;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -31,11 +32,23 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import com.google.gson.reflect.TypeToken;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Objects;
+import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 
 @Entity(tableName = "recipe_fulfillment_table")
 public class RecipeFulfillment implements Parcelable {
@@ -281,5 +294,72 @@ public class RecipeFulfillment implements Parcelable {
   @Override
   public String toString() {
     return "RecipeFulfillment(" + recipeId + ")";
+  }
+
+  public static QueueItem updateRecipeFulfillments(
+      DownloadHelper dlHelper,
+      String dbChangedTime,
+      OnObjectsResponseListener<RecipeFulfillment> onResponseListener
+  ) {
+    String lastTime = dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
+        PREF.DB_LAST_TIME_RECIPE_FULFILLMENTS, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnMultiTypeErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          dlHelper.get(
+              dlHelper.grocyApi.getRecipeFulfillments(),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<RecipeFulfillment>>() {
+                }.getType();
+                ArrayList<RecipeFulfillment> recipeFulfillments = dlHelper.gson.fromJson(response, type);
+                if (dlHelper.debug) {
+                  Log.i(dlHelper.tag, "download RecipeFulfillments: " + recipeFulfillments);
+                }
+                Single.fromCallable(() -> {
+                  dlHelper.appDatabase.recipeFulfillmentDao()
+                      .deleteRecipeFulfillments().blockingSubscribe();
+                  dlHelper.appDatabase.recipeFulfillmentDao()
+                      .insertRecipeFulfillments(recipeFulfillments).blockingSubscribe();
+                  dlHelper.sharedPrefs.edit()
+                      .putString(PREF.DB_LAST_TIME_RECIPE_FULFILLMENTS, dbChangedTime).apply();
+                  return true;
+                })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnError(throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    })
+                    .doFinally(() -> {
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(recipeFulfillments);
+                      }
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    }).subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
+    } else {
+      if (dlHelper.debug) {
+        Log.i(dlHelper.tag, "downloadData: skipped Recipe fulfillments download");
+      }
+      return null;
+    }
   }
 }

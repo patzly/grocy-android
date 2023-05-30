@@ -41,8 +41,8 @@ android {
         applicationId "xyz.zedler.patrick.grocy"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 46
-        versionName "3.2.0"
+        versionCode 47
+        versionName "3.2.1"
         resConfigs 'ca', 'cs', 'de', 'en', 'es', 'et', 'fr', 'hu', 'it', 'iw', 'nb', 'nl', 'pl', 'pt-rBR', 'pt-rPT', 'ru', 'sk', 'sv', 'uk', 'zh-rCN', 'zh-rTW'
 
         javaCompileOptions {

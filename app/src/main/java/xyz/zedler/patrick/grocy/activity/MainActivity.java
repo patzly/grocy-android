@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +31,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.CursorWindow;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
@@ -58,7 +60,6 @@ import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsAnimationCompat;
 import androidx.core.view.WindowInsetsAnimationCompat.BoundsCompat;
 import androidx.core.view.WindowInsetsAnimationCompat.Callback;
@@ -76,7 +77,6 @@ import com.google.android.material.snackbar.Snackbar;
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Objects;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.PREF;
@@ -173,6 +173,19 @@ public class MainActivity extends AppCompatActivity {
     // COLOR
 
     ResUtil.applyColorHarmonization(this);
+
+    // DATABASE
+
+    // Workaround for issue #698
+    // https://github.com/andpor/react-native-sqlite-storage/issues/364#issuecomment-526423153
+    try {
+      @SuppressLint("PrivateApi") Field field = CursorWindow.class
+          .getDeclaredField("sCursorWindowSize");
+      field.setAccessible(true);
+      field.set(null, 10 * 1024 * 1024); // 10MB is the new size
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
     // WEB
 
@@ -397,7 +410,9 @@ public class MainActivity extends AppCompatActivity {
     if (networkReceiver != null) {
       unregisterReceiver(networkReceiver);
     }
-    netUtil.closeWebSocketClient("fragment destroyed");
+    if (netUtil != null) {
+      netUtil.closeWebSocketClient("fragment destroyed");
+    }
     super.onDestroy();
   }
 
@@ -666,19 +681,14 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void showKeyboard(EditText editText) {
-    new Handler().postDelayed(() -> {
-      editText.requestFocus();
-      WindowCompat.getInsetsController(getWindow(), editText).show(Type.ime());
-    }, 100);
+    editText.requestFocus();
+    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
   }
 
   public void hideKeyboard() {
-    ((InputMethodManager) Objects
-        .requireNonNull(getSystemService(Context.INPUT_METHOD_SERVICE)))
-        .hideSoftInputFromWindow(
-            findViewById(android.R.id.content).getWindowToken(),
-            0
-        );
+    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm.hideSoftInputFromWindow(findViewById(android.R.id.content).getWindowToken(), 0);
   }
 
   public GrocyApi getGrocyApi() {

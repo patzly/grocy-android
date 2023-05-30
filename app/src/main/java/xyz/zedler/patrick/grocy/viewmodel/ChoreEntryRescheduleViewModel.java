@@ -24,18 +24,19 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
@@ -46,9 +47,6 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.repository.ChoresRepository;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -65,7 +63,6 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
 
   private final MutableLiveData<String> nextTrackingDateLive;
   private final LiveData<String> nextTrackingDateTextLive;
@@ -94,8 +91,6 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
     repository = new ChoresRepository(application);
 
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
-
     nextTrackingDateLive = new MutableLiveData<>(chore.getRescheduledDate() != null
         && !chore.getRescheduledDate().isEmpty() ? chore.getRescheduledDate() : null);
     nextTrackingDateTextLive = Transformations.map(
@@ -141,7 +136,7 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
           if (downloadAfterLoading) {
             downloadData();
           }
-        }
+        }, error -> onError(error, TAG)
     );
   }
 
@@ -154,7 +149,7 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
       isLoadingLive.setValue(false);
       return;
     }
-    dlHelper.updateData(this::onQueueEmpty, this::onDownloadError, User.class);
+    dlHelper.updateData(this::onQueueEmpty, error -> onError(error, TAG), User.class);
   }
 
   public void downloadDataForceUpdate() {
@@ -171,18 +166,8 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
     loadFromDatabase(false);
   }
 
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
-  }
-
   public void rescheduleChore() {
-    if (offlineLive.getValue()) {
+    if (isOffline()) {
       showMessage(getString(R.string.error_offline));
       return;
     }
@@ -276,19 +261,6 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
 
   public boolean showTimeField() {
     return !chore.getTrackDateOnlyBoolean();
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

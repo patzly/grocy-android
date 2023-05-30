@@ -467,6 +467,7 @@ public final class Constants {
       public final static String TRANSFER = "transfer";
       public final static String INVENTORY = "inventory";
       public final static String SAVE = "save";
+      public final static String SAVE_NOT_CLOSE = "save_not_close";
       public final static String DONE = "done";
       public final static String PREPARATION = "preparation";
     }

@@ -34,6 +34,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.CHORES;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.NOTIFICATIONS;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.util.ReminderUtil;
 
 public class ChoresNotificationReceiver extends BroadcastReceiver {
@@ -58,7 +59,7 @@ public class ChoresNotificationReceiver extends BroadcastReceiver {
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     DownloadHelper dlHelper = new DownloadHelper(context, ChoresNotificationReceiver.class.getSimpleName());
 
-    dlHelper.getChoreEntries(choreEntries -> {
+    ChoreEntry.getChoreEntries(dlHelper, choreEntries -> {
       if (choreEntries.size() == 0) return;
 
       int days = sharedPrefs.getInt(

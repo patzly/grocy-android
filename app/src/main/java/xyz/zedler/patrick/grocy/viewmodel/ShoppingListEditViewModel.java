@@ -30,7 +30,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONException;
@@ -59,9 +58,6 @@ public class ShoppingListEditViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
-
-  private List<ShoppingList> shoppingLists;
 
   private NetworkQueue currentQueueLoading;
   private final ShoppingList startupShoppingList;
@@ -83,7 +79,6 @@ public class ShoppingListEditViewModel extends BaseViewModel {
     formData = new FormDataShoppingListEdit(startupShoppingList);
 
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
     this.startupShoppingList = startupShoppingList;
   }
 
@@ -94,12 +89,11 @@ public class ShoppingListEditViewModel extends BaseViewModel {
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadShoppingListsFromDatabase(
         shoppingLists -> {
-          this.shoppingLists = shoppingLists;
           formData.setShoppingListNames(getShoppingListNames(shoppingLists));
           if (downloadAfterLoading) {
             downloadData();
           }
-        }
+        }, error -> onError(error, TAG)
     );
   }
 
@@ -123,16 +117,17 @@ public class ShoppingListEditViewModel extends BaseViewModel {
     if (dbChangedTime == null) {
       dlHelper.getTimeDbChanged(
           this::downloadData,
-          () -> onDownloadError(null)
+          error -> onError(error, TAG)
       );
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
-    queue.append(dlHelper.updateShoppingLists(dbChangedTime, shoppingLists -> {
-      this.shoppingLists = shoppingLists;
-      formData.setShoppingListNames(getShoppingListNames(shoppingLists));
-    }));
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
+    queue.append(ShoppingList.updateShoppingLists(
+        dlHelper,
+        dbChangedTime,
+        shoppingLists -> formData.setShoppingListNames(getShoppingListNames(shoppingLists))
+    ));
 
     if (queue.isEmpty()) {
       return;
@@ -157,21 +152,10 @@ public class ShoppingListEditViewModel extends BaseViewModel {
     if (isOffline()) {
       setOfflineLive(false);
     }
-    repository.updateShoppingLists(this.shoppingLists);
-  }
-
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
   }
 
   public void saveShoppingList() {
-    if (offlineLive.getValue()) {
+    if (isOffline()) {
       showMessage(getString(R.string.error_offline));
       return;
     }
@@ -179,7 +163,7 @@ public class ShoppingListEditViewModel extends BaseViewModel {
       showMessage(R.string.error_missing_information);
       return;
     }
-
+    assert formData.getNameLive().getValue() != null;
     String name = formData.getNameLive().getValue().trim();
     JSONObject jsonObject = new JSONObject();
     try {
@@ -311,19 +295,6 @@ public class ShoppingListEditViewModel extends BaseViewModel {
     Bundle bundle = new Bundle();
     bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedId);
     sendEvent(Event.SET_SHOPPING_LIST_ID, bundle);
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

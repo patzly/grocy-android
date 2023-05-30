@@ -29,26 +29,25 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
+import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatConversionsEdit;
 import xyz.zedler.patrick.grocy.fragment.MasterProductCatConversionsEditFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatConversionsEdit;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
@@ -67,7 +66,6 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
 
   private List<QuantityUnit> quantityUnits;
   private List<QuantityUnitConversion> unitConversions;
@@ -93,9 +91,7 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
     formData = new FormDataMasterProductCatConversionsEdit(application, startupArgs.getProduct());
     args = startupArgs;
     isActionEdit = startupArgs.getConversion() != null;
-
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
   }
 
   public FormDataMasterProductCatConversionsEdit getFormData() {
@@ -110,7 +106,7 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
@@ -123,16 +119,16 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
       return;
     }
     if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
+      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, TAG));
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
     queue.append(
-        dlHelper.updateQuantityUnitConversions(
-            dbChangedTime, conversions -> this.unitConversions = conversions
-        ), dlHelper.updateQuantityUnits(
-            dbChangedTime, quantityUnits -> this.quantityUnits = quantityUnits
+        QuantityUnitConversion.updateQuantityUnitConversions(
+            dlHelper, dbChangedTime, conversions -> this.unitConversions = conversions
+        ), QuantityUnit.updateQuantityUnits(
+            dlHelper, dbChangedTime, quantityUnits -> this.quantityUnits = quantityUnits
         )
     );
     if (queue.isEmpty()) {
@@ -166,16 +162,6 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
       return;
     }
     fillWithConversionIfNecessary();
-  }
-
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
   }
 
   public void saveItem() {
@@ -278,19 +264,6 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
 
   public boolean isActionEdit() {
     return isActionEdit;
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

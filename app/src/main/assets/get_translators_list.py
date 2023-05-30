@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
 # last update of plural rules in PluralUtils: 05/11/23  (MM/DD/YY)
+# don't forget to add case "en" to "de", "es", ... Else "en" would be an unsupported language
+
 # last update of translators list (res/raw/locales.txt): 05/11/23  (MM/DD/YY)
 
 # https://developers.transifex.com/reference/get_projects-project-id-languages

@@ -20,16 +20,25 @@
 package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import org.json.JSONException;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
@@ -44,6 +53,7 @@ import xyz.zedler.patrick.grocy.util.PrefsUtil;
 public class BaseViewModel extends AndroidViewModel {
 
   private final EventHandler eventHandler;
+  private final MutableLiveData<Boolean> offlineLive;
   private final SharedPreferences sharedPrefs;
   private final Resources resources;
   private boolean isSearchVisible;
@@ -52,6 +62,8 @@ public class BaseViewModel extends AndroidViewModel {
   public BaseViewModel(@NonNull Application application) {
     super(application);
     eventHandler = new EventHandler();
+    offlineLive = new MutableLiveData<>(false);
+
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
     isSearchVisible = false;
@@ -91,24 +103,88 @@ public class BaseViewModel extends AndroidViewModel {
     );
   }
 
+  public void onError(Object error, String TAG) {
+    if (error instanceof VolleyError) {
+      Log.e(TAG, "onError: VolleyError: " + (VolleyError) error);
+      if (!isOffline()) {
+        setOfflineLive(true);
+      }
+      showNetworkErrorMessage((VolleyError) error);
+    } else if (error instanceof JSONException) {
+      Log.e(TAG, "onError: JSONException: " + (JSONException) error);
+      showJSONErrorMessage((JSONException) error);
+    } else if (error instanceof Throwable) {
+      Log.e(TAG, "onError: Throwable: " + (Throwable) error);
+      showDatabaseErrorMessage((Throwable) error);
+    }
+  }
+
   public void showErrorMessage() {
     showMessage(getString(R.string.error_undefined));
   }
 
+  public void showDatabaseErrorMessage(Throwable error) {
+    String message;
+    if (error != null && error.getLocalizedMessage() != null) {
+      message = getApplication()
+          .getString(R.string.error_database_exact, error.getLocalizedMessage());
+    } else {
+      message = getString(R.string.error_database);
+    }
+    SnackbarMessage snackbarMessage = new SnackbarMessage(message);
+    if (error != null) {
+      error.printStackTrace();
+
+      StringWriter sw = new StringWriter();
+      PrintWriter pw = new PrintWriter(sw);
+      error.printStackTrace(pw);
+      String stackTrace = sw.toString();
+      snackbarMessage.setAction(
+          getString(R.string.action_details),
+          v -> showErrorDetailsAlertDialog(v.getContext(), stackTrace)
+      );
+    }
+    snackbarMessage.setDurationSecs(5);
+    showSnackbar(snackbarMessage);
+  }
+
   public void showNetworkErrorMessage(VolleyError volleyError) {
     // similar method is also in BaseFragment
-    if (volleyError != null && volleyError.networkResponse != null) {
-      if (volleyError.networkResponse.statusCode == 403) {
-        showMessage(getString(R.string.error_permission));
-        return;
-      }
-    }
-    if (volleyError != null && volleyError.getLocalizedMessage() != null) {
-      showMessage(getApplication()
+    if (volleyError != null && volleyError.networkResponse != null
+        && volleyError.networkResponse.statusCode == 403) {
+      showMessage(getString(R.string.error_permission));
+    } else if (volleyError != null && volleyError.getLocalizedMessage() != null) {
+      showMessageLong(getApplication()
           .getString(R.string.error_network_exact, volleyError.getLocalizedMessage()));
     } else {
       showMessage(getString(R.string.error_network));
     }
+  }
+
+  public void showJSONErrorMessage(JSONException jsonException) {
+    showMessageLong(getApplication()
+        .getString(R.string.error_network_exact, jsonException.getLocalizedMessage()));
+  }
+
+  private void showErrorDetailsAlertDialog(Context context, String message) {
+    new MaterialAlertDialogBuilder(
+        context, R.style.ThemeOverlay_Grocy_AlertDialog
+    ).setTitle(R.string.error_details)
+        .setMessage(message)
+        .setPositiveButton(R.string.action_close, (dialog, which) -> dialog.cancel())
+        .setNegativeButton(R.string.action_copy, (dialog, which) -> {
+          ClipboardManager clipboard = (ClipboardManager) context
+              .getSystemService(Context.CLIPBOARD_SERVICE);
+          ClipData clip = ClipData.newPlainText("Error details", message);
+          clipboard.setPrimaryClip(clip);
+        }).create().show();
+  }
+
+  public void showMessageLong(@Nullable String message) {
+    if (message == null) {
+      return;
+    }
+    showSnackbar(new SnackbarMessage(message).setDurationSecs(5));
   }
 
   public void showMessage(@Nullable String message) {
@@ -169,6 +245,19 @@ public class BaseViewModel extends AndroidViewModel {
   @NonNull
   public EventHandler getEventHandler() {
     return eventHandler;
+  }
+
+  @NonNull
+  public MutableLiveData<Boolean> getOfflineLive() {
+    return offlineLive;
+  }
+
+  public Boolean isOffline() {
+    return offlineLive.getValue();
+  }
+
+  public void setOfflineLive(boolean isOffline) {
+    offlineLive.setValue(isOffline);
   }
 
   String getString(@StringRes int resId) {

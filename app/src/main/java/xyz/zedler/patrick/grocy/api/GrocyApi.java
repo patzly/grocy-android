@@ -459,20 +459,26 @@ public class GrocyApi {
   // FILES
 
   public String getRecipePicture(String filename) {
+    String fileNameEncoded = new String(Base64.encode(
+        filename.getBytes(StandardCharsets.UTF_8),
+        Base64.DEFAULT
+    ), StandardCharsets.UTF_8);
     return getUrl(
-        "/files/recipepictures/" + new String(Base64.encode(
-            filename.getBytes(StandardCharsets.UTF_8),
-            Base64.DEFAULT
-        ), StandardCharsets.UTF_8) + "?force_serve_as=picture&best_fit_height=240&best_fit_width=360"
+        "/files/recipepictures/"
+            + fileNameEncoded.replace("\n", "")
+            + "?force_serve_as=picture&best_fit_height=240&best_fit_width=360"
     );
   }
 
   public String getProductPicture(String filename) {
+    String fileNameEncoded = new String(Base64.encode(
+        filename.getBytes(StandardCharsets.UTF_8),
+        Base64.DEFAULT
+    ), StandardCharsets.UTF_8);
     return getUrl(
-        "/files/productpictures/" + new String(Base64.encode(
-            filename.getBytes(StandardCharsets.UTF_8),
-            Base64.DEFAULT
-        ), StandardCharsets.UTF_8) + "?force_serve_as=picture&best_fit_height=240&best_fit_width=360"
+        "/files/productpictures/"
+            + fileNameEncoded.replace("\n", "")
+            + "?force_serve_as=picture&best_fit_height=240&best_fit_width=360"
     );
   }
 }

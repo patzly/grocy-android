@@ -20,7 +20,6 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -143,10 +142,7 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
     if (savedInstanceState == null && args.getAction().equals(ACTION.CREATE)) {
       if (binding.autoCompleteProduct.getText() == null
           || binding.autoCompleteProduct.getText().length() == 0) {
-        new Handler().postDelayed(
-            () -> activity.showKeyboard(binding.autoCompleteProduct),
-            50
-        );
+        activity.showKeyboard(binding.autoCompleteProduct);
       }
     }
 
@@ -178,12 +174,12 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
     activity.updateBottomAppBar(
         true,
         viewModel.isActionEdit()
-            ? R.menu.menu_recipe_edit_edit
-            : R.menu.menu_recipe_edit_create,
+            ? R.menu.menu_recipe_ingredient_edit
+            : R.menu.menu_recipe_ingredient_create,
         this::onMenuItemClick
     );
     activity.updateFab(
-        R.drawable.ic_round_backup,
+        R.drawable.ic_round_save,
         R.string.action_save,
         Constants.FAB.TAG.SAVE,
         savedInstanceState == null,

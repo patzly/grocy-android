@@ -123,6 +123,7 @@
   <string name="action_demo_server">Serveur de démo</string>
   <string name="action_own_server">Votre serveur</string>
   <string name="action_enter_data_manually">Entrer les données manuellement</string>
+  <string name="action_details">Détails</string>
   <string name="action_perform">Effectuer l\'action</string>
   <string name="action_share">Partager</string>
   <string name="action_share_description">Parlez à vos amis de Grocy Android</string>
@@ -493,6 +494,10 @@
   <string name="error_network">Erreur réseau</string>
   <string name="error_network_subtitle">Les données requises n\'ont pas pu être chargées complètement</string>
   <string name="error_network_exact">Erreur réseau : %1$s</string>
+  <string name="error_database">Erreur de la base de données</string>
+  <string name="error_database_exact">Erreur de la base de données : %1$s</string>
+  <string name="error_database_object_too_large">Erreur de la base de données</string>
+  <string name="error_details">Détails de l\'erreur</string>
   <string name="error_unknown">Oups !</string>
   <string name="error_not_grocy_instance">Ce n\'est pas une instance de grocy valide</string>
   <string name="error_timeout">Erreur de temporisation</string>

@@ -50,8 +50,9 @@ public class SnackbarMessage extends Event {
     return this;
   }
 
-  public void setDurationSecs(int duration) {
+  public SnackbarMessage setDurationSecs(int duration) {
     this.duration = String.valueOf(duration * 1000);
+    return this;
   }
 
   public Snackbar getSnackbar(View view) {

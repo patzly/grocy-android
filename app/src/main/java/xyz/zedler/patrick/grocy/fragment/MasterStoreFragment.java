@@ -48,8 +48,8 @@ import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterStoreBinding;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.util.BindingAdaptersUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
-import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class MasterStoreFragment extends BaseFragment {
@@ -134,6 +134,11 @@ public class MasterStoreFragment extends BaseFragment {
         ViewUtil.startIcon(binding.imageMasterStoreName);
       }
     });
+    BindingAdaptersUtil.setOnDoneClickInSoftKeyboardListener(
+        binding.editTextMasterStoreName, () -> {
+          binding.editTextMasterStoreName.clearFocus();
+          activity.hideKeyboard();
+        });
 
     // description
     binding.editTextMasterStoreDescription.setOnFocusChangeListener(
@@ -145,14 +150,10 @@ public class MasterStoreFragment extends BaseFragment {
 
     MasterStoreFragmentArgs args = MasterStoreFragmentArgs.fromBundle(requireArguments());
     editStore = args.getStore();
-    if (editStore != null) {
+    if (editStore != null && savedInstanceState == null) {
       fillWithEditReferences();
     } else if (savedInstanceState == null) {
-      resetAll();
-      new Handler().postDelayed(
-          () -> activity.showKeyboard(binding.editTextMasterStoreName),
-          50
-      );
+      activity.showKeyboard(binding.editTextMasterStoreName);
     }
 
     // START
@@ -275,7 +276,6 @@ public class MasterStoreFragment extends BaseFragment {
               new TypeToken<List<Store>>() {
               }.getType()
           );
-          SortUtil.sortStoresByName(stores, true);
           storeNames = getStoreNames();
 
           binding.swipeMasterStore.setRefreshing(false);
@@ -284,8 +284,6 @@ public class MasterStoreFragment extends BaseFragment {
 
           if (isRefresh && editStore != null) {
             fillWithEditReferences();
-          } else {
-            resetAll();
           }
         },
         error -> {

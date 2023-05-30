@@ -21,12 +21,10 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -37,7 +35,6 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.repository.MasterDataOverviewRepository;
-import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class MasterDataOverviewViewModel extends BaseViewModel {
@@ -59,13 +56,11 @@ public class MasterDataOverviewViewModel extends BaseViewModel {
   private final MutableLiveData<List<TaskCategory>> taskCategoriesLive;
 
   private NetworkQueue currentQueueLoading;
-  private final boolean debug;
 
   public MasterDataOverviewViewModel(@NonNull Application application) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
@@ -91,7 +86,7 @@ public class MasterDataOverviewViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(@Nullable String dbChangedTime, boolean skipOfflineCheck) {
@@ -106,19 +101,23 @@ public class MasterDataOverviewViewModel extends BaseViewModel {
     if (dbChangedTime == null) {
       dlHelper.getTimeDbChanged(
           time -> downloadData(time, skipOfflineCheck),
-          () -> onDownloadError(null)
+          error -> onError(error, TAG)
       );
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(() -> setOfflineLive(false), this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(() -> {
+      if (isOffline()) {
+        setOfflineLive(false);
+      }
+    }, error -> onError(error, TAG));
     queue.append(
-        dlHelper.updateStores(dbChangedTime, this.storesLive::setValue),
-        dlHelper.updateLocations(dbChangedTime, this.locationsLive::setValue),
-        dlHelper.updateProductGroups(dbChangedTime, this.productGroupsLive::setValue),
-        dlHelper.updateQuantityUnits(dbChangedTime, this.quantityUnitsLive::setValue),
-        dlHelper.updateProducts(dbChangedTime, this.productsLive::setValue),
-        dlHelper.updateTaskCategories(dbChangedTime, this.taskCategoriesLive::setValue)
+        Store.updateStores(dlHelper, dbChangedTime, this.storesLive::setValue),
+        Location.updateLocations(dlHelper, dbChangedTime, this.locationsLive::setValue),
+        ProductGroup.updateProductGroups(dlHelper, dbChangedTime, this.productGroupsLive::setValue),
+        QuantityUnit.updateQuantityUnits(dlHelper, dbChangedTime, this.quantityUnitsLive::setValue),
+        Product.updateProducts(dlHelper, dbChangedTime, this.productsLive::setValue),
+        TaskCategory.updateTaskCategories(dlHelper, dbChangedTime, this.taskCategoriesLive::setValue)
     );
 
     if (queue.isEmpty()) {
@@ -143,14 +142,6 @@ public class MasterDataOverviewViewModel extends BaseViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_TASK_CATEGORIES, null);
     editPrefs.apply();
     downloadData(null, true);
-  }
-
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showNetworkErrorMessage(error);
-    if (!isOffline()) setOfflineLive(true);
   }
 
   @NonNull
