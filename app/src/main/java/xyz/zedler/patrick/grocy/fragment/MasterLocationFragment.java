@@ -49,6 +49,7 @@ import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterLocationBinding;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.util.BindingAdaptersUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
@@ -142,6 +143,11 @@ public class MasterLocationFragment extends BaseFragment {
         ViewUtil.startIcon(binding.imageMasterLocationName);
       }
     });
+    BindingAdaptersUtil.setOnDoneClickInSoftKeyboardListener(
+        binding.editTextMasterLocationName, () -> {
+          binding.editTextMasterLocationName.clearFocus();
+          activity.hideKeyboard();
+        });
 
     // description
     binding.editTextMasterLocationDescription.setOnFocusChangeListener(

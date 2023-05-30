@@ -50,6 +50,7 @@ import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterTaskCategoryBinding;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
+import xyz.zedler.patrick.grocy.util.BindingAdaptersUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
@@ -138,6 +139,11 @@ public class MasterTaskCategoryFragment extends BaseFragment {
           if (hasFocus) {
             ViewUtil.startIcon(binding.imageName);
           }
+        });
+    BindingAdaptersUtil.setOnDoneClickInSoftKeyboardListener(
+        binding.editTextName, () -> {
+          binding.editTextName.clearFocus();
+          activity.hideKeyboard();
         });
 
     // description
