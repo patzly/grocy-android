@@ -162,7 +162,7 @@ public class MasterProductCatConversionsEditFragment extends BaseFragment {
         this::onMenuItemClick
     );
     activity.updateFab(
-        R.drawable.ic_round_backup,
+        R.drawable.ic_round_save,
         R.string.action_save,
         Constants.FAB.TAG.SAVE,
         true,

@@ -290,6 +290,7 @@ public class MasterProductViewModel extends BaseViewModel {
                 actionEditLive.setValue(true);
                 product.setId(finalObjectId);
                 setCurrentProduct(product);
+                sendEvent(Event.TRANSACTION_SUCCESS);
               });
             }
           },

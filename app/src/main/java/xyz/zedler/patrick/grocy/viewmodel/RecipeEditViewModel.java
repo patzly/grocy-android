@@ -307,6 +307,7 @@ public class RecipeEditViewModel extends BaseViewModel {
               actionEditLive.setValue(true);
               finalRecipe.setId(objectId);
               recipe = finalRecipe;
+              sendEvent(Event.TRANSACTION_SUCCESS);
             }
           },
           error -> {
@@ -323,17 +324,15 @@ public class RecipeEditViewModel extends BaseViewModel {
     if (!isActionEdit() || formData.isFilledWithRecipe()) {
       return;
     }
-
-    Recipe entry = args.getRecipe();
-    assert entry != null;
-
-    formData.getNameLive().setValue(entry.getName());
-    formData.getBaseServingsLive().setValue(NumUtil.trimAmount(entry.getBaseServings(), maxDecimalPlacesAmount));
-    formData.getNotCheckShoppingListLive().setValue(entry.isNotCheckShoppingList());
+    formData.getNameLive().setValue(recipe.getName());
+    formData.getBaseServingsLive().setValue(
+        NumUtil.trimAmount(recipe.getBaseServings(), maxDecimalPlacesAmount)
+    );
+    formData.getNotCheckShoppingListLive().setValue(recipe.isNotCheckShoppingList());
     formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
-    formData.getPreparationLive().setValue(entry.getDescription());
-    formData.getPreparationSpannedLive().setValue(entry.getDescription() != null
-        ? Html.fromHtml(entry.getDescription()) : null);
+    formData.getPreparationLive().setValue(recipe.getDescription());
+    formData.getPreparationSpannedLive().setValue(recipe.getDescription() != null
+        ? Html.fromHtml(recipe.getDescription()) : null);
 
     formData.setFilledWithRecipe(true);
   }
@@ -342,8 +341,6 @@ public class RecipeEditViewModel extends BaseViewModel {
     if (!isActionEdit()) {
       return;
     }
-    Recipe recipe = args.getRecipe();
-    assert recipe != null;
     dlHelper.delete(
         grocyApi.getObject(
             ENTITY.RECIPES,

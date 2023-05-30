@@ -174,12 +174,12 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
     activity.updateBottomAppBar(
         true,
         viewModel.isActionEdit()
-            ? R.menu.menu_recipe_edit_edit
-            : R.menu.menu_recipe_edit_create,
+            ? R.menu.menu_recipe_ingredient_edit
+            : R.menu.menu_recipe_ingredient_create,
         this::onMenuItemClick
     );
     activity.updateFab(
-        R.drawable.ic_round_backup,
+        R.drawable.ic_round_save,
         R.string.action_save,
         Constants.FAB.TAG.SAVE,
         savedInstanceState == null,
