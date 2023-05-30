@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -39,9 +40,12 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -153,6 +157,7 @@ public class RecipeFragment extends BaseFragment implements
     viewModel.getRecipeLive().observe(getViewLifecycleOwner(), recipe -> {
       if (recipe == null) return;
       loadRecipePicture(recipe);
+      setupMenuButtons();
       updateDataWithServings();
     });
 
@@ -205,9 +210,7 @@ public class RecipeFragment extends BaseFragment implements
         R.string.title_preparation_mode,
         FAB.TAG.PREPARATION,
         savedInstanceState == null,
-        () -> activity.navUtil.navigateFragment(
-            RecipesFragmentDirections.actionRecipesFragmentToRecipeEditFragment(ACTION.CREATE)
-        )
+        () -> viewModel.showMessage(R.string.msg_not_implemented_yet)
     );
   }
 
@@ -241,6 +244,20 @@ public class RecipeFragment extends BaseFragment implements
           .transform(new CenterCrop())
           .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
           .transition(DrawableTransitionOptions.withCrossFade())
+          .listener(new RequestListener<>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                Target<Drawable> target, boolean isFirstResource) {
+              binding.picture.setVisibility(View.GONE);
+              return false;
+            }
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
+                DataSource dataSource, boolean isFirstResource) {
+              binding.picture.setVisibility(View.VISIBLE);
+              return false;
+            }
+          })
           .into(binding.picture);
     }
   }

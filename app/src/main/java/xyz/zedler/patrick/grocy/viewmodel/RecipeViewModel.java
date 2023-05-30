@@ -21,14 +21,11 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.HashMap;
 import java.util.List;
 import org.json.JSONArray;
@@ -140,7 +137,7 @@ public class RecipeViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(boolean skipOfflineCheck) {
@@ -154,7 +151,7 @@ public class RecipeViewModel extends BaseViewModel {
           if (isOffline()) setOfflineLive(false);
           loadFromDatabase(false);
         },
-        this::onDownloadError,
+        error -> onError(error, TAG),
         Recipe.class,
         RecipeFulfillment.class,
         RecipePosition.class,
@@ -182,14 +179,6 @@ public class RecipeViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
     editPrefs.apply();
     downloadData(true);
-  }
-
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showNetworkErrorMessage(error);
-    if (!isOffline()) setOfflineLive(true);
   }
 
   public void changeAmount(boolean more) {
@@ -224,7 +213,8 @@ public class RecipeViewModel extends BaseViewModel {
       return;
     }
 
-    dlHelper.editRecipe(
+    Recipe.editRecipe(
+        dlHelper,
         args.getRecipeId(),
         body,
         response -> dlHelper.updateData(
