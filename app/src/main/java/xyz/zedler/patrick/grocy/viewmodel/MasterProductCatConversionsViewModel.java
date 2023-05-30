@@ -150,7 +150,10 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
 
   private ArrayList<QuantityUnitConversion> filterConversions(List<QuantityUnitConversion> conversions) {
     ArrayList<QuantityUnitConversion> filteredConversions = new ArrayList<>();
-    assert args.getProduct() != null;
+    if (args.getProduct() == null) {
+      showErrorMessage();
+      return filteredConversions;
+    }
     int productId = args.getProduct().getId();
     for (QuantityUnitConversion conversion : conversions) {
       if (conversion.getProductIdInt() == productId) {
