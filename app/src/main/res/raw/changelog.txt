@@ -1,5 +1,6 @@
 ## 3.3.0
 
+- New: Recipe details are now displayed on a separate page, not a bottom sheet anymore
 - Improved: Database exceptions are now caught and displayed (#698)
 - Improved: Pictures in recipe or product descriptions now can be up to 10MB large (#698)
 - Improved: Keyboard is displayed more reliably and quickly
@@ -22,7 +23,6 @@
 - New: Product pictures on stock & master products list if at least one picture is available (#536)
 - New: Grid layout for recipes list
 - New: Many pages of the app now can be opened using NFC tags with URI (thanks @codesalatdev) (#676)
-- New: Recipe details are now displayed on a separate page, not a bottom sheet anymore
 - Improved: In-app help now contains a list of the supported URIs that can be used for Intents
 - Improved: Menu button in bottom app bar now can be hidden in behavior settings
 - Improved: Scrollbar is shown in scrollable lists
