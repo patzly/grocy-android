@@ -114,16 +114,25 @@ public class LocaleUtil {
 
   public static void setLocalizedGrocyDemoInstance(Context context, SharedPreferences sharedPrefs) {
     Locale locale = LocaleUtil.getLocale();
+    String fullLocaleStr = locale.getCountry().isEmpty() ? locale.getLanguage()
+        : locale.getLanguage() + "-" + locale.getCountry();
     String serverUrl = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
     if (serverUrl != null && serverUrl.contains("demo.grocy.info")
         && !serverUrl.contains("test-")) {
       List<Language> languages = LocaleUtil.getLanguages(context);
       String demoDomain = null;
       for (Language language : languages) {
-        String localeStr = locale.getCountry().isEmpty() ? locale.getLanguage()
-            : locale.getLanguage() + "-" + locale.getCountry();
-        if (language.getCode().equals(localeStr)) {
+        if (language.getCode().equals(fullLocaleStr)) {
           demoDomain = language.getDemoDomain();
+          break;
+        }
+      }
+      if (demoDomain == null) {
+        for (Language language : languages) {
+          if (language.getCode().equals(locale.getLanguage())) {
+            demoDomain = language.getDemoDomain();
+            break;
+          }
         }
       }
       if (demoDomain != null && !serverUrl.contains(demoDomain)) {

@@ -7,6 +7,7 @@
 - Improved: Form focus on master object pages & fixed plural field for English on QU page
 - Improved: "Create recipe" page and "Create product" page now use "save and not close" buttons
 - Improved: Description editor page now has bottom padding (still needs improvements with keyboard)
+- Improved: Language picker works more reliably with demo domain change
 - Fixed: Crash on startup with Android Lollipop (and maybe higher)
 - Fixed: Prevent crash when opening qu conversion page (#708)
 
