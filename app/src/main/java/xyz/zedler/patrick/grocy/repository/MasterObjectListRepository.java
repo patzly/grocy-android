@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.repository;
 import android.app.Application;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
@@ -94,7 +95,7 @@ public class MasterObjectListRepository {
     }
   }
 
-  public void loadFromDatabase(DataListener listener) {
+  public void loadFromDatabase(DataListener onSuccess, Consumer<Throwable> onError) {
     Single
         .zip(
             appDatabase.productDao().getProducts(),
@@ -107,7 +108,9 @@ public class MasterObjectListRepository {
         )
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .doOnSuccess(listener::actionFinished)
+        .doOnSuccess(onSuccess::actionFinished)
+        .doOnError(onError)
+        .onErrorComplete()
         .subscribe();
   }
 }

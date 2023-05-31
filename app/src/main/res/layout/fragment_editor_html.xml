@@ -26,7 +26,7 @@
       type="xyz.zedler.patrick.grocy.activity.MainActivity" />
   </data>
 
-  <androidx.coordinatorlayout.widget.CoordinatorLayout
+  <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -36,7 +36,8 @@
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="wrap_content"
+      android:layout_alignParentTop="true">
 
       <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -50,9 +51,15 @@
       android:id="@+id/summernote"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginTop="?attr/actionBarSize"
-      android:paddingBottom="@dimen/global_scroll_bottom_padding" />
+      android:layout_below="@+id/app_bar"
+      android:layout_above="@id/padding"/>
 
-  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <View
+      android:id="@+id/padding"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/global_scroll_bottom_padding"
+      android:layout_alignParentBottom="true"/>
+
+  </RelativeLayout>
 
 </layout>

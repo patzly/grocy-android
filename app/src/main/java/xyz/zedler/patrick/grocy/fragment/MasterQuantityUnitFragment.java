@@ -49,9 +49,9 @@ import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterQuantityUnitBinding;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.util.BindingAdaptersUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
-import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class MasterQuantityUnitFragment extends BaseFragment {
@@ -154,6 +154,11 @@ public class MasterQuantityUnitFragment extends BaseFragment {
             ViewUtil.startIcon(binding.imageMasterQuantityUnitNamePlural);
           }
         });
+    BindingAdaptersUtil.setOnDoneClickInSoftKeyboardListener(
+        binding.editTextMasterQuantityUnitNamePlural, () -> {
+          binding.editTextMasterQuantityUnitNamePlural.clearFocus();
+          activity.hideKeyboard();
+    });
     binding.linearMasterQuantityUnitForms.setVisibility(
         pluralUtil.isPluralFormsFieldNecessary() ? View.VISIBLE : View.GONE
     );
@@ -173,14 +178,10 @@ public class MasterQuantityUnitFragment extends BaseFragment {
     MasterQuantityUnitFragmentArgs args = MasterQuantityUnitFragmentArgs
         .fromBundle(requireArguments());
     editQuantityUnit = args.getQuantityUnit();
-    if (editQuantityUnit != null) {
+    if (editQuantityUnit != null && savedInstanceState == null) {
       fillWithEditReferences();
     } else if (savedInstanceState == null) {
-      resetAll();
-      new Handler().postDelayed(
-          () -> activity.showKeyboard(binding.editTextMasterQuantityUnitName),
-          50
-      );
+      activity.showKeyboard(binding.editTextMasterQuantityUnitName);
     }
 
     // START
@@ -298,7 +299,6 @@ public class MasterQuantityUnitFragment extends BaseFragment {
               new TypeToken<ArrayList<QuantityUnit>>() {
               }.getType()
           );
-          SortUtil.sortQuantityUnitsByName(quantityUnits, true);
           quantityUnitNames = getQuantityUnitNames();
 
           binding.swipeMasterQuantityUnit.setRefreshing(false);
@@ -307,8 +307,6 @@ public class MasterQuantityUnitFragment extends BaseFragment {
 
           if (isRefresh && editQuantityUnit != null) {
             fillWithEditReferences();
-          } else {
-            resetAll();
           }
         },
         error -> {

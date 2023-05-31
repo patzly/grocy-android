@@ -30,16 +30,19 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.form.FormDataTransfer;
 import xyz.zedler.patrick.grocy.fragment.TransferFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
@@ -49,7 +52,6 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomShe
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockLocationsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.form.FormDataTransfer;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -60,11 +62,8 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockLocation;
-import xyz.zedler.patrick.grocy.repository.TransferRepository;
+import xyz.zedler.patrick.grocy.repository.InventoryRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -80,7 +79,7 @@ public class TransferViewModel extends BaseViewModel {
 
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
-  private final TransferRepository repository;
+  private final InventoryRepository repository;
   private final FormDataTransfer formData;
 
   private List<Product> products;
@@ -110,7 +109,7 @@ public class TransferViewModel extends BaseViewModel {
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     grocyApi = new GrocyApi(getApplication());
-    repository = new TransferRepository(application);
+    repository = new InventoryRepository(application);
     formData = new FormDataTransfer(application, sharedPrefs, args);
 
     infoFullscreenLive = new MutableLiveData<>();
@@ -143,27 +142,28 @@ public class TransferViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
     if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
+      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, TAG));
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
     queue.append(
-        dlHelper.updateProducts(dbChangedTime, products -> {
+        Product.updateProducts(dlHelper, dbChangedTime, products -> {
           this.products = products;
           formData.getProductsLive().setValue(Product.getActiveAndStockEnabledProductsOnly(products));
-        }), dlHelper.updateProductBarcodes(
-            dbChangedTime, barcodes -> this.barcodes = barcodes
-        ), dlHelper.updateLocations(
-            dbChangedTime, locations -> this.locations = locations
-        ), dlHelper.updateQuantityUnitConversions(
-            dbChangedTime, conversions -> this.unitConversions = conversions
-        ), dlHelper.updateQuantityUnits(
+        }), ProductBarcode.updateProductBarcodes(
+            dlHelper, dbChangedTime, barcodes -> this.barcodes = barcodes
+        ), Location.updateLocations(
+            dlHelper, dbChangedTime, locations -> this.locations = locations
+        ), QuantityUnitConversion.updateQuantityUnitConversions(
+            dlHelper, dbChangedTime, conversions -> this.unitConversions = conversions
+        ), QuantityUnit.updateQuantityUnits(
+            dlHelper,
             dbChangedTime,
             quantityUnits -> quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits)
         )
@@ -200,15 +200,8 @@ public class TransferViewModel extends BaseViewModel {
     }
   }
 
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showMessage(getString(R.string.msg_no_connection));
-  }
-
   public void setProduct(int productId, ProductBarcode barcode, String stockEntryId) {
-    DownloadHelper.OnQueueEmptyListener onQueueEmptyListener = () -> {
+    Runnable onQueueEmptyListener = () -> {
       ProductDetails productDetails = formData.getProductDetailsLive().getValue();
       assert productDetails != null;
       Product product = productDetails.getProduct();
@@ -310,13 +303,16 @@ public class TransferViewModel extends BaseViewModel {
         onQueueEmptyListener,
         error -> showMessageAndContinueScanning(getString(R.string.error_no_product_details))
     ).append(
-        dlHelper.getProductDetails(
+        ProductDetails.getProductDetails(
+            dlHelper,
             productId,
             productDetails -> formData.getProductDetailsLive().setValue(productDetails)
-        ), dlHelper.getStockLocations(
+        ), StockLocation.getStockLocations(
+            dlHelper,
             productId,
             formData::setStockLocations
-        ), dlHelper.getStockEntries(
+        ), StockEntry.getStockEntries(
+            dlHelper,
             productId,
             formData::setStockEntries
         )
@@ -504,7 +500,7 @@ public class TransferViewModel extends BaseViewModel {
   private void uploadProductBarcode(Runnable onSuccess) {
     ProductBarcode productBarcode = formData.fillProductBarcode();
     JSONObject body = productBarcode.getJsonFromProductBarcode(debug, TAG);
-    dlHelper.addProductBarcode(body, () -> {
+    ProductBarcode.addProductBarcode(dlHelper, body, () -> {
       formData.getBarcodeLive().setValue(null);
       barcodes.add(productBarcode); // add to list so it will be found on next scan without reload
       if (onSuccess != null) {

@@ -29,6 +29,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
@@ -173,10 +174,19 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,
-        R.menu.menu_master_product_edit,
+        R.menu.menu_master_product_edit_sub,
         menuItem -> {
           if (menuItem.getItemId() == R.id.action_delete) {
             activity.showSnackbar(R.string.msg_not_implemented_yet, false);
+            return true;
+          }
+          if (menuItem.getItemId() == R.id.action_save) {
+            setForDestination(
+                R.id.masterProductFragment,
+                Constants.ARGUMENT.ACTION,
+                ACTION.SAVE_CLOSE
+            );
+            activity.onBackPressed();
             return true;
           }
           return false;

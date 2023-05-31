@@ -295,7 +295,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     // LOAD DETAILS
 
     if (activity.isOnline() && !hasDetails()) {
-      dlHelper.getProductDetails(product.getId(), details -> {
+      ProductDetails.getProductDetails(dlHelper, product.getId(), details -> {
         productDetails = details;
         stockItem = new StockItem(productDetails);
         refreshButtonStates();
@@ -481,7 +481,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     if (!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
       return;
     }
-    dlHelper.getStockLocations(product.getId(), stockLocations -> {
+    StockLocation.getStockLocations(dlHelper, product.getId(), stockLocations -> {
       if (stockLocations.isEmpty()) {
         return;
       }

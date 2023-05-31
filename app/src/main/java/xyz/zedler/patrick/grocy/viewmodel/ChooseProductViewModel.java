@@ -21,26 +21,26 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import me.xdrop.fuzzywuzzy.model.BoundExtractedResult;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.OpenBeautyFactsProduct;
+import xyz.zedler.patrick.grocy.model.OpenFoodFactsProduct;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.repository.ChooseProductRepository;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
@@ -55,7 +55,6 @@ public class ChooseProductViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> displayHelpLive;
   private final MutableLiveData<Boolean> isLoadingLive;
-  private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<List<Product>> displayedItemsLive;
   private final MutableLiveData<String> productNameLive;
   private final MutableLiveData<Integer> productNameErrorLive;
@@ -94,7 +93,6 @@ public class ChooseProductViewModel extends BaseViewModel {
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     repository = new ChooseProductRepository(application);
 
-    offlineLive = new MutableLiveData<>(false);
     displayedItemsLive = new MutableLiveData<>();
     productNameLive = new MutableLiveData<>();
     productNameErrorLive = new MutableLiveData<>();
@@ -135,7 +133,7 @@ public class ChooseProductViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
@@ -150,13 +148,13 @@ public class ChooseProductViewModel extends BaseViewModel {
     if (dbChangedTime == null) {
       dlHelper.getTimeDbChanged(
           this::downloadData,
-          () -> onDownloadError(null)
+          error -> onError(error, TAG)
       );
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
-    queue.append(dlHelper.updateProducts(dbChangedTime, products -> {
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
+    queue.append(Product.updateProducts(dlHelper, dbChangedTime, products -> {
       this.products = products;
       productHashMap.clear();
       for (Product product : products) {
@@ -194,18 +192,22 @@ public class ChooseProductViewModel extends BaseViewModel {
     boolean productNameFilled = productNameLive.getValue() != null
         && !productNameLive.getValue().isEmpty();
     if(isOpenFoodFactsEnabled() && !productNameFilled) {
-      dlHelper.getOpenFoodFactsProduct(
+      OpenFoodFactsProduct.getOpenFoodFactsProduct(
+          dlHelper,
           barcode,
           product -> {
-            productNameLive.setValue(product.getProductName());
-            nameFromOnlineSource = product.getProductName();
+            productNameLive.setValue(product.getLocalizedProductName(getApplication()));
+            nameFromOnlineSource = product.getLocalizedProductName(getApplication());
             offHelpText.setValue(getString(R.string.msg_product_name_off));
           },
-          error -> dlHelper.getOpenBeautyFactsProductName(
+          error -> OpenBeautyFactsProduct.getOpenBeautyFactsProduct(
+              dlHelper,
               barcode,
-              productName -> {
+              product -> {
+                String productName = product.getLocalizedProductName(getApplication());
                 if (productName != null && !productName.isEmpty()) {
                   productNameLive.setValue(productName);
+                  nameFromOnlineSource = productName;
                   offHelpText.setValue(getString(R.string.msg_product_name_obf));
                 } else {
                   offHelpText.setValue(getString(R.string.msg_product_name_lookup_empty));
@@ -220,16 +222,6 @@ public class ChooseProductViewModel extends BaseViewModel {
       );
     } else if (!productNameFilled) {
       sendEvent(Event.FOCUS_INVALID_VIEWS);
-    }
-  }
-
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
     }
   }
 
@@ -298,21 +290,8 @@ public class ChooseProductViewModel extends BaseViewModel {
     repository.createPendingProduct(
             pendingProduct,
             listener,
-            () -> showMessage("Could not create temporary product")
+            error -> showMessage("Could not create temporary product")
     );
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

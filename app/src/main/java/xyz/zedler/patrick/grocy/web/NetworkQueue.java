@@ -22,23 +22,22 @@ package xyz.zedler.patrick.grocy.web;
 import com.android.volley.RequestQueue;
 import java.util.ArrayList;
 import java.util.UUID;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnQueueEmptyListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 
 public class NetworkQueue {
 
   private final ArrayList<QueueItem> queueItems;
-  private final OnQueueEmptyListener onQueueEmptyListener;
-  private final OnErrorListener onErrorListener;
+  private final Runnable onQueueEmptyListener;
+  private final OnMultiTypeErrorListener onErrorListener;
   private final RequestQueue requestQueue;
   private final String uuidQueue;
   private int queueSize;
   private boolean isRunning;
 
   public NetworkQueue(
-      OnQueueEmptyListener onQueueEmptyListener,
-      OnErrorListener onErrorListener,
+      Runnable onQueueEmptyListener,
+      OnMultiTypeErrorListener onErrorListener,
       RequestQueue requestQueue
   ) {
     this.onQueueEmptyListener = onQueueEmptyListener;
@@ -69,7 +68,7 @@ public class NetworkQueue {
     }
     if (queueItems.isEmpty()) {
       if (onQueueEmptyListener != null) {
-        onQueueEmptyListener.execute();
+        onQueueEmptyListener.run();
       }
       return;
     }
@@ -82,7 +81,7 @@ public class NetworkQueue {
         }
         isRunning = false;
         if (onQueueEmptyListener != null) {
-          onQueueEmptyListener.execute();
+          onQueueEmptyListener.run();
         }
         reset(false);
       }, error -> {

@@ -29,27 +29,26 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
+import xyz.zedler.patrick.grocy.form.FormDataTaskEntryEdit;
 import xyz.zedler.patrick.grocy.fragment.TaskEntryEditFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TaskCategoriesBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.UsersBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.form.FormDataTaskEntryEdit;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
-import xyz.zedler.patrick.grocy.repository.TaskEntryEditRepository;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.repository.TasksRepository;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
@@ -61,13 +60,12 @@ public class TaskEntryEditViewModel extends BaseViewModel {
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
-  private final TaskEntryEditRepository repository;
+  private final TasksRepository repository;
   private final FormDataTaskEntryEdit formData;
   private final TaskEntryEditFragmentArgs args;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
 
   private List<TaskCategory> taskCategories;
   private List<User> users;
@@ -89,13 +87,11 @@ public class TaskEntryEditViewModel extends BaseViewModel {
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     grocyApi = new GrocyApi(getApplication());
-    repository = new TaskEntryEditRepository(application);
+    repository = new TasksRepository(application);
     formData = new FormDataTaskEntryEdit(application);
     args = startupArgs;
     isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
-
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
   }
 
   public FormDataTaskEntryEdit getFormData() {
@@ -104,13 +100,13 @@ public class TaskEntryEditViewModel extends BaseViewModel {
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
-      this.taskCategories = data.getTaskCategories();
+      this.taskCategories = data.getTaskGroups();
       this.users = data.getUsers();
       fillWithTaskEntryIfNecessary();
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
@@ -123,16 +119,16 @@ public class TaskEntryEditViewModel extends BaseViewModel {
       return;
     }
     if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
+      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, TAG));
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
     queue.append(
-        dlHelper.updateTaskCategories(
-            dbChangedTime, taskCategories -> this.taskCategories = taskCategories
+        TaskCategory.updateTaskCategories(
+            dlHelper, dbChangedTime, taskCategories -> this.taskCategories = taskCategories
         ),
-        dlHelper.updateUsers(dbChangedTime, users -> this.users = users)
+        User.updateUsers(dlHelper, dbChangedTime, users -> this.users = users)
     );
     if (queue.isEmpty()) {
       onQueueEmpty();
@@ -165,16 +161,6 @@ public class TaskEntryEditViewModel extends BaseViewModel {
       return;
     }
     fillWithTaskEntryIfNecessary();
-  }
-
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
   }
 
   public void saveEntry() {
@@ -312,19 +298,6 @@ public class TaskEntryEditViewModel extends BaseViewModel {
 
   public boolean isActionEdit() {
     return isActionEdit;
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

@@ -32,10 +32,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -44,16 +42,10 @@ import xyz.zedler.patrick.grocy.adapter.RecipeEntryAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentRecipesBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RecipeBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
-import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Recipe;
-import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
-import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -62,7 +54,7 @@ import xyz.zedler.patrick.grocy.viewmodel.RecipesViewModel;
 public class RecipesFragment extends BaseFragment implements
         RecipeEntryAdapter.RecipesItemAdapterListener {
 
-  private final static String TAG = TasksFragment.class.getSimpleName();
+  private final static String TAG = RecipesFragment.class.getSimpleName();
   private final static String LAYOUT_LINEAR = "linear";
   private final static String LAYOUT_GRID = "grid";
 
@@ -341,20 +333,8 @@ public class RecipesFragment extends BaseFragment implements
       return;
     }
 
-    RecipeFulfillment recipeFulfillment = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(viewModel.getRecipeFulfillments(), recipe.getId());
-    ArrayList<RecipePosition> recipePositions = (ArrayList<RecipePosition>) RecipePosition.getRecipePositionsFromRecipeId(viewModel.getRecipePositions(), recipe.getId());
-    ArrayList<Product> products = Product.getProductsForRecipePositions(viewModel.getProducts(), recipePositions);
-    ArrayList<QuantityUnit> quantityUnits = QuantityUnit.getQuantityUnitsForRecipePositions(viewModel.getQuantityUnits(), recipePositions);
-    ArrayList<QuantityUnitConversion> quantityUnitConversions = QuantityUnitConversion.getQuantityUnitConversionsForRecipePositions(viewModel.getQuantityUnitConversions(), recipePositions);
-
-    Bundle bundle = new Bundle();
-    bundle.putParcelable(ARGUMENT.RECIPE, recipe);
-    bundle.putParcelable(ARGUMENT.RECIPE_FULFILLMENT, recipeFulfillment);
-    bundle.putParcelableArrayList(ARGUMENT.RECIPE_POSITIONS, recipePositions);
-    bundle.putParcelableArrayList(ARGUMENT.PRODUCTS, products);
-    bundle.putParcelableArrayList(ARGUMENT.QUANTITY_UNITS, quantityUnits);
-    bundle.putParcelableArrayList(ARGUMENT.QUANTITY_UNIT_CONVERSIONS, quantityUnitConversions);
-    activity.showBottomSheet(new RecipeBottomSheet(), bundle);
+    activity.navUtil.navigateFragment(RecipesFragmentDirections
+        .actionRecipesFragmentToRecipeFragment(recipe.getId()));
   }
 
   @Override

@@ -507,7 +507,7 @@
   <string name="error_barcode_not_linked">O código de barras não está vinculado a um produto</string>
   <string name="error_no_product_details">Não foi possível obter detalhes do produto</string>
   <string name="error_failed_barcode_upload">Não foi possível carregar o código de barras</string>
-  <string name="error_wrong_grocycode_type">grocycode contém tipo de entidade errado</string>
+  <string name="error_wrong_grocycode_type">grocycode contém tipo de entidade incorreto</string>
   <string name="error_stock_entry_grocycode">Entrada de estoque do grocycode não encontrada</string>
   <string name="error_permission">Sem permissão para esta ação</string>
   <string name="error_undefined">Ocorreu um erro</string>
@@ -627,7 +627,7 @@
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="subtitle_never_overdue">Nunca perde a validade</string>
   <string name="subtitle_selected">Selecionado</string>
-  <string name="subtitle_stock_entry_no_specific">Os que perdem a validade primeiro, então os primeiros en - são primeiros a sair</string>
+  <string name="subtitle_stock_entry_no_specific">Inicialmente os abertos, próximo a vencer e, por fim, o primeiro a entrar é o primeiro a sair</string>
   <!-- %1$s is a purchase date -->
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="subtitle_stock_entry_name">Comprados: %1$s</string>
@@ -697,43 +697,43 @@
   <plurals name="description_overview_stock_due_soon">
     <item quantity="one">%1$d produto vencerá nos próximos %2$d dias.</item>
     <item quantity="many">%1$d produtos vencerão nos próximos %2$d dias.</item>
-    <item quantity="other">%1$d produtos vencerão nos próximos %2$d dias.</item>
+    <item quantity="other">%1$d produtos vencerão nos próximos %2$d dias</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_overdue">
     <item quantity="one">%1$d produto vencido.</item>
     <item quantity="many">%1$d produtos vencidos.</item>
-    <item quantity="other">%1$d produtos vencidos.</item>
+    <item quantity="other">%1$d produtos vencidos</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_expired">
-    <item quantity="one">%1$d produto está estragado.</item>
-    <item quantity="many">%1$d produtos estão estragados.</item>
-    <item quantity="other">%1$d produtos estão estragados.</item>
+    <item quantity="one">%1$d produto pode estar estragado.</item>
+    <item quantity="many">%1$d produtos podem estar estragados.</item>
+    <item quantity="other">%1$d produtos podem estar estragados.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing">
     <item quantity="one">%1$d produto abaixo da quantidade mínima. </item>
     <item quantity="many">%1$d produtos abaixo da quantidade mínima. </item>
-    <item quantity="other">%1$d produtos abaixo da quantidade mínima. </item>
+    <item quantity="other">%1$d produtos abaixo da quantidade mínima</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_single">
-    <item quantity="one">%1$d está na lista de compras.</item>
-    <item quantity="many">%1$d estão na lista de compras.</item>
-    <item quantity="other">%1$d estão na lista de compras.</item>
+    <item quantity="one">%1$d está na lista de compras</item>
+    <item quantity="many">%1$d estão na lista de compras</item>
+    <item quantity="other">%1$d estão na lista de compras</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_multi">
-    <item quantity="one">%1$d está nas listas de compras.</item>
-    <item quantity="many">%1$d estão nas listas de compras.</item>
-    <item quantity="other">%1$d estão nas listas de compras.</item>
+    <item quantity="one">%1$d está nas listas de compras</item>
+    <item quantity="many">%1$d estão nas listas de compras</item>
+    <item quantity="other">%1$d estão nas listas de compras</item>
   </plurals>
   <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
   <plurals name="description_overview_stock_value">
     <item quantity="one">Você tem %1$d produto em estoque com o valor de %2$s %3$s.</item>
     <item quantity="many">Você tem %1$d produtos em estoque com o valor de %2$s %3$s.</item>
-    <item quantity="other">Você tem %1$d produtos em estoque com o valor de %2$s %3$s.</item>
+    <item quantity="other">Você tem %1$d produtos em estoque no valor de %2$s %3$s.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list_multi">
@@ -751,25 +751,25 @@
   <plurals name="description_overview_recipes">
     <item quantity="one">Você tem %1$d receita.</item>
     <item quantity="many">Você tem %1$d receitas.</item>
-    <item quantity="other">Você tem %1$d receitas.</item>
+    <item quantity="other">Você tem %1$d receitas</item>
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_chores_due_soon">
-    <item quantity="one">%1$d tarefa doméstica para ser feita nos próximos %2$d dias, está atrasada.</item>
-    <item quantity="many">%1$d tarefas domésticas para serem feitas nos próximos %2$d dias, estão atrasadas.</item>
-    <item quantity="other">%1$d atividade domésticas para serem feitas nos próximos %2$d dias, estão atrasadas.</item>
+    <item quantity="one">%1$d atividade doméstica para ser feita nos próximos %2$d dias, está atrasada</item>
+    <item quantity="many">%1$d atividades domésticas a serem feitas nos próximos %2$d dias, estão atrasadas</item>
+    <item quantity="other">%1$d atividades domésticas a serem feitas nos próximos %2$d dias, estão atrasadas</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_overdue">
-    <item quantity="one">%1$d  tarefa doméstica está atrasada para ser feita.</item>
-    <item quantity="many">%1$d tarefas domésticas estão atrasadas para serem feitas.</item>
-    <item quantity="other">%1$d atividades domésticas estão atrasadas para serem feitas.</item>
+    <item quantity="one">%1$d atividade doméstica está atrasada</item>
+    <item quantity="many">%1$d atividades domésticas estão atrasadas</item>
+    <item quantity="other">%1$d atividades domésticas estão atrasadas</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_due_today">
-    <item quantity="one">%1$d tarefas domésticas, previstas para hoje, estão atrasadas.</item>
-    <item quantity="many">%1$d tarefas domésticas, previstas para hoje, estão atrasadas.</item>
-    <item quantity="other">%1$d atividades domésticas, previstas para hoje, estão atrasadas.</item>
+    <item quantity="one">%1$d atividade domésticas, prevista para hoje, está atrasada</item>
+    <item quantity="many">%1$d atividades domésticas, previstas para hoje, estão atrasadas</item>
+    <item quantity="other">%1$d atividades domésticas, previstas para hoje, estão atrasadas</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_assigned">
@@ -779,21 +779,21 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks">
-    <item quantity="one">%1$d tarefa deve ser concluída.</item>
-    <item quantity="many">%1$d tarefas devem ser concluídas.</item>
-    <item quantity="other">%1$d tarefas a serem concluídas.</item>
+    <item quantity="one">%1$d tarefa a ser concluída</item>
+    <item quantity="many">%1$d tarefas a serem concluídas</item>
+    <item quantity="other">%1$d tarefas a serem concluídas</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks_user">
-    <item quantity="one">Você foi atribuído a %1$d tarefa.</item>
-    <item quantity="many">Você foi atribuído a %1$d tarefas.</item>
-    <item quantity="other">Você foi atribuído a %1$d tarefas.</item>
+    <item quantity="one">%1$d tarefa atribuída a você</item>
+    <item quantity="many">%1$d tarefas atribuídas a você</item>
+    <item quantity="other">%1$d tarefas atribuídas a você</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
-    <item quantity="one">Seu banco de dados contém %1$d produto.</item>
-    <item quantity="many">Seu banco de dados contém %1$d produtos.</item>
-    <item quantity="other">Seu banco de dados contém %1$d produtos.</item>
+    <item quantity="one">O banco de dados contém %1$d produto.</item>
+    <item quantity="many">O banco de dados contém %1$d produtos.</item>
+    <item quantity="other">O banco de dados contém %1$d produtos.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="error_max_decimal_places">
@@ -837,9 +837,9 @@
   <string name="property_quantity_unit">Unidade</string>
   <string name="property_quantity_units">Unidades</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_default_qu_purchase">Quantidade de compra</string>
+  <string name="property_default_qu_purchase">Unidade de medida usada na compra</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_qu_stock">Quantidade me estoque</string>
+  <string name="property_qu_stock">Unidade de medida</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Fator de compra para estoque</string>
   <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
@@ -868,11 +868,11 @@
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_next">Próxima data de validade</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_days_default">Dias até o vencimento pré-definidos</string>
+  <string name="property_due_days_default">Dias de validade (padrão)</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_days_default_opened">Dias até o vencimento após abertura pré-definidos </string>
+  <string name="property_due_days_default_opened">Dias de validade após abertura (padrão)</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_days_default_freezing">Dias de vencimento pré-definido após o congelamento</string>
+  <string name="property_due_days_default_freezing">Dias de validade após o congelamento (padrão)</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">Dias de vencimento pré-definido após o descongelamento</string>
   <string name="property_location">Localização</string>
@@ -951,8 +951,8 @@
   <string name="property_ungrouped">Desagrupado</string>
   <!-- %1$s is a property like "product group" or "due date" -->
   <string name="property_extra_field">Campo extra: %1$s</string>
-  <string name="property_task_category">Categoria da tarefa</string>
-  <string name="property_task_categories">Categorias da tarefa</string>
+  <string name="property_task_category">Categoria de tarefas</string>
+  <string name="property_task_categories">Categorias de tarefas</string>
   <string name="property_calories">Calorias</string>
   <string name="property_calories_unit">Calorias (unidade)</string>
   <string name="property_calories_total">Calorias (total)</string>
@@ -1133,7 +1133,7 @@
   <string name="setting_logout_description">Voltar à página de início de sessão</string>
   <string name="setting_manage_shortcuts">Gerenciar atalhos</string>
   <string name="setting_list_indicator">Indicar lista de compras</string>
-  <string name="setting_list_indicator_description">Mostrar bola azul se o produto estiver em uma lista de compras</string>
+  <string name="setting_list_indicator_description">Mostrar ponto azul, se o produto estiver em uma Lista de Compras</string>
   <string name="setting_shopping_mode_update_interval">Intervalo de atualização do modo de compra</string>
   <string name="setting_keep_screen_on">Manter a tela ligada</string>
   <string name="setting_keep_screen_on_description">Ao estar no Modo Compras</string>
@@ -1148,7 +1148,7 @@
   <string name="setting_default_amount_purchase">Quantidade pré-definida para compra</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">Valor pré-definido para consumo</string>
-  <string name="setting_treat_opened_as_out_of_stock">Tratar aberto como esgotado</string>
+  <string name="setting_treat_opened_as_out_of_stock">Se \'aberto\', remover do estoque</string>
   <string name="setting_purchased_date">Solicitar data de compra</string>
   <string name="setting_purchased_date_description">Na página de compras e inventário</string>
   <string name="setting_use_quick_consume_amount">Usar a \"Quantidade de consumo rápido\" do produto</string>

@@ -41,8 +41,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -54,8 +52,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.TooltipCompat;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.transition.TransitionManager;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -140,24 +136,6 @@ public class ViewUtil {
         iterator.remove();
       }
     }
-  }
-
-  // Show keyboard for EditText
-
-  public static void requestFocusAndShowKeyboard(@NonNull Window window, @NonNull View view) {
-    WindowCompat.getInsetsController(window, view).show(Type.ime());
-    view.requestFocus();
-  }
-
-  @Deprecated
-  public static void requestFocusAndShowKeyboard(@NonNull final View view) {
-    view.requestFocus();
-    view.post(() -> {
-      InputMethodManager inputMethod = (InputMethodManager) view.getContext().getSystemService(
-          Context.INPUT_METHOD_SERVICE
-      );
-      inputMethod.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
-    });
   }
 
   // ClickListeners & OnCheckedChangeListeners

@@ -49,8 +49,8 @@ import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterLocationBinding;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.util.BindingAdaptersUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
-import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class MasterLocationFragment extends BaseFragment {
@@ -143,6 +143,11 @@ public class MasterLocationFragment extends BaseFragment {
         ViewUtil.startIcon(binding.imageMasterLocationName);
       }
     });
+    BindingAdaptersUtil.setOnDoneClickInSoftKeyboardListener(
+        binding.editTextMasterLocationName, () -> {
+          binding.editTextMasterLocationName.clearFocus();
+          activity.hideKeyboard();
+        });
 
     // description
     binding.editTextMasterLocationDescription.setOnFocusChangeListener(
@@ -165,14 +170,10 @@ public class MasterLocationFragment extends BaseFragment {
 
     MasterLocationFragmentArgs args = MasterLocationFragmentArgs.fromBundle(requireArguments());
     editLocation = args.getLocation();
-    if (editLocation != null) {
+    if (editLocation != null && savedInstanceState == null) {
       fillWithEditReferences();
     } else if (savedInstanceState == null) {
-      resetAll();
-      new Handler().postDelayed(
-          () -> activity.showKeyboard(binding.editTextMasterLocationName),
-          50
-      );
+      activity.showKeyboard(binding.editTextMasterLocationName);
     }
 
     // START
@@ -297,7 +298,6 @@ public class MasterLocationFragment extends BaseFragment {
               new TypeToken<ArrayList<Location>>() {
               }.getType()
           );
-          SortUtil.sortLocationsByName(locations, true);
           locationNames = getLocationNames();
 
           binding.swipeMasterLocation.setRefreshing(false);
@@ -306,8 +306,6 @@ public class MasterLocationFragment extends BaseFragment {
 
           if (isRefresh && editLocation != null) {
             fillWithEditReferences();
-          } else {
-            resetAll();
           }
         },
         error -> {

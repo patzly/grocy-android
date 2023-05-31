@@ -22,14 +22,12 @@ package xyz.zedler.patrick.grocy.viewmodel;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +35,7 @@ import java.util.List;
 import java.util.Locale;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import me.xdrop.fuzzywuzzy.model.BoundExtractedResult;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
@@ -49,8 +48,9 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.repository.MasterObjectListRepository;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ObjectUtil;
@@ -68,7 +68,6 @@ public class MasterObjectListViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<ArrayList<Object>> displayedItemsLive;
 
   private List<?> objects;
@@ -96,7 +95,6 @@ public class MasterObjectListViewModel extends BaseViewModel {
     repository = new MasterObjectListRepository(application);
 
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
     displayedItemsLive = new MutableLiveData<>();
 
     objects = new ArrayList<>();
@@ -135,7 +133,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(@Nullable String dbChangedTime, boolean skipOfflineCheck) {
@@ -150,17 +148,17 @@ public class MasterObjectListViewModel extends BaseViewModel {
     if (dbChangedTime == null) {
       dlHelper.getTimeDbChanged(
           time -> downloadData(time, skipOfflineCheck),
-          () -> onDownloadError(null)
+          error -> onError(error, TAG)
       );
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
     if (entity.equals(GrocyApi.ENTITY.STORES)) {
-      queue.append(dlHelper.updateStores(dbChangedTime, stores -> objects = stores));
+      queue.append(Store.updateStores(dlHelper, dbChangedTime, stores -> objects = stores));
     }
     if ((entity.equals(GrocyApi.ENTITY.LOCATIONS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))) {
-      queue.append(dlHelper.updateLocations(dbChangedTime, locations -> {
+      queue.append(Location.updateLocations(dlHelper, dbChangedTime, locations -> {
         if (entity.equals(GrocyApi.ENTITY.LOCATIONS)) {
           objects = locations;
         } else {
@@ -170,7 +168,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
     }
     if ((entity.equals(GrocyApi.ENTITY.PRODUCT_GROUPS) || entity
         .equals(GrocyApi.ENTITY.PRODUCTS))) {
-      queue.append(dlHelper.updateProductGroups(dbChangedTime, productGroups -> {
+      queue.append(ProductGroup.updateProductGroups(dlHelper, dbChangedTime, productGroups -> {
         if (entity.equals(GrocyApi.ENTITY.PRODUCT_GROUPS)) {
           objects = productGroups;
         } else {
@@ -180,7 +178,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
     }
     if ((entity.equals(GrocyApi.ENTITY.QUANTITY_UNITS) || entity
         .equals(GrocyApi.ENTITY.PRODUCTS))) {
-      queue.append(dlHelper.updateQuantityUnits(dbChangedTime, quantityUnits -> {
+      queue.append(QuantityUnit.updateQuantityUnits(dlHelper, dbChangedTime, quantityUnits -> {
         if (entity.equals(GrocyApi.ENTITY.QUANTITY_UNITS)) {
           objects = quantityUnits;
         } else {
@@ -189,13 +187,15 @@ public class MasterObjectListViewModel extends BaseViewModel {
       }));
     }
     if ((entity.equals(ENTITY.TASK_CATEGORIES))) {
-      queue.append(dlHelper.updateTaskCategories(
+      queue.append(TaskCategory.updateTaskCategories(
+          dlHelper,
           dbChangedTime,
           taskCategories -> this.objects = taskCategories
       ));
     }
     if (entity.equals(GrocyApi.ENTITY.PRODUCTS)) {
-      queue.append(dlHelper.updateProducts(
+      queue.append(Product.updateProducts(
+          dlHelper,
           dbChangedTime,
           products -> objects = products)
       );
@@ -245,15 +245,6 @@ public class MasterObjectListViewModel extends BaseViewModel {
   private void onQueueEmpty() {
     if (isOffline()) setOfflineLive(false);
     displayItems();
-  }
-
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showNetworkErrorMessage(error);
-    if (!isOffline()) setOfflineLive(true);
-    displayItems(); // maybe objects can be loaded partially
   }
 
   public void displayItems() {
@@ -452,19 +443,6 @@ public class MasterObjectListViewModel extends BaseViewModel {
 
   public void deleteSearch() {
     search = null;
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   public HorizontalFilterBarMulti getHorizontalFilterBarMulti() {

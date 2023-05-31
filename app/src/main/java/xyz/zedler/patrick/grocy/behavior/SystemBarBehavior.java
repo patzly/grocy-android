@@ -27,12 +27,14 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import androidx.annotation.NonNull;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.elevation.SurfaceColors;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
@@ -46,10 +48,14 @@ public class SystemBarBehavior {
   private int containerPaddingTop, containerPaddingBottom, scrollContentPaddingBottom;
   private int statusBarInset, navBarInset;
   private AppBarLayout appBarLayout;
+  private MaterialToolbar toolbar;
   private ViewGroup container;
   private NestedScrollView scrollView;
   private ViewGroup scrollContent;
-  private boolean applyAppBarInsetOnContainer, applyStatusBarInsetOnContainer;
+  private boolean applyAppBarInsetOnContainer;
+  private boolean applyStatusBarInsetOnContainer;
+  private boolean applyStatusBarInsetOnAppBar;
+  private boolean applyStatusBarInsetOnToolBar;
   private boolean hasScrollView, hasRecycler;
   private boolean isScrollable;
   private int additionalBottomInset;
@@ -63,6 +69,8 @@ public class SystemBarBehavior {
 
     applyAppBarInsetOnContainer = true;
     applyStatusBarInsetOnContainer = true;
+    applyStatusBarInsetOnAppBar = true;
+    applyStatusBarInsetOnToolBar = false;
     hasScrollView = false;
     hasRecycler = false;
     isScrollable = false;
@@ -70,6 +78,10 @@ public class SystemBarBehavior {
 
   public void setAppBar(AppBarLayout appBarLayout) {
     this.appBarLayout = appBarLayout;
+  }
+
+  public void setToolbar(MaterialToolbar toolbar) {
+    this.toolbar = toolbar;
   }
 
   public void setContainer(ViewGroup container) {
@@ -114,8 +126,10 @@ public class SystemBarBehavior {
         statusBarInset = insets.getInsets(Type.systemBars()).top;
 
         // STATUS BAR INSET
-        appBarLayout.setPadding(0, statusBarInset, 0, appBarLayout.getPaddingBottom());
-        appBarLayout.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        if (applyStatusBarInsetOnAppBar) {
+          appBarLayout.setPadding(0, statusBarInset, 0, appBarLayout.getPaddingBottom());
+          appBarLayout.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        }
 
         // APP BAR INSET
         if (container != null && applyAppBarInsetOnContainer) {
@@ -147,6 +161,18 @@ public class SystemBarBehavior {
             container.getPaddingRight(),
             container.getPaddingBottom()
         );
+        return insets;
+      });
+    }
+    if (appBarLayout != null && toolbar != null && applyStatusBarInsetOnToolBar) {
+      ViewCompat.setOnApplyWindowInsetsListener(appBarLayout, (v, insets) -> {
+        statusBarInset = insets.getInsets(Type.systemBars()).top;
+
+        // TOOLBAR INSET
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
+            appBarLayout.getLayoutParams();
+        params.topMargin = statusBarInset;
+        appBarLayout.setLayoutParams(params);
         return insets;
       });
     }
@@ -224,7 +250,9 @@ public class SystemBarBehavior {
     // TOP INSET
     if (appBarLayout != null) {
       // STATUS BAR INSET
-      appBarLayout.setPadding(0, statusBarInset, 0, appBarLayout.getPaddingBottom());
+      if (applyStatusBarInsetOnAppBar) {
+        appBarLayout.setPadding(0, statusBarInset, 0, appBarLayout.getPaddingBottom());
+      }
 
       // APP BAR INSET
       if (container != null && applyAppBarInsetOnContainer) {
@@ -249,6 +277,9 @@ public class SystemBarBehavior {
           container.getPaddingRight(),
           container.getPaddingBottom()
       );
+    }
+    if (toolbar != null && applyStatusBarInsetOnToolBar) {
+      // TODO
     }
 
     // NAV BAR INSET
@@ -327,6 +358,14 @@ public class SystemBarBehavior {
 
   public void applyStatusBarInsetOnContainer(boolean apply) {
     applyStatusBarInsetOnContainer = apply;
+  }
+
+  public void applyStatusBarInsetOnAppBar(boolean apply) {
+    applyStatusBarInsetOnAppBar = apply;
+  }
+
+  public void applyStatusBarInsetOnToolBar(boolean apply) {
+    applyStatusBarInsetOnToolBar = apply;
   }
 
   public static void applyBottomInset(@NonNull View view) {

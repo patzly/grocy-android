@@ -21,16 +21,15 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -40,7 +39,6 @@ import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
@@ -56,7 +54,6 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<ArrayList<ProductBarcode>> productBarcodesLive;
 
   private List<ProductBarcode> productBarcodes;
@@ -83,7 +80,6 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
 
     productBarcodesLive = new MutableLiveData<>();
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
   }
 
   public Product getFilledProduct() {
@@ -99,7 +95,7 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
 
@@ -113,22 +109,21 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
       return;
     }
     if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
+      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, TAG));
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
     queue.append(
-        dlHelper.updateProductBarcodes(
+        ProductBarcode.updateProductBarcodes(
+            dlHelper,
             dbChangedTime,
             barcodes -> this.productBarcodes = barcodes
-        ), dlHelper.updateQuantityUnits(
+        ), QuantityUnit.updateQuantityUnits(
+            dlHelper,
             dbChangedTime,
             qUs -> this.quantityUnits = qUs
-        ), dlHelper.updateStores(
-            dbChangedTime,
-            stores -> this.stores = stores
-        )
+        ), Store.updateStores(dlHelper, dbChangedTime, stores -> this.stores = stores)
     );
     if (queue.isEmpty()) {
       return;
@@ -158,16 +153,6 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
     productBarcodesLive.setValue(filterBarcodes(productBarcodes));
   }
 
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
-  }
-
   private ArrayList<ProductBarcode> filterBarcodes(List<ProductBarcode> barcodes) {
     ArrayList<ProductBarcode> filteredBarcodes = new ArrayList<>();
     assert args.getProduct() != null;
@@ -190,19 +175,6 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
 
   public List<Store> getStores() {
     return stores;
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

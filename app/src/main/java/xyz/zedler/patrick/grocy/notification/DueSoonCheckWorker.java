@@ -54,6 +54,7 @@ import xyz.zedler.patrick.grocy.fragment.StockOverviewFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.VolatileItem;
 import xyz.zedler.patrick.grocy.util.NavUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
@@ -74,7 +75,7 @@ public class DueSoonCheckWorker extends Worker {
         .getInt(NETWORK.LOADING_TIMEOUT, SETTINGS_DEFAULT.NETWORK.LOADING_TIMEOUT);
 
     RequestFuture<String> future = RequestFuture.newFuture();
-    dlHelper.getVolatile(future, future);
+    VolatileItem.getVolatile(dlHelper, future, future);
 
     try {
       String response = future.get(timeout, TimeUnit.SECONDS); // this will block

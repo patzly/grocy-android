@@ -26,12 +26,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
@@ -45,7 +45,6 @@ import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.repository.TasksRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -66,7 +65,6 @@ public class TasksViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<ArrayList<Task>> filteredTasksLive;
   private final FilterChipLiveDataTasksStatus filterChipLiveDataStatus;
   private final FilterChipLiveDataTasksSort filterChipLiveDataSort;
@@ -97,7 +95,6 @@ public class TasksViewModel extends BaseViewModel {
     dateUtil = new DateUtil(application);
 
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
     filteredTasksLive = new MutableLiveData<>();
 
     filterChipLiveDataStatus = new FilterChipLiveDataTasksStatus(
@@ -144,7 +141,7 @@ public class TasksViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(@Nullable String dbChangedTime, boolean skipOfflineCheck) {
@@ -160,7 +157,7 @@ public class TasksViewModel extends BaseViewModel {
     if (dbChangedTime == null) {
       dlHelper.getTimeDbChanged(
           time -> downloadData(time, skipOfflineCheck),
-          () -> onDownloadError(null)
+          error -> onError(error, TAG)
       );
       return;
     }
@@ -168,12 +165,12 @@ public class TasksViewModel extends BaseViewModel {
     NetworkQueue queue = dlHelper.newQueue(() -> {
       if (isOffline()) setOfflineLive(false);
       updateFilteredTasks();
-    }, this::onDownloadError);
+    }, error -> onError(error, TAG));
     queue.append(
-        dlHelper.updateTaskCategories(dbChangedTime, taskCategories -> {
+        TaskCategory.updateTaskCategories(dlHelper, dbChangedTime, taskCategories -> {
           this.taskCategories = taskCategories;
           taskCategoriesHashMap = ArrayUtil.getTaskCategoriesHashMap(taskCategories);
-        }), dlHelper.updateTasks(dbChangedTime, tasks -> {
+        }), Task.updateTasks(dlHelper, dbChangedTime, tasks -> {
           this.tasks = tasks;
 
           tasksDueTodayCount = 0;
@@ -200,7 +197,8 @@ public class TasksViewModel extends BaseViewModel {
               .emitCounts();
 
           updateFilteredTasks();
-        }), dlHelper.updateUsers(
+        }), User.updateUsers(
+            dlHelper,
             dbChangedTime,
             users -> usersHashMap = ArrayUtil.getUsersHashMap(users)
         )
@@ -226,14 +224,6 @@ public class TasksViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_USERS, null);
     editPrefs.apply();
     downloadData(null, true);
-  }
-
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showNetworkErrorMessage(error);
-    if (!isOffline()) setOfflineLive(true);
   }
 
   public void updateFilteredTasks() {
@@ -366,19 +356,6 @@ public class TasksViewModel extends BaseViewModel {
 
   public HashMap<Integer, User> getUsersHashMap() {
     return usersHashMap;
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull
