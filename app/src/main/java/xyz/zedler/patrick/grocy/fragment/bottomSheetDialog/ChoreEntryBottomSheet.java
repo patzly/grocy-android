@@ -33,6 +33,7 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetChoreEntryBinding;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Chore;
+import xyz.zedler.patrick.grocy.model.ChoreDetails;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
@@ -105,7 +106,7 @@ public class ChoreEntryBottomSheet extends BaseBottomSheetDialogFragment {
       return false;
     });
 
-    dlHelper.getChoreDetails(chore.getId(), choreDetails -> {
+    ChoreDetails.getChoreDetails(dlHelper, chore.getId(), choreDetails -> {
       binding.trackedCount.setText(
           getString(R.string.property_tracked_count),
           String.valueOf(choreDetails.getTrackedCount())

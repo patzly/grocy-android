@@ -21,9 +21,20 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 @Entity(tableName = "stock_item_table")
@@ -262,5 +273,59 @@ public class StockLogEntry implements Parcelable {
   @Override
   public String toString() {
     return "StockLogEntry(" + productId + ")";
+  }
+
+  public static QueueItem getStockLogEntries(
+      DownloadHelper dlHelper,
+      int limit,
+      int offset,
+      int filterProductId,  // -1 for no filter
+      OnObjectsResponseListener<StockLogEntry> onResponseListener,
+      OnErrorListener onErrorListener
+  ) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnMultiTypeErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        dlHelper.get(
+            dlHelper.grocyApi.getStockLogEntries(limit, offset, filterProductId),
+            uuid,
+            response -> {
+              Type type = new TypeToken<ArrayList<StockLogEntry>>() {
+              }.getType();
+              ArrayList<StockLogEntry> stockLogEntries = dlHelper.gson.fromJson(response, type);
+              if (dlHelper.debug) {
+                Log.i(dlHelper.tag, "download StockLogEntry: " + stockLogEntries);
+              }
+              if (onResponseListener != null) {
+                onResponseListener.onResponse(stockLogEntries);
+              }
+              if (responseListener != null) {
+                responseListener.onResponse(response);
+              }
+            },
+            error -> {
+              if (onErrorListener != null) {
+                onErrorListener.onError(error);
+              }
+              if (errorListener != null) {
+                errorListener.onError(error);
+              }
+            }
+        );
+      }
+    };
+  }
+
+  public static QueueItem getStockLogEntries(
+      DownloadHelper dlHelper,
+      int limit,
+      int offset,
+      OnObjectsResponseListener<StockLogEntry> onResponseListener
+  ) {
+    return getStockLogEntries(dlHelper, limit, offset, -1, onResponseListener, null);
   }
 }

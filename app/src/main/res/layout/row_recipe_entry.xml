@@ -32,7 +32,7 @@
       style="@style/Widget.Grocy.LinearLayout.ListItem.ThreeLine.Clickable"
       android:paddingStart="8dp"
       android:paddingEnd="8dp"
-      android:background="@drawable/ripple_list_item_swipeable">
+      android:background="@drawable/ripple_list_item_bg_small_padding">
 
       <xyz.zedler.patrick.grocy.view.RoundedCornerImageView
         android:id="@+id/picture"

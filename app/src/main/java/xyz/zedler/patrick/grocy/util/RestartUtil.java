@@ -22,6 +22,13 @@ package xyz.zedler.patrick.grocy.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import androidx.annotation.NonNull;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 
 public class RestartUtil {
@@ -34,5 +41,21 @@ public class RestartUtil {
       ((Activity) context).finish();
     }
     Runtime.getRuntime().exit(0);
+  }
+
+  public static void restartToApply(MainActivity activity, long delay, @NonNull Bundle bundle) {
+    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+      activity.saveInstanceState(bundle);
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+        activity.finish();
+      }
+      Intent intent = new Intent(activity, MainActivity.class);
+      intent.putExtra(ARGUMENT.INSTANCE_STATE, bundle);
+      activity.startActivity(intent);
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        activity.finish();
+      }
+      activity.overridePendingTransition(R.anim.fade_in_restart, R.anim.fade_out_restart);
+    }, delay);
   }
 }

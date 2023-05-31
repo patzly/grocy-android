@@ -493,7 +493,6 @@
   <string name="title_product_edit">Редагувати продукт</string>
   <string name="title_tasks">Завдання</string>
   <string name="title_task_entry">Завдання</string>
-  <string name="title_task_add">Додати завдання</string>
   <string name="title_master_data">Основні дані</string>
   <string name="title_stock_entries">Список запасів</string>
   <string name="title_stock_journal">Журнал операцій</string>
@@ -539,8 +538,6 @@
   <string name="title_unit_price_specific">%1$s ціна</string>
   <string name="title_stock_entry_no_specific">Невизначений запас</string>
   <string name="title_list_entry">Елемент списку</string>
-  <string name="title_edit_list_entry">Редагувати елемент списку</string>
-  <string name="title_create_list_entry">Створити елемент списку</string>
   <string name="title_edit_barcode">Редагувати штрих-код</string>
   <string name="title_create_barcode">Створити штрих-код</string>
   <string name="title_shopping_list_edit">Редагувати список покупок</string>

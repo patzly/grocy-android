@@ -363,7 +363,6 @@
   <string name="title_product_edit">עריכת מוצר</string>
   <string name="title_tasks">משימות</string>
   <string name="title_task_entry">מילוי משימה</string>
-  <string name="title_task_add">הוספת משימה</string>
   <string name="title_master_data">נתוני על</string>
   <string name="title_stock_entries">רשומות מלאי</string>
   <string name="title_stock_entry">רשומת מלאי</string>
@@ -409,8 +408,6 @@
   <string name="title_unit_price_specific">מחיר על%1$s</string>
   <string name="title_stock_entry_no_specific">אין רשומה מסוימת</string>
   <string name="title_list_entry">רשומה ברשימה</string>
-  <string name="title_edit_list_entry">עריכת רשומה ברשימה</string>
-  <string name="title_create_list_entry">יצירת רשומה ברשימה</string>
   <string name="title_edit_barcode">עריכת ברקוד</string>
   <string name="title_create_barcode">יצירת ברקוד</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->

@@ -97,26 +97,26 @@ public class MasterProductFragment extends BaseFragment {
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     binding.categoryOptional.setOnClickListener(
-        v -> activity.navigateFragment(MasterProductFragmentDirections
+        v -> activity.navUtil.navigateFragment(MasterProductFragmentDirections
         .actionMasterProductFragmentToMasterProductCatOptionalFragment(viewModel.getAction())
         .setProduct(viewModel.getFilledProduct())));
     binding.categoryLocation.setOnClickListener(
-        v -> activity.navigateFragment(MasterProductFragmentDirections
+        v -> activity.navUtil.navigateFragment(MasterProductFragmentDirections
         .actionMasterProductFragmentToMasterProductCatLocationFragment(viewModel.getAction())
         .setProduct(viewModel.getFilledProduct())));
     binding.categoryDueDate.setOnClickListener(
-        v -> activity.navigateFragment(MasterProductFragmentDirections
+        v -> activity.navUtil.navigateFragment(MasterProductFragmentDirections
         .actionMasterProductFragmentToMasterProductCatDueDateFragment(viewModel.getAction())
         .setProduct(viewModel.getFilledProduct())));
     binding.categoryAmount.setOnClickListener(
-        v -> activity.navigateFragment(MasterProductFragmentDirections
+        v -> activity.navUtil.navigateFragment(MasterProductFragmentDirections
         .actionMasterProductFragmentToMasterProductCatAmountFragment(viewModel.getAction())
         .setProduct(viewModel.getFilledProduct())));
     binding.categoryQuantityUnit.setOnClickListener(
-        v -> activity.navigateFragment(MasterProductFragmentDirections
+        v -> activity.navUtil.navigateFragment(MasterProductFragmentDirections
         .actionMasterProductFragmentToMasterProductCatQuantityUnitFragment(viewModel.getAction())
         .setProduct(viewModel.getFilledProduct())));
     binding.categoryBarcodes.setOnClickListener(v -> {
@@ -124,7 +124,7 @@ public class MasterProductFragment extends BaseFragment {
         activity.showSnackbar(R.string.subtitle_product_not_on_server, true);
         return;
       }
-      activity.navigateFragment(MasterProductFragmentDirections
+      activity.navUtil.navigateFragment(MasterProductFragmentDirections
           .actionMasterProductFragmentToMasterProductCatBarcodesFragment(viewModel.getAction())
           .setProduct(viewModel.getFilledProduct()));
     });
@@ -133,7 +133,7 @@ public class MasterProductFragment extends BaseFragment {
         activity.showSnackbar(R.string.subtitle_product_not_on_server, true);
         return;
       }
-      activity.navigateFragment(MasterProductFragmentDirections
+      activity.navUtil.navigateFragment(MasterProductFragmentDirections
           .actionMasterProductFragmentToMasterProductCatConversionsFragment(viewModel.getAction())
           .setProduct(viewModel.getFilledProduct()));
     });
@@ -150,7 +150,7 @@ public class MasterProductFragment extends BaseFragment {
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
       } else if (event.getType() == Event.NAVIGATE_UP) {
-        activity.navigateUp();
+        activity.navUtil.navigateUp();
       } else if (event.getType() == Event.SET_PRODUCT_ID) {
         int id = event.getBundle().getInt(Constants.ARGUMENT.PRODUCT_ID);
         setForPreviousDestination(Constants.ARGUMENT.PRODUCT_ID, id);
@@ -168,6 +168,24 @@ public class MasterProductFragment extends BaseFragment {
             || binding.editTextName.getText().length() == 0) {
           activity.showKeyboard(binding.editTextName);
         }
+      } else if (event.getType() == Event.TRANSACTION_SUCCESS) {
+        if (args.getAction().equals(ACTION.CREATE) && viewModel.isActionEdit()) {
+          activity.updateFab(
+              R.drawable.ic_round_save,
+              R.string.action_save_close,
+              Constants.FAB.TAG.SAVE,
+              savedInstanceState == null,
+              () -> {
+                if (!viewModel.getFormData().isNameValid()) {
+                  clearInputFocus();
+                  activity.showKeyboard(binding.editTextName);
+                } else {
+                  clearInputFocus();
+                  viewModel.saveProduct(true);
+                }
+              }
+          );
+        }
       }
     });
 
@@ -182,6 +200,24 @@ public class MasterProductFragment extends BaseFragment {
         viewModel.setCurrentQueueLoading(null);
       }
     });
+
+    viewModel.getActionEditLive().observe(getViewLifecycleOwner(), isEdit -> activity.updateBottomAppBar(
+        true,
+        isEdit
+            ? R.menu.menu_master_product_edit
+            : R.menu.menu_master_product_create,
+        menuItem -> {
+          if (menuItem.getItemId() == R.id.action_delete) {
+            viewModel.deleteProductSafely();
+            return true;
+          }
+          if (menuItem.getItemId() == R.id.action_save) {
+            viewModel.saveProduct(true);
+            return true;
+          }
+          return false;
+        }
+    ));
 
     String action = (String) getFromThisDestinationNow(Constants.ARGUMENT.ACTION);
     if (action != null) {
@@ -236,29 +272,12 @@ public class MasterProductFragment extends BaseFragment {
         binding.appBar, false, binding.scroll, false
     );
     activity.getScrollBehavior().setBottomBarVisibility(true);
-    activity.updateBottomAppBar(
-        true,
-        viewModel.isActionEdit()
-            ? R.menu.menu_master_product_edit
-            : R.menu.menu_master_product_create,
-        menuItem -> {
-          if (menuItem.getItemId() == R.id.action_delete) {
-            viewModel.deleteProductSafely();
-            return true;
-          }
-          if (menuItem.getItemId() == R.id.action_save_not_close) {
-            viewModel.saveProduct(false);
-            return true;
-          }
-          return false;
-        }
-    );
     activity.updateFab(
-        R.drawable.ic_round_save,
-        R.string.action_save_close,
-        Constants.FAB.TAG.SAVE,
+        viewModel.isActionEdit() ? R.drawable.ic_round_save : R.drawable.ic_round_save_as,
+        viewModel.isActionEdit() ? R.string.action_save : R.string.action_save_not_close,
+        viewModel.isActionEdit() ? Constants.FAB.TAG.SAVE : Constants.FAB.TAG.SAVE_NOT_CLOSE,
         savedInstanceState == null,
-        () -> viewModel.saveProduct(true)
+        () -> viewModel.saveProduct(viewModel.isActionEdit())
     );
   }
 

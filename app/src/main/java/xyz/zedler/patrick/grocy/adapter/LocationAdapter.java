@@ -88,6 +88,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
   ) {
     Context context = holder.linearLayoutContainer.getContext();
     Location location = locations.get(holder.getAdapterPosition());
+    if (location == null) return;
 
     // NAME
 

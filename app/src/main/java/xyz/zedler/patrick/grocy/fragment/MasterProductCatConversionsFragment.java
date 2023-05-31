@@ -29,6 +29,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
@@ -105,7 +106,7 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -113,7 +114,7 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
       } else if (event.getType() == Event.NAVIGATE_UP) {
-        activity.navigateUp();
+        activity.navUtil.navigateUp();
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
@@ -173,10 +174,19 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,
-        R.menu.menu_master_product_edit,
+        R.menu.menu_master_product_edit_sub,
         menuItem -> {
           if (menuItem.getItemId() == R.id.action_delete) {
             activity.showSnackbar(R.string.msg_not_implemented_yet, false);
+            return true;
+          }
+          if (menuItem.getItemId() == R.id.action_save) {
+            setForDestination(
+                R.id.masterProductFragment,
+                Constants.ARGUMENT.ACTION,
+                ACTION.SAVE_CLOSE
+            );
+            activity.onBackPressed();
             return true;
           }
           return false;
@@ -186,7 +196,7 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
         R.string.action_add,
         Constants.FAB.TAG.ADD,
         savedInstanceState == null,
-        () -> activity.navigateFragment(MasterProductCatConversionsFragmentDirections
+        () -> activity.navUtil.navigateFragment(MasterProductCatConversionsFragmentDirections
             .actionMasterProductCatConversionsFragmentToMasterProductCatConversionsEditFragment(
                 viewModel.getFilledProduct()
             )
@@ -198,7 +208,7 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
     if (clickUtil.isDisabled()) {
       return;
     }
-    activity.navigateFragment(MasterProductCatConversionsFragmentDirections
+    activity.navUtil.navigateFragment(MasterProductCatConversionsFragmentDirections
         .actionMasterProductCatConversionsFragmentToMasterProductCatConversionsEditFragment(viewModel.getFilledProduct())
         .setConversion(conversion)
     );

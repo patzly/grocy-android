@@ -21,14 +21,30 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 @Entity(tableName = "stock_entry_table")
@@ -301,5 +317,123 @@ public class StockEntry extends GroupedListItem implements Parcelable {
   @Override
   public String toString() {
     return "StockEntry(" + productId + ")";
+  }
+
+  public static QueueItem updateStockEntries(
+      DownloadHelper dlHelper,
+      String dbChangedTime,
+      OnObjectsResponseListener<StockEntry> onResponseListener
+  ) {
+    String lastTime = dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
+        PREF.DB_LAST_TIME_STOCK_ENTRIES, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnMultiTypeErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          dlHelper.get(
+              dlHelper.grocyApi.getObjects(ENTITY.STOCK_ENTRIES),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<StockEntry>>() {
+                }.getType();
+                ArrayList<StockEntry> stockEntries = dlHelper.gson.fromJson(response, type);
+                if (dlHelper.debug) {
+                  Log.i(dlHelper.tag, "dowload StockEntries: " + stockEntries);
+                }
+                Single.fromCallable(() -> {
+                  dlHelper.appDatabase.stockEntryDao().deleteStockEntries().blockingSubscribe();
+                  dlHelper.appDatabase.stockEntryDao()
+                      .insertStockEntries(stockEntries).blockingSubscribe();
+                  dlHelper.sharedPrefs.edit()
+                      .putString(PREF.DB_LAST_TIME_STOCK_ENTRIES, dbChangedTime).apply();
+                  return true;
+                })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnError(throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    })
+                    .doFinally(() -> {
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(stockEntries);
+                      }
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
+    } else {
+      if (dlHelper.debug) {
+        Log.i(dlHelper.tag, "downloadData: skipped StockEntries download");
+      }
+      return null;
+    }
+  }
+
+  public static QueueItem getStockEntries(
+      DownloadHelper dlHelper,
+      int productId,
+      OnObjectsResponseListener<StockEntry> onResponseListener,
+      OnErrorListener onErrorListener
+  ) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnMultiTypeErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        dlHelper.get(
+            dlHelper.grocyApi.getStockEntriesFromProduct(productId),
+            uuid,
+            response -> {
+              Type type = new TypeToken<ArrayList<StockEntry>>() {
+              }.getType();
+              ArrayList<StockEntry> stockEntries = dlHelper.gson.fromJson(response, type);
+              if (dlHelper.debug) {
+                Log.i(dlHelper.tag, "download StockEntries: " + stockEntries);
+              }
+              if (onResponseListener != null) {
+                onResponseListener.onResponse(stockEntries);
+              }
+              if (responseListener != null) {
+                responseListener.onResponse(response);
+              }
+            },
+            error -> {
+              if (onErrorListener != null) {
+                onErrorListener.onError(error);
+              }
+              if (errorListener != null) {
+                errorListener.onError(error);
+              }
+            }
+        );
+      }
+    };
+  }
+
+  public static QueueItem getStockEntries(
+      DownloadHelper dlHelper,
+      int productId,
+      OnObjectsResponseListener<StockEntry> onResponseListener
+  ) {
+    return getStockEntries(dlHelper, productId, onResponseListener, null);
   }
 }

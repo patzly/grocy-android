@@ -24,109 +24,80 @@
 
   <data>
     <import type="android.view.View" />
+    <import type="xyz.zedler.patrick.grocy.R" />
     <variable
-      name="bottomSheet"
-      type="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RecipeBottomSheet" />
+      name="formData"
+      type="xyz.zedler.patrick.grocy.form.FormDataRecipeEdit" />
     <variable
-      name="recipe"
-      type="xyz.zedler.patrick.grocy.model.Recipe" />
+      name="viewModel"
+      type="xyz.zedler.patrick.grocy.viewmodel.RecipeViewModel" />
+    <variable
+      name="activity"
+      type="xyz.zedler.patrick.grocy.activity.MainActivity" />
+    <variable
+      name="fragment"
+      type="xyz.zedler.patrick.grocy.fragment.RecipeFragment" />
   </data>
 
-  <LinearLayout
-    android:id="@+id/recipe_bottomsheet"
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <FrameLayout
+    <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/app_bar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
 
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:weightSum="4">
+      <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.Grocy.Toolbar.Back"
+        app:title="@string/title_recipe" />
 
-        <LinearLayout
-          android:id="@+id/header_text_container"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:padding="16dp"
-          android:orientation="vertical"
-          android:layout_weight="3">
-
-          <TextView
-            android:id="@+id/name"
-            style="@style/Widget.Grocy.TextView.Toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="false"
-            android:maxLines="3"
-            android:textSize="18sp"/>
-
-          <TextView
-            style="@style/Widget.Grocy.TextView.ListItem.Description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:text="@string/title_recipe" />
-
-        </LinearLayout>
-
-        <ImageView
-          android:id="@+id/picture"
-          android:layout_width="0dp"
-          android:layout_height="match_parent"
-          android:layout_weight="1"
-          android:layout_marginTop="16dp"
-          android:layout_marginBottom="16dp"
-          tools:ignore="ContentDescription" />
-
-        <com.google.android.material.appbar.MaterialToolbar
-          android:id="@+id/toolbar"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:visibility="visible"
-          app:contentInsetStart="4dp"
-          app:contentInsetEnd="0dp"
-          app:contentPadding="0dp"
-          app:menu="@menu/menu_recipe" />
-
-      </LinearLayout>
-
-      <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/progress_loading"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:indeterminate="true"
-        app:indicatorColor="?attr/colorPrimary"
-        android:visibility="@{bottomSheet.networkLoadingLive ? View.VISIBLE : View.GONE}" />
-
-    </FrameLayout>
-
-    <com.google.android.material.divider.MaterialDivider style="@style/Widget.Grocy.Divider" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
-      android:id="@+id/scrollView"
+      android:id="@+id/scroll"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:scrollbars="none"
-      android:overScrollMode="ifContentScrolls">
+      android:layout_height="match_parent"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
       <LinearLayout
         android:id="@+id/linear_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="8dp">
+        android:paddingBottom="80dp"
+        android:animateLayoutChanges="true">
+
+        <xyz.zedler.patrick.grocy.view.RoundedCornerImageView
+          android:id="@+id/picture"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:maxHeight="300dp"
+          android:adjustViewBounds="true"
+          android:scaleType="centerCrop"
+          android:layout_marginTop="16dp"
+          android:layout_marginBottom="12dp"
+          android:layout_marginHorizontal="16dp"
+          android:visibility="gone"
+          tools:ignore="ContentDescription" />
+
+        <TextView
+          style="@style/TextAppearance.Grocy.TitleLarge"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textSize="26sp"
+          android:layout_marginStart="16dp"
+          android:layout_marginTop="12dp"
+          android:text="@{viewModel.recipeLive.name}"/>
 
         <HorizontalScrollView
           android:id="@+id/container_chips"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"
           android:scrollbars="none"
           android:overScrollMode="ifContentScrolls">
 
@@ -135,8 +106,6 @@
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
             android:clipToPadding="false"
             app:singleLine="true"
             app:chipSpacing="8dp">
@@ -197,9 +166,7 @@
                 android:inputType="number|numberDecimal"
                 android:imeOptions="actionDone"
                 android:maxLength="10"
-                android:text="@={bottomSheet.servingsDesiredLive}"
-                android:afterTextChanged="@{() -> bottomSheet.updateSaveDesiredServingsVisibility()}"
-                app:onDoneClickInSoftKeyboard="@{() -> bottomSheet.clearInputFocus()}" />
+                android:text="@{viewModel.servingsDesiredLive}"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -211,7 +178,6 @@
             style="@style/Widget.Grocy.Button.IconButton"
             android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{() -> bottomSheet.changeAmount(true)}"
             app:icon="@drawable/ic_round_expand_less" />
 
           <com.google.android.material.button.MaterialButton
@@ -219,7 +185,6 @@
             style="@style/Widget.Grocy.Button.IconButton"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
-            android:onClick="@{() -> bottomSheet.changeAmount(false)}"
             app:icon="@drawable/ic_round_expand_more" />
 
         </LinearLayout>
@@ -299,15 +264,20 @@
           android:orientation="vertical"
           android:layout_marginTop="16dp">
 
+          <com.google.android.material.divider.MaterialDivider
+            style="@style/Widget.Grocy.Divider"
+            android:layout_marginStart="11dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"/>
+
           <TextView
             android:id="@+id/ingredients_headline"
-            style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-            android:layout_width="match_parent"
+            style="@style/TextAppearance.Grocy.TitleMedium"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:textColor="?attr/colorSecondary"
-            android:text="@string/property_ingredients" />
+            android:layout_marginBottom="8dp"
+            android:text="@string/property_ingredients"/>
 
           <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
@@ -321,19 +291,31 @@
 
         </LinearLayout>
 
-        <xyz.zedler.patrick.grocy.view.HtmlCardView
+        <com.google.android.material.divider.MaterialDivider
+          style="@style/Widget.Grocy.Divider"
+          android:layout_marginStart="11dp"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="4dp"/>
+
+        <TextView
+          android:id="@+id/preparation_title"
+          style="@style/TextAppearance.Grocy.TitleMedium"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:text="@string/property_preparation"/>
+
+        <xyz.zedler.patrick.grocy.view.HtmlView
           android:id="@+id/preparation"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginStart="16dp"
-          android:layout_marginEnd="16dp"
-          android:layout_marginBottom="16dp"
-          android:layout_marginTop="8dp"/>
+          android:layout_marginHorizontal="8dp"/>
 
       </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-  </LinearLayout>
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
 </layout>

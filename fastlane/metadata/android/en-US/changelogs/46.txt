@@ -1,0 +1,8 @@
+• New: Catalan, Estonian and Portuguese (Brazil) translations. Many thanks for your contributions!
+• New: Product pictures on stock & master products list if at least one picture is available
+• New: Grid layout for recipes list
+• New: Many pages of the app now can be opened using NFC tags with URI
+• Improved: More buttons on overview start page
+• Fixed: Home Assistant offline error
+
+Full changelog is available in the app.

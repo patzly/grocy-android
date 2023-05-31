@@ -21,14 +21,31 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 
 @Entity(tableName = "product_group_table")
 public class ProductGroup extends GroupedListItem implements Parcelable {
@@ -46,10 +63,6 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
   @SerializedName("description")
   private String description;
 
-  @Ignore
-  @SerializedName("display_divider")
-  private int displayDivider = 1;
-
   /**
    * First element in bottomSheet selection: NONE (id = null)
    */
@@ -59,14 +72,6 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
     this.name = name;
   }
 
-  @Ignore
-  public ProductGroup(int id, String name, String description, int displayDivider) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.displayDivider = displayDivider;
-  }
-
   public ProductGroup() {
   }  // for Room
 
@@ -74,7 +79,6 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
     id = parcel.readInt();
     name = parcel.readString();
     description = parcel.readString();
-    displayDivider = parcel.readInt();
   }
 
   @Override
@@ -82,7 +86,6 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
     dest.writeInt(id);
     dest.writeString(name);
     dest.writeString(description);
-    dest.writeInt(displayDivider);
   }
 
   public static final Creator<ProductGroup> CREATOR = new Creator<>() {
@@ -122,18 +125,6 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
     this.description = description;
   }
 
-  public int getDisplayDivider() {
-    return displayDivider;
-  }
-
-  public void setDisplayDivider(int display) {
-    displayDivider = display;
-  }
-
-  public void setDisplayDivider(boolean display) {
-    displayDivider = display ? 1 : 0;
-  }
-
   @Override
   public int describeContents() {
     return 0;
@@ -150,13 +141,12 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
     ProductGroup that = (ProductGroup) o;
     return id == that.id &&
         Objects.equals(name, that.name) &&
-        Objects.equals(description, that.description) &&
-        displayDivider == that.displayDivider;
+        Objects.equals(description, that.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, description, displayDivider);
+    return Objects.hash(id, name, description);
   }
 
   public static ProductGroup getFromId(List<ProductGroup> productGroups, int id) {
@@ -174,8 +164,114 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
     return "ProductGroup(" + name + ')';
   }
 
-  @NonNull
-  public ProductGroup getClone() {
-    return new ProductGroup(this.id, this.name, this.description, this.displayDivider);
+  public static QueueItem getProductGroups(
+      DownloadHelper dlHelper,
+      OnObjectsResponseListener<ProductGroup> onResponseListener,
+      OnErrorListener onErrorListener
+  ) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnMultiTypeErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        dlHelper.get(
+            dlHelper.grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
+            uuid,
+            response -> {
+              Type type = new TypeToken<List<ProductGroup>>() {
+              }.getType();
+              ArrayList<ProductGroup> productGroups = dlHelper.gson.fromJson(response, type);
+              if (dlHelper.debug) {
+                Log.i(dlHelper.tag, "download ProductGroups: " + productGroups);
+              }
+              if (onResponseListener != null) {
+                onResponseListener.onResponse(productGroups);
+              }
+              if (responseListener != null) {
+                responseListener.onResponse(response);
+              }
+            },
+            error -> {
+              if (onErrorListener != null) {
+                onErrorListener.onError(error);
+              }
+              if (errorListener != null) {
+                errorListener.onError(error);
+              }
+            }
+        );
+      }
+    };
+  }
+
+  public static QueueItem updateProductGroups(
+      DownloadHelper dlHelper,
+      String dbChangedTime,
+      OnObjectsResponseListener<ProductGroup> onResponseListener
+  ) {
+    String lastTime = dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
+        Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnMultiTypeErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          dlHelper.get(
+              dlHelper.grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<ProductGroup>>() {
+                }.getType();
+                ArrayList<ProductGroup> productGroups = dlHelper.gson.fromJson(response, type);
+                if (dlHelper.debug) {
+                  Log.i(dlHelper.tag, "download ProductGroups: " + productGroups);
+                }
+                Single.fromCallable(() -> {
+                      dlHelper.appDatabase.productGroupDao()
+                          .deleteProductGroups().blockingSubscribe();
+                      dlHelper.appDatabase.productGroupDao()
+                          .insertProductGroups(productGroups).blockingSubscribe();
+                      dlHelper.sharedPrefs.edit()
+                          .putString(PREF.DB_LAST_TIME_PRODUCT_GROUPS, dbChangedTime).apply();
+                      return true;
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnError(throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    })
+                    .onErrorComplete()
+                    .doFinally(() -> {
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(productGroups);
+                      }
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
+    } else {
+      if (dlHelper.debug) {
+        Log.i(dlHelper.tag, "downloadData: skipped ProductGroups download");
+      }
+      return null;
+    }
   }
 }

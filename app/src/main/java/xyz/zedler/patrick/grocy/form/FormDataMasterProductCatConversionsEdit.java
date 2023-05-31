@@ -55,8 +55,9 @@ public class FormDataMasterProductCatConversionsEdit {
   private final MutableLiveData<QuantityUnit> quantityUnitToLive;
   private final MutableLiveData<Boolean> quantityUnitToErrorLive;
   private final LiveData<String> quantityUnitToNameLive;
+  private final MutableLiveData<List<QuantityUnitConversion>> conversionsLive;
   private final PluralUtil pluralUtil;
-  private boolean filledWithConversion;
+  private Integer filledWithConversionId;
   private final int maxDecimalPlacesAmount;
 
   public FormDataMasterProductCatConversionsEdit(Application application, Product product) {
@@ -82,6 +83,7 @@ public class FormDataMasterProductCatConversionsEdit {
         quantityUnitToLive,
         quantityUnit -> quantityUnit != null ? quantityUnit.getName() : null
     );
+    conversionsLive = new MutableLiveData<>();
     factorHelperLive = new MediatorLiveData<>();
     factorHelperLive
         .addSource(quantityUnitFromLive, i -> factorHelperLive.setValue(getFactorHelpText()));
@@ -90,7 +92,7 @@ public class FormDataMasterProductCatConversionsEdit {
     factorHelperLive
         .addSource(factorLive, i -> factorHelperLive.setValue(getFactorHelpText()));
     pluralUtil = new PluralUtil(application);
-    filledWithConversion = false;
+    filledWithConversionId = null;
   }
 
   public MutableLiveData<String> getFactorLive() {
@@ -153,6 +155,10 @@ public class FormDataMasterProductCatConversionsEdit {
     return quantityUnitToNameLive;
   }
 
+  public MutableLiveData<List<QuantityUnitConversion>> getConversionsLive() {
+    return conversionsLive;
+  }
+
   private String getFactorHelpText() {
     if (quantityUnitFromLive.getValue() == null || quantityUnitToLive.getValue() == null
         || !NumUtil.isStringDouble(factorLive.getValue())) {
@@ -166,11 +172,11 @@ public class FormDataMasterProductCatConversionsEdit {
   }
 
   public boolean isFilledWithConversion() {
-    return filledWithConversion;
+    return filledWithConversionId != null;
   }
 
-  public void setFilledWithConversion(boolean filled) {
-    this.filledWithConversion = filled;
+  public void setFilledWithConversionId(int filled) {
+    this.filledWithConversionId = filled;
   }
 
   public boolean isFactorValid() {
@@ -198,6 +204,37 @@ public class FormDataMasterProductCatConversionsEdit {
     if (quantityUnitFromLive.getValue() == null || quantityUnitToLive.getValue() == null) {
       return false;
     }
+    if (quantityUnitFromLive.getValue().getId() == quantityUnitToLive.getValue().getId()) {
+      quantityUnitToErrorLive.setValue(true);
+      return false;
+    }
+    List<QuantityUnitConversion> conversions = conversionsLive.getValue();
+    if (conversions != null) {
+      QuantityUnitConversion conversion = QuantityUnitConversion.getFromTwoUnits(
+          conversions,
+          quantityUnitFromLive.getValue().getId(),
+          quantityUnitToLive.getValue().getId(),
+          product.getId()
+      );
+      if (conversion == null) {
+        conversion = QuantityUnitConversion.getFromTwoUnits(
+            conversions,
+            quantityUnitToLive.getValue().getId(),
+            quantityUnitFromLive.getValue().getId(),
+            product.getId()
+        );
+      }
+      if (conversion != null && filledWithConversionId != null
+          && conversion.getId() != filledWithConversionId) {
+        quantityUnitToErrorLive.setValue(true);
+        return false;
+      }
+      if (conversion != null && filledWithConversionId == null) {
+        quantityUnitToErrorLive.setValue(true);
+        return false;
+      }
+    }
+
     quantityUnitFromErrorLive.setValue(false);
     quantityUnitToErrorLive.setValue(false);
     return true;

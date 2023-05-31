@@ -55,6 +55,7 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
+import xyz.zedler.patrick.grocy.util.RestartUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.view.SelectionCardView;
@@ -98,7 +99,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     viewModel.getEventHandler().observe(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -142,7 +143,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
       }
       getSharedPrefs().edit().putInt(SETTINGS.APPEARANCE.DARK_MODE, pref).apply();
       performHapticClick();
-      activity.restartToApply(0, getInstanceState());
+      RestartUtil.restartToApply(activity, 0, getInstanceState());
     });
 
     binding.partialOptionTransition.linearOtherTransition.setOnClickListener(
@@ -262,7 +263,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
           ViewUtil.uncheckAllChildren(container);
           card.setChecked(true);
           getSharedPrefs().edit().putString(SETTINGS.APPEARANCE.THEME, name).apply();
-          activity.restartToApply(100, getInstanceState());
+          RestartUtil.restartToApply(activity, 100, getInstanceState());
         }
       });
 

@@ -72,7 +72,7 @@ public class ShortcutUtil {
             context, context.getString(R.string.title_shopping_list)
         ));
       } else if (shortcutInfo.getId().equals(ADD_TO_SHOPPING_LIST)) {
-        Uri uriAddToShoppingListDeepLink = MainActivity.getUriWithArgs(
+        Uri uriAddToShoppingListDeepLink = NavUtil.getUriWithArgs(
             context.getString(R.string.deep_link_shoppingListItemEditFragment),
             new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
                 .build().toBundle()
@@ -107,7 +107,7 @@ public class ShortcutUtil {
         ));
       } else if (shortcutInfo.getId().equals(ADD_TASK)) {
         newShortcutInfos.add(createShortcutTasks(
-            context, context.getString(R.string.title_task_add)
+            context, context.getString(R.string.title_task_new)
         ));
       } else if (shortcutInfo.getId().equals(RECIPES)) {
         newShortcutInfos.add(createShortcutRecipes(

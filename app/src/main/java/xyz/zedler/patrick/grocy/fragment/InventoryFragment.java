@@ -115,7 +115,7 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
 
@@ -136,7 +136,7 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
       } else if (event.getType() == Event.TRANSACTION_SUCCESS) {
         assert getArguments() != null;
         if (InventoryFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
-          activity.navigateUp();
+          activity.navUtil.navigateUp();
         } else {
           clearFormAndFocusProductInput();
         }
@@ -153,7 +153,7 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
         embeddedFragmentScanner.startScannerIfVisible();
       } else if (event.getType() == Event.CHOOSE_PRODUCT) {
         String barcode = event.getBundle().getString(ARGUMENT.BARCODE);
-        activity.navigateFragment(InventoryFragmentDirections
+        activity.navUtil.navigateFragment(InventoryFragmentDirections
             .actionInventoryFragmentToChooseProductFragment().setBarcode(barcode));
       }
     });

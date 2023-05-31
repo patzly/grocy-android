@@ -168,7 +168,7 @@
             style="@style/Widget.Grocy.CheckBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/title_task_add"
+            android:text="@string/title_task_new"
             android:onCheckedChanged="@{() -> sheet.checkLimitReached()}" />
 
           <com.google.android.material.checkbox.MaterialCheckBox

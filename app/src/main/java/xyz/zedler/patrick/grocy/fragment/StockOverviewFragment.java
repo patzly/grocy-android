@@ -123,7 +123,7 @@ public class StockOverviewFragment extends BaseFragment implements
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     // APP BAR BEHAVIOR
 
@@ -282,7 +282,7 @@ public class StockOverviewFragment extends BaseFragment implements
 
     hideDisabledFeatures();
 
-    if (savedInstanceState == null) {
+    if (savedInstanceState == null || !viewModel.isAlreadyLoadedFromDatabase()) {
       viewModel.loadFromDatabase(true);
     }
 
@@ -352,12 +352,12 @@ public class StockOverviewFragment extends BaseFragment implements
       setUpSearch();
       return true;
     } else if (item.getItemId() == R.id.action_stock_journal) {
-      activity.navigateFragment(
+      activity.navUtil.navigateFragment(
           StockOverviewFragmentDirections.actionStockOverviewFragmentToStockJournalFragment()
       );
       return true;
     } else if (item.getItemId() == R.id.action_stock_entries) {
-      activity.navigateFragment(
+      activity.navUtil.navigateFragment(
           StockOverviewFragmentDirections.actionStockOverviewFragmentToStockEntriesFragment()
       );
       return true;
@@ -392,7 +392,7 @@ public class StockOverviewFragment extends BaseFragment implements
       activity.showSnackbar(R.string.error_undefined, false);
       return;
     }
-    activity.navigateFragment(StockOverviewFragmentDirections
+    activity.navUtil.navigateFragment(StockOverviewFragmentDirections
         .actionStockOverviewFragmentToProductOverviewBottomSheetDialogFragment()
         .setShowActions(true)
         .setStockItem(stockItem)

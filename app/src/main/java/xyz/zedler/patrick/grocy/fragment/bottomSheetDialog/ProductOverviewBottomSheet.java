@@ -156,7 +156,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     );
     binding.toolbar.setOnMenuItemClickListener(item -> {
       if (item.getItemId() == R.id.action_add_to_shopping_list) {
-        activity.navigateDeepLink(R.string.deep_link_shoppingListItemEditFragment,
+        activity.navUtil.navigateDeepLink(R.string.deep_link_shoppingListItemEditFragment,
             new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
                 .setProductId(String.valueOf(product.getId())).build().toBundle());
         dismiss();
@@ -177,14 +177,14 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
         return true;
       } else if (item.getItemId() == R.id.action_edit_product) {
         String productId = String.valueOf(product.getId());
-        activity.navigateDeepLink(R.string.deep_link_masterProductFragment,
+        activity.navUtil.navigateDeepLink(R.string.deep_link_masterProductFragment,
             new MasterProductFragmentArgs.Builder(Constants.ACTION.EDIT)
                 .setProductId(productId).build().toBundle());
         dismiss();
         return true;
       } else if (item.getItemId() == R.id.action_stock_entries) {
         String productId = String.valueOf(product.getId());
-        activity.navigateDeepLink(R.string.deep_link_stockEntriesFragment,
+        activity.navUtil.navigateDeepLink(R.string.deep_link_stockEntriesFragment,
             new StockEntriesFragmentArgs.Builder().setProductId(productId).build().toBundle());
         dismiss();
         return true;
@@ -295,7 +295,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     // LOAD DETAILS
 
     if (activity.isOnline() && !hasDetails()) {
-      dlHelper.getProductDetails(product.getId(), details -> {
+      ProductDetails.getProductDetails(dlHelper, product.getId(), details -> {
         productDetails = details;
         stockItem = new StockItem(productDetails);
         refreshButtonStates();
@@ -481,7 +481,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     if (!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
       return;
     }
-    dlHelper.getStockLocations(product.getId(), stockLocations -> {
+    StockLocation.getStockLocations(dlHelper, product.getId(), stockLocations -> {
       if (stockLocations.isEmpty()) {
         return;
       }
@@ -506,7 +506,9 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       binding.itemLocation.setText(
           activity.getString(R.string.property_locations),
           locationsString.toString(),
-          getString(R.string.property_location_default_insert, location.getName())
+          location != null
+              ? getString(R.string.property_location_default_insert, location.getName())
+              : null
       );
     }).perform(dlHelper.getUuid());
   }

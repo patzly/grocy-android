@@ -473,4 +473,13 @@ public class BottomScrollBehavior {
       return bottomAppBar.getY();
     }
   }
+
+  @Nullable
+  public ViewGroup getScrollView() {
+    if (scrollView == null || scrollView instanceof RecyclerView) {
+      return null;
+    } else {
+      return scrollView;
+    }
+  }
 }

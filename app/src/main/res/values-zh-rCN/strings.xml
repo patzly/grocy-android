@@ -477,7 +477,6 @@
   <string name="title_product_edit">编辑产品</string>
   <string name="title_tasks">任务</string>
   <string name="title_task_entry">‎任务条目‎</string>
-  <string name="title_task_add">‎添加任务‎</string>
   <string name="title_master_data">主数据</string>
   <string name="title_stock_entries">库存条目</string>
   <string name="title_stock_entry">‎库存输入‎</string>
@@ -529,8 +528,6 @@
   <string name="title_unit_price_specific">%1$s价格</string>
   <string name="title_stock_entry_no_specific">没有特定条目</string>
   <string name="title_list_entry">列表条目</string>
-  <string name="title_edit_list_entry">编辑列表条目</string>
-  <string name="title_create_list_entry">创建列表条目</string>
   <string name="title_edit_barcode">编辑条码</string>
   <string name="title_create_barcode">新建条码</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->

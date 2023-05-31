@@ -59,7 +59,7 @@ If you run into a bug or miss a feature, please [open an issue](https://github.c
 Like the grocy project, Grocy Android can be translated, too. The main language is English, but we also maintain the German translation because it's our mother tongue.
 You can help translate this project at [Transifex](https://app.transifex.com/patzly/grocy-android), if your language is incomplete, contains typos or is not available yet. Translations which reached a completion level of 80% will be included in releases.  
 
-Translated languages (17): Chinese (China), Chinese (Taiwan), Czech, Dutch, French, German, Hebrew, Hungarian, Italian, Norwegian Bokmål, Polish, Portuguese (Portugal), Russian, Slovak, Spanish, Swedish, Ukrainian
+Translated languages (20): Catalan, Czech, German, Spanish, Estonian, French, Hungarian, Italian, Hebrew, Norwegian Bokmål, Dutch, Polish, Portuguese (Brazil), Portuguese (Portugal), Russian, Slovak, Swedish, Ukrainian, Chinese (China), Chinese (Taiwan)
 
 Thanks for your contributions!
 

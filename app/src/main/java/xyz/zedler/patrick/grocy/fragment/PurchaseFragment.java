@@ -121,7 +121,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
 
@@ -149,14 +149,14 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
       } else if (event.getType() == Event.TRANSACTION_SUCCESS) {
         assert getArguments() != null;
         if (viewModel.hasStoredPurchase()) {
-          activity.navigateUp();
+          activity.navUtil.navigateUp();
         } else if (args.getShoppingListItems() != null) {
           clearInputFocus();
           viewModel.getFormData().clearForm();
           boolean nextItemValid = viewModel.batchModeNextItem();
-          if (!nextItemValid) activity.navigateUp();
+          if (!nextItemValid) activity.navUtil.navigateUp();
         } else if (PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
-          activity.navigateUp();
+          activity.navUtil.navigateUp();
         } else {
           viewModel.getFormData().clearForm();
           focusProductInputIfNecessary();
@@ -175,7 +175,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
         embeddedFragmentScanner.startScannerIfVisible();
       } else if (event.getType() == Event.CHOOSE_PRODUCT) {
         String barcode = event.getBundle().getString(ARGUMENT.BARCODE);
-        activity.navigateFragment(PurchaseFragmentDirections
+        activity.navUtil.navigateFragment(PurchaseFragmentDirections
             .actionPurchaseFragmentToChooseProductFragment()
             .setBarcode(barcode)
             .setPendingProductsActive(viewModel.isQuickModeEnabled()));
@@ -436,7 +436,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   }
 
   public void navigateToPendingProductsPage() {
-    activity.navigateFragment(
+    activity.navUtil.navigateFragment(
         PurchaseFragmentDirections.actionPurchaseFragmentToPendingPurchasesFragment()
     );
   }
@@ -540,7 +540,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
       clearInputFocus();
       viewModel.getFormData().clearForm();
       boolean nextItemValid = viewModel.batchModeNextItem();
-      if (!nextItemValid) activity.navigateUp();
+      if (!nextItemValid) activity.navUtil.navigateUp();
       return true;
     }
     return false;

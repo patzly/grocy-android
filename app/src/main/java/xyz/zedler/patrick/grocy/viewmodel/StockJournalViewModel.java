@@ -23,17 +23,17 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -44,7 +44,6 @@ import xyz.zedler.patrick.grocy.model.StockLogEntry;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.repository.StockEntriesRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
@@ -59,7 +58,6 @@ public class StockJournalViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<ArrayList<StockLogEntry>> filteredStockLogEntriesLive;
 
   private List<StockLogEntry> stockLogEntries;
@@ -86,7 +84,6 @@ public class StockJournalViewModel extends BaseViewModel {
     repository = new StockEntriesRepository(application);
 
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
     filteredStockLogEntriesLive = new MutableLiveData<>();
   }
 
@@ -101,15 +98,19 @@ public class StockJournalViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData(false);
       } else {
-        NetworkQueue queue = dlHelper.newQueue(this::updateFilteredStockLogEntries, this::onDownloadError);
-        queue.append(dlHelper.getStockLogEntries(
+        NetworkQueue queue = dlHelper.newQueue(
+            this::updateFilteredStockLogEntries,
+            error -> onError(error, TAG)
+        );
+        queue.append(StockLogEntry.getStockLogEntries(
+            dlHelper,
             20,
             0,
             entries -> this.stockLogEntries = entries
         ));
         queue.start();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(boolean skipOfflineCheck) {
@@ -120,7 +121,7 @@ public class StockJournalViewModel extends BaseViewModel {
     }
     dlHelper.updateData(
         () -> loadFromDatabase(false),
-        this::onDownloadError,
+        error -> onError(error, TAG),
         QuantityUnit.class,
         Product.class,
         ProductBarcode.class,
@@ -139,19 +140,12 @@ public class StockJournalViewModel extends BaseViewModel {
     downloadData(true);
   }
 
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showNetworkErrorMessage(error);
-    if (!isOffline()) setOfflineLive(true);
-  }
-
-  public void loadNextPage(DownloadHelper.OnStockLogEntriesResponseListener responseListener) {
+  public void loadNextPage(OnObjectsResponseListener<StockLogEntry> responseListener) {
     NetworkQueue queue = dlHelper.newQueue(() -> {
       if (isOffline()) setOfflineLive(false);
-    }, this::onDownloadError);
-    queue.append(dlHelper.getStockLogEntries(
+    }, error -> onError(error, TAG));
+    queue.append(StockLogEntry.getStockLogEntries(
+        dlHelper,
         20,
         currentPage*20,
         responseListener
@@ -240,19 +234,6 @@ public class StockJournalViewModel extends BaseViewModel {
 
   public void setCurrentPage(int currentPage) {
     this.currentPage = currentPage;
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

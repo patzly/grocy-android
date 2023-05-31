@@ -97,7 +97,7 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -105,7 +105,7 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
       } else if (event.getType() == Event.NAVIGATE_UP) {
-        activity.navigateUp();
+        activity.navUtil.navigateUp();
       } else if (event.getType() == Event.SET_SHOPPING_LIST_ID) {
         int id = event.getBundle().getInt(Constants.ARGUMENT.SELECTED_ID);
         setForDestination(R.id.shoppingListFragment, Constants.ARGUMENT.SELECTED_ID, id);
@@ -165,7 +165,7 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
         this::onMenuItemClick
     );
     activity.updateFab(
-        R.drawable.ic_round_backup,
+        R.drawable.ic_round_save,
         R.string.action_save,
         Constants.FAB.TAG.SAVE,
         true,

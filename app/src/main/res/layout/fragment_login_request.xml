@@ -136,7 +136,7 @@
               style="@style/Widget.Grocy.Button.OutlinedButton"
               android:layout_marginEnd="4dp"
               android:text="@string/action_back"
-              android:onClick="@{() -> activity.navigateUp()}"
+              android:onClick="@{() -> activity.navUtil.navigateUp()}"
               app:clickUtil="@{clickUtil}" />
 
             <com.google.android.material.button.MaterialButton
@@ -159,7 +159,7 @@
           <TextView
             style="@style/Widget.Grocy.TextView.Paragraph.Card"
             android:text="@{viewModel.loginErrorHassLog}"
-            android:textAppearance="?attr/textAppearanceBodySmall" />
+            android:textAppearance="?attr/textAppearanceBodyMedium" />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -175,7 +175,7 @@
             style="@style/Widget.Grocy.Button.OutlinedButton"
             android:layout_marginEnd="4dp"
             android:text="@string/action_back"
-            android:onClick="@{() -> activity.navigateUp()}"
+            android:onClick="@{() -> activity.navUtil.navigateUp()}"
             app:clickUtil="@{clickUtil}" />
 
           <com.google.android.material.button.MaterialButton

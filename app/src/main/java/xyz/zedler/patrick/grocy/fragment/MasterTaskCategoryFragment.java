@@ -50,8 +50,8 @@ import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterTaskCategoryBinding;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
+import xyz.zedler.patrick.grocy.util.BindingAdaptersUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
-import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class MasterTaskCategoryFragment extends BaseFragment {
@@ -140,6 +140,11 @@ public class MasterTaskCategoryFragment extends BaseFragment {
             ViewUtil.startIcon(binding.imageName);
           }
         });
+    BindingAdaptersUtil.setOnDoneClickInSoftKeyboardListener(
+        binding.editTextName, () -> {
+          binding.editTextName.clearFocus();
+          activity.hideKeyboard();
+        });
 
     // description
     binding.editTextDescription.setOnFocusChangeListener(
@@ -152,14 +157,10 @@ public class MasterTaskCategoryFragment extends BaseFragment {
     MasterTaskCategoryFragmentArgs args = MasterTaskCategoryFragmentArgs
         .fromBundle(requireArguments());
     editTaskCategory = args.getTaskCategory();
-    if (editTaskCategory != null) {
+    if (editTaskCategory != null && savedInstanceState == null) {
       fillWithEditReferences();
     } else if (savedInstanceState == null) {
-      resetAll();
-      new Handler().postDelayed(
-          () -> activity.showKeyboard(binding.editTextName),
-          50
-      );
+      activity.showKeyboard(binding.editTextName);
     }
 
     // START
@@ -277,7 +278,6 @@ public class MasterTaskCategoryFragment extends BaseFragment {
               new TypeToken<ArrayList<TaskCategory>>() {
               }.getType()
           );
-          SortUtil.sortTaskCategoriesByName(taskCategories, true);
           taskCategoryNames = getTaskCategoryNames();
 
           binding.swipe.setRefreshing(false);
@@ -286,8 +286,6 @@ public class MasterTaskCategoryFragment extends BaseFragment {
 
           if (isRefresh && editTaskCategory != null) {
             fillWithEditReferences();
-          } else {
-            resetAll();
           }
         },
         error -> {
@@ -366,7 +364,7 @@ public class MasterTaskCategoryFragment extends BaseFragment {
       dlHelper.put(
           grocyApi.getObject(ENTITY.TASK_CATEGORIES, editTaskCategory.getId()),
           jsonObject,
-          response -> activity.navigateUp(),
+          response -> activity.navUtil.navigateUp(),
           error -> {
             showErrorMessage(error);
             if (debug) {
@@ -378,7 +376,7 @@ public class MasterTaskCategoryFragment extends BaseFragment {
       dlHelper.post(
           grocyApi.getObjects(ENTITY.TASK_CATEGORIES),
           jsonObject,
-          response -> activity.navigateUp(),
+          response -> activity.navUtil.navigateUp(),
           error -> {
             showErrorMessage(error);
             if (debug) {
@@ -418,7 +416,7 @@ public class MasterTaskCategoryFragment extends BaseFragment {
   public void deleteObject(int taskCategoryId) {
     dlHelper.delete(
         grocyApi.getObject(ENTITY.TASK_CATEGORIES, taskCategoryId),
-        response -> activity.navigateUp(),
+        response -> activity.navUtil.navigateUp(),
         this::showErrorMessage
     );
   }

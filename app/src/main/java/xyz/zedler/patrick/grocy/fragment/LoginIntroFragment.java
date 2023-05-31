@@ -77,7 +77,7 @@ public class LoginIntroFragment extends BaseFragment {
   }
 
   public void loginDemoInstance() {
-    activity.navigateFragment(
+    activity.navUtil.navigateFragment(
         LoginIntroFragmentDirections.actionLoginIntroFragmentToLoginRequestFragment(
             getString(R.string.url_grocy_demo),
             ""
@@ -88,11 +88,11 @@ public class LoginIntroFragment extends BaseFragment {
   public void loginOwnInstance() {
     PackageManager pm = activity.getPackageManager();
     if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-      activity.navigateFragment(
+      activity.navUtil.navigateFragment(
           LoginIntroFragmentDirections.actionLoginIntroFragmentToLoginApiQrCodeFragment()
       );
     } else {
-      activity.navigateFragment(
+      activity.navUtil.navigateFragment(
           LoginIntroFragmentDirections.actionLoginIntroFragmentToLoginApiFormFragment()
       );
     }

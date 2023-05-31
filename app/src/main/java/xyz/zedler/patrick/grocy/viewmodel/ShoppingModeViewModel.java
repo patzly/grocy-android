@@ -28,17 +28,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListGrouping;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
+import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -49,8 +51,6 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
@@ -67,7 +67,6 @@ public class ShoppingModeViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Integer> selectedShoppingListIdLive;
-  private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<ArrayList<ShoppingListItem>> filteredShoppingListItemsLive;
 
   private List<ShoppingListItem> shoppingListItems;
@@ -99,7 +98,6 @@ public class ShoppingModeViewModel extends BaseViewModel {
     repository = new ShoppingListRepository(application);
 
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
     selectedShoppingListIdLive = new MutableLiveData<>(1);
     filteredShoppingListItemsLive = new MutableLiveData<>();
 
@@ -130,7 +128,7 @@ public class ShoppingModeViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void updateFilteredShoppingListItems() {
@@ -175,38 +173,44 @@ public class ShoppingModeViewModel extends BaseViewModel {
     if (dbChangedTime == null) {
       dlHelper.getTimeDbChanged(
           time -> downloadData(time, skipOfflineCheck),
-          () -> onDownloadError(null)
+          error -> onError(error, TAG)
       );
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
     queue.append(
-        dlHelper.updateShoppingListItems(
+        ShoppingListItem.updateShoppingListItems(
+            dlHelper,
             dbChangedTime,
             (shoppingListItems, itemsToSync, serverItemsHashMap) -> {
               this.shoppingListItems = shoppingListItems;
               this.itemsToSyncTemp = itemsToSync;
               this.serverItemHashMapTemp = serverItemsHashMap;
             }
-        ), dlHelper.updateShoppingLists(
-            dbChangedTime, shoppingLists -> this.shoppingLists = shoppingLists
-        ), dlHelper.updateProductGroups(
+        ), ShoppingList.updateShoppingLists(
+            dlHelper, dbChangedTime, shoppingLists -> this.shoppingLists = shoppingLists
+        ), ProductGroup.updateProductGroups(
+            dlHelper,
             dbChangedTime,
             productGroups -> productGroupHashMap = ArrayUtil.getProductGroupsHashMap(productGroups)
-        ), dlHelper.updateQuantityUnits(
+        ), QuantityUnit.updateQuantityUnits(
+            dlHelper,
             dbChangedTime,
             quantityUnits -> quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits)
-        ), dlHelper.updateQuantityUnitConversions(
+        ), QuantityUnitConversion.updateQuantityUnitConversions(
+            dlHelper,
             dbChangedTime,
             unitConversions -> unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(unitConversions)
-        ), dlHelper.updateProducts(dbChangedTime, products -> {
+        ), Product.updateProducts(dlHelper, dbChangedTime, products -> {
           productHashMap = ArrayUtil.getProductsHashMap(products);
           productNamesHashMap = ArrayUtil.getProductNamesHashMap(products);
-        }), dlHelper.updateStores(
+        }), Store.updateStores(
+            dlHelper,
             dbChangedTime,
             stores -> storeHashMap = ArrayUtil.getStoresHashMap(stores)
-        ), dlHelper.updateMissingItems(
+        ), MissingItem.updateMissingItems(
+            dlHelper,
             dbChangedTime,
             missing -> missingProductIds = ArrayUtil.getMissingProductsIds(missing)
         )
@@ -247,7 +251,7 @@ public class ShoppingModeViewModel extends BaseViewModel {
       updateFilteredShoppingListItems();
       return;
     }
-    DownloadHelper.OnQueueEmptyListener emptyListener = () -> {
+    Runnable emptyListener = () -> {
       ArrayList<ShoppingListItem> itemsToUpdate = new ArrayList<>();
       for (ShoppingListItem itemToSync : itemsToSyncTemp) {
         int itemId = itemToSync.getId();
@@ -268,7 +272,7 @@ public class ShoppingModeViewModel extends BaseViewModel {
           itemsToUpdate.toArray(new ShoppingListItem[0])
       );
     };
-    DownloadHelper.OnErrorListener errorListener = error -> {
+    DownloadHelper.OnMultiTypeErrorListener errorListener = error -> {
       showMessage(getString(R.string.msg_failed_to_sync));
       downloadData();
     };
@@ -282,18 +286,10 @@ public class ShoppingModeViewModel extends BaseViewModel {
           Log.e(TAG, "syncItems: " + e);
         }
       }
-      queue.append(dlHelper.editShoppingListItem(itemToSync.getId(), body));
+      queue.append(ShoppingListItem.editShoppingListItem(dlHelper, itemToSync.getId(), body));
     }
     currentQueueLoading = queue;
     queue.start();
-  }
-
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showNetworkErrorMessage(error);
-    if (!isOffline()) setOfflineLive(true);
   }
 
   public int getSelectedShoppingListId() {
@@ -339,7 +335,8 @@ public class ShoppingModeViewModel extends BaseViewModel {
         Log.e(TAG, "toggleDoneStatus: " + e);
       }
     }
-    dlHelper.editShoppingListItem(
+    ShoppingListItem.editShoppingListItem(
+        dlHelper,
         shoppingListItem.getId(),
         body,
         response -> updateDoneStatus(shoppingListItem),
@@ -470,19 +467,6 @@ public class ShoppingModeViewModel extends BaseViewModel {
   public String getGroupingMode() {
     return sharedPrefs.getString(PREF.SHOPPING_LIST_GROUPING_MODE,
         FilterChipLiveDataShoppingListGrouping.GROUPING_PRODUCT_GROUP);
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

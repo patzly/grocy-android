@@ -19,31 +19,94 @@
 
 package xyz.zedler.patrick.grocy.util;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings.Global;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.view.WindowMetrics;
 import androidx.annotation.Dimension;
+import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import com.google.android.material.color.DynamicColors;
+import com.google.android.material.color.DynamicColorsOptions;
+import com.google.android.material.color.HarmonizedColors;
+import com.google.android.material.color.HarmonizedColorsOptions;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.Constants.THEME;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 
 public class UiUtil {
 
   public static final int SCRIM = 0x55000000;
   public static final int SCRIM_DARK_DIALOG = 0xFF0c0c0e;
   public static final int SCRIM_LIGHT_DIALOG = 0xFF666666;
+
+  public static void setTheme(Activity activity, SharedPreferences sharedPrefs) {
+    switch (sharedPrefs.getString(SETTINGS.APPEARANCE.THEME, SETTINGS_DEFAULT.APPEARANCE.THEME)) {
+      case THEME.RED:
+        activity.setTheme(R.style.Theme_Grocy_Red);
+        break;
+      case THEME.YELLOW:
+        activity.setTheme(R.style.Theme_Grocy_Yellow);
+        break;
+      case THEME.LIME:
+        activity.setTheme(R.style.Theme_Grocy_Lime);
+        break;
+      case THEME.GREEN:
+        activity.setTheme(R.style.Theme_Grocy_Green);
+        break;
+      case THEME.TURQUOISE:
+        activity.setTheme(R.style.Theme_Grocy_Turquoise);
+        break;
+      case THEME.TEAL:
+        activity.setTheme(R.style.Theme_Grocy_Teal);
+        break;
+      case THEME.BLUE:
+        activity.setTheme(R.style.Theme_Grocy_Blue);
+        break;
+      case THEME.PURPLE:
+        activity.setTheme(R.style.Theme_Grocy_Purple);
+        break;
+      default:
+        if (DynamicColors.isDynamicColorAvailable()) {
+          DynamicColors.applyToActivityIfAvailable(
+              activity,
+              new DynamicColorsOptions.Builder().setOnAppliedCallback(
+                  activityCallback -> HarmonizedColors.applyToContextIfAvailable(
+                      activity, HarmonizedColorsOptions.createMaterialDefaults()
+                  )
+              ).build()
+          );
+        } else {
+          activity.setTheme(R.style.Theme_Grocy_Green);
+        }
+        break;
+    }
+  }
 
   public static void layoutEdgeToEdge(Window window) {
     if (Build.VERSION.SDK_INT >= VERSION_CODES.R) {
@@ -87,6 +150,143 @@ public class UiUtil {
       }
       view.setSystemUiVisibility(flags);
     }
+  }
+
+  public static void updateBottomAppBar(
+      ActivityMainBinding binding,
+      Context context,
+      SharedPreferences sharedPrefs,
+      boolean showFab,
+      @MenuRes int newMenuId,
+      @Nullable OnMenuItemClickListener onMenuItemClickListener
+  ) {
+    // Handler with postDelayed is necessary for workaround of issue #552
+    new Handler().postDelayed(() -> {
+      if (showFab && !binding.fabMain.isShown() && !PrefsUtil.isServerUrlEmpty(sharedPrefs)) {
+        binding.fabMain.show();
+      } else if (!showFab && binding.fabMain.isShown()) {
+        binding.fabMain.hide();
+      }
+
+      Drawable overflowIcon = binding.bottomAppBar.getOverflowIcon();
+
+      // IF ANIMATIONS DISABLED
+      if (!UiUtil.areAnimationsEnabled(context)) {
+        binding.bottomAppBar.replaceMenu(newMenuId);
+        Menu menu = binding.bottomAppBar.getMenu();
+        int tint = ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant);
+        for (int i = 0; i < menu.size(); i++) {
+          MenuItem item = menu.getItem(i);
+          if (item.getIcon() != null) {
+            item.getIcon().mutate();
+            item.getIcon().setAlpha(255);
+            item.getIcon().setTint(tint);
+          }
+        }
+        if (overflowIcon != null && overflowIcon.isVisible()) {
+          overflowIcon.setAlpha(255);
+          overflowIcon.setTint(tint);
+        }
+        binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
+        return;
+      }
+
+      long iconFadeOutDuration = 150;
+      long iconFadeInDuration = 300;
+
+      int alphaFrom = 255;
+      // get better start value if animation was not finished yet
+      if (binding.bottomAppBar.getMenu() != null
+          && binding.bottomAppBar.getMenu().size() > 0
+          && binding.bottomAppBar.getMenu().getItem(0) != null
+          && binding.bottomAppBar.getMenu().getItem(0).getIcon() != null) {
+        alphaFrom = binding.bottomAppBar.getMenu().getItem(0).getIcon().getAlpha();
+      }
+      ValueAnimator animatorFadeOut = ValueAnimator.ofInt(alphaFrom, 0);
+      animatorFadeOut.addUpdateListener(animation -> {
+        for (int i = 0; i < binding.bottomAppBar.getMenu().size(); i++) {
+          MenuItem item = binding.bottomAppBar.getMenu().getItem(i);
+          if (item.getIcon() != null && item.isVisible()) {
+            item.getIcon().setAlpha((int) animation.getAnimatedValue());
+          }
+        }
+        if (overflowIcon != null && overflowIcon.isVisible()) {
+          overflowIcon.setAlpha((int) animation.getAnimatedValue());
+        }
+      });
+      animatorFadeOut.setDuration(iconFadeOutDuration);
+      animatorFadeOut.setInterpolator(new FastOutSlowInInterpolator());
+      animatorFadeOut.start();
+
+      new Handler(Looper.getMainLooper()).postDelayed(() -> {
+        binding.bottomAppBar.replaceMenu(newMenuId);
+
+        int iconIndex = 0;
+        int overflowCount = 0;
+        int tint = ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant);
+        for (int i = 0; i < binding.bottomAppBar.getMenu().size(); i++) {
+          MenuItem item = binding.bottomAppBar.getMenu().getItem(i);
+          if (item.getIcon() == null || !item.isVisible()) {
+            if (item.isVisible()) {
+              overflowCount++;
+            }
+            continue;
+          }
+          iconIndex++;
+          int index = iconIndex;
+          item.getIcon().mutate();
+          item.getIcon().setTint(tint);
+          item.getIcon().setAlpha(0);
+          new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            Rect bounds = item.getIcon().copyBounds();
+            int top = bounds.top;
+            int offset = UiUtil.dpToPx(context, 12);
+            ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
+            animator.addUpdateListener(animation -> {
+              bounds.offsetTo(
+                  0,
+                  (int) (top + (float) animation.getAnimatedValue() * offset)
+              );
+              item.getIcon().setBounds(bounds);
+              item.getIcon().setAlpha(255 - (int) ((float) animation.getAnimatedValue() * 255));
+              item.getIcon().invalidateSelf();
+            });
+            animator.setDuration(iconFadeInDuration - index * 50L);
+            animator.setInterpolator(new FastOutSlowInInterpolator());
+            animator.start();
+          }, index * 90L);
+        }
+        if (overflowCount > 0) {
+          Drawable overflowIconNew = binding.bottomAppBar.getOverflowIcon();
+          if (overflowIconNew == null || !overflowIconNew.isVisible()) {
+            return;
+          }
+          iconIndex++;
+          int index = iconIndex;
+          overflowIconNew.setTint(tint);
+          overflowIconNew.setAlpha(0);
+          new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            Rect bounds = overflowIconNew.copyBounds();
+            int top = bounds.top;
+            int offset = UiUtil.dpToPx(context, 12);
+            ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
+            animator.addUpdateListener(animation -> {
+              bounds.offsetTo(
+                  0,
+                  (int) (top + (float) animation.getAnimatedValue() * offset)
+              );
+              overflowIconNew.setBounds(bounds);
+              overflowIconNew.setAlpha(255 - (int) ((float) animation.getAnimatedValue() * 255));
+              overflowIconNew.invalidateSelf();
+            });
+            animator.setDuration(iconFadeInDuration - index * 50L);
+            animator.setInterpolator(new FastOutSlowInInterpolator());
+            animator.start();
+          }, index * 90L);
+        }
+        binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
+      }, iconFadeOutDuration);
+    }, 10);
   }
 
   public static boolean isDarkModeActive(Context context) {

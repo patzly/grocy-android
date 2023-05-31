@@ -113,7 +113,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     // APP BAR BEHAVIOR
 
@@ -313,7 +313,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
       viewModel.showErrorMessage();
       return;
     }
-    activity.navigateFragment(
+    activity.navUtil.navigateFragment(
         ChoresFragmentDirections.actionChoresFragmentToChoreEntryRescheduleFragment(chore)
     );
   }

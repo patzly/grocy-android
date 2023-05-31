@@ -1,3 +1,23 @@
+## 3.3.0
+
+- New: Recipe details are now displayed on a separate page, not a bottom sheet anymore
+- Improved: Database exceptions are now caught and displayed (#698)
+- Improved: Pictures in recipe or product descriptions now can be up to 10MB large (#698)
+- Improved: Keyboard is displayed more reliably and quickly
+- Improved: Form focus on master object pages & fixed plural field for English on QU page
+- Improved: "Create recipe" page and "Create product" page now use "save and not close" buttons
+- Improved: Description editor page now has bottom padding (still needs improvements with keyboard)
+- Fixed: Crash on startup with Android Lollipop (and maybe higher)
+- Fixed: Prevent crash when opening qu conversion page (#708)
+
+## 3.2.1
+
+- Fixed: Random crash with no reason (#699)
+- Fixed: Prevent another crash after reopening app from background (#697)
+- Fixed: Product pictures not loading (with Home Assistant or not, we don't know) (#700)
+- Fixed: Overview and stock page not populated after theme change or other cases (#692, #695)
+- Fixed: Crash on stock page with opened product overview sheet in some cases (#673)
+
 ## 3.2.0
 
 - New: Catalan, Estonian and Portuguese (Brazil) translations. Many thanks for your contributions!
@@ -13,10 +33,14 @@
 - Improved: Added option for quick mode state when using scan button on overview page (#540, #648)
 - Improved: Added separate buttons for shopping mode and new task to overview start page
 - Improved: Updated plural rules for quantity units in all project languages from Transifex
+- Improved: Better indication of invalid fields on unit conversion edit page (#682)
+- Improved: themed icon support for app shortcuts
 - Fixed: Home Assistant offline error (#670)
 - Fixed: On login pages all barcode formats were allowed, now only QR code format is recognized
 - Fixed: Deprecated Google Play developer profile link
 - Fixed: Demo domain change with translation which has a specific region
+- Fixed: Focused input field covered by keyboard
+- Fixed: Crashes where parsing a wrong formatted decimal number was the reason (again #652)
 
 ## 3.1.1
 

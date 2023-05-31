@@ -97,11 +97,11 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     binding.ingredients.setOnClickListener(v -> {
       if (viewModel.isActionEdit()) {
-        activity.navigateFragment(
+        activity.navUtil.navigateFragment(
             RecipeEditFragmentDirections
                 .actionRecipeEditFragmentToRecipeEditIngredientListFragment(viewModel.getAction())
                 .setRecipe(viewModel.getRecipe())
@@ -112,13 +112,13 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     });
     binding.preparation.setOnClickListener(v -> {
       if (viewModel.getFormData().getPreparationLive().getValue() != null) {
-        activity.navigateFragment(
+        activity.navUtil.navigateFragment(
             RecipeEditFragmentDirections.actionRecipeEditFragmentToEditorHtmlFragment2().setText(
                 viewModel.getFormData().getPreparationLive().getValue()
             )
         );
       } else {
-        activity.navigateFragment(
+        activity.navUtil.navigateFragment(
             RecipeEditFragmentDirections.actionRecipeEditFragmentToEditorHtmlFragment2()
         );
       }
@@ -137,13 +137,31 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
       } else if (event.getType() == Event.NAVIGATE_UP) {
-        activity.navigateUp();
+        activity.navUtil.navigateUp();
       } else if (event.getType() == Event.SET_RECIPE_ID) {
         int id = event.getBundle().getInt(Constants.ARGUMENT.RECIPE_ID);
         setForPreviousDestination(Constants.ARGUMENT.RECIPE_ID, id);
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
+      } else if (event.getType() == Event.TRANSACTION_SUCCESS) {
+        if (args.getAction().equals(ACTION.CREATE) && viewModel.isActionEdit()) {
+          activity.updateFab(
+              R.drawable.ic_round_save,
+              R.string.action_save,
+              Constants.FAB.TAG.SAVE,
+              savedInstanceState == null,
+              () -> {
+                if (!viewModel.getFormData().isNameValid()) {
+                  clearInputFocus();
+                  activity.showKeyboard(binding.editTextName);
+                } else {
+                  clearInputFocus();
+                  viewModel.saveEntry(true);
+                }
+              }
+          );
+        }
       }
     });
 
@@ -162,8 +180,9 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     });
 
     if (savedInstanceState == null && args.getAction().equals(ACTION.CREATE)) {
-      if (binding.editTextName.getText() == null || binding.editTextName.getText().length() == 0) {
-        new Handler().postDelayed(() -> activity.showKeyboard(binding.editTextName), 50);
+      if (viewModel.getFormData().getNameLive().getValue() == null
+          || viewModel.getFormData().getNameLive().getValue().length() == 0) {
+        activity.showKeyboard(binding.editTextName);
       }
     }
 
@@ -206,24 +225,18 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
         binding.appBar, false, binding.scroll, false, false
     );
     activity.getScrollBehavior().setBottomBarVisibility(true);
-    activity.updateBottomAppBar(
-        true,
-        viewModel.isActionEdit()
-            ? R.menu.menu_recipe_edit_edit
-            : R.menu.menu_recipe_edit_create,
-        this::onMenuItemClick
-    );
     activity.updateFab(
-        R.drawable.ic_round_backup,
-        R.string.action_save,
-        Constants.FAB.TAG.SAVE,
+        viewModel.isActionEdit() ? R.drawable.ic_round_save : R.drawable.ic_round_save_as,
+        viewModel.isActionEdit() ? R.string.action_save : R.string.action_save_not_close,
+        viewModel.isActionEdit() ? Constants.FAB.TAG.SAVE : Constants.FAB.TAG.SAVE_NOT_CLOSE,
         savedInstanceState == null,
         () -> {
           if (!viewModel.getFormData().isNameValid()) {
             clearInputFocus();
             activity.showKeyboard(binding.editTextName);
           } else {
-            viewModel.saveEntry(true);
+            clearInputFocus();
+            viewModel.saveEntry(viewModel.isActionEdit());
           }
         }
     );
@@ -272,8 +285,8 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
       clearInputFocus();
       viewModel.getFormData().clearForm();
       return true;
-    } else if (item.getItemId() == R.id.action_save_not_close) {
-      viewModel.saveEntry(false);
+    } else if (item.getItemId() == R.id.action_save) {
+      viewModel.saveEntry(true);
       return true;
     }
     return false;

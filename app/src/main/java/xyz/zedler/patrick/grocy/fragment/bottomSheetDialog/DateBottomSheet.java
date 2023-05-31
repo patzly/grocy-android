@@ -24,7 +24,6 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -54,8 +53,8 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetDateBinding;
-import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatDueDate;
+import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
@@ -153,7 +152,7 @@ public class DateBottomSheet extends BaseBottomSheetDialogFragment {
       }
 
       if (savedInstanceState == null) {
-        new Handler().postDelayed(() -> activity.showKeyboard(binding.editTextDate), 50);
+        activity.showKeyboard(binding.editTextDate);
       }
 
       updateDateHint();
@@ -475,7 +474,7 @@ public class DateBottomSheet extends BaseBottomSheetDialogFragment {
 
   public void navigateToSettingsCatBehavior() {
     dismiss();
-    activity.navigateDeepLink(R.string.deep_link_settingsCatBehaviorFragment);
+    activity.navUtil.navigateDeepLink(R.string.deep_link_settingsCatBehaviorFragment);
   }
 
   @Override
