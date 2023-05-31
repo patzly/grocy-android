@@ -36,7 +36,6 @@ import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -383,6 +382,13 @@ public class RecipeEntryAdapter extends
           divider.setVisibility(View.VISIBLE);
         }
       }
+    } else if (layoutManager instanceof LinearLayoutManager
+        && viewHolder instanceof RecipeViewHolder) {
+      if (position == getItemCount()-1) {
+        divider.setVisibility(View.GONE);
+      } else {
+        divider.setVisibility(View.VISIBLE);
+      }
     }
   }
 
@@ -443,13 +449,7 @@ public class RecipeEntryAdapter extends
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
     this.extraField = extraField;
-    if (layoutManager instanceof LinearLayoutManager) {
-      diffResult.dispatchUpdatesTo(
-          new AdapterListUpdateCallback(this, (LinearLayoutManager) layoutManager)
-      );
-    } else {
-      diffResult.dispatchUpdatesTo(this);
-    }
+    diffResult.dispatchUpdatesTo(this);
   }
 
   static class DiffCallback extends DiffUtil.Callback {
@@ -535,62 +535,7 @@ public class RecipeEntryAdapter extends
         return newItem.getId() == oldItem.getId();
       }
 
-      return newItem.equals(oldItem);
-    }
-  }
-
-  /**
-   * Custom ListUpdateCallback that prevents RecyclerView from scrolling down if top item is moved.
-   */
-  public static final class AdapterListUpdateCallback implements ListUpdateCallback {
-
-    @NonNull
-    private final RecipeEntryAdapter mAdapter;
-    private final LinearLayoutManager linearLayoutManager;
-
-    public AdapterListUpdateCallback(
-        @NonNull RecipeEntryAdapter adapter,
-        LinearLayoutManager linearLayoutManager
-    ) {
-      this.mAdapter = adapter;
-      this.linearLayoutManager = linearLayoutManager;
-    }
-
-    @Override
-    public void onInserted(int position, int count) {
-      mAdapter.notifyItemRangeInserted(position, count);
-    }
-
-    @Override
-    public void onRemoved(int position, int count) {
-      mAdapter.notifyItemRangeRemoved(position, count);
-    }
-
-    @Override
-    public void onMoved(int fromPosition, int toPosition) {
-      // workaround for https://github.com/patzly/grocy-android/issues/439
-      // figure out the position of the first visible item
-      int firstPos = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
-      int offsetTop = 0;
-      if(firstPos >= 0) {
-        View firstView = linearLayoutManager.findViewByPosition(firstPos);
-        if (firstView != null) {
-          offsetTop = linearLayoutManager.getDecoratedTop(firstView)
-              - linearLayoutManager.getTopDecorationHeight(firstView);
-        }
-      }
-
-      mAdapter.notifyItemMoved(fromPosition, toPosition);
-
-      // reapply the saved position
-      if(firstPos >= 0) {
-        linearLayoutManager.scrollToPositionWithOffset(firstPos, offsetTop);
-      }
-    }
-
-    @Override
-    public void onChanged(int position, int count, Object payload) {
-      mAdapter.notifyItemRangeChanged(position, count, payload);
+      return newItem.equalsForListDiff(oldItem);
     }
   }
 }
