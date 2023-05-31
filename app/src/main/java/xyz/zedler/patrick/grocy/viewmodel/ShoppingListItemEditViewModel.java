@@ -29,32 +29,32 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.HashMap;
 import java.util.List;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.form.FormDataShoppingListItemEdit;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.FormDataShoppingListItemEdit;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
+import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.repository.ShoppingListItemEditRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -131,7 +131,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
@@ -140,25 +140,26 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       currentQueueLoading = null;
     }
     if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
+      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, TAG));
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
     queue.append(
-        dlHelper.updateShoppingLists(dbChangedTime, shoppingLists -> {
+        ShoppingList.updateShoppingLists(dlHelper, dbChangedTime, shoppingLists -> {
           this.shoppingLists = shoppingLists;
           if (!isActionEdit) {
             formData.getShoppingListLive().setValue(getLastShoppingList());
           }
-        }), dlHelper.updateProducts(dbChangedTime, products -> {
+        }), Product.updateProducts(dlHelper, dbChangedTime, products -> {
           this.products = products;
           formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
-        }), dlHelper.updateQuantityUnitConversions(
-            dbChangedTime, conversions -> this.unitConversions = conversions
-        ), dlHelper.updateProductBarcodes(
-            dbChangedTime, barcodes -> this.barcodes = barcodes
-        ), dlHelper.updateQuantityUnits(
+        }), QuantityUnitConversion.updateQuantityUnitConversions(
+            dlHelper, dbChangedTime, conversions -> this.unitConversions = conversions
+        ), ProductBarcode.updateProductBarcodes(
+            dlHelper, dbChangedTime, barcodes -> this.barcodes = barcodes
+        ), QuantityUnit.updateQuantityUnits(
+            dlHelper,
             dbChangedTime,
             quantityUnits -> quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits)
         )
@@ -193,20 +194,10 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       queueEmptyAction = null;
       return;
     }
-    fillWithShoppingListItemIfNecessary();
-  }
-
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
+    if (isOffline()) {
+      setOfflineLive(false);
     }
-    String exact = error == null ? null : error.getLocalizedMessage();
-    infoFullscreenLive.setValue(
-        new InfoFullscreen(InfoFullscreen.ERROR_NETWORK, exact, () -> {
-          infoFullscreenLive.setValue(null);
-          downloadDataForceUpdate();
-        })
-    );
+    fillWithShoppingListItemIfNecessary();
   }
 
   public void saveItem() {
@@ -256,7 +247,8 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       navigateUp();
       return;
     }
-    dlHelper.addProductBarcode(
+    ProductBarcode.addProductBarcode(
+        dlHelper,
         ProductBarcode.getJsonFromProductBarcode(productBarcode, debug, TAG),
         this::navigateUp,
         error -> navigateUp()
@@ -380,7 +372,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     if (product == null) {
       return;
     }
-    dlHelper.getProductDetails(product.getId(), details -> showBottomSheet(
+    ProductDetails.getProductDetails(dlHelper, product.getId(), details -> showBottomSheet(
         new ProductOverviewBottomSheet(),
         new ProductOverviewBottomSheetArgs.Builder()
             .setProductDetails(details).build().toBundle()

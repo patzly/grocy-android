@@ -30,9 +30,9 @@
     app:showAsAction="always" />
 
   <item
-    android:id="@+id/action_save_not_close"
-    android:title="@string/action_save_not_close"
-    android:icon="@drawable/ic_round_save_as"
+    android:id="@+id/action_save"
+    android:title="@string/action_save_close"
+    android:icon="@drawable/ic_round_save"
     app:showAsAction="always" />
 
 </menu>

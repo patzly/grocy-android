@@ -98,6 +98,8 @@
   <string name="action_open_scanner">Spustit čtečku</string>
   <string name="action_discard">Smazat</string>
   <string name="action_clear_form">Vyčistit formulář</string>
+  <!-- Short form for "Link barcode to existing product and clear form", this should fit into a button so keep it short -->
+  <string name="action_link_and_clear">Vložit a smazat</string>
   <string name="action_toggle_done">Přidat/odebrat z košíku</string>
   <string name="action_edit_notes">Upravit poznámky</string>
   <string name="action_add_missing">Přidat produkty s malou zásobou</string>
@@ -149,6 +151,20 @@
     <item quantity="few">%1$d po době použitelnosti</item>
     <item quantity="many">%1$d po době použitelnosti</item>
     <item quantity="other">%1$d po době použitelnosti</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_short">
+    <item quantity="one">%1$d není čerstvý</item>
+    <item quantity="few">%1$d nejsou čerstvé</item>
+    <item quantity="many">%1$d není čerstvých</item>
+    <item quantity="other">%1$d není čerstvých</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_long">
+    <item quantity="one">%1$d následující není čerstvý</item>
+    <item quantity="few">%1$d následující nejsou čerstvé</item>
+    <item quantity="many">%1$d následujících není čerstvých</item>
+    <item quantity="other">%1$d následujících není čerstvých</item>
   </plurals>
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
   <plurals name="msg_missing_products">
@@ -239,6 +255,8 @@
   <string name="msg_task_undo">Vrátit zpět</string>
   <string name="msg_recipes_enough_in_stock">Dostatečná zásoba</string>
   <string name="msg_recipes_enough_in_stock_filter">Dostatečná zásoba (%1$d)</string>
+  <!-- %1$s is an amount with quantity unit (e.g. 3 bottles) -->
+  <string name="msg_recipes_enough_in_stock_amount">Dostatečná zásoba (%1$s)</string>
   <string name="msg_recipes_not_enough_but_on_shopping_list_filter">Zásoba není dostatečná, ale je na nákupním seznamu (%1$d)</string>
   <string name="msg_recipes_not_enough_filter">Nemá dostatečnou zásobu (%1$d)</string>
   <string name="msg_recipes_not_enough">Nemá dostatečnou zásobu</string>
@@ -254,6 +272,7 @@
     <item quantity="many">%1$d ingrediencí chybí</item>
     <item quantity="other">%1$d ingrediencí chybí</item>
   </plurals>
+  <string name="msg_recipes_ingredient_fulfillment_info_list">Chybí: %1$s, ale je v nákupním seznamu: %2$s</string>
   <string name="msg_chore_executed">Splnění povinnosti zaznamenáno</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Nakoupeno %1$s %2$s produktu %3$s</string>
@@ -305,6 +324,7 @@
     <item quantity="other">%1$s %2$s bude ubráno ze zásob</item>
   </plurals>
   <string name="msg_transfer_tare_weight">Produkty s vyplněnou tárou zatím není možné přesouvat</string>
+  <string name="msg_should_not_be_frozen">Tento produkt by neměl být zmrazen. Chcete pokračovat?</string>
   <string name="msg_item_marked_as_done">Položka je označena jako hotová</string>
   <string name="msg_item_marked_as_undone">Stav položky byl vrácen</string>
   <string name="option_synced_success">Volba byla zapsána na server</string>
@@ -348,8 +368,6 @@
   <string name="msg_feedback">Máte nějaké přání, otázky nebo jste našli chybu? Kontaktujte nás a my vám pomůžeme.\nRádi si od vás přečteme pěknou recenzi na Google Play.</string>
   <string name="msg_point_at_barcode">Namiřte kameru na čárový kód</string>
   <string name="msg_press_hold_confirm">Podržením potvrdíte odstranění</string>
-  <string name="msg_recipe_consume_ask">Opravdu si přejete spotřebovat všechny ingredience receptu „%1$s“? Suroviny označené „Zkontrolovat pouze zda je v zásobě jakékoliv množství“ budou ignorovány.</string>
-  <string name="msg_recipe_shopping_list_ask">Chcete přidat všechny chybějící ingredience z receptu „%1$s“ do nákupního seznamu?\nOdškrtněte ty, které v nákupním seznamu nechcete.</string>
   <string name="msg_welcome">Grocy pro Android vás vítá</string>
   <string name="msg_welcome_introduce">Chcete-li grocy používat, musíte si ji nejprve nainstalovat na svůj server nebo jako grocy add-on pro Home Assistant.\nPokud si jen chcete aplikaci vyzkoušet, můžete použít demo server od Bernda Bestela, tvůrce grocy.</string>
   <string name="msg_choose_option_below">Vyberte si jednu z možností</string>
@@ -371,6 +389,8 @@
   <string name="msg_help_move_on_open">Označíte-li produkt jako otevřený, automaticky se přesune z Obvyklého umístění do Spotřebovávat z umístění. Abyste mohli funkci použít, musíte pro obě umístění vybrat různá místa.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_own_stock">Tento produkt nebude možné vybrat při nákupu. To je vhodné pro nadřazené produkty, které používáte jen jako sumář řady podřízených produktů.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_should_not_be_frozen">Při pokusu přesunout takto označený produkt do mrazničky se zobrazí varování</string>
   <string name="msg_help_due_date_type">Podle zvoleného typu data bude styl zvýrazňování na stránce přehledu zásob rozdílný. „Datum minimální trvanlivosti” znamená, že produkt je bezpečné konzumovat i po tomto datu. „Datum použitelnosti” znamená, že konzumovat produkt po tomto datu není bezpečné.</string>
   <string name="msg_help_default_due_days_format">Dlouhým stiskem na položku zadat datum pomocí dialogu místo psaním</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -434,6 +454,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="msg_help_home_assistant_login_server">Zde můžete zadat URL adresu vašeho Nabu Casa cloudu, pokud ho používáte. Klepněte na tuto kartu pro otevření webu Nabu Casa.</string>
   <string name="msg_help_home_assistant_login_token">Můžete si vytvořit přístupový kód s dlouhou životností ve svém profilu aplikace Home Assistant. Klepnutím otevřete výše uvedenou adresu</string>
   <string name="msg_help_home_assistant_login_proxy_id">Vraťte se zpět nebo klikněte na tuto kartu pro naskenování QR kódu, který vyplní všechny údaje.</string>
+  <string name="msg_help_fab_overview_start">V tomto přehledu má tlačítko dvě funkce:\n\n– sejmutím čárového kódu a klepnutím produkt spotřebujete\n– sejmutím čárového kódu a podržením produkt nakoupíte\n\nTtoto tlačítko je vždy aktivní a můžete jím produkty spotřebovat nebo nakoupit. V nastavení aplikace to můžete změnit.</string>
   <string name="msg_share">Tato aplikace je klient projektu grocy: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">Tento API klíč nefunguje</string>
@@ -525,7 +546,6 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="title_product_edit">Upravit produkt</string>
   <string name="title_tasks">Úkoly</string>
   <string name="title_task_entry">Úkol</string>
-  <string name="title_task_add">Přidat úkol</string>
   <string name="title_master_data">Základní data</string>
   <string name="title_stock_entries">Položky zásob</string>
   <string name="title_stock_entry">Položka zásob</string>
@@ -578,8 +598,6 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="title_unit_price_specific">Cena za %1$s</string>
   <string name="title_stock_entry_no_specific">Nespecifikovaná položka</string>
   <string name="title_list_entry">Seznam položek</string>
-  <string name="title_edit_list_entry">Upravit seznam položek</string>
-  <string name="title_create_list_entry">Vytvořit seznam položek</string>
   <string name="title_edit_barcode">Upravit čárový kód</string>
   <string name="title_create_barcode">Vytvořit čárový kód</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
@@ -602,6 +620,9 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="title_product_cat_qu_conversions">Převody měr. jednotek</string>
   <string name="title_unknown_input">Nesprávně vložené údaje</string>
   <string name="title_presets_new_products">Výchozí hodnoty pro nové produkty</string>
+  <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
+  <string name="title_ingredient_with_amount">%1$s %2$s produktu %3$s</string>
+
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
   <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
@@ -667,6 +688,8 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="subtitle_print_label_per_purchase">Při nákupu</string>
   <!-- Short form for "One label per unit" -->
   <string name="subtitle_print_label_per_unit">Každé balení</string>
+  <!-- %1$s is a price and %2$s is a currency -->
+  <string name="subtitle_total_price">Celková cena: %1$s%2$s</string>
 
   <string name="description_input_product_part1">Pole produktu obsahuje:</string>
   <string name="description_input_product_part2">Vyberte si, jak pokračovat:</string>
@@ -853,10 +876,6 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_qu_stock">Měrná jednotka zásoby</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Převodní koeficient (násobek) měrné jednotky nákupu produktu do měrné jednotky zásob</string>
-  <!-- This string is part of a pair, there is also 'quantity unit to' -->
-  <string name="property_quantity_unit_from">Z měrné jednotky</string>
-  <!-- This string is part of a pair, there is also 'quantity unit from' -->
-  <string name="property_quantity_unit_to">Do měrné jednotky</string>
   <string name="property_factor">Násobek</string>
   <string name="property_barcode">Čárový kód</string>
   <string name="property_barcodes">Čárové kódy</string>
@@ -872,6 +891,8 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_due_type_expiration">Datum použitelnosti</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date">Datum min. trvanlivosti</string>
+  <!-- This string is for due date of task -->
+  <string name="property_due_date_task">Datum min. trvanlivosti</string>
   <!-- %1$s is a due date-->
   <string name="property_due_date_fill">Datum min. trvanlivosti: %1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -927,6 +948,8 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_never_show">Nezobrazovat v Přehledu zásob</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_disable_own_stock">Produkt nemá vlastní zásobu</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_should_not_be_frozen">Tento produkt by neměl být zmrazen</string>
   <string name="property_number">Číslo</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_enable_tare_weight">Použít táru</string>
@@ -1045,7 +1068,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
     <item quantity="one">Před %d rokem</item>
     <item quantity="few">Před %d roky</item>
     <item quantity="many">Před %d léty</item>
-    <item quantity="other">Před %d léty</item>
+    <item quantity="other">Před %d lety</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_days_from_now">

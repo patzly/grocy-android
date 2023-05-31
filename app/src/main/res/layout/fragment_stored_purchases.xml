@@ -73,7 +73,7 @@
             android:tooltipText="@string/action_back"
             android:focusable="true"
             tools:targetApi="o"
-            android:onClick="@{() -> activity.navigateUp()}">
+            android:onClick="@{() -> activity.navUtil.navigateUp()}">
 
             <ImageView
               android:layout_width="24dp"

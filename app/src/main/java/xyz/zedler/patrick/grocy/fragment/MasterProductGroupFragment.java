@@ -49,8 +49,8 @@ import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductGroupBinding;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.util.BindingAdaptersUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
-import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class MasterProductGroupFragment extends BaseFragment {
@@ -146,6 +146,11 @@ public class MasterProductGroupFragment extends BaseFragment {
             ViewUtil.startIcon(binding.imageMasterProductGroupName);
           }
         });
+    BindingAdaptersUtil.setOnDoneClickInSoftKeyboardListener(
+        binding.editTextMasterProductGroupName, () -> {
+          binding.editTextMasterProductGroupName.clearFocus();
+          activity.hideKeyboard();
+        });
 
     // description
     binding.editTextMasterProductGroupDescription.setOnFocusChangeListener(
@@ -158,14 +163,10 @@ public class MasterProductGroupFragment extends BaseFragment {
     MasterProductGroupFragmentArgs args = MasterProductGroupFragmentArgs
         .fromBundle(requireArguments());
     editProductGroup = args.getProductGroup();
-    if (editProductGroup != null) {
+    if (editProductGroup != null && savedInstanceState == null) {
       fillWithEditReferences();
     } else if (savedInstanceState == null) {
-      resetAll();
-      new Handler().postDelayed(
-          () -> activity.showKeyboard(binding.editTextMasterProductGroupName),
-          50
-      );
+      activity.showKeyboard(binding.editTextMasterProductGroupName);
     }
 
     // START
@@ -283,7 +284,6 @@ public class MasterProductGroupFragment extends BaseFragment {
               new TypeToken<ArrayList<ProductGroup>>() {
               }.getType()
           );
-          SortUtil.sortProductGroupsByName(productGroups, true);
           productGroupNames = getProductGroupNames();
 
           binding.swipeMasterProductGroup.setRefreshing(false);
@@ -292,8 +292,6 @@ public class MasterProductGroupFragment extends BaseFragment {
 
           if (isRefresh && editProductGroup != null) {
             fillWithEditReferences();
-          } else {
-            resetAll();
           }
         },
         error -> {
@@ -387,7 +385,7 @@ public class MasterProductGroupFragment extends BaseFragment {
               editProductGroup.getId()
           ),
           jsonObject,
-          response -> activity.navigateUp(),
+          response -> activity.navUtil.navigateUp(),
           error -> {
             showErrorMessage(error);
             if (debug) {
@@ -399,7 +397,7 @@ public class MasterProductGroupFragment extends BaseFragment {
       dlHelper.post(
           grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
           jsonObject,
-          response -> activity.navigateUp(),
+          response -> activity.navUtil.navigateUp(),
           error -> {
             showErrorMessage(error);
             if (debug) {
@@ -443,7 +441,7 @@ public class MasterProductGroupFragment extends BaseFragment {
   public void deleteObject(int productGroupId) {
     dlHelper.delete(
         grocyApi.getObject(GrocyApi.ENTITY.PRODUCT_GROUPS, productGroupId),
-        response -> activity.navigateUp(),
+        response -> activity.navUtil.navigateUp(),
         this::showErrorMessage
     );
   }

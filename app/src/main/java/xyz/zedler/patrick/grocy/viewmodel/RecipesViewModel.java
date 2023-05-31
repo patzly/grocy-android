@@ -21,12 +21,9 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -67,7 +64,6 @@ public class RecipesViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<ArrayList<Recipe>> filteredRecipesLive;
   private final FilterChipLiveDataRecipesStatus filterChipLiveDataStatus;
   private final FilterChipLiveDataRecipesSort filterChipLiveDataSort;
@@ -95,7 +91,6 @@ public class RecipesViewModel extends BaseViewModel {
     repository = new RecipesRepository(application);
 
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
     filteredRecipesLive = new MutableLiveData<>();
 
     filterChipLiveDataStatus = new FilterChipLiveDataRecipesStatus(
@@ -125,7 +120,7 @@ public class RecipesViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(boolean skipOfflineCheck) {
@@ -140,7 +135,7 @@ public class RecipesViewModel extends BaseViewModel {
           if (isOffline()) setOfflineLive(false);
           loadFromDatabase(false);
         },
-        this::onDownloadError,
+        error -> onError(error, TAG),
         Recipe.class,
         RecipeFulfillment.class,
         RecipePosition.class,
@@ -168,14 +163,6 @@ public class RecipesViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
     editPrefs.apply();
     downloadData(true);
-  }
-
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showNetworkErrorMessage(error);
-    if (!isOffline()) setOfflineLive(true);
   }
 
   public void updateFilteredRecipes() {
@@ -339,6 +326,11 @@ public class RecipesViewModel extends BaseViewModel {
     return filterChipLiveDataExtraField.getExtraField();
   }
 
+  @Override
+  public SharedPreferences getSharedPrefs() {
+    return sharedPrefs;
+  }
+
   public void updateSearchInput(String input) {
     this.searchInput = input.toLowerCase();
     updateFilteredRecipes();
@@ -350,19 +342,6 @@ public class RecipesViewModel extends BaseViewModel {
 
   public boolean isSortAscending() {
     return filterChipLiveDataSort.isSortAscending();
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

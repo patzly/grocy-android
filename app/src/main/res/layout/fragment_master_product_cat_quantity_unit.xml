@@ -26,7 +26,7 @@
     <import type="xyz.zedler.patrick.grocy.R" />
     <variable
       name="formData"
-      type="xyz.zedler.patrick.grocy.model.FormDataMasterProductCatQuantityUnit" />
+      type="xyz.zedler.patrick.grocy.form.FormDataMasterProductCatQuantityUnit" />
     <variable
       name="viewModel"
       type="xyz.zedler.patrick.grocy.viewmodel.MasterProductCatQuantityUnitViewModel" />

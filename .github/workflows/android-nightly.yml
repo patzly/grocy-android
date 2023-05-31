@@ -20,12 +20,12 @@ jobs:
     - name: Replace applicationId and name
       run: |
         sed -i 's/applicationId "xyz.zedler.patrick.grocy"/applicationId "xyz.zedler.patrick.grocy.nightly"/' app/build.gradle
-        sed -i 's%@string/app_name%Grocy Nightly%' app/src/main/AndroidManifest.xml
+        sed -i 's|<string name="app_name" translatable="false">Grocy</string>|<string name="app_name" translatable="false">Grocy Nightly</string>|g' app/src/main/res/values/strings.xml
         
-    - name: Set up JDK 11
+    - name: Set up JDK 19
       uses: actions/setup-java@v3
       with:
-        java-version: '11'
+        java-version: '19'
         distribution: 'temurin'
         cache: gradle
 
@@ -54,7 +54,7 @@ jobs:
     - name: Replace applicationId to default for checkout without git commit
       run: |
         sed -i 's/applicationId "xyz.zedler.patrick.grocy.nightly"/applicationId "xyz.zedler.patrick.grocy"/' app/build.gradle
-        sed -i 's%Grocy Nightly%@string/app_name%' app/src/main/AndroidManifest.xml
+        sed -i 's|<string name="app_name" translatable="false">Grocy</string>|<string name="app_name" translatable="false">Grocy Nightly</string>|g' app/src/main/res/values/strings.xml
         
     - name: Checkout branch
       uses: actions/checkout@v3

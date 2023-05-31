@@ -21,16 +21,31 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
-
+import com.google.gson.reflect.TypeToken;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 
 @Entity(tableName = "quantity_unit_table")
 public class QuantityUnit implements Parcelable {
@@ -194,5 +209,114 @@ public class QuantityUnit implements Parcelable {
   @Override
   public String toString() {
     return "QuantityUnit(" + name + ')';
+  }
+
+  public static QueueItem getQuantityUnits(
+      DownloadHelper dlHelper,
+      OnObjectsResponseListener<QuantityUnit> onResponseListener,
+      OnErrorListener onErrorListener
+  ) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnMultiTypeErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        dlHelper.get(
+            dlHelper.grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
+            uuid,
+            response -> {
+              Type type = new TypeToken<List<QuantityUnit>>() {
+              }.getType();
+              ArrayList<QuantityUnit> quantityUnits = dlHelper.gson.fromJson(response, type);
+              if (dlHelper.debug) {
+                Log.i(dlHelper.tag, "download QuantityUnits: " + quantityUnits);
+              }
+              if (onResponseListener != null) {
+                onResponseListener.onResponse(quantityUnits);
+              }
+              if (responseListener != null) {
+                responseListener.onResponse(response);
+              }
+            },
+            error -> {
+              if (onErrorListener != null) {
+                onErrorListener.onError(error);
+              }
+              if (errorListener != null) {
+                errorListener.onError(error);
+              }
+            }
+        );
+      }
+    };
+  }
+
+  public static QueueItem updateQuantityUnits(
+      DownloadHelper dlHelper,
+      String dbChangedTime,
+      OnObjectsResponseListener<QuantityUnit> onResponseListener
+  ) {
+    String lastTime = dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
+        Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnMultiTypeErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          dlHelper.get(
+              dlHelper.grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<QuantityUnit>>() {
+                }.getType();
+                ArrayList<QuantityUnit> quantityUnits = dlHelper.gson.fromJson(response, type);
+                if (dlHelper.debug) {
+                  Log.i(dlHelper.tag, "download QuantityUnits: " + quantityUnits);
+                }
+                Single.fromCallable(() -> {
+                  dlHelper.appDatabase.quantityUnitDao().deleteQuantityUnits().blockingSubscribe();
+                  dlHelper.appDatabase.quantityUnitDao()
+                      .insertQuantityUnits(quantityUnits).blockingSubscribe();
+                  dlHelper.sharedPrefs.edit()
+                      .putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, dbChangedTime).apply();
+                  return true;
+                })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnError(throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    })
+                    .doFinally(() -> {
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(quantityUnits);
+                      }
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
+    } else {
+      if (dlHelper.debug) {
+        Log.i(dlHelper.tag, "downloadData: skipped QuantityUnits download");
+      }
+      return null;
+    }
   }
 }

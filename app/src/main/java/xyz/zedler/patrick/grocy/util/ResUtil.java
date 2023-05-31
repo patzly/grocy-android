@@ -19,9 +19,11 @@
 
 package xyz.zedler.patrick.grocy.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -39,6 +41,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.RawRes;
 import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
@@ -57,6 +60,28 @@ import xyz.zedler.patrick.grocy.model.StoredPurchase;
 public class ResUtil {
 
   private final static String TAG = ResUtil.class.getSimpleName();
+
+  public static void applyConfigToResources(Activity activity, int modeNight) {
+    int uiMode = activity.getResources().getConfiguration().uiMode;
+    switch (modeNight) {
+      case AppCompatDelegate.MODE_NIGHT_NO:
+        uiMode = Configuration.UI_MODE_NIGHT_NO;
+        break;
+      case AppCompatDelegate.MODE_NIGHT_YES:
+        uiMode = Configuration.UI_MODE_NIGHT_YES;
+        break;
+    }
+    // base
+    Resources resBase = activity.getBaseContext().getResources();
+    Configuration configBase = resBase.getConfiguration();
+    configBase.uiMode = uiMode;
+    resBase.updateConfiguration(configBase, resBase.getDisplayMetrics());
+    // app
+    Resources resApp = activity.getApplicationContext().getResources();
+    Configuration configApp = resApp.getConfiguration();
+    configApp.uiMode = uiMode;
+    resApp.updateConfiguration(configApp, activity.getResources().getDisplayMetrics());
+  }
 
   @NonNull
   public static String getRawText(Context context, @RawRes int resId) {
@@ -167,9 +192,7 @@ public class ResUtil {
     if (item == null || item.getIcon() == null) {
       return;
     }
-    item.getIcon().setTintList(
-        ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant))
-    );
+    item.getIcon().setTint(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant));
   }
 
   public static void tintMenuItemIcons(Context context, Menu menu) {

@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,8 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 
 public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListener {
+
+  private final static String TAG = LoginApiQrCodeFragment.class.getSimpleName();
 
   private static final int SCAN_GROCY_KEY = 0;
   private static final int SCAN_HASS_TOKEN = 1;
@@ -60,7 +63,8 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
         binding.containerScanner,
         this,
         true,
-        false
+        false,
+        true
     );
     return binding.getRoot();
   }
@@ -88,7 +92,7 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
     binding.toolbar.setOnMenuItemClickListener(item -> {
       int id = item.getItemId();
       if (id == R.id.action_help) {
@@ -98,9 +102,9 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
       } else if (id == R.id.action_website) {
         openGrocyWebsite();
       } else if (id == R.id.action_settings) {
-        activity.navigateDeepLink(R.string.deep_link_settingsFragment);
+        activity.navUtil.navigateDeepLink(R.string.deep_link_settingsFragment);
       } else if (id == R.id.action_about) {
-        activity.navigateDeepLink(R.string.deep_link_aboutFragment);
+        activity.navUtil.navigateDeepLink(R.string.deep_link_aboutFragment);
       }
       return true;
     });
@@ -156,10 +160,10 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
       String apiKey = resultSplit[1];
 
       if (ingressProxyId == null) {
-        activity.navigateFragment(LoginApiQrCodeFragmentDirections
+        activity.navUtil.navigateFragment(LoginApiQrCodeFragmentDirections
             .actionLoginApiQrCodeFragmentToLoginRequestFragment(serverURL, apiKey));
       } else { // grocy home assistant add-on used
-        activity.navigateFragment(LoginApiQrCodeFragmentDirections
+        activity.navUtil.navigateFragment(LoginApiQrCodeFragmentDirections
             .actionLoginApiQrCodeFragmentSelf()
             .setServerURL(serverURLHomeAssistant)
             .setGrocyIngressProxyId(ingressProxyId)
@@ -169,10 +173,11 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
       String[] resultSplit = rawValue.split("\\.");
       if (resultSplit.length != 3) {
         activity.showSnackbar(R.string.error_token_qr_code, true);
+        Log.e(TAG, "onBarcodeRecognized: not a HASS Token QR code: " + rawValue);
         embeddedFragmentScanner.startScannerIfVisible();
         return;
       }
-      activity.navigateFragment(LoginApiQrCodeFragmentDirections
+      activity.navUtil.navigateFragment(LoginApiQrCodeFragmentDirections
           .actionLoginApiQrCodeFragmentToLoginApiFormFragment()
           .setServerUrl(args.getServerURL())
           .setGrocyIngressProxyId(args.getGrocyIngressProxyId())
@@ -186,7 +191,7 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
   }
 
   public void enterDataManually() {
-    activity.navigateFragment(
+    activity.navUtil.navigateFragment(
         LoginApiQrCodeFragmentDirections.actionLoginApiQrCodeFragmentToLoginApiFormFragment()
     );
   }

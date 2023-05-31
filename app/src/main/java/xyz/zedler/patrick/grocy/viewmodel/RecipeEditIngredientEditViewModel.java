@@ -24,13 +24,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,11 +41,11 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
+import xyz.zedler.patrick.grocy.form.FormDataRecipeEditIngredientEdit;
 import xyz.zedler.patrick.grocy.fragment.RecipeEditIngredientEditFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.FormDataRecipeEditIngredientEdit;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
@@ -76,7 +74,6 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
 
   private List<Product> products;
   private List<ProductBarcode> productBarcodes;
@@ -102,9 +99,7 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
     formData = new FormDataRecipeEditIngredientEdit(application, sharedPrefs, startupArgs);
     args = startupArgs;
     isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
-
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
   }
 
   public FormDataRecipeEditIngredientEdit getFormData() {
@@ -123,7 +118,7 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData() {
@@ -134,7 +129,7 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
 
     dlHelper.updateData(
         () -> loadFromDatabase(false),
-        this::onDownloadError,
+        error -> onError(error, TAG),
         Product.class,
         ProductBarcode.class,
         QuantityUnit.class,
@@ -152,18 +147,8 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
     downloadData();
   }
 
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
-  }
-
   public void setProduct(int productId, ProductBarcode barcode, String stockEntryId, ProductLoadedListener productLoadedListener) {
-    DownloadHelper.OnQueueEmptyListener onQueueEmptyListener = () -> {
+    Runnable onQueueEmptyListener = () -> {
       ProductDetails productDetails = formData.getProductDetailsLive().getValue();
       assert productDetails != null;
       Product product = productDetails.getProduct();
@@ -196,13 +181,14 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
     };
 
     dlHelper.newQueue(
-            onQueueEmptyListener,
-            error -> showMessageAndContinueScanning(getString(R.string.error_no_product_details))
+        onQueueEmptyListener,
+        error -> showMessageAndContinueScanning(getString(R.string.error_no_product_details))
     ).append(
-            dlHelper.getProductDetails(
-                    productId,
-                    productDetails -> formData.getProductDetailsLive().setValue(productDetails)
-            )
+        ProductDetails.getProductDetails(
+            dlHelper,
+            productId,
+            productDetails -> formData.getProductDetailsLive().setValue(productDetails)
+        )
     ).start();
   }
 
@@ -400,19 +386,6 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
 
   public boolean isActionEdit() {
     return isActionEdit;
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

@@ -25,12 +25,15 @@ import androidx.annotation.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.SHOPPING_LIST;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class ConfigUtil {
@@ -42,7 +45,7 @@ public class ConfigUtil {
       GrocyApi api,
       SharedPreferences prefs,
       @Nullable Runnable onSuccessAction,
-      @Nullable DownloadHelper.OnErrorListener onError
+      @Nullable DownloadHelper.OnMultiTypeErrorListener onError
   ) {
 
     boolean debug = prefs.getBoolean(
@@ -54,22 +57,25 @@ public class ConfigUtil {
       if (onSuccessAction != null) {
         onSuccessAction.run();
       }
-    }, volleyError -> {
+    }, error -> {
       if (onError != null) {
-        onError.onError(volleyError);
+        onError.onError(error);
       }
     });
 
     queue.append(
-        dlHelper.getStringData(
+        getStringData(
+            dlHelper,
             api.getSystemConfig(),
             response -> storeSystemConfig(response, prefs, debug)
         ),
-        dlHelper.getStringData(
+        getStringData(
+            dlHelper,
             api.getUserSettings(),
             response -> storeUserSettings(response, prefs, debug)
         ),
-        dlHelper.getStringData(
+        getStringData(
+            dlHelper,
             api.getSystemInfo(),
             response -> storeSystemInfo(response, prefs, debug)
         )
@@ -295,5 +301,47 @@ public class ConfigUtil {
         Log.e(TAG, "downloadSystemInfo: " + e);
       }
     }
+  }
+
+  public static QueueItem getStringData(
+      DownloadHelper dlHelper,
+      String url,
+      OnStringResponseListener onResponseListener
+  ) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnMultiTypeErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        dlHelper.get(
+            url,
+            uuid,
+            response -> {
+              if (dlHelper.debug) {
+                Log.i(
+                    dlHelper.tag,
+                    "download StringData from " + url + " : " + response
+                );
+              }
+              if (onResponseListener != null) {
+                onResponseListener.onResponse(response);
+              }
+              if (responseListener != null) {
+                responseListener.onResponse(response);
+              }
+            },
+            error -> {
+              if (dlHelper.debug) {
+                Log.e(dlHelper.tag, "download StringData: " + error);
+              }
+              if (errorListener != null) {
+                errorListener.onError(error);
+              }
+            }
+        );
+      }
+    };
   }
 }

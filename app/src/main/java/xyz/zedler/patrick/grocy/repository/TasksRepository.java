@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.repository;
 import android.app.Application;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
@@ -71,7 +72,7 @@ public class TasksRepository {
     }
   }
 
-  public void loadFromDatabase(TasksDataListener listener) {
+  public void loadFromDatabase(TasksDataListener onSuccess, Consumer<Throwable> onError) {
     Single
         .zip(
             appDatabase.taskCategoryDao().getTaskCategories(),
@@ -81,7 +82,9 @@ public class TasksRepository {
         )
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .doOnSuccess(listener::actionFinished)
+        .doOnSuccess(onSuccess::actionFinished)
+        .doOnError(onError)
+        .onErrorComplete()
         .subscribe();
   }
 }

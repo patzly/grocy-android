@@ -21,25 +21,21 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.List;
-import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatAmount;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatAmount;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class MasterProductCatAmountViewModel extends BaseViewModel {
@@ -54,12 +50,10 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
 
   private List<QuantityUnit> quantityUnits;
 
   private NetworkQueue currentQueueLoading;
-  private final boolean debug;
   private final boolean isActionEdit;
 
   public MasterProductCatAmountViewModel(
@@ -69,7 +63,6 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
@@ -79,7 +72,6 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
     isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
 
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
   }
 
   public FormDataMasterProductCatAmount getFormData() {
@@ -101,7 +93,7 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
@@ -114,13 +106,14 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
       return;
     }
     if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
+      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, null));
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, null));
     queue.append(
-        dlHelper.updateQuantityUnits(
+        QuantityUnit.updateQuantityUnits(
+            dlHelper,
             dbChangedTime,
             quantityUnits -> this.quantityUnits = quantityUnits
         )
@@ -142,29 +135,6 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
       setOfflineLive(false);
     }
     formData.fillWithProductIfNecessary(args.getProduct(), quantityUnits);
-  }
-
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

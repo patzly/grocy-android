@@ -327,8 +327,6 @@
   <string name="msg_feedback">Têm alguns pedidos, questões ou erros? Contacte-nos e deixe-nos ajudar!\nDe qualquer forma, ficariamos muito contentes com uma boa crítica na Play Store.</string>
   <string name="msg_point_at_barcode">Aponte a camara para um código de barras</string>
   <string name="msg_press_hold_confirm">Mantenha premido para confirmar a eliminação</string>
-  <string name="msg_recipe_consume_ask">Tem a certeza que quer consumir todos os ingredientes necessários para a receita \"%1$s\"? (ingredientes marcados com \"apenas validar se a quantidade estiver em stock\" serão ignorados)</string>
-  <string name="msg_recipe_shopping_list_ask">Tem a certeza que quer adicionar todos os ingredientes da receita \"%1$s\" à lista de compras?\n\nDesmarque ingredientes para não os adicionar à lista de compras:</string>
   <string name="msg_qr_code_scan">Noutro dispositivo, visite o seu website do grocy e navegue até à página \'API keys\'. Seleccione \"Adicionar\", depois seleccione o pequeno símbolo de código QR e digitalize o código QR.</string>
   <string name="msg_qr_code_scan_token">Está a usar o add-on do grocy par ao Home Assistant. Crie um token de acesso de longa duração nas definições do seu perfil do Home Assistant (última secção). Em baixo do campo do token seleccione \"Gerar código QR\" e leia-o aqui.</string>
   <string name="msg_port_connection_info_without_port">A aplicação vai-se conectar à porta %1$s.\nSe prefere ligar-se a uma porta diferente pode acrescentar a porta no URL.\nExemplo: http://domain.com:81/</string>
@@ -488,7 +486,6 @@
   <string name="title_product_edit">Editar produto</string>
   <string name="title_tasks">Tarefas</string>
   <string name="title_task_entry">Entradas de tarefa</string>
-  <string name="title_task_add">Adicionar tarefa</string>
   <string name="title_master_data">Dados mestre</string>
   <string name="title_stock_entries">Entradas de stock</string>
   <string name="title_stock_entry">Entrada de stock</string>
@@ -537,8 +534,6 @@
   <string name="title_unit_price_specific">%1$s preço</string>
   <string name="title_stock_entry_no_specific">Sem entrada específica</string>
   <string name="title_list_entry">Entrada de lista</string>
-  <string name="title_edit_list_entry">Editar entrada de lista</string>
-  <string name="title_create_list_entry">Criar entrada de lista</string>
   <string name="title_edit_barcode">Editar código de barras</string>
   <string name="title_create_barcode">Criar código de barras</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
@@ -778,10 +773,6 @@
   <string name="property_qu_stock">Stock de unidade de produto</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Conversão de compra para unidades de produto</string>
-  <!-- This string is part of a pair, there is also 'quantity unit to' -->
-  <string name="property_quantity_unit_from">De quantidade unitária</string>
-  <!-- This string is part of a pair, there is also 'quantity unit from' -->
-  <string name="property_quantity_unit_to">Para quantidade unitária</string>
   <string name="property_factor">Factor</string>
   <string name="property_barcode">Código de barras</string>
   <string name="property_barcodes">Códigos de barras</string>
@@ -797,6 +788,8 @@
   <string name="property_due_type_expiration">Data de validade</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date">Prazo de validade</string>
+  <!-- This string is for due date of task -->
+  <string name="property_due_date_task">Prazo de validade</string>
   <!-- %1$s is a due date-->
   <string name="property_due_date_fill">Prazo de validade: %1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->

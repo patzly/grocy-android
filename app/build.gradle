@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
 plugins {
@@ -41,10 +41,9 @@ android {
         applicationId "xyz.zedler.patrick.grocy"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 44
-        versionName "3.1.0"
-        resConfigs 'cs', 'de', 'en', 'es', 'fr', 'hu', 'it', 'iw', 'nb', 'nl', 'pl', 'pt-rPT', 'ru',
-                'sk', 'sv', 'uk', 'zh-rCN', 'zh-rTW'
+        versionCode 47
+        versionName "3.2.1"
+        resConfigs 'ca', 'cs', 'de', 'en', 'es', 'et', 'fr', 'hu', 'it', 'iw', 'nb', 'nl', 'pl', 'pt-rBR', 'pt-rPT', 'ru', 'sk', 'sv', 'uk', 'zh-rCN', 'zh-rTW'
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -81,17 +80,24 @@ android {
     
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility 11
-        targetCompatibility 11
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 }
 
 dependencies {
+    // Fix for Kotlin build error from some AndroidX dependencies
+    constraints {
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0") {
+            because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
+        }
+    }
+
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'androidx.browser:browser:1.5.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
     implementation 'androidx.paging:paging-runtime:3.1.1'
 
     // Navigation framework for easy navigation control using XML
@@ -99,20 +105,22 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.5.3'
 
     // Android Room for database and RxJava for Async access of database
-    implementation 'androidx.room:room-runtime:2.5.0'
-    implementation 'androidx.room:room-rxjava3:2.5.0'
-    annotationProcessor 'androidx.room:room-compiler:2.5.0'
+    implementation 'androidx.room:room-runtime:2.5.1'
+    implementation 'androidx.room:room-rxjava3:2.5.1'
+    annotationProcessor 'androidx.room:room-compiler:2.5.1'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
 
     // Nice material views
-    implementation 'com.google.android.material:material:1.9.0-alpha01'
+    // don't upgrade to 1.10 alpha, only change it to stable 1.9.0 when it has been released
+    implementation 'com.google.android.material:material:1.9.0'
 
     // Volley for all general network requests and Glide for image loading
     // Netcipher for Tor support and Conscrypt for new TLS support on old Android devices
     implementation 'com.android.volley:volley:1.2.1'
-    implementation 'com.github.bumptech.glide:glide:4.14.2'
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
     implementation 'info.guardianproject.netcipher:netcipher:2.1.0'
     implementation 'org.conscrypt:conscrypt-android:2.5.2'
+    implementation 'dev.gustavoavila:java-android-websocket-client:2.0.2'
 
     // GSON for converting JSON responses to Java objects
     implementation 'com.google.code.gson:gson:2.10.1'
@@ -121,9 +129,9 @@ dependencies {
     implementation 'me.xdrop:fuzzywuzzy:1.4.0'
 
     // Work for daily notifications
-    implementation 'androidx.work:work-runtime:2.8.0'
+    implementation 'androidx.work:work-runtime:2.8.1'
 
-    implementation 'androidx.webkit:webkit:1.6.0'
+    implementation 'androidx.webkit:webkit:1.7.0'
 
     // ZXing for barcode scanning
     //noinspection GradleDependency
@@ -132,5 +140,5 @@ dependencies {
     // https://github.com/journeyapps/zxing-android-embedded#option-2-desugaring-advanced
     // prevents bug https://github.com/patzly/grocy-android/issues/425
     //noinspection GradleDependency
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 }

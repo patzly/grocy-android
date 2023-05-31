@@ -27,7 +27,7 @@
     <import type="xyz.zedler.patrick.grocy.R" />
     <variable
       name="formData"
-      type="xyz.zedler.patrick.grocy.model.FormDataShoppingListItemEdit" />
+      type="xyz.zedler.patrick.grocy.form.FormDataShoppingListItemEdit" />
     <variable
       name="viewModel"
       type="xyz.zedler.patrick.grocy.viewmodel.ShoppingListItemEditViewModel" />
@@ -52,7 +52,7 @@
       <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         style="@style/Widget.Grocy.Toolbar.Back"
-        app:title="@{viewModel.isActionEdit ? @string/title_edit_list_entry : @string/title_create_list_entry}"/>
+        app:title="@{viewModel.isActionEdit ? @string/title_entry_edit : @string/title_entry_new}"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

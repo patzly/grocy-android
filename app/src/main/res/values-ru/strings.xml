@@ -98,7 +98,11 @@
   <string name="action_open_scanner">Открыть сканер</string>
   <string name="action_discard">Сбросить</string>
   <string name="action_clear_form">Очистить форму</string>
+  <!-- Short form for "Only link barcode to existing product", this should fit into a
+  button so keep it short. -->
+  <string name="action_link_and_clear">Только ссылка</string>
   <string name="action_toggle_done">Пометить выполненным</string>
+  <string name="action_change_layout">Изменить представление</string>
   <string name="action_edit_notes">Отредактировать заметки</string>
   <string name="action_add_missing">Добавить недостающие продукты</string>
   <string name="action_purchase_done_items">Купить все выполненные продукты</string>
@@ -149,6 +153,20 @@
     <item quantity="few">%1$d истекает</item>
     <item quantity="many">%1$d истекает</item>
     <item quantity="other">%1$d истекает</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_short">
+    <item quantity="one">%1$d не свежий</item>
+    <item quantity="few">%1$d не свежие</item>
+    <item quantity="many">%1$d не свежие</item>
+    <item quantity="other">%1$d не свежие</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_long">
+    <item quantity="one">%1$d  не свежий (все ниже)</item>
+    <item quantity="few">%1$d не свежие (все ниже) </item>
+    <item quantity="many">%1$d не свежие (все ниже) </item>
+    <item quantity="other">%1$d не свежие (все ниже)</item>
   </plurals>
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
   <plurals name="msg_missing_products">
@@ -239,6 +257,8 @@
   <string name="msg_task_undo">Отмененные задачи</string>
   <string name="msg_recipes_enough_in_stock">Достаточно в запасах</string>
   <string name="msg_recipes_enough_in_stock_filter">(%1$d) Достаточно в запасах</string>
+  <!-- %1$s is an amount with quantity unit (e.g. 3 bottles) -->
+  <string name="msg_recipes_enough_in_stock_amount">Достаточно в запасах (%1$s)</string>
   <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) Недостаточно в запасах, но в списке покупок</string>
   <string name="msg_recipes_not_enough_filter">(%1$d) Недостаточно в запасах</string>
   <string name="msg_recipes_not_enough">Недостаточно в запасах</string>
@@ -254,6 +274,7 @@
     <item quantity="many">%1$d ингредиентов отсутствуют</item>
     <item quantity="other">%1$d ингредиентов отсутствуют</item>
   </plurals>
+  <string name="msg_recipes_ingredient_fulfillment_info_list">Отсутствует: %1$s | Уже в списке покупок: %2$s</string>
   <string name="msg_chore_executed">Отслеживаемое выполнение работ по дому</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Куплено %1$s %2$s %3$s</string>
@@ -305,6 +326,7 @@
     <item quantity="other">%1$s %2$s будет удалено из запасов.</item>
   </plurals>
   <string name="msg_transfer_tare_weight">Продукты с включенным учетом веса тары в данный момент недоступны для переноса.</string>
+  <string name="msg_should_not_be_frozen">Этот продукт не следует замораживать. Вы хотите продолжить?</string>
   <string name="msg_item_marked_as_done">Пункт выполнен</string>
   <string name="msg_item_marked_as_undone">Пункт не выполнен</string>
   <string name="option_synced_success">Опция успешно синхронизирована</string>
@@ -348,8 +370,8 @@
   <string name="msg_feedback">У вас есть пожелания, вопросы или ошибки? Свяжитесь с нами и мы поможем!\nесли нет. мы будем рады положительному отзыву в Play Store</string>
   <string name="msg_point_at_barcode">Направьте камеру на штрихкод</string>
   <string name="msg_press_hold_confirm">Нажмите и удерживайте, чтобы подтвердить удаление</string>
-  <string name="msg_recipe_consume_ask">Использовать все ингредиенты рецепта \"%1$s\"? (ингредиенты с пометкой \"любое количество в запасах\" будут игнорироваться)</string>
-  <string name="msg_recipe_shopping_list_ask">Добавить все недостающие ингредиенты рецепта \"%1$s\" в список покупок?\n\nСнимите галочки с ингредиентов, которые добавлять не нужно:</string>
+  <string name="msg_recipe_consume_ask">Вы уверены, что хотите использовать все ингредиенты, необходимые по рецепту для \"%1$s\"? (ингредиенты с отметкой \"проверять, если любое количество в запасах\", будут проигнорированы)</string>
+  <string name="msg_recipe_shopping_list_ask">Вы уверены, что хотите включить в список покупок все недостающие ингредиенты, необходимые для рецепта \"%1$s\"?\n\nОтметьте ингредиенты, чтобы не включать их в список покупок:</string>
   <string name="msg_welcome">Добро пожаловать в Grocy Android!</string>
   <string name="msg_welcome_introduce">Для продуктивного использования Grocy вам понадобится собственный сервер или надстройка Grocy для Home Assistant.\nЕсли вы просто хотите опробовать это приложение, вы можете использовать демонстрационный сервер от Бернда Бестела, создателя Grocy.</string>
   <string name="msg_choose_option_below">Пожалуйста, выберите вариант снизу</string>
@@ -360,6 +382,8 @@
   <string name="msg_clear_form_first">Очистите форму, прежде чем сканировать другой известный штрихкод.</string>
   <string name="msg_not_implemented_yet">Скоро это будет реализовано. До тех пор используйте, пожалуйста, веб-интерфейс.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_stock_label_type">Это тип метки записи товара по умолчанию, который будет предварительно заполнен при покупке.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">На странице обзора запасов перечислены все продукты, которые в настоящее время есть в наличии или меньше мин. количества. Включите, чтобы всегда скрывать этот продукт.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_parent_product_deactivated">Продукт не может иметь родительский продукт потому что этот продукт уже используется как родительский продукт для другого продукта.</string>
@@ -369,6 +393,8 @@
   <string name="msg_help_move_on_open">Если включено, при пометке этого продукта как открытого соответствующее кол-во будет перемещено в место использования по умолчанию.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_own_stock">Когда этот параметр включен, соответствующий продукт не может иметь собственного запаса. Это означает, что он не будет выбираться при покупке (полезно для родительских продуктов, которые просто используются в качестве сводного/общего представления вложенных продуктов).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_should_not_be_frozen">Если этот параметр включен, при перемещении данного продукта в морозильную камеру (то есть при его замораживании) будет отображаться предупреждение.</string>
   <string name="msg_help_due_date_type">В зависимости от выбранного типа срока годности, отображение на странице обзора запасов будет другим. «Рекомендуемый» означает, что продукт может быть безопасным для употребления после наступления срока его годности. «Обязательный» означает, что продукт небезопасно употреблять после наступления срока его годности.</string>
   <string name="msg_help_default_due_days_format">Используйте долгое нажатие на элемент ниже, чтобы ввести дату вместо числа.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -428,6 +454,7 @@
   <string name="msg_help_home_assistant_login_server">В поле ниже вы также можете ввести URL-адрес вашего облака Nabu Casa, если вы используете эту службу. Нажмите на эту карточку, чтобы перейти на сайт Nabu Casa.</string>
   <string name="msg_help_home_assistant_login_token">Вы можете создать токен доступа с длительным сроком доступа в настройках вашего профиля Home Assistant (последний раздел). Нажмите здесь, чтобы открыть URL-адрес сверху.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Вернитесь назад или нажмите на эту карточку, чтобы отсканировать QR-код, который заполняет поля ниже.</string>
+  <string name="msg_help_fab_overview_start">Кнопка \"Действие\" на этой обзорной странице содержит два действия:\n\n- Короткое нажатие: использовать со сканером штрихкодов\n- Длительное нажатие: покупка со сканером штрихкодов\n\nС помощью этой кнопки по умолчанию включается быстрый режим на соответствующих страницах. Вы можете изменить это в настройках поведения.</string>
   <string name="msg_share">Привет! Я использую Grocy Android для эффективного управления домашним хозяйством. Присоединяйся!\nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">Ключ API  не работает</string>
@@ -519,7 +546,6 @@
   <string name="title_product_edit">Редактировать продукт</string>
   <string name="title_tasks">Задачи</string>
   <string name="title_task_entry">Ввод задачи</string>
-  <string name="title_task_add">Добавить задачу</string>
   <string name="title_master_data">Основные данные</string>
   <string name="title_stock_entries">Список запасов</string>
   <string name="title_stock_entry">Ввод запасов</string>
@@ -550,10 +576,16 @@
   <string name="title_chores">Работы по дому</string>
   <string name="title_chore">Работа по дому</string>
   <string name="title_recipes">Рецепты</string>
-  <string name="title_recipe_create">Создать рецепт</string>
-  <string name="title_recipe_edit">Изменить рецепт</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Редактор</string>
+  <string name="title_task_new">Новая задача</string>
+  <string name="title_task_edit">Изменить задачу</string>
+  <string name="title_entry_new">Новая запись</string>
+  <string name="title_entry_edit">Изменить запись</string>
+  <string name="title_ingredient_new">Новый ингредиент</string>
+  <string name="title_ingredient_edit">Изменить ингредиент</string>
+  <string name="title_recipe_create">Новый рецепт</string>
+  <string name="title_recipe_edit">Изменить рецепт</string>
 
   <string name="title_spoiled">Испорчено</string>
   <string name="title_use_specific">Использовать конкретный запас</string>
@@ -572,8 +604,6 @@
   <string name="title_unit_price_specific">Цена за %1$s</string>
   <string name="title_stock_entry_no_specific">Неопределенный запас</string>
   <string name="title_list_entry">Элемент списка</string>
-  <string name="title_edit_list_entry">Редактировать элемент списка</string>
-  <string name="title_create_list_entry">Создать элемент списка</string>
   <string name="title_edit_barcode">Изменить штрихкод</string>
   <string name="title_create_barcode">Создать штрихкод</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
@@ -596,6 +626,9 @@
   <string name="title_product_cat_qu_conversions">Преобразование ЕИ</string>
   <string name="title_unknown_input">Неизвестный ввод</string>
   <string name="title_presets_new_products">Шаблоны для новых продуктов</string>
+  <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
+  <string name="title_ingredient_with_amount">%1$s %2$s %3$s</string>
+
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
   <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
@@ -655,10 +688,14 @@
   <string name="subtitle_recipe_due_score">Балл \"срока годности\": %1$s</string>
   <string name="subtitle_per_serving">за порцию</string>
   <string name="subtitle_tap_preparation_mode">Нажмите для режима приготовления</string>
+  <!-- Context is Label printer -->
+  <string name="subtitle_print_label_no">Нет метки</string>
   <!-- Short form for "One label per purchase" -->
   <string name="subtitle_print_label_per_purchase">На покупку</string>
   <!-- Short form for "One label per unit" -->
   <string name="subtitle_print_label_per_unit">На единицу</string>
+  <!-- %1$s is a price and %2$s is a currency -->
+  <string name="subtitle_total_price">Общая цена: %1$s %2$s</string>
 
   <string name="description_input_product_part1">Поле продукта содержит:</string>
   <string name="description_input_product_part2">Пожалуйста, выберите, как продолжить:</string>
@@ -845,10 +882,10 @@
   <string name="property_qu_stock">Единица измерения запасов</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Коэффициент закупа к запасам</string>
-  <!-- This string is part of a pair, there is also 'quantity unit to' -->
-  <string name="property_quantity_unit_from">Из ед. измерения</string>
-  <!-- This string is part of a pair, there is also 'quantity unit from' -->
-  <string name="property_quantity_unit_to">К ед. измерения</string>
+  <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
+  <string name="property_quantity_unit_from">Конвертировать из</string>
+  <!-- Example: "Convert to cup"; This string is part of a pair, there is also 'Convert from' -->
+  <string name="property_quantity_unit_to">Конвертировать в</string>
   <string name="property_factor">Множитель</string>
   <string name="property_barcode">Штрихкод</string>
   <string name="property_barcodes">Штрихкоды</string>
@@ -864,6 +901,8 @@
   <string name="property_due_type_expiration">Обязательный срок годности</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date">Срок годности</string>
+  <!-- This string is for due date of task -->
+  <string name="property_due_date_task">Срок годности</string>
   <!-- %1$s is a due date-->
   <string name="property_due_date_fill">Срок выполнения: %1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -919,6 +958,8 @@
   <string name="property_never_show">Никогда не показывать в обзоре запасов</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_disable_own_stock">Отключить собственный запас</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_should_not_be_frozen">Не следует замораживать</string>
   <string name="property_number">Количество</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_enable_tare_weight">Включить расчёт с учётом тары</string>
@@ -988,6 +1029,8 @@
   <string name="property_only_check_single_unit_in_stock">Проверить любое кол-во в запасах</string>
   <!-- See context for this string on the web interface on the recipe ingredients edit page -->
   <string name="property_ingredient_group">Группа</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
+  <string name="property_variable_amount">Переменное количество</string>
   <string name="property_requirements_fulfilled">Требования выполнены</string>
   <string name="property_produces_product">Произвести продукт</string>
 
@@ -1092,6 +1135,10 @@
   <string name="category_network">Сеть</string>
   <string name="category_network_proxy">Прокси</string>
   <string name="category_behavior">Поведение</string>
+  <string name="category_display_behavior">Поведение отображения</string>
+  <string name="category_input_behavior">Поведение ввода</string>
+  <string name="category_additional_services">Дополнительные сервисы</string>
+  <string name="category_other_behavior">Другое поведение</string>
   <string name="category_debugging">Отладка</string>
   <string name="category_new_product">Новый продукт</string>
   <string name="category_existing_products">Существующие продукты</string>
@@ -1175,12 +1222,17 @@
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">Расширить Bottom Sheets</string>
   <string name="setting_expand_bottom_sheets_description">Выдвигающийся снизу экран в альбомном режиме</string>
+  <string name="setting_bottom_menu_button">Показать кнопку главного меню</string>
+  <string name="setting_bottom_menu_button_description">В нижней панели приложения</string>
+  <string name="setting_turn_on_quick_mode">Включить быстрый режим по умолчанию</string>
+  <string name="setting_turn_on_quick_mode_description">При использовании кнопки сканирования на странице обзора</string>
   <string name="setting_speed_up_start">Уменьшить время запуска приложения</string>
   <string name="setting_speed_up_start_description">Применимо только для производительных устройств</string>
   <string name="setting_date_keyboard_input">Ввод дат с клавиатуры</string>
   <string name="setting_date_keyboard_input_description">Вместо колес для выбора даты</string>
   <string name="setting_date_keyboard_reverse">Использовать обратный формат даты для ввода</string>
   <string name="setting_date_keyboard_reverse_description">ДДММГГ вместо ГГММВВ</string>
+  <string name="setting_copy_barcode_note">Скопировать примечания штрихкода в примечания запаса</string>
   <string name="setting_copy_barcode_note_description">При покупке продукта</string>
   <string name="setting_loading_circle">Показывать анимацию загрузки для всех запросов</string>
   <string name="setting_loading_circle_description">Полезно для медленных соединений</string>

@@ -19,10 +19,12 @@
   -->
 
 <locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+  <locale android:name="ca"/>
   <locale android:name="cs"/>
   <locale android:name="de"/>
   <locale android:name="en"/>
   <locale android:name="es"/>
+  <locale android:name="et"/>
   <locale android:name="fr"/>
   <locale android:name="hu"/>
   <locale android:name="it"/>
@@ -30,6 +32,7 @@
   <locale android:name="nb"/>
   <locale android:name="nl"/>
   <locale android:name="pl"/>
+  <locale android:name="pt-BR"/>
   <locale android:name="pt-PT"/>
   <locale android:name="ru"/>
   <locale android:name="sk"/>

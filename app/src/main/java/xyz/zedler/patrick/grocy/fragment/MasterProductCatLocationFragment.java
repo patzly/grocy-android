@@ -97,7 +97,7 @@ public class MasterProductCatLocationFragment extends BaseFragment {
 
     binding.toolbar.setNavigationOnClickListener(v -> {
       onBackPressed();
-      activity.navigateUp();
+      activity.navUtil.navigateUp();
     });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
@@ -106,7 +106,7 @@ public class MasterProductCatLocationFragment extends BaseFragment {
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
       } else if (event.getType() == Event.NAVIGATE_UP) {
-        activity.navigateUp();
+        activity.navUtil.navigateUp();
       } else if (event.getType() == Event.SET_SHOPPING_LIST_ID) {
         int id = event.getBundle().getInt(Constants.ARGUMENT.SELECTED_ID);
         setForDestination(R.id.shoppingListFragment, Constants.ARGUMENT.SELECTED_ID, id);
@@ -160,11 +160,11 @@ public class MasterProductCatLocationFragment extends BaseFragment {
             activity.onBackPressed();
             return true;
           }
-          if (menuItem.getItemId() == R.id.action_save_not_close) {
+          if (menuItem.getItemId() == R.id.action_save) {
             setForDestination(
                 R.id.masterProductFragment,
                 Constants.ARGUMENT.ACTION,
-                ACTION.SAVE_NOT_CLOSE
+                ACTION.SAVE_CLOSE
             );
             activity.onBackPressed();
             return true;
@@ -173,15 +173,15 @@ public class MasterProductCatLocationFragment extends BaseFragment {
         }
     );
     activity.updateFab(
-        R.drawable.ic_round_backup,
-        R.string.action_save_close,
-        Constants.FAB.TAG.SAVE,
+        viewModel.isActionEdit() ? R.drawable.ic_round_save : R.drawable.ic_round_save_as,
+        viewModel.isActionEdit() ? R.string.action_save : R.string.action_save_not_close,
+        viewModel.isActionEdit() ? Constants.FAB.TAG.SAVE : Constants.FAB.TAG.SAVE_NOT_CLOSE,
         savedInstanceState == null,
         () -> {
           setForDestination(
               R.id.masterProductFragment,
               Constants.ARGUMENT.ACTION,
-              ACTION.SAVE_CLOSE
+              viewModel.isActionEdit() ? ACTION.SAVE_CLOSE : ACTION.SAVE_NOT_CLOSE
           );
           activity.onBackPressed();
         }

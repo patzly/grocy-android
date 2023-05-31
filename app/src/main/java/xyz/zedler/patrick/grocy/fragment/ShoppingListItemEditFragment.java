@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.InputType;
 import android.view.FocusFinder;
 import android.view.LayoutInflater;
@@ -48,6 +47,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSh
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
@@ -108,7 +108,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -116,7 +116,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
       } else if (event.getType() == Event.NAVIGATE_UP) {
-        activity.navigateUp();
+        activity.navUtil.navigateUp();
       } else if (event.getType() == Event.SET_SHOPPING_LIST_ID) {
         int id = event.getBundle().getInt(Constants.ARGUMENT.SELECTED_ID);
         setForDestination(R.id.shoppingListFragment, Constants.ARGUMENT.SELECTED_ID, id);
@@ -125,7 +125,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
       } else if (event.getType() == Event.CHOOSE_PRODUCT) {
         String barcode = event.getBundle().getString(ARGUMENT.BARCODE);
-        activity.navigateFragment(
+        activity.navUtil.navigateFragment(
             R.id.chooseProductFragment,
             new ChooseProductFragmentArgs.Builder(barcode).build().toBundle()
         );
@@ -155,6 +155,14 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
       ) {
         showInitialKeyboardIfConditionsAreMet();
       }
+    });
+
+    viewModel.getOfflineLive().observe(getViewLifecycleOwner(), offline -> {
+      InfoFullscreen infoFullscreen = offline ? new InfoFullscreen(
+          InfoFullscreen.ERROR_OFFLINE,
+          () -> updateConnectivity(true)
+      ) : null;
+      viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
     });
 
     viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
@@ -208,6 +216,13 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
     // necessary because else getValue() doesn't give current value (?)
     viewModel.getFormData().getQuantityUnitsLive().observe(getViewLifecycleOwner(), qUs -> {
     });
+
+    if (savedInstanceState == null && !args.getAction().equals(ACTION.EDIT)) {
+      if (binding.autoCompleteProduct.getText() == null
+          || binding.autoCompleteProduct.getText().length() == 0) {
+        activity.showKeyboard(binding.autoCompleteProduct);
+      }
+    }
 
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
@@ -307,10 +322,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
   private void showInitialKeyboardIfConditionsAreMet() {
     if (binding.autoCompleteProduct.getText() == null
         || binding.autoCompleteProduct.getText().length() == 0) {
-      new Handler().postDelayed(() -> {
-        if (viewModel.getInfoFullscreenLive().getValue() != null) return;
-        activity.showKeyboard(binding.autoCompleteProduct);
-      }, 50);
+      activity.showKeyboard(binding.autoCompleteProduct);
     }
   }
 

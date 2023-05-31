@@ -23,6 +23,7 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
@@ -120,7 +121,7 @@ public class ShoppingListRepository {
     }
   }
 
-  public void loadFromDatabase(DataListener listener) {
+  public void loadFromDatabase(DataListener onSuccess, Consumer<Throwable> onError) {
     Single
         .zip(
             appDatabase.shoppingListItemDao().getShoppingListItems(),
@@ -136,7 +137,9 @@ public class ShoppingListRepository {
         )
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .doOnSuccess(listener::actionFinished)
+        .doOnSuccess(onSuccess::actionFinished)
+        .doOnError(onError)
+        .onErrorComplete()
         .subscribe();
   }
 
@@ -155,25 +158,20 @@ public class ShoppingListRepository {
     void actionFinished(List<ShoppingList> shoppingLists);
   }
 
-  public void loadShoppingListsFromDatabase(ShoppingListsListener listener) {
+  public void loadShoppingListsFromDatabase(
+      ShoppingListsListener onSuccess,
+      Consumer<Throwable> onError
+  ) {
     appDatabase.shoppingListDao().getShoppingLists()
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .doOnSuccess(listener::actionFinished)
+        .doOnSuccess(onSuccess::actionFinished)
+        .doOnError(onError)
+        .onErrorComplete()
         .subscribe();
   }
 
   public LiveData<List<ShoppingList>> getShoppingListsLive() {
     return appDatabase.shoppingListDao().getAllLive();
-  }
-
-  public void updateShoppingLists(List<ShoppingList> shoppingLists) {
-    Single.concat(
-        appDatabase.shoppingListDao().deleteShoppingLists(),
-        appDatabase.shoppingListDao().insertShoppingLists(shoppingLists)
-    )
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe();
   }
 }

@@ -312,8 +312,6 @@
   <string name="msg_feedback">Kas sul on mingeid soove, küsimusi või vigu? Võta meiega ühendust ja lase meil aidata!\nMuul juhul oleksime väga õnnelikud Play Store\'i hea ülevaate üle.</string>
   <string name="msg_point_at_barcode">Sihi oma kaamera triipkoodi suunas</string>
   <string name="msg_press_hold_confirm">Vajuta ja hoia, et eemaldamine kinnitada</string>
-  <string name="msg_recipe_consume_ask">Kas oled kindel, et soovid tarbida kõik retsepti \"%1$s\" koostisosad? (koostisosi, mis on tähistatud märkega \"kontrollige ainult siis, kui mõni kogus on varudes\", ignoreeritakse.)</string>
-  <string name="msg_recipe_shopping_list_ask">Kas oled kindel, et soovid panna kõik retsepti \"%1$s\" puuduvad koostisosad poenimekirja?\n\nEemalda märge koostisainete kohta, et mitte panna neid ostunimekirja.</string>
   <string name="msg_welcome">Tere tulemast Grocy Androidi!</string>
   <string name="msg_welcome_introduce">Grocy produktiivseks kasutamiseks on vaja oma serverit või grocy lisaprogrammi Home Assistant\'ile.\nKui soovid seda rakendust lihtsalt proovida, võid kasutada Grocy looja Bernd Besteli demoserverit.</string>
   <string name="msg_choose_option_below">Palun vali allpool olev valik.</string>
@@ -484,7 +482,6 @@
   <string name="title_product_edit">Muuda toodet</string>
   <string name="title_tasks">Ülesanded</string>
   <string name="title_task_entry">Ülesande sisend</string>
-  <string name="title_task_add">Lisa ülesanne</string>
   <string name="title_master_data">Põhiandmed</string>
   <string name="title_stock_entries">Varude sisendid</string>
   <string name="title_stock_entry">Varude sisend</string>
@@ -537,8 +534,6 @@
   <string name="title_unit_price_specific">%1$s hind</string>
   <string name="title_stock_entry_no_specific">Spetsiifiline sisend puudub</string>
   <string name="title_list_entry">Nimekirja sisend</string>
-  <string name="title_edit_list_entry">Muuda nimekirja sisendit</string>
-  <string name="title_create_list_entry">Loo nimekirja sisend</string>
   <string name="title_edit_barcode">Muuda triipkoodi</string>
   <string name="title_create_barcode">Loo triipkood</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
@@ -626,7 +621,6 @@
   <string name="subtitle_print_label_per_purchase">Ostu kohta</string>
   <!-- Short form for "One label per unit" -->
   <string name="subtitle_print_label_per_unit">Ühiku kohta</string>
-
   <string name="description_input_product_part1">Toote lahter sisaldab:</string>
   <string name="description_input_product_part2">Palun vali, kuidas jätkata:</string>
   <string name="description_input_product_option1">Loo uus toode ja kasuta sisendit nimena</string>
@@ -772,10 +766,6 @@
   <string name="property_qu_stock">Koguseühik varudes</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Arvesta ostmine varude koguseühikusse</string>
-  <!-- This string is part of a pair, there is also 'quantity unit to' -->
-  <string name="property_quantity_unit_from">Koguseühikust</string>
-  <!-- This string is part of a pair, there is also 'quantity unit from' -->
-  <string name="property_quantity_unit_to">Koguseühikusse</string>
   <string name="property_factor">Tegur</string>
   <string name="property_barcode">Triipkood</string>
   <string name="property_barcodes">Triipkoodid</string>
@@ -791,6 +781,8 @@
   <string name="property_due_type_expiration">Kõlblik kuni kuupäev</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date">Tähtaeg</string>
+  <!-- This string is for due date of task -->
+  <string name="property_due_date_task">Tähtaeg</string>
   <!-- %1$s is a due date-->
   <string name="property_due_date_fill">Tähtaeg: %1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->

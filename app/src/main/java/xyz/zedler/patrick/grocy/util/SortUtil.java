@@ -282,8 +282,8 @@ public class SortUtil {
       } else if (!NumUtil.isStringDouble(item1) && NumUtil.isStringDouble(item2)) {
         return -1;
       } else {
-        double item1Double = Double.parseDouble(item1);
-        double item2Double = Double.parseDouble(item2);
+        double item1Double = NumUtil.toDouble(item1);
+        double item2Double = NumUtil.toDouble(item2);
         return Double.compare(item1Double, item2Double);
       }
     });

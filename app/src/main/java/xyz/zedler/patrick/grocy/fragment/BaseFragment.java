@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spanned;
 import android.view.KeyEvent;
@@ -36,7 +35,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import com.android.volley.VolleyError;
-import java.net.URLEncoder;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.model.Language;
@@ -54,6 +52,7 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
+import xyz.zedler.patrick.grocy.util.NavUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 @SuppressWarnings("EmptyMethod")
@@ -85,15 +84,14 @@ public class BaseFragment extends Fragment {
   }
 
   public void performHapticClick() {
-    activity.performHapticClick();
+    activity.hapticUtil.click();
   }
 
   public void performHapticHeavyClick() {
-    activity.performHapticHeavyClick();
+    activity.hapticUtil.heavyClick();
   }
 
   protected String getErrorMessage(VolleyError volleyError) {
-    // similar method is also in BaseViewmodel
     if (volleyError != null && volleyError.networkResponse != null) {
       if (volleyError.networkResponse.statusCode == 403) {
         return getString(R.string.error_permission);
@@ -295,39 +293,11 @@ public class BaseFragment extends Fragment {
   }
 
   public void navigateUp() {
-    activity.navigateUp();
+    activity.navUtil.navigateUp();
   }
 
   public void navigateDeepLinkHorizontally(@StringRes int uri, @NonNull Bundle args) {
-    activity.navigateDeepLink(getUriWithArgs(getString(uri), args), false);
-  }
-
-  private Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
-    String[] parts = uri.split("\\?");
-    if (parts.length == 1) {
-      return Uri.parse(uri);
-    }
-    String linkPart = parts[0];
-    String argsPart = parts[parts.length - 1];
-    String[] pairs = argsPart.split("&");
-    StringBuilder finalDeepLink = new StringBuilder(linkPart + "?");
-    for (int i = 0; i <= pairs.length - 1; i++) {
-      String pair = pairs[i];
-      String key = pair.split("=")[0];
-      Object valueBundle = argsBundle.get(key);
-      if (valueBundle == null) {
-        continue;
-      }
-      try {
-        finalDeepLink.append(key).append("=")
-            .append(URLEncoder.encode(valueBundle.toString(), "UTF-8"));
-      } catch (Throwable ignore) {
-      }
-      if (i != pairs.length - 1) {
-        finalDeepLink.append("&");
-      }
-    }
-    return Uri.parse(finalDeepLink.toString());
+    activity.navUtil.navigateDeepLink(NavUtil.getUriWithArgs(getString(uri), args), false);
   }
 
   /**

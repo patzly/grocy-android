@@ -21,17 +21,33 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnIntegerResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 
 @Entity(tableName = "user_table")
-public class User  implements Parcelable {
+public class User implements Parcelable {
   @PrimaryKey
   @ColumnInfo(name = "id")
   @SerializedName("id")
@@ -200,5 +216,109 @@ public class User  implements Parcelable {
   @Override
   public String toString() {
     return "User(" + userName + ')';
+  }
+
+  public static QueueItem updateUsers(
+      DownloadHelper dlHelper,
+      String dbChangedTime,
+      OnObjectsResponseListener<User> onResponseListener
+  ) {
+    String lastTime = dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
+        Constants.PREF.DB_LAST_TIME_USERS, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnMultiTypeErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          dlHelper.get(
+              dlHelper.grocyApi.getUsers(),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<User>>() {
+                }.getType();
+                ArrayList<User> users = dlHelper.gson.fromJson(response, type);
+                if (dlHelper.debug) {
+                  Log.i(dlHelper.tag, "download Users: " + users);
+                }
+                Single.fromCallable(() -> {
+                  dlHelper.appDatabase.userDao().deleteUsers().blockingSubscribe();
+                  dlHelper.appDatabase.userDao().insertUsers(users).blockingSubscribe();
+                  dlHelper.sharedPrefs.edit()
+                      .putString(PREF.DB_LAST_TIME_USERS, dbChangedTime).apply();
+                  return true;
+                })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnError(throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    })
+                    .doFinally(() -> {
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(users);
+                      }
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
+    } else {
+      if (dlHelper.debug) {
+        Log.i(dlHelper.tag, "downloadData: skipped Users download");
+      }
+      return null;
+    }
+  }
+
+  public static QueueItem getCurrentUserId(
+      DownloadHelper dlHelper,
+      OnIntegerResponseListener onResponseListener
+  ) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnMultiTypeErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        dlHelper.get(
+            dlHelper.grocyApi.getUser(),
+            uuid,
+            response -> {
+              Type type = new TypeToken<List<User>>() {
+              }.getType();
+              ArrayList<User> users = dlHelper.gson.fromJson(response, type);
+              if (dlHelper.debug) {
+                Log.i(dlHelper.tag, "get currentUserId: " + response);
+              }
+              if (onResponseListener != null) {
+                onResponseListener.onResponse(users.size() == 1 ? users.get(0).getId() : -1);
+              }
+              if (responseListener != null) {
+                responseListener.onResponse(response);
+              }
+            },
+            error -> {
+              if (errorListener != null) {
+                errorListener.onError(error);
+              }
+            }
+        );
+      }
+    };
   }
 }

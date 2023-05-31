@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,7 +86,9 @@ public class LoginRequestFragment extends BaseFragment {
         activity.getScrollBehavior().setCanBottomAppBarBeVisible(true);
 
         activity.updateGrocyApi();
-        navigateToStartDestination();
+        activity.netUtil.createWebSocketClient();
+        activity.netUtil.resetHassSessionTimer();
+        new Handler().postDelayed(this::navigateToStartDestination, 500);
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
@@ -106,19 +109,21 @@ public class LoginRequestFragment extends BaseFragment {
   }
 
   private void navigateToStartDestination() {
-    activity.updateStartDestination();
-    NavOptions.Builder builder = activity.getNavOptionsBuilderFragmentFadeOrSlide(
+    activity.navUtil.updateStartDestination();
+    NavOptions.Builder builder = activity.navUtil.getNavOptionsBuilderFragmentFadeOrSlide(
         false
     );
     builder.setPopUpTo(R.id.navigation_main, true);
-    activity.navigateFragment(
+    activity.navUtil.navigateFragment(
         findNavController().getGraph().getStartDestinationId(), builder.build()
     );
   }
 
   @Override
   public void login(boolean checkVersion) {
-    viewModel.login(checkVersion);
+    viewModel.clearHassData();
+    new Handler().postDelayed(() -> viewModel.login(checkVersion), 500);
+    ;
   }
 
   @Override

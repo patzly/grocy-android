@@ -94,7 +94,7 @@ public class NumUtil {
     }
     s = s.replace(",", ".");
     try {
-      double result = Double.parseDouble(s);
+      double result = NumUtil.toDouble(s);
       return !Double.isNaN(result);
     } catch (NumberFormatException ex) {
       return false;

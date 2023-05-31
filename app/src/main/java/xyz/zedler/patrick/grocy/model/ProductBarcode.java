@@ -23,15 +23,32 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 @Entity(tableName = "product_barcode_table")
@@ -169,7 +186,7 @@ public class ProductBarcode implements Parcelable {
   }
 
   public double getAmountDouble() {
-    return hasAmount() ? Double.parseDouble(amount) : 0;
+    return hasAmount() ? NumUtil.toDouble(amount) : 0;
   }
 
   public void setAmount(String amount) {
@@ -201,7 +218,7 @@ public class ProductBarcode implements Parcelable {
   }
 
   public double getLastPriceDouble() {
-    return hasLastPrice() ? Double.parseDouble(lastPrice) : 0;
+    return hasLastPrice() ? NumUtil.toDouble(lastPrice) : 0;
   }
 
   public void setLastPrice(String lastPrice) {
@@ -310,5 +327,162 @@ public class ProductBarcode implements Parcelable {
   @Override
   public String toString() {
     return "ProductBarcode(" + id + ')';
+  }
+
+  public static QueueItem updateProductBarcodes(
+      DownloadHelper dlHelper,
+      String dbChangedTime,
+      OnObjectsResponseListener<ProductBarcode> onResponseListener
+  ) {
+    String lastTime = dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
+        Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnMultiTypeErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          dlHelper.get(
+              dlHelper.grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_BARCODES),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<ProductBarcode>>() {
+                }.getType();
+                ArrayList<ProductBarcode> barcodes
+                    = dlHelper.gson.fromJson(response, type);
+                if (dlHelper.debug) {
+                  Log.i(dlHelper.tag, "download Barcodes: " + barcodes);
+                }
+                Single.fromCallable(() -> {
+                  dlHelper.appDatabase.productBarcodeDao()
+                      .deleteProductBarcodes().blockingSubscribe();
+                  dlHelper.appDatabase.productBarcodeDao()
+                      .insertProductBarcodes(barcodes).blockingSubscribe();
+                  dlHelper.sharedPrefs.edit()
+                      .putString(PREF.DB_LAST_TIME_PRODUCT_BARCODES, dbChangedTime).apply();
+                  return true;
+                })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnError(throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    })
+                    .doFinally(() -> {
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(barcodes);
+                      }
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
+    } else {
+      if (dlHelper.debug) {
+        Log.i(dlHelper.tag, "downloadData: skipped ProductsBarcodes download");
+      }
+      return null;
+    }
+  }
+
+  public static QueueItem addProductBarcode(
+      DownloadHelper dlHelper,
+      JSONObject jsonObject,
+      Runnable onSuccessListener,
+      OnErrorListener onErrorListener
+  ) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnMultiTypeErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        dlHelper.post(
+            dlHelper.grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_BARCODES),
+            jsonObject,
+            response -> {
+              if (dlHelper.debug) {
+                Log.i(dlHelper.tag, "added ProductBarcode");
+              }
+              if (onSuccessListener != null) {
+                onSuccessListener.run();
+              }
+              if (responseListener != null) {
+                responseListener.onResponse(null);
+              }
+            },
+            error -> {
+              if (onErrorListener != null) {
+                onErrorListener.onError(error);
+              }
+              if (errorListener != null) {
+                errorListener.onError(error);
+              }
+            }
+        );
+      }
+    };
+  }
+
+  public QueueItem getSingleFilteredProductBarcode(
+      DownloadHelper dlHelper,
+      String barcode,
+      OnObjectResponseListener<ProductBarcode> onResponseListener,
+      OnErrorListener onErrorListener
+  ) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnMultiTypeErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        dlHelper.get(
+            dlHelper.grocyApi.getObjectsEqualValue(
+                GrocyApi.ENTITY.PRODUCT_BARCODES, "barcode", barcode
+            ),
+            uuid,
+            response -> {
+              Type type = new TypeToken<List<ProductBarcode>>() {
+              }.getType();
+              ArrayList<ProductBarcode> barcodes
+                  = dlHelper.gson.fromJson(response, type);
+              if (dlHelper.debug) {
+                Log.i(dlHelper.tag, "download filtered Barcodes: " + barcodes);
+              }
+              if (onResponseListener != null) {
+                ProductBarcode barcode = !barcodes.isEmpty()
+                    ? barcodes.get(0) : null; // take first object
+                onResponseListener.onResponse(barcode);
+              }
+              if (responseListener != null) {
+                responseListener.onResponse(response);
+              }
+            },
+            error -> {
+              if (onErrorListener != null) {
+                onErrorListener.onError(error);
+              }
+              if (errorListener != null) {
+                errorListener.onError(error);
+              }
+            }
+        );
+      }
+    };
   }
 }

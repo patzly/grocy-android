@@ -118,7 +118,7 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     // APP BAR BEHAVIOR
 

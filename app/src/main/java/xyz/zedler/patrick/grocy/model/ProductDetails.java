@@ -21,8 +21,18 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class ProductDetails implements Parcelable {
@@ -165,19 +175,19 @@ public class ProductDetails implements Parcelable {
   }
 
   public double getStockAmount() {
-    return NumUtil.isStringDouble(stockAmount) ? Double.parseDouble(stockAmount) : 0;
+    return NumUtil.isStringDouble(stockAmount) ? NumUtil.toDouble(stockAmount) : 0;
   }
 
   public double getStockAmountOpened() {
-    return NumUtil.isStringDouble(stockAmountOpened) ? Double.parseDouble(stockAmountOpened) : 0;
+    return NumUtil.isStringDouble(stockAmountOpened) ? NumUtil.toDouble(stockAmountOpened) : 0;
   }
 
   public double getStockAmountAggregated() {
-    return NumUtil.isStringDouble(stockAmountAggregated) ? Double.parseDouble(stockAmountAggregated) : 0;
+    return NumUtil.isStringDouble(stockAmountAggregated) ? NumUtil.toDouble(stockAmountAggregated) : 0;
   }
 
   public double getStockAmountOpenedAggregated() {
-    return NumUtil.isStringDouble(stockAmountOpenedAggregated) ? Double.parseDouble(stockAmountOpenedAggregated) : 0;
+    return NumUtil.isStringDouble(stockAmountOpenedAggregated) ? NumUtil.toDouble(stockAmountOpenedAggregated) : 0;
   }
 
   public QuantityUnit getQuantityUnitPurchase() {
@@ -208,7 +218,7 @@ public class ProductDetails implements Parcelable {
     if (spoilRatePercent == null || spoilRatePercent.isEmpty()) {
       return 0;
     } else {
-      return Double.parseDouble(spoilRatePercent);
+      return NumUtil.toDouble(spoilRatePercent);
     }
   }
 
@@ -253,5 +263,56 @@ public class ProductDetails implements Parcelable {
   @Override
   public String toString() {
     return "ProductDetails(" + product + ')';
+  }
+
+  public static QueueItem getProductDetails(
+      DownloadHelper dlHelper,
+      int productId,
+      OnObjectResponseListener<ProductDetails> onResponseListener,
+      OnErrorListener onErrorListener
+  ) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnMultiTypeErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        dlHelper.get(
+            dlHelper.grocyApi.getStockProductDetails(productId),
+            uuid,
+            response -> {
+              Type type = new TypeToken<ProductDetails>() {
+              }.getType();
+              ProductDetails productDetails = dlHelper.gson.fromJson(response, type);
+              if (dlHelper.debug) {
+                Log.i(dlHelper.tag, "download ProductDetails: " + productDetails);
+              }
+              if (onResponseListener != null) {
+                onResponseListener.onResponse(productDetails);
+              }
+              if (responseListener != null) {
+                responseListener.onResponse(response);
+              }
+            },
+            error -> {
+              if (onErrorListener != null) {
+                onErrorListener.onError(error);
+              }
+              if (errorListener != null) {
+                errorListener.onError(error);
+              }
+            }
+        );
+      }
+    };
+  }
+
+  public static QueueItem getProductDetails(
+      DownloadHelper dlHelper,
+      int productId,
+      OnObjectResponseListener<ProductDetails> onResponseListener
+  ) {
+    return getProductDetails(dlHelper, productId, onResponseListener, null);
   }
 }

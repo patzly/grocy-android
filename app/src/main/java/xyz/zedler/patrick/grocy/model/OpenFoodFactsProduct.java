@@ -20,10 +20,18 @@
 package xyz.zedler.patrick.grocy.model;
 
 import android.app.Application;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.api.OpenFoodFactsApi;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectResponseListener;
 
 public class OpenFoodFactsProduct {
 
@@ -122,5 +130,36 @@ public class OpenFoodFactsProduct {
   @Override
   public String toString() {
     return "OpenFoodFactsProduct(" + productName + ")";
+  }
+
+  public static void getOpenFoodFactsProduct(
+      DownloadHelper dlHelper,
+      String barcode,
+      OnObjectResponseListener<OpenFoodFactsProduct> successListener,
+      OnErrorListener errorListener
+  ) {
+    dlHelper.get(
+        OpenFoodFactsApi.getProduct(barcode),
+        response -> {
+          try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONObject jsonProduct = jsonObject.getJSONObject("product");
+            Type type = new TypeToken<OpenFoodFactsProduct>(){}.getType();
+            OpenFoodFactsProduct product = dlHelper.gson.fromJson(jsonProduct.toString(), type);
+            product.setProductJson(jsonProduct);
+            successListener.onResponse(product);
+            if(dlHelper.debug) Log.i(dlHelper.tag, "getOpenFoodFactsProduct: " + product);
+          } catch (JSONException e) {
+            if(dlHelper.debug) Log.e(dlHelper.tag, "getOpenFoodFactsProduct: " + e);
+            errorListener.onError(null);
+          }
+        },
+        error -> {
+          if(dlHelper.debug) Log.e(dlHelper.tag, "getOpenFoodFactsProduct: "
+              + "can't get OpenFoodFacts product");
+          errorListener.onError(error);
+        },
+        OpenFoodFactsApi.getUserAgent(dlHelper.application)
+    );
   }
 }

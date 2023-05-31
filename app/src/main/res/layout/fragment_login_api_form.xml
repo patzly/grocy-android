@@ -37,7 +37,7 @@
       type="xyz.zedler.patrick.grocy.viewmodel.LoginApiFormViewModel" />
     <variable
       name="formData"
-      type="xyz.zedler.patrick.grocy.model.FormDataLoginApiForm" />
+      type="xyz.zedler.patrick.grocy.form.FormDataLoginApiForm" />
   </data>
 
   <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -236,7 +236,7 @@
             style="@style/Widget.Grocy.Card.Text"
             android:layout_marginBottom="8dp"
             android:visibility="@{formData.usingGrocyHassAddOnLive &amp;&amp; formData.showHelpTexts ? View.VISIBLE : View.GONE}"
-            android:onClick="@{() -> activity.navigateUp()}">
+            android:onClick="@{() -> activity.navUtil.navigateUp()}">
 
             <TextView
               style="@style/Widget.Grocy.TextView.Paragraph.Card"

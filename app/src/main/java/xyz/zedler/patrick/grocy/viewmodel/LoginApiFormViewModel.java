@@ -24,7 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import xyz.zedler.patrick.grocy.fragment.LoginApiFormFragmentArgs;
-import xyz.zedler.patrick.grocy.model.FormDataLoginApiForm;
+import xyz.zedler.patrick.grocy.form.FormDataLoginApiForm;
 
 public class LoginApiFormViewModel extends BaseViewModel {
 

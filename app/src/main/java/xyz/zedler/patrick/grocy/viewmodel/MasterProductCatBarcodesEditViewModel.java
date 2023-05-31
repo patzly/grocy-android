@@ -29,21 +29,22 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
+import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatBarcodesEdit;
 import xyz.zedler.patrick.grocy.fragment.MasterProductCatBarcodesEditFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatBarcodesEdit;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
@@ -51,8 +52,6 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -72,7 +71,6 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
 
   private List<Store> stores;
   private List<ProductBarcode> barcodes;
@@ -105,9 +103,7 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
     formData = new FormDataMasterProductCatBarcodesEdit(application, startupArgs.getProduct());
     args = startupArgs;
     isActionEdit = startupArgs.getProductBarcode() != null;
-
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
   }
 
   public FormDataMasterProductCatBarcodesEdit getFormData() {
@@ -124,7 +120,7 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
@@ -137,19 +133,22 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
       return;
     }
     if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
+      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, TAG));
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
     queue.append(
-        dlHelper.updateStores(dbChangedTime, stores -> this.stores = stores),
-        dlHelper.updateQuantityUnitConversions(
-            dbChangedTime, conversions -> this.unitConversions = conversions
-        ), dlHelper.updateProductBarcodes(
-            dbChangedTime, barcodes -> this.barcodes = barcodes
-        ), dlHelper.updateQuantityUnits(
-            dbChangedTime, quantityUnits -> this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits)
+        Store.updateStores(dlHelper, dbChangedTime, stores -> this.stores = stores),
+        QuantityUnitConversion.updateQuantityUnitConversions(
+            dlHelper, dbChangedTime, conversions -> this.unitConversions = conversions
+        ), ProductBarcode.updateProductBarcodes(
+            dlHelper, dbChangedTime, barcodes -> this.barcodes = barcodes
+        ), QuantityUnit.updateQuantityUnits(
+            dlHelper,
+            dbChangedTime,
+            quantityUnits -> this.quantityUnitHashMap = ArrayUtil
+                .getQuantityUnitsHashMap(quantityUnits)
         )
     );
     if (queue.isEmpty()) {
@@ -187,18 +186,9 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
     fillWithProductBarcodeIfNecessary();
   }
 
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
-  }
-
   public void saveItem() {
     if (!formData.isFormValid()) {
+      showMessage(R.string.error_missing_information);
       return;
     }
 
@@ -343,19 +333,6 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
 
   public boolean isActionEdit() {
     return isActionEdit;
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

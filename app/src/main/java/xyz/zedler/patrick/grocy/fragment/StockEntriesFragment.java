@@ -125,7 +125,7 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     // APP BAR BEHAVIOR
 

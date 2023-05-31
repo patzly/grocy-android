@@ -21,13 +21,29 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 @Entity(tableName = "stock_item_table")
@@ -161,7 +177,7 @@ public class StockItem extends GroupedListItem implements Parcelable {
     if (amountAggregated == null || amountAggregated.isEmpty()) {
       return 0;
     } else {
-      return Double.parseDouble(amountAggregated);
+      return NumUtil.toDouble(amountAggregated);
     }
   }
 
@@ -170,7 +186,7 @@ public class StockItem extends GroupedListItem implements Parcelable {
   }
 
   public double getValueDouble() {
-    return NumUtil.isStringDouble(value) ? Double.parseDouble(value) : 0;
+    return NumUtil.isStringDouble(value) ? NumUtil.toDouble(value) : 0;
   }
 
   public String getBestBeforeDate() {
@@ -181,7 +197,7 @@ public class StockItem extends GroupedListItem implements Parcelable {
     if (amountOpenedAggregated == null || amountOpenedAggregated.isEmpty()) {
       return 0;
     } else {
-      return Double.parseDouble(amountOpenedAggregated);
+      return NumUtil.toDouble(amountOpenedAggregated);
     }
   }
 
@@ -205,7 +221,7 @@ public class StockItem extends GroupedListItem implements Parcelable {
     if (amount == null || amount.isEmpty()) {
       return 0;
     } else {
-      return Double.parseDouble(amount);
+      return NumUtil.toDouble(amount);
     }
   }
 
@@ -213,7 +229,7 @@ public class StockItem extends GroupedListItem implements Parcelable {
     if (amountOpened == null || amountOpened.isEmpty()) {
       return 0;
     } else {
-      return Double.parseDouble(amountOpened);
+      return NumUtil.toDouble(amountOpened);
     }
   }
 
@@ -364,5 +380,72 @@ public class StockItem extends GroupedListItem implements Parcelable {
   @Override
   public String toString() {
     return "StockItem(" + product + ")";
+  }
+
+  public static QueueItem updateStockItems(
+      DownloadHelper dlHelper,
+      String dbChangedTime,
+      OnObjectsResponseListener<StockItem> onResponseListener
+  ) {
+    String lastTime = dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
+        Constants.PREF.DB_LAST_TIME_STOCK_ITEMS, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnMultiTypeErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          dlHelper.get(
+              dlHelper.grocyApi.getStock(),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<StockItem>>() {
+                }.getType();
+                ArrayList<StockItem> stockItems = dlHelper.gson.fromJson(response, type);
+                if (dlHelper.debug) {
+                  Log.i(dlHelper.tag, "download StockItems: " + stockItems);
+                }
+                Single.fromCallable(() -> {
+                  dlHelper.appDatabase.stockItemDao().deleteStockItems().blockingSubscribe();
+                  dlHelper.appDatabase.stockItemDao()
+                      .insertStockItems(stockItems).blockingSubscribe();
+                  dlHelper.sharedPrefs.edit()
+                      .putString(PREF.DB_LAST_TIME_STOCK_ITEMS, dbChangedTime).apply();
+                  return true;
+                })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnError(throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    })
+                    .doFinally(() -> {
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(stockItems);
+                      }
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
+    } else {
+      if (dlHelper.debug) {
+        Log.i(dlHelper.tag, "downloadData: skipped StockItems download");
+      }
+      return null;
+    }
   }
 }

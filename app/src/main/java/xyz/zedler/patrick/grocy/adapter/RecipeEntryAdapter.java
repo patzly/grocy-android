@@ -27,6 +27,9 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,29 +38,33 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.LayoutManager;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.color.ColorRoles;
+import com.google.android.material.divider.MaterialDivider;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.RowRecipeEntryBinding;
+import xyz.zedler.patrick.grocy.databinding.RowRecipeEntryGridBinding;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesExtraField;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
-import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class RecipeEntryAdapter extends
@@ -67,7 +74,7 @@ public class RecipeEntryAdapter extends
   private final static boolean DEBUG = false;
 
   private Context context;
-  private final LinearLayoutManager linearLayoutManager;
+  private final LayoutManager layoutManager;
   private final ArrayList<Recipe> recipes;
   private final ArrayList<RecipeFulfillment> recipeFulfillments;
   private final RecipesItemAdapterListener listener;
@@ -78,10 +85,11 @@ public class RecipeEntryAdapter extends
   private String extraField;
   private final int maxDecimalPlacesAmount;
   private boolean containsPictures;
+  private RecyclerView recyclerView;
 
   public RecipeEntryAdapter(
       Context context,
-      LinearLayoutManager linearLayoutManager,
+      LayoutManager layoutManager,
       ArrayList<Recipe> recipes,
       ArrayList<RecipeFulfillment> recipeFulfillments,
       RecipesItemAdapterListener listener,
@@ -90,7 +98,7 @@ public class RecipeEntryAdapter extends
       String extraField
   ) {
     this.context = context;
-    this.linearLayoutManager = linearLayoutManager;
+    this.layoutManager = layoutManager;
     this.recipes = new ArrayList<>(recipes);
     this.recipeFulfillments = new ArrayList<>(recipeFulfillments);
     this.listener = listener;
@@ -137,14 +145,34 @@ public class RecipeEntryAdapter extends
     }
   }
 
+  public static class RecipeGridViewHolder extends ViewHolder {
+
+    private final RowRecipeEntryGridBinding binding;
+    StaggeredGridLayoutManager.LayoutParams layoutParams;
+
+    public RecipeGridViewHolder(RowRecipeEntryGridBinding binding) {
+      super(binding.getRoot());
+      this.binding = binding;
+      layoutParams = (StaggeredGridLayoutManager.LayoutParams) itemView.getLayoutParams();
+    }
+  }
+
   @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    return new RecipeViewHolder(RowRecipeEntryBinding.inflate(
-        LayoutInflater.from(parent.getContext()),
-        parent,
-        false
-    ));
+    if (layoutManager instanceof LinearLayoutManager) {
+      return new RecipeViewHolder(RowRecipeEntryBinding.inflate(
+          LayoutInflater.from(parent.getContext()),
+          parent,
+          false
+      ));
+    } else {
+      return new RecipeGridViewHolder(RowRecipeEntryGridBinding.inflate(
+          LayoutInflater.from(parent.getContext()),
+          parent,
+          false
+      ));
+    }
   }
 
   @SuppressLint("ClickableViewAccessibility")
@@ -157,14 +185,53 @@ public class RecipeEntryAdapter extends
     RecipeFulfillment recipeFulfillment = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(
         recipeFulfillments, recipe.getId()
     );
-    RecipeViewHolder holder = (RecipeViewHolder) viewHolder;
+
+    LinearLayout container;
+    TextView title;
+    TextView dueScore;
+    TextView fulfilled;
+    ImageView imageFulfillment;
+    TextView missing;
+    TextView extraFieldTitle;
+    TextView extraFieldSubtitle;
+    LinearLayout extraFieldContainer;
+    ImageView picture;
+    MaterialCardView picturePlaceholder;
+    MaterialDivider divider;
+
+    if (viewHolder instanceof RecipeViewHolder) {
+      container = ((RecipeViewHolder) viewHolder).binding.container;
+      title = ((RecipeViewHolder) viewHolder).binding.title;
+      dueScore = ((RecipeViewHolder) viewHolder).binding.dueScore;
+      fulfilled = ((RecipeViewHolder) viewHolder).binding.fulfilled;
+      imageFulfillment = ((RecipeViewHolder) viewHolder).binding.imageFulfillment;
+      missing = ((RecipeViewHolder) viewHolder).binding.missing;
+      extraFieldTitle = ((RecipeViewHolder) viewHolder).binding.extraField;
+      extraFieldSubtitle = ((RecipeViewHolder) viewHolder).binding.extraFieldSubtitle;
+      extraFieldContainer = ((RecipeViewHolder) viewHolder).binding.extraFieldContainer;
+      picture = ((RecipeViewHolder) viewHolder).binding.picture;
+      picturePlaceholder = ((RecipeViewHolder) viewHolder).binding.picturePlaceholder;
+      divider = ((RecipeViewHolder) viewHolder).binding.divider;
+    } else {
+      container = ((RecipeGridViewHolder) viewHolder).binding.container;
+      title = ((RecipeGridViewHolder) viewHolder).binding.title;
+      dueScore = ((RecipeGridViewHolder) viewHolder).binding.dueScore;
+      fulfilled = ((RecipeGridViewHolder) viewHolder).binding.fulfilled;
+      imageFulfillment = ((RecipeGridViewHolder) viewHolder).binding.imageFulfillment;
+      missing = ((RecipeGridViewHolder) viewHolder).binding.missing;
+      extraFieldTitle = ((RecipeGridViewHolder) viewHolder).binding.extraField;
+      extraFieldSubtitle = ((RecipeGridViewHolder) viewHolder).binding.extraFieldSubtitle;
+      extraFieldContainer = ((RecipeGridViewHolder) viewHolder).binding.extraFieldContainer;
+      picture = ((RecipeGridViewHolder) viewHolder).binding.picture;
+      picturePlaceholder = ((RecipeGridViewHolder) viewHolder).binding.picturePlaceholder;
+      divider = ((RecipeGridViewHolder) viewHolder).binding.divider;
+    }
 
     // NAME
 
-    holder.binding.title.setText(recipe.getName());
+    title.setText(recipe.getName());
 
     if (recipeFulfillment != null) {
-      Context context = holder.binding.getRoot().getContext();
       ColorRoles colorGreen = ResUtil.getHarmonizedRoles(context, R.color.green);
       ColorRoles colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
       ColorRoles colorRed = ResUtil.getHarmonizedRoles(context, R.color.red);
@@ -182,9 +249,9 @@ public class RecipeEntryAdapter extends
       else {
         color = colorRed.getAccent();
       }
-      holder.binding.dueScore.setTextColor(color);
+      dueScore.setTextColor(color);
 
-      holder.binding.dueScore.setText(
+      dueScore.setText(
               context.getString(
                       R.string.subtitle_recipe_due_score,
                       String.valueOf(recipeFulfillment.getDueScore())
@@ -193,38 +260,38 @@ public class RecipeEntryAdapter extends
 
       // REQUIREMENTS FULFILLED
       if (recipeFulfillment.isNeedFulfilled()) {
-        holder.binding.fulfilled.setText(R.string.msg_recipes_enough_in_stock);
-        holder.binding.imageFulfillment.setImageResource(R.drawable.ic_round_check_circle_outline);
-        holder.binding.imageFulfillment.setImageTintList(
+        fulfilled.setText(R.string.msg_recipes_enough_in_stock);
+        imageFulfillment.setImageResource(R.drawable.ic_round_check_circle_outline);
+        imageFulfillment.setImageTintList(
             ColorStateList.valueOf(colorGreen.getAccent())
         );
-        holder.binding.missing.setVisibility(View.GONE);
+        missing.setVisibility(View.GONE);
       } else if (recipeFulfillment.isNeedFulfilledWithShoppingList()) {
-        holder.binding.fulfilled.setText(R.string.msg_recipes_not_enough);
-        holder.binding.imageFulfillment.setImageResource(R.drawable.ic_round_error_outline);
-        holder.binding.imageFulfillment.setImageTintList(
+        fulfilled.setText(R.string.msg_recipes_not_enough);
+        imageFulfillment.setImageResource(R.drawable.ic_round_error_outline);
+        imageFulfillment.setImageTintList(
             ColorStateList.valueOf(colorYellow.getAccent())
         );
-        holder.binding.missing.setText(
+        missing.setText(
             context.getResources()
                 .getQuantityString(R.plurals.msg_recipes_ingredients_missing_but_on_shopping_list,
                     recipeFulfillment.getMissingProductsCount(),
                     recipeFulfillment.getMissingProductsCount())
         );
-        holder.binding.missing.setVisibility(View.VISIBLE);
+        missing.setVisibility(View.VISIBLE);
       } else {
-        holder.binding.fulfilled.setText(R.string.msg_recipes_not_enough);
-        holder.binding.imageFulfillment.setImageResource(R.drawable.ic_round_highlight_off);
-        holder.binding.imageFulfillment.setImageTintList(
+        fulfilled.setText(R.string.msg_recipes_not_enough);
+        imageFulfillment.setImageResource(R.drawable.ic_round_highlight_off);
+        imageFulfillment.setImageTintList(
             ColorStateList.valueOf(colorRed.getAccent())
         );
-        holder.binding.missing.setText(
+        missing.setText(
             context.getResources()
                 .getQuantityString(R.plurals.msg_recipes_ingredients_missing,
                     recipeFulfillment.getMissingProductsCount(),
                     recipeFulfillment.getMissingProductsCount())
         );
-        holder.binding.missing.setVisibility(View.VISIBLE);
+        missing.setVisibility(View.VISIBLE);
       }
     }
 
@@ -241,60 +308,102 @@ public class RecipeEntryAdapter extends
         break;
     }
     if (extraFieldText != null) {
-      holder.binding.extraField.setText(extraFieldText);
-      holder.binding.extraFieldContainer.setVisibility(View.VISIBLE);
+      extraFieldTitle.setText(extraFieldText);
+      extraFieldContainer.setVisibility(View.VISIBLE);
     } else {
-      holder.binding.extraFieldContainer.setVisibility(View.GONE);
+      extraFieldContainer.setVisibility(View.GONE);
     }
     if (extraFieldSubtitleText != null) {
-      holder.binding.extraFieldSubtitle.setText(extraFieldSubtitleText);
-      holder.binding.extraFieldSubtitle.setVisibility(View.VISIBLE);
+      extraFieldSubtitle.setText(extraFieldSubtitleText);
+      extraFieldSubtitle.setVisibility(View.VISIBLE);
     } else {
-      holder.binding.extraFieldSubtitle.setVisibility(View.GONE);
+      extraFieldSubtitle.setVisibility(View.GONE);
     }
 
     String pictureFileName = recipe.getPictureFileName();
     if (pictureFileName != null && !pictureFileName.isEmpty()) {
-      holder.binding.picture.layout(0, 0, 0, 0);
+      picture.layout(0, 0, 0, 0);
 
-      Glide.with(context)
-          .load(
-              new GlideUrl(grocyApi.getRecipePicture(recipe.getPictureFileName()), grocyAuthHeaders)
-          ).transform(
-              new CenterCrop(), new RoundedCorners(UiUtil.dpToPx(context, 12))
-          ).transition(DrawableTransitionOptions.withCrossFade())
-          .listener(new RequestListener<>() {
+      RequestBuilder<Drawable> requestBuilder = Glide.with(context).load(new GlideUrl(grocyApi.getRecipePicture(pictureFileName), grocyAuthHeaders));
+      requestBuilder = requestBuilder
+          .transform(new CenterCrop())
+          .transition(DrawableTransitionOptions.withCrossFade());
+      if (viewHolder instanceof RecipeGridViewHolder) {
+        requestBuilder = requestBuilder.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+      }
+      requestBuilder.listener(new RequestListener<>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model,
                 Target<Drawable> target, boolean isFirstResource) {
-              holder.binding.picture.setVisibility(View.GONE);
-              holder.binding.picturePlaceholder.setVisibility(View.VISIBLE);
+              picture.setVisibility(View.GONE);
+              picturePlaceholder.setVisibility(View.VISIBLE);
               return false;
             }
-
             @Override
             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
                 DataSource dataSource, boolean isFirstResource) {
-              holder.binding.picture.setVisibility(View.VISIBLE);
-              holder.binding.picturePlaceholder.setVisibility(View.GONE);
+              picture.setVisibility(View.VISIBLE);
+              picturePlaceholder.setVisibility(View.GONE);
               return false;
             }
-          }).into(holder.binding.picture);
-    } else if (containsPictures) {
-      holder.binding.picture.setVisibility(View.GONE);
-      holder.binding.picturePlaceholder.setVisibility(View.VISIBLE);
+          }).into(picture);
+    } else if (containsPictures && viewHolder instanceof RecipeViewHolder) {
+      picture.setVisibility(View.GONE);
+      picturePlaceholder.setVisibility(View.VISIBLE);
     } else {
-      holder.binding.picture.setVisibility(View.GONE);
-      holder.binding.picturePlaceholder.setVisibility(View.GONE);
+      picture.setVisibility(View.GONE);
+      picturePlaceholder.setVisibility(View.GONE);
     }
-
 
     // CONTAINER
 
-    holder.binding.linearRecipeEntryContainer.setOnClickListener(
+    container.setOnClickListener(
         view -> listener.onItemRowClicked(recipe)
     );
+
+    // DIVIDER
+
+    if (layoutManager instanceof StaggeredGridLayoutManager
+        && viewHolder instanceof RecipeGridViewHolder) {
+      int spanCount = ((StaggeredGridLayoutManager) layoutManager).getSpanCount();
+      int itemCount = getItemCount();
+      int[] lastVisiblePositions = getLastVisiblePositions();
+
+      if (lastVisiblePositions != null) {
+        boolean isLastItemInColumn = false;
+        for (int i = 0; i < spanCount; i++) {
+          if (position == lastVisiblePositions[i] || position + spanCount >= itemCount) {
+            isLastItemInColumn = true;
+            break;
+          }
+        }
+        if (isLastItemInColumn) {
+          divider.setVisibility(View.GONE);
+        } else {
+          divider.setVisibility(View.VISIBLE);
+        }
+      }
+    }
   }
+
+  @Override
+  public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+    super.onAttachedToRecyclerView(recyclerView);
+    this.recyclerView = recyclerView;
+  }
+
+  private int[] getLastVisiblePositions() {
+    if (recyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
+      StaggeredGridLayoutManager layoutManager = (StaggeredGridLayoutManager) recyclerView.getLayoutManager();
+      int spanCount = layoutManager.getSpanCount();
+      int[] lastVisiblePositions = new int[spanCount];
+      layoutManager.findLastVisibleItemPositions(lastVisiblePositions);
+      return lastVisiblePositions;
+    }
+    return null;
+  }
+
+
 
   @Override
   public int getItemCount() {
@@ -334,7 +443,13 @@ public class RecipeEntryAdapter extends
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
     this.extraField = extraField;
-    diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this, linearLayoutManager));
+    if (layoutManager instanceof LinearLayoutManager) {
+      diffResult.dispatchUpdatesTo(
+          new AdapterListUpdateCallback(this, (LinearLayoutManager) layoutManager)
+      );
+    } else {
+      diffResult.dispatchUpdatesTo(this);
+    }
   }
 
   static class DiffCallback extends DiffUtil.Callback {

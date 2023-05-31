@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
+  -->
+
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background = "@drawable/ripple_list_grid_item_bg"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:id="@+id/container">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:layout_marginHorizontal="8dp"
+      android:layout_marginVertical="8dp">
+
+      <xyz.zedler.patrick.grocy.view.RoundedCornerImageView
+        android:id="@+id/picture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="top"
+        android:adjustViewBounds="true"
+        tools:ignore="ContentDescription" />
+
+      <com.google.android.material.card.MaterialCardView
+        android:id="@+id/picture_placeholder"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="top"
+        android:visibility="gone"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="0dp"
+        app:cardBackgroundColor="?attr/colorSurfaceVariant">
+
+        <ImageView
+          style="@style/Widget.Grocy.ImageView.Icon"
+          android:src="@drawable/ic_round_image"
+          android:layout_gravity="center"
+          tools:ignore="ContentDescription" />
+
+      </com.google.android.material.card.MaterialCardView>
+
+      <LinearLayout
+        android:id="@+id/linear_text_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+          android:id="@+id/title"
+          style="@style/Widget.Grocy.TextView.ListItem.Title"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical" />
+
+        <TextView
+          android:id="@+id/due_score"
+          style="@style/Widget.Grocy.TextView.ListItem.Description"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:alpha="1"
+          android:singleLine="true" />
+
+        <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          tools:ignore="UseCompoundDrawables">
+
+          <TextView
+            android:id="@+id/fulfilled"
+            style="@style/Widget.Grocy.TextView.ListItem.Description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="false"
+            android:maxLines="2" />
+
+          <ImageView
+            android:id="@+id/image_fulfillment"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:visibility="visible"
+            tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+
+        <TextView
+          android:id="@+id/missing"
+          style="@style/Widget.Grocy.TextView.ListItem.Description"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:singleLine="false"
+          android:maxLines="5"/>
+
+        <LinearLayout
+          android:id="@+id/extra_field_container"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:layout_gravity="center_vertical"
+          android:layout_marginTop="3dp"
+          android:visibility="gone">
+
+          <TextView
+            android:id="@+id/extra_field"
+            style="@style/Widget.Grocy.TextView.LabelSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurfaceVariant" />
+
+          <TextView
+            android:id="@+id/extra_field_subtitle"
+            style="@style/Widget.Grocy.TextView.LabelSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:visibility="gone"
+            android:textColor="?attr/colorOnSurfaceVariant" />
+
+        </LinearLayout>
+
+      </LinearLayout>
+
+    </LinearLayout>
+
+  </LinearLayout>
+
+  <com.google.android.material.divider.MaterialDivider
+    android:id="@+id/divider"
+    style="@style/Widget.Grocy.Divider.Margin"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="4dp"/>
+
+</LinearLayout>

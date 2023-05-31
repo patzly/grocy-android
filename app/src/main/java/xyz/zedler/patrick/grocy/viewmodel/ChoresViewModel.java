@@ -26,12 +26,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -45,7 +45,6 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.repository.ChoresRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -64,7 +63,6 @@ public class ChoresViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<ArrayList<ChoreEntry>> filteredChoreEntriesLive;
   private final MutableLiveData<Integer> currentUserIdLive;
   private final FilterChipLiveDataChoresStatus filterChipLiveDataStatus;
@@ -95,7 +93,6 @@ public class ChoresViewModel extends BaseViewModel {
     dateUtil = new DateUtil(application);
 
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
     filteredChoreEntriesLive = new MutableLiveData<>();
     currentUserIdLive = new MutableLiveData<>(sharedPrefs.getInt(PREF.CURRENT_USER_ID, 1));
 
@@ -150,7 +147,7 @@ public class ChoresViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(@Nullable String dbChangedTime, boolean skipOfflineCheck) {
@@ -166,7 +163,7 @@ public class ChoresViewModel extends BaseViewModel {
     if (dbChangedTime == null) {
       dlHelper.getTimeDbChanged(
           time -> downloadData(time, skipOfflineCheck),
-          () -> onDownloadError(null)
+          error -> onError(error, null)
       );
       return;
     }
@@ -174,9 +171,9 @@ public class ChoresViewModel extends BaseViewModel {
     NetworkQueue queue = dlHelper.newQueue(() -> {
       setOfflineLive(false);
       updateFilteredChoreEntries();
-    }, this::onDownloadError);
+    }, error -> onError(error, null));
     queue.append(
-        dlHelper.updateChoreEntries(dbChangedTime, choreEntries -> {
+        ChoreEntry.updateChoreEntries(dlHelper, dbChangedTime, choreEntries -> {
           this.choreEntries = choreEntries;
 
           choresDueTodayCount = 0;
@@ -206,10 +203,11 @@ public class ChoresViewModel extends BaseViewModel {
               .emitCounts();
 
           updateFilteredChoreEntries();
-        }), dlHelper.updateChores(
+        }), Chore.updateChores(
+            dlHelper,
             dbChangedTime,
             chores -> this.choreHashMap = ArrayUtil.getChoresHashMap(chores)
-        ), dlHelper.updateUsers(dbChangedTime, users -> {
+        ), User.updateUsers(dlHelper, dbChangedTime, users -> {
           usersHashMap = ArrayUtil.getUsersHashMap(users);
           filterChipLiveDataAssignment.setUsers(users);
         })
@@ -235,14 +233,6 @@ public class ChoresViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_USERS, null);
     editPrefs.apply();
     downloadData(null, true);
-  }
-
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showNetworkErrorMessage(error);
-    if (!isOffline()) setOfflineLive(true);
   }
 
   public void updateFilteredChoreEntries() {
@@ -387,19 +377,6 @@ public class ChoresViewModel extends BaseViewModel {
   @Override
   public SharedPreferences getSharedPrefs() {
     return sharedPrefs;
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

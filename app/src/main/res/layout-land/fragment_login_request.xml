@@ -144,13 +144,51 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="4dp">
+            android:layout_marginTop="4dp"
+            android:visibility="@{viewModel.useHassLoginFlow ? View.GONE : View.VISIBLE}">
 
             <com.google.android.material.button.MaterialButton
               style="@style/Widget.Grocy.Button.OutlinedButton"
               android:layout_marginEnd="4dp"
               android:text="@string/action_back"
-              android:onClick="@{() -> activity.navigateUp()}"
+              android:onClick="@{() -> activity.navUtil.navigateUp()}"
+              app:clickUtil="@{clickUtil}" />
+
+            <com.google.android.material.button.MaterialButton
+              style="@style/Widget.Grocy.Button.UnelevatedButton"
+              android:layout_marginStart="4dp"
+              android:text="@string/action_try_again"
+              android:onClick="@{() -> fragment.login(true)}"
+              app:clickUtil="@{clickUtil}" />
+
+          </LinearLayout>
+
+          <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Grocy.Card.Text"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="16dp"
+            android:visibility="@{viewModel.loginErrorHassLog != null ? View.VISIBLE : View.GONE}">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.Paragraph.Card"
+              android:text="@{viewModel.loginErrorHassLog}"
+              android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+          </com.google.android.material.card.MaterialCardView>
+
+          <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:visibility="@{viewModel.useHassLoginFlow ? View.VISIBLE : View.GONE}">
+
+            <com.google.android.material.button.MaterialButton
+              style="@style/Widget.Grocy.Button.OutlinedButton"
+              android:layout_marginEnd="4dp"
+              android:text="@string/action_back"
+              android:onClick="@{() -> activity.navUtil.navigateUp()}"
               app:clickUtil="@{clickUtil}" />
 
             <com.google.android.material.button.MaterialButton

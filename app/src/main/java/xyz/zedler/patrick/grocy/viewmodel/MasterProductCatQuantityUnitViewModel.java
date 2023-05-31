@@ -22,29 +22,27 @@ package xyz.zedler.patrick.grocy.viewmodel;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatQuantityUnit;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatQuantityUnit;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.StockLogEntry;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
-import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
@@ -60,7 +58,6 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<Boolean> isQuantityUnitStockChangeableLive;
   private final MutableLiveData<Boolean> hasProductAlreadyStockTransactionsLive;
 
@@ -68,7 +65,6 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
   private List<QuantityUnitConversion> conversions;
 
   private NetworkQueue currentQueueLoading;
-  private final boolean debug;
   private final boolean isActionEdit;
 
   public MasterProductCatQuantityUnitViewModel(
@@ -76,10 +72,7 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
       @NonNull MasterProductFragmentArgs startupArgs
   ) {
     super(application);
-
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
-
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     repository = new MasterProductRepository(application);
@@ -90,7 +83,6 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
     hasProductAlreadyStockTransactionsLive = new MutableLiveData<>(false);
 
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
   }
 
   public FormDataMasterProductCatQuantityUnit getFormData() {
@@ -116,7 +108,7 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
       } else {
         updateHasProductAlreadyStockTransactions();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
@@ -129,18 +121,18 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
       return;
     }
     if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
+      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, TAG));
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
     queue.append(
-        dlHelper.updateQuantityUnits(dbChangedTime, quantityUnits -> {
+        QuantityUnit.updateQuantityUnits(dlHelper, dbChangedTime, quantityUnits -> {
           this.quantityUnits = quantityUnits;
           formData.getQuantityUnitsLive().setValue(quantityUnits);
         }),
-        dlHelper.updateQuantityUnitConversions(
-            dbChangedTime, conversions -> this.conversions = conversions
+        QuantityUnitConversion.updateQuantityUnitConversions(
+            dlHelper, dbChangedTime, conversions -> this.conversions = conversions
         )
     );
     if (queue.isEmpty()) {
@@ -170,16 +162,6 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
     }
     formData.fillWithProductIfNecessary(args.getProduct());
     updateHasProductAlreadyStockTransactions();
-  }
-
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
   }
 
   public void showQuBottomSheet(int type) {
@@ -236,19 +218,6 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
   }
 
   @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
-  }
-
-  @NonNull
   public MutableLiveData<Boolean> getIsLoadingLive() {
     return isLoadingLive;
   }
@@ -270,7 +239,8 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
     if (!isActionEdit) {
       return;
     }
-    dlHelper.getStockLogEntries(10, 0, getFilledProduct().getId(), entries -> {
+    StockLogEntry.getStockLogEntries(dlHelper, 10, 0, getFilledProduct().getId(),
+        entries -> {
       if (VersionUtil.isGrocyServerMin330(sharedPrefs)) {
         hasProductAlreadyStockTransactionsLive.setValue(!entries.isEmpty());
       } else {

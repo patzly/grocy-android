@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.repository;
 import android.app.Application;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
@@ -62,7 +63,7 @@ public class ChooseProductRepository {
     }
   }
 
-  public void loadFromDatabase(DataListener listener) {
+  public void loadFromDatabase(DataListener onSuccess, Consumer<Throwable> onError) {
     Single.zip(
         appDatabase.productDao().getProducts(),
         appDatabase.pendingProductDao().getPendingProducts(),
@@ -70,21 +71,24 @@ public class ChooseProductRepository {
     )
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .doOnSuccess(listener::actionFinished)
+        .doOnSuccess(onSuccess::actionFinished)
+        .doOnError(onError)
+        .onErrorComplete()
         .subscribe();
   }
 
   public void createPendingProduct(
-          PendingProduct pendingProduct,
-          CreatePendingProductListener successListener,
-          Runnable errorListener
+      PendingProduct pendingProduct,
+      CreatePendingProductListener successListener,
+      Consumer<Throwable> onError
   ) {
     appDatabase.pendingProductDao().insertPendingProduct(pendingProduct)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSuccess(successListener::onSuccess)
-            .doOnError(throwable -> errorListener.run())
-            .subscribe();
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnSuccess(successListener::onSuccess)
+        .doOnError(onError)
+        .onErrorComplete()
+        .subscribe();
   }
 
   public interface CreatePendingProductListener {

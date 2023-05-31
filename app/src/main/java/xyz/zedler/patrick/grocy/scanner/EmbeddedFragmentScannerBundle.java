@@ -37,7 +37,8 @@ public class EmbeddedFragmentScannerBundle extends EmbeddedFragmentScanner {
       CoordinatorLayout containerScanner,
       BarcodeListener barcodeListener,
       boolean qrCodeFormat,
-      boolean takeSmallQrCodeFormat
+      boolean takeSmallQrCodeFormat,
+      boolean qrCodeFilter
   ) {
     super(fragment.requireActivity());
     embeddedFragmentScanner = new EmbeddedFragmentScannerZXing(
@@ -45,7 +46,8 @@ public class EmbeddedFragmentScannerBundle extends EmbeddedFragmentScanner {
         containerScanner,
         barcodeListener,
         qrCodeFormat,
-        takeSmallQrCodeFormat
+        takeSmallQrCodeFormat,
+        qrCodeFilter
     );
   }
 
@@ -59,7 +61,8 @@ public class EmbeddedFragmentScannerBundle extends EmbeddedFragmentScanner {
         containerScanner,
         barcodeListener,
         useScannerFormat2d(fragment),
-        true
+        true,
+        false
     );
   }
 

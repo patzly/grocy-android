@@ -71,6 +71,7 @@ public final class Constants {
     public final static String RECIPES_SORT_MODE = "recipes_sort_mode";
     public final static String RECIPES_SORT_ASCENDING = "recipes_sort_ascending";
     public final static String RECIPES_EXTRA_FIELD = "stock_extra_field";
+    public final static String RECIPES_LIST_LAYOUT = "recipes_list_layout";
 
     public final static String DB_LAST_TIME_STOCK_ITEMS = "db_last_time_stock_items";
     public final static String DB_LAST_TIME_STOCK_ENTRIES = "db_last_time_stock_entries";
@@ -144,8 +145,10 @@ public final class Constants {
       public final static String BEGINNER_MODE = "beginner_mode";
       public final static String HAPTIC = "haptic";
       public final static String FOOD_FACTS = "food_facts";
+      public final static String SHOW_MAIN_MENU_BUTTON = "show_main_menu_button";
       public final static String EXPAND_BOTTOM_SHEETS = "expand_bottom_sheets";
       public final static String SPEED_UP_START = "speed_up_start";
+      public final static String TURN_ON_QUICK_MODE = "turn_on_quick_mode";
       public final static String DATE_KEYBOARD_INPUT = "date_keyboard_input";
       public final static String DATE_KEYBOARD_REVERSE = "date_keyboard_reverse";
       public final static String MESSAGE_DURATION = "message_duration";
@@ -247,8 +250,10 @@ public final class Constants {
       public final static boolean BEGINNER_MODE = true;
       public final static boolean HAPTIC = true;
       public final static boolean FOOD_FACTS = false;
+      public final static boolean SHOW_MAIN_MENU_BUTTON = true;
       public final static boolean EXPAND_BOTTOM_SHEETS = false;
       public final static boolean SPEED_UP_START = false;
+      public final static boolean TURN_ON_QUICK_MODE = true;
       public final static boolean DATE_KEYBOARD_INPUT = false;
       public final static boolean DATE_KEYBOARD_REVERSE = false;
       public final static int MESSAGE_DURATION = 10;
@@ -464,7 +469,9 @@ public final class Constants {
       public final static String TRANSFER = "transfer";
       public final static String INVENTORY = "inventory";
       public final static String SAVE = "save";
+      public final static String SAVE_NOT_CLOSE = "save_not_close";
       public final static String DONE = "done";
+      public final static String PREPARATION = "preparation";
     }
   }
 

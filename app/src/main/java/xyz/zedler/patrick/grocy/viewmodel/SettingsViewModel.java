@@ -28,9 +28,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.Arrays;
+import org.json.JSONException;
+import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.APPEARANCE;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.NETWORK;
@@ -52,6 +53,8 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSh
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShortcutsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnSettingUploadListener;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -192,6 +195,27 @@ public class SettingsViewModel extends BaseViewModel {
     );
   }
 
+  public void uploadSetting(
+      String settingKey,
+      Object settingValue,
+      OnSettingUploadListener listener
+  ) {
+    JSONObject jsonObject = new JSONObject();
+    try {
+      jsonObject.put("value", settingValue);
+    } catch (JSONException e) {
+      e.printStackTrace();
+      listener.onFinished(R.string.option_synced_error);
+      return;
+    }
+    dlHelper.put(
+        grocyApi.getUserSetting(settingKey),
+        jsonObject,
+        response -> listener.onFinished(R.string.option_synced_success),
+        volleyError -> listener.onFinished(R.string.option_synced_error)
+    );
+  }
+
   public void showShortcutsBottomSheet() {
     showBottomSheet(new ShortcutsBottomSheet(), null);
   }
@@ -267,6 +291,19 @@ public class SettingsViewModel extends BaseViewModel {
         .putBoolean(Constants.SETTINGS.BEHAVIOR.FOOD_FACTS, enabled).apply();
   }
 
+  public boolean getShowMainMenuButtonEnabled() {
+    return sharedPrefs.getBoolean(
+        BEHAVIOR.SHOW_MAIN_MENU_BUTTON,
+        Constants.SETTINGS_DEFAULT.BEHAVIOR.SHOW_MAIN_MENU_BUTTON
+    );
+  }
+
+  public void setShowMainMenuButtonEnabled(boolean enabled) {
+    sharedPrefs.edit()
+        .putBoolean(Constants.SETTINGS.BEHAVIOR.SHOW_MAIN_MENU_BUTTON, enabled).apply();
+    sendEvent(Event.UPDATE_BOTTOM_APP_BAR);
+  }
+
   public boolean getExpandBottomSheetsEnabled() {
     return sharedPrefs.getBoolean(
         Constants.SETTINGS.BEHAVIOR.EXPAND_BOTTOM_SHEETS,
@@ -289,6 +326,18 @@ public class SettingsViewModel extends BaseViewModel {
   public void setSpeedUpStartEnabled(boolean enabled) {
     sharedPrefs.edit()
         .putBoolean(Constants.SETTINGS.BEHAVIOR.SPEED_UP_START, enabled).apply();
+  }
+
+  public boolean getTurnOnQuickModeEnabled() {
+    return sharedPrefs.getBoolean(
+        BEHAVIOR.DATE_KEYBOARD_INPUT,
+        SETTINGS_DEFAULT.BEHAVIOR.TURN_ON_QUICK_MODE
+    );
+  }
+
+  public void setTurnOnQuickModeEnabled(boolean enabled) {
+    sharedPrefs.edit()
+        .putBoolean(Constants.SETTINGS.BEHAVIOR.TURN_ON_QUICK_MODE, enabled).apply();
   }
 
   public boolean getDateKeyboardInputEnabled() {
@@ -385,17 +434,12 @@ public class SettingsViewModel extends BaseViewModel {
     int autoShoppingListId = sharedPrefs.getInt(
         SHOPPING_LIST.AUTO_ADD_LIST_ID, SETTINGS_DEFAULT.SHOPPING_LIST.AUTO_ADD_LIST_ID
     );
-    sharedPrefs.edit().putString(PREF.DB_LAST_TIME_SHOPPING_LISTS, null).apply();
-    dlHelper.getTimeDbChanged(
-        timeDbChanged -> dlHelper.updateShoppingLists(timeDbChanged, shoppingLists -> {
+    ShoppingList.getShoppingLists(dlHelper, shoppingLists -> {
           ShoppingList shoppingList = ShoppingList.getFromId(shoppingLists, autoShoppingListId);
           autoAddToShoppingListTextLive.setValue(shoppingList != null ? shoppingList.getName()
               : getString(R.string.subtitle_none_selected));
-        }).perform(
-            null,
-            error -> autoAddToShoppingListTextLive.setValue(getString(R.string.setting_not_loaded)),
+        }, error -> autoAddToShoppingListTextLive.setValue(getString(R.string.setting_not_loaded))).perform(
             dlHelper.getUuid()
-        ), () -> autoAddToShoppingListTextLive.setValue(getString(R.string.setting_not_loaded))
     );
   }
 
@@ -418,14 +462,14 @@ public class SettingsViewModel extends BaseViewModel {
 
   public void setAutoAddToShoppingListEnabled(boolean enabled) {
     sharedPrefs.edit().putBoolean(SHOPPING_LIST.AUTO_ADD, enabled).apply();
-    dlHelper.uploadSetting(SHOPPING_LIST.AUTO_ADD, enabled, this::showMessage);
+    uploadSetting(SHOPPING_LIST.AUTO_ADD, enabled, this::showMessage);
     autoAddToShoppingListLive.setValue(enabled);
   }
 
   public void setAutoAddToShoppingListId(ShoppingList shoppingList) {
     sharedPrefs.edit().putInt(SHOPPING_LIST.AUTO_ADD_LIST_ID, shoppingList.getId()).apply();
     autoAddToShoppingListTextLive.setValue(shoppingList.getName());
-    dlHelper.uploadSetting(SHOPPING_LIST.AUTO_ADD_LIST_ID, shoppingList.getId(), this::showMessage);
+    uploadSetting(SHOPPING_LIST.AUTO_ADD_LIST_ID, shoppingList.getId(), this::showMessage);
   }
 
   public void showShoppingModeUpdateIntervalBottomSheet() {
@@ -531,7 +575,7 @@ public class SettingsViewModel extends BaseViewModel {
   public void setListIndicatorEnabled(boolean enabled) {
     sharedPrefs.edit().putBoolean(STOCK.DISPLAY_DOTS_IN_STOCK, enabled)
         .apply();
-    dlHelper.uploadSetting(STOCK.DISPLAY_DOTS_IN_STOCK, enabled, this::showMessage);
+    uploadSetting(STOCK.DISPLAY_DOTS_IN_STOCK, enabled, this::showMessage);
   }
 
   public MutableLiveData<String> getPresetLocationTextLive() {
@@ -540,7 +584,7 @@ public class SettingsViewModel extends BaseViewModel {
 
   public void setPresetLocation(Location location) {
     sharedPrefs.edit().putInt(STOCK.LOCATION, location.getId()).apply();
-    dlHelper.uploadSetting(STOCK.LOCATION, location.getId(), this::showMessage);
+    uploadSetting(STOCK.LOCATION, location.getId(), this::showMessage);
     presetLocationTextLive.setValue(location.getName());
   }
 
@@ -550,7 +594,7 @@ public class SettingsViewModel extends BaseViewModel {
 
   public void setPresetProductGroup(ProductGroup productGroup) {
     sharedPrefs.edit().putInt(STOCK.PRODUCT_GROUP, productGroup.getId()).apply();
-    dlHelper.uploadSetting(STOCK.PRODUCT_GROUP, productGroup.getId(), this::showMessage);
+    uploadSetting(STOCK.PRODUCT_GROUP, productGroup.getId(), this::showMessage);
     presetProductGroupTextLive.setValue(productGroup.getName());
   }
 
@@ -560,7 +604,7 @@ public class SettingsViewModel extends BaseViewModel {
 
   public void setPresetQuantityUnit(QuantityUnit quantityUnit) {
     sharedPrefs.edit().putInt(STOCK.QUANTITY_UNIT, quantityUnit.getId()).apply();
-    dlHelper.uploadSetting(STOCK.QUANTITY_UNIT, quantityUnit.getId(), this::showMessage);
+    uploadSetting(STOCK.QUANTITY_UNIT, quantityUnit.getId(), this::showMessage);
     presetQuantityUnitTextLive.setValue(quantityUnit.getName());
   }
 
@@ -568,16 +612,16 @@ public class SettingsViewModel extends BaseViewModel {
     int locationId = sharedPrefs.getInt(STOCK.LOCATION, SETTINGS_DEFAULT.STOCK.LOCATION);
     int groupId = sharedPrefs.getInt(STOCK.PRODUCT_GROUP, SETTINGS_DEFAULT.STOCK.PRODUCT_GROUP);
     int unitId = sharedPrefs.getInt(STOCK.QUANTITY_UNIT, SETTINGS_DEFAULT.STOCK.QUANTITY_UNIT);
-    dlHelper.getLocations(
-        locations -> {
+    Location.getLocations(
+        dlHelper, locations -> {
           this.locations = locations;
           Location location = Location.getFromId(locations, locationId);
           presetLocationTextLive.setValue(location != null ? location.getName()
               : getString(R.string.subtitle_none_selected));
         }, error -> presetLocationTextLive.setValue(getString(R.string.setting_not_loaded))
     ).perform(dlHelper.getUuid());
-    dlHelper.getProductGroups(
-        productGroups -> {
+    ProductGroup.getProductGroups(
+        dlHelper, productGroups -> {
           SortUtil.sortProductGroupsByName(productGroups, true);
           this.productGroups = productGroups;
           ProductGroup productGroup = ProductGroup.getFromId(productGroups, groupId);
@@ -585,8 +629,8 @@ public class SettingsViewModel extends BaseViewModel {
               : getString(R.string.subtitle_none_selected));
         }, error -> presetProductGroupTextLive.setValue(getString(R.string.setting_not_loaded))
     ).perform(dlHelper.getUuid());
-    dlHelper.getQuantityUnits(
-        quantityUnits -> {
+    QuantityUnit.getQuantityUnits(
+        dlHelper, quantityUnits -> {
           this.quantityUnits = quantityUnits;
           QuantityUnit quantityUnit = QuantityUnit.getFromId(quantityUnits, unitId);
           presetQuantityUnitTextLive.setValue(quantityUnit != null ? quantityUnit.getName()
@@ -667,7 +711,7 @@ public class SettingsViewModel extends BaseViewModel {
     defaultDueDaysTextLive.setValue(
         getApplication().getResources().getQuantityString(R.plurals.date_days, days, days)
     );
-    dlHelper.uploadSetting(STOCK.DEFAULT_DUE_DAYS, days, this::showMessage);
+    uploadSetting(STOCK.DEFAULT_DUE_DAYS, days, this::showMessage);
   }
 
   public void showDueSoonDaysBottomSheet() {
@@ -710,7 +754,7 @@ public class SettingsViewModel extends BaseViewModel {
     dueSoonDaysTextLive.setValue(
         getApplication().getResources().getQuantityString(R.plurals.date_days, interval, interval)
     );
-    dlHelper.uploadSetting(STOCK.DUE_SOON_DAYS, String.valueOf(interval), this::showMessage);
+    uploadSetting(STOCK.DUE_SOON_DAYS, String.valueOf(interval), this::showMessage);
   }
 
   public boolean hasServerNewOptionTreatOpenedAsOutOfStock() {
@@ -732,7 +776,7 @@ public class SettingsViewModel extends BaseViewModel {
       return;
     }
     sharedPrefs.edit().putBoolean(STOCK.TREAT_OPENED_OUT_OF_STOCK, enabled).apply();
-    dlHelper.uploadSetting(STOCK.TREAT_OPENED_OUT_OF_STOCK, enabled, this::showMessage);
+    uploadSetting(STOCK.TREAT_OPENED_OUT_OF_STOCK, enabled, this::showMessage);
   }
 
   public void showDefaultPurchaseAmountBottomSheet() {
@@ -742,11 +786,11 @@ public class SettingsViewModel extends BaseViewModel {
         SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT
     );
     if (NumUtil.isStringDouble(amount)) {
-      bundle.putDouble(ARGUMENT.NUMBER, Double.parseDouble(amount));
+      bundle.putDouble(ARGUMENT.NUMBER, NumUtil.toDouble(amount));
     } else {
       bundle.putDouble(
           ARGUMENT.NUMBER,
-          Double.parseDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT)
+          NumUtil.toDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT)
       );
     }
     bundle.putString(ARGUMENT.TYPE, STOCK.DEFAULT_PURCHASE_AMOUNT);
@@ -761,9 +805,9 @@ public class SettingsViewModel extends BaseViewModel {
     );
     double amountDouble;
     if (NumUtil.isStringDouble(amount)) {
-      amountDouble = Double.parseDouble(amount);
+      amountDouble = NumUtil.toDouble(amount);
     } else {
-      amountDouble = Double.parseDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT);
+      amountDouble = NumUtil.toDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT);
     }
     return NumUtil.trimAmount(amountDouble, allowedDecimalPlacesAmount);
   }
@@ -775,14 +819,14 @@ public class SettingsViewModel extends BaseViewModel {
   public void setDefaultPurchaseAmount(String text) {
     double amount = 0;
     if (NumUtil.isStringDouble(text)) {
-      amount = Double.parseDouble(text);
+      amount = NumUtil.toDouble(text);
       if (amount < 0) {
         amount = 0;
       }
     }
     sharedPrefs.edit().putString(STOCK.DEFAULT_PURCHASE_AMOUNT, NumUtil.trimAmount(amount, allowedDecimalPlacesAmount)).apply();
     defaultPurchaseAmountTextLive.setValue(NumUtil.trimAmount(amount, allowedDecimalPlacesAmount));
-    dlHelper.uploadSetting(STOCK.DEFAULT_PURCHASE_AMOUNT, NumUtil.trimAmount(amount, allowedDecimalPlacesAmount), this::showMessage);
+    uploadSetting(STOCK.DEFAULT_PURCHASE_AMOUNT, NumUtil.trimAmount(amount, allowedDecimalPlacesAmount), this::showMessage);
   }
 
   public boolean getPurchasedDateEnabled() {
@@ -795,7 +839,7 @@ public class SettingsViewModel extends BaseViewModel {
   public void setPurchasedDateEnabled(boolean enabled) {
     sharedPrefs.edit().putBoolean(Constants.SETTINGS.STOCK.SHOW_PURCHASED_DATE, enabled)
         .apply();
-    dlHelper.uploadSetting(STOCK.SHOW_PURCHASED_DATE, enabled, this::showMessage);
+    uploadSetting(STOCK.SHOW_PURCHASED_DATE, enabled, this::showMessage);
   }
 
   public void showDefaultConsumeAmountBottomSheet() {
@@ -805,11 +849,11 @@ public class SettingsViewModel extends BaseViewModel {
         SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT
     );
     if (NumUtil.isStringDouble(amount)) {
-      bundle.putDouble(ARGUMENT.NUMBER, Double.parseDouble(amount));
+      bundle.putDouble(ARGUMENT.NUMBER, NumUtil.toDouble(amount));
     } else {
       bundle.putDouble(
           ARGUMENT.NUMBER,
-          Double.parseDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT)
+          NumUtil.toDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT)
       );
     }
     bundle.putString(ARGUMENT.TYPE, STOCK.DEFAULT_CONSUME_AMOUNT);
@@ -824,9 +868,9 @@ public class SettingsViewModel extends BaseViewModel {
     );
     double amountDouble;
     if (NumUtil.isStringDouble(amount)) {
-      amountDouble = Double.parseDouble(amount);
+      amountDouble = NumUtil.toDouble(amount);
     } else {
-      amountDouble = Double.parseDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT);
+      amountDouble = NumUtil.toDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT);
     }
     return NumUtil.trimAmount(amountDouble, allowedDecimalPlacesAmount);
   }
@@ -838,14 +882,14 @@ public class SettingsViewModel extends BaseViewModel {
   public void setDefaultConsumeAmount(String text) {
     double amount = 0;
     if (NumUtil.isStringDouble(text)) {
-      amount = Double.parseDouble(text);
+      amount = NumUtil.toDouble(text);
       if (amount < 0) {
         amount = 0;
       }
     }
     sharedPrefs.edit().putString(STOCK.DEFAULT_CONSUME_AMOUNT, NumUtil.trimAmount(amount, allowedDecimalPlacesAmount)).apply();
     defaultConsumeAmountTextLive.setValue(NumUtil.trimAmount(amount, allowedDecimalPlacesAmount));
-    dlHelper.uploadSetting(STOCK.DEFAULT_CONSUME_AMOUNT, NumUtil.trimAmount(amount, allowedDecimalPlacesAmount), this::showMessage);
+    uploadSetting(STOCK.DEFAULT_CONSUME_AMOUNT, NumUtil.trimAmount(amount, allowedDecimalPlacesAmount), this::showMessage);
   }
 
   public boolean getUseQuickConsumeAmountEnabled() {
@@ -858,7 +902,7 @@ public class SettingsViewModel extends BaseViewModel {
   public void setUseQuickConsumeAmountEnabled(boolean enabled) {
     sharedPrefs.edit().putBoolean(Constants.SETTINGS.STOCK.USE_QUICK_CONSUME_AMOUNT, enabled)
         .apply();
-    dlHelper.uploadSetting(STOCK.USE_QUICK_CONSUME_AMOUNT, enabled, this::showMessage);
+    uploadSetting(STOCK.USE_QUICK_CONSUME_AMOUNT, enabled, this::showMessage);
   }
 
   public boolean getLoadingCircleEnabled() {
@@ -1027,14 +1071,6 @@ public class SettingsViewModel extends BaseViewModel {
   public boolean getIsDemoInstance() {
     String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
     return server != null && server.contains("grocy.info");
-  }
-
-  public DownloadHelper getDownloadHelper() {
-    return dlHelper;
-  }
-
-  public GrocyApi getGrocyApi() {
-    return grocyApi;
   }
 
   public boolean isFeatureEnabled(String pref) {

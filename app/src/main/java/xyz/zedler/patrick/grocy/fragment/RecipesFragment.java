@@ -19,8 +19,9 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,29 +31,21 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
-import java.util.List;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.RecipeEntryAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
-import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentRecipesBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RecipeBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
-import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Recipe;
-import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
-import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -61,13 +54,14 @@ import xyz.zedler.patrick.grocy.viewmodel.RecipesViewModel;
 public class RecipesFragment extends BaseFragment implements
         RecipeEntryAdapter.RecipesItemAdapterListener {
 
-  private final static String TAG = TasksFragment.class.getSimpleName();
+  private final static String TAG = RecipesFragment.class.getSimpleName();
+  private final static String LAYOUT_LINEAR = "linear";
+  private final static String LAYOUT_GRID = "grid";
 
   private MainActivity activity;
   private RecipesViewModel viewModel;
   private AppBarBehavior appBarBehavior;
   private ClickUtil clickUtil;
-  private SwipeBehavior swipeBehavior;
   private FragmentRecipesBinding binding;
   private InfoFullscreenHelper infoFullscreenHelper;
 
@@ -118,7 +112,7 @@ public class RecipesFragment extends BaseFragment implements
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     // APP BAR BEHAVIOR
 
@@ -129,9 +123,18 @@ public class RecipesFragment extends BaseFragment implements
         savedInstanceState
     );
 
-    binding.recycler.setLayoutManager(
-        new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-    );
+    boolean isGrid = viewModel.getSharedPrefs()
+        .getString(PREF.RECIPES_LIST_LAYOUT, LAYOUT_LINEAR).equals(LAYOUT_LINEAR);
+    if (isGrid) {
+      binding.recycler.setLayoutManager(
+          new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+      );
+    } else {
+      binding.recycler.setLayoutManager(
+          new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+      );
+    }
+
     binding.recycler.setAdapter(new MasterPlaceholderAdapter());
 
     if (savedInstanceState == null) {
@@ -173,7 +176,7 @@ public class RecipesFragment extends BaseFragment implements
         binding.recycler.setAdapter(
             new RecipeEntryAdapter(
                 requireContext(),
-                (LinearLayoutManager) binding.recycler.getLayoutManager(),
+                binding.recycler.getLayoutManager(),
                 items,
                 viewModel.getRecipeFulfillments(),
                 this,
@@ -193,46 +196,6 @@ public class RecipesFragment extends BaseFragment implements
       }
     });
 
-    if (swipeBehavior == null) {
-      swipeBehavior = new SwipeBehavior(
-          activity,
-          swipeStarted -> binding.swipe.setEnabled(!swipeStarted)
-      ) {
-        @Override
-        public void instantiateUnderlayButton(
-            RecyclerView.ViewHolder viewHolder,
-            List<UnderlayButton> underlayButtons
-        ) {
-          int position = viewHolder.getAdapterPosition();
-          ArrayList<Recipe> displayedItems = viewModel.getFilteredRecipesLive()
-              .getValue();
-          if (displayedItems == null || position < 0
-              || position >= displayedItems.size()) {
-            return;
-          }
-
-          underlayButtons.add(new UnderlayButton(
-              activity,
-              R.drawable.ic_round_restaurant_menu,
-              pos -> {
-                if (pos >= displayedItems.size()) {
-                  return;
-                }
-                swipeBehavior.recoverLatestSwipedItem();
-                new Handler().postDelayed(() -> {
-                  Recipe recipe = displayedItems.get(pos);
-                  consumeRecipe(recipe.getId());
-                  activity.showSnackbar(
-                      getString(R.string.msg_recipe_consumed, recipe.getName()), true
-                  );
-                }, 100);
-              }
-          ));
-        }
-      };
-    }
-    swipeBehavior.attachToRecyclerView(binding.recycler);
-
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
     }
@@ -247,14 +210,44 @@ public class RecipesFragment extends BaseFragment implements
     activity.updateBottomAppBar(true, R.menu.menu_recipes, this::onMenuItemClick);
     activity.updateFab(
         R.drawable.ic_round_add_anim,
-        R.string.action_add,
+        R.string.title_recipe_create,
         Constants.FAB.TAG.ADD,
         savedInstanceState == null,
-        () -> activity.navigateFragment(
+        () -> activity.navUtil.navigateFragment(
             RecipesFragmentDirections.actionRecipesFragmentToRecipeEditFragment(ACTION.CREATE)
         )
     );
   }
+
+  private void toggleLayoutManager() {
+    fadeOutRecyclerView(() -> {
+      RecyclerView.LayoutManager layoutManager = binding.recycler.getLayoutManager();
+      if (layoutManager instanceof StaggeredGridLayoutManager) {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
+        binding.recycler.setLayoutManager(linearLayoutManager);
+        viewModel.getSharedPrefs().edit().putString(PREF.RECIPES_LIST_LAYOUT, LAYOUT_LINEAR).apply();
+      } else {
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        binding.recycler.setLayoutManager(staggeredGridLayoutManager);
+        viewModel.getSharedPrefs().edit().putString(PREF.RECIPES_LIST_LAYOUT, LAYOUT_GRID).apply();
+      }
+      binding.recycler.setAdapter(
+          new RecipeEntryAdapter(
+              requireContext(),
+              binding.recycler.getLayoutManager(),
+              viewModel.getFilteredRecipesLive().getValue(),
+              viewModel.getRecipeFulfillments(),
+              this,
+              viewModel.getSortMode(),
+              viewModel.isSortAscending(),
+              viewModel.getExtraField()
+          )
+      );
+      binding.recycler.scheduleLayoutAnimation();
+      fadeInRecyclerView();
+    });
+  }
+
 
   @Override
   public void consumeRecipe(int recipeId) {
@@ -277,7 +270,7 @@ public class RecipesFragment extends BaseFragment implements
     if (showOfflineError()) {
       return;
     }
-    activity.navigateFragment(
+    activity.navUtil.navigateFragment(
         RecipesFragmentDirections.actionRecipesFragmentToRecipeEditFragment(ACTION.EDIT)
             .setRecipe(recipe)
     );
@@ -324,6 +317,9 @@ public class RecipesFragment extends BaseFragment implements
       ViewUtil.startIcon(item);
       setUpSearch();
       return true;
+    } else if (item.getItemId() == R.id.action_layout) {
+      toggleLayoutManager();
+      return true;
     }
     return false;
   }
@@ -336,24 +332,9 @@ public class RecipesFragment extends BaseFragment implements
     if (recipe == null) {
       return;
     }
-    if (swipeBehavior != null) {
-      swipeBehavior.recoverLatestSwipedItem();
-    }
 
-    RecipeFulfillment recipeFulfillment = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(viewModel.getRecipeFulfillments(), recipe.getId());
-    ArrayList<RecipePosition> recipePositions = (ArrayList<RecipePosition>) RecipePosition.getRecipePositionsFromRecipeId(viewModel.getRecipePositions(), recipe.getId());
-    ArrayList<Product> products = Product.getProductsForRecipePositions(viewModel.getProducts(), recipePositions);
-    ArrayList<QuantityUnit> quantityUnits = QuantityUnit.getQuantityUnitsForRecipePositions(viewModel.getQuantityUnits(), recipePositions);
-    ArrayList<QuantityUnitConversion> quantityUnitConversions = QuantityUnitConversion.getQuantityUnitConversionsForRecipePositions(viewModel.getQuantityUnitConversions(), recipePositions);
-
-    Bundle bundle = new Bundle();
-    bundle.putParcelable(ARGUMENT.RECIPE, recipe);
-    bundle.putParcelable(ARGUMENT.RECIPE_FULFILLMENT, recipeFulfillment);
-    bundle.putParcelableArrayList(ARGUMENT.RECIPE_POSITIONS, recipePositions);
-    bundle.putParcelableArrayList(ARGUMENT.PRODUCTS, products);
-    bundle.putParcelableArrayList(ARGUMENT.QUANTITY_UNITS, quantityUnits);
-    bundle.putParcelableArrayList(ARGUMENT.QUANTITY_UNIT_CONVERSIONS, quantityUnitConversions);
-    activity.showBottomSheet(new RecipeBottomSheet(), bundle);
+    activity.navUtil.navigateFragment(RecipesFragmentDirections
+        .actionRecipesFragmentToRecipeFragment(recipe.getId()));
   }
 
   @Override
@@ -389,6 +370,28 @@ public class RecipesFragment extends BaseFragment implements
     activity.hideKeyboard();
     binding.editTextSearch.setText("");
     viewModel.setIsSearchVisible(false);
+  }
+
+  private void fadeOutRecyclerView(final Runnable onAnimationEnd) {
+    binding.recycler.animate()
+        .alpha(0f)
+        .setDuration(150)
+        .setListener(new AnimatorListenerAdapter() {
+          @Override
+          public void onAnimationEnd(Animator animation) {
+            if (onAnimationEnd != null) {
+              onAnimationEnd.run();
+            }
+          }
+        });
+  }
+
+  private void fadeInRecyclerView() {
+    binding.recycler.setAlpha(0f);
+    binding.recycler.animate()
+        .alpha(1f)
+        .setDuration(150)
+        .setListener(null);
   }
 
   @NonNull

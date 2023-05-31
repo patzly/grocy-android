@@ -114,7 +114,7 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
 
@@ -133,7 +133,7 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
       } else if (event.getType() == Event.CONSUME_SUCCESS) {
         assert getArguments() != null;
         if (PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
-          activity.navigateUp();
+          activity.navUtil.navigateUp();
         } else {
           viewModel.getFormData().clearForm();
           focusProductInputIfNecessary();
@@ -152,7 +152,7 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
         embeddedFragmentScanner.startScannerIfVisible();
       } else if (event.getType() == Event.CHOOSE_PRODUCT) {
         String barcode = event.getBundle().getString(ARGUMENT.BARCODE);
-        activity.navigateFragment(ConsumeFragmentDirections
+        activity.navUtil.navigateFragment(ConsumeFragmentDirections
             .actionConsumeFragmentToChooseProductFragment(barcode)
             .setForbidCreateProduct(true));
       }

@@ -19,8 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.content.pm.ShortcutInfo;
-import android.content.pm.ShortcutManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +27,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
@@ -85,7 +82,7 @@ public class SettingsCatBehaviorFragment extends BaseFragment {
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     viewModel.getEventHandler().observe(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -95,6 +92,8 @@ public class SettingsCatBehaviorFragment extends BaseFragment {
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
+      } else if (event.getType() == Event.UPDATE_BOTTOM_APP_BAR) {
+        activity.updateBottomNavigationMenuButton();
       }
     });
 
@@ -138,29 +137,5 @@ public class SettingsCatBehaviorFragment extends BaseFragment {
       viewModel.setMessageDuration(Integer.parseInt(text));
       binding.textMessageDuration.setText(getMessageDuration());
     }
-  }
-
-  @Override
-  public void updateShortcuts() {
-    String subtitleShortcuts;
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
-      ShortcutManager shortcutManager = activity.getSystemService(ShortcutManager.class);
-      List<ShortcutInfo> shortcutInfos = shortcutManager.getDynamicShortcuts();
-      StringBuilder shortcutLabels = new StringBuilder();
-      for (ShortcutInfo shortcutInfo : shortcutInfos) {
-        shortcutLabels.append(shortcutInfo.getShortLabel());
-        if (shortcutInfo != shortcutInfos.get(shortcutInfos.size() - 1)) {
-          shortcutLabels.append(", ");
-        }
-      }
-      if (shortcutLabels.length() != 0) {
-        subtitleShortcuts = shortcutLabels.toString();
-      } else {
-        subtitleShortcuts = getString(R.string.subtitle_none_selected);
-      }
-    } else {
-      subtitleShortcuts = getString(R.string.subtitle_not_supported);
-    }
-    binding.subtitleShortcuts.setText(subtitleShortcuts);
   }
 }

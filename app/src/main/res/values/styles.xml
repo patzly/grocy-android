@@ -111,6 +111,15 @@
     <item name="android:layout_gravity">center</item>
   </style>
 
+  <!-- RecyclerView -->
+
+  <style name="Widget.Grocy.RecyclerView" parent="">
+    <item name="android:overScrollMode">ifContentScrolls</item>
+    <item name="android:scrollbarStyle">outsideOverlay</item>
+    <item name="android:scrollbars">vertical</item>
+    <item name="android:scrollbarThumbVertical">@drawable/shape_scrollbar_rounded</item>
+  </style>
+
   <!-- Button -->
 
   <!-- Base style -->

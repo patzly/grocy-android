@@ -101,9 +101,11 @@
   <string name="action_open_scanner">Open scanner</string>
   <string name="action_discard">Discard</string>
   <string name="action_clear_form">Clear form</string>
-  <!-- Short form for "Link barcode to existing product and clear form", this should fit into a button so keep it short -->
-  <string name="action_link_and_clear">Link &amp; Clear</string>
+  <!-- Short form for "Only link barcode to existing product", this should fit into a
+  button so keep it short. -->
+  <string name="action_link_and_clear">Link only</string>
   <string name="action_toggle_done">Toggle done</string>
+  <string name="action_change_layout">Change layout</string>
   <string name="action_edit_notes">Edit notes</string>
   <string name="action_add_missing">Add missing products</string>
   <string name="action_purchase_done_items">Purchase done items</string>
@@ -124,6 +126,7 @@
   <string name="action_demo_server">Demo server</string>
   <string name="action_own_server">Own server</string>
   <string name="action_enter_data_manually">Enter data manually</string>
+  <string name="action_details">Details</string>
   <string name="action_perform">Perform action</string>
   <!-- Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="action_play_store" translatable="false">Play Store</string>
@@ -336,8 +339,8 @@
   <string name="msg_feedback">Do you have any wishes, questions or errors? Contact us and let us help!\nOtherwise we would be very happy about a nice review in the Play Store.</string>
   <string name="msg_point_at_barcode">Point your camera at a barcode</string>
   <string name="msg_press_hold_confirm">Press and hold to confirm deletion</string>
-  <string name="msg_recipe_consume_ask">Are you sure to consume all ingredients needed by recipe \"%1$s\"? (ingredients marked with \"only check if any amount is in stock\" will be ignored)</string>
-  <string name="msg_recipe_shopping_list_ask">Are you sure to put all missing ingredients for recipe \"%1$s\" on the shopping list?\n\nUncheck ingredients to not put them on the shopping list:</string>
+  <string name="msg_recipe_consume_ask">Are you sure you want to consume all ingredients needed by the recipe for \"%1$s\"? (ingredients marked with \"only check if any amount is in stock\" will be ignored)</string>
+  <string name="msg_recipe_shopping_list_ask">Are you sure you want to put all missing ingredients needed by the recipe for \"%1$s\" on the shopping list?\n\nUncheck ingredients to not put them on the shopping list:</string>
   <string name="msg_welcome">Welcome to Grocy Android!</string>
   <string name="msg_welcome_introduce">To use grocy productively you need your own server or the grocy add-on for Home Assistant.\nIf you just want to try out this app you can use the demo server from Bernd Bestel, the creator of grocy.</string>
   <string name="msg_choose_option_below">Please choose an option below.</string>
@@ -479,6 +482,10 @@
   <string name="error_network">Network error</string>
   <string name="error_network_subtitle">The required data could not be loaded completely</string>
   <string name="error_network_exact">Network error: %1$s</string>
+  <string name="error_database">Database error</string>
+  <string name="error_database_exact">Database error: %1$s</string>
+  <string name="error_database_object_too_large">Database error</string>
+  <string name="error_details">Error details</string>
   <string name="error_unknown">Oops!</string>
   <string name="error_not_grocy_instance">Not a valid grocy instance</string>
   <string name="error_timeout">Timeout error</string>
@@ -512,7 +519,6 @@
   <string name="title_product_edit">Edit product</string>
   <string name="title_tasks">Tasks</string>
   <string name="title_task_entry">Task entry</string>
-  <string name="title_task_add">Add task</string>
   <string name="title_master_data">Master data</string>
   <string name="title_stock_entries">Stock entries</string>
   <string name="title_stock_entry">Stock entry</string>
@@ -543,11 +549,17 @@
   <string name="title_chores">Chores</string>
   <string name="title_chore">Chore</string>
   <string name="title_recipes">Recipes</string>
-  <string name="title_recipe_create">Create recipe</string>
-  <string name="title_recipe_edit">Edit recipe</string>
+  <string name="title_meal_plan">Meal plan</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Editor</string>
-  <string name="title_meal_plan">Meal plan</string>
+  <string name="title_task_new">New task</string>
+  <string name="title_task_edit">Edit task</string>
+  <string name="title_entry_new">New entry</string>
+  <string name="title_entry_edit">Edit entry</string>
+  <string name="title_ingredient_new">New ingredient</string>
+  <string name="title_ingredient_edit">Edit ingredient</string>
+  <string name="title_recipe_create">New recipe</string>
+  <string name="title_recipe_edit">Edit recipe</string>
 
   <string name="title_home_assistant" translatable="false">Home Assistant</string>
   <string name="title_grocy" translatable="false">grocy</string>
@@ -572,8 +584,6 @@
   <string name="title_unit_price_specific">%1$s price</string>
   <string name="title_stock_entry_no_specific">No specific entry</string>
   <string name="title_list_entry">List entry</string>
-  <string name="title_edit_list_entry">Edit list entry</string>
-  <string name="title_create_list_entry">Create list entry</string>
   <string name="title_edit_barcode">Edit barcode</string>
   <string name="title_create_barcode">Create barcode</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
@@ -812,10 +822,10 @@
   <string name="property_qu_stock">Quantity unit stock</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Factor purchase to stock quantity unit</string>
-  <!-- This string is part of a pair, there is also 'quantity unit to' -->
-  <string name="property_quantity_unit_from">Quantity unit from</string>
-  <!-- This string is part of a pair, there is also 'quantity unit from' -->
-  <string name="property_quantity_unit_to">Quantity unit to</string>
+  <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
+  <string name="property_quantity_unit_from">Convert from</string>
+  <!-- Example: "Convert to cup"; This string is part of a pair, there is also 'Convert from' -->
+  <string name="property_quantity_unit_to">Convert to</string>
   <string name="property_factor">Factor</string>
   <string name="property_barcode">Barcode</string>
   <string name="property_barcodes">Barcodes</string>
@@ -1049,6 +1059,10 @@
   <string name="category_network">Network</string>
   <string name="category_network_proxy">Proxy</string>
   <string name="category_behavior">Behavior</string>
+  <string name="category_display_behavior">Display behavior</string>
+  <string name="category_input_behavior">Input behavior</string>
+  <string name="category_additional_services">Additional services</string>
+  <string name="category_other_behavior">Other behavior</string>
   <string name="category_debugging">Debugging</string>
   <string name="category_new_product">New product</string>
   <string name="category_existing_products">Existing products</string>
@@ -1132,6 +1146,10 @@
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">Expand bottom sheets</string>
   <string name="setting_expand_bottom_sheets_description">In landscape mode</string>
+  <string name="setting_bottom_menu_button">Show main menu button</string>
+  <string name="setting_bottom_menu_button_description">In bottom app bar</string>
+  <string name="setting_turn_on_quick_mode">Turn on quick mode by default</string>
+  <string name="setting_turn_on_quick_mode_description">When using scan button on overview page</string>
   <string name="setting_speed_up_start">Reduce app startup time</string>
   <string name="setting_speed_up_start_description">Has an effect only on fast devices</string>
   <string name="setting_date_keyboard_input">Enter dates with keyboard</string>
@@ -1204,7 +1222,7 @@
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://en.demo.grocy.info</string>
   <string name="url_grocy" translatable="false">https://grocy.info</string>
-  <string name="url_developer" translatable="false">http://play.google.com/store/apps/dev?id=8122479227040208191</string>
+  <string name="url_developer" translatable="false">http://play.google.com/store/apps/dev?id=5870283381366287608</string>
   <string name="url_github" translatable="false">https://github.com/patzly/grocy-android/</string>
   <string name="url_github_issues" translatable="false">https://github.com/patzly/grocy-android/issues/</string>
 

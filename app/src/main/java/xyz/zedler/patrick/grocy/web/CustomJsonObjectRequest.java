@@ -87,46 +87,6 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
     setRetryPolicy(policy);
   }
 
-  public CustomJsonObjectRequest( // for Home Assistant
-      String url,
-      String hassLongLivedAccessToken,
-      @Nullable JSONObject jsonRequest,
-      Response.Listener<JSONObject> listener,
-      @Nullable Response.ErrorListener errorListener,
-      @Nullable Runnable onRequestFinished,
-      int timeoutSeconds,
-      String tag
-  ) {
-    super(Method.POST, url, jsonRequest, response -> {
-      if (onRequestFinished != null) {
-        onRequestFinished.run();
-      }
-      listener.onResponse(response);
-    }, error -> {
-      if (onRequestFinished != null) {
-        onRequestFinished.run();
-      }
-      if (errorListener != null) {
-        errorListener.onErrorResponse(error);
-      }
-    });
-    this.onRequestFinished = onRequestFinished;
-    this.url = url;
-    this.apiKey = null;
-    this.homeAssistantIngressSessionKey = null;
-    this.hassLongLivedAccessToken = hassLongLivedAccessToken;
-    if (tag != null) {
-      setTag(tag);
-    }
-    setShouldCache(false);
-    RetryPolicy policy = new DefaultRetryPolicy(
-        timeoutSeconds * 1000,
-        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-    );
-    setRetryPolicy(policy);
-  }
-
   @Override
   protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
     try {
