@@ -241,7 +241,7 @@
 
         <LinearLayout
           android:id="@+id/linear_drawer_meal_plan"
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon">
 
           <ImageView
             android:id="@+id/image_drawer_meal_plan"

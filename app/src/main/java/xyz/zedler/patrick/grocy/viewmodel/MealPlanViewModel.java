@@ -110,6 +110,7 @@ public class MealPlanViewModel extends BaseViewModel {
 
   private String searchInput;
   private ArrayList<String> searchResultsFuzzy;
+  private final int maxDecimalPlacesAmount;
   private final boolean debug;
 
   public MealPlanViewModel(@NonNull Application application, StockOverviewFragmentArgs args) {
@@ -117,6 +118,10 @@ public class MealPlanViewModel extends BaseViewModel {
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
@@ -218,7 +223,7 @@ public class MealPlanViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData() {
@@ -229,7 +234,7 @@ public class MealPlanViewModel extends BaseViewModel {
     }
     dlHelper.updateData(
         () -> loadFromDatabase(false),
-        this::onDownloadError,
+        error -> onError(error, TAG),
         QuantityUnit.class,
         ProductGroup.class,
         StockItem.class,
@@ -258,16 +263,6 @@ public class MealPlanViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_STOCK_LOCATIONS, null);
     editPrefs.apply();
     downloadData();
-  }
-
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
   }
 
   public void updateFilteredStockItems() {
@@ -388,7 +383,7 @@ public class MealPlanViewModel extends BaseViewModel {
 
           String msg = getApplication().getString(
               spoiled ? R.string.msg_consumed_spoiled : R.string.msg_consumed,
-              NumUtil.trim(amountConsumed),
+              NumUtil.trimAmount(amountConsumed, maxDecimalPlacesAmount),
               pluralUtil.getQuantityUnitPlural(
                   quantityUnitHashMap,
                   stockItem.getProduct().getQuIdStockInt(),
@@ -412,7 +407,7 @@ public class MealPlanViewModel extends BaseViewModel {
                     Log.i(TAG, "consumeProduct: undone");
                   }
                 },
-                this::showErrorMessage
+                error -> onError(error, TAG)
             ));
           }
           downloadData();
@@ -424,10 +419,10 @@ public class MealPlanViewModel extends BaseViewModel {
           }
         },
         error -> {
-          showErrorMessage(error);
           if (debug) {
             Log.i(TAG, "consumeProduct: " + error);
           }
+          onError(error, TAG);
         }
     );
   }
@@ -462,7 +457,7 @@ public class MealPlanViewModel extends BaseViewModel {
 
           String msg = getApplication().getString(
               R.string.msg_opened,
-              NumUtil.trim(amountOpened),
+              NumUtil.trimAmount(amountOpened, maxDecimalPlacesAmount),
               pluralUtil.getQuantityUnitPlural(
                   quantityUnitHashMap,
                   stockItem.getProduct().getQuIdStockInt(),
@@ -486,7 +481,7 @@ public class MealPlanViewModel extends BaseViewModel {
                     Log.i(TAG, "openProduct: undone");
                   }
                 },
-                this::showErrorMessage
+                error -> onError(error, TAG)
             ));
           }
           downloadData();
@@ -498,10 +493,10 @@ public class MealPlanViewModel extends BaseViewModel {
           }
         },
         error -> {
-          showErrorMessage(error);
           if (debug) {
             Log.i(TAG, "openProduct: " + error);
           }
+          onError(error, TAG);
         }
     );
   }

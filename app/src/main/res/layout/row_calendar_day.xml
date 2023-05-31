@@ -48,15 +48,15 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="2dp"
       android:textSize="12sp"
-      android:textColor="@color/filter_chip_text_inactive" />
+      android:textColor="@color/black" />
 
     <TextView
       android:id="@+id/day"
-      style="@style/TextAppearance.Grocy.Chip"
+      style="@style/TextAppearance.Grocy.LabelMedium"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginBottom="1dp"
-      android:textColor="@color/filter_chip_text_inactive" />
+      android:textColor="@color/black" />
 
   </LinearLayout>
 

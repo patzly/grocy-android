@@ -113,7 +113,7 @@ public class MealPlanFragment extends BaseFragment {
     systemBarBehavior.setRecycler(binding.recycler);
     systemBarBehavior.setUp();
 
-    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
@@ -138,7 +138,6 @@ public class MealPlanFragment extends BaseFragment {
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
             activity.binding.coordinatorMain
         ));
       }
@@ -264,11 +263,6 @@ public class MealPlanFragment extends BaseFragment {
     if (isOnline) {
       viewModel.downloadData();
     }
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
   }
 
   @NonNull
