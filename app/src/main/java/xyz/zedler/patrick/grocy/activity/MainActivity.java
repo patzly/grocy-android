@@ -37,7 +37,6 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -79,7 +78,6 @@ import java.lang.reflect.Field;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.NETWORK;
@@ -93,7 +91,6 @@ import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.repository.MainRepository;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.HapticUtil;
@@ -102,7 +99,6 @@ import xyz.zedler.patrick.grocy.util.NavUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
-import xyz.zedler.patrick.grocy.util.RestartUtil;
 import xyz.zedler.patrick.grocy.util.ShortcutUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
@@ -116,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
   private SharedPreferences sharedPrefs;
   private FragmentManager fragmentManager;
   private GrocyApi grocyApi;
-  private MainRepository repository;
   private ClickUtil clickUtil;
   public NavUtil navUtil;
   public NetUtil netUtil;
@@ -212,7 +207,6 @@ public class MainActivity extends AppCompatActivity {
 
     // API
     updateGrocyApi();
-    repository = new MainRepository(getApplication());
 
     // VIEWS
     binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -562,7 +556,6 @@ public class MainActivity extends AppCompatActivity {
       }
       if (!PrefsUtil.isServerUrlEmpty(sharedPrefs)) {
         binding.bottomAppBar.performShow();
-        //isScrollRestored = true;
       }
     }
     hideKeyboard();
@@ -704,42 +697,6 @@ public class MainActivity extends AppCompatActivity {
     Fragment navHostFragment = fragmentManager.findFragmentById(R.id.fragment_main_nav_host);
     assert navHostFragment != null;
     return (BaseFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
-  }
-
-  public void clearOfflineDataAndRestart() {
-    repository.clearAllTables();
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.remove(PREF.DB_LAST_TIME_STOCK_ITEMS);
-    editPrefs.remove(PREF.DB_LAST_TIME_STORES);
-    editPrefs.remove(PREF.DB_LAST_TIME_LOCATIONS);
-    editPrefs.remove(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS);
-    editPrefs.remove(PREF.DB_LAST_TIME_SHOPPING_LISTS);
-    editPrefs.remove(PREF.DB_LAST_TIME_PRODUCT_GROUPS);
-    editPrefs.remove(PREF.DB_LAST_TIME_QUANTITY_UNITS);
-    editPrefs.remove(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS);
-    editPrefs.remove(PREF.DB_LAST_TIME_PRODUCTS);
-    editPrefs.remove(PREF.DB_LAST_TIME_PRODUCTS_LAST_PURCHASED);
-    editPrefs.remove(PREF.DB_LAST_TIME_PRODUCTS_AVERAGE_PRICE);
-    editPrefs.remove(PREF.DB_LAST_TIME_PRODUCT_BARCODES);
-    editPrefs.remove(PREF.DB_LAST_TIME_VOLATILE);
-    editPrefs.remove(PREF.DB_LAST_TIME_VOLATILE_MISSING);
-    editPrefs.remove(PREF.DB_LAST_TIME_TASKS);
-    editPrefs.remove(PREF.DB_LAST_TIME_TASK_CATEGORIES);
-    editPrefs.remove(PREF.DB_LAST_TIME_CHORES);
-    editPrefs.remove(PREF.DB_LAST_TIME_CHORE_ENTRIES);
-    editPrefs.remove(PREF.DB_LAST_TIME_USERS);
-
-    editPrefs.remove(PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY);
-    editPrefs.remove(PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY_TIME);
-    editPrefs.remove(PREF.SERVER_URL);
-    editPrefs.remove(PREF.HOME_ASSISTANT_SERVER_URL);
-    editPrefs.remove(PREF.HOME_ASSISTANT_LONG_LIVED_TOKEN);
-    editPrefs.remove(PREF.API_KEY);
-    editPrefs.remove(PREF.SHOPPING_LIST_LAST_ID);
-    editPrefs.remove(PREF.GROCY_VERSION);
-    editPrefs.remove(PREF.CURRENT_USER_ID);
-    editPrefs.apply();
-    new Handler().postDelayed(() -> RestartUtil.restartApp(this), 1000);
   }
 
   private void replaceFabIcon(Drawable icon, String tag, boolean animated) {
