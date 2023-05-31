@@ -92,7 +92,6 @@ public class BaseFragment extends Fragment {
   }
 
   protected String getErrorMessage(VolleyError volleyError) {
-    // similar method is also in BaseViewmodel
     if (volleyError != null && volleyError.networkResponse != null) {
       if (volleyError.networkResponse.statusCode == 403) {
         return getString(R.string.error_permission);

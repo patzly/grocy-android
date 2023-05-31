@@ -64,6 +64,7 @@ public class EditorHtmlFragment extends BaseFragment {
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.summernote);
+    systemBarBehavior.applyAppBarInsetOnContainer(false);
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
