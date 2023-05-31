@@ -117,7 +117,8 @@
             android:id="@+id/constraint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="8dp">
+            android:paddingTop="8dp"
+            android:paddingBottom="@dimen/global_scroll_bottom_padding">
 
             <LinearLayout
               android:layout_width="0dp"

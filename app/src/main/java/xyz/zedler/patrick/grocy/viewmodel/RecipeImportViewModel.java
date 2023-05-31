@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy.viewmodel;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.webkit.URLUtil;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,7 +29,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -54,7 +52,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.RecipeParsed;
 import xyz.zedler.patrick.grocy.model.RecipeParsed.Ingredient;
 import xyz.zedler.patrick.grocy.model.RecipeParsed.IngredientPart;
-import xyz.zedler.patrick.grocy.repository.TransferRepository;
+import xyz.zedler.patrick.grocy.repository.InventoryRepository;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
@@ -67,7 +65,7 @@ public class RecipeImportViewModel extends BaseViewModel {
 
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
-  private final TransferRepository repository;
+  private final InventoryRepository repository;
 
   private List<Product> products;
   private List<QuantityUnitConversion> unitConversions;
@@ -105,7 +103,7 @@ public class RecipeImportViewModel extends BaseViewModel {
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     grocyApi = new GrocyApi(getApplication());
-    repository = new TransferRepository(application);
+    repository = new InventoryRepository(application);
 
     recipeWebsiteLive = new MutableLiveData<>();
     recipeWebsiteErrorLive = new MutableLiveData<>();
@@ -134,26 +132,27 @@ public class RecipeImportViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData();
       }
-    });
+    }, error -> onError(error, TAG));
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
     if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
+      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, TAG));
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
     queue.append(
-        dlHelper.updateProducts(dbChangedTime, products -> {
+        Product.updateProducts(dlHelper, dbChangedTime, products -> {
           this.products = products;
-        }), dlHelper.updateProductBarcodes(
-            dbChangedTime, barcodes -> this.barcodes = barcodes
-        ), dlHelper.updateLocations(
-            dbChangedTime, locations -> this.locations = locations
-        ), dlHelper.updateQuantityUnitConversions(
-            dbChangedTime, conversions -> this.unitConversions = conversions
-        ), dlHelper.updateQuantityUnits(
+        }), ProductBarcode.updateProductBarcodes(
+            dlHelper, dbChangedTime, barcodes -> this.barcodes = barcodes
+        ), Location.updateLocations(
+            dlHelper, dbChangedTime, locations -> this.locations = locations
+        ), QuantityUnitConversion.updateQuantityUnitConversions(
+            dlHelper, dbChangedTime, conversions -> this.unitConversions = conversions
+        ), QuantityUnit.updateQuantityUnits(
+            dlHelper,
             dbChangedTime,
             quantityUnits -> this.quantityUnits = quantityUnits
         )
@@ -188,13 +187,6 @@ public class RecipeImportViewModel extends BaseViewModel {
       queueEmptyAction.run();
       queueEmptyAction = null;
     }
-  }
-
-  private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
-      Log.e(TAG, "onError: VolleyError: " + error);
-    }
-    showMessage(getString(R.string.msg_no_connection));
   }
 
   public void scrapeRecipe() {

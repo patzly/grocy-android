@@ -108,7 +108,7 @@ public class RecipeImportGeneralFragment extends BaseFragment {
       viewModel.setRecipeParsed(recipeParsed);
     }
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
 
@@ -146,7 +146,7 @@ public class RecipeImportGeneralFragment extends BaseFragment {
         FAB.TAG.IMPORT,
         savedInstanceState == null,
         () -> {
-          activity.navigateFragment(RecipeImportGeneralFragmentDirections
+          activity.navUtil.navigateFragment(RecipeImportGeneralFragmentDirections
               .actionRecipeImportGeneralFragmentToRecipeImportMappingFragment(
                   viewModel.getRecipeParsed()
               )

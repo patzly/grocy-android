@@ -586,7 +586,7 @@
                     android:layout_gravity="end"
                     android:layout_marginTop="8dp"
                     android:text="@string/title_recipe_import"
-                    android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_recipeImportFragment)}"
+                    android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_recipeImportFragment)}"
                     app:clickUtil="@{clickUtil}"
                     app:icon="@drawable/ic_round_download" />
 

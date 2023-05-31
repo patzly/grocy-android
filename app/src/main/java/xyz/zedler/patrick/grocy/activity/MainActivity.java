@@ -410,7 +410,7 @@ public class MainActivity extends AppCompatActivity {
     Intent intent = getIntent();
     String url = intent.getStringExtra("url");
     if (url != null) {
-      navigateFragment(
+      navUtil.navigateFragment(
           R.id.recipeImportFragment,
           new RecipeImportFragmentArgs.Builder().setUrl(url).build().toBundle()
       );

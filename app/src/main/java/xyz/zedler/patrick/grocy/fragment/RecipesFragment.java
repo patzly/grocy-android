@@ -321,9 +321,8 @@ public class RecipesFragment extends BaseFragment implements
       toggleLayoutManager();
       return true;
     } else if (item.getItemId() == R.id.action_import) {
-      activity.navigateFragment(
-          RecipesFragmentDirections
-              .actionRecipesFragmentToRecipeImportFragment()
+      activity.navUtil.navigateFragment(
+          RecipesFragmentDirections.actionRecipesFragmentToRecipeImportFragment()
       );
       return true;
     }

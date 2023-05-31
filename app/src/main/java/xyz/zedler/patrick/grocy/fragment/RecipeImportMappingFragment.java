@@ -110,7 +110,7 @@ public class RecipeImportMappingFragment extends BaseFragment
       viewModel.setRecipeParsed(recipeParsed);
     }
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
 
@@ -177,7 +177,7 @@ public class RecipeImportMappingFragment extends BaseFragment
           if (!isAssignmentMode()) {
             if (adapter.isShowErrors()) {
               viewModel.getRecipeParsed().updateWordsAssignmentState();
-              activity.navigateFragment(RecipeImportMappingFragmentDirections
+              activity.navUtil.navigateFragment(RecipeImportMappingFragmentDirections
                   .actionRecipeImportMappingFragmentSelf(viewModel.getRecipeParsed())
                   .setAssigningMode(true));
             } else {
@@ -209,7 +209,7 @@ public class RecipeImportMappingFragment extends BaseFragment
     if (part.getEntity().equals(IngredientPart.ENTITY_UNIT)) {
       viewModel.openQuantityUnitsBottomSheet(ingredient, part);
     } else if (part.getEntity().equals(IngredientPart.ENTITY_PRODUCT)) {
-      activity.navigateFragment(RecipeImportMappingFragmentDirections
+      activity.navUtil.navigateFragment(RecipeImportMappingFragmentDirections
           .actionRecipeImportMappingFragmentToChooseProductFragment()
           .setSearchName(ingredient.getTextFromPart(part))
           .setReturnString(ingredient.getTextFromPart(part)));

@@ -110,7 +110,7 @@ public class RecipeImportFragment extends BaseFragment {
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
 
@@ -132,7 +132,7 @@ public class RecipeImportFragment extends BaseFragment {
       } else if (event.getType() == Event.FOCUS_INVALID_VIEWS) {
         focusNextInvalidView();
       } else if (event.getType() == Event.TRANSACTION_SUCCESS) {
-        activity.navigateFragment(RecipeImportFragmentDirections
+        activity.navUtil.navigateFragment(RecipeImportFragmentDirections
             .actionRecipeImportFragmentToRecipeImportGeneralFragment(viewModel.getRecipeParsed()));
       }
     });
@@ -186,7 +186,7 @@ public class RecipeImportFragment extends BaseFragment {
   }
 
   public void openSupportedWebsites() {
-    activity.showTextBottomSheet(R.raw.recipe_websites, R.string.title_supported_websites);
+    activity.showTextBottomSheet(R.raw.recipe_websites, R.string.title_supported_websites, 0);
   }
 
   private void requestReadExternalStoragePermission() {
