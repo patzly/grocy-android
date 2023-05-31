@@ -114,6 +114,8 @@ dependencies {
     // don't upgrade to 1.10 alpha, only change it to stable 1.9.0 when it has been released
     implementation 'com.google.android.material:material:1.9.0'
 
+    implementation 'com.kizitonwose.calendar:view:2.3.0'
+
     // Volley for all general network requests and Glide for image loading
     // Netcipher for Tor support and Conscrypt for new TLS support on old Android devices
     implementation 'com.android.volley:volley:1.2.1'

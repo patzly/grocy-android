@@ -23,19 +23,13 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.paging.LivePagedListBuilder;
-import androidx.paging.PagedList;
 import androidx.preference.PreferenceManager;
-import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
-import java.time.Instant;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,13 +61,12 @@ import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.VolatileItem;
 import xyz.zedler.patrick.grocy.repository.StockOverviewRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
+import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
-import xyz.zedler.patrick.grocy.view.singlerowcalendar.HorizontalCalendarFactory;
-import xyz.zedler.patrick.grocy.view.singlerowcalendar.Week;
 
 public class MealPlanViewModel extends BaseViewModel {
 
@@ -88,11 +81,8 @@ public class MealPlanViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
+  private final MutableLiveData<LocalDate> selectedDateLive;
   private final MutableLiveData<ArrayList<StockItem>> filteredStockItemsLive;
-
-  private final Instant now;
-  private int firstDayOfWeek;
-  private final LiveData<PagedList<Week>> horizontalCalendarSource;
 
   private List<StockItem> stockItems;
   private List<Product> products;
@@ -131,15 +121,8 @@ public class MealPlanViewModel extends BaseViewModel {
 
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
+    selectedDateLive = new MutableLiveData<>(LocalDate.now());
     filteredStockItemsLive = new MutableLiveData<>();
-
-    now = Instant.now();
-    String firstDayOfWeekStr = sharedPrefs.getString(PREF.MEAL_PLAN_FIRST_DAY_OF_WEEK, "");
-    firstDayOfWeek = NumUtil.isStringInt(firstDayOfWeekStr) ? Integer.parseInt(firstDayOfWeekStr) : 0;
-    if (firstDayOfWeek < 0 || firstDayOfWeek > 6) firstDayOfWeek = 0;
-    horizontalCalendarSource =
-        new LivePagedListBuilder<>(new HorizontalCalendarFactory(now, firstDayOfWeek), 10).build();
-
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
@@ -528,41 +511,16 @@ public class MealPlanViewModel extends BaseViewModel {
     updateFilteredStockItems();
   }
 
-  public LiveData<PagedList<Week>> getHorizontalCalendarSource() {
-    return horizontalCalendarSource;
+  public DayOfWeek getFirstDayOfWeek() {
+    return DateUtil.getMealPlanFirstDayOfWeek(sharedPrefs);
   }
 
-  public Week getSelectedWeek() {
-    if (horizontalCalendarSource.getValue() == null) return null;
-    for (Week weekTemp : horizontalCalendarSource.getValue()) {
-      if (weekTemp.getSelectedDayOfWeek() > -1) {
-        return weekTemp;
-      }
-    }
-    return null;
+  public MutableLiveData<LocalDate> getSelectedDateLive() {
+    return selectedDateLive;
   }
 
-  public LocalDate getToday() {
-    return now.atZone(ZoneId.systemDefault()).toLocalDate();
-  }
-
-  public int getDayOffsetToWeekStart(LocalDate date) {
-    return date.getDayOfWeek().ordinal()-(firstDayOfWeek-1);
-  }
-
-  public int getCalendarPosition(LocalDate date) {
-    if (date == null) return -1;
-    int offsetToStart = getDayOffsetToWeekStart(date);
-    LocalDate weekStart = date.minusDays(offsetToStart);
-    int index = 0;
-    if (horizontalCalendarSource.getValue() == null) return -1;
-    for (Week weekTemp : horizontalCalendarSource.getValue()) {
-      if (weekTemp.getStartDate().isEqual(weekStart)) {
-        return index;
-      }
-      index++;
-    }
-    return -1;
+  public LocalDate getSelectedDate() {
+    return selectedDateLive.getValue();
   }
 
   public ArrayList<Integer> getProductIdsMissingItems() {

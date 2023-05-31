@@ -19,37 +19,42 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.content.res.Resources.Theme;
 import android.os.Bundle;
-import android.os.Handler;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.paging.PagedList;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.viewpager2.widget.ViewPager2;
+import com.kizitonwose.calendar.core.WeekDay;
+import com.kizitonwose.calendar.core.WeekDayPosition;
+import com.kizitonwose.calendar.view.ViewContainer;
+import com.kizitonwose.calendar.view.WeekDayBinder;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.time.format.TextStyle;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
+import java.util.Locale;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.adapter.CalendarWeekAdapter;
-import xyz.zedler.patrick.grocy.adapter.StockOverviewItemAdapter;
-import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
+import xyz.zedler.patrick.grocy.adapter.MealPlanPagerAdapter;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMealPlanBinding;
-import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
-import xyz.zedler.patrick.grocy.helper.SnapToBlockHelper;
-import xyz.zedler.patrick.grocy.helper.SnapToBlockHelper.SnapBlockCallback;
+import xyz.zedler.patrick.grocy.databinding.ViewCalendarDayLayoutBinding;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.view.singlerowcalendar.Week;
 import xyz.zedler.patrick.grocy.viewmodel.MealPlanViewModel;
 
 public class MealPlanFragment extends BaseFragment {
@@ -60,11 +65,7 @@ public class MealPlanFragment extends BaseFragment {
   private MealPlanViewModel viewModel;
   private ClickUtil clickUtil;
   private FragmentMealPlanBinding binding;
-  private InfoFullscreenHelper infoFullscreenHelper;
   private SystemBarBehavior systemBarBehavior;
-  private CalendarWeekAdapter calendarWeekAdapter;
-
-  private boolean suppressNextSelectEvent;
 
   @Override
   public View onCreateView(
@@ -79,14 +80,7 @@ public class MealPlanFragment extends BaseFragment {
   @Override
   public void onDestroyView() {
     super.onDestroyView();
-
-    if (infoFullscreenHelper != null) {
-      infoFullscreenHelper.destroyInstance();
-      infoFullscreenHelper = null;
-    }
     if (binding != null) {
-      binding.recycler.animate().cancel();
-      binding.recycler.setAdapter(null);
       binding = null;
     }
   }
@@ -104,35 +98,88 @@ public class MealPlanFragment extends BaseFragment {
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
-    infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();
 
     systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipe);
-    systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.applyStatusBarInsetOnContainer(false);
+    systemBarBehavior.applyAppBarInsetOnContainer(false);
     systemBarBehavior.setUp();
 
     binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
-    binding.recycler.setLayoutManager(
-        new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-    );
-    binding.recycler.setAdapter(new StockPlaceholderAdapter());
-
-    viewModel.getInfoFullscreenLive().observe(
-        getViewLifecycleOwner(),
-        infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
-    );
-
-    setupCalendarView();
-
-    viewModel.getFilteredStockItemsLive().observe(getViewLifecycleOwner(), items -> {
-      if (items == null) return;
-      if (binding.recycler.getAdapter() instanceof StockOverviewItemAdapter) {
-
-      } else {
+    binding.calendarView.setDayBinder(new WeekDayBinder<DayViewContainer>() {
+      @NonNull
+      @Override
+      public DayViewContainer create(@NonNull View view) {
+        return new DayViewContainer(view);
       }
+
+      @Override
+      public void bind(@NonNull DayViewContainer container, WeekDay data) {
+        container.binding.weekday.setText(
+            data.getDate().getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.getDefault())
+        );
+        container.binding.day.setText(String.valueOf(data.getDate().getDayOfMonth()));
+
+        if (viewModel.getSelectedDate().isEqual(data.getDate())) {
+          container.binding.card.setStrokeColor(ContextCompat.getColor(requireContext(), R.color.material_dynamic_secondary50));
+          container.binding.card.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.material_dynamic_secondary50));
+          container.binding.weekday.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
+          container.binding.day.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
+        } else {
+          TypedValue typedValue = new TypedValue();
+          Theme theme = requireContext().getTheme();
+          theme.resolveAttribute(R.attr.colorOutline, typedValue, true);
+          @ColorInt int colorOutline = typedValue.data;
+
+          container.binding.card.setStrokeColor(colorOutline);
+          container.binding.card.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent));
+          container.binding.weekday.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
+          container.binding.day.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
+        }
+        container.binding.card.setOnClickListener((view) -> selectDate(data));
+      }
+    });
+
+    YearMonth currentMonth = YearMonth.now();
+    LocalDate startDate = currentMonth.minusMonths(5).atDay(1);
+    LocalDate endDate = currentMonth.plusMonths(7).atEndOfMonth();
+    binding.calendarView.setup(startDate, endDate, viewModel.getFirstDayOfWeek());
+    binding.calendarView.setWeekScrollListener(week -> {
+      binding.weekDates.setText(
+          getString(
+              R.string.date_timespan,
+              week.getDays().get(0).getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)),
+              week.getDays().get(week.getDays().size()-1).getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+          )
+      );
+      DayOfWeek selected = viewModel.getSelectedDate().getDayOfWeek();
+      LocalDate newSelectedDay = week.getDays().get(0).getDate()
+          .with(TemporalAdjusters.nextOrSame(DayOfWeek.of(selected.getValue())));
+      selectDate(new WeekDay(newSelectedDay, WeekDayPosition.RangeDate));
+      return null;
+    });
+    binding.calendarView.scrollToWeek(viewModel.getSelectedDate());
+    binding.today.setOnClickListener(v -> binding.calendarView.smoothScrollToWeek(LocalDate.now()));
+
+    MealPlanPagerAdapter adapter = new MealPlanPagerAdapter(activity, viewModel.getSelectedDate());
+    binding.viewPager.setAdapter(adapter);
+    binding.viewPager.setCurrentItem(Integer.MAX_VALUE / 2);
+
+    binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+      @Override
+      public void onPageSelected(int position) {
+        LocalDate date = LocalDate.now().plusDays(position - Integer.MAX_VALUE / 2);
+        selectDate(new WeekDay(date, WeekDayPosition.RangeDate));
+        binding.calendarView.scrollToWeek(date);
+      }
+    });
+
+    viewModel.getSelectedDateLive().observe(getViewLifecycleOwner(), date -> {
+      int position = (int) ChronoUnit.DAYS.between(LocalDate.now(), date) + Integer.MAX_VALUE / 2;
+      binding.viewPager.setCurrentItem(position, true);
     });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
@@ -147,101 +194,9 @@ public class MealPlanFragment extends BaseFragment {
       viewModel.loadFromDatabase(true);
     }
 
-    // UPDATE UI
-
-    activity.getScrollBehavior().setUpScroll(
-        binding.appBar, false, binding.recycler, true, true
-    );
+    activity.getScrollBehavior().setUpScroll(binding.appBar, false, null);
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(false, R.menu.menu_empty, this::onMenuItemClick);
-  }
-
-  private void setupCalendarView() {
-    LinearLayoutManager layoutManagerCalendar = new LinearLayoutManager(
-        requireContext(),
-        LinearLayoutManager.HORIZONTAL,
-        false
-    );
-    binding.recyclerCalendar.setLayoutManager(layoutManagerCalendar);
-    calendarWeekAdapter = new CalendarWeekAdapter(
-        requireContext(),
-        week -> {
-          if (week == null) return;
-          viewModel.showMessage(week.getSelectedDate().toString());
-        },
-        CalendarWeekAdapter.DIFF_CALLBACK
-    );
-    binding.recyclerCalendar.setAdapter(calendarWeekAdapter);
-
-    SnapToBlockHelper snapToBlockHelper = new SnapToBlockHelper(1);
-    snapToBlockHelper.attachToRecyclerView(binding.recyclerCalendar);
-    snapToBlockHelper.setSnapBlockCallback(new SnapBlockCallback() {
-      @Override
-      public void onBlockSnap(int snapPosition) {}
-
-      @Override
-      public void onBlockSnapped(int snapPosition) {
-        Week previousSelected = viewModel.getSelectedWeek();
-        if (!suppressNextSelectEvent) {
-          calendarWeekAdapter.onSelect(snapPosition, previousSelected.getSelectedDayOfWeek());
-        } else {
-          suppressNextSelectEvent = false;
-        }
-        updateWeekDatesText(snapPosition);
-      }
-    });
-
-    LinearSmoothScroller linearSmoothScroller = new LinearSmoothScroller(requireContext());
-
-
-    viewModel.getHorizontalCalendarSource().observe(getViewLifecycleOwner(), weeks -> {
-      boolean initial =
-          calendarWeekAdapter.getCurrentList() == null || calendarWeekAdapter.getItemCount() == 0;
-      calendarWeekAdapter.submitList(weeks);
-
-      if (initial && weeks.size() > 0) {
-        new Handler().postDelayed(() -> {
-          int position = calendarWeekAdapter.getPositionOfWeek(
-              viewModel.getSelectedWeek().getStartDate()
-          );
-          if (position == -1) {
-            return;
-          }
-          binding.recyclerCalendar.scrollToPosition(position);
-          updateWeekDatesText(position);
-        }, 100);
-      }
-    });
-
-    binding.today.setOnClickListener(v -> {
-      LocalDate today = viewModel.getToday();
-      int position = viewModel.getCalendarPosition(today);
-
-      if (position == -1) {
-        return;
-      }
-
-      linearSmoothScroller.setTargetPosition(position);
-      if (layoutManagerCalendar.findFirstVisibleItemPosition() != position) {
-        suppressNextSelectEvent = true;
-      }
-      calendarWeekAdapter.onSelect(position, viewModel.getDayOffsetToWeekStart(today));
-      layoutManagerCalendar.startSmoothScroll(linearSmoothScroller);
-    });
-  }
-
-  private void updateWeekDatesText(int position) {
-    PagedList<Week> currentList = this.calendarWeekAdapter.getCurrentList();
-    if (currentList == null || position+1 > currentList.size()) return;
-    Week week = currentList.get(position);
-    if (week == null) return;
-    binding.weekDates.setText(
-        getString(
-            R.string.date_timespan,
-            week.getStartDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)),
-            week.getStartDate().plusDays(6).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
-        )
-    );
   }
 
   @Override
@@ -251,6 +206,17 @@ public class MealPlanFragment extends BaseFragment {
 
   private boolean onMenuItemClick(MenuItem item) {
     return false;
+  }
+
+  private void selectDate(WeekDay data) {
+    if (data.getPosition() == WeekDayPosition.RangeDate) {
+      LocalDate currentSelection = viewModel.getSelectedDate();
+      if (currentSelection != data.getDate()) {
+        viewModel.getSelectedDateLive().setValue(data.getDate());
+        binding.calendarView.notifyWeekChanged(currentSelection);
+        binding.calendarView.notifyDateChanged(data.getDate());
+      }
+    }
   }
 
   @Override
@@ -269,5 +235,14 @@ public class MealPlanFragment extends BaseFragment {
   @Override
   public String toString() {
     return TAG;
+  }
+
+  static class DayViewContainer extends ViewContainer {
+    private final ViewCalendarDayLayoutBinding binding;
+
+    public DayViewContainer(View view) {
+      super(view);
+      binding = ViewCalendarDayLayoutBinding.bind(view);
+    }
   }
 }

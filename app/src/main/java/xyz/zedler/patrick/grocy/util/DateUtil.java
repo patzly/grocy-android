@@ -20,16 +20,21 @@
 package xyz.zedler.patrick.grocy.util;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.Constants.DATE;
+import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.R;
 
 public class DateUtil {
 
@@ -285,6 +290,28 @@ public class DateUtil {
       }
     } else {
       return context.getString(R.string.date_unknown);
+    }
+  }
+
+  public static DayOfWeek getCalendarFirstDayOfWeek(SharedPreferences sharedPrefs) {
+    String pref = sharedPrefs.getString(PREF.CALENDAR_FIRST_DAY_OF_WEEK, "");
+    if (NumUtil.isStringNum(pref)) {
+      int grocyDayInt = Integer.parseInt(pref);
+      return DayOfWeek.of(grocyDayInt > 0 ? grocyDayInt : 7);
+    } else {
+      return WeekFields.of(Locale.getDefault()).getFirstDayOfWeek();
+    }
+  }
+
+  public static DayOfWeek getMealPlanFirstDayOfWeek(SharedPreferences sharedPrefs) {
+    String pref = sharedPrefs.getString(PREF.MEAL_PLAN_FIRST_DAY_OF_WEEK, "");
+    if (NumUtil.isStringNum(pref)) {
+      int grocyDayInt = Integer.parseInt(pref);
+      return grocyDayInt != -1
+          ? DayOfWeek.of(grocyDayInt > 0 ? grocyDayInt : 7)
+          : DayOfWeek.of(LocalDate.now().getDayOfWeek().getValue());
+    } else {
+      return getCalendarFirstDayOfWeek(sharedPrefs);
     }
   }
 }

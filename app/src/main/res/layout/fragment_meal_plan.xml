@@ -36,7 +36,7 @@
       type="xyz.zedler.patrick.grocy.fragment.MealPlanFragment" />
   </data>
 
-  <androidx.coordinatorlayout.widget.CoordinatorLayout
+  <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/colorBackground">
@@ -46,8 +46,9 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
+      android:layout_alignParentTop="true"
       android:animateLayoutChanges="true"
-      transitionTypeChanging="@{true}">
+      app:transitionTypeChanging="@{true}">
 
       <FrameLayout
         android:layout_width="match_parent"
@@ -81,90 +82,65 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout
-      android:id="@+id/swipe"
+    <LinearLayout
+      android:layout_below="@id/app_bar"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="?attr/actionBarSize"
-      android:overScrollMode="never"
-      android:animateLayoutChanges="true"
-      app:transitionTypeChanging="@{true}"
-      app:setRefreshing="@{viewModel.isLoadingLive}"
-      app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
+      android:layout_height="match_parent"
+      android:orientation="vertical">
 
-      <LinearLayout
+      <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <FrameLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content">
-
-          <TextView
-            android:id="@+id/week_dates"
-            style="@style/Widget.Grocy.TextView.Medium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_gravity="center"/>
-
-          <com.google.android.material.button.MaterialButton
-            android:id="@+id/today"
-            style="@style/Widget.Grocy.Button.IconButton"
-            android:layout_marginEnd="4dp"
-            android:layout_gravity="end"
-            app:icon="@drawable/ic_round_event" />
-
-        </FrameLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-          android:id="@+id/recycler_calendar"
-          android:layout_width="match_parent"
+        <TextView
+          android:id="@+id/week_dates"
+          style="@style/Widget.Grocy.TextView.Medium"
+          android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:paddingTop="12dp"
-          android:paddingBottom="8dp"
-          android:orientation="horizontal"
-          android:overScrollMode="ifContentScrolls"
-          android:clipToPadding="false"
-          android:layoutAnimation="@anim/recycler_layout"
-          android:scrollbarStyle="outsideOverlay"
-          app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+          android:layout_marginTop="2dp"
+          android:layout_gravity="center"/>
 
-        <com.google.android.material.divider.MaterialDivider
-          style="@style/Widget.Grocy.Divider.Margin"
-          android:layout_marginBottom="0dp" />
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/today"
+          style="@style/Widget.Grocy.Button.IconButton"
+          android:layout_marginEnd="4dp"
+          android:layout_gravity="end"
+          app:icon="@drawable/ic_round_event" />
+
+      </FrameLayout>
+
+      <com.kizitonwose.calendar.view.WeekCalendarView
+        android:id="@+id/calendar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cv_dayViewResource="@layout/view_calendar_day_layout"
+        app:cv_daySize="rectangle"
+        android:paddingHorizontal="8dp"
+        android:clipToPadding="false"/>
+
+      <com.google.android.material.divider.MaterialDivider
+        style="@style/Widget.Grocy.Divider.Margin"
+        android:layout_marginBottom="0dp" />
+
+      <xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout
+        android:id="@+id/swipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:animateLayoutChanges="true"
+        app:transitionTypeChanging="@{true}"
+        app:setRefreshing="@{viewModel.isLoadingLive}"
+        app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
 
         <androidx.viewpager2.widget.ViewPager2
-          android:id="@+id/infiniteViewPager"
+          android:id="@+id/view_pager"
           android:layout_width="match_parent"
           android:layout_height="match_parent" />
 
-        <FrameLayout
-          android:id="@+id/frame"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:visibility="gone">
+      </xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout>
 
-          <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler"
-            android:scrollbarStyle="outsideOverlay"
-            android:layout_width="match_parent"
-            android:layout_height="665dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="@dimen/global_scroll_bottom_padding"
-            android:clipToPadding="false"
-            android:layoutAnimation="@anim/recycler_layout"
-            android:overScrollMode="ifContentScrolls"
-            android:clickable="false"
-            android:focusable="false"/>
+    </LinearLayout>
 
-        </FrameLayout>
-
-      </LinearLayout>
-
-    </xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout>
-
-  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+  </RelativeLayout>
 
 </layout>
