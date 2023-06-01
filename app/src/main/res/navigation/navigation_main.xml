@@ -1368,9 +1368,13 @@
   </fragment>
   <fragment
     android:id="@+id/mealPlanFragment"
-    android:name="xyz.zedler.patrick.grocy.fragment.MealPlanFragment"
     android:label="MealPlanFragment"
-    tools:layout="@layout/fragment_meal_plan"/>
+    android:name="xyz.zedler.patrick.grocy.fragment.MealPlanFragment"
+    tools:layout="@layout/fragment_meal_plan">
+    <deepLink
+      android:id="@+id/deepLink20"
+      app:uri="@string/deep_link_mealPlanFragment" />
+  </fragment>
   <dialog
     android:id="@+id/textBottomSheetDialogFragment"
     android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextBottomSheet"

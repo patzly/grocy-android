@@ -558,6 +558,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
+                app:contentPaddingLeft="0dp"
+                app:contentPaddingRight="0dp"
+                app:contentPaddingBottom="12dp"
                 android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_RECIPES) ? View.VISIBLE : View.GONE}"
                 android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_recipesFragment)}"
                 app:clickUtil="@{clickUtil}">
@@ -571,6 +574,8 @@
                     style="@style/Widget.Grocy.TextView.TitleLarge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginBottom="4dp"
                     android:text="@string/title_recipes" />
 
@@ -578,7 +583,37 @@
                     style="@style/Widget.Grocy.TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:text="@{viewModel.recipesDescriptionTextLive}" />
+
+                  <HorizontalScrollView
+                    android:id="@+id/scroll_horiz_actions_recipes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    android:layout_marginTop="8dp"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal"
+                      android:paddingStart="16dp"
+                      android:paddingEnd="16dp"
+                      android:layout_gravity="end">
+
+                      <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_meal_plan"
+                        style="@style/Widget.Grocy.Button.TonalButton.Icon"
+                        android:text="@string/title_meal_plan"
+                        android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_mealPlanFragment)}"
+                        android:layout_marginStart="8dp"
+                        app:icon="@drawable/ic_round_date_range" />
+
+                    </LinearLayout>
+
+                  </HorizontalScrollView>
 
                 </LinearLayout>
 

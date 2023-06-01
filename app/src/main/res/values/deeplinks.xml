@@ -45,5 +45,6 @@
   <string name="deep_link_recipeEditIngredientEditFragment">grocy://recipeEditIngredientEditFragment</string>
   <string name="deep_link_recipeEditIngredientListFragment">grocy://masterRecipeEditIngredientListFragment?recipeId={recipeId}</string>
   <string name="deep_link_recipeEditFragment">grocy://recipeEditFragment?action={action}</string>
+  <string name="deep_link_mealPlanFragment" translatable="false">grocy://mealPlanFragment</string>
   <string name="deep_link_chooseProductFragment">grocy://chooseProductFragment?barcode={barcode}&amp;forbidCreateProduct={forbidCreateProduct}&amp;pendingProductsActive={pendingProductsActive}</string>
 </resources>
