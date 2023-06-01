@@ -21,50 +21,39 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import com.google.android.material.snackbar.Snackbar;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import me.xdrop.fuzzywuzzy.FuzzySearch;
-import me.xdrop.fuzzywuzzy.model.BoundExtractedResult;
-import org.json.JSONException;
-import org.json.JSONObject;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
-import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.StockOverviewFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.MealPlanEntry;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.ProductAveragePrice;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
-import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
-import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.VolatileItem;
-import xyz.zedler.patrick.grocy.repository.StockOverviewRepository;
+import xyz.zedler.patrick.grocy.repository.MealPlanRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
-import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
@@ -75,7 +64,7 @@ public class MealPlanViewModel extends BaseViewModel {
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
-  private final StockOverviewRepository repository;
+  private final MealPlanRepository repository;
   private final PluralUtil pluralUtil;
 
   private final MutableLiveData<Boolean> isLoadingLive;
@@ -84,13 +73,11 @@ public class MealPlanViewModel extends BaseViewModel {
   private final MutableLiveData<LocalDate> selectedDateLive;
   private final MutableLiveData<ArrayList<StockItem>> filteredStockItemsLive;
 
-  private List<StockItem> stockItems;
+  private List<MealPlanEntry> mealPlanEntries;
   private List<Product> products;
   private HashMap<Integer, ProductGroup> productGroupHashMap;
   private HashMap<String, ProductBarcode> productBarcodeHashMap;
   private HashMap<Integer, Product> productHashMap;
-  private HashMap<Integer, String> productAveragePriceHashMap;
-  private HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap;
   private List<ShoppingListItem> shoppingListItems;
   private ArrayList<String> shoppingListItemsProductIds;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
@@ -116,7 +103,7 @@ public class MealPlanViewModel extends BaseViewModel {
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     grocyApi = new GrocyApi(getApplication());
-    repository = new StockOverviewRepository(application);
+    repository = new MealPlanRepository(application);
     pluralUtil = new PluralUtil(application);
 
     infoFullscreenLive = new MutableLiveData<>();
@@ -128,79 +115,9 @@ public class MealPlanViewModel extends BaseViewModel {
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
       quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
-      productGroupHashMap = ArrayUtil.getProductGroupsHashMap(data.getProductGroups());
       this.products = data.getProducts();
       productHashMap = ArrayUtil.getProductsHashMap(data.getProducts());
-      productAveragePriceHashMap = ArrayUtil
-          .getProductAveragePriceHashMap(data.getProductsAveragePrice());
-      productLastPurchasedHashMap = ArrayUtil
-          .getProductLastPurchasedHashMap(data.getProductsLastPurchased());
-      productBarcodeHashMap = ArrayUtil.getProductBarcodesHashMap(data.getProductBarcodes());
-      this.stockItems = data.getStockItems();
-
-      int itemsDueCount = 0;
-      int itemsOverdueCount = 0;
-      int itemsExpiredCount = 0;
-      HashMap<Integer, StockItem> stockItemHashMap = ArrayUtil.getStockItemHashMap(stockItems);
-      for (VolatileItem volatileItem : data.getVolatileItems()) {
-        StockItem stockItem = stockItemHashMap.get(volatileItem.getProductId());
-        if (stockItem == null) continue;
-        if (volatileItem.getVolatileType() == VolatileItem.TYPE_DUE) {
-          stockItem.setItemDue(true);
-          itemsDueCount++;
-        } else if (volatileItem.getVolatileType() == VolatileItem.TYPE_OVERDUE) {
-          stockItem.setItemOverdue(true);
-          itemsOverdueCount++;
-        } else if (volatileItem.getVolatileType() == VolatileItem.TYPE_EXPIRED) {
-          stockItem.setItemExpired(true);
-          itemsExpiredCount++;
-        }
-      }
-      int itemsMissingCount = 0;
-      productIdsMissingItems = new HashMap<>();
-      for (MissingItem missingItem : data.getMissingItems()) {
-        itemsMissingCount++;
-        productIdsMissingItems.put(missingItem.getId(), missingItem);
-        StockItem stockItem = stockItemHashMap.get(missingItem.getId());
-        if (stockItem == null && !missingItem.getIsPartlyInStockBoolean()) {
-          StockItem stockItemMissing = new StockItem(missingItem);
-          stockItems.add(stockItemMissing);
-        } else if (stockItem != null) {
-          stockItem.setItemMissing(true);
-          stockItem.setItemMissingAndPartlyInStock(missingItem.getIsPartlyInStockBoolean());
-        }
-      }
-      int itemsInStockCount = 0;
-      int itemsOpenedCount = 0;
-      for (StockItem stockItem : stockItems) {
-        stockItem.setProduct(productHashMap.get(stockItem.getProductId()));
-        if (!stockItem.isItemMissing() || stockItem.isItemMissingAndPartlyInStock()) {
-          itemsInStockCount++;
-        }
-        if (stockItem.getAmountOpenedDouble() > 0) {
-          itemsOpenedCount++;
-        }
-      }
-
-      this.shoppingListItems = data.getShoppingListItems();
-      shoppingListItemsProductIds = new ArrayList<>();
-      for (ShoppingListItem item : shoppingListItems) {
-        if (item.getProductId() != null && !item.getProductId().isEmpty()) {
-          shoppingListItemsProductIds.add(item.getProductId());
-        }
-      }
-      locationHashMap = ArrayUtil.getLocationsHashMap(data.getLocations());
-
-      stockLocationsHashMap = new HashMap<>();
-      for (StockLocation stockLocation : data.getStockCurrentLocations()) {
-        HashMap<Integer, StockLocation> locationsForProductId = stockLocationsHashMap
-            .get(stockLocation.getProductId());
-        if (locationsForProductId == null) {
-          locationsForProductId = new HashMap<>();
-          stockLocationsHashMap.put(stockLocation.getProductId(), locationsForProductId);
-        }
-        locationsForProductId.put(stockLocation.getLocationId(), stockLocation);
-      }
+      this.mealPlanEntries = data.getMealPlanEntries();
 
       updateFilteredStockItems();
       if (downloadAfterLoading) {
@@ -220,14 +137,12 @@ public class MealPlanViewModel extends BaseViewModel {
         error -> onError(error, TAG),
         QuantityUnit.class,
         ProductGroup.class,
-        StockItem.class,
+        MealPlanEntry.class,
         Product.class,
         ProductBarcode.class,
         VolatileItem.class,
         ShoppingListItem.class,
         Location.class,
-        ProductAveragePrice.class,
-        ProductLastPurchased.class,
         StockLocation.class
     );
   }
@@ -236,9 +151,8 @@ public class MealPlanViewModel extends BaseViewModel {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
     editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
     editPrefs.putString(PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_STOCK_ITEMS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_MEAL_PLAN_ENTRIES, null);
     editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS_AVERAGE_PRICE, null);
     editPrefs.putString(PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
     editPrefs.putString(PREF.DB_LAST_TIME_VOLATILE, null);
     editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
@@ -263,252 +177,7 @@ public class MealPlanViewModel extends BaseViewModel {
       }
     }
 
-    for (StockItem item : this.stockItems) {
-      if (item.getProduct() == null) {
-        // invalidate products and stock items offline cache because products may have changed
-        SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-        editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
-        editPrefs.putString(PREF.DB_LAST_TIME_STOCK_ITEMS, null);
-        editPrefs.apply();
-        continue;
-      }
-
-      if (item.getProduct().getHideOnStockOverviewBoolean()) {
-        continue;
-      }
-
-      boolean searchContainsItem = true;
-      if (searchInput != null && !searchInput.isEmpty()) {
-        String productName = item.getProduct().getName().toLowerCase();
-        searchContainsItem = productName.contains(searchInput);
-        if (!searchContainsItem) {
-          searchContainsItem = searchResultsFuzzy.contains(productName);
-        }
-      }
-      if (!searchContainsItem && productSearch == null && productBarcodeSearch == null) {
-        continue;
-      }
-      if (!searchContainsItem && productSearch == null
-          && productBarcodeSearch.getProductIdInt() != item.getProductId()) {
-        continue;
-      }
-      if (productSearch != null && productSearch.getId() != item.getProductId()) {
-        continue;
-      }
-    }
-
-    if (filteredStockItems.isEmpty()) {
-      InfoFullscreen info;
-      if (searchInput != null && !searchInput.isEmpty()) {
-        info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
-      } else {
-        info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_STOCK);
-      }
-      infoFullscreenLive.setValue(info);
-    } else {
-      infoFullscreenLive.setValue(null);
-    }
-
     filteredStockItemsLive.setValue(filteredStockItems);
-  }
-
-  public void performAction(String action, StockItem stockItem) {
-    switch (action) {
-      case Constants.ACTION.CONSUME:
-        consumeProduct(stockItem, stockItem.getProduct().getQuickConsumeAmountDouble(), false);
-        break;
-      case Constants.ACTION.OPEN:
-        openProduct(stockItem, stockItem.getProduct().getQuickConsumeAmountDouble());
-        break;
-      case Constants.ACTION.CONSUME_ALL:
-        consumeProduct(
-            stockItem,
-            stockItem.getProduct().getEnableTareWeightHandlingInt() == 0
-                ? stockItem.getAmountDouble()
-                : stockItem.getProduct().getTareWeightDouble(),
-            false
-        );
-        break;
-      case Constants.ACTION.CONSUME_SPOILED:
-        consumeProduct(stockItem, 1, true);
-        break;
-    }
-  }
-
-  private void consumeProduct(StockItem stockItem, double amount, boolean spoiled) {
-    JSONObject body = new JSONObject();
-    try {
-      body.put("amount", amount);
-      body.put("allow_subproduct_substitution", true);
-      body.put("spoiled", spoiled);
-    } catch (JSONException e) {
-      if (debug) {
-        Log.e(TAG, "consumeProduct: " + e);
-      }
-    }
-    dlHelper.postWithArray(
-        grocyApi.consumeProduct(stockItem.getProductId()),
-        body,
-        response -> {
-          String transactionId = null;
-          double amountConsumed = 0;
-          try {
-            transactionId = response.getJSONObject(0)
-                .getString("transaction_id");
-            for (int i = 0; i < response.length(); i++) {
-              amountConsumed -= response.getJSONObject(i).getDouble("amount");
-            }
-          } catch (JSONException e) {
-            if (debug) {
-              Log.e(TAG, "consumeProduct: " + e);
-            }
-          }
-
-          String msg = getApplication().getString(
-              spoiled ? R.string.msg_consumed_spoiled : R.string.msg_consumed,
-              NumUtil.trimAmount(amountConsumed, maxDecimalPlacesAmount),
-              pluralUtil.getQuantityUnitPlural(
-                  quantityUnitHashMap,
-                  stockItem.getProduct().getQuIdStockInt(),
-                  amountConsumed
-              ), stockItem.getProduct().getName()
-          );
-          SnackbarMessage snackbarMsg = new SnackbarMessage(msg, 15);
-
-          // set undo button on snackBar
-          if (transactionId != null) {
-            String finalTransactionId = transactionId;
-            snackbarMsg.setAction(getString(R.string.action_undo), v -> dlHelper.post(
-                grocyApi.undoStockTransaction(finalTransactionId),
-                response1 -> {
-                  downloadData();
-                  showSnackbar(new SnackbarMessage(
-                      getString(R.string.msg_undone_transaction),
-                      Snackbar.LENGTH_SHORT
-                  ));
-                  if (debug) {
-                    Log.i(TAG, "consumeProduct: undone");
-                  }
-                },
-                error -> onError(error, TAG)
-            ));
-          }
-          downloadData();
-          showSnackbar(snackbarMsg);
-          if (debug) {
-            Log.i(
-                TAG, "consumeProduct: consumed " + amountConsumed
-            );
-          }
-        },
-        error -> {
-          if (debug) {
-            Log.i(TAG, "consumeProduct: " + error);
-          }
-          onError(error, TAG);
-        }
-    );
-  }
-
-  private void openProduct(StockItem stockItem, double amount) {
-    JSONObject body = new JSONObject();
-    try {
-      body.put("amount", amount);
-      body.put("allow_subproduct_substitution", true);
-    } catch (JSONException e) {
-      if (debug) {
-        Log.e(TAG, "openProduct: " + e);
-      }
-    }
-    dlHelper.postWithArray(
-        grocyApi.openProduct(stockItem.getProductId()),
-        body,
-        response -> {
-          String transactionId = null;
-          double amountOpened = 0;
-          try {
-            transactionId = response.getJSONObject(0)
-                .getString("transaction_id");
-            for (int i = 0; i < response.length(); i++) {
-              amountOpened += response.getJSONObject(i).getDouble("amount");
-            }
-          } catch (JSONException e) {
-            if (debug) {
-              Log.e(TAG, "openProduct: " + e);
-            }
-          }
-
-          String msg = getApplication().getString(
-              R.string.msg_opened,
-              NumUtil.trimAmount(amountOpened, maxDecimalPlacesAmount),
-              pluralUtil.getQuantityUnitPlural(
-                  quantityUnitHashMap,
-                  stockItem.getProduct().getQuIdStockInt(),
-                  amountOpened
-              ), stockItem.getProduct().getName()
-          );
-          SnackbarMessage snackbarMsg = new SnackbarMessage(msg, 15);
-
-          // set undo button on snackBar
-          if (transactionId != null) {
-            String finalTransactionId = transactionId;
-            snackbarMsg.setAction(getString(R.string.action_undo), v -> dlHelper.post(
-                grocyApi.undoStockTransaction(finalTransactionId),
-                response1 -> {
-                  downloadData();
-                  showSnackbar(new SnackbarMessage(
-                      getString(R.string.msg_undone_transaction),
-                      Snackbar.LENGTH_SHORT
-                  ));
-                  if (debug) {
-                    Log.i(TAG, "openProduct: undone");
-                  }
-                },
-                error -> onError(error, TAG)
-            ));
-          }
-          downloadData();
-          showSnackbar(snackbarMsg);
-          if (debug) {
-            Log.i(
-                TAG, "openProduct: opened " + amountOpened
-            );
-          }
-        },
-        error -> {
-          if (debug) {
-            Log.i(TAG, "openProduct: " + error);
-          }
-          onError(error, TAG);
-        }
-    );
-  }
-
-  public void resetSearch() {
-    searchInput = null;
-    setIsSearchVisible(false);
-  }
-
-  public MutableLiveData<ArrayList<StockItem>> getFilteredStockItemsLive() {
-    return filteredStockItemsLive;
-  }
-
-  public void updateSearchInput(String input) {
-    this.searchInput = input.toLowerCase();
-
-    // Initialize suggestion list with max. capacity; growing is expensive.
-    searchResultsFuzzy = new ArrayList<>(products.size());
-    List<BoundExtractedResult<Product>> results = FuzzySearch.extractSorted(
-        this.searchInput,
-        products,
-        item -> item.getName().toLowerCase(),
-        70
-    );
-    for (BoundExtractedResult<Product> result : results) {
-      searchResultsFuzzy.add(result.getString());
-    }
-
-    updateFilteredStockItems();
   }
 
   public DayOfWeek getFirstDayOfWeek() {
@@ -533,14 +202,6 @@ public class MealPlanViewModel extends BaseViewModel {
 
   public HashMap<Integer, Product> getProductHashMap() {
     return productHashMap;
-  }
-
-  public HashMap<Integer, String> getProductAveragePriceHashMap() {
-    return productAveragePriceHashMap;
-  }
-
-  public HashMap<Integer, ProductLastPurchased> getProductLastPurchasedHashMap() {
-    return productLastPurchasedHashMap;
   }
 
   public ArrayList<String> getShoppingListItemsProductIds() {
@@ -591,14 +252,6 @@ public class MealPlanViewModel extends BaseViewModel {
       return true;
     }
     return sharedPrefs.getBoolean(pref, true);
-  }
-
-  public int getDaysExpriringSoon() {
-    String days = sharedPrefs.getString(
-        STOCK.DUE_SOON_DAYS,
-        SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS
-    );
-    return NumUtil.isStringInt(days) ? Integer.parseInt(days) : 5;
   }
 
   public String getCurrency() {

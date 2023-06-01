@@ -97,6 +97,7 @@ public final class Constants {
     public final static String DB_LAST_TIME_RECIPES = "db_last_time_recipes";
     public final static String DB_LAST_TIME_RECIPE_FULFILLMENTS = "db_last_time_recipe_fulfillments";
     public final static String DB_LAST_TIME_RECIPE_POSITIONS = "db_last_time_recipe_positions";
+    public final static String DB_LAST_TIME_MEAL_PLAN_ENTRIES = "db_last_time_meal_plan_entries";
 
     public final static String QUICK_MODE_ACTIVE_CONSUME = "quick_mode_active_consume";
     public final static String QUICK_MODE_ACTIVE_PURCHASE = "quick_mode_active_purchase";

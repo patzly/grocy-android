@@ -53,7 +53,6 @@ import xyz.zedler.patrick.grocy.databinding.FragmentMealPlanBinding;
 import xyz.zedler.patrick.grocy.databinding.ViewCalendarDayLayoutBinding;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MealPlanViewModel;
 
@@ -197,11 +196,6 @@ public class MealPlanFragment extends BaseFragment {
     activity.getScrollBehavior().setUpScroll(binding.appBar, false, null);
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(false, R.menu.menu_empty, this::onMenuItemClick);
-  }
-
-  @Override
-  public void performAction(String action, StockItem stockItem) {
-    viewModel.performAction(action, stockItem);
   }
 
   private boolean onMenuItemClick(MenuItem item) {

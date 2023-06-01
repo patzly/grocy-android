@@ -48,6 +48,7 @@ import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.MealPlanEntry;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.OpenFoodFactsProduct;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -500,6 +501,8 @@ public class DownloadHelper {
         queue.append(RecipeFulfillment.updateRecipeFulfillments(this, dbChangedTime, null));
       } else if (type == RecipePosition.class) {
         queue.append(RecipePosition.updateRecipePositions(this, dbChangedTime, null));
+      } else if (type == MealPlanEntry.class) {
+        queue.append(MealPlanEntry.updateMealPlanEntries(this, dbChangedTime, null));
       }
     }
     if (queue.isEmpty()) {
