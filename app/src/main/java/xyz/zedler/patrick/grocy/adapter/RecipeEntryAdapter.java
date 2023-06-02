@@ -85,7 +85,7 @@ public class RecipeEntryAdapter extends
   private final LazyHeaders grocyAuthHeaders;
   private String sortMode;
   private boolean sortAscending;
-  private List<String> activeFields;
+  private final List<String> activeFields;
   private final int maxDecimalPlacesAmount;
   private boolean containsPictures;
   private RecyclerView recyclerView;
@@ -307,6 +307,17 @@ public class RecipeEntryAdapter extends
       chips.addView(createChip(context, NumUtil.trimAmount(
           recipeFulfillment.getCalories(), maxDecimalPlacesAmount
       ) + " kcal", -1)); // TODO: UNIT
+    }
+
+    if (activeFields.contains(FilterChipLiveDataRecipesFields.FIELD_DESIRED_SERVINGS)
+        && recipeFulfillment != null) {
+      chips.addView(createChip(
+          context,
+          context.getString(R.string.property_servings_desired_insert, NumUtil.trimAmount(
+          recipe.getDesiredServings(), maxDecimalPlacesAmount
+          )),
+          -1
+      ));
     }
 
     chips.setVisibility(chips.getChildCount() > 0 ? View.VISIBLE : View.GONE);

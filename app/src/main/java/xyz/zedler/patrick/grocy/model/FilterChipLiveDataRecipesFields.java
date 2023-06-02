@@ -32,10 +32,12 @@ public class FilterChipLiveDataRecipesFields extends FilterChipLiveData {
   public final static int ID_FIELD_DUE_SCORE = 0;
   public final static int ID_FIELD_FULFILLMENT = 1;
   public final static int ID_FIELD_CALORIES = 2;
+  public final static int ID_FIELD_DESIRED_SERVINGS = 3;
 
-  public final static String FIELD_DUE_SCORE = "extra_field_due_score";
-  public final static String FIELD_FULFILLMENT = "extra_field_fulfillment";
-  public final static String FIELD_CALORIES = "extra_field_calories";
+  public final static String FIELD_DUE_SCORE = "field_due_score";
+  public final static String FIELD_FULFILLMENT = "field_fulfillment";
+  public final static String FIELD_CALORIES = "field_calories";
+  public final static String FIELD_DESIRED_SERVINGS = "field_desired_servings";
 
   private final Application application;
   private final SharedPreferences sharedPrefs;
@@ -79,6 +81,8 @@ public class FilterChipLiveDataRecipesFields extends FilterChipLiveData {
       field = FIELD_FULFILLMENT;
     } else if (id == ID_FIELD_CALORIES) {
       field = FIELD_CALORIES;
+    } else if (id == ID_FIELD_DESIRED_SERVINGS) {
+      field = FIELD_DESIRED_SERVINGS;
     }
     addOrRemoveNameFromList(activeFields, field);
     sharedPrefs.edit().putString(PREF.RECIPES_FIELDS, createMultiNamesActive(activeFields)).apply();
@@ -103,6 +107,12 @@ public class FilterChipLiveDataRecipesFields extends FilterChipLiveData {
         0,
         application.getString(R.string.property_calories),
         activeFields.contains(FIELD_CALORIES)
+    ));
+    menuItemDataList.add(new MenuItemData(
+        ID_FIELD_DESIRED_SERVINGS,
+        0,
+        application.getString(R.string.property_servings_desired),
+        activeFields.contains(FIELD_DESIRED_SERVINGS)
     ));
     setMenuItemDataList(menuItemDataList);
     setMenuItemGroups(new MenuItemGroup(0, true, false));

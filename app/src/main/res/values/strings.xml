@@ -958,6 +958,7 @@
   <string name="property_servings_base_insert">Base servings: %1$s</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_servings_desired">Desired servings</string>
+  <string name="property_servings_desired_insert">Desired servings: %1$s</string>
   <string name="property_not_check_shopping_list">Do not check against the shopping list</string>
   <string name="property_not_check_shopping_list_description">When adding missing items to it</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
