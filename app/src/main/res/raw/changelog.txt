@@ -3,6 +3,7 @@
 - New: Recipe details are now displayed on a separate page, not a bottom sheet anymore
 - Improved: Database exceptions are now caught and displayed (#698)
 - Improved: Pictures in recipe or product descriptions now can be up to 10MB large (#698)
+- Improved: Other design for recipe page
 - Improved: Keyboard is displayed more reliably and quickly
 - Improved: Form focus on master object pages & fixed plural field for English on QU page
 - Improved: "Create recipe" page and "Create product" page now use "save and not close" buttons
