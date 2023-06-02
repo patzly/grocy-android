@@ -28,6 +28,6 @@
   app:chipBackgroundColor="?attr/colorSurfaceContainerHigh"
   app:chipStrokeWidth="0dp"
   app:chipMinHeight="28dp"
-  app:textStartPadding="0dp"
-  app:textEndPadding="0dp"
+  app:textStartPadding="1dp"
+  app:textEndPadding="1dp"
   app:ensureMinTouchTargetSize="false"/>
