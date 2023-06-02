@@ -546,7 +546,15 @@
       <deepLink
         android:id="@+id/deepLink2"
         app:uri="@string/deep_link_shoppingModeFragment" />
+      <action
+        android:id="@+id/action_shoppingModeFragment_to_shoppingModeOptionsFragment"
+        app:destination="@id/shoppingModeOptionsFragment" />
     </fragment>
+    <fragment
+      android:id="@+id/shoppingModeOptionsFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.ShoppingModeOptionsFragment"
+      android:label="ShoppingModeOptionsFragment"
+      tools:layout="@layout/fragment_shopping_mode_options"/>
   </navigation>
   <navigation
     android:id="@+id/navigation_settings"
@@ -595,13 +603,6 @@
       <action
         android:id="@+id/action_settingsFragment_to_settingsCatScannerFragment"
         app:destination="@id/settingsCatScannerFragment"
-        app:enterAnim="@anim/slide_from_end"
-        app:exitAnim="@anim/slide_to_start"
-        app:popEnterAnim="@anim/slide_from_start"
-        app:popExitAnim="@anim/slide_to_end" />
-      <action
-        android:id="@+id/action_settingsFragment_to_settingsCatShoppingModeFragment"
-        app:destination="@id/settingsCatShoppingModeFragment"
         app:enterAnim="@anim/slide_from_end"
         app:exitAnim="@anim/slide_to_start"
         app:popEnterAnim="@anim/slide_from_start"
@@ -686,11 +687,6 @@
       android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatStockFragment"
       android:label="SettingsCatStockFragment"
       tools:layout="@layout/fragment_settings_cat_stock"/>
-    <fragment
-      android:id="@+id/settingsCatShoppingModeFragment"
-      android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatShoppingModeFragment"
-      android:label="SettingsCatShoppingModeFragment"
-      tools:layout="@layout/fragment_settings_cat_shopping_mode"/>
     <fragment
       android:id="@+id/settingsCatNetworkFragment"
       android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatNetworkFragment"

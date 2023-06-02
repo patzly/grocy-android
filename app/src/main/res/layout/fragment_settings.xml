@@ -236,30 +236,6 @@
 
           <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
-            android:onClick="@{v -> activity.navUtil.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatShoppingModeFragment())}"
-            app:clickUtil="@{clickUtil}">
-
-            <ImageView
-              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              tools:ignore="ContentDescription"
-              android:src="@drawable/ic_round_storefront" />
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:layout_width="0dp"
-              android:layout_weight="1"
-              android:text="@string/title_shopping_mode" />
-
-            <ImageView
-              style="@style/Widget.Grocy.ImageView.Icon"
-              android:layout_marginStart="16dp"
-              android:src="@drawable/ic_round_chevron_right"
-              tools:ignore="ContentDescription" />
-
-          </LinearLayout>
-
-          <LinearLayout
-            style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
             android:onClick="@{v -> activity.navUtil.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsNotificationsFragment())}"
             app:clickUtil="@{clickUtil}">
 

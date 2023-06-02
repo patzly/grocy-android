@@ -526,6 +526,7 @@
   <string name="title_shopping_list">Shopping list</string>
   <string name="title_feedback">Feedback</string>
   <string name="title_settings">Settings</string>
+  <string name="title_options">Options</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="title_barcode_scanner">Barcode scanner</string>
   <!-- Context: About this app -->

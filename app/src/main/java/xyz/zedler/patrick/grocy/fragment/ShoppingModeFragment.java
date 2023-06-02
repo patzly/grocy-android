@@ -25,11 +25,13 @@ import android.os.Handler;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
@@ -118,7 +120,7 @@ public class ShoppingModeFragment extends BaseFragment implements
     activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
-    binding.toolbar.setOnClickListener(v -> showShoppingListsBottomSheet());
+    binding.toolbar.setOnMenuItemClickListener(getMenuItemClickListener());
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();
@@ -334,12 +336,28 @@ public class ShoppingModeFragment extends BaseFragment implements
 
   private void hideDisabledFeatures() {
     if (isFeatureMultipleListsDisabled()) {
-      binding.buttonShoppingListLists.setVisibility(View.GONE);
+      MenuItem menuItem = binding.toolbar.getMenu().findItem(R.id.action_select);
+      if (menuItem != null) menuItem.setVisible(false);
     }
   }
 
   private boolean isFeatureMultipleListsDisabled() {
     return !sharedPrefs.getBoolean(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true);
+  }
+
+  public Toolbar.OnMenuItemClickListener getMenuItemClickListener() {
+    return item -> {
+      if (item.getItemId() == R.id.action_select) {
+        showShoppingListsBottomSheet();
+        return true;
+      }
+      if (item.getItemId() == R.id.action_options) {
+        activity.navUtil.navigateFragment(ShoppingModeFragmentDirections
+            .actionShoppingModeFragmentToShoppingModeOptionsFragment());
+        return true;
+      }
+      return false;
+    };
   }
 
   private void initTimerTask() {
