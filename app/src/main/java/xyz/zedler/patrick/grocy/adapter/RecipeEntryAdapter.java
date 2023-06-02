@@ -29,7 +29,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -224,54 +223,68 @@ public class RecipeEntryAdapter extends
 
       // DUE SCORE
       int due_score = recipeFulfillment.getDueScore();
-      @ColorInt int color;
 
+      Chip dueScoreChip;
       if (due_score == 0) {
-        color = colorGreen.getAccent();
+        dueScoreChip = createChip(context, context.getString(
+            R.string.subtitle_recipe_due_score,
+            String.valueOf(recipeFulfillment.getDueScore())
+        ), -1);
       }
       else if (due_score <= 10) {
-        color = colorYellow.getAccent();
+        dueScoreChip = createChip(context, context.getString(
+            R.string.subtitle_recipe_due_score,
+            String.valueOf(recipeFulfillment.getDueScore())
+        ), colorYellow.getOnAccentContainer());
+        dueScoreChip.setChipBackgroundColor(ColorStateList.valueOf(colorYellow.getAccentContainer()));
       }
       else {
-        color = colorRed.getAccent();
+        dueScoreChip = createChip(context, context.getString(
+            R.string.subtitle_recipe_due_score,
+            String.valueOf(recipeFulfillment.getDueScore())
+        ), colorRed.getOnAccentContainer());
+        dueScoreChip.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getAccentContainer()));
       }
-      chips.addView(createChip(context, context.getString(
-          R.string.subtitle_recipe_due_score,
-          String.valueOf(recipeFulfillment.getDueScore())
-      ), color));
+      chips.addView(dueScoreChip);
+
 
       // REQUIREMENTS FULFILLED
-      Chip chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), -1);
-      chipFulfillment.setCloseIconStartPadding(UiUtil.dpToPx(context, 4));
-      chipFulfillment.setCloseIconVisible(true);
-
+      Chip chipFulfillment;
       if (recipeFulfillment.isNeedFulfilled()) {
         textFulfillment = context.getString(R.string.msg_recipes_enough_in_stock);
+        chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorGreen.getOnAccentContainer());
         chipFulfillment.setCloseIcon(
             ContextCompat.getDrawable(context, R.drawable.ic_round_check_circle_outline)
         );
-        chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorGreen.getAccent()));
+        chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorGreen.getOnAccentContainer()));
+        chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorGreen.getAccentContainer()));
       } else if (recipeFulfillment.isNeedFulfilledWithShoppingList()) {
         textFulfillment = context.getString(R.string.msg_recipes_not_enough) + "\n"
             + context.getResources()
             .getQuantityString(R.plurals.msg_recipes_ingredients_missing_but_on_shopping_list,
                 recipeFulfillment.getMissingProductsCount(),
                 recipeFulfillment.getMissingProductsCount());
+        chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorYellow.getOnAccentContainer());
         chipFulfillment.setCloseIcon(
             ContextCompat.getDrawable(context, R.drawable.ic_round_error_outline)
         );
-        chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorYellow.getAccent()));
+        chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorYellow.getOnAccentContainer()));
+        chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorYellow.getAccentContainer()));
       } else {
         textFulfillment = context.getString(R.string.msg_recipes_not_enough) + "\n"
             + context.getResources()
             .getQuantityString(R.plurals.msg_recipes_ingredients_missing,
                 recipeFulfillment.getMissingProductsCount(),
                 recipeFulfillment.getMissingProductsCount());
+        chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorRed.getOnAccentContainer());
         chipFulfillment.setCloseIcon(
             ContextCompat.getDrawable(context, R.drawable.ic_round_highlight_off)
         );
-        chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorRed.getAccent()));
+        chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorRed.getOnAccentContainer()));
+        chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getAccentContainer()));
       }
+      chipFulfillment.setCloseIconStartPadding(UiUtil.dpToPx(context, 4));
+      chipFulfillment.setCloseIconVisible(true);
       chips.addView(chipFulfillment);
       String finalTextFulfillment = textFulfillment;
       chipFulfillment.setOnClickListener(v -> {
