@@ -86,50 +86,16 @@
         android:layout_gravity="center_vertical"
         android:fontFamily="@font/jost_medium"/>
 
-      <LinearLayout
+      <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/flexbox_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <com.google.android.flexbox.FlexboxLayout
-          android:id="@+id/flexbox_layout"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
-          app:flexWrap="wrap"
-          app:alignItems="stretch"
-          app:alignContent="stretch"
-          app:showDivider="middle"
-          app:dividerDrawable="@drawable/shape_flex_layout_divider"/>
-
-      </LinearLayout>
-
-      <LinearLayout
-        android:id="@+id/extra_field_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_vertical"
-        android:layout_marginTop="3dp"
-        android:visibility="gone">
-
-        <TextView
-          android:id="@+id/extra_field"
-          style="@style/Widget.Grocy.TextView.LabelSmall"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:textColor="?attr/colorOnSurfaceVariant" />
-
-        <TextView
-          android:id="@+id/extra_field_subtitle"
-          style="@style/Widget.Grocy.TextView.LabelSmall"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="4dp"
-          android:visibility="gone"
-          android:textColor="?attr/colorOnSurfaceVariant" />
-
-      </LinearLayout>
+        android:layout_marginTop="6dp"
+        app:flexWrap="wrap"
+        app:alignItems="stretch"
+        app:alignContent="stretch"
+        app:showDivider="middle"
+        app:dividerDrawable="@drawable/shape_flex_layout_divider"/>
 
     </LinearLayout>
 

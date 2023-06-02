@@ -68,7 +68,7 @@ public final class Constants {
     public final static String TASKS_SHOW_DONE = "tasks_show_done";
     public final static String RECIPES_SORT_MODE = "recipes_sort_mode";
     public final static String RECIPES_SORT_ASCENDING = "recipes_sort_ascending";
-    public final static String RECIPES_EXTRA_FIELD = "stock_extra_field";
+    public final static String RECIPES_FIELDS = "recipes_fields";
     public final static String RECIPES_LIST_LAYOUT = "recipes_list_layout";
 
     public final static String DB_LAST_TIME_STOCK_ITEMS = "db_last_time_stock_items";

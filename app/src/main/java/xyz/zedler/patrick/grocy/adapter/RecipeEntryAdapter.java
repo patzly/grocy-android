@@ -54,15 +54,17 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.ArrayList;
+import java.util.List;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.RowRecipeEntryBinding;
 import xyz.zedler.patrick.grocy.databinding.RowRecipeEntryGridBinding;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesExtraField;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesFields;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
@@ -83,7 +85,7 @@ public class RecipeEntryAdapter extends
   private final LazyHeaders grocyAuthHeaders;
   private String sortMode;
   private boolean sortAscending;
-  private String extraField;
+  private List<String> activeFields;
   private final int maxDecimalPlacesAmount;
   private boolean containsPictures;
   private RecyclerView recyclerView;
@@ -96,7 +98,7 @@ public class RecipeEntryAdapter extends
       RecipesItemAdapterListener listener,
       String sortMode,
       boolean sortAscending,
-      String extraField
+      List<String> activeFields
   ) {
     this.context = context;
     this.layoutManager = layoutManager;
@@ -107,7 +109,7 @@ public class RecipeEntryAdapter extends
     this.grocyAuthHeaders = RequestHeaders.getGlideGrocyAuthHeaders(context);
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
-    this.extraField = extraField;
+    this.activeFields = new ArrayList<>(activeFields);
     maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(context).getInt(
         STOCK.DECIMAL_PLACES_AMOUNT,
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
@@ -216,10 +218,12 @@ public class RecipeEntryAdapter extends
 
     chips.removeAllViews();
 
-    if (recipeFulfillment != null) {
-      ColorRoles colorGreen = ResUtil.getHarmonizedRoles(context, R.color.green);
-      ColorRoles colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
-      ColorRoles colorRed = ResUtil.getHarmonizedRoles(context, R.color.red);
+    ColorRoles colorGreen = ResUtil.getHarmonizedRoles(context, R.color.green);
+    ColorRoles colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
+    ColorRoles colorRed = ResUtil.getHarmonizedRoles(context, R.color.red);
+
+    if (activeFields.contains(FilterChipLiveDataRecipesFields.FIELD_DUE_SCORE)
+        && recipeFulfillment != null) {
 
       // DUE SCORE
       int due_score = recipeFulfillment.getDueScore();
@@ -230,15 +234,14 @@ public class RecipeEntryAdapter extends
             R.string.subtitle_recipe_due_score,
             String.valueOf(recipeFulfillment.getDueScore())
         ), -1);
-      }
-      else if (due_score <= 10) {
+      } else if (due_score <= 10) {
         dueScoreChip = createChip(context, context.getString(
             R.string.subtitle_recipe_due_score,
             String.valueOf(recipeFulfillment.getDueScore())
         ), colorYellow.getOnAccentContainer());
-        dueScoreChip.setChipBackgroundColor(ColorStateList.valueOf(colorYellow.getAccentContainer()));
-      }
-      else {
+        dueScoreChip.setChipBackgroundColor(
+            ColorStateList.valueOf(colorYellow.getAccentContainer()));
+      } else {
         dueScoreChip = createChip(context, context.getString(
             R.string.subtitle_recipe_due_score,
             String.valueOf(recipeFulfillment.getDueScore())
@@ -246,7 +249,10 @@ public class RecipeEntryAdapter extends
         dueScoreChip.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getAccentContainer()));
       }
       chips.addView(dueScoreChip);
+    }
 
+    if (activeFields.contains(FilterChipLiveDataRecipesFields.FIELD_FULFILLMENT)
+        && recipeFulfillment != null) {
 
       // REQUIREMENTS FULFILLED
       Chip chipFulfillment;
@@ -296,15 +302,14 @@ public class RecipeEntryAdapter extends
       });
     }
 
-    switch (extraField) {
-      case FilterChipLiveDataRecipesExtraField.EXTRA_FIELD_CALORIES:
-        if (recipeFulfillment != null) {
-          chips.addView(createChip(context, NumUtil.trimAmount(
-              recipeFulfillment.getCalories(), maxDecimalPlacesAmount
-          ) + " kcal", -1)); // TODO: UNIT
-        }
-        break;
+    if (activeFields.contains(FilterChipLiveDataRecipesFields.FIELD_CALORIES)
+        && recipeFulfillment != null) {
+      chips.addView(createChip(context, NumUtil.trimAmount(
+          recipeFulfillment.getCalories(), maxDecimalPlacesAmount
+      ) + " kcal", -1)); // TODO: UNIT
     }
+
+    chips.setVisibility(chips.getChildCount() > 0 ? View.VISIBLE : View.GONE);
 
     String pictureFileName = recipe.getPictureFileName();
     if (pictureFileName != null && !pictureFileName.isEmpty()) {
@@ -402,7 +407,7 @@ public class RecipeEntryAdapter extends
       ArrayList<RecipeFulfillment> newRecipeFulfillments,
       String sortMode,
       boolean sortAscending,
-      String extraField
+      List<String> activeFields
   ) {
 
     RecipeEntryAdapter.DiffCallback diffCallback = new RecipeEntryAdapter.DiffCallback(
@@ -414,8 +419,8 @@ public class RecipeEntryAdapter extends
         sortMode,
         this.sortAscending,
         sortAscending,
-        this.extraField,
-        extraField
+        this.activeFields,
+        activeFields
     );
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.recipes.clear();
@@ -424,7 +429,8 @@ public class RecipeEntryAdapter extends
     this.recipeFulfillments.addAll(newRecipeFulfillments);
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
-    this.extraField = extraField;
+    this.activeFields.clear();
+    this.activeFields.addAll(activeFields);
     diffResult.dispatchUpdatesTo(this);
   }
 
@@ -438,8 +444,8 @@ public class RecipeEntryAdapter extends
     String sortModeNew;
     boolean sortAscendingOld;
     boolean sortAscendingNew;
-    String extraFieldOld;
-    String extraFieldNew;
+    List<String> activeFieldsOld;
+    List<String> activeFieldsNew;
 
     public DiffCallback(
         ArrayList<Recipe> oldItems,
@@ -450,8 +456,8 @@ public class RecipeEntryAdapter extends
         String sortModeNew,
         boolean sortAscendingOld,
         boolean sortAscendingNew,
-        String extraFieldOld,
-        String extraFieldNew
+        List<String> activeFieldsOld,
+        List<String> activeFieldsNew
     ) {
       this.oldItems = oldItems;
       this.newItems = newItems;
@@ -461,8 +467,8 @@ public class RecipeEntryAdapter extends
       this.sortModeNew = sortModeNew;
       this.sortAscendingOld = sortAscendingOld;
       this.sortAscendingNew = sortAscendingNew;
-      this.extraFieldOld = extraFieldOld;
-      this.extraFieldNew = extraFieldNew;
+      this.activeFieldsOld = activeFieldsOld;
+      this.activeFieldsNew = activeFieldsNew;
     }
 
     @Override
@@ -495,7 +501,7 @@ public class RecipeEntryAdapter extends
       if (sortAscendingOld != sortAscendingNew) {
         return false;
       }
-      if (!extraFieldOld.equals(extraFieldNew)) {
+      if (!ArrayUtil.areListsEqualIgnoreOrder(activeFieldsOld, activeFieldsNew)) {
         return false;
       }
 

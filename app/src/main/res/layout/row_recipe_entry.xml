@@ -67,22 +67,21 @@
 
       <LinearLayout
         android:id="@+id/linear_text_container"
-        style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+        style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch"
+        android:layout_gravity="center_vertical">
 
         <TextView
           android:id="@+id/title"
           style="@style/Widget.Grocy.TextView.ListItem.Title"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical"
           android:fontFamily="@font/jost_medium"/>
-
 
         <com.google.android.flexbox.FlexboxLayout
           android:id="@+id/flexbox_layout"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
+          android:layout_marginTop="6dp"
           app:flexWrap="wrap"
           app:alignItems="stretch"
           app:alignContent="stretch"

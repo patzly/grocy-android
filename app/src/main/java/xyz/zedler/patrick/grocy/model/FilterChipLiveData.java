@@ -21,10 +21,14 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.view.MenuItem.OnMenuItemClickListener;
 import androidx.annotation.DrawableRes;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class FilterChipLiveData extends MutableLiveData<FilterChipLiveData> {
+
+  public final static String MULTI_SEPARATOR = "%0";
 
   private boolean active = false;
   private String text;
@@ -157,6 +161,36 @@ public class FilterChipLiveData extends MutableLiveData<FilterChipLiveData> {
     public boolean isExclusive() {
       return exclusive;
     }
+  }
+
+  public ArrayList<String> getNamesListFromMulti(@Nullable String multiNamesActive) {
+    if (multiNamesActive == null || multiNamesActive.isBlank()) return new ArrayList<>();
+    return new ArrayList<>(Arrays.asList(multiNamesActive.split(MULTI_SEPARATOR)));
+  }
+
+  public ArrayList<String> getNamesList(String... names) {
+    return new ArrayList<>(Arrays.asList(names));
+  }
+
+  public void addOrRemoveNameFromList(ArrayList<String> namesList, String name) {
+    if (namesList == null || name == null) return;
+    if (namesList.contains(name)) {
+      namesList.remove(name);
+    } else {
+      namesList.add(name);
+    }
+  }
+
+  public String createMultiNamesActive(ArrayList<String> namesActive) {
+    if (namesActive.isEmpty()) return "";
+    StringBuilder stringBuilder = new StringBuilder();
+    for (String name : namesActive) {
+      stringBuilder.append(name);
+      if (!namesActive.get(namesActive.size()-1).equals(name)) {
+        stringBuilder.append(MULTI_SEPARATOR);
+      }
+    }
+    return stringBuilder.toString();
   }
 
   public interface Listener {

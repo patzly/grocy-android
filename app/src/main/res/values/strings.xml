@@ -931,6 +931,8 @@
   <string name="property_ungrouped">Ungrouped</string>
   <!-- %1$s is a property like "product group" or "due date" -->
   <string name="property_extra_field">Extra field: %1$s</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields">Fields</string>
   <string name="property_task_category">Task category</string>
   <string name="property_task_categories">Task categories</string>
   <string name="property_calories">Calories</string>

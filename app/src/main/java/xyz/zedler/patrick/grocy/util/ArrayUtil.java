@@ -21,7 +21,9 @@ package xyz.zedler.patrick.grocy.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
@@ -216,5 +218,11 @@ public class ArrayUtil {
       }
     }
     return false;
+  }
+
+  public static boolean areListsEqualIgnoreOrder(List<String> list1, List<String> list2) {
+    Set<String> set1 = new HashSet<>(list1);
+    Set<String> set2 = new HashSet<>(list2);
+    return set1.equals(set2);
   }
 }
