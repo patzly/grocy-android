@@ -817,6 +817,7 @@
   <string name="property_description">Description</string>
   <string name="property_note">Note</string>
   <string name="property_status">Statut</string>
+  <string name="property_status_insert">Statut :</string>
   <string name="property_amount">Montant</string>
   <string name="property_amount_insert">Quantité : %1$s</string>
   <string name="property_seconds">Secondes</string>
@@ -956,6 +957,8 @@
   <string name="property_ungrouped">Non groupé</string>
   <!-- %1$s is a property like "product group" or "due date" -->
   <string name="property_extra_field">Champ supplémentaire : %1$s</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields">Champs</string>
   <string name="property_task_category">Catégorie de tâche</string>
   <string name="property_task_categories">Catégories de tâches</string>
   <string name="property_calories">Calories</string>
@@ -981,6 +984,7 @@
   <string name="property_servings_base_insert">Portions de base : %1$s</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_servings_desired">Portions souhaitées</string>
+  <string name="property_servings_desired_insert">Portions souhaitées : %1$s</string>
   <string name="property_not_check_shopping_list">Ne pas vérifier la liste de courses</string>
   <string name="property_not_check_shopping_list_description">Lorsque vous y ajoutez des éléments manquants</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->

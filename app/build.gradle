@@ -115,6 +115,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.9.0'
 
     implementation 'com.kizitonwose.calendar:view:2.3.0'
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
     // Volley for all general network requests and Glide for image loading
     // Netcipher for Tor support and Conscrypt for new TLS support on old Android devices

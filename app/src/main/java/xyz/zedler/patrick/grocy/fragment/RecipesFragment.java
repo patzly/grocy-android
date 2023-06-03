@@ -170,7 +170,7 @@ public class RecipesFragment extends BaseFragment implements
             viewModel.getRecipeFulfillments(),
             viewModel.getSortMode(),
             viewModel.isSortAscending(),
-            viewModel.getExtraField()
+            viewModel.getActiveFields()
         );
       } else {
         binding.recycler.setAdapter(
@@ -182,7 +182,7 @@ public class RecipesFragment extends BaseFragment implements
                 this,
                 viewModel.getSortMode(),
                 viewModel.isSortAscending(),
-                viewModel.getExtraField()
+                viewModel.getActiveFields()
             )
         );
       }
@@ -240,7 +240,7 @@ public class RecipesFragment extends BaseFragment implements
               this,
               viewModel.getSortMode(),
               viewModel.isSortAscending(),
-              viewModel.getExtraField()
+              viewModel.getActiveFields()
           )
       );
       binding.recycler.scheduleLayoutAnimation();

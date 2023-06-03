@@ -34,7 +34,7 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesExtraField;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesFields;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesSort;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
@@ -67,7 +67,7 @@ public class RecipesViewModel extends BaseViewModel {
   private final MutableLiveData<ArrayList<Recipe>> filteredRecipesLive;
   private final FilterChipLiveDataRecipesStatus filterChipLiveDataStatus;
   private final FilterChipLiveDataRecipesSort filterChipLiveDataSort;
-  private final FilterChipLiveDataRecipesExtraField filterChipLiveDataExtraField;
+  private final FilterChipLiveDataRecipesFields filterChipLiveDataExtraField;
 
   private List<Recipe> recipes;
   private List<RecipeFulfillment> recipeFulfillments;
@@ -101,7 +101,7 @@ public class RecipesViewModel extends BaseViewModel {
         getApplication(),
         this::updateFilteredRecipes
     );
-    filterChipLiveDataExtraField = new FilterChipLiveDataRecipesExtraField(
+    filterChipLiveDataExtraField = new FilterChipLiveDataRecipesFields(
         getApplication(),
         this::updateFilteredRecipes
     );
@@ -322,8 +322,8 @@ public class RecipesViewModel extends BaseViewModel {
     return () -> filterChipLiveDataExtraField;
   }
 
-  public String getExtraField() {
-    return filterChipLiveDataExtraField.getExtraField();
+  public List<String> getActiveFields() {
+    return filterChipLiveDataExtraField.getActiveFields();
   }
 
   @Override

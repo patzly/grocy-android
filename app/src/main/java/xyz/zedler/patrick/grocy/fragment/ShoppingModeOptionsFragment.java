@@ -33,18 +33,18 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS.SHOPPING_MODE;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
-import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatShoppingModeBinding;
+import xyz.zedler.patrick.grocy.databinding.FragmentShoppingModeOptionsBinding;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
-public class SettingsCatShoppingModeFragment extends BaseFragment {
+public class ShoppingModeOptionsFragment extends BaseFragment {
 
-  private final static String TAG = SettingsCatShoppingModeFragment.class.getSimpleName();
+  private final static String TAG = ShoppingModeOptionsFragment.class.getSimpleName();
 
-  private FragmentSettingsCatShoppingModeBinding binding;
+  private FragmentShoppingModeOptionsBinding binding;
   private MainActivity activity;
   private SettingsViewModel viewModel;
 
@@ -54,7 +54,7 @@ public class SettingsCatShoppingModeFragment extends BaseFragment {
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    binding = FragmentSettingsCatShoppingModeBinding.inflate(inflater, container, false);
+    binding = FragmentShoppingModeOptionsBinding.inflate(inflater, container, false);
     return binding.getRoot();
   }
 

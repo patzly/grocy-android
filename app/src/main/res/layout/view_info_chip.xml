@@ -17,18 +17,17 @@
   ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources>
-
-  <declare-styleable name="ActionButton">
-    <attr name="icon" format="reference" />
-    <attr name="tint" format="color" />
-    <attr name="dense" format="boolean" />
-  </declare-styleable>
-
-  <declare-styleable name="RoundedCornerImageView">
-    <attr name="radius" format="dimension" />
-    <attr name="onlyBottomCornersRound" format="boolean" />
-    <attr name="showBottomShadow" format="boolean" />
-  </declare-styleable>
-
-</resources>
+<com.google.android.material.chip.Chip
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:textSize="12sp"
+  android:textAppearance="@style/TextAppearance.Grocy.LabelMedium"
+  android:textColor="?attr/colorOnSurface"
+  app:chipBackgroundColor="?attr/colorSurfaceContainerHigh"
+  app:chipStrokeWidth="0dp"
+  app:chipMinHeight="28dp"
+  app:textStartPadding="1dp"
+  app:textEndPadding="1dp"
+  app:ensureMinTouchTargetSize="false"/>
