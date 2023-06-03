@@ -20,14 +20,11 @@
 package xyz.zedler.patrick.grocy.model;
 
 import android.app.Application;
-import android.content.SharedPreferences;
-import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
-import java.util.List;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 
-public class FilterChipLiveDataRecipesFields extends FilterChipLiveData {
+public class FilterChipLiveDataRecipesFields extends FilterChipLiveDataFields {
 
   public final static int ID_FIELD_DUE_SCORE = 0;
   public final static int ID_FIELD_FULFILLMENT = 1;
@@ -42,16 +39,10 @@ public class FilterChipLiveDataRecipesFields extends FilterChipLiveData {
   public final static String FIELD_PICTURE = "field_picture";
 
   private final Application application;
-  private final SharedPreferences sharedPrefs;
-  private ArrayList<String> activeFields;
 
   public FilterChipLiveDataRecipesFields(Application application, Runnable clickListener) {
+    super(PREF.RECIPES_FIELDS, application, FIELD_DUE_SCORE, FIELD_FULFILLMENT, FIELD_PICTURE);
     this.application = application;
-    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
-    activeFields = getNamesListFromMulti(sharedPrefs.getString(PREF.RECIPES_FIELDS, null));
-    if (activeFields.isEmpty()) activeFields = getNamesList(
-        FIELD_DUE_SCORE, FIELD_FULFILLMENT, FIELD_PICTURE
-    );
     setFilterText();
     setItems();
     if (clickListener != null) {
@@ -63,10 +54,6 @@ public class FilterChipLiveDataRecipesFields extends FilterChipLiveData {
         return true;
       });
     }
-  }
-
-  public List<String> getActiveFields() {
-    return activeFields;
   }
 
   private void setFilterText() {
@@ -86,8 +73,8 @@ public class FilterChipLiveDataRecipesFields extends FilterChipLiveData {
     } else if (id == ID_FIELD_PICTURE) {
       field = FIELD_PICTURE;
     }
-    addOrRemoveNameFromList(activeFields, field);
-    sharedPrefs.edit().putString(PREF.RECIPES_FIELDS, createMultiNamesActive(activeFields)).apply();
+    enableOrDisableField(field);
+    storeFieldStates();
   }
 
   private void setItems() {
@@ -96,31 +83,31 @@ public class FilterChipLiveDataRecipesFields extends FilterChipLiveData {
         ID_FIELD_DUE_SCORE,
         0,
         application.getString(R.string.property_due_score),
-        activeFields.contains(FIELD_DUE_SCORE)
+        isFieldActive(FIELD_DUE_SCORE)
     ));
     menuItemDataList.add(new MenuItemData(
         ID_FIELD_FULFILLMENT,
         0,
         application.getString(R.string.property_requirements_fulfilled),
-        activeFields.contains(FIELD_FULFILLMENT)
+        isFieldActive(FIELD_FULFILLMENT)
     ));
     menuItemDataList.add(new MenuItemData(
         ID_FIELD_CALORIES,
         0,
         application.getString(R.string.property_calories),
-        activeFields.contains(FIELD_CALORIES)
+        isFieldActive(FIELD_CALORIES)
     ));
     menuItemDataList.add(new MenuItemData(
         ID_FIELD_DESIRED_SERVINGS,
         0,
         application.getString(R.string.property_servings_desired),
-        activeFields.contains(FIELD_DESIRED_SERVINGS)
+        isFieldActive(FIELD_DESIRED_SERVINGS)
     ));
     menuItemDataList.add(new MenuItemData(
         ID_FIELD_PICTURE,
         0,
         application.getString(R.string.property_picture),
-        activeFields.contains(FIELD_PICTURE)
+        isFieldActive(FIELD_PICTURE)
     ));
     setMenuItemDataList(menuItemDataList);
     setMenuItemGroups(new MenuItemGroup(0, true, false));
