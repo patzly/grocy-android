@@ -33,11 +33,13 @@ public class FilterChipLiveDataRecipesFields extends FilterChipLiveData {
   public final static int ID_FIELD_FULFILLMENT = 1;
   public final static int ID_FIELD_CALORIES = 2;
   public final static int ID_FIELD_DESIRED_SERVINGS = 3;
+  public final static int ID_FIELD_PICTURE = 4;
 
   public final static String FIELD_DUE_SCORE = "field_due_score";
   public final static String FIELD_FULFILLMENT = "field_fulfillment";
   public final static String FIELD_CALORIES = "field_calories";
   public final static String FIELD_DESIRED_SERVINGS = "field_desired_servings";
+  public final static String FIELD_PICTURE = "field_picture";
 
   private final Application application;
   private final SharedPreferences sharedPrefs;
@@ -45,12 +47,10 @@ public class FilterChipLiveDataRecipesFields extends FilterChipLiveData {
 
   public FilterChipLiveDataRecipesFields(Application application, Runnable clickListener) {
     this.application = application;
-    setItemIdChecked(-1);
-
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
     activeFields = getNamesListFromMulti(sharedPrefs.getString(PREF.RECIPES_FIELDS, null));
     if (activeFields.isEmpty()) activeFields = getNamesList(
-        FIELD_DUE_SCORE, FIELD_FULFILLMENT
+        FIELD_DUE_SCORE, FIELD_FULFILLMENT, FIELD_PICTURE
     );
     setFilterText();
     setItems();
@@ -83,6 +83,8 @@ public class FilterChipLiveDataRecipesFields extends FilterChipLiveData {
       field = FIELD_CALORIES;
     } else if (id == ID_FIELD_DESIRED_SERVINGS) {
       field = FIELD_DESIRED_SERVINGS;
+    } else if (id == ID_FIELD_PICTURE) {
+      field = FIELD_PICTURE;
     }
     addOrRemoveNameFromList(activeFields, field);
     sharedPrefs.edit().putString(PREF.RECIPES_FIELDS, createMultiNamesActive(activeFields)).apply();
@@ -113,6 +115,12 @@ public class FilterChipLiveDataRecipesFields extends FilterChipLiveData {
         0,
         application.getString(R.string.property_servings_desired),
         activeFields.contains(FIELD_DESIRED_SERVINGS)
+    ));
+    menuItemDataList.add(new MenuItemData(
+        ID_FIELD_PICTURE,
+        0,
+        application.getString(R.string.property_picture),
+        activeFields.contains(FIELD_PICTURE)
     ));
     setMenuItemDataList(menuItemDataList);
     setMenuItemGroups(new MenuItemGroup(0, true, false));

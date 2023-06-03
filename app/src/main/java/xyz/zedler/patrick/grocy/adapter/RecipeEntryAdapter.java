@@ -192,11 +192,9 @@ public class RecipeEntryAdapter extends
     ViewGroup container;
     TextView title;
     ImageView picture;
-    MaterialCardView picturePlaceholder;
-
-    FlexboxLayout chips = null;
-    ImageView imageFulfillment;
-    String textFulfillment = null;
+    MaterialCardView picturePlaceholder = null;
+    FlexboxLayout chips;
+    String textFulfillment;
 
     if (viewHolder instanceof RecipeViewHolder) {
       container = ((RecipeViewHolder) viewHolder).binding.container;
@@ -209,7 +207,6 @@ public class RecipeEntryAdapter extends
       title = ((RecipeGridViewHolder) viewHolder).binding.title;
       chips = ((RecipeGridViewHolder) viewHolder).binding.flexboxLayout;
       picture = ((RecipeGridViewHolder) viewHolder).binding.picture;
-      picturePlaceholder = ((RecipeGridViewHolder) viewHolder).binding.picturePlaceholder;
     }
 
     // NAME
@@ -323,7 +320,8 @@ public class RecipeEntryAdapter extends
     chips.setVisibility(chips.getChildCount() > 0 ? View.VISIBLE : View.GONE);
 
     String pictureFileName = recipe.getPictureFileName();
-    if (pictureFileName != null && !pictureFileName.isEmpty()) {
+    if (activeFields.contains(FilterChipLiveDataRecipesFields.FIELD_PICTURE)
+        && pictureFileName != null && !pictureFileName.isEmpty()) {
       picture.layout(0, 0, 0, 0);
 
       RequestBuilder<Drawable> requestBuilder = Glide.with(context).load(new GlideUrl(grocyApi.getRecipePicture(pictureFileName), grocyAuthHeaders));
@@ -333,28 +331,34 @@ public class RecipeEntryAdapter extends
       if (viewHolder instanceof RecipeGridViewHolder) {
         requestBuilder = requestBuilder.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
       }
+      MaterialCardView finalPicturePlaceholder = picturePlaceholder;
       requestBuilder.listener(new RequestListener<>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model,
                 Target<Drawable> target, boolean isFirstResource) {
               picture.setVisibility(View.GONE);
-              picturePlaceholder.setVisibility(View.VISIBLE);
+              if (finalPicturePlaceholder != null) {
+                finalPicturePlaceholder.setVisibility(View.VISIBLE);
+              }
               return false;
             }
             @Override
             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
                 DataSource dataSource, boolean isFirstResource) {
               picture.setVisibility(View.VISIBLE);
-              picturePlaceholder.setVisibility(View.GONE);
+              if (finalPicturePlaceholder != null) {
+                finalPicturePlaceholder.setVisibility(View.GONE);
+              }
               return false;
             }
           }).into(picture);
-    } else if (containsPictures && viewHolder instanceof RecipeViewHolder) {
+    } else if (activeFields.contains(FilterChipLiveDataRecipesFields.FIELD_PICTURE)
+        && containsPictures && viewHolder instanceof RecipeViewHolder) {
       picture.setVisibility(View.GONE);
       picturePlaceholder.setVisibility(View.VISIBLE);
     } else {
       picture.setVisibility(View.GONE);
-      picturePlaceholder.setVisibility(View.GONE);
+      if (picturePlaceholder != null) picturePlaceholder.setVisibility(View.GONE);
     }
 
     // CONTAINER
@@ -365,9 +369,11 @@ public class RecipeEntryAdapter extends
 
     // DIVIDER
 
-    if (layoutManager instanceof StaggeredGridLayoutManager
-        && viewHolder instanceof RecipeGridViewHolder) {
-
+    if (layoutManager instanceof LinearLayoutManager
+        && viewHolder instanceof RecipeViewHolder) {
+      ((RecipeViewHolder) viewHolder).binding.divider.setVisibility(
+          position < recipes.size()-1 ? View.VISIBLE : View.GONE
+      );
     }
 
   }
@@ -389,19 +395,6 @@ public class RecipeEntryAdapter extends
     super.onAttachedToRecyclerView(recyclerView);
     this.recyclerView = recyclerView;
   }
-
-  private int[] getLastVisiblePositions() {
-    if (recyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
-      StaggeredGridLayoutManager layoutManager = (StaggeredGridLayoutManager) recyclerView.getLayoutManager();
-      int spanCount = layoutManager.getSpanCount();
-      int[] lastVisiblePositions = new int[spanCount];
-      layoutManager.findLastVisibleItemPositions(lastVisiblePositions);
-      return lastVisiblePositions;
-    }
-    return null;
-  }
-
-
 
   @Override
   public int getItemCount() {

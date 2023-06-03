@@ -47,28 +47,6 @@
       app:showBottomShadow="true"
       tools:ignore="ContentDescription" />
 
-    <com.google.android.material.card.MaterialCardView
-      android:id="@+id/picture_placeholder"
-      android:layout_width="56dp"
-      android:layout_height="56dp"
-      android:layout_marginEnd="16dp"
-      android:layout_marginTop="4dp"
-      android:layout_marginBottom="8dp"
-      android:layout_gravity="top"
-      android:visibility="gone"
-      app:cardCornerRadius="12dp"
-      app:cardElevation="0dp"
-      app:strokeWidth="0dp"
-      app:cardBackgroundColor="?attr/colorSurfaceVariant">
-
-      <ImageView
-        style="@style/Widget.Grocy.ImageView.Icon"
-        android:src="@drawable/ic_round_image"
-        android:layout_gravity="center"
-        tools:ignore="ContentDescription" />
-
-    </com.google.android.material.card.MaterialCardView>
-
     <LinearLayout
       android:id="@+id/linear_text_container"
       android:layout_width="match_parent"

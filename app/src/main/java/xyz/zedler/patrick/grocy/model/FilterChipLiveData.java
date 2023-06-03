@@ -29,6 +29,7 @@ import java.util.Arrays;
 public class FilterChipLiveData extends MutableLiveData<FilterChipLiveData> {
 
   public final static String MULTI_SEPARATOR = "%0";
+  public final static String VALUE_SEPARATOR = "%=";
 
   private boolean active = false;
   private String text;
