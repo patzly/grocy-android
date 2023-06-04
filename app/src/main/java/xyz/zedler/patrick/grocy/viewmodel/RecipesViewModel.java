@@ -131,9 +131,9 @@ public class RecipesViewModel extends BaseViewModel {
     }
 
     dlHelper.updateData(
-        () -> {
+        dataLoaded -> {
           if (isOffline()) setOfflineLive(false);
-          loadFromDatabase(false);
+          if (dataLoaded) loadFromDatabase(false);
         },
         error -> onError(error, TAG),
         Recipe.class,

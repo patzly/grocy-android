@@ -28,7 +28,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 public class NetworkQueue {
 
   private final ArrayList<QueueItem> queueItems;
-  private final Runnable onQueueEmptyListener;
+  private final OnQueueEmptyListener onQueueEmptyListener;
   private final OnMultiTypeErrorListener onErrorListener;
   private final RequestQueue requestQueue;
   private final String uuidQueue;
@@ -36,7 +36,7 @@ public class NetworkQueue {
   private boolean isRunning;
 
   public NetworkQueue(
-      Runnable onQueueEmptyListener,
+      OnQueueEmptyListener onQueueEmptyListener,
       OnMultiTypeErrorListener onErrorListener,
       RequestQueue requestQueue
   ) {
@@ -68,7 +68,7 @@ public class NetworkQueue {
     }
     if (queueItems.isEmpty()) {
       if (onQueueEmptyListener != null) {
-        onQueueEmptyListener.run();
+        onQueueEmptyListener.onQueueEmpty(false);
       }
       return;
     }
@@ -81,7 +81,7 @@ public class NetworkQueue {
         }
         isRunning = false;
         if (onQueueEmptyListener != null) {
-          onQueueEmptyListener.run();
+          onQueueEmptyListener.onQueueEmpty(true);
         }
         reset(false);
       }, error -> {
@@ -108,5 +108,9 @@ public class NetworkQueue {
     }
     queueItems.clear();
     queueSize = 0;
+  }
+
+  public interface OnQueueEmptyListener {
+    void onQueueEmpty(boolean dataLoaded); // dataLoaded = queue was not empty on start
   }
 }

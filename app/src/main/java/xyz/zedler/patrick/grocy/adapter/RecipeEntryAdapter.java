@@ -88,7 +88,6 @@ public class RecipeEntryAdapter extends
   private final List<String> activeFields;
   private final int maxDecimalPlacesAmount;
   private boolean containsPictures;
-  private RecyclerView recyclerView;
 
   public RecipeEntryAdapter(
       Context context,
@@ -388,12 +387,6 @@ public class RecipeEntryAdapter extends
       chip.setTextColor(textColor);
     }
     return chip;
-  }
-
-  @Override
-  public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
-    super.onAttachedToRecyclerView(recyclerView);
-    this.recyclerView = recyclerView;
   }
 
   @Override
