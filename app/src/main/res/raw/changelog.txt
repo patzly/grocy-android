@@ -13,6 +13,7 @@
 - Improved: Language picker works more reliably with demo domain change
 - Fixed: Crash on startup with Android Lollipop (and maybe higher)
 - Fixed: Prevent crash when opening qu conversion page (#708)
+- Fixed: Glitch with large top margin on recipe grid layout (#696)
 
 ## 3.2.1
 
