@@ -264,6 +264,10 @@ public class BaseViewModel extends AndroidViewModel {
     return resources.getString(resId);
   }
 
+  String getString(@StringRes int resId, Object... formatArgs) {
+    return resources.getString(resId, formatArgs);
+  }
+
   Resources getResources() {
     return resources;
   }

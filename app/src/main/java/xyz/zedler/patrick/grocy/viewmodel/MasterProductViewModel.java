@@ -49,6 +49,7 @@ import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
@@ -104,16 +105,37 @@ public class MasterProductViewModel extends BaseViewModel {
         extraQueueItem = ProductDetails.getProductDetails(dlHelper, productId, productDetails -> {
           extraQueueItem = null;
           setCurrentProduct(productDetails.getProduct());
-          if (products != null) {
-            formData.getProductNamesLive().setValue(getProductNames(products));
-          }
         });
       }
-    } else if (args.getProduct() != null) {  // on clone
-      Product product = args.getProduct();
-      product.setName(null);
-      sendEvent(Event.FOCUS_INVALID_VIEWS);
-      setCurrentProduct(product);
+    } else if (args.getProduct() != null || NumUtil.isStringInt(args.getProductId())) {  // on clone
+      if (args.getProduct() != null) {
+        Product product = args.getProduct();
+        formData.getMessageCopiedFromLive()
+            .setValue(getString(R.string.msg_data_copied_from_product, product.getName()));
+        if (args.getProductName() != null) {
+          product.setName(args.getProductName());
+        } else {
+          product.setName(null);
+          sendEvent(Event.FOCUS_INVALID_VIEWS);
+        }
+        setCurrentProduct(product);
+      } else {
+        assert args.getProductId() != null;
+        int productId = Integer.parseInt(args.getProductId());
+        extraQueueItem = ProductDetails.getProductDetails(dlHelper, productId, productDetails -> {
+          extraQueueItem = null;
+          Product product = productDetails.getProduct();
+          formData.getMessageCopiedFromLive()
+              .setValue(getString(R.string.msg_data_copied_from_product, product.getName()));
+          if (args.getProductName() != null) {
+            product.setName(args.getProductName());
+          } else {
+            product.setName(null);
+            sendEvent(Event.FOCUS_INVALID_VIEWS);
+          }
+          setCurrentProduct(product);
+        });
+      }
     } else {
       Product product = new Product(sharedPrefs);
       if (args.getProductName() != null) {

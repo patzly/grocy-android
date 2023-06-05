@@ -1,5 +1,6 @@
 ## 3.3.0
 
+- New: Product choose page after barcode scan now has really useful copy option for products (#636)
 - New: Recipe details are now displayed on a separate page, not a bottom sheet anymore
 - New: Recipes page now has checkbox options for all additional fields
 - New: Shopping mode options are now reachable through shopping mode menu and removed from settings

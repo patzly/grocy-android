@@ -299,6 +299,7 @@
   <string name="msg_item_marked_as_undone">Marked item as undone</string>
   <string name="option_synced_success">Option synced successfully</string>
   <string name="option_synced_error">Option could not be synced</string>
+  <string name="msg_data_copied_from_product">Data was copied from the product \"%1$s\".</string>
   <string name="msg_recipe_added_to_cart">Added recipe ingredients to cart</string>
   <string name="msg_recipe_consumed">Removed all ingredients of recipe \"%1$s\" from stock</string>
   <string name="msg_stored_purchases_overview">There are purchases on the device that have not yet been transferred to the server. Tap here for details.</string>

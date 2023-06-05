@@ -36,6 +36,7 @@ public class FormDataMasterProduct {
 
   private final SharedPreferences sharedPrefs;
   private final MutableLiveData<Boolean> displayHelpLive;
+  private final MutableLiveData<String> messageCopiedFromLive;
   private final MutableLiveData<String> nameLive;
   private final MediatorLiveData<Integer> nameErrorLive;
   private final LiveData<Boolean> catOptionalErrorLive;
@@ -51,6 +52,7 @@ public class FormDataMasterProduct {
     displayHelpLive = new MutableLiveData<>(beginnerMode);
     productLive = new MutableLiveData<>();
     productNamesLive = new MutableLiveData<>();
+    messageCopiedFromLive = new MutableLiveData<>();
     nameLive = (MutableLiveData<String>) Transformations.map(
         productLive,
         product -> product != null ? product.getName() : null
@@ -91,6 +93,10 @@ public class FormDataMasterProduct {
 
   public MutableLiveData<Product> getProductLive() {
     return productLive;
+  }
+
+  public MutableLiveData<String> getMessageCopiedFromLive() {
+    return messageCopiedFromLive;
   }
 
   public MutableLiveData<String> getNameLive() {

@@ -132,7 +132,7 @@ public class ChooseProductFragment extends BaseFragment
         ((ChooseProductAdapter) binding.recycler.getAdapter()).updateData(products);
       } else {
         binding.recycler.setAdapter(new ChooseProductAdapter(
-            products, this
+            products, this, forbidCreateProduct
         ));
         binding.recycler.scheduleLayoutAnimation();
       }
@@ -203,8 +203,16 @@ public class ChooseProductFragment extends BaseFragment
   }
 
   @Override
-  public void onItemRowClicked(Product product) {
+  public void onItemRowClicked(Product product, boolean copy) {
     if (clickUtil.isDisabled()) {
+      return;
+    }
+    if (copy) {
+      navigateDeepLinkHorizontally(R.string.deep_link_masterProductFragment,
+          new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE)
+              .setProductId(String.valueOf(product.getId()))
+              .setProductName(viewModel.getProductNameLive().getValue())
+              .build().toBundle());
       return;
     }
     if (product instanceof PendingProduct) {
