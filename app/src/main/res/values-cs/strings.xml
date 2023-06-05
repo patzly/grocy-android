@@ -861,7 +861,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_parent_product">Nadřazený produkt</string>
   <string name="property_description">Popis</string>
   <string name="property_note">Poznámka</string>
-  <string name="property_status">Stav</string>
+  <string name="property_status">Filtr</string>
   <string name="property_status_insert">Stav</string>
   <string name="property_amount">Množství</string>
   <string name="property_amount_insert">Množství: %1$s</string>
