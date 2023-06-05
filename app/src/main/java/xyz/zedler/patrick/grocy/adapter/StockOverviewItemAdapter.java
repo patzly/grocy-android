@@ -28,9 +28,9 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,10 +40,10 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,7 +71,6 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
-import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class StockOverviewItemAdapter extends
@@ -353,10 +352,14 @@ public class StockOverviewItemAdapter extends
     StockItem stockItem = (StockItem) groupedListItem;
     StockItemViewHolder holder = (StockItemViewHolder) viewHolder;
 
-    Context context = holder.binding.textAmount.getContext();
+    Context context = holder.binding.getRoot().getContext();
+
     ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
     ColorRoles colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
     ColorRoles colorOrange = ResUtil.getHarmonizedRoles(context, R.color.orange);
+    ColorRoles colorRed = ResUtil.getHarmonizedRoles(context, R.color.red);
+
+    holder.binding.flexboxLayout.removeAllViews();
 
     // NAME
 
@@ -379,27 +382,30 @@ public class StockOverviewItemAdapter extends
     QuantityUnit quantityUnitStock = quantityUnitHashMap.get(
         stockItem.getProduct().getQuIdStockInt()
     );
-    String stockAmountInfo = AmountUtil.getStockAmountInfo(
-        context, pluralUtil, stockItem, quantityUnitStock, maxDecimalPlacesAmount
-    );
-    if (stockAmountInfo.isBlank()) {
-      holder.binding.textAmount.setVisibility(View.GONE);
-    } else {
-      holder.binding.textAmount.setText(stockAmountInfo);
-      holder.binding.textAmount.setVisibility(View.VISIBLE);
+
+    StringBuilder stringBuilderAmount = new StringBuilder();
+    if (!stockItem.getProduct().getNoOwnStockBoolean()) {
+      AmountUtil.addStockAmountNormalInfo(context, pluralUtil, stringBuilderAmount, stockItem,
+          quantityUnitStock, maxDecimalPlacesAmount);
+      Chip chipAmount = createChip(context, stringBuilderAmount.toString(), -1);
+      if (missingItemsProductIds.contains(stockItem.getProductId())) {
+        chipAmount.setTextColor(colorBlue.getOnAccentContainer());
+        chipAmount.setChipBackgroundColor(ColorStateList.valueOf(colorBlue.getAccentContainer()));
+      }
+      holder.binding.flexboxLayout.addView(chipAmount);
     }
-    if (missingItemsProductIds.contains(stockItem.getProductId())) {
-      holder.binding.textAmount.setTypeface(
-          ResourcesCompat.getFont(context, R.font.jost_medium)
-      );
-      holder.binding.textAmount.setTextColor(colorBlue.getAccent());
-    } else {
-      holder.binding.textAmount.setTypeface(
-          ResourcesCompat.getFont(context, R.font.jost_book)
-      );
-      holder.binding.textAmount.setTextColor(
-          ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant)
-      );
+
+    StringBuilder stringBuilderAmountAggregated = new StringBuilder();
+    AmountUtil.addStockAmountAggregatedInfo(context, pluralUtil, stringBuilderAmountAggregated,
+        stockItem, quantityUnitStock, maxDecimalPlacesAmount, false);
+    if (!stringBuilderAmountAggregated.toString().isBlank()) {
+      Chip chipAmountAggregated = createChip(context,
+          stringBuilderAmountAggregated.toString(), -1);
+      if (missingItemsProductIds.contains(stockItem.getProductId())) {
+        chipAmountAggregated.setTextColor(colorBlue.getOnAccentContainer());
+        chipAmountAggregated.setChipBackgroundColor(ColorStateList.valueOf(colorBlue.getAccentContainer()));
+      }
+      holder.binding.flexboxLayout.addView(chipAmountAggregated);
     }
 
     // BEST BEFORE
@@ -411,53 +417,25 @@ public class StockOverviewItemAdapter extends
       days = String.valueOf(DateUtil.getDaysFromNow(date));
     }
 
-    if (!showDateTracking) {
-      holder.binding.linearDays.setVisibility(View.GONE);
-    } else if (days != null && (sortMode.equals(FilterChipLiveDataStockSort.SORT_DUE_DATE)
+    if (showDateTracking && days != null && (sortMode.equals(FilterChipLiveDataStockSort.SORT_DUE_DATE)
         || Integer.parseInt(days) <= daysExpiringSoon
         && !date.equals(Constants.DATE.NEVER_OVERDUE))
     ) {
-      holder.binding.linearDays.setVisibility(View.VISIBLE);
-      holder.binding.textDays.setText(dateUtil.getHumanForDaysFromNow(date));
+      Chip chipDate = createChip(context, dateUtil.getHumanForDaysFromNow(date), -1);
       if (Integer.parseInt(days) <= daysExpiringSoon
           && !stockItem.getProduct().getNoOwnStockBoolean()) {  // don't color days text if product has no own stock (children will be colored)
-        colorDays = true;
+        if (Integer.parseInt(days) >= 0) {
+          chipDate.setTextColor(colorYellow.getOnAccentContainer());
+          chipDate.setChipBackgroundColor(ColorStateList.valueOf(colorYellow.getAccentContainer()));
+        } else if (stockItem.getDueTypeInt() == StockItem.DUE_TYPE_BEST_BEFORE) {
+          chipDate.setTextColor(colorOrange.getOnAccentContainer());
+          chipDate.setChipBackgroundColor(ColorStateList.valueOf(colorOrange.getAccentContainer())); // formally DIRT
+        } else {
+          chipDate.setTextColor(colorRed.getOnAccentContainer());
+          chipDate.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getAccentContainer()));
+        }
       }
-      if (holder.binding.linearDays.getChildCount() == 1) { // not in landscape/tablet mode
-        int dp4 = UiUtil.dpToPx(context, 4);
-        boolean isRtl = UiUtil.isLayoutRtl(context);
-        holder.binding.linearContainer.setPadding(
-            dp4 * 4, dp4 * 3 , dp4 * 4, dp4 * 3
-        );
-        /*holder.binding.linearContainer.setPadding(
-            isRtl ? dp4 * 6 : dp4 * 4, dp4 * 3 , isRtl ? dp4 * 4 : dp4 * 6, dp4 * 3
-        );*/
-      }
-    } else {
-      holder.binding.linearDays.setVisibility(View.GONE);
-      holder.binding.textDays.setText(null);
-    }
-
-    if (colorDays) {
-      holder.binding.textDays.setTypeface(
-          ResourcesCompat.getFont(context, R.font.jost_medium)
-      );
-      int color;
-      if (Integer.parseInt(days) >= 0) {
-        color = colorYellow.getAccent();
-      } else if (stockItem.getDueTypeInt() == StockItem.DUE_TYPE_BEST_BEFORE) {
-        color = colorOrange.getAccent(); // formally DIRT
-      } else {
-        color = ResUtil.getColorAttr(context, R.attr.colorError);
-      }
-      holder.binding.textDays.setTextColor(color);
-    } else {
-      holder.binding.textDays.setTypeface(
-          ResourcesCompat.getFont(context, R.font.jost_book)
-      );
-      holder.binding.textDays.setTextColor(
-          ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant)
-      );
+      holder.binding.flexboxLayout.addView(chipDate);
     }
 
     double factorPurchaseToStock = stockItem.getProduct().getQuFactorPurchaseToStockDouble();
@@ -497,7 +475,7 @@ public class StockOverviewItemAdapter extends
               .get(stockItem.getProduct().getQuIdPurchaseInt());
           if (quantityUnitPurchase != null && quantityUnitStock != null
               && quantityUnitStock.getId() != quantityUnitPurchase.getId()) {
-            extraFieldSubtitleText = holder.binding.extraFieldSubtitle.getContext().getString(
+            extraFieldSubtitleText = context.getString(
                 R.string.property_price_unit_insert, currency, quantityUnitPurchase.getName()
             );
           } else {
@@ -514,7 +492,7 @@ public class StockOverviewItemAdapter extends
               .get(stockItem.getProduct().getQuIdPurchaseInt());
           if (quantityUnitPurchase != null && quantityUnitStock != null
               && quantityUnitStock.getId() != quantityUnitPurchase.getId()) {
-            extraFieldSubtitleText = holder.binding.extraFieldSubtitle.getContext().getString(
+            extraFieldSubtitleText = context.getString(
                 R.string.property_price_unit_insert, currency, quantityUnitPurchase.getName()
             );
           } else {
@@ -522,18 +500,6 @@ public class StockOverviewItemAdapter extends
           }
         }
         break;
-    }
-    if (extraFieldText != null) {
-      holder.binding.extraField.setText(extraFieldText);
-      holder.binding.extraFieldContainer.setVisibility(View.VISIBLE);
-    } else {
-      holder.binding.extraFieldContainer.setVisibility(View.GONE);
-    }
-    if (extraFieldSubtitleText != null) {
-      holder.binding.extraFieldSubtitle.setText(extraFieldSubtitleText);
-      holder.binding.extraFieldSubtitle.setVisibility(View.VISIBLE);
-    } else {
-      holder.binding.extraFieldSubtitle.setVisibility(View.GONE);
     }
 
     String pictureFileName = stockItem.getProduct().getPictureFileName();
@@ -543,9 +509,8 @@ public class StockOverviewItemAdapter extends
       Glide.with(context)
           .load(
               new GlideUrl(grocyApi.getProductPicture(pictureFileName), grocyAuthHeaders)
-          ).transform(
-              new CenterCrop(), new RoundedCorners(UiUtil.dpToPx(context, 12))
-          ).transition(DrawableTransitionOptions.withCrossFade())
+          ).transform(new CenterCrop())
+          .transition(DrawableTransitionOptions.withCrossFade())
           .listener(new RequestListener<>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model,
@@ -562,7 +527,7 @@ public class StockOverviewItemAdapter extends
               holder.binding.picturePlaceholder.setVisibility(View.GONE);
               return false;
             }
-          }).into(holder.binding.picture);
+          }).into((ImageView) holder.binding.picture);
     } else if (containsPictures) {
       holder.binding.picture.setVisibility(View.GONE);
       holder.binding.picturePlaceholder.setVisibility(View.VISIBLE);
@@ -576,6 +541,17 @@ public class StockOverviewItemAdapter extends
     holder.binding.linearContainer.setOnClickListener(
         view -> listener.onItemRowClicked(stockItem)
     );
+  }
+
+  private static Chip createChip(Context ctx, String text, int textColor) {
+    @SuppressLint("InflateParams")
+    Chip chip = (Chip) LayoutInflater.from(ctx)
+        .inflate(R.layout.view_info_chip, null, false);
+    chip.setText(text);
+    if (textColor != -1) {
+      chip.setTextColor(textColor);
+    }
+    return chip;
   }
 
   @Override

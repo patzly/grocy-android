@@ -29,7 +29,7 @@
 
     <LinearLayout
       android:id="@+id/container"
-      style="@style/Widget.Grocy.LinearLayout.ListItem.ThreeLine.Clickable"
+      style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
       android:paddingStart="8dp"
       android:paddingEnd="8dp"
       android:background="@drawable/ripple_list_item_bg_small_padding">
@@ -42,7 +42,7 @@
         android:layout_marginTop="4dp"
         android:layout_gravity="top"
         tools:ignore="ContentDescription"
-        app:radius="@{12}"/>
+        app:radius="5dp"/>
 
       <com.google.android.material.card.MaterialCardView
         android:id="@+id/picture_placeholder"

@@ -381,7 +381,6 @@ public class RecipeEntryAdapter extends
     @SuppressLint("InflateParams")
     Chip chip = (Chip) LayoutInflater.from(ctx)
         .inflate(R.layout.view_info_chip, null, false);
-
     chip.setText(text);
     if (textColor != -1) {
       chip.setTextColor(textColor);
