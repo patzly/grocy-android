@@ -70,7 +70,7 @@
   <string name="action_cancel">Zrušit</string>
   <string name="action_add">Přidat</string>
   <string name="action_clear">Smazat</string>
-  <string name="action_clear_shopping_list">Vymazat obsah nákupního seznamu</string>
+  <string name="action_clear_shopping_list">Vyčistit seznam</string>
   <string name="action_rate">Napsat hodnocení na Google Play</string>
   <string name="action_rate_description">Udělejte něco pro autory</string>
   <string name="action_email">Poslat email</string>
