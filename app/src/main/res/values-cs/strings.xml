@@ -332,6 +332,7 @@
   <string name="msg_item_marked_as_undone">Stav položky byl vrácen</string>
   <string name="option_synced_success">Volba byla zapsána na server</string>
   <string name="option_synced_error">Volbu se nepodařilo zapsat na server</string>
+  <string name="msg_data_copied_from_product">Zkopírováno z produktu: %1$s</string>
   <string name="msg_recipe_added_to_cart">Všechny ingredience receptu jsou vloženy do nákupního košíku</string>
   <string name="msg_recipe_consumed">Všechny ingredience z receptu „%1$s“ byly odebrány ze zásob</string>
   <string name="msg_stored_purchases_overview">Několik nákupů ještě nebylo zapsáno na server. Pro podrobnosti klepněte sem.</string>
@@ -881,6 +882,8 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_price_unit">Cena za %1$s</string>
   <!-- %1$s is a price and %2$s is a quantity unit-->
   <string name="property_price_unit_insert">%1$s za %2$s</string>
+  <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_with_currency">%1$s %2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Cena v %1$s</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -1009,6 +1012,14 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_calories">Kalorie</string>
   <string name="property_calories_unit">Kalorií v jednotce</string>
   <string name="property_calories_total">Kalorií celkem</string>
+  <!-- %1$s is a value like energy or price, unit means value of items per unit -->
+  <string name="property_insert_per_unit">%1$s (za jednotku)</string>
+  <!-- %1$s is a value like energy or price, total means value of many items in total -->
+  <string name="property_insert_total">%1$s (celkem)</string>
+  <!-- %1$s is a value like price, average means average price -->
+  <string name="property_insert_average">%1$s (průměr)</string>
+  <!-- %1$s is a value like price, "last" is like for example in "last price" -->
+  <string name="property_insert_last">%1$s (poslední)</string>
   <string name="property_category">Kategorie</string>
   <string name="property_assigned_to">Přiřazeno</string>
   <string name="property_users">Uživatelé</string>
