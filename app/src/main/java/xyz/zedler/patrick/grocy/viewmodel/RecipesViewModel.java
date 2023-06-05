@@ -30,11 +30,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesFields;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields.Field;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesSort;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
@@ -47,7 +49,6 @@ import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.repository.RecipesRepository;
-import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class RecipesViewModel extends BaseViewModel {
@@ -56,6 +57,12 @@ public class RecipesViewModel extends BaseViewModel {
   public final static String SORT_NAME = "sort_name";
   public final static String SORT_CALORIES = "sort_calories";
   public final static String SORT_DUE_SCORE = "sort_due_score";
+
+  public final static String FIELD_DUE_SCORE = "field_due_score";
+  public final static String FIELD_FULFILLMENT = "field_fulfillment";
+  public final static String FIELD_CALORIES = "field_calories";
+  public final static String FIELD_DESIRED_SERVINGS = "field_desired_servings";
+  public final static String FIELD_PICTURE = "field_picture";
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
@@ -67,7 +74,7 @@ public class RecipesViewModel extends BaseViewModel {
   private final MutableLiveData<ArrayList<Recipe>> filteredRecipesLive;
   private final FilterChipLiveDataRecipesStatus filterChipLiveDataStatus;
   private final FilterChipLiveDataRecipesSort filterChipLiveDataSort;
-  private final FilterChipLiveDataRecipesFields filterChipLiveDataExtraField;
+  private final FilterChipLiveDataFields filterChipLiveDataFields;
 
   private List<Recipe> recipes;
   private List<RecipeFulfillment> recipeFulfillments;
@@ -77,14 +84,11 @@ public class RecipesViewModel extends BaseViewModel {
   private List<QuantityUnitConversion> quantityUnitConversions;
 
   private String searchInput;
-  private final boolean debug;
 
   public RecipesViewModel(@NonNull Application application) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
-
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     grocyApi = new GrocyApi(getApplication());
@@ -101,9 +105,15 @@ public class RecipesViewModel extends BaseViewModel {
         getApplication(),
         this::updateFilteredRecipes
     );
-    filterChipLiveDataExtraField = new FilterChipLiveDataRecipesFields(
+    filterChipLiveDataFields = new FilterChipLiveDataFields(
         getApplication(),
-        this::updateFilteredRecipes
+        PREF.RECIPES_FIELDS,
+        this::updateFilteredRecipes,
+        new Field(FIELD_DUE_SCORE, R.string.property_due_score, true),
+        new Field(FIELD_FULFILLMENT, R.string.property_requirements_fulfilled, true),
+        new Field(FIELD_CALORIES, R.string.property_calories, false),
+        new Field(FIELD_DESIRED_SERVINGS, R.string.property_servings_desired, false),
+        new Field(FIELD_PICTURE, R.string.property_picture, true)
     );
   }
 
@@ -318,12 +328,12 @@ public class RecipesViewModel extends BaseViewModel {
     return () -> filterChipLiveDataSort;
   }
 
-  public FilterChipLiveData.Listener getFilterChipLiveDataExtraField() {
-    return () -> filterChipLiveDataExtraField;
+  public FilterChipLiveData.Listener getFilterChipLiveDataFields() {
+    return () -> filterChipLiveDataFields;
   }
 
   public List<String> getActiveFields() {
-    return filterChipLiveDataExtraField.getActiveFields();
+    return filterChipLiveDataFields.getActiveFields();
   }
 
   @Override

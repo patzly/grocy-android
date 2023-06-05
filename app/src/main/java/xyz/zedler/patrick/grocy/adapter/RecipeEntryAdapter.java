@@ -61,13 +61,13 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.RowRecipeEntryBinding;
 import xyz.zedler.patrick.grocy.databinding.RowRecipeEntryGridBinding;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesFields;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
+import xyz.zedler.patrick.grocy.viewmodel.RecipesViewModel;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class RecipeEntryAdapter extends
@@ -218,7 +218,7 @@ public class RecipeEntryAdapter extends
     ColorRoles colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
     ColorRoles colorRed = ResUtil.getHarmonizedRoles(context, R.color.red);
 
-    if (activeFields.contains(FilterChipLiveDataRecipesFields.FIELD_DUE_SCORE)
+    if (activeFields.contains(RecipesViewModel.FIELD_DUE_SCORE)
         && recipeFulfillment != null) {
 
       // DUE SCORE
@@ -247,7 +247,7 @@ public class RecipeEntryAdapter extends
       chips.addView(dueScoreChip);
     }
 
-    if (activeFields.contains(FilterChipLiveDataRecipesFields.FIELD_FULFILLMENT)
+    if (activeFields.contains(RecipesViewModel.FIELD_FULFILLMENT)
         && recipeFulfillment != null) {
 
       // REQUIREMENTS FULFILLED
@@ -298,14 +298,14 @@ public class RecipeEntryAdapter extends
       });
     }
 
-    if (activeFields.contains(FilterChipLiveDataRecipesFields.FIELD_CALORIES)
+    if (activeFields.contains(RecipesViewModel.FIELD_CALORIES)
         && recipeFulfillment != null) {
       chips.addView(createChip(context, NumUtil.trimAmount(
           recipeFulfillment.getCalories(), maxDecimalPlacesAmount
       ) + " kcal", -1)); // TODO: UNIT
     }
 
-    if (activeFields.contains(FilterChipLiveDataRecipesFields.FIELD_DESIRED_SERVINGS)
+    if (activeFields.contains(RecipesViewModel.FIELD_DESIRED_SERVINGS)
         && recipeFulfillment != null) {
       chips.addView(createChip(
           context,
@@ -319,7 +319,7 @@ public class RecipeEntryAdapter extends
     chips.setVisibility(chips.getChildCount() > 0 ? View.VISIBLE : View.GONE);
 
     String pictureFileName = recipe.getPictureFileName();
-    if (activeFields.contains(FilterChipLiveDataRecipesFields.FIELD_PICTURE)
+    if (activeFields.contains(RecipesViewModel.FIELD_PICTURE)
         && pictureFileName != null && !pictureFileName.isEmpty()) {
       picture.layout(0, 0, 0, 0);
 
@@ -351,7 +351,7 @@ public class RecipeEntryAdapter extends
               return false;
             }
           }).into(picture);
-    } else if (activeFields.contains(FilterChipLiveDataRecipesFields.FIELD_PICTURE)
+    } else if (activeFields.contains(RecipesViewModel.FIELD_PICTURE)
         && containsPictures && viewHolder instanceof RecipeViewHolder) {
       picture.setVisibility(View.GONE);
       picturePlaceholder.setVisibility(View.VISIBLE);
