@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.adapter;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -55,6 +56,7 @@ import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.ArrayList;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -87,6 +89,7 @@ public class RecipeEntryAdapter extends
   private boolean sortAscending;
   private final List<String> activeFields;
   private final int maxDecimalPlacesAmount;
+  private final String energyUnit;
   private boolean containsPictures;
 
   public RecipeEntryAdapter(
@@ -109,11 +112,12 @@ public class RecipeEntryAdapter extends
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
     this.activeFields = new ArrayList<>(activeFields);
-    maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(context).getInt(
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
         STOCK.DECIMAL_PLACES_AMOUNT,
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
     );
-
+    energyUnit = sharedPrefs.getString(PREF.ENERGY_UNIT, PREF.ENERGY_UNIT_DEFAULT);
     containsPictures = false;
     for (Recipe recipe : recipes) {
       String pictureFileName = recipe.getPictureFileName();
@@ -302,7 +306,7 @@ public class RecipeEntryAdapter extends
         && recipeFulfillment != null) {
       chips.addView(createChip(context, NumUtil.trimAmount(
           recipeFulfillment.getCalories(), maxDecimalPlacesAmount
-      ) + " kcal", -1)); // TODO: UNIT
+      ) + " " + energyUnit, -1));
     }
 
     if (activeFields.contains(RecipesViewModel.FIELD_DESIRED_SERVINGS)
@@ -323,7 +327,8 @@ public class RecipeEntryAdapter extends
         && pictureFileName != null && !pictureFileName.isEmpty()) {
       picture.layout(0, 0, 0, 0);
 
-      RequestBuilder<Drawable> requestBuilder = Glide.with(context).load(new GlideUrl(grocyApi.getRecipePicture(pictureFileName), grocyAuthHeaders));
+      RequestBuilder<Drawable> requestBuilder = Glide.with(context)
+          .load(new GlideUrl(grocyApi.getRecipePicture(pictureFileName), grocyAuthHeaders));
       requestBuilder = requestBuilder
           .transform(new CenterCrop())
           .transition(DrawableTransitionOptions.withCrossFade());

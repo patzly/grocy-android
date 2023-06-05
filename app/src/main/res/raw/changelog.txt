@@ -2,7 +2,7 @@
 
 - New: Product choose page after barcode scan now has really useful copy option for products (#636)
 - New: Recipe details are now displayed on a separate page, not a bottom sheet anymore
-- New: Recipes page now has checkbox options for all additional fields
+- New: Recipes and stock overview page now have checkbox options for all additional fields (#663)
 - New: Shopping mode options are now reachable through shopping mode menu and removed from settings
 - Improved: Database exceptions are now caught and displayed (#698)
 - Improved: Pictures in recipe or product descriptions now can be up to 10MB large (#698)

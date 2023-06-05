@@ -85,7 +85,7 @@ public class ConfigUtil {
   private static void storeSystemConfig(String response, SharedPreferences prefs, boolean debug) {
     try {
       JSONObject jsonObject = new JSONObject(response);
-      prefs.edit()
+      SharedPreferences.Editor editor = prefs.edit()
           .putString(
               Constants.PREF.CURRENCY,
               jsonObject.getString("CURRENCY")
@@ -136,13 +136,20 @@ public class ConfigUtil {
           ).putBoolean(
               PREF.FEATURE_LABEL_PRINTER,
               jsonObject.getBoolean("FEATURE_FLAG_LABEL_PRINTER")
-          ).apply();
+          );
       if (jsonObject.has("FEATURE_FLAG_STOCK_PRODUCT_FREEZING")) {
-        prefs.edit().putBoolean(
+        editor.putBoolean(
             Constants.PREF.FEATURE_STOCK_FREEZING_TRACKING,
             jsonObject.getBoolean("FEATURE_FLAG_STOCK_PRODUCT_FREEZING")
-        ).apply();
+        );
       }
+      if (jsonObject.has("ENERGY_UNIT")) {
+        editor.putString(
+            Constants.PREF.ENERGY_UNIT,
+            jsonObject.getString("ENERGY_UNIT")
+        );
+      }
+      editor.apply();
     } catch (JSONException e) {
       if (debug) {
         Log.e(TAG, "downloadConfig: " + e);
@@ -156,7 +163,7 @@ public class ConfigUtil {
   private static void storeUserSettings(String response, SharedPreferences prefs, boolean debug) {
     try {
       JSONObject jsonObject = new JSONObject(response);
-      prefs.edit().putInt(
+      SharedPreferences.Editor editor = prefs.edit().putInt(
           STOCK.LOCATION,
           jsonObject.getInt(STOCK.LOCATION)
       ).putInt(
@@ -194,44 +201,45 @@ public class ConfigUtil {
           SHOPPING_LIST.AUTO_ADD,
           getBoolean(jsonObject, SHOPPING_LIST.AUTO_ADD,
               SETTINGS_DEFAULT.SHOPPING_LIST.AUTO_ADD, prefs)
-      ).apply();
+      );
       if (jsonObject.has(STOCK.DEFAULT_DUE_DAYS)) {
-        prefs.edit().putInt(
+        editor.putInt(
             STOCK.DEFAULT_DUE_DAYS,
             jsonObject.getInt(STOCK.DEFAULT_DUE_DAYS)
-        ).apply();
+        );
       }
       if (jsonObject.has(SHOPPING_LIST.AUTO_ADD_LIST_ID)) {
-        prefs.edit().putInt(
+        editor.putInt(
             SHOPPING_LIST.AUTO_ADD_LIST_ID,
             jsonObject.getInt(SHOPPING_LIST.AUTO_ADD_LIST_ID)
-        ).apply();
+        );
       }
       if (jsonObject.has(STOCK.DECIMAL_PLACES_AMOUNT)) {
-        prefs.edit().putInt(
+        editor.putInt(
             STOCK.DECIMAL_PLACES_AMOUNT,
             jsonObject.getInt(STOCK.DECIMAL_PLACES_AMOUNT)
-        ).apply();
+        );
       }
       if (jsonObject.has(STOCK.DECIMAL_PLACES_PRICES_INPUT)) {
-        prefs.edit().putInt(
+        editor.putInt(
             STOCK.DECIMAL_PLACES_PRICES_INPUT,
             jsonObject.getInt(STOCK.DECIMAL_PLACES_PRICES_INPUT)
-        ).apply();
+        );
       }
       if (jsonObject.has(STOCK.DECIMAL_PLACES_PRICES_DISPLAY)) {
-        prefs.edit().putInt(
+        editor.putInt(
             STOCK.DECIMAL_PLACES_PRICES_DISPLAY,
             jsonObject.getInt(STOCK.DECIMAL_PLACES_PRICES_DISPLAY)
-        ).apply();
+        );
       }
       if (jsonObject.has(STOCK.AUTO_DECIMAL_SEPARATOR_PRICES)) {
-        prefs.edit().putBoolean(
+        editor.putBoolean(
             STOCK.AUTO_DECIMAL_SEPARATOR_PRICES,
             getBoolean(jsonObject, STOCK.AUTO_DECIMAL_SEPARATOR_PRICES,
                 SETTINGS_DEFAULT.STOCK.AUTO_DECIMAL_SEPARATOR_PRICES, prefs)
-        ).apply();
+        );
       }
+      editor.apply();
     } catch (JSONException e) {
       if (debug) {
         Log.e(TAG, "downloadUserSettings: " + e);

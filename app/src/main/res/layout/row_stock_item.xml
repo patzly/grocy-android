@@ -32,8 +32,7 @@
     android:layout_width="56dp"
     android:layout_height="56dp"
     android:layout_marginEnd="16dp"
-    android:layout_marginTop="4dp"
-    android:layout_gravity="center_vertical"
+    android:layout_gravity="top"
     tools:ignore="ContentDescription"
     app:radius="5dp"/>
 
@@ -42,7 +41,6 @@
     android:layout_width="56dp"
     android:layout_height="56dp"
     android:layout_marginEnd="16dp"
-    android:layout_marginTop="4dp"
     android:layout_gravity="top"
     android:visibility="gone"
     app:cardCornerRadius="12dp"
@@ -90,7 +88,7 @@
       android:id="@+id/flexbox_layout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="6dp"
+      android:layout_marginTop="4dp"
       app:flexWrap="wrap"
       app:alignItems="stretch"
       app:alignContent="stretch"

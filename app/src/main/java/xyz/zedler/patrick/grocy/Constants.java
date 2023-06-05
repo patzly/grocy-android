@@ -35,6 +35,8 @@ public final class Constants {
     public final static String HOME_ASSISTANT_INGRESS_SESSION_KEY = "home_assistant_ingress_session_key";
     public final static String HOME_ASSISTANT_INGRESS_SESSION_KEY_TIME = "home_assistant_ingress_session_key_time";
     public final static String CURRENCY = "currency";
+    public final static String ENERGY_UNIT = "energy_unit";
+    public final static String ENERGY_UNIT_DEFAULT = "kcal";
     public final static String GROCY_VERSION = "grocy_version";
     public final static String CREDENTIALS = "credentials";
     public final static String CURRENT_USER_ID = "current_user_id";
@@ -56,7 +58,7 @@ public final class Constants {
     public final static String STOCK_SORT_MODE = "stock_sort_mode";
     public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";
     public final static String STOCK_GROUPING_MODE = "stock_grouping_mode";
-    public final static String STOCK_EXTRA_FIELD = "stock_extra_field";
+    public final static String STOCK_FIELDS = "stock_fields";
     public final static String STOCK_ENTRIES_SORT_MODE = "stock_entries_sort_mode";
     public final static String STOCK_ENTRIES_SORT_ASCENDING = "stock_entries_sort_ascending";
     public final static String STOCK_ENTRIES_GROUPING_MODE = "stock_entries_grouping_mode";
