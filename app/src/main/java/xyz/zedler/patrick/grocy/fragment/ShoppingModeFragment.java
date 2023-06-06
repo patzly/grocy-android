@@ -49,6 +49,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSh
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
@@ -349,6 +350,11 @@ public class ShoppingModeFragment extends BaseFragment implements
   public void showShoppingModeMenu() {
     PopupMenu popupMenu = new PopupMenu(requireContext(), binding.toolbarMenu);
     popupMenu.inflate(R.menu.menu_shopping_mode);
+    MenuItem itemGrouping = popupMenu.getMenu().findItem(R.id.action_grouping_mode);
+    if (itemGrouping != null) {
+      FilterChipLiveData data = viewModel.getFilterChipLiveDataGrouping();
+      itemGrouping.setTitle(data.getText());
+    }
     popupMenu.setOnMenuItemClickListener(getMenuItemClickListener());
     popupMenu.show();
   }
@@ -357,6 +363,11 @@ public class ShoppingModeFragment extends BaseFragment implements
     return item -> {
       if (item.getItemId() == R.id.action_select) {
         showShoppingListsBottomSheet();
+        return true;
+      } else if (item.getItemId() == R.id.action_grouping_mode) {
+        PopupMenu popupMenu = new PopupMenu(requireContext(), binding.toolbarMenu);
+        viewModel.getFilterChipLiveDataGrouping().populateMenu(popupMenu.getMenu());
+        popupMenu.show();
         return true;
       } else if (item.getItemId() == R.id.action_fields) {
         PopupMenu popupMenu = new PopupMenu(requireContext(), binding.toolbarMenu);

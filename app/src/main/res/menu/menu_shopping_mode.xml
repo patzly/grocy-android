@@ -29,6 +29,15 @@
     app:showAsAction="never" />
 
   <item
+    android:id="@+id/action_grouping_mode"
+    android:title="@string/property_group_by"
+    app:showAsAction="never">
+
+    <menu />
+
+  </item>
+
+  <item
     android:id="@+id/action_fields"
     android:title="@string/property_fields"
     app:showAsAction="never">
