@@ -56,8 +56,15 @@
           style="@style/Widget.Grocy.Toolbar.Close"
           app:title="@string/title_shopping_list"
           app:titleCentered="true"
-          app:titleMarginEnd="48dp"
-          app:menu="@menu/menu_shopping_mode"/>
+          app:titleMarginEnd="48dp" />
+
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/toolbar_menu"
+          style="@style/Widget.Grocy.Button.IconButton"
+          android:layout_marginStart="20dp"
+          android:layout_gravity="end|center_vertical"
+          android:onClick="@{() -> fragment.showShoppingModeMenu()}"
+          app:icon="@drawable/ic_round_more_vert" />
 
       </FrameLayout>
 

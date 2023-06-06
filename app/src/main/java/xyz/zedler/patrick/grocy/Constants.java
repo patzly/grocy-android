@@ -65,6 +65,7 @@ public final class Constants {
     public final static String SHOPPING_LIST_GROUPING_MODE = "shopping_list_grouping_mode";
     public final static String SHOPPING_LIST_EXTRA_FIELD = "shopping_list_extra_field";
     public final static String SHOPPING_LIST_LAST_ID = "shopping_list_last_id";
+    public final static String SHOPPING_MODE_FIELDS = "shopping_mode_fields";
     public final static String TASKS_SORT_MODE = "tasks_sort_mode";
     public final static String TASKS_SORT_ASCENDING = "tasks_sort_ascending";
     public final static String TASKS_SHOW_DONE = "tasks_show_done";
@@ -199,7 +200,6 @@ public final class Constants {
       public final static String KEEP_SCREEN_ON = "shopping_keep_screen_on";
       public final static String SHOW_DONE_ITEMS = "show_done_items";
       public final static String USE_SMALLER_FONT = "use_smaller_font";
-      public final static String SHOW_PRODUCT_DESCRIPTION = "show_product_description";
     }
 
     public final static class RECIPES {
@@ -320,7 +320,6 @@ public final class Constants {
       public final static boolean KEEP_SCREEN_ON = true;
       public final static boolean SHOW_DONE_ITEMS = true;
       public final static boolean USE_SMALLER_FONT = false;
-      public final static boolean SHOW_PRODUCT_DESCRIPTION = false;
     }
 
     public final static class RECIPES {

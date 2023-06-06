@@ -31,7 +31,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
@@ -120,7 +120,6 @@ public class ShoppingModeFragment extends BaseFragment implements
     activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
-    binding.toolbar.setOnMenuItemClickListener(getMenuItemClickListener());
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();
@@ -174,7 +173,8 @@ public class ShoppingModeFragment extends BaseFragment implements
             viewModel.getShoppingListItemAmountsHashMap(),
             viewModel.getMissingProductIds(),
             viewModel.getShoppingListNotes(),
-            viewModel.getGroupingMode()
+            viewModel.getGroupingMode(),
+            viewModel.getActiveFields()
         );
       } else {
         binding.recycler.setAdapter(
@@ -191,7 +191,8 @@ public class ShoppingModeFragment extends BaseFragment implements
                 viewModel.getMissingProductIds(),
                 this,
                 viewModel.getShoppingListNotes(),
-                viewModel.getGroupingMode()
+                viewModel.getGroupingMode(),
+                viewModel.getActiveFields()
             )
         );
         binding.recycler.scheduleLayoutAnimation();
@@ -345,13 +346,24 @@ public class ShoppingModeFragment extends BaseFragment implements
     return !sharedPrefs.getBoolean(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true);
   }
 
-  public Toolbar.OnMenuItemClickListener getMenuItemClickListener() {
+  public void showShoppingModeMenu() {
+    PopupMenu popupMenu = new PopupMenu(requireContext(), binding.toolbarMenu);
+    popupMenu.inflate(R.menu.menu_shopping_mode);
+    popupMenu.setOnMenuItemClickListener(getMenuItemClickListener());
+    popupMenu.show();
+  }
+
+  public PopupMenu.OnMenuItemClickListener getMenuItemClickListener() {
     return item -> {
       if (item.getItemId() == R.id.action_select) {
         showShoppingListsBottomSheet();
         return true;
-      }
-      if (item.getItemId() == R.id.action_options) {
+      } else if (item.getItemId() == R.id.action_fields) {
+        PopupMenu popupMenu = new PopupMenu(requireContext(), binding.toolbarMenu);
+        viewModel.getFilterChipLiveDataFields().populateMenu(popupMenu.getMenu());
+        popupMenu.show();
+        return true;
+      } else if (item.getItemId() == R.id.action_options) {
         activity.navUtil.navigateFragment(ShoppingModeFragmentDirections
             .actionShoppingModeFragmentToShoppingModeOptionsFragment());
         return true;

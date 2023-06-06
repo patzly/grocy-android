@@ -1046,7 +1046,6 @@
   <string name="setting_show_done_items_description">Allpool</string>
   <string name="setting_smaller_font">Kasuta väiksemat tekstisuurust</string>
   <string name="setting_smaller_font_description">Et näha rohkem asju korraga</string>
-  <string name="setting_show_product_description">Kuva toote kirjeldus</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Tähtaeg päevades</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->

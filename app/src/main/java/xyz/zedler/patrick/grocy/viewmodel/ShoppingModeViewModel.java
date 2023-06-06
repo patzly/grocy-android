@@ -38,6 +38,8 @@ import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields.Field;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListGrouping;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.MissingItem;
@@ -59,6 +61,17 @@ public class ShoppingModeViewModel extends BaseViewModel {
   private static final String TAG = ShoppingModeViewModel.class.getSimpleName();
   private static final int DEFAULT_SHOPPING_LIST_ID = 1;
 
+  public final static String FIELD_AMOUNT = "field_amount";
+  public final static String FIELD_NOTES = "field_notes";
+  public final static String FIELD_DUE_DATE = "field_due_date";
+  public final static String FIELD_VALUE = "field_value";
+  public final static String FIELD_CALORIES_UNIT = "field_calories_unit";
+  public final static String FIELD_CALORIES_TOTAL = "field_calories_total";
+  public final static String FIELD_AVERAGE_PRICE = "field_average_price";
+  public final static String FIELD_LAST_PRICE = "field_last_price";
+  public final static String FIELD_PRODUCT_DESCRIPTION = "field_product_description";
+  public final static String FIELD_PICTURE = "field_picture";
+
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
@@ -68,6 +81,7 @@ public class ShoppingModeViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Integer> selectedShoppingListIdLive;
   private final MutableLiveData<ArrayList<ShoppingListItem>> filteredShoppingListItemsLive;
+  private final FilterChipLiveDataFields filterChipLiveDataFields;
 
   private List<ShoppingListItem> shoppingListItems;
   private List<ShoppingList> shoppingLists;
@@ -100,6 +114,15 @@ public class ShoppingModeViewModel extends BaseViewModel {
     infoFullscreenLive = new MutableLiveData<>();
     selectedShoppingListIdLive = new MutableLiveData<>(1);
     filteredShoppingListItemsLive = new MutableLiveData<>();
+    filterChipLiveDataFields = new FilterChipLiveDataFields(
+        getApplication(),
+        PREF.SHOPPING_MODE_FIELDS,
+        this::updateFilteredShoppingListItems,
+        new Field(FIELD_AMOUNT, R.string.property_amount, true),
+        new Field(FIELD_NOTES, R.string.property_notes, true),
+        new Field(FIELD_PRODUCT_DESCRIPTION, R.string.property_product_description, false),
+        new Field(FIELD_PICTURE, R.string.property_picture, false)
+    );
 
     int lastId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1);
     if (lastId != DEFAULT_SHOPPING_LIST_ID
@@ -477,6 +500,14 @@ public class ShoppingModeViewModel extends BaseViewModel {
   @NonNull
   public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
     return infoFullscreenLive;
+  }
+
+  public FilterChipLiveDataFields getFilterChipLiveDataFields() {
+    return filterChipLiveDataFields;
+  }
+
+  public List<String> getActiveFields() {
+    return filterChipLiveDataFields.getActiveFields();
   }
 
   public void setCurrentQueueLoading(NetworkQueue queueLoading) {

@@ -1048,7 +1048,6 @@
   <string name="setting_show_done_items_description">下部に表示</string>
   <string name="setting_smaller_font">小さいフォントを使用</string>
   <string name="setting_smaller_font_description">さらにアイテムを表示するには</string>
-  <string name="setting_show_product_description">製品説明を表示</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">期限間近として表示する日数</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->

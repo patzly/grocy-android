@@ -792,6 +792,7 @@
   <string name="property_product_name">Product name</string>
   <string name="property_parent_product">Parent product</string>
   <string name="property_description">Description</string>
+  <string name="property_product_description">Product description</string>
   <string name="property_note">Note</string>
   <string name="property_status">Status</string>
   <string name="property_status_insert">Status:</string>
@@ -1127,7 +1128,6 @@
   <string name="setting_show_done_items_description">At the bottom</string>
   <string name="setting_smaller_font">Use smaller font</string>
   <string name="setting_smaller_font_description">To see more items at once</string>
-  <string name="setting_show_product_description">Show product description</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Due soon days</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->

@@ -19,8 +19,11 @@
 
 package xyz.zedler.patrick.grocy.model;
 
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import androidx.annotation.DrawableRes;
+import androidx.core.view.MenuCompat;
 import androidx.lifecycle.MutableLiveData;
 import java.util.ArrayList;
 
@@ -91,6 +94,33 @@ public class FilterChipLiveData extends MutableLiveData<FilterChipLiveData> {
 
   public void setMenuItemGroups(MenuItemGroup... menuItemGroupArray) {
     this.menuItemGroupArray = menuItemGroupArray;
+  }
+
+  public void populateMenu(Menu menu) {
+    for (MenuItemData menuItemData : getMenuItemDataList()) {
+      MenuItem menuItem = menu.add(
+          menuItemData.getGroupId(),
+          menuItemData.getItemId(),
+          Menu.NONE,
+          menuItemData.getText()
+      );
+      menuItem.setCheckable(true);
+      menuItem.setChecked(menuItemData.getItemId() == getItemIdChecked()
+          || menuItemData.isChecked());
+      menuItem.setOnMenuItemClickListener(getMenuItemClickListener());
+    }
+    if (getMenuItemGroupArray() != null) {
+      for (MenuItemGroup menuItemGroup : getMenuItemGroupArray()) {
+        menu.setGroupCheckable(
+            menuItemGroup.getGroupId(),
+            menuItemGroup.isCheckable(),
+            menuItemGroup.isExclusive()
+        );
+      }
+      if (getMenuItemGroupArray().length > 1) {
+        MenuCompat.setGroupDividerEnabled(menu, true);
+      }
+    }
   }
 
   public int getItemIdChecked() {

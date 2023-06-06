@@ -839,7 +839,6 @@
   <string name="setting_show_done_items_description">למטה</string>
   <string name="setting_smaller_font">להשתמש בגופן קטן יותר</string>
   <string name="setting_smaller_font_description">כדי לראות יותר פריטים בו־זמנית</string>
-  <string name="setting_show_product_description">הצגת תיאור המוצר</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">ימים לתפוגה מתקרבת</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->

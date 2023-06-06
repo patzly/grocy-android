@@ -1046,7 +1046,6 @@
   <string name="setting_show_done_items_description">A la part inferior</string>
   <string name="setting_smaller_font">Utilitzar una font més petita</string>
   <string name="setting_smaller_font_description">Per a veure més elements a la vegada</string>
-  <string name="setting_show_product_description">Mostrar descripció del producte</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Dies per consumir aviat</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->

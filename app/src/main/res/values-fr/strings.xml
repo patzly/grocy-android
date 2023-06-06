@@ -1162,7 +1162,6 @@
   <string name="setting_show_done_items_description">En bas</string>
   <string name="setting_smaller_font">Utiliser une police plus petite</string>
   <string name="setting_smaller_font_description">Pour voir plus d\'articles à la fois</string>
-  <string name="setting_show_product_description">Afficher la description du produit</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Seuil de péremption</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->

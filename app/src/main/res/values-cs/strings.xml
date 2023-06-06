@@ -1215,7 +1215,6 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="setting_show_done_items_description">na konci seznamu</string>
   <string name="setting_smaller_font">Menší písmo</string>
   <string name="setting_smaller_font_description">aby se mohlo zobrazit více řádků</string>
-  <string name="setting_show_product_description">Zobrazit popis produktu</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Počet dní ve filtru produktů v Přehledu</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->

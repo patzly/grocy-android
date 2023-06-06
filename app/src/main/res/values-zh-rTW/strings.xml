@@ -963,7 +963,6 @@
   <string name="setting_show_done_items_description">在底部</string>
   <string name="setting_smaller_font">使用較小的字體‎</string>
   <string name="setting_smaller_font_description">以顯示更多項目</string>
-  <string name="setting_show_product_description">顯示物品描述</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">即將到期</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
