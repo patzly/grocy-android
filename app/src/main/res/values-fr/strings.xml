@@ -817,6 +817,7 @@
   <string name="property_product_name">Nom du produit</string>
   <string name="property_parent_product">Produit parent</string>
   <string name="property_description">Description</string>
+  <string name="property_product_description">Description du produit</string>
   <string name="property_note">Note</string>
   <string name="property_status">Statut</string>
   <string name="property_status_insert">Statut :</string>
