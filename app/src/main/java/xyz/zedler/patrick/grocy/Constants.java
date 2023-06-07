@@ -63,7 +63,7 @@ public final class Constants {
     public final static String STOCK_ENTRIES_SORT_ASCENDING = "stock_entries_sort_ascending";
     public final static String STOCK_ENTRIES_GROUPING_MODE = "stock_entries_grouping_mode";
     public final static String SHOPPING_LIST_GROUPING_MODE = "shopping_list_grouping_mode";
-    public final static String SHOPPING_LIST_EXTRA_FIELD = "shopping_list_extra_field";
+    public final static String SHOPPING_LIST_FIELDS = "shopping_list_fields";
     public final static String SHOPPING_LIST_LAST_ID = "shopping_list_last_id";
     public final static String SHOPPING_MODE_GROUPING_MODE = "shopping_mode_grouping_mode";
     public final static String SHOPPING_MODE_FIELDS = "shopping_mode_fields";
