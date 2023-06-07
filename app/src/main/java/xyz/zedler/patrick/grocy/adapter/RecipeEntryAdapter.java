@@ -502,6 +502,9 @@ public class RecipeEntryAdapter extends
       if (sortAscendingOld != sortAscendingNew) {
         return false;
       }
+      if (!compareContent) {
+        return newItem.getId() == oldItem.getId();
+      }
       if (!ArrayUtil.areListsEqualIgnoreOrder(activeFieldsOld, activeFieldsNew)) {
         return false;
       }
@@ -512,10 +515,6 @@ public class RecipeEntryAdapter extends
           || recipeFulfillmentOld != null && recipeFulfillmentNew == null
           || recipeFulfillmentOld != null && !recipeFulfillmentOld.equals(recipeFulfillmentNew)) {
         return false;
-      }
-
-      if (!compareContent) {
-        return newItem.getId() == oldItem.getId();
       }
 
       return newItem.equalsForListDiff(oldItem);

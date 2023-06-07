@@ -739,9 +739,6 @@ public class StockOverviewItemAdapter extends
       if (!groupingModeOld.equals(groupingModeNew)) {
         return false;
       }
-      if (!ArrayUtil.areListsEqualIgnoreOrder(activeFieldsOld, activeFieldsNew)) {
-        return false;
-      }
       if (oldItemType == GroupedListItem.TYPE_ENTRY) {
         StockItem newItem = (StockItem) newItems.get(newItemPos);
         StockItem oldItem = (StockItem) oldItems.get(oldItemPos);
@@ -749,6 +746,9 @@ public class StockOverviewItemAdapter extends
           return newItem.getProductId() == oldItem.getProductId();
         }
         if (!newItem.getProduct().equals(oldItem.getProduct())) {
+          return false;
+        }
+        if (!ArrayUtil.areListsEqualIgnoreOrder(activeFieldsOld, activeFieldsNew)) {
           return false;
         }
         QuantityUnit quOld = quantityUnitHashMapOld.get(oldItem.getProduct().getQuIdStockInt());
