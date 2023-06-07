@@ -2,7 +2,7 @@
 
 # Grocy Android
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Release](https://img.shields.io/github/v/release/patzly/grocy-android?label=Release)](https://github.com/patzly/grocy-android/releases)  [![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads)](https://github.com/patzly/grocy-android/releases)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Release](https://img.shields.io/github/v/release/patzly/grocy-android?label=Release)](https://github.com/patzly/grocy-android/releases)  [![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads)](https://github.com/patzly/grocy-android/releases) [![Project Dashboard](https://sourcespy.com/shield.svg)](https://sourcespy.com/github/patzlygrocyandroid/)
 
 Grocy Android is an open-source Android client for [grocy](https://grocy.info/) ([source code](https://github.com/grocy/grocy)), a self-hosted grocery and household management solution for your home.
 
@@ -55,6 +55,8 @@ Please see the in-app help dialog or the [FAQ](https://github.com/patzly/grocy-a
 ## Contribution
 
 If you run into a bug or miss a feature, please [open an issue](https://github.com/patzly/grocy-android/issues) in this repository.
+
+For a quick repository overview please refer to [build, module, class and other diagrams](https://sourcespy.com/github/patzlygrocyandroid/). 
 
 Like the grocy project, Grocy Android can be translated, too. The main language is English, but we also maintain the German translation because it's our mother tongue.
 You can help translate this project at [Transifex](https://app.transifex.com/patzly/grocy-android), if your language is incomplete, contains typos or is not available yet. Translations which reached a completion level of 80% will be included in releases.  
