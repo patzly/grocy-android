@@ -123,7 +123,7 @@ public class RecipesFragment extends BaseFragment implements
     );
 
     boolean isGrid = viewModel.getSharedPrefs()
-        .getString(PREF.RECIPES_LIST_LAYOUT, LAYOUT_LINEAR).equals(LAYOUT_GRID);
+        .getString(PREF.RECIPES_LIST_LAYOUT, LAYOUT_GRID).equals(LAYOUT_GRID);
     if (isGrid) {
       binding.recycler.setLayoutManager(
           new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)

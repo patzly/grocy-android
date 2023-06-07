@@ -14,6 +14,7 @@
 - Improved: Description editor page now has bottom padding (still needs improvements with keyboard)
 - Improved: Language picker works more reliably with demo domain change
 - Improved: Shopping mode grouping option now can be set separately from shopping list page
+- Improved: New grid layout on recipe page is default now
 - Fixed: Crash on startup with Android Lollipop (and maybe higher)
 - Fixed: Prevent crash when opening qu conversion page (#708)
 - Fixed: Glitch with large top margin on recipe grid layout (#696)
