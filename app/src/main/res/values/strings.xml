@@ -1231,9 +1231,7 @@
   <string name="license_xzing_android" translatable="false">ZXing Android Embedded</string>
   <string name="license_xzing_android_author" translatable="false">ZXing authors, Journey Mobile</string>
 
-  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
-  Examples: 'de' for German; 'fr' for French -->
-  <string name="url_grocy_demo">https://en.demo.grocy.info</string>
+  <string name="url_grocy_demo_default">https://en.demo.grocy.info</string>
   <string name="url_grocy" translatable="false">https://grocy.info</string>
   <string name="url_developer" translatable="false">http://play.google.com/store/apps/dev?id=5870283381366287608</string>
   <string name="url_github" translatable="false">https://github.com/patzly/grocy-android/</string>
