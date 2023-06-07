@@ -1234,6 +1234,4 @@
   <string name="setting_keep_screen_on_recipes_description">Pendant la consultation d\'une recette</string>
 
   <string name="notification_due_soon_content">Consommez-les au cours des prochains jours pour aider à réduire le gaspillage alimentaire.</string>
-
-  <string name="url_grocy_demo_default">https://fr.demo.grocy.info</string>
   </resources>
