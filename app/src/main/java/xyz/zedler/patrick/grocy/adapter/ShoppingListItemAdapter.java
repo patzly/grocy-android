@@ -460,58 +460,65 @@ public class ShoppingListItemAdapter extends
       binding.noteAsName.setText(null);
     }
 
+    binding.flexboxLayout.removeAllViews();
+
     // AMOUNT
 
-    StringBuilder stringBuilderAmount = new StringBuilder();
     Double amountInQuUnit = shoppingListItemAmountsHashMap.get(item.getId());
-    if (product != null && amountInQuUnit != null) {
-      QuantityUnit quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
-      String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, amountInQuUnit);
-      if (quStr != null) {
-        stringBuilderAmount.append(context.getString(
-            R.string.subtitle_amount,
-            NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount),
-            quStr
-        ));
-      } else {
-        stringBuilderAmount.append(NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount));
-      }
-    } else if (product != null) {
-      QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
-      String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble());
-      if (quStr != null) {
-        stringBuilderAmount.append(context.getString(
-            R.string.subtitle_amount,
-            NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount),
-            quStr
-        ));
+    if (activeFields.contains(ShoppingListViewModel.FIELD_AMOUNT)) {
+      StringBuilder stringBuilderAmount = new StringBuilder();
+      if (product != null && amountInQuUnit != null) {
+        QuantityUnit quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
+        String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, amountInQuUnit);
+        if (quStr != null) {
+          stringBuilderAmount.append(context.getString(
+              R.string.subtitle_amount,
+              NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount),
+              quStr
+          ));
+        } else {
+          stringBuilderAmount.append(NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount));
+        }
+      } else if (product != null) {
+        QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
+        String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble());
+        if (quStr != null) {
+          stringBuilderAmount.append(context.getString(
+              R.string.subtitle_amount,
+              NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount),
+              quStr
+          ));
+        } else {
+          stringBuilderAmount.append(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
+        }
       } else {
         stringBuilderAmount.append(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
       }
-    } else {
-      stringBuilderAmount.append(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
+      Chip chipAmount = createChip(context, stringBuilderAmount.toString());
+      if (item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {
+        chipAmount.setTextColor(colorBlue.getOnAccentContainer());
+        chipAmount.setChipBackgroundColor(ColorStateList.valueOf(colorBlue.getAccentContainer()));
+      }
+      if (item.isUndone()) {
+        chipAmount.setPaintFlags(chipAmount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+        chipAmount.setAlpha(1);
+      } else {
+        chipAmount.setPaintFlags(chipAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        chipAmount.setAlpha(0.61f);
+      }
+      binding.flexboxLayout.addView(chipAmount);
     }
-
-    Chip chipAmount = createChip(context, stringBuilderAmount.toString());
-    if (item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {
-      chipAmount.setTextColor(colorBlue.getOnAccentContainer());
-      chipAmount.setChipBackgroundColor(ColorStateList.valueOf(colorBlue.getAccentContainer()));
-    }
-    if (item.isUndone()) {
-      chipAmount.setPaintFlags(chipAmount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-      chipAmount.setAlpha(1);
-    } else {
-      chipAmount.setPaintFlags(chipAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-      chipAmount.setAlpha(0.61f);
-    }
-    binding.flexboxLayout.addView(chipAmount);
 
     // NOTE
 
     if (item.getNote() != null && !item.getNote().trim().isEmpty()) {
       if (binding.name.getVisibility() == View.VISIBLE) {
-        binding.note.setVisibility(View.VISIBLE);
-        binding.note.setText(item.getNote().trim());
+        if (activeFields.contains(ShoppingListViewModel.FIELD_NOTES)) {
+          binding.note.setVisibility(View.VISIBLE);
+          binding.note.setText(item.getNote().trim());
+        } else {
+          binding.note.setVisibility(View.GONE);
+        }
       } else {
         binding.noteAsName.setVisibility(View.VISIBLE);
         binding.noteAsName.setText(item.getNote().trim());
@@ -579,6 +586,10 @@ public class ShoppingListItemAdapter extends
         binding.flexboxLayout.addView(chipValue);
       }
     }
+
+    binding.flexboxLayout.setVisibility(
+        binding.flexboxLayout.getChildCount() > 0 ? View.VISIBLE : View.GONE
+    );
 
     String pictureFileName = product != null ? product.getPictureFileName() : null;
     if (activeFields.contains(StockOverviewViewModel.FIELD_PICTURE)
