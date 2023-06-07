@@ -19,6 +19,7 @@
 - Fixed: Prevent crash when opening qu conversion page (#708)
 - Fixed: Glitch with large top margin on recipe grid layout (#696)
 - Fixed: Saving QU conversion failed if conversion existed already in other product (#707, #682)
+- Fixed: Disabled features with Home Assistant add-on were not disabled in app (#713)
 
 ## 3.2.1
 

@@ -92,55 +92,55 @@ public class ConfigUtil {
           )
           .putBoolean(
               Constants.PREF.FEATURE_STOCK,
-              jsonObject.getBoolean("FEATURE_FLAG_STOCK")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_STOCK")
           )
           .putBoolean(
               Constants.PREF.FEATURE_SHOPPING_LIST,
-              jsonObject.getBoolean("FEATURE_FLAG_SHOPPINGLIST")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_SHOPPINGLIST")
           )
           .putBoolean(
               Constants.PREF.FEATURE_STOCK_PRICE_TRACKING,
-              jsonObject.getBoolean("FEATURE_FLAG_STOCK_PRICE_TRACKING")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_STOCK_PRICE_TRACKING")
           )
           .putBoolean(
               Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS,
-              jsonObject.getBoolean("FEATURE_FLAG_SHOPPINGLIST_MULTIPLE_LISTS")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_SHOPPINGLIST_MULTIPLE_LISTS")
           )
           .putBoolean(
               Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING,
-              jsonObject.getBoolean("FEATURE_FLAG_STOCK_LOCATION_TRACKING")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_STOCK_LOCATION_TRACKING")
           )
           .putBoolean(
               Constants.PREF.FEATURE_STOCK_BBD_TRACKING,
-              jsonObject.getBoolean("FEATURE_FLAG_STOCK_BEST_BEFORE_DATE_TRACKING")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_STOCK_BEST_BEFORE_DATE_TRACKING")
           )
           .putBoolean(
               Constants.PREF.FEATURE_STOCK_OPENED_TRACKING,
-              jsonObject.getBoolean("FEATURE_FLAG_STOCK_PRODUCT_OPENED_TRACKING")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_STOCK_PRODUCT_OPENED_TRACKING")
           )
           .putBoolean(
               PREF.FEATURE_RECIPES,
-              jsonObject.getBoolean("FEATURE_FLAG_RECIPES")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_RECIPES")
           )
           .putBoolean(
               PREF.FEATURE_TASKS,
-              jsonObject.getBoolean("FEATURE_FLAG_TASKS")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_TASKS")
           )
           .putBoolean(
               PREF.FEATURE_CHORES,
-              jsonObject.getBoolean("FEATURE_FLAG_CHORES")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_CHORES")
           )
           .putBoolean(
               PREF.FEATURE_CHORES_ASSIGNMENTS,
-              jsonObject.getBoolean("FEATURE_FLAG_CHORES_ASSIGNMENTS")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_CHORES_ASSIGNMENTS")
           ).putBoolean(
               PREF.FEATURE_LABEL_PRINTER,
-              jsonObject.getBoolean("FEATURE_FLAG_LABEL_PRINTER")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_LABEL_PRINTER")
           );
       if (jsonObject.has("FEATURE_FLAG_STOCK_PRODUCT_FREEZING")) {
         editor.putBoolean(
             Constants.PREF.FEATURE_STOCK_FREEZING_TRACKING,
-            jsonObject.getBoolean("FEATURE_FLAG_STOCK_PRODUCT_FREEZING")
+            getBooleanConfig(jsonObject, "FEATURE_FLAG_STOCK_PRODUCT_FREEZING")
         );
       }
       if (jsonObject.has("ENERGY_UNIT")) {
@@ -254,7 +254,7 @@ public class ConfigUtil {
       JSONObject jsonObject,
       String settingKey,
       boolean settingDefault,
-      SharedPreferences prefs
+      @Nullable SharedPreferences prefs
   ) {
     try {
       Object settingValue = jsonObject.get(settingKey);
@@ -271,17 +271,21 @@ public class ConfigUtil {
       } else if (settingValue instanceof String && settingValue.equals("true")) {
         return true;
       } else {
-        return prefs.getBoolean(settingKey, settingDefault);
+        return prefs != null ? prefs.getBoolean(settingKey, settingDefault) : settingDefault;
       }
     } catch (JSONException e) {
       Log.e(TAG, "downloadUserSettings: getBoolean: settingKey="
           + settingKey + " Exception:" + e);
       try {
-        return prefs.getBoolean(settingKey, settingDefault);
+        return prefs != null ? prefs.getBoolean(settingKey, settingDefault) : settingDefault;
       } catch (ClassCastException e1) {
         return settingDefault;
       }
     }
+  }
+
+  private static boolean getBooleanConfig(JSONObject jsonObject, String settingKey) {
+    return getBoolean(jsonObject, settingKey, true, null);
   }
 
   private static void storeSystemInfo(String response, SharedPreferences prefs, boolean debug) {
