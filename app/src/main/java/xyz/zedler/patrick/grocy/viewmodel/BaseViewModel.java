@@ -123,7 +123,7 @@ public class BaseViewModel extends AndroidViewModel {
     showMessage(getString(R.string.error_undefined));
   }
 
-  public void showThrowableErrorMessage(Throwable error) {
+  public void showThrowableErrorMessage(@Nullable Throwable error) {
     String message;
     if (error != null && error.getLocalizedMessage() != null) {
       message = getApplication()
@@ -131,39 +131,47 @@ public class BaseViewModel extends AndroidViewModel {
     } else {
       message = getString(R.string.error_undefined);
     }
-    SnackbarMessage snackbarMessage = new SnackbarMessage(message);
     if (error != null) {
       error.printStackTrace();
-
-      StringWriter sw = new StringWriter();
-      PrintWriter pw = new PrintWriter(sw);
-      error.printStackTrace(pw);
-      String stackTrace = sw.toString();
-      snackbarMessage.setAction(
-          getString(R.string.action_details),
-          v -> showErrorDetailsAlertDialog(v.getContext(), stackTrace)
-      );
-    }
-    snackbarMessage.setDurationSecs(5);
-    showSnackbar(snackbarMessage);
-  }
-
-  public void showNetworkErrorMessage(VolleyError volleyError) {
-    // similar method is also in BaseFragment
-    if (volleyError != null && volleyError.networkResponse != null
-        && volleyError.networkResponse.statusCode == 403) {
-      showMessage(getString(R.string.error_permission));
-    } else if (volleyError != null && volleyError.getLocalizedMessage() != null) {
-      showMessageLong(getApplication()
-          .getString(R.string.error_network_exact, volleyError.getLocalizedMessage()));
+      showSnackbarWithDetailsAction(error, message);
     } else {
-      showMessage(getString(R.string.error_network));
+      showMessageLong(message);
     }
   }
 
-  public void showJSONErrorMessage(JSONException jsonException) {
-    showMessageLong(getApplication()
-        .getString(R.string.error_network_exact, jsonException.getLocalizedMessage()));
+  public void showNetworkErrorMessage(VolleyError error) {
+    // similar method is also in BaseFragment
+    String message;
+    if (error != null && error.networkResponse != null
+        && error.networkResponse.statusCode == 403) {
+      message = getString(R.string.error_permission);
+    } else if (error != null && error.getLocalizedMessage() != null) {
+      message = getString(R.string.error_network_exact, error.getLocalizedMessage());
+    } else {
+      message = getString(R.string.error_network);
+    }
+    if (error != null) {
+      error.printStackTrace();
+      showSnackbarWithDetailsAction(error, message);
+    } else {
+      showMessageLong(message);
+    }
+  }
+
+  public void showJSONErrorMessage(JSONException error) {
+    String message;
+    if (error != null && error.getLocalizedMessage() != null) {
+      message = getApplication()
+          .getString(R.string.error_insert, error.getLocalizedMessage());
+    } else {
+      message = getString(R.string.error_undefined);
+    }
+    if (error != null) {
+      error.printStackTrace();
+      showSnackbarWithDetailsAction(error, message);
+    } else {
+      showMessageLong(message);
+    }
   }
 
   private void showErrorDetailsAlertDialog(Context context, String message) {
@@ -178,6 +186,22 @@ public class BaseViewModel extends AndroidViewModel {
           ClipData clip = ClipData.newPlainText("Error details", message);
           clipboard.setPrimaryClip(clip);
         }).create().show();
+  }
+
+  private void showSnackbarWithDetailsAction(@NonNull Throwable error, String message) {
+    SnackbarMessage snackbarMessage = new SnackbarMessage(message);
+    error.printStackTrace();
+
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    error.printStackTrace(pw);
+    String stackTrace = sw.toString();
+    snackbarMessage.setAction(
+        getString(R.string.action_details),
+        v -> showErrorDetailsAlertDialog(v.getContext(), stackTrace)
+    );
+    snackbarMessage.setDurationSecs(5);
+    showSnackbar(snackbarMessage);
   }
 
   public void showMessageLong(@Nullable String message) {
