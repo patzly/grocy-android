@@ -115,7 +115,7 @@ public class BaseViewModel extends AndroidViewModel {
       showJSONErrorMessage((JSONException) error);
     } else if (error instanceof Throwable) {
       Log.e(TAG, "onError: Throwable: " + (Throwable) error);
-      showDatabaseErrorMessage((Throwable) error);
+      showThrowableErrorMessage((Throwable) error);
     }
   }
 
@@ -123,13 +123,13 @@ public class BaseViewModel extends AndroidViewModel {
     showMessage(getString(R.string.error_undefined));
   }
 
-  public void showDatabaseErrorMessage(Throwable error) {
+  public void showThrowableErrorMessage(Throwable error) {
     String message;
     if (error != null && error.getLocalizedMessage() != null) {
       message = getApplication()
-          .getString(R.string.error_database_exact, error.getLocalizedMessage());
+          .getString(R.string.error_insert, error.getLocalizedMessage());
     } else {
-      message = getString(R.string.error_database);
+      message = getString(R.string.error_undefined);
     }
     SnackbarMessage snackbarMessage = new SnackbarMessage(message);
     if (error != null) {

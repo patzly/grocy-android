@@ -484,8 +484,7 @@
   <string name="error_network_subtitle">The required data could not be loaded completely</string>
   <string name="error_network_exact">Network error: %1$s</string>
   <string name="error_database">Database error</string>
-  <string name="error_database_exact">Database error: %1$s</string>
-  <string name="error_database_object_too_large">Database error</string>
+  <string name="error_insert">Error: %1$s</string>
   <string name="error_details">Error details</string>
   <string name="error_unknown">Oops!</string>
   <string name="error_not_grocy_instance">Not a valid grocy instance</string>
