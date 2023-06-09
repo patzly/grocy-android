@@ -63,11 +63,11 @@ public class RoundedCornerImageView extends AppCompatImageView {
     rect = new RectF();
 
     // Initialize the shadow paint
-    shadowRadius = UiUtil.dpToPx(getContext(), 8);
+    shadowRadius = UiUtil.dpToPx(getContext(), 10);
     shadowPaint = new Paint();
     shadowPaint.setStyle(Paint.Style.FILL);
     shadowPaint.setColor(Color.BLACK);
-    shadowPaint.setAlpha(100);
+    shadowPaint.setAlpha(80);
     shadowPaint.setMaskFilter(
         new BlurMaskFilter(UiUtil.dpToPx(getContext(), shadowRadius), BlurMaskFilter.Blur.NORMAL)
     );
