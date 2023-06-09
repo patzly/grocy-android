@@ -31,7 +31,11 @@
     style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
     android:animateLayoutChanges="true"
     android:layout_width="0dp"
-    android:layout_weight="1">
+    android:layout_weight="1"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="8dp">
 
     <ImageView
       android:id="@+id/image_master_edit_selection_selected"
@@ -40,24 +44,29 @@
       android:visibility="invisible"
       tools:ignore="ContentDescription"
       android:layout_marginEnd="16dp"
+      android:layout_marginTop="12dp"
+      android:layout_marginBottom="12dp"
       app:tint="?attr/colorPrimary" />
 
     <TextView
       android:id="@+id/text_master_edit_selection_name"
       style="@style/Widget.Grocy.TextView.ListItem.Title"
-      android:layout_width="match_parent"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:singleLine="false" />
+      android:layout_marginTop="12dp"
+      android:layout_marginBottom="12dp"
+      android:singleLine="false"
+      android:layout_weight="1"
+      android:layout_marginEnd="16dp"/>
+
+    <com.google.android.material.button.MaterialButton
+      style="@style/Widget.Grocy.Button.IconButton"
+      android:id="@+id/button_pin"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:visibility="gone"
+      app:icon="@drawable/ic_round_push_pin" />
 
   </LinearLayout>
-
-  <com.google.android.material.button.MaterialButton
-    style="@style/Widget.Grocy.Button.IconButton"
-    android:id="@+id/button_pin"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="8dp"
-    android:visibility="gone"
-    app:icon="@drawable/ic_round_push_pin" />
 
 </LinearLayout>

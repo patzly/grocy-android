@@ -611,6 +611,8 @@
                   style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
                   android:layout_width="0dp"
                   android:layout_weight="1"
+                  android:paddingStart="16dp"
+                  android:paddingEnd="8dp"
                   android:onClick="@{() -> viewModel.showStoresBottomSheet()}"
                   android:visibility="@{formData.showStoreSection &amp;&amp; viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING) ? View.VISIBLE : View.GONE}">
 
@@ -620,7 +622,9 @@
                     android:src="@drawable/ic_round_store"
                     tools:ignore="ContentDescription" />
 
-                  <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+                  <LinearLayout
+                    style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch"
+                    android:layout_marginEnd="16dp">
 
                     <TextView
                       style="@style/Widget.Grocy.TextView.ListItem.OverLine"
@@ -633,18 +637,18 @@
 
                   </LinearLayout>
 
-                </LinearLayout>
+                  <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.Grocy.Button.IconButton"
+                    android:id="@+id/button_pin_store"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{formData.pinnedStoreIdLive != null ? View.VISIBLE : View.GONE}"
+                    android:onClick="@{v -> formData.setPinnedStoreId(-1)}"
+                    android:layout_gravity="center_vertical"
+                    app:iconTint="?attr/colorPrimary"
+                    app:icon="@drawable/ic_round_push_pin" />
 
-                <com.google.android.material.button.MaterialButton
-                  style="@style/Widget.Grocy.Button.IconButton"
-                  android:id="@+id/button_pin_store"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_marginEnd="8dp"
-                  app:backgroundTint="?attr/colorPrimaryContainer"
-                  android:visibility="@{formData.pinnedStoreIdLive != null ? View.VISIBLE : View.GONE}"
-                  android:onClick="@{v -> formData.setPinnedStoreId(-1)}"
-                  app:icon="@drawable/ic_round_push_pin" />
+                </LinearLayout>
 
               </LinearLayout>
 

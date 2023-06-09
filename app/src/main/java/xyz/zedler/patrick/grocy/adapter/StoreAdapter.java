@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,9 +122,9 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
     holder.buttonPin.setOnClickListener(
         view -> listener.onItemRowClicked(store, true)
     );
-    holder.buttonPin.setBackgroundColor(store.getId() == currentPinId
-        ? ResUtil.getColorAttr(ctx, R.attr.colorPrimaryContainer)
-        : ctx.getResources().getColor(R.color.transparent));
+    holder.buttonPin.setIconTint(ColorStateList.valueOf(store.getId() == currentPinId
+        ? ResUtil.getColorAttr(ctx, R.attr.colorPrimary)
+        : ResUtil.getColorAttr(ctx, R.attr.colorOnSurfaceVariant, 0.6f)));
 
     if (noneSelectable) {
       holder.linearLayoutContainer.setEnabled(false);
