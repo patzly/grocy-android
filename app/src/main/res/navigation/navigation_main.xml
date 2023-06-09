@@ -966,6 +966,10 @@
       <argument
         android:name="action"
         app:argType="string" />
+      <argument
+        android:name="forceSaveWithClose"
+        app:argType="boolean"
+        android:defaultValue="false" />
       <action
           android:id="@+id/action_masterProductCatOptionalFragment_to_editorHtmlFragment"
           app:destination="@id/editorHtmlFragment"
@@ -987,6 +991,10 @@
       <argument
         android:name="action"
         app:argType="string" />
+      <argument
+        android:name="forceSaveWithClose"
+        app:argType="boolean"
+        android:defaultValue="false" />
     </fragment>
     <fragment
       android:id="@+id/masterProductCatDueDateFragment"
@@ -1001,6 +1009,10 @@
       <argument
         android:name="action"
         app:argType="string" />
+      <argument
+        android:name="forceSaveWithClose"
+        app:argType="boolean"
+        android:defaultValue="false" />
     </fragment>
     <fragment
       android:id="@+id/masterProductCatAmountFragment"
@@ -1015,6 +1027,10 @@
       <argument
         android:name="action"
         app:argType="string" />
+      <argument
+        android:name="forceSaveWithClose"
+        app:argType="boolean"
+        android:defaultValue="false" />
     </fragment>
     <fragment
       android:id="@+id/masterProductCatQuantityUnitFragment"
@@ -1029,6 +1045,10 @@
       <argument
         android:name="action"
         app:argType="string" />
+      <argument
+        android:name="forceSaveWithClose"
+        app:argType="boolean"
+        android:defaultValue="false" />
     </fragment>
     <fragment
       android:id="@+id/masterProductCatBarcodesFragment"

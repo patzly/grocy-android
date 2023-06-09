@@ -54,6 +54,7 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.elevation.SurfaceColors;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants.PREF;
@@ -370,22 +371,13 @@ public class RecipeEntryAdapter extends
     container.setOnClickListener(
         view -> listener.onItemRowClicked(recipe)
     );
-
-    // DIVIDER
-
-    if (layoutManager instanceof LinearLayoutManager
-        && viewHolder instanceof RecipeViewHolder) {
-      ((RecipeViewHolder) viewHolder).binding.divider.setVisibility(
-          position < recipes.size()-1 ? View.VISIBLE : View.GONE
-      );
-    }
-
   }
 
   private static Chip createChip(Context ctx, String text, int textColor) {
     @SuppressLint("InflateParams")
     Chip chip = (Chip) LayoutInflater.from(ctx)
         .inflate(R.layout.view_info_chip, null, false);
+    chip.setChipBackgroundColor(ColorStateList.valueOf(SurfaceColors.SURFACE_3.getColor(ctx)));
     chip.setText(text);
     if (textColor != -1) {
       chip.setTextColor(textColor);

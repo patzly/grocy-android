@@ -83,13 +83,20 @@ public class StoresBottomSheet extends BaseBottomSheetDialogFragment
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
     binding.recyclerListSelection.setItemAnimator(new DefaultItemAnimator());
-    binding.recyclerListSelection.setAdapter(new StoreAdapter(stores, selected, this));;
+    binding.recyclerListSelection.setAdapter(new StoreAdapter(
+        stores,
+        selected,
+        bundle.getBoolean(ARGUMENT.NONE_SELECTABLE, false),
+        bundle.getBoolean(ARGUMENT.DISPLAY_PIN_BUTTONS, false),
+        bundle.getInt(ARGUMENT.CURRENT_PIN_ID, -1),
+        this
+    ));
   }
 
   @Override
-  public void onItemRowClicked(int position) {
+  public void onItemRowClicked(Store store, boolean pinClicked) {
     BaseFragment currentFragment = activity.getCurrentFragment();
-    currentFragment.selectStore(stores.get(position));
+    currentFragment.selectStore(store, pinClicked);
     dismiss();
   }
 

@@ -404,7 +404,9 @@ public class PurchaseViewModel extends BaseViewModel {
 
       // store
       String storeId;
-      if (barcode != null && barcode.hasStoreId()) {
+      if (formData.getPinnedStoreIdLive().getValue() != null) {
+        storeId = String.valueOf(formData.getPinnedStoreIdLive().getValue());
+      } else if (barcode != null && barcode.hasStoreId()) {
         // if barcode contains store, take this
         storeId = barcode.getStoreId();
       } else {
@@ -490,7 +492,9 @@ public class PurchaseViewModel extends BaseViewModel {
 
     // store
     String storeId = null;
-    if (barcode != null && barcode.hasStoreId()) {
+    if (formData.getPinnedStoreIdLive().getValue() != null) {
+      storeId = String.valueOf(formData.getPinnedStoreIdLive().getValue());
+    } else if (barcode != null && barcode.hasStoreId()) {
       // if barcode contains store, take this
       storeId = barcode.getStoreId();
     }
@@ -952,7 +956,7 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public void showStoresBottomSheet() {
-    if (!formData.isProductNameValid() || stores == null || stores.isEmpty()) {
+    if (stores == null || stores.isEmpty()) {
       return;
     }
     Bundle bundle = new Bundle();
@@ -964,6 +968,10 @@ public class PurchaseViewModel extends BaseViewModel {
             : -1
     );
     bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
+    bundle.putBoolean(ARGUMENT.NONE_SELECTABLE, !formData.isProductNameValid(false));
+    bundle.putBoolean(ARGUMENT.DISPLAY_PIN_BUTTONS, true);
+    Integer pinId = formData.getPinnedStoreIdLive().getValue();
+    bundle.putInt(ARGUMENT.CURRENT_PIN_ID, pinId != null ? pinId : -1);
     showBottomSheet(new StoresBottomSheet(), bundle);
   }
 

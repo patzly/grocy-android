@@ -74,6 +74,7 @@ public class MasterProductViewModel extends BaseViewModel {
   private final boolean debug;
   private final MutableLiveData<Boolean> actionEditLive;
   private final MasterProductFragmentArgs args;
+  private final boolean forceSaveWithClose;
 
   public MasterProductViewModel(
       @NonNull Application application,
@@ -92,6 +93,7 @@ public class MasterProductViewModel extends BaseViewModel {
     formData = new FormDataMasterProduct(application, getBeginnerModeEnabled());
     actionEditLive = new MutableLiveData<>();
     actionEditLive.setValue(args.getAction().equals(Constants.ACTION.EDIT));
+    forceSaveWithClose = !isActionEdit() && args.getProductName() != null;
 
     pendingProductBarcodesLive = new MutableLiveData<>();
     infoFullscreenLive = new MutableLiveData<>();
@@ -407,6 +409,10 @@ public class MasterProductViewModel extends BaseViewModel {
     } else {
       pendingProductBarcodesLive.setValue(filteredBarcodes);
     }
+  }
+
+  public boolean isForceSaveWithClose() {
+    return forceSaveWithClose;
   }
 
   @NonNull

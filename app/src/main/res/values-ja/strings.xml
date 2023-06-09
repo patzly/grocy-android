@@ -272,6 +272,7 @@
   <string name="msg_item_marked_as_undone">アイテムを未完了として登録</string>
   <string name="option_synced_success">オプションが同期されました</string>
   <string name="option_synced_error">オプションが同期できませんでした</string>
+  <string name="msg_data_copied_from_product">製品「%1$s」のデータがコピーされました。</string>
   <string name="msg_recipe_added_to_cart">レシピの材料をカートに追加しました</string>
   <string name="msg_recipe_consumed">レシピ \"%1$s\" の材料を在庫から消去しました</string>
   <string name="msg_stored_purchases_overview">サーバーに送信できなかった購入情報があります。詳細はここをタップ</string>
@@ -455,8 +456,7 @@
   <string name="error_network_subtitle">必要なデータを完全にはロードできませんでした</string>
   <string name="error_network_exact">ネットワークエラー：%1$s</string>
   <string name="error_database">データベースエラー</string>
-  <string name="error_database_exact">データベースエラー：%1$s</string>
-  <string name="error_database_object_too_large">データベースエラー</string>
+  <string name="error_insert">エラー：%1$s</string>
   <string name="error_details">エラーの詳細</string>
   <string name="error_unknown">おっと！</string>
   <string name="error_not_grocy_instance">無効なgrocyインスタンスです</string>
@@ -498,6 +498,7 @@
   <string name="title_shopping_list">買い物リスト</string>
   <string name="title_feedback">フィードバック</string>
   <string name="title_settings">設定</string>
+  <string name="title_options">オプション</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="title_barcode_scanner">バーコードスキャナ</string>
   <!-- Context: About this app -->
@@ -737,8 +738,10 @@
   <string name="property_product_name">製品名</string>
   <string name="property_parent_product">親製品</string>
   <string name="property_description">説明</string>
+  <string name="property_product_description">製品の説明</string>
   <string name="property_note">ノート</string>
   <string name="property_status">状態</string>
+  <string name="property_status_insert">状態：</string>
   <string name="property_amount">数量</string>
   <string name="property_amount_insert">数量：%1$s</string>
   <string name="property_seconds">秒</string>
@@ -755,6 +758,8 @@
   <string name="property_price_unit">1 %1$sあたりの価格</string>
   <!-- %1$s is a price and %2$s is a quantity unit-->
   <string name="property_price_unit_insert">1 %2$sあたり%1$s</string>
+  <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_with_currency">%1$s%2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">通貨：%1$s での価格</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -876,11 +881,21 @@
   <string name="property_ungrouped">グループ化されていない</string>
   <!-- %1$s is a property like "product group" or "due date" -->
   <string name="property_extra_field">ほかのフィールド：%1$s</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields">フィールド</string>
   <string name="property_task_category">タスク種別</string>
   <string name="property_task_categories">タスク種別</string>
   <string name="property_calories">カロリー</string>
   <string name="property_calories_unit">カロリー(単位)</string>
   <string name="property_calories_total">カロリー(総量)</string>
+  <!-- %1$s is a value like energy or price, unit means value of items per unit -->
+  <string name="property_insert_per_unit">%1$s (単位あたり)</string>
+  <!-- %1$s is a value like energy or price, total means value of many items in total -->
+  <string name="property_insert_total">%1$s (すべて)</string>
+  <!-- %1$s is a value like price, average means average price -->
+  <string name="property_insert_average">%1$s (平均)</string>
+  <!-- %1$s is a value like price, "last" is like for example in "last price" -->
+  <string name="property_insert_last">%1$s (前回)</string>
   <string name="property_category">種別</string>
   <string name="property_assigned_to">割り当て：</string>
   <string name="property_users">ユーザー</string>
@@ -901,6 +916,7 @@
   <string name="property_servings_base_insert">基本提供量：%1$s</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_servings_desired">希望提供数</string>
+  <string name="property_servings_desired_insert">必要提供数：%1$s</string>
   <string name="property_not_check_shopping_list">買い物リストをチェックしない</string>
   <string name="property_not_check_shopping_list_description">不足アイテムを追加する場合</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
@@ -1120,6 +1136,4 @@
 
   <string name="notification_due_soon_content">食品ロスを減らすために数日間で消費。</string>
 
-  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
-  Examples: 'de' for German; 'fr' for French -->
-</resources>
+  </resources>

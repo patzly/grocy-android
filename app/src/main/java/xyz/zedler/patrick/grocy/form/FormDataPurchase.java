@@ -107,6 +107,7 @@ public class FormDataPurchase {
   private final MutableLiveData<Boolean> showStoreSection;
   private final MutableLiveData<Store> storeLive;
   private final LiveData<String> storeNameLive;
+  private final MutableLiveData<Integer> pinnedStoreIdLive;
   private final MutableLiveData<Location> locationLive;
   private final LiveData<String> locationNameLive;
   private final MutableLiveData<Integer> printLabelTypeLive;
@@ -280,6 +281,7 @@ public class FormDataPurchase {
         storeLive,
         store -> store != null ? store.getName() : null
     );
+    pinnedStoreIdLive = new MutableLiveData<>();
     locationLive = new MutableLiveData<>();
     locationNameLive = Transformations.map(
         locationLive,
@@ -683,7 +685,20 @@ public class FormDataPurchase {
     this.currentProductFlowInterrupted = currentProductFlowInterrupted;
   }
 
+  public MutableLiveData<Integer> getPinnedStoreIdLive() {
+    return pinnedStoreIdLive;
+  }
+
+  public void setPinnedStoreId(Integer pinnedStoreId) {
+    if (pinnedStoreId != null && pinnedStoreId == -1) pinnedStoreId = null;
+    this.pinnedStoreIdLive.setValue(pinnedStoreId);
+  }
+
   public boolean isProductNameValid() {
+    return isProductNameValid(true);
+  }
+
+  public boolean isProductNameValid(boolean displayError) {
     if (productNameLive.getValue() != null && productNameLive.getValue().isEmpty()) {
       if (productDetailsLive.getValue() != null || pendingProductLive.getValue() != null) {
         clearForm();
@@ -692,12 +707,12 @@ public class FormDataPurchase {
     }
     if (productDetailsLive.getValue() == null && productNameLive.getValue() == null
         || productDetailsLive.getValue() == null && productNameLive.getValue().isEmpty()) {
-      productNameErrorLive.setValue(R.string.error_empty);
+      if (displayError) productNameErrorLive.setValue(R.string.error_empty);
       return false;
     }
     if (productDetailsLive.getValue() == null && !productNameLive.getValue().isEmpty()
             && pendingProductLive.getValue() == null) {
-      productNameErrorLive.setValue(R.string.error_invalid_product);
+      if (displayError) productNameErrorLive.setValue(R.string.error_invalid_product);
       return false;
     }
     if (productDetailsLive.getValue() != null && !productNameLive.getValue().isEmpty()
@@ -707,7 +722,7 @@ public class FormDataPurchase {
             && !pendingProductLive.getValue().getName()
             .equals(productNameLive.getValue())
     ) {
-      productNameErrorLive.setValue(R.string.error_invalid_product);
+      if (displayError) productNameErrorLive.setValue(R.string.error_invalid_product);
       return false;
     }
     productNameErrorLive.setValue(null);

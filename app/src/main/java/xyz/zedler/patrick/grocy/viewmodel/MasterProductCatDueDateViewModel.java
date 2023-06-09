@@ -26,12 +26,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatDueDate;
+import xyz.zedler.patrick.grocy.fragment.MasterProductCatDueDateFragmentArgs;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.Constants;
 
 public class MasterProductCatDueDateViewModel extends BaseViewModel {
 
@@ -40,7 +40,7 @@ public class MasterProductCatDueDateViewModel extends BaseViewModel {
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
   private final FormDataMasterProductCatDueDate formData;
-  private final MasterProductFragmentArgs args;
+  private final MasterProductCatDueDateFragmentArgs args;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -50,7 +50,7 @@ public class MasterProductCatDueDateViewModel extends BaseViewModel {
 
   public MasterProductCatDueDateViewModel(
       @NonNull Application application,
-      @NonNull MasterProductFragmentArgs startupArgs
+      @NonNull MasterProductCatDueDateFragmentArgs startupArgs
   ) {
     super(application);
 
@@ -121,11 +121,11 @@ public class MasterProductCatDueDateViewModel extends BaseViewModel {
   public static class MasterProductCatDueDateViewModelFactory implements ViewModelProvider.Factory {
 
     private final Application application;
-    private final MasterProductFragmentArgs args;
+    private final MasterProductCatDueDateFragmentArgs args;
 
     public MasterProductCatDueDateViewModelFactory(
         Application application,
-        MasterProductFragmentArgs args
+        MasterProductCatDueDateFragmentArgs args
     ) {
       this.application = application;
       this.args = args;

@@ -84,10 +84,9 @@
           tools:ignore="ContentDescription" />
 
         <TextView
-          style="@style/TextAppearance.Grocy.TitleLarge"
+          style="@style/TextAppearance.Grocy.HeadlineMedium"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:textSize="26sp"
           android:layout_marginStart="16dp"
           android:layout_marginTop="12dp"
           android:text="@{viewModel.recipeLive.name}"/>
@@ -96,7 +95,6 @@
           android:id="@+id/container_chips"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
           android:layout_marginBottom="8dp"
           android:scrollbars="none"
           android:overScrollMode="ifContentScrolls">

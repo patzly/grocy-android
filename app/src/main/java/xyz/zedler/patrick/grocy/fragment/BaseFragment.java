@@ -239,6 +239,9 @@ public class BaseFragment extends Fragment {
   public void selectStore(Store store) {
   }
 
+  public void selectStore(Store store, boolean pinClicked) {
+  }
+
   public void selectTaskCategory(TaskCategory taskCategory) {
   }
 

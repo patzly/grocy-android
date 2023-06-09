@@ -375,10 +375,14 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   }
 
   @Override
-  public void selectStore(Store store) {
-    viewModel.getFormData().getStoreLive().setValue(
-        store == null || store.getId() == -1 ? null : store
-    );
+  public void selectStore(Store store, boolean pinClicked) {
+    if (pinClicked) {
+      if (store != null) viewModel.getFormData().setPinnedStoreId(store.getId());
+    } else {
+      viewModel.getFormData().getStoreLive().setValue(
+          store == null || store.getId() == -1 ? null : store
+      );
+    }
   }
 
   @Override

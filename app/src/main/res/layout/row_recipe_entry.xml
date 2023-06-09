@@ -23,77 +23,64 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:id="@+id/container"
+    style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:background="@drawable/ripple_list_item_bg_small_padding">
+
+    <xyz.zedler.patrick.grocy.view.RoundedCornerImageView
+      android:id="@+id/picture"
+      android:layout_width="56dp"
+      android:layout_height="56dp"
+      android:layout_marginEnd="16dp"
+      android:layout_gravity="top"
+      tools:ignore="ContentDescription"
+      app:radius="5dp"/>
+
+    <com.google.android.material.card.MaterialCardView
+      android:id="@+id/picture_placeholder"
+      android:layout_width="56dp"
+      android:layout_height="56dp"
+      android:layout_marginEnd="16dp"
+      android:layout_gravity="top"
+      android:visibility="gone"
+      app:cardCornerRadius="12dp"
+      app:cardElevation="0dp"
+      app:strokeWidth="0dp"
+      app:cardBackgroundColor="?attr/colorSurfaceVariant">
+
+      <ImageView
+        style="@style/Widget.Grocy.ImageView.Icon"
+        android:src="@drawable/ic_round_image"
+        android:layout_gravity="center"
+        tools:ignore="ContentDescription" />
+
+    </com.google.android.material.card.MaterialCardView>
 
     <LinearLayout
-      android:id="@+id/container"
-      style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-      android:paddingStart="8dp"
-      android:paddingEnd="8dp"
-      android:background="@drawable/ripple_list_item_bg_small_padding">
+      android:id="@+id/linear_text_container"
+      style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch"
+      android:layout_gravity="center_vertical">
 
-      <xyz.zedler.patrick.grocy.view.RoundedCornerImageView
-        android:id="@+id/picture"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginEnd="16dp"
-        android:layout_gravity="top"
-        tools:ignore="ContentDescription"
-        app:radius="5dp"/>
+      <TextView
+        android:id="@+id/title"
+        style="@style/Widget.Grocy.TextView.ListItem.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
-      <com.google.android.material.card.MaterialCardView
-        android:id="@+id/picture_placeholder"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginEnd="16dp"
-        android:layout_gravity="top"
-        android:visibility="gone"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="0dp"
-        app:strokeWidth="0dp"
-        app:cardBackgroundColor="?attr/colorSurfaceVariant">
-
-        <ImageView
-          style="@style/Widget.Grocy.ImageView.Icon"
-          android:src="@drawable/ic_round_image"
-          android:layout_gravity="center"
-          tools:ignore="ContentDescription" />
-
-      </com.google.android.material.card.MaterialCardView>
-
-      <LinearLayout
-        android:id="@+id/linear_text_container"
-        style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch"
-        android:layout_gravity="center_vertical">
-
-        <TextView
-          android:id="@+id/title"
-          style="@style/Widget.Grocy.TextView.ListItem.Title"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"/>
-
-        <com.google.android.flexbox.FlexboxLayout
-          android:id="@+id/flexbox_layout"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="4dp"
-          app:flexWrap="wrap"
-          app:alignItems="stretch"
-          app:alignContent="stretch"
-          app:showDivider="middle"
-          app:dividerDrawable="@drawable/shape_flex_layout_divider"/>
-
-      </LinearLayout>
+      <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/flexbox_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:flexWrap="wrap"
+        app:alignItems="stretch"
+        app:alignContent="stretch"
+        app:showDivider="middle"
+        app:dividerDrawable="@drawable/shape_flex_layout_divider"/>
 
     </LinearLayout>
-
-    <com.google.android.material.divider.MaterialDivider
-      android:id="@+id/divider"
-      style="@style/Widget.Grocy.Divider.Margin"
-      android:layout_marginHorizontal="8dp"
-      android:layout_marginVertical="4dp"/>
 
   </LinearLayout>
 
