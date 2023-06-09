@@ -548,7 +548,7 @@ public class StockOverviewItemAdapter extends
     @SuppressLint("InflateParams")
     Chip chip = (Chip) LayoutInflater.from(ctx)
         .inflate(R.layout.view_info_chip, null, false);
-    chip.setChipBackgroundColor(ColorStateList.valueOf(SurfaceColors.SURFACE_3.getColor(ctx)));
+    chip.setChipBackgroundColor(ColorStateList.valueOf(SurfaceColors.SURFACE_4.getColor(ctx)));
     chip.setText(text);
     chip.setEnabled(false);
     chip.setClickable(false);
