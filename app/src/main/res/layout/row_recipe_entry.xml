@@ -72,8 +72,7 @@
           android:id="@+id/title"
           style="@style/Widget.Grocy.TextView.ListItem.Title"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:fontFamily="@font/jost_medium"/>
+          android:layout_height="wrap_content"/>
 
         <com.google.android.flexbox.FlexboxLayout
           android:id="@+id/flexbox_layout"
