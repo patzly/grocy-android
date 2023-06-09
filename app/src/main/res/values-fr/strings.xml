@@ -496,8 +496,7 @@
   <string name="error_network_subtitle">Les données requises n\'ont pas pu être chargées complètement</string>
   <string name="error_network_exact">Erreur réseau : %1$s</string>
   <string name="error_database">Erreur de la base de données</string>
-  <string name="error_database_exact">Erreur de la base de données : %1$s</string>
-  <string name="error_database_object_too_large">Erreur de la base de données</string>
+  <string name="error_insert">Erreur : %1$s</string>
   <string name="error_details">Détails de l\'erreur</string>
   <string name="error_unknown">Oups !</string>
   <string name="error_not_grocy_instance">Ce n\'est pas une instance de grocy valide</string>
