@@ -76,7 +76,6 @@ import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
-import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingListViewModel;
 import xyz.zedler.patrick.grocy.viewmodel.StockOverviewViewModel;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
@@ -631,7 +630,6 @@ public class ShoppingListItemAdapter extends
     Chip chip = (Chip) LayoutInflater.from(ctx)
         .inflate(R.layout.view_info_chip, null, false);
     chip.setText(text);
-    chip.setChipMinHeight(UiUtil.dpToPx(ctx, 20));
     chip.setClickable(false);
     chip.setFocusable(false);
     return chip;
