@@ -968,7 +968,7 @@ public class PurchaseViewModel extends BaseViewModel {
             : -1
     );
     bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
-    bundle.putBoolean(ARGUMENT.NONE_SELECTABLE, !formData.isProductNameValid());
+    bundle.putBoolean(ARGUMENT.NONE_SELECTABLE, !formData.isProductNameValid(false));
     bundle.putBoolean(ARGUMENT.DISPLAY_PIN_BUTTONS, true);
     Integer pinId = formData.getPinnedStoreIdLive().getValue();
     bundle.putInt(ARGUMENT.CURRENT_PIN_ID, pinId != null ? pinId : -1);

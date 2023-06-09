@@ -695,6 +695,10 @@ public class FormDataPurchase {
   }
 
   public boolean isProductNameValid() {
+    return isProductNameValid(true);
+  }
+
+  public boolean isProductNameValid(boolean displayError) {
     if (productNameLive.getValue() != null && productNameLive.getValue().isEmpty()) {
       if (productDetailsLive.getValue() != null || pendingProductLive.getValue() != null) {
         clearForm();
@@ -703,12 +707,12 @@ public class FormDataPurchase {
     }
     if (productDetailsLive.getValue() == null && productNameLive.getValue() == null
         || productDetailsLive.getValue() == null && productNameLive.getValue().isEmpty()) {
-      productNameErrorLive.setValue(R.string.error_empty);
+      if (displayError) productNameErrorLive.setValue(R.string.error_empty);
       return false;
     }
     if (productDetailsLive.getValue() == null && !productNameLive.getValue().isEmpty()
             && pendingProductLive.getValue() == null) {
-      productNameErrorLive.setValue(R.string.error_invalid_product);
+      if (displayError) productNameErrorLive.setValue(R.string.error_invalid_product);
       return false;
     }
     if (productDetailsLive.getValue() != null && !productNameLive.getValue().isEmpty()
@@ -718,7 +722,7 @@ public class FormDataPurchase {
             && !pendingProductLive.getValue().getName()
             .equals(productNameLive.getValue())
     ) {
-      productNameErrorLive.setValue(R.string.error_invalid_product);
+      if (displayError) productNameErrorLive.setValue(R.string.error_invalid_product);
       return false;
     }
     productNameErrorLive.setValue(null);
