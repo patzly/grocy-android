@@ -29,7 +29,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
@@ -67,7 +67,7 @@ public class ChooseProductAdapter extends
     private final LinearLayout container;
     private final TextView name;
     private final ImageView imagePending;
-    private final MaterialToolbar toolbar;
+    private final MaterialButton buttonCopy;
 
     public ItemViewHolder(View view) {
       super(view);
@@ -75,7 +75,7 @@ public class ChooseProductAdapter extends
       container = view.findViewById(R.id.container);
       name = view.findViewById(R.id.name);
       imagePending = view.findViewById(R.id.image_pending);
-      toolbar = view.findViewById(R.id.toolbar);
+      buttonCopy = view.findViewById(R.id.button_copy);
     }
   }
 
@@ -108,15 +108,10 @@ public class ChooseProductAdapter extends
     }
 
     if (forbidCreateProduct) {
-      holder.toolbar.setVisibility(View.GONE);
+      holder.buttonCopy.setVisibility(View.GONE);
     } else {
-      holder.toolbar.setVisibility(View.VISIBLE);
-      holder.toolbar.setOnMenuItemClickListener(item -> {
-        if (item.getItemId() == R.id.action_copy) {
-          listener.onItemRowClicked(product, true);
-        }
-        return false;
-      });
+      holder.buttonCopy.setVisibility(View.VISIBLE);
+      holder.buttonCopy.setOnClickListener(v -> listener.onItemRowClicked(product, true));
     }
 
     // CONTAINER

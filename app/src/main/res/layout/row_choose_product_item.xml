@@ -46,15 +46,6 @@
     android:visibility="gone"
     tools:ignore="ContentDescription" />
 
-  <com.google.android.material.appbar.MaterialToolbar
-    android:id="@+id/toolbar"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:contentInsetStart="2dp"
-    app:contentInsetEnd="0dp"
-    app:contentPadding="0dp"
-    app:menu="@menu/menu_choose_product_entry" />
-
   <com.google.android.material.button.MaterialButton
     android:id="@+id/button_copy"
     style="@style/Widget.Grocy.Button.IconButton"
