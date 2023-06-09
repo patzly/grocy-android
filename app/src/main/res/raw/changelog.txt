@@ -20,6 +20,7 @@
 - Fixed: Glitch with large top margin on recipe grid layout (#696)
 - Fixed: Saving QU conversion failed if conversion existed already in other product (#707, #682)
 - Fixed: Disabled features with Home Assistant add-on were not disabled in app (#713)
+- Fixed: On product creation with prefilled name there was a plus instead of space character
 
 ## 3.2.1
 
