@@ -36,7 +36,8 @@ public class RoundedCornerImageView extends AppCompatImageView {
   private float radius = 16f;
   private Path path;
   private RectF rect;
-  private boolean onlyBottomCornersRound = false;
+  private boolean bottomCornersRound = true;
+  private boolean topCornersRound = true;
   private boolean showBottomShadow = false;
   private Paint shadowPaint;
 
@@ -75,7 +76,8 @@ public class RoundedCornerImageView extends AppCompatImageView {
     try {
       // Extract the radius, onlyBottomCornersRound, and showBottomShadow if they exist
       radius = a.getDimensionPixelSize(R.styleable.RoundedCornerImageView_radius, (int) radius);
-      onlyBottomCornersRound = a.getBoolean(R.styleable.RoundedCornerImageView_onlyBottomCornersRound, false);
+      bottomCornersRound = a.getBoolean(R.styleable.RoundedCornerImageView_bottomCornersRound, true);
+      topCornersRound = a.getBoolean(R.styleable.RoundedCornerImageView_topCornersRound, true);
       showBottomShadow = a.getBoolean(R.styleable.RoundedCornerImageView_showBottomShadow, false);
     } finally {
       // Recycle the TypedArray
@@ -96,9 +98,14 @@ public class RoundedCornerImageView extends AppCompatImageView {
     rect.set(0, 0, getWidth(), getHeight());
     path.rewind();  // Clear the path before adding to it
 
-    if (onlyBottomCornersRound) {
+    if (bottomCornersRound && !topCornersRound) {
       float[] radii = {0, 0, 0, 0, radius, radius, radius, radius};
       path.addRoundRect(rect, radii, Path.Direction.CW);
+    } else if (!bottomCornersRound && topCornersRound) {
+      float[] radii = {radius, radius, radius, radius, 0, 0, 0, 0};
+      path.addRoundRect(rect, radii, Path.Direction.CW);
+    } if (!bottomCornersRound && !topCornersRound) {
+      path.addRoundRect(rect, 0, 0, Path.Direction.CW);
     } else {
       path.addRoundRect(rect, radius, radius, Path.Direction.CW);
     }
