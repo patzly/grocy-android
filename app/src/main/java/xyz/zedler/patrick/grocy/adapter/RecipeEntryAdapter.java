@@ -54,6 +54,7 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.elevation.SurfaceColors;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants.PREF;
@@ -376,6 +377,7 @@ public class RecipeEntryAdapter extends
     @SuppressLint("InflateParams")
     Chip chip = (Chip) LayoutInflater.from(ctx)
         .inflate(R.layout.view_info_chip, null, false);
+    chip.setChipBackgroundColor(ColorStateList.valueOf(SurfaceColors.SURFACE_2.getColor(ctx)));
     chip.setText(text);
     if (textColor != -1) {
       chip.setTextColor(textColor);
