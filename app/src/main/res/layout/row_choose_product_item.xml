@@ -27,7 +27,7 @@
   android:paddingBottom="0dp"
   android:paddingTop="0dp"
   android:paddingStart="16dp"
-  android:paddingEnd="12dp">
+  android:paddingEnd="8dp">
 
   <TextView
     android:id="@+id/name"
@@ -54,5 +54,13 @@
     app:contentInsetEnd="0dp"
     app:contentPadding="0dp"
     app:menu="@menu/menu_choose_product_entry" />
+
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/button_copy"
+    style="@style/Widget.Grocy.Button.IconButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:icon="@drawable/ic_round_content_copy" />
+
 
 </LinearLayout>
