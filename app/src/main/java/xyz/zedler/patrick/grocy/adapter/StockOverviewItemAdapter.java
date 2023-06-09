@@ -550,6 +550,7 @@ public class StockOverviewItemAdapter extends
         .inflate(R.layout.view_info_chip, null, false);
     chip.setChipBackgroundColor(ColorStateList.valueOf(SurfaceColors.SURFACE_3.getColor(ctx)));
     chip.setText(text);
+    chip.setEnabled(false);
     chip.setClickable(false);
     chip.setFocusable(false);
     return chip;
