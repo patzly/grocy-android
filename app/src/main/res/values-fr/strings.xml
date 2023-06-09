@@ -312,6 +312,7 @@
   <string name="msg_item_marked_as_undone">Élément marqué comme non terminé</string>
   <string name="option_synced_success">Option synchronisée avec succès</string>
   <string name="option_synced_error">L\'option n\'a pas pu être synchronisée</string>
+  <string name="msg_data_copied_from_product">Les données ont été copiées à partir du produit \"%1$s\".</string>
   <string name="msg_recipe_added_to_cart">Ingrédients de la recette ajoutés au panier</string>
   <string name="msg_recipe_consumed">Tous les ingrédients de la recette \"%1$s\" ont été retirés du stock</string>
   <string name="msg_stored_purchases_overview">Il y a des achats sur l\'appareil qui n\'ont pas encore été transférés sur le serveur. Appuyez ici pour plus de détails.</string>
@@ -495,8 +496,7 @@
   <string name="error_network_subtitle">Les données requises n\'ont pas pu être chargées complètement</string>
   <string name="error_network_exact">Erreur réseau : %1$s</string>
   <string name="error_database">Erreur de la base de données</string>
-  <string name="error_database_exact">Erreur de la base de données : %1$s</string>
-  <string name="error_database_object_too_large">Erreur de la base de données</string>
+  <string name="error_insert">Erreur : %1$s</string>
   <string name="error_details">Détails de l\'erreur</string>
   <string name="error_unknown">Oups !</string>
   <string name="error_not_grocy_instance">Ce n\'est pas une instance de grocy valide</string>
@@ -538,6 +538,7 @@
   <string name="title_shopping_list">Liste de courses</string>
   <string name="title_feedback">Retour d\'information</string>
   <string name="title_settings">Paramètres</string>
+  <string name="title_options">Options</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="title_barcode_scanner">Lecteur de code-barres</string>
   <!-- Context: About this app -->
@@ -815,8 +816,10 @@
   <string name="property_product_name">Nom du produit</string>
   <string name="property_parent_product">Produit parent</string>
   <string name="property_description">Description</string>
+  <string name="property_product_description">Description du produit</string>
   <string name="property_note">Note</string>
   <string name="property_status">Statut</string>
+  <string name="property_status_insert">Statut :</string>
   <string name="property_amount">Montant</string>
   <string name="property_amount_insert">Quantité : %1$s</string>
   <string name="property_seconds">Secondes</string>
@@ -835,6 +838,8 @@
   <string name="property_price_unit">Prix par %1$s</string>
   <!-- %1$s is a price and %2$s is a quantity unit-->
   <string name="property_price_unit_insert">%1$s les %2$s</string>
+  <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_with_currency">%1$s %2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Prix en %1$s</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -956,11 +961,21 @@
   <string name="property_ungrouped">Non groupé</string>
   <!-- %1$s is a property like "product group" or "due date" -->
   <string name="property_extra_field">Champ supplémentaire : %1$s</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields">Champs</string>
   <string name="property_task_category">Catégorie de tâche</string>
   <string name="property_task_categories">Catégories de tâches</string>
   <string name="property_calories">Calories</string>
   <string name="property_calories_unit">Calories (par unité)</string>
   <string name="property_calories_total">Calories (total)</string>
+  <!-- %1$s is a value like energy or price, unit means value of items per unit -->
+  <string name="property_insert_per_unit">%1$s (unité)</string>
+  <!-- %1$s is a value like energy or price, total means value of many items in total -->
+  <string name="property_insert_total">%1$s (total)</string>
+  <!-- %1$s is a value like price, average means average price -->
+  <string name="property_insert_average">%1$s (moyenne)</string>
+  <!-- %1$s is a value like price, "last" is like for example in "last price" -->
+  <string name="property_insert_last">%1$s (dernier)</string>
   <string name="property_category">Catégorie</string>
   <string name="property_assigned_to">Assigné à</string>
   <string name="property_users">Utilisateurs</string>
@@ -981,6 +996,7 @@
   <string name="property_servings_base_insert">Portions de base : %1$s</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_servings_desired">Portions souhaitées</string>
+  <string name="property_servings_desired_insert">Portions souhaitées : %1$s</string>
   <string name="property_not_check_shopping_list">Ne pas vérifier la liste de courses</string>
   <string name="property_not_check_shopping_list_description">Lorsque vous y ajoutez des éléments manquants</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
@@ -1146,7 +1162,6 @@
   <string name="setting_show_done_items_description">En bas</string>
   <string name="setting_smaller_font">Utiliser une police plus petite</string>
   <string name="setting_smaller_font_description">Pour voir plus d\'articles à la fois</string>
-  <string name="setting_show_product_description">Afficher la description du produit</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Seuil de péremption</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -1219,7 +1234,4 @@
 
   <string name="notification_due_soon_content">Consommez-les au cours des prochains jours pour aider à réduire le gaspillage alimentaire.</string>
 
-  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
-  Examples: 'de' for German; 'fr' for French -->
-  <string name="url_grocy_demo">https://fr.demo.grocy.info</string>
   </resources>

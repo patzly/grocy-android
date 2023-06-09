@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
+  -->
+
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content">
+
+  <com.google.android.material.card.MaterialCardView
+    android:id="@+id/card"
+    style="@style/Widget.Grocy.Card.Outlined"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="8dp"
+    app:contentPadding="8dp">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
+
+      <LinearLayout
+        android:id="@+id/container_row"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="8dp">
+
+        <TextView
+          android:id="@+id/name"
+          style="@style/Widget.Grocy.TextView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textAppearance="?textAppearanceHeadlineMedium" />
+
+        <TextView
+          android:id="@+id/note_as_name"
+          style="@style/Widget.Grocy.TextView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="4dp"
+          android:textAppearance="?textAppearanceHeadlineMedium"
+          android:textStyle="italic"
+          android:visibility="gone" />
+
+        <TextView
+          android:id="@+id/amount"
+          style="@style/Widget.Grocy.TextView.TitleMedium"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:singleLine="true" />
+
+        <TextView
+          android:id="@+id/note"
+          style="@style/Widget.Grocy.TextView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="4dp"
+          android:visibility="gone"
+          android:textColor="?attr/colorError" />
+
+        <xyz.zedler.patrick.grocy.view.ExpandableCard
+          android:id="@+id/card_description"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:visibility="gone"/>
+
+      </LinearLayout>
+
+      <xyz.zedler.patrick.grocy.view.RoundedCornerImageView
+        android:id="@+id/picture"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="4dp"
+        android:layout_gravity="center_vertical"
+        tools:ignore="ContentDescription"
+        app:radius="5dp"/>
+
+    </LinearLayout>
+
+  </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

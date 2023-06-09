@@ -281,6 +281,24 @@ public class Recipe implements Parcelable {
         Objects.equals(notCheckShoppingList, recipe.notCheckShoppingList);
   }
 
+  public boolean equalsForListDiff(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Recipe recipe = (Recipe) o;
+    return Objects.equals(id, recipe.id) &&
+        Objects.equals(name, recipe.name) &&
+        Objects.equals(productId, recipe.productId) &&
+        Objects.equals(type, recipe.type) &&
+        Objects.equals(pictureFileName, recipe.pictureFileName) &&
+        Objects.equals(baseServings, recipe.baseServings) &&
+        Objects.equals(desiredServings, recipe.desiredServings) &&
+        Objects.equals(notCheckShoppingList, recipe.notCheckShoppingList);
+  }
+
   @Override
   public int hashCode() {
     return Objects

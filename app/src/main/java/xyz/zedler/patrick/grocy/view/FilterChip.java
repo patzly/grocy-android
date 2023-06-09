@@ -26,14 +26,12 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.MenuCompat;
 import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.Observer;
 import androidx.transition.AutoTransition;
@@ -41,8 +39,6 @@ import androidx.transition.TransitionManager;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.ViewFilterChipBinding;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveData.MenuItemData;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveData.MenuItemGroup;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 
 public class FilterChip extends LinearLayout {
@@ -119,30 +115,7 @@ public class FilterChip extends LinearLayout {
     if (data.hasPopupMenu()) {
       PopupMenu popupMenu = new PopupMenu(getContext(), this);
       Menu menu = popupMenu.getMenu();
-      for (MenuItemData menuItemData : data.getMenuItemDataList()) {
-        MenuItem menuItem = menu.add(
-            menuItemData.getGroupId(),
-            menuItemData.getItemId(),
-            Menu.NONE,
-            menuItemData.getText()
-        );
-        menuItem.setCheckable(true);
-        menuItem.setChecked(menuItemData.getItemId() == data.getItemIdChecked()
-            || menuItemData.isChecked());
-        menuItem.setOnMenuItemClickListener(data.getMenuItemClickListener());
-      }
-      if (data.getMenuItemGroupArray() != null) {
-        for (MenuItemGroup menuItemGroup : data.getMenuItemGroupArray()) {
-          menu.setGroupCheckable(
-              menuItemGroup.getGroupId(),
-              menuItemGroup.isCheckable(),
-              menuItemGroup.isExclusive()
-          );
-        }
-        if (data.getMenuItemGroupArray().length > 1) {
-          MenuCompat.setGroupDividerEnabled(menu, true);
-        }
-      }
+      data.populateMenu(menu);
       binding.card.setOnClickListener(v -> popupMenu.show());
       binding.container.setOnClickListener(v -> popupMenu.show());
     }

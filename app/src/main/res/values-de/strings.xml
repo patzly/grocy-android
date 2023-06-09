@@ -123,6 +123,7 @@
   <string name="action_demo_server">Demo-Server</string>
   <string name="action_own_server">Eigener Server</string>
   <string name="action_enter_data_manually">Daten manuell eingeben</string>
+  <string name="action_details">Details</string>
   <string name="action_perform">Aktion ausführen</string>
   <string name="action_share">Teilen</string>
   <string name="action_share_description">Erzählen Sie Ihren Freunden von Grocy Android</string>
@@ -291,6 +292,7 @@
   <string name="msg_item_marked_as_undone">Eintrag als unerledigt markiert</string>
   <string name="option_synced_success">Einstellung erfolgreich synchronisiert</string>
   <string name="option_synced_error">Einstellung konnte nicht synchronisiert werden</string>
+  <string name="msg_data_copied_from_product">Daten wurden vom Produkt \"%1$s\" kopiert.</string>
   <string name="msg_recipe_added_to_cart">Fehlende Produkte wurden auf den Einkaufszettel gesetzt</string>
   <string name="msg_recipe_consumed">Alle Zutaten, die vom Rezept \"%1$s\" benötigt werden, wurden aus dem Bestand entfernt</string>
   <string name="msg_stored_purchases_overview">Es gibt Einkäufe auf dem Gerät, welche noch nicht auf den Server übertragen wurden. Hier tippen für Details.</string>
@@ -473,6 +475,10 @@
   <string name="error_network">Netzwerkfehler</string>
   <string name="error_network_subtitle">Die benötigten Daten konnten nicht vollständig geladen werden</string>
   <string name="error_network_exact">Netzwerkfehler: %1$s</string>
+  <string name="error_database">Datenbank-Fehler</string>
+  <string name="error_database_exact">Datenbank-Fehler: %1$s</string>
+  <string name="error_database_object_too_large">Datenbank-Fehler</string>
+  <string name="error_details">Fehlerdetails</string>
   <string name="error_unknown">Uups!</string>
   <string name="error_not_grocy_instance">Keine gültige Grocy Instanz</string>
   <string name="error_timeout">Zeitüberschreitungsfehler</string>
@@ -513,6 +519,7 @@
   <string name="title_shopping_list">Einkaufszettel</string>
   <string name="title_feedback">Feedback</string>
   <string name="title_settings">Einstellungen</string>
+  <string name="title_options">Optionen</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="title_barcode_scanner">Barcode-Scanner</string>
   <!-- Context: About this app -->
@@ -771,8 +778,10 @@
   <string name="property_product_name">Produktname</string>
   <string name="property_parent_product">Übergeordnetes Produkt</string>
   <string name="property_description">Beschreibung</string>
+  <string name="property_product_description">Produktbeschreibung</string>
   <string name="property_note">Notiz</string>
   <string name="property_status">Status</string>
+  <string name="property_status_insert">Status:</string>
   <string name="property_amount">Menge</string>
   <string name="property_amount_insert">Menge: %1$s</string>
   <string name="property_seconds">Sekunden</string>
@@ -790,6 +799,8 @@
   <string name="property_price_unit">Preis pro %1$s</string>
   <!-- %1$s is a price and %2$s is a quantity unit-->
   <string name="property_price_unit_insert">%1$s pro %2$s</string>
+  <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_with_currency">%1$s %2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Preis in %1$s</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -911,11 +922,21 @@
   <string name="property_ungrouped">Ungruppiert</string>
   <!-- %1$s is a property like "product group" or "due date" -->
   <string name="property_extra_field">Extrafeld: %1$s</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields">Felder</string>
   <string name="property_task_category">Aufgabenkategorie</string>
   <string name="property_task_categories">Aufgabenkategorien</string>
   <string name="property_calories">Kalorien</string>
   <string name="property_calories_unit">Kalorien (Einheit)</string>
   <string name="property_calories_total">Kalorien (gesamt)</string>
+  <!-- %1$s is a value like energy or price, unit means value of items per unit -->
+  <string name="property_insert_per_unit">%1$s (Einheit)</string>
+  <!-- %1$s is a value like energy or price, total means value of many items in total -->
+  <string name="property_insert_total">%1$s (gesamt)</string>
+  <!-- %1$s is a value like price, average means average price -->
+  <string name="property_insert_average">%1$s (durchschnittlich)</string>
+  <!-- %1$s is a value like price, "last" is like for example in "last price" -->
+  <string name="property_insert_last">%1$s (zuletzt)</string>
   <string name="property_category">Kategorie</string>
   <string name="property_assigned_to">Zugewiesen an</string>
   <string name="property_users">Benutzer</string>
@@ -936,6 +957,7 @@
   <string name="property_servings_base_insert">Basis: %1$s</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_servings_desired">Gewünschte Portionen</string>
+  <string name="property_servings_desired_insert">Gewünschte Portionen: %1$s</string>
   <string name="property_not_check_shopping_list">Nicht gegen die bereits auf dem Einkaufszettel vorhandene Menge prüfen</string>
   <string name="property_not_check_shopping_list_description">Wenn diesem fehlende Zutaten hinzugefügt werden</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
@@ -1092,7 +1114,6 @@
   <string name="setting_show_done_items_description">Am Listen-Ende</string>
   <string name="setting_smaller_font">Kleinere Schrift benutzen</string>
   <string name="setting_smaller_font_description">Um mehr Einträge auf einmal zu sehen</string>
-  <string name="setting_show_product_description">Produktbeschreibung anzeigen</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">\"Bald fällig\"-Tage</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -1165,7 +1186,4 @@
 
   <string name="notification_due_soon_content">Verbrauchen Sie sie innerhalb der nächsten Tage, um das Verschwenden von Lebensmitteln zu vermeiden.</string>
 
-  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
-  Examples: 'de' for German; 'fr' for French -->
-  <string name="url_grocy_demo">https://de.demo.grocy.info</string>
   </resources>

@@ -34,13 +34,15 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListExtraField;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields.Field;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListGrouping;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
@@ -64,6 +66,12 @@ public class ShoppingListViewModel extends BaseViewModel {
   private static final String TAG = ShoppingListViewModel.class.getSimpleName();
   private static final int DEFAULT_SHOPPING_LIST_ID = 1;
 
+  public final static String FIELD_AMOUNT = "field_amount";
+  public final static String FIELD_PRICE_LAST_UNIT = "field_price_last_unit";
+  public final static String FIELD_PRICE_LAST_TOTAL = "field_price_last_total";
+  public final static String FIELD_NOTES = "field_notes";
+  public final static String FIELD_PICTURE = "field_picture";
+
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
@@ -75,7 +83,7 @@ public class ShoppingListViewModel extends BaseViewModel {
   private final MutableLiveData<ArrayList<ShoppingListItem>> filteredShoppingListItemsLive;
   private final FilterChipLiveDataShoppingListStatus filterChipLiveDataStatus;
   private final FilterChipLiveDataShoppingListGrouping filterChipLiveDataGrouping;
-  private final FilterChipLiveDataShoppingListExtraField filterChipLiveDataExtraField;
+  private final FilterChipLiveDataFields filterChipLiveDataFields;
 
   private List<ShoppingListItem> shoppingListItems;
   private List<ShoppingList> shoppingLists;
@@ -124,9 +132,15 @@ public class ShoppingListViewModel extends BaseViewModel {
         getApplication(),
         this::updateFilteredShoppingListItems
     );
-    filterChipLiveDataExtraField = new FilterChipLiveDataShoppingListExtraField(
-            getApplication(),
-            this::updateFilteredShoppingListItems
+    filterChipLiveDataFields = new FilterChipLiveDataFields(
+        getApplication(),
+        PREF.SHOPPING_MODE_FIELDS,
+        this::updateFilteredShoppingListItems,
+        new Field(FIELD_AMOUNT, R.string.property_amount, true),
+        new Field(FIELD_PRICE_LAST_TOTAL, R.string.property_last_price_total, false),
+        new Field(FIELD_PRICE_LAST_UNIT, R.string.property_last_price_unit, false),
+        new Field(FIELD_NOTES, R.string.property_notes, true),
+        new Field(FIELD_PICTURE, R.string.property_picture, false)
     );
 
     int lastId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1);
@@ -786,16 +800,16 @@ public class ShoppingListViewModel extends BaseViewModel {
     return () -> filterChipLiveDataGrouping;
   }
 
-  public FilterChipLiveData.Listener getFilterChipLiveDataExtraField() {
-    return () -> filterChipLiveDataExtraField;
+  public FilterChipLiveData.Listener getFilterChipLiveDataFields() {
+    return () -> filterChipLiveDataFields;
   }
 
   public String getGroupingMode() {
     return filterChipLiveDataGrouping.getGroupingMode();
   }
 
-  public String getExtraField() {
-    return filterChipLiveDataExtraField.getExtraField();
+  public List<String> getActiveFields() {
+    return filterChipLiveDataFields.getActiveFields();
   }
 
   private void fillShoppingListItemAmountsHashMap() {

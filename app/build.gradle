@@ -43,7 +43,7 @@ android {
         targetSdkVersion 33
         versionCode 47
         versionName "3.2.1"
-        resConfigs 'ca', 'cs', 'de', 'en', 'es', 'et', 'fr', 'hu', 'it', 'iw', 'nb', 'nl', 'pl', 'pt-rBR', 'pt-rPT', 'ru', 'sk', 'sv', 'uk', 'zh-rCN', 'zh-rTW'
+        resourceConfigurations += ['ca', 'cs', 'de', 'en', 'es', 'et', 'fr', 'hu', 'it', 'iw', 'nb', 'nl', 'pl', 'pt-rBR', 'pt-rPT', 'ru', 'sk', 'sv', 'uk', 'zh-rCN', 'zh-rTW']
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -52,7 +52,7 @@ android {
         }
     }
 
-    applicationVariants.all { variant ->
+    applicationVariants.configureEach { variant ->
         variant.resValue "string", "versionName", variant.versionName
     }
 
@@ -100,8 +100,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
 
     // Navigation framework for easy navigation control using XML
-    implementation 'androidx.navigation:navigation-fragment:2.5.3'
-    implementation 'androidx.navigation:navigation-ui:2.5.3'
+    implementation 'androidx.navigation:navigation-fragment:2.6.0'
+    implementation 'androidx.navigation:navigation-ui:2.6.0'
 
     // Android Room for database and RxJava for Async access of database
     implementation 'androidx.room:room-runtime:2.5.1'
@@ -112,6 +112,8 @@ dependencies {
     // Nice material views
     // don't upgrade to 1.10 alpha, only change it to stable 1.9.0 when it has been released
     implementation 'com.google.android.material:material:1.9.0'
+
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
     // Volley for all general network requests and Glide for image loading
     // Netcipher for Tor support and Conscrypt for new TLS support on old Android devices

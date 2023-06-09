@@ -29,6 +29,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.button.MaterialButton;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
@@ -42,13 +43,16 @@ public class ChooseProductAdapter extends
 
   private final List<Product> products;
   private final ChooseProductAdapterListener listener;
+  private final boolean forbidCreateProduct;
 
   public ChooseProductAdapter(
       List<Product> products,
-      ChooseProductAdapterListener listener
+      ChooseProductAdapterListener listener,
+      boolean forbidCreateProduct
   ) {
     this.products = new ArrayList<>(products);
     this.listener = listener;
+    this.forbidCreateProduct = forbidCreateProduct;
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -63,6 +67,7 @@ public class ChooseProductAdapter extends
     private final LinearLayout container;
     private final TextView name;
     private final ImageView imagePending;
+    private final MaterialButton buttonCopy;
 
     public ItemViewHolder(View view) {
       super(view);
@@ -70,6 +75,7 @@ public class ChooseProductAdapter extends
       container = view.findViewById(R.id.container);
       name = view.findViewById(R.id.name);
       imagePending = view.findViewById(R.id.image_pending);
+      buttonCopy = view.findViewById(R.id.button_copy);
     }
   }
 
@@ -101,9 +107,16 @@ public class ChooseProductAdapter extends
       holder.imagePending.setVisibility(View.GONE);
     }
 
+    if (forbidCreateProduct) {
+      holder.buttonCopy.setVisibility(View.GONE);
+    } else {
+      holder.buttonCopy.setVisibility(View.VISIBLE);
+      holder.buttonCopy.setOnClickListener(v -> listener.onItemRowClicked(product, true));
+    }
+
     // CONTAINER
     holder.container.setOnClickListener(
-        view -> listener.onItemRowClicked(product)
+        view -> listener.onItemRowClicked(product, false)
     );
   }
 
@@ -166,6 +179,6 @@ public class ChooseProductAdapter extends
 
   public interface ChooseProductAdapterListener {
 
-    void onItemRowClicked(Product product);
+    void onItemRowClicked(Product product, boolean copy);
   }
 }

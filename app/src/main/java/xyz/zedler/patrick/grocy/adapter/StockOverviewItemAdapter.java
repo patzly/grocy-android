@@ -30,7 +30,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,21 +39,22 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowStockItemBinding;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockExtraField;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockGrouping;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockSort;
 import xyz.zedler.patrick.grocy.model.GroupHeader;
@@ -66,12 +66,13 @@ import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
-import xyz.zedler.patrick.grocy.util.UiUtil;
+import xyz.zedler.patrick.grocy.viewmodel.StockOverviewViewModel;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class StockOverviewItemAdapter extends
@@ -95,11 +96,12 @@ public class StockOverviewItemAdapter extends
   private String sortMode;
   private boolean sortAscending;
   private String groupingMode;
-  private String extraField;
+  private final List<String> activeFields;
   private final DateUtil dateUtil;
   private final String currency;
   private final int maxDecimalPlacesAmount;
   private final int decimalPlacesPriceDisplay;
+  private final String energyUnit;
   private boolean containsPictures;
 
   public StockOverviewItemAdapter(
@@ -121,7 +123,7 @@ public class StockOverviewItemAdapter extends
       String sortMode,
       boolean sortAscending,
       String groupingMode,
-      String extraField
+      List<String> activeFields
   ) {
     this.shoppingListItemsProductIds = new ArrayList<>(shoppingListItemsProductIds);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
@@ -145,11 +147,12 @@ public class StockOverviewItemAdapter extends
         STOCK.DECIMAL_PLACES_PRICES_DISPLAY,
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_DISPLAY
     );
+    energyUnit = sharedPrefs.getString(PREF.ENERGY_UNIT, PREF.ENERGY_UNIT_DEFAULT);
     this.dateUtil = new DateUtil(context);
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
     this.groupingMode = groupingMode;
-    this.extraField = extraField;
+    this.activeFields = activeFields;
     this.groupedListItems = getGroupedListItems(context, stockItems,
         productGroupHashMap, productHashMap, locationHashMap, currency, dateUtil, sortMode,
         sortAscending, groupingMode, maxDecimalPlacesAmount, decimalPlacesPriceDisplay);
@@ -353,10 +356,14 @@ public class StockOverviewItemAdapter extends
     StockItem stockItem = (StockItem) groupedListItem;
     StockItemViewHolder holder = (StockItemViewHolder) viewHolder;
 
-    Context context = holder.binding.textAmount.getContext();
+    Context context = holder.binding.getRoot().getContext();
+
     ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
     ColorRoles colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
     ColorRoles colorOrange = ResUtil.getHarmonizedRoles(context, R.color.orange);
+    ColorRoles colorRed = ResUtil.getHarmonizedRoles(context, R.color.red);
+
+    holder.binding.flexboxLayout.removeAllViews();
 
     // NAME
 
@@ -379,173 +386,131 @@ public class StockOverviewItemAdapter extends
     QuantityUnit quantityUnitStock = quantityUnitHashMap.get(
         stockItem.getProduct().getQuIdStockInt()
     );
-    String stockAmountInfo = AmountUtil.getStockAmountInfo(
-        context, pluralUtil, stockItem, quantityUnitStock, maxDecimalPlacesAmount
-    );
-    if (stockAmountInfo.isBlank()) {
-      holder.binding.textAmount.setVisibility(View.GONE);
-    } else {
-      holder.binding.textAmount.setText(stockAmountInfo);
-      holder.binding.textAmount.setVisibility(View.VISIBLE);
-    }
-    if (missingItemsProductIds.contains(stockItem.getProductId())) {
-      holder.binding.textAmount.setTypeface(
-          ResourcesCompat.getFont(context, R.font.jost_medium)
-      );
-      holder.binding.textAmount.setTextColor(colorBlue.getAccent());
-    } else {
-      holder.binding.textAmount.setTypeface(
-          ResourcesCompat.getFont(context, R.font.jost_book)
-      );
-      holder.binding.textAmount.setTextColor(
-          ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant)
-      );
+
+    if (activeFields.contains(StockOverviewViewModel.FIELD_AMOUNT)) {
+      StringBuilder stringBuilderAmount = new StringBuilder();
+      if (!stockItem.getProduct().getNoOwnStockBoolean()) {
+        AmountUtil.addStockAmountNormalInfo(context, pluralUtil, stringBuilderAmount, stockItem,
+            quantityUnitStock, maxDecimalPlacesAmount);
+        Chip chipAmount = createChip(context, stringBuilderAmount.toString());
+        if (missingItemsProductIds.contains(stockItem.getProductId())) {
+          chipAmount.setTextColor(colorBlue.getOnAccentContainer());
+          chipAmount.setChipBackgroundColor(ColorStateList.valueOf(colorBlue.getAccentContainer()));
+        }
+        holder.binding.flexboxLayout.addView(chipAmount);
+      }
+      StringBuilder stringBuilderAmountAggregated = new StringBuilder();
+      AmountUtil.addStockAmountAggregatedInfo(context, pluralUtil, stringBuilderAmountAggregated,
+          stockItem, quantityUnitStock, maxDecimalPlacesAmount, false);
+      if (!stringBuilderAmountAggregated.toString().isBlank()) {
+        Chip chipAmountAggregated = createChip(context, stringBuilderAmountAggregated.toString());
+        if (missingItemsProductIds.contains(stockItem.getProductId())) {
+          chipAmountAggregated.setTextColor(colorBlue.getOnAccentContainer());
+          chipAmountAggregated.setChipBackgroundColor(ColorStateList.valueOf(colorBlue.getAccentContainer()));
+        }
+        holder.binding.flexboxLayout.addView(chipAmountAggregated);
+      }
     }
 
     // BEST BEFORE
 
     String date = stockItem.getBestBeforeDate();
     String days = null;
-    boolean colorDays = false;
     if (date != null) {
       days = String.valueOf(DateUtil.getDaysFromNow(date));
     }
 
-    if (!showDateTracking) {
-      holder.binding.linearDays.setVisibility(View.GONE);
-    } else if (days != null && (sortMode.equals(FilterChipLiveDataStockSort.SORT_DUE_DATE)
+    if (activeFields.contains(StockOverviewViewModel.FIELD_DUE_DATE) && showDateTracking
+        && days != null && (sortMode.equals(FilterChipLiveDataStockSort.SORT_DUE_DATE)
         || Integer.parseInt(days) <= daysExpiringSoon
         && !date.equals(Constants.DATE.NEVER_OVERDUE))
     ) {
-      holder.binding.linearDays.setVisibility(View.VISIBLE);
-      holder.binding.textDays.setText(dateUtil.getHumanForDaysFromNow(date));
+      Chip chipDate = createChip(context, dateUtil.getHumanForDaysFromNow(date));
       if (Integer.parseInt(days) <= daysExpiringSoon
           && !stockItem.getProduct().getNoOwnStockBoolean()) {  // don't color days text if product has no own stock (children will be colored)
-        colorDays = true;
+        if (Integer.parseInt(days) >= 0) {
+          chipDate.setTextColor(colorYellow.getOnAccentContainer());
+          chipDate.setChipBackgroundColor(ColorStateList.valueOf(colorYellow.getAccentContainer()));
+        } else if (stockItem.getDueTypeInt() == StockItem.DUE_TYPE_BEST_BEFORE) {
+          chipDate.setTextColor(colorOrange.getOnAccentContainer());
+          chipDate.setChipBackgroundColor(ColorStateList.valueOf(colorOrange.getAccentContainer())); // formally DIRT
+        } else {
+          chipDate.setTextColor(colorRed.getOnAccentContainer());
+          chipDate.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getAccentContainer()));
+        }
       }
-      if (holder.binding.linearDays.getChildCount() == 1) { // not in landscape/tablet mode
-        int dp4 = UiUtil.dpToPx(context, 4);
-        boolean isRtl = UiUtil.isLayoutRtl(context);
-        holder.binding.linearContainer.setPadding(
-            dp4 * 4, dp4 * 3 , dp4 * 4, dp4 * 3
-        );
-        /*holder.binding.linearContainer.setPadding(
-            isRtl ? dp4 * 6 : dp4 * 4, dp4 * 3 , isRtl ? dp4 * 4 : dp4 * 6, dp4 * 3
-        );*/
-      }
-    } else {
-      holder.binding.linearDays.setVisibility(View.GONE);
-      holder.binding.textDays.setText(null);
+      holder.binding.flexboxLayout.addView(chipDate);
     }
 
-    if (colorDays) {
-      holder.binding.textDays.setTypeface(
-          ResourcesCompat.getFont(context, R.font.jost_medium)
+    if (activeFields.contains(StockOverviewViewModel.FIELD_VALUE)
+        && NumUtil.isStringDouble(stockItem.getValue())) {
+      String value = NumUtil.trimPrice(
+          NumUtil.toDouble(stockItem.getValue()), decimalPlacesPriceDisplay
       );
-      int color;
-      if (Integer.parseInt(days) >= 0) {
-        color = colorYellow.getAccent();
-      } else if (stockItem.getDueTypeInt() == StockItem.DUE_TYPE_BEST_BEFORE) {
-        color = colorOrange.getAccent(); // formally DIRT
-      } else {
-        color = ResUtil.getColorAttr(context, R.attr.colorError);
+      if (currency != null && !currency.isEmpty()) {
+        value = context.getString(R.string.property_price_with_currency, value, currency);
       }
-      holder.binding.textDays.setTextColor(color);
-    } else {
-      holder.binding.textDays.setTypeface(
-          ResourcesCompat.getFont(context, R.font.jost_book)
-      );
-      holder.binding.textDays.setTextColor(
-          ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant)
-      );
+      Chip chipValue = createChip(context, value);
+      holder.binding.flexboxLayout.addView(chipValue);
     }
-
+    if (activeFields.contains(StockOverviewViewModel.FIELD_CALORIES_UNIT)
+        && NumUtil.isStringDouble(stockItem.getProduct().getCalories())) {
+      Chip chipValue = createChip(context, context.getString(
+          R.string.property_insert_per_unit,
+          stockItem.getProduct().getCalories() + " " + energyUnit
+      ));
+      holder.binding.flexboxLayout.addView(chipValue);
+    }
+    if (activeFields.contains(StockOverviewViewModel.FIELD_CALORIES_TOTAL)
+        && NumUtil.isStringDouble(stockItem.getProduct().getCalories())) {
+      Chip chipValue = createChip(context, context.getString(
+          R.string.property_insert_total,
+          NumUtil.trimAmount(NumUtil.toDouble(stockItem.getProduct()
+              .getCalories()) * stockItem.getAmountDouble(), maxDecimalPlacesAmount)
+              + " " + energyUnit
+      ));
+      holder.binding.flexboxLayout.addView(chipValue);
+    }
     double factorPurchaseToStock = stockItem.getProduct().getQuFactorPurchaseToStockDouble();
-    String extraFieldText = null;
-    String extraFieldSubtitleText = null;
-    switch (extraField) {
-      case FilterChipLiveDataStockExtraField.EXTRA_FIELD_VALUE:
-        if (NumUtil.isStringDouble(stockItem.getValue())) {
-          extraFieldText = NumUtil.trimPrice(
-              NumUtil.toDouble(stockItem.getValue()), decimalPlacesPriceDisplay
-          );
-        }
-        if (currency != null && !currency.isEmpty()) {
-          extraFieldSubtitleText = currency;
-        }
-        break;
-      case FilterChipLiveDataStockExtraField.EXTRA_FIELD_CALORIES_UNIT:
-        if (NumUtil.isStringDouble(stockItem.getProduct().getCalories())) {
-          extraFieldText = stockItem.getProduct().getCalories();
-          extraFieldSubtitleText = "kcal";
-        }
-        break;
-      case FilterChipLiveDataStockExtraField.EXTRA_FIELD_CALORIES_TOTAL:
-        if (NumUtil.isStringDouble(stockItem.getProduct().getCalories())) {
-          extraFieldText = NumUtil.trimAmount(NumUtil.toDouble(stockItem.getProduct()
-              .getCalories()) * stockItem.getAmountDouble(), maxDecimalPlacesAmount);
-          extraFieldSubtitleText = "kcal";
-        }
-        break;
-      case FilterChipLiveDataStockExtraField.EXTRA_FIELD_AVERAGE_PRICE:
-        String avg = productAveragePriceHashMap.get(stockItem.getProductId());
-        if (NumUtil.isStringDouble(avg)) {
-          extraFieldText = NumUtil.trimPrice(
-              NumUtil.toDouble(avg) * factorPurchaseToStock, decimalPlacesPriceDisplay
-          );
-          QuantityUnit quantityUnitPurchase = quantityUnitHashMap
-              .get(stockItem.getProduct().getQuIdPurchaseInt());
-          if (quantityUnitPurchase != null && quantityUnitStock != null
-              && quantityUnitStock.getId() != quantityUnitPurchase.getId()) {
-            extraFieldSubtitleText = holder.binding.extraFieldSubtitle.getContext().getString(
-                R.string.property_price_unit_insert, currency, quantityUnitPurchase.getName()
-            );
-          } else {
-            extraFieldSubtitleText = currency;
-          }
-        }
-        break;
-      case FilterChipLiveDataStockExtraField.EXTRA_FIELD_LAST_PRICE:
-        ProductLastPurchased p = productLastPurchasedHashMap.get(stockItem.getProductId());
-        if (p != null && NumUtil.isStringDouble(p.getPrice())) {
-          extraFieldText = NumUtil.trimPrice(NumUtil.toDouble(p.getPrice())
-              * factorPurchaseToStock, decimalPlacesPriceDisplay);
-          QuantityUnit quantityUnitPurchase = quantityUnitHashMap
-              .get(stockItem.getProduct().getQuIdPurchaseInt());
-          if (quantityUnitPurchase != null && quantityUnitStock != null
-              && quantityUnitStock.getId() != quantityUnitPurchase.getId()) {
-            extraFieldSubtitleText = holder.binding.extraFieldSubtitle.getContext().getString(
-                R.string.property_price_unit_insert, currency, quantityUnitPurchase.getName()
-            );
-          } else {
-            extraFieldSubtitleText = currency;
-          }
-        }
-        break;
+    if (activeFields.contains(StockOverviewViewModel.FIELD_AVERAGE_PRICE)) {
+      String avg = productAveragePriceHashMap.get(stockItem.getProductId());
+      if (NumUtil.isStringDouble(avg)) {
+        Chip chipValue = createChip(context, context.getString(
+            R.string.property_insert_average,
+            context.getString(R.string.property_price_with_currency, NumUtil.trimPrice(
+                NumUtil.toDouble(avg) * factorPurchaseToStock, decimalPlacesPriceDisplay
+            ), currency)
+        ));
+        holder.binding.flexboxLayout.addView(chipValue);
+      }
     }
-    if (extraFieldText != null) {
-      holder.binding.extraField.setText(extraFieldText);
-      holder.binding.extraFieldContainer.setVisibility(View.VISIBLE);
-    } else {
-      holder.binding.extraFieldContainer.setVisibility(View.GONE);
+    if (activeFields.contains(StockOverviewViewModel.FIELD_LAST_PRICE)) {
+      ProductLastPurchased p = productLastPurchasedHashMap.get(stockItem.getProductId());
+      if (p != null && NumUtil.isStringDouble(p.getPrice())) {
+        Chip chipValue = createChip(context, context.getString(
+            R.string.property_insert_last,
+            context.getString(R.string.property_price_with_currency,
+                NumUtil.trimPrice(NumUtil.toDouble(p.getPrice())
+                * factorPurchaseToStock, decimalPlacesPriceDisplay), currency)
+        ));
+        holder.binding.flexboxLayout.addView(chipValue);
+      }
     }
-    if (extraFieldSubtitleText != null) {
-      holder.binding.extraFieldSubtitle.setText(extraFieldSubtitleText);
-      holder.binding.extraFieldSubtitle.setVisibility(View.VISIBLE);
-    } else {
-      holder.binding.extraFieldSubtitle.setVisibility(View.GONE);
-    }
+
+    holder.binding.flexboxLayout.setVisibility(
+        holder.binding.flexboxLayout.getChildCount() > 0 ? View.VISIBLE : View.GONE
+    );
 
     String pictureFileName = stockItem.getProduct().getPictureFileName();
-    if (pictureFileName != null && !pictureFileName.isEmpty()) {
+    if (activeFields.contains(StockOverviewViewModel.FIELD_PICTURE)
+        && pictureFileName != null && !pictureFileName.isEmpty()) {
       holder.binding.picture.layout(0, 0, 0, 0);
 
       Glide.with(context)
           .load(
               new GlideUrl(grocyApi.getProductPicture(pictureFileName), grocyAuthHeaders)
-          ).transform(
-              new CenterCrop(), new RoundedCorners(UiUtil.dpToPx(context, 12))
-          ).transition(DrawableTransitionOptions.withCrossFade())
+          ).transform(new CenterCrop())
+          .transition(DrawableTransitionOptions.withCrossFade())
           .listener(new RequestListener<>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model,
@@ -563,7 +528,7 @@ public class StockOverviewItemAdapter extends
               return false;
             }
           }).into(holder.binding.picture);
-    } else if (containsPictures) {
+    } else if (activeFields.contains(StockOverviewViewModel.FIELD_PICTURE) && containsPictures) {
       holder.binding.picture.setVisibility(View.GONE);
       holder.binding.picturePlaceholder.setVisibility(View.VISIBLE);
     } else {
@@ -576,6 +541,16 @@ public class StockOverviewItemAdapter extends
     holder.binding.linearContainer.setOnClickListener(
         view -> listener.onItemRowClicked(stockItem)
     );
+  }
+
+  private static Chip createChip(Context ctx, String text) {
+    @SuppressLint("InflateParams")
+    Chip chip = (Chip) LayoutInflater.from(ctx)
+        .inflate(R.layout.view_info_chip, null, false);
+    chip.setText(text);
+    chip.setClickable(false);
+    chip.setFocusable(false);
+    return chip;
   }
 
   @Override
@@ -606,7 +581,7 @@ public class StockOverviewItemAdapter extends
       String sortMode,
       boolean sortAscending,
       String groupingMode,
-      String extraField
+      List<String> activeFields
   ) {
     ArrayList<GroupedListItem> newGroupedListItems = getGroupedListItems(context, newList,
         productGroupHashMap, productHashMap, locationHashMap, this.currency, this.dateUtil,
@@ -630,8 +605,8 @@ public class StockOverviewItemAdapter extends
         sortAscending,
         this.groupingMode,
         groupingMode,
-        this.extraField,
-        extraField
+        this.activeFields,
+        activeFields
     );
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.groupedListItems.clear();
@@ -649,7 +624,8 @@ public class StockOverviewItemAdapter extends
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
     this.groupingMode = groupingMode;
-    this.extraField = extraField;
+    this.activeFields.clear();
+    this.activeFields.addAll(activeFields);
     diffResult.dispatchUpdatesTo(this);
   }
 
@@ -673,8 +649,8 @@ public class StockOverviewItemAdapter extends
     boolean sortAscendingNew;
     String groupingModeOld;
     String groupingModeNew;
-    String extraFieldOld;
-    String extraFieldNew;
+    List<String> activeFieldsOld;
+    List<String> activeFieldsNew;
 
     public DiffCallback(
         ArrayList<GroupedListItem> oldItems,
@@ -695,8 +671,8 @@ public class StockOverviewItemAdapter extends
         boolean sortAscendingNew,
         String groupingModeOld,
         String groupingModeNew,
-        String extraFieldOld,
-        String extraFieldNew
+        List<String> activeFieldsOld,
+        List<String> activeFieldsNew
     ) {
       this.newItems = newItems;
       this.oldItems = oldItems;
@@ -716,8 +692,8 @@ public class StockOverviewItemAdapter extends
       this.sortAscendingNew = sortAscendingNew;
       this.groupingModeOld = groupingModeOld;
       this.groupingModeNew = groupingModeNew;
-      this.extraFieldOld = extraFieldOld;
-      this.extraFieldNew = extraFieldNew;
+      this.activeFieldsOld = activeFieldsOld;
+      this.activeFieldsNew = activeFieldsNew;
     }
 
     @Override
@@ -758,7 +734,7 @@ public class StockOverviewItemAdapter extends
       if (sortAscendingOld != sortAscendingNew) {
         return false;
       }
-      if (!groupingModeOld.equals(groupingModeNew) || !extraFieldOld.equals(extraFieldNew)) {
+      if (!groupingModeOld.equals(groupingModeNew)) {
         return false;
       }
       if (oldItemType == GroupedListItem.TYPE_ENTRY) {
@@ -768,6 +744,9 @@ public class StockOverviewItemAdapter extends
           return newItem.getProductId() == oldItem.getProductId();
         }
         if (!newItem.getProduct().equals(oldItem.getProduct())) {
+          return false;
+        }
+        if (!ArrayUtil.areListsEqualIgnoreOrder(activeFieldsOld, activeFieldsNew)) {
           return false;
         }
         QuantityUnit quOld = quantityUnitHashMapOld.get(oldItem.getProduct().getQuIdStockInt());
@@ -786,14 +765,14 @@ public class StockOverviewItemAdapter extends
           return false;
         }
 
-        if (extraFieldNew.equals(FilterChipLiveDataStockExtraField.EXTRA_FIELD_AVERAGE_PRICE)) {
+        if (activeFieldsNew.contains(StockOverviewViewModel.FIELD_AVERAGE_PRICE)) {
           String priceOld = productAveragePriceHashMapOld.get(oldItem.getProductId());
           String priceNew = productAveragePriceHashMapNew.get(newItem.getProductId());
           if (priceOld == null && priceNew != null
               || priceOld != null && priceNew != null && !priceOld.equals(priceNew)) {
             return false;
           }
-        } else if (extraFieldNew.equals(FilterChipLiveDataStockExtraField.EXTRA_FIELD_LAST_PRICE)) {
+        } else if (activeFieldsNew.contains(StockOverviewViewModel.FIELD_LAST_PRICE)) {
           ProductLastPurchased purchasedOld = productLastPurchasedHashMapOld
               .get(oldItem.getProductId());
           ProductLastPurchased purchasedNew = productLastPurchasedHashMapNew

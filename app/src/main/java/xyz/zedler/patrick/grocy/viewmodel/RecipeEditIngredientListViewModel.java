@@ -117,7 +117,9 @@ public class RecipeEditIngredientListViewModel extends BaseViewModel {
     }
 
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        dataLoaded -> {
+          if (dataLoaded) loadFromDatabase(false);
+        },
         error -> onError(error, TAG),
         RecipePosition.class,
         Product.class,

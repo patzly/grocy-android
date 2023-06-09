@@ -720,5 +720,4 @@
   <string name="settings_synchronized">Te ustawienia są synchronizowane z serwerem.</string>
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
-  <string name="url_grocy_demo">https://pl.demo.grocy.info</string>
-  </resources>
+</resources>

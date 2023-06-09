@@ -25,7 +25,6 @@ import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -316,10 +315,6 @@ public class ShoppingListEditViewModel extends BaseViewModel {
       return true;
     }
     return sharedPrefs.getBoolean(pref, true);
-  }
-
-  private String getString(@SuppressWarnings("SameParameterValue") @StringRes int resId, Object... formatArgs) {
-    return getApplication().getString(resId, formatArgs);
   }
 
   @Override

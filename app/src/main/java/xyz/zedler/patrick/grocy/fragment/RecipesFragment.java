@@ -37,7 +37,6 @@ import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.RecipeEntryAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -124,21 +123,18 @@ public class RecipesFragment extends BaseFragment implements
     );
 
     boolean isGrid = viewModel.getSharedPrefs()
-        .getString(PREF.RECIPES_LIST_LAYOUT, LAYOUT_LINEAR).equals(LAYOUT_LINEAR);
+        .getString(PREF.RECIPES_LIST_LAYOUT, LAYOUT_GRID).equals(LAYOUT_GRID);
     if (isGrid) {
-      binding.recycler.setLayoutManager(
-          new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-      );
-    } else {
       binding.recycler.setLayoutManager(
           new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
       );
+    } else {
+      binding.recycler.setLayoutManager(
+          new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+      );
     }
 
-    binding.recycler.setAdapter(new MasterPlaceholderAdapter());
-
     if (savedInstanceState == null) {
-      binding.recycler.scrollToPosition(0);
       viewModel.resetSearch();
     }
 
@@ -170,7 +166,7 @@ public class RecipesFragment extends BaseFragment implements
             viewModel.getRecipeFulfillments(),
             viewModel.getSortMode(),
             viewModel.isSortAscending(),
-            viewModel.getExtraField()
+            viewModel.getActiveFields()
         );
       } else {
         binding.recycler.setAdapter(
@@ -182,9 +178,10 @@ public class RecipesFragment extends BaseFragment implements
                 this,
                 viewModel.getSortMode(),
                 viewModel.isSortAscending(),
-                viewModel.getExtraField()
+                viewModel.getActiveFields()
             )
         );
+        binding.recycler.scheduleLayoutAnimation();
       }
     });
 
@@ -240,7 +237,7 @@ public class RecipesFragment extends BaseFragment implements
               this,
               viewModel.getSortMode(),
               viewModel.isSortAscending(),
-              viewModel.getExtraField()
+              viewModel.getActiveFields()
           )
       );
       binding.recycler.scheduleLayoutAnimation();

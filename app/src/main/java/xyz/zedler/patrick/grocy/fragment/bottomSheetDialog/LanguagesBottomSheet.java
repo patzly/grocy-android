@@ -35,6 +35,7 @@ import xyz.zedler.patrick.grocy.adapter.LanguageAdapter;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetListSelectionBinding;
 import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
+import xyz.zedler.patrick.grocy.util.RestartUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class LanguagesBottomSheet extends BaseBottomSheetDialogFragment
@@ -88,8 +89,8 @@ public class LanguagesBottomSheet extends BaseBottomSheetDialogFragment
     LocaleListCompat selected = LocaleListCompat.forLanguageTags(code);
     if (!previous.equals(selected)) {
       performHapticClick();
-      dismiss();
       AppCompatDelegate.setApplicationLocales(selected);
+      RestartUtil.restartApp(requireContext());
     }
   }
 

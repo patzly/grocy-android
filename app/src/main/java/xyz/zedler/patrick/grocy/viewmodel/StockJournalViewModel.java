@@ -120,7 +120,10 @@ public class StockJournalViewModel extends BaseViewModel {
       return;
     }
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        dataLoaded -> {
+          if (isOffline()) setOfflineLive(false);
+          if (dataLoaded) loadFromDatabase(false);
+        },
         error -> onError(error, TAG),
         QuantityUnit.class,
         Product.class,

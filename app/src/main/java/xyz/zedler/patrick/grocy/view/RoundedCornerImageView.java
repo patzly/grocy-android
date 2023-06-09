@@ -20,17 +20,28 @@
 package xyz.zedler.patrick.grocy.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import androidx.appcompat.widget.AppCompatImageView;
+import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class RoundedCornerImageView extends AppCompatImageView {
 
   private float radius = 16f;
   private Path path;
   private RectF rect;
+  private boolean bottomCornersRound = true;
+  private boolean topCornersRound = true;
+  private boolean showBottomShadow = false;
+  private Paint shadowPaint;
+  private float shadowRadius, shadowHeight;
 
   public RoundedCornerImageView(Context context) {
     super(context);
@@ -50,19 +61,80 @@ public class RoundedCornerImageView extends AppCompatImageView {
   private void init(AttributeSet attrs, int defStyle) {
     path = new Path();
     rect = new RectF();
-    radius = getResources().getDisplayMetrics().density * radius;
+
+    // Initialize the shadow paint
+    shadowRadius = UiUtil.dpToPx(getContext(), 10);
+    shadowPaint = new Paint();
+    shadowPaint.setStyle(Paint.Style.FILL);
+    shadowPaint.setColor(Color.BLACK);
+    shadowPaint.setAlpha(80);
+    shadowPaint.setMaskFilter(
+        new BlurMaskFilter(UiUtil.dpToPx(getContext(), shadowRadius), BlurMaskFilter.Blur.NORMAL)
+    );
+
+    // Extract custom attributes into a TypedArray
+    TypedArray a = getContext().getTheme().obtainStyledAttributes(
+        attrs,
+        R.styleable.RoundedCornerImageView,
+        defStyle, 0
+    );
+
+    try {
+      // Extract the radius, onlyBottomCornersRound, and showBottomShadow if they exist
+      radius = a.getDimensionPixelSize(R.styleable.RoundedCornerImageView_radius, (int) radius);
+      bottomCornersRound = a.getBoolean(R.styleable.RoundedCornerImageView_bottomCornersRound, true);
+      topCornersRound = a.getBoolean(R.styleable.RoundedCornerImageView_topCornersRound, true);
+      showBottomShadow = a.getBoolean(R.styleable.RoundedCornerImageView_showBottomShadow, false);
+    } finally {
+      // Recycle the TypedArray
+      a.recycle();
+    }
+
+    // Convert radius to pixels
+    radius = UiUtil.dpToPx(getContext(), radius);
+
+    shadowHeight = UiUtil.dpToPx(getContext(), 32);
   }
 
   public void setRadius(float radius) {
-    this.radius = getResources().getDisplayMetrics().density * radius;
+    this.radius = UiUtil.dpToPx(getContext(), radius);
     invalidate();
   }
 
   @Override
   protected void onDraw(Canvas canvas) {
     rect.set(0, 0, getWidth(), getHeight());
-    path.addRoundRect(rect, radius, radius, Path.Direction.CW);
+    path.rewind();  // Clear the path before adding to it
+
+    if (bottomCornersRound && !topCornersRound) {
+      float[] radii = {0, 0, 0, 0, radius, radius, radius, radius};
+      path.addRoundRect(rect, radii, Path.Direction.CW);
+    } else if (!bottomCornersRound && topCornersRound) {
+      float[] radii = {radius, radius, radius, radius, 0, 0, 0, 0};
+      path.addRoundRect(rect, radii, Path.Direction.CW);
+    } if (!bottomCornersRound && !topCornersRound) {
+      path.addRoundRect(rect, 0, 0, Path.Direction.CW);
+    } else {
+      path.addRoundRect(rect, radius, radius, Path.Direction.CW);
+    }
+
     canvas.clipPath(path);
+
+    // Draw the image
     super.onDraw(canvas);
+
+    // Draw the shadow
+    if (showBottomShadow) {
+      canvas.drawRect(
+          -shadowRadius,
+          getHeight() - shadowHeight + shadowRadius,
+          getWidth() + shadowRadius,
+          getHeight() + shadowRadius,
+          shadowPaint
+      );
+    }
   }
 }
+
+
+

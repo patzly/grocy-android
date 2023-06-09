@@ -166,7 +166,7 @@
           <xyz.zedler.patrick.grocy.view.FilterChip
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:data="@{viewModel.filterChipLiveDataExtraField}"/>
+            app:data="@{viewModel.filterChipLiveDataFields}"/>
 
         </LinearLayout>
 

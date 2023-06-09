@@ -17,19 +17,14 @@
   ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
-  <declare-styleable name="ActionButton">
-    <attr name="icon" format="reference" />
-    <attr name="tint" format="color" />
-    <attr name="dense" format="boolean" />
-  </declare-styleable>
+  <item
+    android:id="@+id/action_copy"
+    android:title="@string/action_copy"
+    android:icon="@drawable/ic_round_content_copy"
+    app:showAsAction="always" />
 
-  <declare-styleable name="RoundedCornerImageView">
-    <attr name="radius" format="dimension" />
-    <attr name="bottomCornersRound" format="boolean" />
-    <attr name="topCornersRound" format="boolean" />
-    <attr name="showBottomShadow" format="boolean" />
-  </declare-styleable>
-
-</resources>
+</menu>

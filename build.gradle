@@ -34,11 +34,11 @@ buildscript {
         maven { url "https://a8c-libs.s3.amazonaws.com/android" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.0.1'
-        classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.5.3'
+        classpath 'com.android.tools.build:gradle:8.0.2'
+        classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.6.0'
     }
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }

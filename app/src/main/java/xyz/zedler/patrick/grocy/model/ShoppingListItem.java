@@ -47,7 +47,6 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnJSONResponseListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnShoppingListItemsWithSyncResponseListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -602,5 +601,14 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
       int itemId
   ) {
     return deleteShoppingListItem(dlHelper, itemId, null, null);
+  }
+
+  public interface OnShoppingListItemsWithSyncResponseListener {
+
+    void onResponse(
+        ArrayList<ShoppingListItem> shoppingListItems,
+        ArrayList<ShoppingListItem> itemsToSync,
+        HashMap<Integer, ShoppingListItem> serverItemHashMap
+    );
   }
 }

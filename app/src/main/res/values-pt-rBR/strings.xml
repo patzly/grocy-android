@@ -1141,7 +1141,6 @@
   <string name="setting_show_done_items_description">No final</string>
   <string name="setting_smaller_font">Usar fonte pequena</string>
   <string name="setting_smaller_font_description">Para ver mais itens de uma só vez</string>
-  <string name="setting_show_product_description">Mostrar descrição do produto</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Vence nos próximos dias</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -1216,5 +1215,4 @@
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
-  <string name="url_grocy_demo">https://pt-br.demo.grocy.info/</string>
-  </resources>
+</resources>

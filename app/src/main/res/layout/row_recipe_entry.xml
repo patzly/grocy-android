@@ -29,7 +29,7 @@
 
     <LinearLayout
       android:id="@+id/container"
-      style="@style/Widget.Grocy.LinearLayout.ListItem.ThreeLine.Clickable"
+      style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
       android:paddingStart="8dp"
       android:paddingEnd="8dp"
       android:background="@drawable/ripple_list_item_bg_small_padding">
@@ -39,17 +39,15 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="4dp"
         android:layout_gravity="top"
         tools:ignore="ContentDescription"
-        app:radius="@{12}"/>
+        app:radius="5dp"/>
 
       <com.google.android.material.card.MaterialCardView
         android:id="@+id/picture_placeholder"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="4dp"
         android:layout_gravity="top"
         android:visibility="gone"
         app:cardCornerRadius="12dp"
@@ -67,83 +65,25 @@
 
       <LinearLayout
         android:id="@+id/linear_text_container"
-        style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+        style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch"
+        android:layout_gravity="center_vertical">
 
         <TextView
           android:id="@+id/title"
           style="@style/Widget.Grocy.TextView.ListItem.Title"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical" />
+          android:layout_height="wrap_content"/>
 
-        <TextView
-          android:id="@+id/due_score"
-          style="@style/Widget.Grocy.TextView.ListItem.Description"
+        <com.google.android.flexbox.FlexboxLayout
+          android:id="@+id/flexbox_layout"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:alpha="1"
-          android:singleLine="true" />
-
-        <LinearLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:orientation="horizontal"
-          tools:ignore="UseCompoundDrawables">
-
-          <TextView
-            android:id="@+id/fulfilled"
-            style="@style/Widget.Grocy.TextView.ListItem.Description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="false"
-            android:maxLines="2" />
-
-          <ImageView
-            android:id="@+id/image_fulfillment"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="5dp"
-            android:visibility="visible"
-            tools:ignore="ContentDescription" />
-
-        </LinearLayout>
-
-        <TextView
-          android:id="@+id/missing"
-          style="@style/Widget.Grocy.TextView.ListItem.Description"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:singleLine="false"
-          android:maxLines="5"/>
-
-      </LinearLayout>
-
-      <LinearLayout
-        android:id="@+id/extra_field_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginStart="16dp"
-        android:layout_gravity="center_vertical"
-        android:visibility="gone">
-
-        <TextView
-          android:id="@+id/extra_field"
-          style="@style/Widget.Grocy.TextView.LabelSmall"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="end"
-          android:textColor="?attr/colorOnSurfaceVariant" />
-
-        <TextView
-          android:id="@+id/extra_field_subtitle"
-          style="@style/Widget.Grocy.TextView.LabelSmall"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="end"
-          android:visibility="gone"
-          android:textColor="?attr/colorOnSurfaceVariant" />
+          android:layout_marginTop="4dp"
+          app:flexWrap="wrap"
+          app:alignItems="stretch"
+          app:alignContent="stretch"
+          app:showDivider="middle"
+          app:dividerDrawable="@drawable/shape_flex_layout_divider"/>
 
       </LinearLayout>
 

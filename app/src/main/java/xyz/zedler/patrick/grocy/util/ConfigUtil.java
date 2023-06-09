@@ -85,64 +85,71 @@ public class ConfigUtil {
   private static void storeSystemConfig(String response, SharedPreferences prefs, boolean debug) {
     try {
       JSONObject jsonObject = new JSONObject(response);
-      prefs.edit()
+      SharedPreferences.Editor editor = prefs.edit()
           .putString(
               Constants.PREF.CURRENCY,
               jsonObject.getString("CURRENCY")
           )
           .putBoolean(
               Constants.PREF.FEATURE_STOCK,
-              jsonObject.getBoolean("FEATURE_FLAG_STOCK")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_STOCK")
           )
           .putBoolean(
               Constants.PREF.FEATURE_SHOPPING_LIST,
-              jsonObject.getBoolean("FEATURE_FLAG_SHOPPINGLIST")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_SHOPPINGLIST")
           )
           .putBoolean(
               Constants.PREF.FEATURE_STOCK_PRICE_TRACKING,
-              jsonObject.getBoolean("FEATURE_FLAG_STOCK_PRICE_TRACKING")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_STOCK_PRICE_TRACKING")
           )
           .putBoolean(
               Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS,
-              jsonObject.getBoolean("FEATURE_FLAG_SHOPPINGLIST_MULTIPLE_LISTS")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_SHOPPINGLIST_MULTIPLE_LISTS")
           )
           .putBoolean(
               Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING,
-              jsonObject.getBoolean("FEATURE_FLAG_STOCK_LOCATION_TRACKING")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_STOCK_LOCATION_TRACKING")
           )
           .putBoolean(
               Constants.PREF.FEATURE_STOCK_BBD_TRACKING,
-              jsonObject.getBoolean("FEATURE_FLAG_STOCK_BEST_BEFORE_DATE_TRACKING")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_STOCK_BEST_BEFORE_DATE_TRACKING")
           )
           .putBoolean(
               Constants.PREF.FEATURE_STOCK_OPENED_TRACKING,
-              jsonObject.getBoolean("FEATURE_FLAG_STOCK_PRODUCT_OPENED_TRACKING")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_STOCK_PRODUCT_OPENED_TRACKING")
           )
           .putBoolean(
               PREF.FEATURE_RECIPES,
-              jsonObject.getBoolean("FEATURE_FLAG_RECIPES")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_RECIPES")
           )
           .putBoolean(
               PREF.FEATURE_TASKS,
-              jsonObject.getBoolean("FEATURE_FLAG_TASKS")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_TASKS")
           )
           .putBoolean(
               PREF.FEATURE_CHORES,
-              jsonObject.getBoolean("FEATURE_FLAG_CHORES")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_CHORES")
           )
           .putBoolean(
               PREF.FEATURE_CHORES_ASSIGNMENTS,
-              jsonObject.getBoolean("FEATURE_FLAG_CHORES_ASSIGNMENTS")
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_CHORES_ASSIGNMENTS")
           ).putBoolean(
               PREF.FEATURE_LABEL_PRINTER,
-              jsonObject.getBoolean("FEATURE_FLAG_LABEL_PRINTER")
-          ).apply();
+              getBooleanConfig(jsonObject, "FEATURE_FLAG_LABEL_PRINTER")
+          );
       if (jsonObject.has("FEATURE_FLAG_STOCK_PRODUCT_FREEZING")) {
-        prefs.edit().putBoolean(
+        editor.putBoolean(
             Constants.PREF.FEATURE_STOCK_FREEZING_TRACKING,
-            jsonObject.getBoolean("FEATURE_FLAG_STOCK_PRODUCT_FREEZING")
-        ).apply();
+            getBooleanConfig(jsonObject, "FEATURE_FLAG_STOCK_PRODUCT_FREEZING")
+        );
       }
+      if (jsonObject.has("ENERGY_UNIT")) {
+        editor.putString(
+            Constants.PREF.ENERGY_UNIT,
+            jsonObject.getString("ENERGY_UNIT")
+        );
+      }
+      editor.apply();
     } catch (JSONException e) {
       if (debug) {
         Log.e(TAG, "downloadConfig: " + e);
@@ -156,7 +163,7 @@ public class ConfigUtil {
   private static void storeUserSettings(String response, SharedPreferences prefs, boolean debug) {
     try {
       JSONObject jsonObject = new JSONObject(response);
-      prefs.edit().putInt(
+      SharedPreferences.Editor editor = prefs.edit().putInt(
           STOCK.LOCATION,
           jsonObject.getInt(STOCK.LOCATION)
       ).putInt(
@@ -194,44 +201,45 @@ public class ConfigUtil {
           SHOPPING_LIST.AUTO_ADD,
           getBoolean(jsonObject, SHOPPING_LIST.AUTO_ADD,
               SETTINGS_DEFAULT.SHOPPING_LIST.AUTO_ADD, prefs)
-      ).apply();
+      );
       if (jsonObject.has(STOCK.DEFAULT_DUE_DAYS)) {
-        prefs.edit().putInt(
+        editor.putInt(
             STOCK.DEFAULT_DUE_DAYS,
             jsonObject.getInt(STOCK.DEFAULT_DUE_DAYS)
-        ).apply();
+        );
       }
       if (jsonObject.has(SHOPPING_LIST.AUTO_ADD_LIST_ID)) {
-        prefs.edit().putInt(
+        editor.putInt(
             SHOPPING_LIST.AUTO_ADD_LIST_ID,
             jsonObject.getInt(SHOPPING_LIST.AUTO_ADD_LIST_ID)
-        ).apply();
+        );
       }
       if (jsonObject.has(STOCK.DECIMAL_PLACES_AMOUNT)) {
-        prefs.edit().putInt(
+        editor.putInt(
             STOCK.DECIMAL_PLACES_AMOUNT,
             jsonObject.getInt(STOCK.DECIMAL_PLACES_AMOUNT)
-        ).apply();
+        );
       }
       if (jsonObject.has(STOCK.DECIMAL_PLACES_PRICES_INPUT)) {
-        prefs.edit().putInt(
+        editor.putInt(
             STOCK.DECIMAL_PLACES_PRICES_INPUT,
             jsonObject.getInt(STOCK.DECIMAL_PLACES_PRICES_INPUT)
-        ).apply();
+        );
       }
       if (jsonObject.has(STOCK.DECIMAL_PLACES_PRICES_DISPLAY)) {
-        prefs.edit().putInt(
+        editor.putInt(
             STOCK.DECIMAL_PLACES_PRICES_DISPLAY,
             jsonObject.getInt(STOCK.DECIMAL_PLACES_PRICES_DISPLAY)
-        ).apply();
+        );
       }
       if (jsonObject.has(STOCK.AUTO_DECIMAL_SEPARATOR_PRICES)) {
-        prefs.edit().putBoolean(
+        editor.putBoolean(
             STOCK.AUTO_DECIMAL_SEPARATOR_PRICES,
             getBoolean(jsonObject, STOCK.AUTO_DECIMAL_SEPARATOR_PRICES,
                 SETTINGS_DEFAULT.STOCK.AUTO_DECIMAL_SEPARATOR_PRICES, prefs)
-        ).apply();
+        );
       }
+      editor.apply();
     } catch (JSONException e) {
       if (debug) {
         Log.e(TAG, "downloadUserSettings: " + e);
@@ -246,7 +254,7 @@ public class ConfigUtil {
       JSONObject jsonObject,
       String settingKey,
       boolean settingDefault,
-      SharedPreferences prefs
+      @Nullable SharedPreferences prefs
   ) {
     try {
       Object settingValue = jsonObject.get(settingKey);
@@ -263,17 +271,21 @@ public class ConfigUtil {
       } else if (settingValue instanceof String && settingValue.equals("true")) {
         return true;
       } else {
-        return prefs.getBoolean(settingKey, settingDefault);
+        return prefs != null ? prefs.getBoolean(settingKey, settingDefault) : settingDefault;
       }
     } catch (JSONException e) {
       Log.e(TAG, "downloadUserSettings: getBoolean: settingKey="
           + settingKey + " Exception:" + e);
       try {
-        return prefs.getBoolean(settingKey, settingDefault);
+        return prefs != null ? prefs.getBoolean(settingKey, settingDefault) : settingDefault;
       } catch (ClassCastException e1) {
         return settingDefault;
       }
     }
+  }
+
+  private static boolean getBooleanConfig(JSONObject jsonObject, String settingKey) {
+    return getBoolean(jsonObject, settingKey, true, null);
   }
 
   private static void storeSystemInfo(String response, SharedPreferences prefs, boolean debug) {

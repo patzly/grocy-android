@@ -997,7 +997,6 @@ Bezoek ons op GitHub om te leren hoe u kunt helpen Grocy Android beschikbaar te 
   <string name="setting_show_done_items_description">Onderaan</string>
   <string name="setting_smaller_font">Gebruik kleiner lettertype</string>
   <string name="setting_smaller_font_description">Om meer artikelen tegelijk te zien</string>
-  <string name="setting_show_product_description">Laat productomschrijving zien</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">\"Vervalt binnenkort\" dagen</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -1072,5 +1071,4 @@ Bezoek ons op GitHub om te leren hoe u kunt helpen Grocy Android beschikbaar te 
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
-  <string name="url_grocy_demo">https://nl.demo.grocy.info</string>
-  </resources>
+</resources>

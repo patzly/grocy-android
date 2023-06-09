@@ -37,7 +37,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.UUID;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,7 +48,6 @@ import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
-import xyz.zedler.patrick.grocy.model.OpenFoodFactsProduct;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductAveragePrice;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
@@ -76,6 +74,7 @@ import xyz.zedler.patrick.grocy.web.CustomJsonArrayRequest;
 import xyz.zedler.patrick.grocy.web.CustomJsonObjectRequest;
 import xyz.zedler.patrick.grocy.web.CustomStringRequest;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
+import xyz.zedler.patrick.grocy.web.NetworkQueue.OnQueueEmptyListener;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 
 public class DownloadHelper {
@@ -420,6 +419,13 @@ public class DownloadHelper {
       Runnable onQueueEmptyListener,
       OnMultiTypeErrorListener onErrorListener
   ) {
+    return newQueue(dataLoaded -> onQueueEmptyListener.run(), onErrorListener);
+  }
+
+  public NetworkQueue newQueue(
+      OnQueueEmptyListener onQueueEmptyListener,
+      OnMultiTypeErrorListener onErrorListener
+  ) {
     NetworkQueue queue = new NetworkQueue(onQueueEmptyListener, onErrorListener, requestQueue);
     queueArrayList.add(queue);
     return queue;
@@ -439,11 +445,15 @@ public class DownloadHelper {
   }
 
   public void updateData(Runnable onFinished, OnMultiTypeErrorListener errorListener, Class<?>... types) {
+    updateData(dataLoaded -> onFinished.run(), errorListener, null, types);
+  }
+
+  public void updateData(OnQueueEmptyListener onFinished, OnMultiTypeErrorListener errorListener, Class<?>... types) {
     updateData(onFinished, errorListener, null, types);
   }
 
   public void updateData(
-      Runnable onFinished, OnMultiTypeErrorListener errorListener, String dbChangedTime, Class<?>... types
+      OnQueueEmptyListener onFinished, OnMultiTypeErrorListener errorListener, String dbChangedTime, Class<?>... types
   ) {
     if (dbChangedTime == null) {
       getTimeDbChanged(time -> updateData(onFinished, errorListener, time, types), errorListener);
@@ -502,30 +512,7 @@ public class DownloadHelper {
         queue.append(RecipePosition.updateRecipePositions(this, dbChangedTime, null));
       }
     }
-    if (queue.isEmpty()) {
-      onFinished.run();
-      return;
-    }
     queue.start();
-  }
-
-  public interface OnVolatileResponseListener {
-
-    void onResponse(
-        ArrayList<StockItem> due,
-        ArrayList<StockItem> overdue,
-        ArrayList<StockItem> expired,
-        ArrayList<MissingItem> missing
-    );
-  }
-
-  public interface OnShoppingListItemsWithSyncResponseListener {
-
-    void onResponse(
-        ArrayList<ShoppingListItem> shoppingListItems,
-        ArrayList<ShoppingListItem> itemsToSync,
-        HashMap<Integer, ShoppingListItem> serverItemHashMap
-    );
   }
 
   public interface OnObjectsResponseListener<T> {
@@ -536,11 +523,6 @@ public class DownloadHelper {
   public interface OnObjectResponseListener<T> {
 
     void onResponse(T object);
-  }
-
-  public interface OnOpenFoodFactsProductResponseListener {
-
-    void onResponse(OpenFoodFactsProduct product);
   }
 
   public interface OnStringResponseListener {

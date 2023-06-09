@@ -35,6 +35,8 @@ public final class Constants {
     public final static String HOME_ASSISTANT_INGRESS_SESSION_KEY = "home_assistant_ingress_session_key";
     public final static String HOME_ASSISTANT_INGRESS_SESSION_KEY_TIME = "home_assistant_ingress_session_key_time";
     public final static String CURRENCY = "currency";
+    public final static String ENERGY_UNIT = "energy_unit";
+    public final static String ENERGY_UNIT_DEFAULT = "kcal";
     public final static String GROCY_VERSION = "grocy_version";
     public final static String CREDENTIALS = "credentials";
     public final static String CURRENT_USER_ID = "current_user_id";
@@ -56,19 +58,21 @@ public final class Constants {
     public final static String STOCK_SORT_MODE = "stock_sort_mode";
     public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";
     public final static String STOCK_GROUPING_MODE = "stock_grouping_mode";
-    public final static String STOCK_EXTRA_FIELD = "stock_extra_field";
+    public final static String STOCK_FIELDS = "stock_fields";
     public final static String STOCK_ENTRIES_SORT_MODE = "stock_entries_sort_mode";
     public final static String STOCK_ENTRIES_SORT_ASCENDING = "stock_entries_sort_ascending";
     public final static String STOCK_ENTRIES_GROUPING_MODE = "stock_entries_grouping_mode";
     public final static String SHOPPING_LIST_GROUPING_MODE = "shopping_list_grouping_mode";
-    public final static String SHOPPING_LIST_EXTRA_FIELD = "shopping_list_extra_field";
+    public final static String SHOPPING_LIST_FIELDS = "shopping_list_fields";
     public final static String SHOPPING_LIST_LAST_ID = "shopping_list_last_id";
+    public final static String SHOPPING_MODE_GROUPING_MODE = "shopping_mode_grouping_mode";
+    public final static String SHOPPING_MODE_FIELDS = "shopping_mode_fields";
     public final static String TASKS_SORT_MODE = "tasks_sort_mode";
     public final static String TASKS_SORT_ASCENDING = "tasks_sort_ascending";
     public final static String TASKS_SHOW_DONE = "tasks_show_done";
     public final static String RECIPES_SORT_MODE = "recipes_sort_mode";
     public final static String RECIPES_SORT_ASCENDING = "recipes_sort_ascending";
-    public final static String RECIPES_EXTRA_FIELD = "stock_extra_field";
+    public final static String RECIPES_FIELDS = "recipes_fields";
     public final static String RECIPES_LIST_LAYOUT = "recipes_list_layout";
 
     public final static String DB_LAST_TIME_STOCK_ITEMS = "db_last_time_stock_items";
@@ -199,7 +203,6 @@ public final class Constants {
       public final static String KEEP_SCREEN_ON = "shopping_keep_screen_on";
       public final static String SHOW_DONE_ITEMS = "show_done_items";
       public final static String USE_SMALLER_FONT = "use_smaller_font";
-      public final static String SHOW_PRODUCT_DESCRIPTION = "show_product_description";
     }
 
     public final static class RECIPES {
@@ -321,7 +324,6 @@ public final class Constants {
       public final static boolean KEEP_SCREEN_ON = true;
       public final static boolean SHOW_DONE_ITEMS = true;
       public final static boolean USE_SMALLER_FONT = false;
-      public final static boolean SHOW_PRODUCT_DESCRIPTION = false;
     }
 
     public final static class RECIPES {

@@ -299,6 +299,7 @@
   <string name="msg_item_marked_as_undone">Marked item as undone</string>
   <string name="option_synced_success">Option synced successfully</string>
   <string name="option_synced_error">Option could not be synced</string>
+  <string name="msg_data_copied_from_product">Data was copied from the product \"%1$s\".</string>
   <string name="msg_recipe_added_to_cart">Added recipe ingredients to cart</string>
   <string name="msg_recipe_consumed">Removed all ingredients of recipe \"%1$s\" from stock</string>
   <string name="msg_stored_purchases_overview">There are purchases on the device that have not yet been transferred to the server. Tap here for details.</string>
@@ -483,8 +484,7 @@
   <string name="error_network_subtitle">The required data could not be loaded completely</string>
   <string name="error_network_exact">Network error: %1$s</string>
   <string name="error_database">Database error</string>
-  <string name="error_database_exact">Database error: %1$s</string>
-  <string name="error_database_object_too_large">Database error</string>
+  <string name="error_insert">Error: %1$s</string>
   <string name="error_details">Error details</string>
   <string name="error_unknown">Oops!</string>
   <string name="error_not_grocy_instance">Not a valid grocy instance</string>
@@ -526,6 +526,7 @@
   <string name="title_shopping_list">Shopping list</string>
   <string name="title_feedback">Feedback</string>
   <string name="title_settings">Settings</string>
+  <string name="title_options">Options</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="title_barcode_scanner">Barcode scanner</string>
   <!-- Context: About this app -->
@@ -790,8 +791,10 @@
   <string name="property_product_name">Product name</string>
   <string name="property_parent_product">Parent product</string>
   <string name="property_description">Description</string>
+  <string name="property_product_description">Product description</string>
   <string name="property_note">Note</string>
   <string name="property_status">Status</string>
+  <string name="property_status_insert">Status:</string>
   <string name="property_amount">Amount</string>
   <string name="property_amount_insert">Amount: %1$s</string>
   <string name="property_seconds">Seconds</string>
@@ -809,6 +812,8 @@
   <string name="property_price_unit">Price per %1$s</string>
   <!-- %1$s is a price and %2$s is a quantity unit-->
   <string name="property_price_unit_insert">%1$s per %2$s</string>
+  <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_with_currency">%1$s %2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Price in %1$s</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -930,11 +935,21 @@
   <string name="property_ungrouped">Ungrouped</string>
   <!-- %1$s is a property like "product group" or "due date" -->
   <string name="property_extra_field">Extra field: %1$s</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields">Fields</string>
   <string name="property_task_category">Task category</string>
   <string name="property_task_categories">Task categories</string>
   <string name="property_calories">Calories</string>
   <string name="property_calories_unit">Calories (unit)</string>
   <string name="property_calories_total">Calories (total)</string>
+  <!-- %1$s is a value like energy or price, unit means value of items per unit -->
+  <string name="property_insert_per_unit">%1$s (unit)</string>
+  <!-- %1$s is a value like energy or price, total means value of many items in total -->
+  <string name="property_insert_total">%1$s (total)</string>
+  <!-- %1$s is a value like price, average means average price -->
+  <string name="property_insert_average">%1$s (average)</string>
+  <!-- %1$s is a value like price, "last" is like for example in "last price" -->
+  <string name="property_insert_last">%1$s (last)</string>
   <string name="property_category">Category</string>
   <string name="property_assigned_to">Assigned to</string>
   <string name="property_users">Users</string>
@@ -955,6 +970,7 @@
   <string name="property_servings_base_insert">Base servings: %1$s</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_servings_desired">Desired servings</string>
+  <string name="property_servings_desired_insert">Desired servings: %1$s</string>
   <string name="property_not_check_shopping_list">Do not check against the shopping list</string>
   <string name="property_not_check_shopping_list_description">When adding missing items to it</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
@@ -1111,7 +1127,6 @@
   <string name="setting_show_done_items_description">At the bottom</string>
   <string name="setting_smaller_font">Use smaller font</string>
   <string name="setting_smaller_font_description">To see more items at once</string>
-  <string name="setting_show_product_description">Show product description</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Due soon days</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -1215,9 +1230,7 @@
   <string name="license_xzing_android" translatable="false">ZXing Android Embedded</string>
   <string name="license_xzing_android_author" translatable="false">ZXing authors, Journey Mobile</string>
 
-  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
-  Examples: 'de' for German; 'fr' for French -->
-  <string name="url_grocy_demo">https://en.demo.grocy.info</string>
+  <string name="url_grocy_demo_default" translatable="false">https://en.demo.grocy.info</string>
   <string name="url_grocy" translatable="false">https://grocy.info</string>
   <string name="url_developer" translatable="false">http://play.google.com/store/apps/dev?id=5870283381366287608</string>
   <string name="url_github" translatable="false">https://github.com/patzly/grocy-android/</string>

@@ -17,19 +17,38 @@
   ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources>
+<menu
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  tools:ignore="AlwaysShowAction">
 
-  <declare-styleable name="ActionButton">
-    <attr name="icon" format="reference" />
-    <attr name="tint" format="color" />
-    <attr name="dense" format="boolean" />
-  </declare-styleable>
+  <item
+    android:id="@+id/action_select"
+    android:title="@string/property_shopping_lists"
+    app:showAsAction="never" />
 
-  <declare-styleable name="RoundedCornerImageView">
-    <attr name="radius" format="dimension" />
-    <attr name="bottomCornersRound" format="boolean" />
-    <attr name="topCornersRound" format="boolean" />
-    <attr name="showBottomShadow" format="boolean" />
-  </declare-styleable>
+  <item
+    android:id="@+id/action_grouping_mode"
+    android:title="@string/property_group_by"
+    app:showAsAction="never">
 
-</resources>
+    <menu />
+
+  </item>
+
+  <item
+    android:id="@+id/action_fields"
+    android:title="@string/property_fields"
+    app:showAsAction="never">
+
+    <menu />
+
+  </item>
+
+  <item
+    android:id="@+id/action_options"
+    android:title="@string/title_options"
+    app:showAsAction="never" />
+
+</menu>

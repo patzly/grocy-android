@@ -216,7 +216,9 @@ public class QuantityUnitConversion implements Parcelable {
         if (NumUtil.isStringInt(quantityUnitConversion.getProductId()) && quantityUnitConversion.getProductIdInt() == productId) {
           return quantityUnitConversion;
         }
-        tempConversion = quantityUnitConversion;
+        if (!NumUtil.isStringInt(quantityUnitConversion.getProductId())) {
+          tempConversion = quantityUnitConversion;
+        }
       }
     }
     return tempConversion;

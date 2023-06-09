@@ -29,6 +29,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.util.LocaleUtil;
 
 public class GrocyApi {
 
@@ -103,9 +104,12 @@ public class GrocyApi {
 
   public GrocyApi(Application application) {
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
+    String demoDomain = LocaleUtil.getLocalizedGrocyDemoDomain(application);
     baseUrl = sharedPrefs.getString(
         Constants.PREF.SERVER_URL,
-        application.getString(R.string.url_grocy_demo)
+        demoDomain != null && !demoDomain.isBlank()
+            ? "https://" + demoDomain
+            : application.getString(R.string.url_grocy_demo_default)
     );
   }
 

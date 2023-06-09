@@ -482,7 +482,7 @@ public class OverviewStartViewModel extends BaseViewModel {
       if (downloadAfterLoading) {
         downloadData(false);
       }
-    }, this::showDatabaseErrorMessage);
+    }, this::showThrowableErrorMessage);
   }
 
   public void downloadData(boolean skipOfflineCheck) {

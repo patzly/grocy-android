@@ -24,27 +24,29 @@ import android.content.SharedPreferences;
 import androidx.annotation.StringRes;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
-import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.R;
 
-public class FilterChipLiveDataRecipesExtraField extends FilterChipLiveData {
+public class FilterChipLiveDataShoppingModeGrouping extends FilterChipLiveData {
 
-  public final static int ID_EXTRA_FIELD_NONE = 0;
-  public final static int ID_EXTRA_FIELD_CALORIES = 1;
+  public final static int ID_GROUPING_NONE = 0;
+  public final static int ID_GROUPING_PRODUCT_GROUP = 1;
+  public final static int ID_GROUPING_STORE = 2;
 
-  public final static String EXTRA_FIELD_NONE = "extra_field_none";
-  public final static String EXTRA_FIELD_CALORIES = "extra_field_calories";
+  public final static String GROUPING_NONE = "grouping_none";
+  public final static String GROUPING_PRODUCT_GROUP = "grouping_product_group";
+  public final static String GROUPING_STORE = "grouping_store";
 
   private final Application application;
   private final SharedPreferences sharedPrefs;
-  private String extraField;
+  private String groupingMode;
 
-  public FilterChipLiveDataRecipesExtraField(Application application, Runnable clickListener) {
+  public FilterChipLiveDataShoppingModeGrouping(Application application, Runnable clickListener) {
     this.application = application;
     setItemIdChecked(-1);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
-    extraField = sharedPrefs.getString(PREF.RECIPES_EXTRA_FIELD, EXTRA_FIELD_NONE);
+    groupingMode = sharedPrefs.getString(PREF.SHOPPING_MODE_GROUPING_MODE, GROUPING_PRODUCT_GROUP);
     setFilterText();
     setItems();
     if (clickListener != null) {
@@ -58,49 +60,60 @@ public class FilterChipLiveDataRecipesExtraField extends FilterChipLiveData {
     }
   }
 
-  public String getExtraField() {
-    return extraField;
+  public String getGroupingMode() {
+    return groupingMode;
   }
 
   private void setFilterText() {
     @StringRes int groupBy;
-    switch (extraField) {
-      case EXTRA_FIELD_CALORIES:
-        groupBy = R.string.property_calories;
+    switch (groupingMode) {
+      case GROUPING_PRODUCT_GROUP:
+        groupBy = R.string.property_product_group;
+        break;
+      case GROUPING_STORE:
+        groupBy = R.string.property_store_default;
         break;
       default:
         groupBy = R.string.subtitle_none;
         break;
     }
     setText(application.getString(
-        R.string.property_extra_field,
+        R.string.property_group_by,
         application.getString(groupBy)
     ));
   }
 
   public void setValues(int id) {
-    if (id == ID_EXTRA_FIELD_CALORIES) {
-      extraField = EXTRA_FIELD_CALORIES;
+    if (id == ID_GROUPING_PRODUCT_GROUP) {
+      groupingMode = GROUPING_PRODUCT_GROUP;
+    } else if (id == ID_GROUPING_STORE) {
+      groupingMode = GROUPING_STORE;
     } else {
-      extraField = EXTRA_FIELD_NONE;
+      groupingMode = GROUPING_NONE;
     }
     setFilterText();
-    sharedPrefs.edit().putString(PREF.RECIPES_EXTRA_FIELD, extraField).apply();
+    sharedPrefs.edit().putString(PREF.SHOPPING_LIST_GROUPING_MODE, groupingMode).apply();
   }
 
   private void setItems() {
     ArrayList<MenuItemData> menuItemDataList = new ArrayList<>();
     menuItemDataList.add(new MenuItemData(
-        ID_EXTRA_FIELD_NONE,
+        ID_GROUPING_NONE,
         0,
         application.getString(R.string.subtitle_none),
-        extraField.equals(EXTRA_FIELD_NONE)
+        groupingMode.equals(GROUPING_NONE)
     ));
     menuItemDataList.add(new MenuItemData(
-        ID_EXTRA_FIELD_CALORIES,
-            0,
-            application.getString(R.string.property_calories),
-            extraField.equals(EXTRA_FIELD_CALORIES)
+        ID_GROUPING_PRODUCT_GROUP,
+        0,
+        application.getString(R.string.property_product_group),
+        groupingMode.equals(GROUPING_PRODUCT_GROUP)
+    ));
+    menuItemDataList.add(new MenuItemData(
+        ID_GROUPING_STORE,
+        0,
+        application.getString(R.string.property_store_default),
+        groupingMode.equals(GROUPING_STORE)
     ));
     setMenuItemDataList(menuItemDataList);
     setMenuItemGroups(new MenuItemGroup(0, true, true));

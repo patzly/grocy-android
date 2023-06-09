@@ -17,19 +17,14 @@
   ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources>
+<shape
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:shape="rectangle">
 
-  <declare-styleable name="ActionButton">
-    <attr name="icon" format="reference" />
-    <attr name="tint" format="color" />
-    <attr name="dense" format="boolean" />
-  </declare-styleable>
+  <solid android:color="@color/transparent" />
 
-  <declare-styleable name="RoundedCornerImageView">
-    <attr name="radius" format="dimension" />
-    <attr name="bottomCornersRound" format="boolean" />
-    <attr name="topCornersRound" format="boolean" />
-    <attr name="showBottomShadow" format="boolean" />
-  </declare-styleable>
+  <size
+    android:width="4dp"
+    android:height="4dp" />
 
-</resources>
+</shape>

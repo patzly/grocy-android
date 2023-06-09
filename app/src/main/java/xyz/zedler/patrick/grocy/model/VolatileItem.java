@@ -43,7 +43,6 @@ import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnVolatileResponseListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 
 @Entity(tableName = "volatile_item_table")
@@ -272,6 +271,16 @@ public class VolatileItem implements Parcelable {
         dlHelper.grocyApi.getStockVolatile(),
         responseListener::onResponse,
         errorListener::onErrorResponse
+    );
+  }
+
+  public interface OnVolatileResponseListener {
+
+    void onResponse(
+        ArrayList<StockItem> due,
+        ArrayList<StockItem> overdue,
+        ArrayList<StockItem> expired,
+        ArrayList<MissingItem> missing
     );
   }
 }

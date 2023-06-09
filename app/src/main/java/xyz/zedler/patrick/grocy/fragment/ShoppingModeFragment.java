@@ -25,11 +25,13 @@ import android.os.Handler;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
@@ -47,6 +49,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSh
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
@@ -118,7 +121,6 @@ public class ShoppingModeFragment extends BaseFragment implements
     activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
-    binding.toolbar.setOnClickListener(v -> showShoppingListsBottomSheet());
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();
@@ -172,7 +174,8 @@ public class ShoppingModeFragment extends BaseFragment implements
             viewModel.getShoppingListItemAmountsHashMap(),
             viewModel.getMissingProductIds(),
             viewModel.getShoppingListNotes(),
-            viewModel.getGroupingMode()
+            viewModel.getGroupingMode(),
+            viewModel.getActiveFields()
         );
       } else {
         binding.recycler.setAdapter(
@@ -189,7 +192,8 @@ public class ShoppingModeFragment extends BaseFragment implements
                 viewModel.getMissingProductIds(),
                 this,
                 viewModel.getShoppingListNotes(),
-                viewModel.getGroupingMode()
+                viewModel.getGroupingMode(),
+                viewModel.getActiveFields()
             )
         );
         binding.recycler.scheduleLayoutAnimation();
@@ -334,12 +338,49 @@ public class ShoppingModeFragment extends BaseFragment implements
 
   private void hideDisabledFeatures() {
     if (isFeatureMultipleListsDisabled()) {
-      binding.buttonShoppingListLists.setVisibility(View.GONE);
+      MenuItem menuItem = binding.toolbar.getMenu().findItem(R.id.action_select);
+      if (menuItem != null) menuItem.setVisible(false);
     }
   }
 
   private boolean isFeatureMultipleListsDisabled() {
     return !sharedPrefs.getBoolean(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true);
+  }
+
+  public void showShoppingModeMenu() {
+    PopupMenu popupMenu = new PopupMenu(requireContext(), binding.toolbarMenu);
+    popupMenu.inflate(R.menu.menu_shopping_mode);
+    MenuItem itemGrouping = popupMenu.getMenu().findItem(R.id.action_grouping_mode);
+    if (itemGrouping != null) {
+      FilterChipLiveData data = viewModel.getFilterChipLiveDataGrouping();
+      itemGrouping.setTitle(data.getText());
+    }
+    popupMenu.setOnMenuItemClickListener(getMenuItemClickListener());
+    popupMenu.show();
+  }
+
+  public PopupMenu.OnMenuItemClickListener getMenuItemClickListener() {
+    return item -> {
+      if (item.getItemId() == R.id.action_select) {
+        showShoppingListsBottomSheet();
+        return true;
+      } else if (item.getItemId() == R.id.action_grouping_mode) {
+        PopupMenu popupMenu = new PopupMenu(requireContext(), binding.toolbarMenu);
+        viewModel.getFilterChipLiveDataGrouping().populateMenu(popupMenu.getMenu());
+        popupMenu.show();
+        return true;
+      } else if (item.getItemId() == R.id.action_fields) {
+        PopupMenu popupMenu = new PopupMenu(requireContext(), binding.toolbarMenu);
+        viewModel.getFilterChipLiveDataFields().populateMenu(popupMenu.getMenu());
+        popupMenu.show();
+        return true;
+      } else if (item.getItemId() == R.id.action_options) {
+        activity.navUtil.navigateFragment(ShoppingModeFragmentDirections
+            .actionShoppingModeFragmentToShoppingModeOptionsFragment());
+        return true;
+      }
+      return false;
+    };
   }
 
   private void initTimerTask() {

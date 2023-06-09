@@ -180,7 +180,7 @@ public class OnboardingFragment extends BaseFragment {
       activity.showSnackbar(R.string.msg_features, true);
       sharedPrefs.edit().putBoolean(Constants.PREF.INTRO_SHOWN, true).apply();
     }
-    if (findNavController().getBackQueue().getSize() == 2) { // TODO: Better condition
+    if (findNavController().getCurrentBackStack().getValue().size() == 2) { // TODO: Better condition
       activity.navUtil.navigate(OnboardingFragmentDirections.actionOnboardingFragmentToNavigationLogin());
       return true;
     } else {

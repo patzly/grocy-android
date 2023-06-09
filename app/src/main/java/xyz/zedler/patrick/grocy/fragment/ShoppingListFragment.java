@@ -189,7 +189,7 @@ public class ShoppingListFragment extends BaseFragment implements
             viewModel.getMissingProductIds(),
             viewModel.getShoppingListNotes(),
             viewModel.getGroupingMode(),
-            viewModel.getExtraField()
+            viewModel.getActiveFields()
         );
       } else {
         binding.recycler.setAdapter(
@@ -207,7 +207,7 @@ public class ShoppingListFragment extends BaseFragment implements
                 this,
                 viewModel.getShoppingListNotes(),
                 viewModel.getGroupingMode(),
-                viewModel.getExtraField()
+                viewModel.getActiveFields()
             )
         );
         binding.recycler.scheduleLayoutAnimation();

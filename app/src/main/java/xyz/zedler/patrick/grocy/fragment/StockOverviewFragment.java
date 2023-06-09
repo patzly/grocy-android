@@ -166,7 +166,7 @@ public class StockOverviewFragment extends BaseFragment implements
             viewModel.getSortMode(),
             viewModel.isSortAscending(),
             viewModel.getGroupingMode(),
-            viewModel.getExtraField()
+            viewModel.getActiveFields()
         );
       } else {
         binding.recycler.setAdapter(
@@ -189,7 +189,7 @@ public class StockOverviewFragment extends BaseFragment implements
                 viewModel.getSortMode(),
                 viewModel.isSortAscending(),
                 viewModel.getGroupingMode(),
-                viewModel.getExtraField()
+                viewModel.getActiveFields()
             )
         );
         binding.recycler.scheduleLayoutAnimation();

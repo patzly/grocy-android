@@ -44,9 +44,10 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.StockOverviewFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields.Field;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataLocation;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataProductGroup;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockExtraField;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockGrouping;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockSort;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
@@ -76,6 +77,15 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   private final static String TAG = ShoppingListViewModel.class.getSimpleName();
 
+  public final static String FIELD_AMOUNT = "field_amount";
+  public final static String FIELD_DUE_DATE = "field_due_date";
+  public final static String FIELD_VALUE = "field_value";
+  public final static String FIELD_CALORIES_UNIT = "field_calories_unit";
+  public final static String FIELD_CALORIES_TOTAL = "field_calories_total";
+  public final static String FIELD_AVERAGE_PRICE = "field_average_price";
+  public final static String FIELD_LAST_PRICE = "field_last_price";
+  public final static String FIELD_PICTURE = "field_picture";
+
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
@@ -91,7 +101,7 @@ public class StockOverviewViewModel extends BaseViewModel {
   private final FilterChipLiveDataLocation filterChipLiveDataLocation;
   private final FilterChipLiveDataStockSort filterChipLiveDataSort;
   private final FilterChipLiveDataStockGrouping filterChipLiveDataGrouping;
-  private final FilterChipLiveDataStockExtraField filterChipLiveDataExtraField;
+  private final FilterChipLiveDataFields filterChipLiveDataFields;
 
   private List<StockItem> stockItems;
   private List<Product> products;
@@ -160,9 +170,18 @@ public class StockOverviewViewModel extends BaseViewModel {
         getApplication(),
         this::updateFilteredStockItems
     );
-    filterChipLiveDataExtraField = new FilterChipLiveDataStockExtraField(
+    filterChipLiveDataFields = new FilterChipLiveDataFields(
         getApplication(),
-        this::updateFilteredStockItems
+        PREF.STOCK_FIELDS,
+        this::updateFilteredStockItems,
+        new Field(FIELD_AMOUNT, R.string.property_amount, true),
+        new Field(FIELD_DUE_DATE, R.string.property_due_date_next, true),
+        new Field(FIELD_VALUE, R.string.property_value, false),
+        new Field(FIELD_CALORIES_UNIT, R.string.property_calories_unit, false),
+        new Field(FIELD_CALORIES_TOTAL, R.string.property_calories_total, false),
+        new Field(FIELD_AVERAGE_PRICE, R.string.property_price_average, false),
+        new Field(FIELD_LAST_PRICE, R.string.property_last_price, false),
+        new Field(FIELD_PICTURE, R.string.property_picture, true)
     );
   }
 
@@ -695,12 +714,12 @@ public class StockOverviewViewModel extends BaseViewModel {
     return filterChipLiveDataGrouping.getGroupingMode();
   }
 
-  public FilterChipLiveData.Listener getFilterChipLiveDataExtraField() {
-    return () -> filterChipLiveDataExtraField;
+  public FilterChipLiveData.Listener getFilterChipLiveDataFields() {
+    return () -> filterChipLiveDataFields;
   }
 
-  public String getExtraField() {
-    return filterChipLiveDataExtraField.getExtraField();
+  public List<String> getActiveFields() {
+    return filterChipLiveDataFields.getActiveFields();
   }
 
   public MutableLiveData<Boolean> getScannerVisibilityLive() {
