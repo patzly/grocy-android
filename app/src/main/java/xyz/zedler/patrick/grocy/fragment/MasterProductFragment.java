@@ -101,24 +101,29 @@ public class MasterProductFragment extends BaseFragment {
 
     binding.categoryOptional.setOnClickListener(
         v -> activity.navUtil.navigateFragment(MasterProductFragmentDirections
-        .actionMasterProductFragmentToMasterProductCatOptionalFragment(viewModel.getAction())
-        .setProduct(viewModel.getFilledProduct())));
+            .actionMasterProductFragmentToMasterProductCatOptionalFragment(viewModel.getAction())
+            .setProduct(viewModel.getFilledProduct())
+            .setForceSaveWithClose(viewModel.isForceSaveWithClose())));
     binding.categoryLocation.setOnClickListener(
         v -> activity.navUtil.navigateFragment(MasterProductFragmentDirections
-        .actionMasterProductFragmentToMasterProductCatLocationFragment(viewModel.getAction())
-        .setProduct(viewModel.getFilledProduct())));
+            .actionMasterProductFragmentToMasterProductCatLocationFragment(viewModel.getAction())
+            .setProduct(viewModel.getFilledProduct())
+            .setForceSaveWithClose(viewModel.isForceSaveWithClose())));
     binding.categoryDueDate.setOnClickListener(
         v -> activity.navUtil.navigateFragment(MasterProductFragmentDirections
-        .actionMasterProductFragmentToMasterProductCatDueDateFragment(viewModel.getAction())
-        .setProduct(viewModel.getFilledProduct())));
+            .actionMasterProductFragmentToMasterProductCatDueDateFragment(viewModel.getAction())
+            .setProduct(viewModel.getFilledProduct())
+            .setForceSaveWithClose(viewModel.isForceSaveWithClose())));
     binding.categoryAmount.setOnClickListener(
         v -> activity.navUtil.navigateFragment(MasterProductFragmentDirections
-        .actionMasterProductFragmentToMasterProductCatAmountFragment(viewModel.getAction())
-        .setProduct(viewModel.getFilledProduct())));
+            .actionMasterProductFragmentToMasterProductCatAmountFragment(viewModel.getAction())
+            .setProduct(viewModel.getFilledProduct())
+            .setForceSaveWithClose(viewModel.isForceSaveWithClose())));
     binding.categoryQuantityUnit.setOnClickListener(
         v -> activity.navUtil.navigateFragment(MasterProductFragmentDirections
-        .actionMasterProductFragmentToMasterProductCatQuantityUnitFragment(viewModel.getAction())
-        .setProduct(viewModel.getFilledProduct())));
+            .actionMasterProductFragmentToMasterProductCatQuantityUnitFragment(viewModel.getAction())
+            .setProduct(viewModel.getFilledProduct())
+            .setForceSaveWithClose(viewModel.isForceSaveWithClose())));
     binding.categoryBarcodes.setOnClickListener(v -> {
       if (!viewModel.isActionEdit()) {
         activity.showSnackbar(R.string.subtitle_product_not_on_server, true);
@@ -272,12 +277,13 @@ public class MasterProductFragment extends BaseFragment {
         binding.appBar, false, binding.scroll, false
     );
     activity.getScrollBehavior().setBottomBarVisibility(true);
+    boolean showSaveWithCloseButton = viewModel.isActionEdit() || viewModel.isForceSaveWithClose();
     activity.updateFab(
-        viewModel.isActionEdit() ? R.drawable.ic_round_save : R.drawable.ic_round_save_as,
-        viewModel.isActionEdit() ? R.string.action_save : R.string.action_save_not_close,
-        viewModel.isActionEdit() ? Constants.FAB.TAG.SAVE : Constants.FAB.TAG.SAVE_NOT_CLOSE,
+        showSaveWithCloseButton ? R.drawable.ic_round_save : R.drawable.ic_round_save_as,
+        showSaveWithCloseButton ? R.string.action_save : R.string.action_save_not_close,
+        showSaveWithCloseButton ? Constants.FAB.TAG.SAVE : Constants.FAB.TAG.SAVE_NOT_CLOSE,
         savedInstanceState == null,
-        () -> viewModel.saveProduct(viewModel.isActionEdit())
+        () -> viewModel.saveProduct(showSaveWithCloseButton)
     );
   }
 

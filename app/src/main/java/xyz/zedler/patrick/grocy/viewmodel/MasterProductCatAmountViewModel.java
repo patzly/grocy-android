@@ -30,7 +30,7 @@ import androidx.preference.PreferenceManager;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatAmount;
-import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.MasterProductCatAmountFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -46,7 +46,7 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
   private final DownloadHelper dlHelper;
   private final MasterProductRepository repository;
   private final FormDataMasterProductCatAmount formData;
-  private final MasterProductFragmentArgs args;
+  private final MasterProductCatAmountFragmentArgs args;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -58,7 +58,7 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
 
   public MasterProductCatAmountViewModel(
       @NonNull Application application,
-      @NonNull MasterProductFragmentArgs startupArgs
+      @NonNull MasterProductCatAmountFragmentArgs startupArgs
   ) {
     super(application);
 
@@ -174,11 +174,11 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
   public static class MasterProductCatAmountViewModelFactory implements ViewModelProvider.Factory {
 
     private final Application application;
-    private final MasterProductFragmentArgs args;
+    private final MasterProductCatAmountFragmentArgs args;
 
     public MasterProductCatAmountViewModelFactory(
         Application application,
-        MasterProductFragmentArgs args
+        MasterProductCatAmountFragmentArgs args
     ) {
       this.application = application;
       this.args = args;

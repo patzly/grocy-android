@@ -32,7 +32,7 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatLocation;
-import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.MasterProductCatLocationFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -51,7 +51,7 @@ public class MasterProductCatLocationViewModel extends BaseViewModel {
   private final DownloadHelper dlHelper;
   private final MasterProductRepository repository;
   private final FormDataMasterProductCatLocation formData;
-  private final MasterProductFragmentArgs args;
+  private final MasterProductCatLocationFragmentArgs args;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -65,7 +65,7 @@ public class MasterProductCatLocationViewModel extends BaseViewModel {
 
   public MasterProductCatLocationViewModel(
       @NonNull Application application,
-      @NonNull MasterProductFragmentArgs startupArgs
+      @NonNull MasterProductCatLocationFragmentArgs startupArgs
   ) {
     super(application);
 
@@ -189,11 +189,11 @@ public class MasterProductCatLocationViewModel extends BaseViewModel {
       ViewModelProvider.Factory {
 
     private final Application application;
-    private final MasterProductFragmentArgs args;
+    private final MasterProductCatLocationFragmentArgs args;
 
     public MasterProductCatLocationViewModelFactory(
         Application application,
-        MasterProductFragmentArgs args
+        MasterProductCatLocationFragmentArgs args
     ) {
       this.application = application;
       this.args = args;

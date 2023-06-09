@@ -31,7 +31,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatOptional;
-import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.MasterProductCatOptionalFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -49,7 +49,7 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
   private final DownloadHelper dlHelper;
   private final MasterProductRepository repository;
   private final FormDataMasterProductCatOptional formData;
-  private final MasterProductFragmentArgs args;
+  private final MasterProductCatOptionalFragmentArgs args;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -63,7 +63,7 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
 
   public MasterProductCatOptionalViewModel(
       @NonNull Application application,
-      @NonNull MasterProductFragmentArgs startupArgs
+      @NonNull MasterProductCatOptionalFragmentArgs startupArgs
   ) {
     super(application);
 
@@ -204,11 +204,11 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
       ViewModelProvider.Factory {
 
     private final Application application;
-    private final MasterProductFragmentArgs args;
+    private final MasterProductCatOptionalFragmentArgs args;
 
     public MasterProductCatOptionalViewModelFactory(
         Application application,
-        MasterProductFragmentArgs args
+        MasterProductCatOptionalFragmentArgs args
     ) {
       this.application = application;
       this.args = args;

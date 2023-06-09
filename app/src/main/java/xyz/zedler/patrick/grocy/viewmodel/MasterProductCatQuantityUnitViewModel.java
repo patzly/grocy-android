@@ -34,7 +34,7 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatQuantityUnit;
-import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.MasterProductCatQuantityUnitFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
@@ -54,7 +54,7 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
   private final DownloadHelper dlHelper;
   private final MasterProductRepository repository;
   private final FormDataMasterProductCatQuantityUnit formData;
-  private final MasterProductFragmentArgs args;
+  private final MasterProductCatQuantityUnitFragmentArgs args;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -69,7 +69,7 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
 
   public MasterProductCatQuantityUnitViewModel(
       @NonNull Application application,
-      @NonNull MasterProductFragmentArgs startupArgs
+      @NonNull MasterProductCatQuantityUnitFragmentArgs startupArgs
   ) {
     super(application);
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
@@ -277,11 +277,11 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
       ViewModelProvider.Factory {
 
     private final Application application;
-    private final MasterProductFragmentArgs args;
+    private final MasterProductCatQuantityUnitFragmentArgs args;
 
     public MasterProductCatQuantityUnitViewModelFactory(
         Application application,
-        MasterProductFragmentArgs args
+        MasterProductCatQuantityUnitFragmentArgs args
     ) {
       this.application = application;
       this.args = args;
