@@ -370,16 +370,6 @@ public class RecipeEntryAdapter extends
     container.setOnClickListener(
         view -> listener.onItemRowClicked(recipe)
     );
-
-    // DIVIDER
-
-    if (layoutManager instanceof LinearLayoutManager
-        && viewHolder instanceof RecipeViewHolder) {
-      ((RecipeViewHolder) viewHolder).binding.divider.setVisibility(
-          position < recipes.size()-1 ? View.VISIBLE : View.GONE
-      );
-    }
-
   }
 
   private static Chip createChip(Context ctx, String text, int textColor) {
