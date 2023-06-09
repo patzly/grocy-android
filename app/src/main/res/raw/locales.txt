@@ -38,6 +38,10 @@ iw
 en.demo.grocy.info
 sefi.ninio, Yaron
 
+ja
+ja.demo.grocy.info
+daigoume
+
 nb
 no.demo.grocy.info
 teitrand, Ziggiz, RonnyRusten

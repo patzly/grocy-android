@@ -1,5 +1,6 @@
 ## 3.3.0
 
+- New: Japanese translation (thanks daigoume!)
 - New: Product choose page after barcode scan now has really useful copy option for products (#636)
 - New: On purchase page, store now can be pinned (always initially selected in session) (#525)
 - New: Recipe details are now displayed on a separate page, not a bottom sheet anymore
