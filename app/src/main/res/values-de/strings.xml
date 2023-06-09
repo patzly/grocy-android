@@ -476,8 +476,7 @@
   <string name="error_network_subtitle">Die benötigten Daten konnten nicht vollständig geladen werden</string>
   <string name="error_network_exact">Netzwerkfehler: %1$s</string>
   <string name="error_database">Datenbank-Fehler</string>
-  <string name="error_database_exact">Datenbank-Fehler: %1$s</string>
-  <string name="error_database_object_too_large">Datenbank-Fehler</string>
+  <string name="error_insert">Fehler: %1$s</string>
   <string name="error_details">Fehlerdetails</string>
   <string name="error_unknown">Uups!</string>
   <string name="error_not_grocy_instance">Keine gültige Grocy Instanz</string>
