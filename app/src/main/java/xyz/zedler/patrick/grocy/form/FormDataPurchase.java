@@ -107,6 +107,7 @@ public class FormDataPurchase {
   private final MutableLiveData<Boolean> showStoreSection;
   private final MutableLiveData<Store> storeLive;
   private final LiveData<String> storeNameLive;
+  private final MutableLiveData<Integer> pinnedStoreIdLive;
   private final MutableLiveData<Location> locationLive;
   private final LiveData<String> locationNameLive;
   private final MutableLiveData<Integer> printLabelTypeLive;
@@ -280,6 +281,7 @@ public class FormDataPurchase {
         storeLive,
         store -> store != null ? store.getName() : null
     );
+    pinnedStoreIdLive = new MutableLiveData<>();
     locationLive = new MutableLiveData<>();
     locationNameLive = Transformations.map(
         locationLive,
@@ -681,6 +683,15 @@ public class FormDataPurchase {
 
   public void setCurrentProductFlowInterrupted(boolean currentProductFlowInterrupted) {
     this.currentProductFlowInterrupted = currentProductFlowInterrupted;
+  }
+
+  public MutableLiveData<Integer> getPinnedStoreIdLive() {
+    return pinnedStoreIdLive;
+  }
+
+  public void setPinnedStoreId(Integer pinnedStoreId) {
+    if (pinnedStoreId != null && pinnedStoreId == -1) pinnedStoreId = null;
+    this.pinnedStoreIdLive.setValue(pinnedStoreId);
   }
 
   public boolean isProductNameValid() {

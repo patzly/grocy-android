@@ -29,9 +29,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.button.MaterialButton;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> {
@@ -40,15 +42,24 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
 
   private final ArrayList<Store> stores;
   private final int selectedId;
+  private final boolean noneSelectable;
+  private final boolean displayPinButtons;
+  private final int currentPinId;
   private final StoreAdapterListener listener;
 
   public StoreAdapter(
       ArrayList<Store> stores,
       int selectedId,
+      boolean noneSelectable,
+      boolean displayPinButtons,
+      int currentPinId,
       StoreAdapterListener listener
   ) {
     this.stores = stores;
     this.selectedId = selectedId;
+    this.noneSelectable = noneSelectable;
+    this.displayPinButtons = displayPinButtons;
+    this.currentPinId = currentPinId;
     this.listener = listener;
   }
 
@@ -57,6 +68,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
     private final LinearLayout linearLayoutContainer;
     private final TextView textViewName;
     private final ImageView imageViewSelected;
+    private final MaterialButton buttonPin;
 
     public ViewHolder(View view) {
       super(view);
@@ -64,6 +76,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
       linearLayoutContainer = view.findViewById(R.id.linear_master_edit_selection_container);
       textViewName = view.findViewById(R.id.text_master_edit_selection_name);
       imageViewSelected = view.findViewById(R.id.image_master_edit_selection_selected);
+      buttonPin = view.findViewById(R.id.button_pin);
     }
   }
 
@@ -102,10 +115,24 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
       holder.linearLayoutContainer.setBackground(ViewUtil.getBgListItemSelected(context));
     }
 
+    Context ctx = holder.linearLayoutContainer.getContext();
+    holder.buttonPin.setVisibility(displayPinButtons && store.getId() != -1
+        ? View.VISIBLE : View.GONE);
+    holder.buttonPin.setOnClickListener(
+        view -> listener.onItemRowClicked(store, true)
+    );
+    holder.buttonPin.setBackgroundColor(store.getId() == currentPinId
+        ? ResUtil.getColorAttr(ctx, R.attr.colorPrimaryContainer)
+        : ctx.getResources().getColor(R.color.transparent));
+
+    if (noneSelectable) {
+      holder.linearLayoutContainer.setEnabled(false);
+    }
+
     // CONTAINER
 
     holder.linearLayoutContainer.setOnClickListener(
-        view -> listener.onItemRowClicked(holder.getAdapterPosition())
+        view -> listener.onItemRowClicked(store, false)
     );
   }
 
@@ -121,6 +148,6 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
 
   public interface StoreAdapterListener {
 
-    void onItemRowClicked(int position);
+    void onItemRowClicked(Store store, boolean pinClicked);
   }
 }

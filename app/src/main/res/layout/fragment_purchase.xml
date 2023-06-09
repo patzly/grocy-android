@@ -600,29 +600,51 @@
               </LinearLayout>
 
               <LinearLayout
-                android:id="@+id/linear_purchase_store"
-                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-                android:onClick="@{() -> viewModel.showStoresBottomSheet()}"
-                android:visibility="@{formData.showStoreSection &amp;&amp; viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING) ? View.VISIBLE : View.GONE}">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:animateLayoutChanges="true">
 
-                <ImageView
-                  android:id="@+id/image_purchase_store"
-                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                  android:src="@drawable/ic_round_store"
-                  tools:ignore="ContentDescription" />
+                <LinearLayout
+                  android:id="@+id/linear_purchase_store"
+                  style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+                  android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:onClick="@{() -> viewModel.showStoresBottomSheet()}"
+                  android:visibility="@{formData.showStoreSection &amp;&amp; viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING) ? View.VISIBLE : View.GONE}">
 
-                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+                  <ImageView
+                    android:id="@+id/image_purchase_store"
+                    style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                    android:src="@drawable/ic_round_store"
+                    tools:ignore="ContentDescription" />
 
-                  <TextView
-                    style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                    android:text="@string/property_store" />
+                  <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
-                  <TextView
-                    android:id="@+id/text_purchase_store"
-                    style="@style/Widget.Grocy.TextView.ListItem.Title"
-                    android:text="@{formData.storeNameLive ?? @string/subtitle_none_selected}" />
+                    <TextView
+                      style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                      android:text="@string/property_store" />
+
+                    <TextView
+                      android:id="@+id/text_purchase_store"
+                      style="@style/Widget.Grocy.TextView.ListItem.Title"
+                      android:text="@{formData.storeNameLive ?? @string/subtitle_none_selected}" />
+
+                  </LinearLayout>
 
                 </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                  style="@style/Widget.Grocy.Button.IconButton"
+                  android:id="@+id/button_pin_store"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginEnd="8dp"
+                  app:backgroundTint="?attr/colorPrimaryContainer"
+                  android:visibility="@{formData.pinnedStoreIdLive != null ? View.VISIBLE : View.GONE}"
+                  android:onClick="@{v -> formData.setPinnedStoreId(-1)}"
+                  app:icon="@drawable/ic_round_push_pin" />
 
               </LinearLayout>
 
