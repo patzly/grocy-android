@@ -49,7 +49,6 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.elevation.SurfaceColors;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -142,12 +141,6 @@ public class RecipeFragment extends BaseFragment implements
     activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
-
-    ColorStateList colorSurface3 = ColorStateList.valueOf(
-        SurfaceColors.SURFACE_3.getColor(activity)
-    );
-    binding.chipConsume.setChipBackgroundColor(colorSurface3);
-    binding.chipShoppingList.setChipBackgroundColor(colorSurface3);
 
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
