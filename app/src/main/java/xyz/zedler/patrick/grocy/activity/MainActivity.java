@@ -412,7 +412,7 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   protected void onPause() {
-    netUtil.cancelHassSessionTimer();
+    if (netUtil != null) netUtil.cancelHassSessionTimer();
     super.onPause();
   }
 
