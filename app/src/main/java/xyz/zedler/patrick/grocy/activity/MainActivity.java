@@ -530,18 +530,19 @@ public class MainActivity extends AppCompatActivity {
       }
       onClick.run();
     });
-    binding.fabMain.setOnLongClickListener(v -> {
-      if (onLongClick == null) {
-        return false;
-      }
-      Drawable drawable = binding.fabMain.getDrawable();
-      if (drawable instanceof AnimationDrawable) {
-        ViewUtil.startIcon(drawable);
-      }
-      onLongClick.run();
-      return true;
-    });
-    ViewUtil.setTooltipText(binding.fabMain, tooltipStringId);
+    if (onLongClick != null) {
+      binding.fabMain.setOnLongClickListener(v -> {
+        Drawable drawable = binding.fabMain.getDrawable();
+        if (drawable instanceof AnimationDrawable) {
+          ViewUtil.startIcon(drawable);
+        }
+        onLongClick.run();
+        return true;
+      });
+    } else {
+      binding.fabMain.setOnLongClickListener(null);
+      ViewUtil.setTooltipText(binding.fabMain, tooltipStringId);
+    }
   }
 
   @Override
