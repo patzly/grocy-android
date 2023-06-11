@@ -24,6 +24,7 @@
 - Fixed: Saving QU conversion failed if conversion existed already in other product (#707, #682)
 - Fixed: Disabled features with Home Assistant add-on were not disabled in app (#713)
 - Fixed: On product creation with prefilled name there was a plus instead of space character
+- Fixed: On product details sheet, description card was rendered with wrong height sometimes (#717)
 
 ## 3.2.1
 
