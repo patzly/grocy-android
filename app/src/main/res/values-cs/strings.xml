@@ -520,8 +520,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="error_network_subtitle">Potřebná data nemohla být načtena</string>
   <string name="error_network_exact">Chyba sítě: %1$s</string>
   <string name="error_database">Chyba v databázi</string>
-  <string name="error_database_exact">Chyba v databázi č.: %1$s</string>
-  <string name="error_database_object_too_large">Chyba v databázi</string>
+  <string name="error_insert">Chyba: </string>
   <string name="error_details">Podrobnosti k chybě</string>
   <string name="error_unknown">Jejda!</string>
   <string name="error_not_grocy_instance">Neplatná instance grocy</string>
@@ -860,6 +859,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_product_name">Jméno produktu</string>
   <string name="property_parent_product">Nadřazený produkt</string>
   <string name="property_description">Popis</string>
+  <string name="property_product_description">Popis</string>
   <string name="property_note">Poznámka</string>
   <string name="property_status">Filtr</string>
   <string name="property_status_insert">Filtr:</string>
@@ -1287,6 +1287,4 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
 
   <string name="notification_due_soon_content">Spotřebujte je brzy, aby se nezkazily</string>
 
-  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
-  Examples: 'de' for German; 'fr' for French -->
-</resources>
+  </resources>
