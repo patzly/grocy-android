@@ -520,7 +520,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="error_network_subtitle">Potřebná data nemohla být načtena</string>
   <string name="error_network_exact">Chyba sítě: %1$s</string>
   <string name="error_database">Chyba v databázi</string>
-  <string name="error_insert">Chyba: </string>
+  <string name="error_insert">Chyba: %1$s</string>
   <string name="error_details">Podrobnosti k chybě</string>
   <string name="error_unknown">Jejda!</string>
   <string name="error_not_grocy_instance">Neplatná instance grocy</string>
