@@ -216,7 +216,7 @@ public class MasterObjectListAdapter extends
 
       Glide.with(context)
           .load(
-              new GlideUrl(grocyApi.getProductPicture(pictureFileName), grocyAuthHeaders)
+              new GlideUrl(grocyApi.getProductPictureServeSmall(pictureFileName), grocyAuthHeaders)
           ).transform(
               new CenterCrop(), new RoundedCorners(UiUtil.dpToPx(context, 12))
           ).transition(DrawableTransitionOptions.withCrossFade())

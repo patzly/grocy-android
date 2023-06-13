@@ -474,6 +474,16 @@ public class GrocyApi {
     );
   }
 
+  public String getProductPictureServeSmall(String filename) {
+    return getProductPicture(filename)
+        + "?force_serve_as=picture&best_fit_height=240&best_fit_width=360";
+  }
+
+  public String getProductPictureServeLarge(String filename) {
+    return getProductPicture(filename)
+        + "?force_serve_as=picture&best_fit_height=800&best_fit_width=1280";
+  }
+
   public String getProductPicture(String filename) {
     String fileNameEncoded = new String(Base64.encode(
         filename.getBytes(StandardCharsets.UTF_8),
@@ -482,7 +492,6 @@ public class GrocyApi {
     return getUrl(
         "/files/productpictures/"
             + fileNameEncoded.replace("\n", "")
-            + "?force_serve_as=picture&best_fit_height=240&best_fit_width=360"
     );
   }
 }

@@ -529,7 +529,7 @@ public class ShoppingModeItemAdapter extends
 
       Glide.with(context)
           .load(
-              new GlideUrl(grocyApi.getProductPicture(pictureFileName), grocyAuthHeaders)
+              new GlideUrl(grocyApi.getProductPictureServeSmall(pictureFileName), grocyAuthHeaders)
           ).transform(new CenterCrop())
           .transition(DrawableTransitionOptions.withCrossFade())
           .listener(new RequestListener<>() {

@@ -21,15 +21,29 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import org.json.JSONException;
+import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatOptional;
 import xyz.zedler.patrick.grocy.fragment.MasterProductCatOptionalFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -47,6 +61,7 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
   private static final String TAG = MasterProductCatOptionalViewModel.class.getSimpleName();
 
   private final DownloadHelper dlHelper;
+  private final GrocyApi grocyApi;
   private final MasterProductRepository repository;
   private final FormDataMasterProductCatOptional formData;
   private final MasterProductCatOptionalFragmentArgs args;
@@ -60,6 +75,8 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
 
   private NetworkQueue currentQueueLoading;
   private final boolean isActionEdit;
+  private String currentFilePath;
+  private String currentFileName;
 
   public MasterProductCatOptionalViewModel(
       @NonNull Application application,
@@ -69,6 +86,7 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    grocyApi = new GrocyApi(application);
     repository = new MasterProductRepository(application);
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
     formData = new FormDataMasterProductCatOptional(application, prefs, getBeginnerModeEnabled());
@@ -178,6 +196,109 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
         showMessage(getString(R.string.error_barcode_not_linked));
       }
     }
+  }
+
+  public File createImageFile() throws IOException {
+    File storageDir = getApplication().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+    File image = File.createTempFile(
+        String.valueOf(System.currentTimeMillis()),
+        ".jpg",
+        storageDir
+    );
+    currentFilePath = image.getAbsolutePath();
+    currentFileName = image.getName();
+    return image;
+  }
+
+  public void scaleAndUploadBitmap(String filePath, String filename) {
+    isLoadingLive.setValue(true);
+    ExecutorService executor = Executors.newSingleThreadExecutor();
+    executor.execute(() -> {
+      Bitmap scaledBitmap = scaleBitmap(filePath);
+      byte[] imageArray = convertBitmapToByteArray(scaledBitmap);
+      new Handler(Looper.getMainLooper()).post(() -> {
+        uploadPicture(imageArray, filename);
+        executor.shutdown();
+      });
+    });
+  }
+
+  private Bitmap scaleBitmap(String imagePath) {
+    int maxWidth = 1280;
+    int maxHeight = 800;
+    BitmapFactory.Options options = new BitmapFactory.Options();
+    options.inJustDecodeBounds = true;
+    BitmapFactory.decodeFile(imagePath, options);
+    int imageHeight = options.outHeight;
+    int imageWidth = options.outWidth;
+    int scaleFactor = Math.min(imageWidth / maxWidth, imageHeight / maxHeight);
+    options.inJustDecodeBounds = false;
+    options.inSampleSize = scaleFactor;
+    return BitmapFactory.decodeFile(imagePath, options);
+  }
+
+  private byte[] convertBitmapToByteArray(Bitmap bitmap) {
+    if (bitmap == null) return null;
+    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+    return stream.toByteArray();
+  }
+
+  public void uploadPicture(byte[] pictureData, String filename) {
+    if (pictureData == null || filename == null || filename.isBlank()) {
+      showErrorMessage();
+      isLoadingLive.setValue(false);
+      return;
+    }
+    dlHelper.putFile(
+        grocyApi.getProductPicture(filename),
+        pictureData,
+        () -> {
+          deleteCurrentPicture(filename);
+          formData.getPictureFilenameLive().setValue(filename);
+        },
+        this::showNetworkErrorMessage
+    );
+  }
+
+  public void deleteCurrentPicture(String newFilename) {
+    if (isActionEdit()) {
+      JSONObject jsonObject = new JSONObject();
+      try {
+        jsonObject.put("picture_file_name", newFilename);
+        dlHelper.put(
+            grocyApi.getObject(ENTITY.PRODUCTS, args.getProduct().getId()),
+            jsonObject,
+            response -> {},
+            volleyError -> {}
+        );
+      } catch (JSONException ignored) {}
+    }
+    String lastFilename = formData.getPictureFilenameLive().getValue();
+    if (lastFilename != null && !lastFilename.isBlank()) {
+      dlHelper.delete(
+          grocyApi.getProductPicture(lastFilename),
+          response -> formData.getPictureFilenameLive().setValue(""),
+          volleyError -> {
+            showNetworkErrorMessage(volleyError);
+            formData.getPictureFilenameLive().setValue(lastFilename);
+          }
+      );
+    } else if (lastFilename != null && lastFilename.isBlank()) {
+      formData.getPictureFilenameLive().setValue("");
+    }
+  }
+
+  public String getCurrentFilePath() {
+    return currentFilePath;
+  }
+
+  public void setCurrentFilePath(String currentFilePath) {
+    this.currentFilePath = currentFilePath;
+  }
+
+  public String getCurrentFileName() {
+    return currentFileName;
   }
 
   @NonNull

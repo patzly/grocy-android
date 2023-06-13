@@ -101,6 +101,8 @@
   <string name="action_open_scanner">Open scanner</string>
   <string name="action_discard">Discard</string>
   <string name="action_clear_form">Clear form</string>
+  <string name="action_choose_file">Choose file</string>
+  <string name="action_take_photo">Take photo</string>
   <!-- Short form for "Only link barcode to existing product", this should fit into a
   button so keep it short. -->
   <string name="action_link_and_clear">Link only</string>
@@ -351,6 +353,7 @@
   <string name="msg_port_connection_info_with_port">The app will connect to port %1$s.</string>
   <string name="msg_clear_form_first">Clear the form first before scanning another known barcode.</string>
   <string name="msg_not_implemented_yet">This will be implemented soon. Please use your server interface for now.</string>
+  <string name="msg_help_picture_changes">Changes to the image are synchronised with the server immediately, not only when saving!</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_stock_label_type">This is the default stock entry label type which will be prefilled on purchase.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->

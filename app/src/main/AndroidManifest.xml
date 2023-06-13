@@ -89,6 +89,16 @@
         android:value="true" />
     </service>
 
+    <provider
+      android:name="androidx.core.content.FileProvider"
+      android:authorities="xyz.zedler.patrick.grocy.fileprovider"
+      android:exported="false"
+      android:grantUriPermissions="true">
+      <meta-data
+        android:name="android.support.FILE_PROVIDER_PATHS"
+        android:resource="@xml/file_paths" />
+    </provider>
+
     <receiver
       android:name=".notification.DueSoonNotificationReceiver"
       android:enabled="true" />
