@@ -98,6 +98,8 @@
   <string name="action_open_scanner">Ouvrir le scanner</string>
   <string name="action_discard">Jeter</string>
   <string name="action_clear_form">Effacer le formulaire</string>
+  <string name="action_choose_file">Choisir un fichier</string>
+  <string name="action_take_photo">Prendre une photo</string>
   <!-- Short form for "Only link barcode to existing product", this should fit into a
   button so keep it short. -->
   <string name="action_link_and_clear">Lien seul.</string>
@@ -363,6 +365,7 @@
   <string name="msg_port_connection_info_with_port">L\'application se connectera au port %1$s.</string>
   <string name="msg_clear_form_first">Effacez d\'abord le formulaire avant de scanner un autre code-barres connu.</string>
   <string name="msg_not_implemented_yet">Cela sera implémenté bientôt. Merci d\'utiliser l\'interface de votre serveur pour l\'instant.</string>
+  <string name="msg_help_picture_changes">Les modifications apportées à l\'image sont immédiatement synchronisées avec le serveur, pas seulement lors de l\'enregistrement !</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_stock_label_type">Il s\'agit du type d\'étiquette d\'entrée de stock par défaut qui sera pré-remplie à l\'achat.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
