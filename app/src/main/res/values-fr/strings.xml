@@ -494,6 +494,7 @@
   <string name="error_offline">Hors ligne</string>
   <string name="error_offline_subtitle">Cette page ne fonctionne qu\'avec un accès internet. Vérifiez votre connexion.</string>
   <string name="error_no_done_items">Il n\'y a aucun article coché</string>
+  <string name="error_already_exists">Existe déjà</string>
   <string name="error_network">Erreur réseau</string>
   <string name="error_network_subtitle">Les données requises n\'ont pas pu être chargées complètement</string>
   <string name="error_network_exact">Erreur réseau : %1$s</string>
