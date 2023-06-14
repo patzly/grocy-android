@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.sqlite.SQLiteBlobTooBigException;
 import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
@@ -125,7 +126,9 @@ public class BaseViewModel extends AndroidViewModel {
 
   public void showThrowableErrorMessage(@Nullable Throwable error) {
     String message;
-    if (error != null && error.getLocalizedMessage() != null) {
+    if (error instanceof SQLiteBlobTooBigException) {
+      message = getString(R.string.error_pictures_size_exceeds_limit);
+    } else if (error != null && error.getLocalizedMessage() != null) {
       message = getApplication()
           .getString(R.string.error_insert, error.getLocalizedMessage());
     } else {
@@ -198,7 +201,7 @@ public class BaseViewModel extends AndroidViewModel {
     String stackTrace = sw.toString();
     snackbarMessage.setAction(
         getString(R.string.action_details),
-        v -> showErrorDetailsAlertDialog(v.getContext(), stackTrace)
+        v -> showErrorDetailsAlertDialog(v.getContext(), message + "\n\n" + stackTrace)
     );
     snackbarMessage.setDurationSecs(5);
     showSnackbar(snackbarMessage);

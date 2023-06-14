@@ -508,6 +508,7 @@
   <string name="error_permission">No permission for this action</string>
   <string name="error_undefined">An error occurred</string>
   <string name="error_invalid_base_servings">Servings invalid</string>
+  <string name="error_pictures_size_exceeds_limit">There are embedded pictures in product or recipe descriptions on your server, which exceed the parsing limit of this app. Please remove high quality and large sized pictures from your descriptions, this will also speed up data loading.</string>
 
   <string name="title_overview">Overview</string>
   <string name="title_stock_overview">Stock overview</string>
