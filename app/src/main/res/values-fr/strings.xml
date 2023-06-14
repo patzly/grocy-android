@@ -520,6 +520,7 @@
   <string name="error_permission">Aucune autorisation pour cette action</string>
   <string name="error_undefined">Une erreur est survenue</string>
   <string name="error_invalid_base_servings">Portions invalides</string>
+  <string name="error_pictures_size_exceeds_limit">Il y a des images intégrées dans les descriptions de produits ou de recettes sur votre serveur, qui dépassent la limite d\'analyse de cette application. Veuillez supprimer les images de haute qualité et de grande taille de vos descriptions, cela accélérera également le chargement des données.</string>
 
   <string name="title_overview">Aperçu</string>
   <string name="title_stock_overview">Aperçu des stocks</string>
