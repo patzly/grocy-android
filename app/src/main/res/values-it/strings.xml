@@ -453,7 +453,6 @@
   <string name="error_offline">Disconnesso</string>
   <string name="error_offline_subtitle">Controlla la connessione e riprova</string>
   <string name="error_no_done_items">Non ci sono elementi marcati come completati</string>
-  <string name="error_name_exists">Nome già esistente</string>
   <string name="error_network">Errore di rete</string>
   <string name="error_network_subtitle">Non è stato possibile caricare completamente i dati richiesti</string>
   <string name="error_unknown">Oops!</string>
@@ -617,7 +616,6 @@
   <string name="subtitle_product_optional_properties">Stato, Prodotto padre, Descrizione, Gruppo del prodotto, Energia, Immagine</string>
   <string name="subtitle_product_quantity_unit">Dispensa, Acquisto predefinito</string>
   <string name="subtitle_synced_with_server">Sincronizzazione con il server</string>
-  <string name="subtitle_recipe_not_on_server">La ricetta non è sul server</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">Punteggio scadenza: %1$s</string>
   <string name="subtitle_per_serving">per porzione</string>

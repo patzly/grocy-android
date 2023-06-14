@@ -112,6 +112,11 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
+      } else if (event.getType() == Event.FOCUS_INVALID_VIEWS) {
+        if (binding.editTextBarcode.getText() == null
+            || binding.editTextBarcode.getText().length() == 0) {
+          activity.showKeyboard(binding.editTextBarcode);
+        }
       }
     });
 

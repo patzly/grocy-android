@@ -329,7 +329,6 @@
   <string name="error_offline">בלתי מקוון</string>
   <string name="error_offline_subtitle">נא לבדוק את החיבור שלך ולנסות שוב</string>
   <string name="error_no_done_items">אין פריטים שסומנו כבוצעו</string>
-  <string name="error_name_exists">השם כבר קיים</string>
   <string name="error_network">שגיאת רשת</string>
   <string name="error_network_subtitle">לא ניתן לגמרי לטעון את הנתונים הדרושים</string>
   <string name="error_unknown">אופס!</string>

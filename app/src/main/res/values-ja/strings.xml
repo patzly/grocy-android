@@ -451,7 +451,6 @@
   <string name="error_offline">オフライン</string>
   <string name="error_offline_subtitle">ネット接続が必要です。接続されていますか？</string>
   <string name="error_no_done_items">実行済のアイテムがありません</string>
-  <string name="error_name_exists">すでに存在する名前です</string>
   <string name="error_network">ネットワークエラー</string>
   <string name="error_network_subtitle">必要なデータを完全にはロードできませんでした</string>
   <string name="error_network_exact">ネットワークエラー：%1$s</string>
@@ -629,7 +628,6 @@
   <string name="subtitle_product_optional_properties">状態・親製品・説明・製品グループ・エネルギー・画像</string>
   <string name="subtitle_product_quantity_unit">在庫、購入のデフォルト</string>
   <string name="subtitle_synced_with_server">サーバーと同期</string>
-  <string name="subtitle_recipe_not_on_server">サーバーにレシピがありません</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">期限スコア：%1$s</string>
   <string name="subtitle_per_serving">1提供あたり</string>

@@ -265,7 +265,6 @@
   <string name="error_bounds_higher">Musi być większe od %1$s</string>
   <string name="error_offline">Sieć niedostępna</string>
   <string name="error_offline_subtitle">Sprawdź swoje połączenie i spróbuj ponownie</string>
-  <string name="error_name_exists">Nazwa już istnieje</string>
   <string name="error_network">Błąd sieci</string>
   <string name="error_network_subtitle">Żądane dane nie mogły zostać w całości załadowane</string>
   <string name="error_unknown">Ups!</string>

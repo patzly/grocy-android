@@ -70,6 +70,7 @@ import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.model.VolatileItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.web.CustomByteArrayRequest;
 import xyz.zedler.patrick.grocy.web.CustomJsonArrayRequest;
 import xyz.zedler.patrick.grocy.web.CustomJsonObjectRequest;
 import xyz.zedler.patrick.grocy.web.CustomStringRequest;
@@ -350,6 +351,30 @@ public class DownloadHelper {
         sessionKey,
         json,
         onResponse::onResponse,
+        onError::onError,
+        this::onRequestFinished,
+        timeoutSeconds,
+        uuidHelper
+    );
+    onRequestLoading();
+    requestQueue.add(request);
+  }
+
+  public void putFile(
+      String url,
+      byte[] fileContent,
+      Runnable onSuccess,
+      OnErrorListener onError
+  ) {
+    String sessionKey = sharedPrefs
+        .getString(Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY, null);
+    CustomByteArrayRequest request = new CustomByteArrayRequest(
+        Request.Method.PUT,
+        url,
+        apiKey,
+        sessionKey,
+        fileContent,
+        onSuccess,
         onError::onError,
         this::onRequestFinished,
         timeoutSeconds,

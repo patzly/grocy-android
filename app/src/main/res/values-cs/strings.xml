@@ -515,13 +515,11 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="error_offline">Nepřipojen k serveru</string>
   <string name="error_offline_subtitle">K zobrazení této stránky potřebujete připojení k internetu.</string>
   <string name="error_no_done_items">Zatím není nic vloženo do nákupního košíku</string>
-  <string name="error_name_exists">Toto jméno již existuje</string>
   <string name="error_network">Chyba sítě</string>
   <string name="error_network_subtitle">Potřebná data nemohla být načtena</string>
   <string name="error_network_exact">Chyba sítě: %1$s</string>
   <string name="error_database">Chyba v databázi</string>
-  <string name="error_database_exact">Chyba v databázi č.: %1$s</string>
-  <string name="error_database_object_too_large">Chyba v databázi</string>
+  <string name="error_insert">Chyba: %1$s</string>
   <string name="error_details">Podrobnosti k chybě</string>
   <string name="error_unknown">Jejda!</string>
   <string name="error_not_grocy_instance">Neplatná instance grocy</string>
@@ -694,7 +692,6 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="subtitle_product_optional_properties">Stav, Nadřazený produkt, Popis, Skupina produktů, Energie, Obrázek</string>
   <string name="subtitle_product_quantity_unit">Výchozí hodnoty pro zásobu a nákup</string>
   <string name="subtitle_synced_with_server">Uloženo na server</string>
-  <string name="subtitle_recipe_not_on_server">Recept není uložen na serveru</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">Index min. trvanlivosti: %1$s</string>
   <string name="subtitle_per_serving">na 1 porci</string>
@@ -860,6 +857,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_product_name">Jméno produktu</string>
   <string name="property_parent_product">Nadřazený produkt</string>
   <string name="property_description">Popis</string>
+  <string name="property_product_description">Popis</string>
   <string name="property_note">Poznámka</string>
   <string name="property_status">Filtr</string>
   <string name="property_status_insert">Filtr:</string>
@@ -1287,6 +1285,4 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
 
   <string name="notification_due_soon_content">Spotřebujte je brzy, aby se nezkazily</string>
 
-  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
-  Examples: 'de' for German; 'fr' for French -->
-</resources>
+  </resources>

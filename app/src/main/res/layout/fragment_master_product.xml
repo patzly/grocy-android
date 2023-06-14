@@ -367,7 +367,7 @@
                 style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:alpha="@{viewModel.actionEditLive ? 1.0f : 0.38f}">
+                android:alpha="@{viewModel.actionEditLive ? 1.0f : 0.4f}">
 
                 <ImageView
                   style="@style/Widget.Grocy.ImageView.ListItem.Icon"
@@ -379,17 +379,6 @@
                   <TextView
                     style="@style/Widget.Grocy.TextView.ListItem.Title"
                     android:text="@string/title_product_cat_barcodes" />
-
-                  <TextView
-                    style="@style/Widget.Grocy.TextView.ListItem.Description"
-                    android:text="@string/subtitle_product_not_on_server"
-                    android:textColor="?attr/colorError"
-                    android:visibility="@{viewModel.actionEditLive ? View.GONE : View.VISIBLE}" />
-
-                  <TextView
-                    style="@style/Widget.Grocy.TextView.ListItem.Description"
-                    android:text="@string/subtitle_barcodes_will_be_added"
-                    android:visibility="@{viewModel.pendingProductBarcodesLive != null ? View.VISIBLE : View.GONE}" />
 
                 </LinearLayout>
 
@@ -406,7 +395,7 @@
                 style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:alpha="@{viewModel.actionEditLive ? 1.0f : 0.38f}">
+                android:alpha="@{viewModel.actionEditLive ? 1.0f : 0.4f}">
 
                 <ImageView
                   style="@style/Widget.Grocy.ImageView.ListItem.Icon"
@@ -418,12 +407,6 @@
                   <TextView
                     style="@style/Widget.Grocy.TextView.ListItem.Title"
                     android:text="@string/title_product_cat_qu_conversions" />
-
-                  <TextView
-                    style="@style/Widget.Grocy.TextView.ListItem.Description"
-                    android:text="@string/subtitle_product_not_on_server"
-                    android:textColor="?attr/colorError"
-                    android:visibility="@{viewModel.actionEditLive ? View.GONE : View.VISIBLE}" />
 
                 </LinearLayout>
 

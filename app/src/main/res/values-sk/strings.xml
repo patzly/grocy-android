@@ -458,7 +458,6 @@
   <string name="error_offline">Bez pripojenia</string>
   <string name="error_offline_subtitle">Táto stránka funguje len s prístupom na internet. Skontrolujte pripojenie.</string>
   <string name="error_no_done_items">Žiadne položky nie sú označené ako hotové</string>
-  <string name="error_name_exists">Taký názov už jestvuje</string>
   <string name="error_network">Chyba siete</string>
   <string name="error_network_subtitle">Požadované údaje sa nepodarilo úplne načítať</string>
   <string name="error_network_exact">Chyba siete: %1$s</string>

@@ -288,7 +288,6 @@
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">Kontrollera din anslutning och försök igen</string>
   <string name="error_no_done_items">Inget är \"klar\" markerat</string>
-  <string name="error_name_exists">Namn finns redan</string>
   <string name="error_network">Nätverksfel</string>
   <string name="error_network_subtitle">Kunde inte fullföra nerladningen</string>
   <string name="error_unknown">Uups!</string>

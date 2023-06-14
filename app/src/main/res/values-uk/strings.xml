@@ -457,7 +457,6 @@
   <string name="error_offline">Офлайн</string>
   <string name="error_offline_subtitle">Ця сторінка працює тільки з доступом до Інтернету. Перевірте підключення.</string>
   <string name="error_no_done_items">Немає елементів, позначених як виконані</string>
-  <string name="error_name_exists">Назва вже існує</string>
   <string name="error_network">Помилка мережі</string>
   <string name="error_network_subtitle">Не вдалося повністю завантажити потрібні дані</string>
   <string name="error_unknown">Ой, щось пішло не так!</string>
@@ -598,7 +597,6 @@
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Кількість: %1$s</string>
   <string name="subtitle_feature_disabled">Функцію відключено</string>
-  <string name="subtitle_recipe_not_on_server">Рецепт відсутній на сервері</string>
   <string name="description_input_product_part1">Поле продукту містить:</string>
   <string name="description_input_product_part2">Будь ласка, виберіть, що робити:</string>
   <string name="description_input_product_option1">Створіть новий продукт і використовуйте введення як назву</string>

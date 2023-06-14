@@ -2,6 +2,7 @@
 
 - New: Japanese translation (thanks daigoume!)
 - New: Product choose page after barcode scan now has really useful copy option for products (#636)
+- New: Product pictures now can be removed and added with camera (#536)
 - New: On purchase page, store now can be pinned (always initially selected in session) (#525)
 - New: Recipe details are now displayed on a separate page, not a bottom sheet anymore
 - New: Recipes and stock overview page now have checkbox options for all additional fields (#663)
@@ -17,12 +18,16 @@
 - Improved: Language picker works more reliably with demo domain change
 - Improved: Shopping mode grouping option now can be set separately from shopping list page
 - Improved: New grid layout on recipe page is default now
+- Improved: Misleading error when trying to save duplicated barcode on product barcode edit (#724)
+- Improved: Message shown when product or recipe is not on server (#718)
+- Fixed: Long click on barcode button on overview page was broken on Android Nougat and lower
 - Fixed: Crash on startup with Android Lollipop (and maybe higher)
 - Fixed: Prevent crash when opening qu conversion page (#708)
 - Fixed: Glitch with large top margin on recipe grid layout (#696)
 - Fixed: Saving QU conversion failed if conversion existed already in other product (#707, #682)
 - Fixed: Disabled features with Home Assistant add-on were not disabled in app (#713)
 - Fixed: On product creation with prefilled name there was a plus instead of space character
+- Fixed: On product details sheet, description card was rendered with wrong height sometimes (#717)
 
 ## 3.2.1
 

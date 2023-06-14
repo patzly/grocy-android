@@ -45,6 +45,7 @@ import xyz.zedler.patrick.grocy.fragment.MasterProductCatBarcodesEditFragmentArg
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
@@ -73,7 +74,6 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
 
   private List<Store> stores;
-  private List<ProductBarcode> barcodes;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
   private List<QuantityUnitConversion> unitConversions;
 
@@ -113,7 +113,7 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
       this.stores = data.getStores();
-      this.barcodes = data.getBarcodes();
+      formData.getBarcodesLive().setValue(getBarcodes(data.getBarcodes()));
       this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
       this.unitConversions = data.getConversions();
       fillWithProductBarcodeIfNecessary();
@@ -143,7 +143,9 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
         QuantityUnitConversion.updateQuantityUnitConversions(
             dlHelper, dbChangedTime, conversions -> this.unitConversions = conversions
         ), ProductBarcode.updateProductBarcodes(
-            dlHelper, dbChangedTime, barcodes -> this.barcodes = barcodes
+            dlHelper,
+            dbChangedTime,
+            barcodes -> formData.getBarcodesLive().setValue(getBarcodes(barcodes))
         ), QuantityUnit.updateQuantityUnits(
             dlHelper,
             dbChangedTime,
@@ -227,6 +229,7 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
       return;
     } else if(!isActionEdit) {
       setProductQuantityUnitsAndFactors(args.getProduct());
+      sendEvent(Event.FOCUS_INVALID_VIEWS);
       return;
     }
 
@@ -320,6 +323,17 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
         response -> navigateUp(),
         this::showNetworkErrorMessage
     );
+  }
+
+  private List<String> getBarcodes(List<ProductBarcode> barcodes) {
+    ArrayList<String> barcodeStrings = new ArrayList<>();
+    for (ProductBarcode barcode : barcodes) {
+      barcodeStrings.add(barcode.getBarcode());
+    }
+    if (isActionEdit() && (args.getProductBarcode() != null)) {
+      barcodeStrings.remove(args.getProductBarcode().getBarcode());
+    }
+    return barcodeStrings;
   }
 
   private Store getStore(int id) {

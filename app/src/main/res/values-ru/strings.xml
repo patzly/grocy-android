@@ -509,7 +509,6 @@
   <string name="error_offline">Не в сети - оффлайн</string>
   <string name="error_offline_subtitle">Проверьте соединение и попробуйте еще раз</string>
   <string name="error_no_done_items">Нет выполненных продуктов</string>
-  <string name="error_name_exists">Название уже существует</string>
   <string name="error_network">Ошибка сети</string>
   <string name="error_network_subtitle">Требуемые данные не могут быть загружены полностью</string>
   <string name="error_network_exact">Ошибка сети: %1$s</string>
@@ -683,7 +682,6 @@
   <string name="subtitle_product_optional_properties">Состояние, Родительский продукт, Описание, Группа продукта, Энергетическая ценность, Изображение</string>
   <string name="subtitle_product_quantity_unit">В запасах, При покупках</string>
   <string name="subtitle_synced_with_server">Синхронизировано с сервером</string>
-  <string name="subtitle_recipe_not_on_server">Рецепт не на сервере</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">Балл \"срока годности\": %1$s</string>
   <string name="subtitle_per_serving">за порцию</string>

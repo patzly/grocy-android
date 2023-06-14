@@ -98,6 +98,8 @@
   <string name="action_open_scanner">Ouvrir le scanner</string>
   <string name="action_discard">Jeter</string>
   <string name="action_clear_form">Effacer le formulaire</string>
+  <string name="action_choose_file">Choisir un fichier</string>
+  <string name="action_take_photo">Prendre une photo</string>
   <!-- Short form for "Only link barcode to existing product", this should fit into a
   button so keep it short. -->
   <string name="action_link_and_clear">Lien seul.</string>
@@ -363,6 +365,7 @@
   <string name="msg_port_connection_info_with_port">L\'application se connectera au port %1$s.</string>
   <string name="msg_clear_form_first">Effacez d\'abord le formulaire avant de scanner un autre code-barres connu.</string>
   <string name="msg_not_implemented_yet">Cela sera implémenté bientôt. Merci d\'utiliser l\'interface de votre serveur pour l\'instant.</string>
+  <string name="msg_help_picture_changes">Les modifications apportées à l\'image sont immédiatement synchronisées avec le serveur, pas seulement lors de l\'enregistrement !</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_stock_label_type">Il s\'agit du type d\'étiquette d\'entrée de stock par défaut qui sera pré-remplie à l\'achat.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -491,7 +494,7 @@
   <string name="error_offline">Hors ligne</string>
   <string name="error_offline_subtitle">Cette page ne fonctionne qu\'avec un accès internet. Vérifiez votre connexion.</string>
   <string name="error_no_done_items">Il n\'y a aucun article coché</string>
-  <string name="error_name_exists">Le nom existe déjà</string>
+  <string name="error_already_exists">Existe déjà</string>
   <string name="error_network">Erreur réseau</string>
   <string name="error_network_subtitle">Les données requises n\'ont pas pu être chargées complètement</string>
   <string name="error_network_exact">Erreur réseau : %1$s</string>
@@ -517,6 +520,7 @@
   <string name="error_permission">Aucune autorisation pour cette action</string>
   <string name="error_undefined">Une erreur est survenue</string>
   <string name="error_invalid_base_servings">Portions invalides</string>
+  <string name="error_pictures_size_exceeds_limit">Il y a des images intégrées dans les descriptions de produits ou de recettes sur votre serveur, qui dépassent la limite d\'analyse de cette application. Veuillez supprimer les images de haute qualité et de grande taille de vos descriptions, cela accélérera également le chargement des données.</string>
 
   <string name="title_overview">Aperçu</string>
   <string name="title_stock_overview">Aperçu des stocks</string>
@@ -669,7 +673,6 @@
   <string name="subtitle_product_optional_properties">État, Produit parent, Description, Groupe de produits, Énergie, Image</string>
   <string name="subtitle_product_quantity_unit">Stock, Format à l\'achat par défaut</string>
   <string name="subtitle_synced_with_server">Synchronisé avec le serveur</string>
-  <string name="subtitle_recipe_not_on_server">La recette n\'est pas sur le serveur</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">Indice de péremption : %1$s</string>
   <string name="subtitle_per_serving">par portion</string>

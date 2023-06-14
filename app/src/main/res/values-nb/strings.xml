@@ -262,7 +262,6 @@
   <string name="error_offline">Frakoblet</string>
   <string name="error_offline_subtitle">Sjekk tilkoblingen din og prøv igjen</string>
   <string name="error_no_done_items">Det finnes ingen elementer merket som ferdig</string>
-  <string name="error_name_exists">Navn eksisterer allerede</string>
   <string name="error_network">Nettverksfeil</string>
   <string name="error_network_subtitle">Den påkrevde informasjonen kunne ikke lastes fullstendig</string>
   <string name="error_unknown">Oops!</string>

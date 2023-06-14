@@ -534,36 +534,81 @@
               </LinearLayout>
 
               <LinearLayout
-                android:id="@+id/category_picture"
-                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Category"
+                  android:text="@string/property_picture"
+                  android:paddingBottom="0dp"
+                  android:paddingTop="1dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                  style="@style/Widget.Grocy.Button.IconButton"
+                  android:onClick="@{v -> formData.toggleDisplayHelpLive()}"
+                  app:icon="@drawable/ic_round_error_outline"
+                  app:iconTint="?attr/colorSecondary" />
+
+              </LinearLayout>
+
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card.Text"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="?attr/colorOnSurfaceVariant"
+                  android:text="@string/msg_help_picture_changes" />
+
+              </com.google.android.material.card.MaterialCardView>
+
+              <xyz.zedler.patrick.grocy.view.RoundedCornerImageView
+                android:id="@+id/picture"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:alpha="@{viewModel.actionEdit ? 1.0f : 0.38f}"
-                android:onClick="@{v -> activity.showSnackbar(@string/msg_not_implemented_yet, false)}">
+                android:maxHeight="300dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:layout_marginStart="56dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"
+                tools:ignore="ContentDescription" />
 
-                <ImageView
-                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                  android:src="@drawable/ic_round_image"
-                  tools:ignore="ContentDescription" />
+              <com.google.android.material.button.MaterialButton
+                style="@style/Widget.Grocy.Button.UnelevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="56dp"
+                android:layout_marginEnd="16dp"
+                android:layout_gravity="start"
+                android:visibility="@{formData.pictureFilenameLive == null || formData.pictureFilenameLive.blank ? View.GONE : View.VISIBLE}"
+                android:onClick="@{v -> viewModel.deleteCurrentPicture(``)}"
+                android:text="@string/action_delete" />
 
-                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+              <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="56dp"
+                android:layout_marginTop="8dp"
+                android:visibility="@{formData.pictureFilenameLive == null || formData.pictureFilenameLive.blank ? View.VISIBLE : View.GONE}">
 
-                  <TextView
-                    style="@style/Widget.Grocy.TextView.ListItem.Title"
-                    android:text="@string/property_picture" />
-
-                  <TextView
-                    style="@style/Widget.Grocy.TextView.ListItem.Description"
-                    android:text="@string/subtitle_product_not_on_server"
-                    android:visibility="@{viewModel.actionEdit ? View.GONE : View.VISIBLE}" />
-
-                </LinearLayout>
-
-                <ImageView
-                  style="@style/Widget.Grocy.ImageView.Icon"
-                  android:layout_marginStart="16dp"
-                  android:src="@drawable/ic_round_chevron_right"
-                  tools:ignore="ContentDescription" />
+                <com.google.android.material.button.MaterialButton
+                  style="@style/Widget.Grocy.Button.UnelevatedButton"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginEnd="8dp"
+                  android:onClick="@{v -> fragment.dispatchTakePictureIntent()}"
+                  android:text="@string/action_take_photo"/>
 
               </LinearLayout>
 

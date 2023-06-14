@@ -32,6 +32,7 @@ import androidx.lifecycle.Transformations;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
@@ -50,7 +51,8 @@ public class FormDataMasterProductCatBarcodesEdit {
   private final Product product;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
   private final MutableLiveData<String> barcodeLive;
-  private final MutableLiveData<Integer> barcodeErrorLive;
+  private final MediatorLiveData<Integer> barcodeErrorLive;
+  private final MutableLiveData<List<String>> barcodesLive;
   private final MutableLiveData<String> amountLive;
   private final MutableLiveData<String> amountErrorLive;
   private final MediatorLiveData<String> amountHelperLive;
@@ -77,8 +79,11 @@ public class FormDataMasterProductCatBarcodesEdit {
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
     );
     scannerVisibilityLive = new MutableLiveData<>(false);
+    barcodesLive = new MutableLiveData<>();
     barcodeLive = new MutableLiveData<>();
-    barcodeErrorLive = new MutableLiveData<>();
+    barcodeErrorLive = new MediatorLiveData<>();
+    barcodeErrorLive.addSource(barcodeLive, i -> isBarcodeValid());
+    barcodeErrorLive.addSource(barcodesLive, i -> isBarcodeValid());
     amountLive = new MutableLiveData<>();
     amountErrorLive = new MutableLiveData<>();
     quantityUnitsFactorsLive = new MutableLiveData<>();
@@ -138,6 +143,10 @@ public class FormDataMasterProductCatBarcodesEdit {
 
   public MutableLiveData<Integer> getBarcodeErrorLive() {
     return barcodeErrorLive;
+  }
+
+  public MutableLiveData<List<String>> getBarcodesLive() {
+    return barcodesLive;
   }
 
   public MutableLiveData<String> getAmountLive() {
@@ -272,6 +281,13 @@ public class FormDataMasterProductCatBarcodesEdit {
   public boolean isBarcodeValid() {
     if (barcodeLive.getValue() == null || barcodeLive.getValue().isEmpty()) {
       barcodeErrorLive.setValue(R.string.error_empty);
+      return false;
+    }
+    if (barcodeLive.getValue() != null && !barcodeLive.getValue().isEmpty()
+        && barcodesLive.getValue() != null
+        && barcodesLive.getValue().contains(barcodeLive.getValue())
+    ) {
+      barcodeErrorLive.setValue(R.string.error_already_exists);
       return false;
     }
     barcodeErrorLive.setValue(null);

@@ -30,7 +30,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -108,40 +107,29 @@ public class HtmlCardView extends LinearLayout {
       binding.webview.setWebViewClient(new WebViewClient() {
         @Override
         public void onPageFinished(WebView view, String url) {
-          new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            if (binding == null) {
-              return;
-            }
-            ViewTreeObserver observer = binding.webview.getViewTreeObserver();
-            observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-              @Override
-              public void onGlobalLayout() {
-                binding.webview.measure(
-                    MeasureSpec.makeMeasureSpec(binding.card.getWidth(), MeasureSpec.EXACTLY),
-                    MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
-                );
-                int height = binding.webview.getMeasuredHeight();
-                int maxHeight = UiUtil.dpToPx(context, 80);
-                int padding = UiUtil.dpToPx(context, 8);
-                boolean isStartEndParagraph = HtmlCardView.this.html.matches("^<p>.*</p>$");
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, Math.min(height, maxHeight)
-                );
-                params.setMargins(
-                    padding, isStartEndParagraph ? 0 : padding,
-                    padding, isStartEndParagraph ? 0 : padding
-                );
-                binding.webview.setLayoutParams(params);
-                if (height > maxHeight) {
-                  binding.divider.setVisibility(VISIBLE);
-                  binding.textHelp.setVisibility(VISIBLE);
-                }
-                if (binding.webview.getViewTreeObserver().isAlive()) {
-                  binding.webview.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }
-              }
-            });
-          }, 100);
+          if (binding == null) {
+            return;
+          }
+          binding.webview.measure(
+              MeasureSpec.makeMeasureSpec(binding.card.getWidth(), MeasureSpec.EXACTLY),
+              MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+          );
+          int height = binding.webview.getMeasuredHeight();
+          int maxHeight = UiUtil.dpToPx(context, 80);
+          int padding = UiUtil.dpToPx(context, 8);
+          boolean isStartEndParagraph = HtmlCardView.this.html.matches("^<p>.*</p>$");
+          LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+              LinearLayout.LayoutParams.MATCH_PARENT, Math.min(height, maxHeight)
+          );
+          params.setMargins(
+              padding, isStartEndParagraph ? 0 : padding,
+              padding, isStartEndParagraph ? 0 : padding
+          );
+          binding.webview.setLayoutParams(params);
+          if (height > maxHeight) {
+            binding.divider.setVisibility(VISIBLE);
+            binding.textHelp.setVisibility(VISIBLE);
+          }
         }
       });
       binding.card.setOnClickListener(v -> showHtmlDialog());

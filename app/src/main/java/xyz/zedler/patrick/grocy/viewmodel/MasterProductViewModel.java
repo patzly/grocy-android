@@ -106,6 +106,9 @@ public class MasterProductViewModel extends BaseViewModel {
         int productId = Integer.parseInt(args.getProductId());
         extraQueueItem = ProductDetails.getProductDetails(dlHelper, productId, productDetails -> {
           extraQueueItem = null;
+          formData.getProductNamesLive().setValue(
+              getProductNames(products, productDetails.getProduct().getName())
+          );
           setCurrentProduct(productDetails.getProduct());
         });
       }
@@ -178,7 +181,7 @@ public class MasterProductViewModel extends BaseViewModel {
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
       this.products = data.getProducts();
-      formData.getProductNamesLive().setValue(getProductNames(this.products));
+      formData.getProductNamesLive().setValue(getProductNames(this.products, null));
       if (args.getPendingProductBarcodes() != null) {
         ArrayList<PendingProductBarcode> filteredBarcodes = new ArrayList<>();
         String[] barcodeIds = args.getPendingProductBarcodes().split(",");
@@ -220,7 +223,7 @@ public class MasterProductViewModel extends BaseViewModel {
     queue.append(
         Product.updateProducts(dlHelper, dbChangedTime, products -> {
           this.products = products;
-          formData.getProductNamesLive().setValue(getProductNames(products));
+          formData.getProductNamesLive().setValue(getProductNames(products, null));
         }), ProductBarcode.updateProductBarcodes(
             dlHelper,
             dbChangedTime,
@@ -250,13 +253,15 @@ public class MasterProductViewModel extends BaseViewModel {
     downloadData();
   }
 
-  private ArrayList<String> getProductNames(List<Product> products) {
+  private ArrayList<String> getProductNames(List<Product> products, @Nullable String nameToRemove) {
     ArrayList<String> names = new ArrayList<>();
     for (Product product : products) {
       names.add(product.getName());
     }
-    if (isActionEdit() && formData.getProductLive().getValue() != null) {
-      names.remove(formData.getProductLive().getValue().getName());
+    if (isActionEdit() && (formData.getProductLive().getValue() != null || nameToRemove != null)) {
+      names.remove(nameToRemove != null
+          ? nameToRemove
+          : formData.getProductLive().getValue().getName());
     }
     return names;
   }
