@@ -43,8 +43,9 @@
       android:layout_gravity="top"
       android:adjustViewBounds="true"
       app:topCornersRound="false"
-      app:bottomCornersRound="false"
+      app:bottomCornersRound="true"
       app:showBottomShadow="true"
+      app:radius="5dp"
       tools:ignore="ContentDescription" />
 
     <LinearLayout
