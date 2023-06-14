@@ -126,7 +126,7 @@ public class MasterProductFragment extends BaseFragment {
             .setForceSaveWithClose(viewModel.isForceSaveWithClose())));
     binding.categoryBarcodes.setOnClickListener(v -> {
       if (!viewModel.isActionEdit()) {
-        activity.showSnackbar(R.string.subtitle_product_not_on_server, true);
+        activity.showSnackbar(R.string.msg_save_product_first, true);
         return;
       }
       activity.navUtil.navigateFragment(MasterProductFragmentDirections
@@ -135,7 +135,7 @@ public class MasterProductFragment extends BaseFragment {
     });
     binding.categoryQuConversions.setOnClickListener(v -> {
       if (!viewModel.isActionEdit()) {
-        activity.showSnackbar(R.string.subtitle_product_not_on_server, true);
+        activity.showSnackbar(R.string.msg_save_product_first, true);
         return;
       }
       activity.navUtil.navigateFragment(MasterProductFragmentDirections

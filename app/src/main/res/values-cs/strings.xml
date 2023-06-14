@@ -692,7 +692,6 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="subtitle_product_optional_properties">Stav, Nadřazený produkt, Popis, Skupina produktů, Energie, Obrázek</string>
   <string name="subtitle_product_quantity_unit">Výchozí hodnoty pro zásobu a nákup</string>
   <string name="subtitle_synced_with_server">Uloženo na server</string>
-  <string name="subtitle_recipe_not_on_server">Recept není uložen na serveru</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">Index min. trvanlivosti: %1$s</string>
   <string name="subtitle_per_serving">na 1 porci</string>

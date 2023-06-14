@@ -609,7 +609,6 @@
   <string name="subtitle_product_optional_properties">Seisund, Vanemtoode, Kirjeldus, Toodegrupp, Energia, Pilt</string>
   <string name="subtitle_product_quantity_unit">Varud, Vaikimisi ostmisel</string>
   <string name="subtitle_synced_with_server">Sünkroonitud serveriga</string>
-  <string name="subtitle_recipe_not_on_server">Retsept ei ole serveris</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">Tähtaja skoor: %1$s</string>
   <string name="subtitle_per_serving">portsjoni kohta</string>

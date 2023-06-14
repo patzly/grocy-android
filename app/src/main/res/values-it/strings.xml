@@ -616,7 +616,6 @@
   <string name="subtitle_product_optional_properties">Stato, Prodotto padre, Descrizione, Gruppo del prodotto, Energia, Immagine</string>
   <string name="subtitle_product_quantity_unit">Dispensa, Acquisto predefinito</string>
   <string name="subtitle_synced_with_server">Sincronizzazione con il server</string>
-  <string name="subtitle_recipe_not_on_server">La ricetta non è sul server</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">Punteggio scadenza: %1$s</string>
   <string name="subtitle_per_serving">per porzione</string>

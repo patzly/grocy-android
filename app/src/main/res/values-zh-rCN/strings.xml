@@ -603,7 +603,6 @@
   <string name="subtitle_product_optional_properties">状态，父产品，描述，产品分组、能量、图片</string>
   <string name="subtitle_product_quantity_unit">‎库存，购买默认‎</string>
   <string name="subtitle_synced_with_server">‎与服务器同步‎</string>
-  <string name="subtitle_recipe_not_on_server">食谱不在服务器上</string>
   <string name="subtitle_per_serving">每份</string>
   <string name="subtitle_tap_preparation_mode">点击这里进入准备模式</string>
   <string name="description_input_product_part1">产品字段包含：</string>

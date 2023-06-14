@@ -609,7 +609,6 @@
   <string name="subtitle_product_optional_properties">Estado, Produto principal, Descrição, Grupo do produto, Energia, Imagem</string>
   <string name="subtitle_product_quantity_unit">Stock, Opções de compra</string>
   <string name="subtitle_synced_with_server">Sincronizado com o servidor</string>
-  <string name="subtitle_recipe_not_on_server">A receita não está no servidor</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">Pontuação devida: %1$s</string>
   <string name="subtitle_per_serving">por porção</string>

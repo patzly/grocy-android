@@ -672,7 +672,6 @@
   <string name="subtitle_product_optional_properties">État, Produit parent, Description, Groupe de produits, Énergie, Image</string>
   <string name="subtitle_product_quantity_unit">Stock, Format à l\'achat par défaut</string>
   <string name="subtitle_synced_with_server">Synchronisé avec le serveur</string>
-  <string name="subtitle_recipe_not_on_server">La recette n\'est pas sur le serveur</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">Indice de péremption : %1$s</string>
   <string name="subtitle_per_serving">par portion</string>

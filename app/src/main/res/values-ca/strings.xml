@@ -609,7 +609,6 @@
   <string name="subtitle_product_optional_properties">Estat, Producte principal, Descripció, Grup de productes, Energia, Imatge</string>
   <string name="subtitle_product_quantity_unit">Per defecte a l\'inventari, Compra</string>
   <string name="subtitle_synced_with_server">Sincronitzat amb el servidor</string>
-  <string name="subtitle_recipe_not_on_server">La recepta no és al servidor</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">Puntuació de conservació%1$s</string>
   <string name="subtitle_per_serving">per ració</string>

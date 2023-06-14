@@ -564,7 +564,6 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Aantal: %1$s</string>
   <string name="subtitle_synced_with_server">Gesynchroniseerd met server</string>
-  <string name="subtitle_recipe_not_on_server">Recept is niet aanwezig op server</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">Overdatumscore: %1$s</string>
   <string name="subtitle_per_serving">per portie</string>
