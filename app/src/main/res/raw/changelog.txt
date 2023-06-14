@@ -18,6 +18,7 @@
 - Improved: Language picker works more reliably with demo domain change
 - Improved: Shopping mode grouping option now can be set separately from shopping list page
 - Improved: New grid layout on recipe page is default now
+- Improved: Misleading error when trying to save duplicated barcode on product barcode edit (#724)
 - Fixed: Long click on barcode button on overview page was broken on Android Nougat and lower
 - Fixed: Crash on startup with Android Lollipop (and maybe higher)
 - Fixed: Prevent crash when opening qu conversion page (#708)

@@ -489,7 +489,6 @@
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">Essa página somente funciona com acesso à Internet. Verifique sua conexão.</string>
   <string name="error_no_done_items">Não há itens marcados como concluídos</string>
-  <string name="error_name_exists">O nome já existe</string>
   <string name="error_network">Erro de rede</string>
   <string name="error_network_subtitle">Os dados necessários não puderam ser carregados completamente</string>
   <string name="error_network_exact">Erro de rede: %1$s</string>

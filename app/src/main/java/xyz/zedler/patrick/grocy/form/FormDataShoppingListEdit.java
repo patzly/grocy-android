@@ -69,7 +69,7 @@ public class FormDataShoppingListEdit {
       return false;
     }
     if (shoppingListNames.contains(nameLive.getValue())) {
-      nameErrorLive.setValue(R.string.error_name_exists);
+      nameErrorLive.setValue(R.string.error_already_exists);
       return false;
     }
     nameErrorLive.setValue(null);

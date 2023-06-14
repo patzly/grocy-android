@@ -437,7 +437,6 @@
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">Deze pagina werk alleen met internet toegang. Controleer je verbinding.</string>
   <string name="error_no_done_items">Er zijn geen items gemarkeerd als voltooid</string>
-  <string name="error_name_exists">Naam bestaat al</string>
   <string name="error_network">Netwerk fout</string>
   <string name="error_network_subtitle">De benodigde gegevens kunnen niet volledig geladen worden.</string>
   <string name="error_unknown">Oeps!</string>

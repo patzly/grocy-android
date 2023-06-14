@@ -453,7 +453,6 @@
   <string name="error_offline">Disconnesso</string>
   <string name="error_offline_subtitle">Controlla la connessione e riprova</string>
   <string name="error_no_done_items">Non ci sono elementi marcati come completati</string>
-  <string name="error_name_exists">Nome già esistente</string>
   <string name="error_network">Errore di rete</string>
   <string name="error_network_subtitle">Non è stato possibile caricare completamente i dati richiesti</string>
   <string name="error_unknown">Oops!</string>

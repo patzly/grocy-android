@@ -411,7 +411,6 @@
   <string name="error_bounds_higher">必須大於%1$s</string>
   <string name="error_offline">離線</string>
   <string name="error_no_done_items">沒有被標記為已完成的項目</string>
-  <string name="error_name_exists">名稱已存在</string>
   <string name="error_network">網路錯誤</string>
   <string name="error_network_subtitle">無法完整載入需要的資料</string>
   <string name="error_unknown">唉呀!</string>

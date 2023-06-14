@@ -304,7 +304,6 @@
   <string name="error_offline">Desconectado</string>
   <string name="error_offline_subtitle">Revisa tu conexión y vuelve a intentarlo</string>
   <string name="error_no_done_items">No hay artículos marcados como hechos</string>
-  <string name="error_name_exists">El nombre ya existe</string>
   <string name="error_network">Error de red</string>
   <string name="error_network_subtitle">Los datos requeridos no pudieron cargarse completamente</string>
   <string name="error_unknown">Ups!</string>

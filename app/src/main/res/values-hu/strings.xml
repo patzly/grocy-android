@@ -347,7 +347,6 @@
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">Ez az oldal csak internetkapcsolattal működik. Ellenőrizd a kapcsolatod.</string>
   <string name="error_no_done_items">Nincsenek elvégzettként megjelölt tételek</string>
-  <string name="error_name_exists">A név már létezik</string>
   <string name="error_network">Hálózati hiba</string>
   <string name="error_network_subtitle">A szükséges adatokat nem sikerült teljesen betölteni</string>
   <string name="error_unknown">Hoppá!</string>

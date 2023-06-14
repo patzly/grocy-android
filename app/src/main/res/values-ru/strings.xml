@@ -509,7 +509,6 @@
   <string name="error_offline">Не в сети - оффлайн</string>
   <string name="error_offline_subtitle">Проверьте соединение и попробуйте еще раз</string>
   <string name="error_no_done_items">Нет выполненных продуктов</string>
-  <string name="error_name_exists">Название уже существует</string>
   <string name="error_network">Ошибка сети</string>
   <string name="error_network_subtitle">Требуемые данные не могут быть загружены полностью</string>
   <string name="error_network_exact">Ошибка сети: %1$s</string>

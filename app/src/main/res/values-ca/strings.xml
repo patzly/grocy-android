@@ -446,7 +446,6 @@
   <string name="error_offline">No actiu</string>
   <string name="error_offline_subtitle">Aquesta pàgina només funciona amb accés a internet. Comprova la teva connexió.</string>
   <string name="error_no_done_items">No hi ha cap element marcat com a completat</string>
-  <string name="error_name_exists">El nom ja existeix</string>
   <string name="error_network">Error de xarxa</string>
   <string name="error_network_subtitle">Les dades requerides no s\'han pogut carregar completament.</string>
   <string name="error_unknown">Vaja!</string>

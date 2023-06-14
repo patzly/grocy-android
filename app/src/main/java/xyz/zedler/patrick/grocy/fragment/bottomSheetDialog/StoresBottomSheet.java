@@ -97,6 +97,7 @@ public class StoresBottomSheet extends BaseBottomSheetDialogFragment
   public void onItemRowClicked(Store store, boolean pinClicked) {
     BaseFragment currentFragment = activity.getCurrentFragment();
     currentFragment.selectStore(store, pinClicked);
+    currentFragment.selectStore(store);
     dismiss();
   }
 

@@ -450,7 +450,6 @@
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">Esta página apenas funciona com uma ligação à internet. Verifique a sua conecção.</string>
   <string name="error_no_done_items">Não existem itens marcados como concluídos</string>
-  <string name="error_name_exists">Nome já existe</string>
   <string name="error_network">Erro de rede</string>
   <string name="error_network_subtitle">Não foi possível carregar completamente os dados necessários</string>
   <string name="error_unknown">Oops!</string>

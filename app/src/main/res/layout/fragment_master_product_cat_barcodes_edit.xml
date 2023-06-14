@@ -142,7 +142,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                   android:id="@+id/text_input_barcode"
-                  style="@style/Widget.Grocy.TextInputLayout.FilledBox.DropDown"
+                  style="@style/Widget.Grocy.TextInputLayout.FilledBox"
                   app:endIconMode="custom"
                   app:endIconDrawable="@drawable/ic_round_barcode_scan"
                   app:endIconContentDescription="Scan barcode"
@@ -153,16 +153,13 @@
                   app:endIconOnClickListener="@{v -> fragment.toggleScannerVisibility()}"
                   app:errorText="@{formData.barcodeErrorLive}">
 
-                  <xyz.zedler.patrick.grocy.view.CustomAutoCompleteTextView
-                    android:id="@+id/auto_complete_barcode"
+                  <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_barcode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text|textNoSuggestions"
                     android:imeOptions="actionDone"
-                    android:completionThreshold="10"
-                    android:popupBackground="@drawable/bg_auto_complete"
                     android:text="@={formData.barcodeLive}"
-                    android:afterTextChanged="@{() -> formData.isBarcodeValid()}"
                     app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}" />
 
                 </com.google.android.material.textfield.TextInputLayout>

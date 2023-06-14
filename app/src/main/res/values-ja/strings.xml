@@ -451,7 +451,6 @@
   <string name="error_offline">オフライン</string>
   <string name="error_offline_subtitle">ネット接続が必要です。接続されていますか？</string>
   <string name="error_no_done_items">実行済のアイテムがありません</string>
-  <string name="error_name_exists">すでに存在する名前です</string>
   <string name="error_network">ネットワークエラー</string>
   <string name="error_network_subtitle">必要なデータを完全にはロードできませんでした</string>
   <string name="error_network_exact">ネットワークエラー：%1$s</string>

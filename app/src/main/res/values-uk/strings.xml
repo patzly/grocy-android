@@ -457,7 +457,6 @@
   <string name="error_offline">Офлайн</string>
   <string name="error_offline_subtitle">Ця сторінка працює тільки з доступом до Інтернету. Перевірте підключення.</string>
   <string name="error_no_done_items">Немає елементів, позначених як виконані</string>
-  <string name="error_name_exists">Назва вже існує</string>
   <string name="error_network">Помилка мережі</string>
   <string name="error_network_subtitle">Не вдалося повністю завантажити потрібні дані</string>
   <string name="error_unknown">Ой, щось пішло не так!</string>

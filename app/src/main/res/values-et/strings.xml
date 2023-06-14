@@ -446,7 +446,6 @@
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">See leht töötab ainult interneti juurdepääsuga. Kontrolli oma ühendust.</string>
   <string name="error_no_done_items">Pole ühtegi asja märgitud valmis</string>
-  <string name="error_name_exists">Nimi juba kasutuses</string>
   <string name="error_network">Võrgu viga</string>
   <string name="error_network_subtitle">Vajaminevaid andmeid ei suudetud täielikult laadida</string>
   <string name="error_unknown">Ups!</string>
