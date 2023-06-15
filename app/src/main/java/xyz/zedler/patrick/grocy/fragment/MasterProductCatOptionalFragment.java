@@ -331,7 +331,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
   }
 
   private void loadProductPicture(String filename) {
-    if (filename != null) {
+    if (filename != null && !filename.isBlank()) {
       GrocyApi grocyApi = new GrocyApi(activity.getApplication());
       Glide
           .with(requireContext())
@@ -364,22 +364,20 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
 
   public void dispatchTakePictureIntent() {
     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    if (takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
-      // Create the File where the photo should go
-      File photoFile = null;
-      try {
-        photoFile = viewModel.createImageFile();
-      } catch (IOException ex) {
-        viewModel.showErrorMessage();
-        viewModel.setCurrentFilePath(null);
-      }
-      if (photoFile != null) {
-        Uri photoURI = FileProvider.getUriForFile(requireContext(),
-            "xyz.zedler.patrick.grocy.fileprovider",
-            photoFile);
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-        mActivityResultLauncherTakePicture.launch(takePictureIntent);
-      }
+    // Create the File where the photo should go
+    File photoFile = null;
+    try {
+      photoFile = viewModel.createImageFile();
+    } catch (IOException ex) {
+      viewModel.showErrorMessage();
+      viewModel.setCurrentFilePath(null);
+    }
+    if (photoFile != null) {
+      Uri photoURI = FileProvider.getUriForFile(requireContext(),
+          "xyz.zedler.patrick.grocy.fileprovider",
+          photoFile);
+      takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+      mActivityResultLauncherTakePicture.launch(takePictureIntent);
     }
   }
 
