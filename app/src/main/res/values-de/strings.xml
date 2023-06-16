@@ -98,6 +98,9 @@
   <string name="action_open_scanner">Scanner öffnen</string>
   <string name="action_discard">Verwerfen</string>
   <string name="action_clear_form">Formular leeren</string>
+  <string name="action_take_photo">Foto aufnehmen</string>
+  <!-- "Paste" like in "Paste from clipboard" -->
+  <string name="action_paste">Einfügen</string>
   <!-- Short form for "Only link barcode to existing product", this should fit into a
   button so keep it short. -->
   <string name="action_link_and_clear">Nur verlinken</string>
@@ -331,6 +334,8 @@
   <string name="msg_features">Intro erneut starten in \"Über\"</string>
   <string name="msg_feedback">Haben Sie Wünsche, Fragen oder einen Fehler gefunden? Kontaktieren Sie uns und wir helfen Ihnen gerne.\nAnsonsten wären wir sehr glücklich über eine gute Bewertung im Play Store.</string>
   <string name="msg_point_at_barcode">Richten Sie die Kamera auf einen Barcode</string>
+  <string name="msg_save_product_first">Bitte speichern Sie das Produkt zuerst</string>
+  <string name="msg_save_recipe_first">Bitte speichern Sie das Rezept zuerst</string>
   <string name="msg_press_hold_confirm">Drücken und halten, um das Löschen zu bestätigen</string>
   <string name="msg_recipe_consume_ask">Sicher, dass alle Zutaten, die vom Rezept für \"%1$s\" benötigt werden, aus dem Bestand entfernt werden sollen? (Zutaten markiert mit \"Nur prüfen, ob eine beliebige Menge im Bestand verfügbar ist\" werden ignoriert)</string>
   <string name="msg_recipe_shopping_list_ask">Alle fehlenden Zutaten vom Rezept für \"%1$s\" wirklich auf den Einkaufszettel setzen?\n\nEntfernen Sie den Haken einer Zutat, um diese nicht auf den Einkaufszettel zu übernehmen:</string>
@@ -343,6 +348,7 @@
   <string name="msg_port_connection_info_with_port">Die App wird sich zu Port %1$s verbinden.</string>
   <string name="msg_clear_form_first">Leeren Sie zuerst das Formular, bevor Sie einen anderen bekannten Barcode scannen.</string>
   <string name="msg_not_implemented_yet">Dies wird bald implementiert. Bitte benutzen Sie vorerst Ihre Server-Oberfläche.</string>
+  <string name="msg_help_picture_changes">Änderungen am Bild werden sofort mit dem Server synchronisiert, nicht erst beim Speichern!</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_stock_label_type">Dies ist die Standardeinstellung für das Bestandseintragsetikett, die beim Einkauf vorbelegt wird.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -457,6 +463,7 @@
   <string name="error_api_qr_code">Kein QR-Code mit grocy API-Zugangsdaten</string>
   <string name="error_token_qr_code">Kein QR-Code mit einem langlebigen Zugangsschlüssel von Home Assistant</string>
   <string name="error_loading_qus">Mengeneinheiten konnten nicht vom Produkt geladen werden</string>
+  <string name="error_clipboard_no_image">Zwischenablage enthält kein Bild oder es konnte nicht gelesen werden</string>
   <string name="error_no_children">Das ausgewählte Produkt hat keine untergeordneten Produkte</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Darf nicht gleich %1$s sein</string>
@@ -471,6 +478,7 @@
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">Diese Seite funktioniert nur mit Internet-Zugriff. Überprüfen Sie Ihre Verbindung.</string>
   <string name="error_no_done_items">Es sind keine Einträge als erledigt markiert</string>
+  <string name="error_already_exists">Existiert bereits</string>
   <string name="error_network">Netzwerkfehler</string>
   <string name="error_network_subtitle">Die benötigten Daten konnten nicht vollständig geladen werden</string>
   <string name="error_network_exact">Netzwerkfehler: %1$s</string>
@@ -496,6 +504,7 @@
   <string name="error_permission">Keine Berechtigung für diese Aktion</string>
   <string name="error_undefined">Ein Fehler ist aufgetreten</string>
   <string name="error_invalid_base_servings">Portionen ungültig</string>
+  <string name="error_pictures_size_exceeds_limit">Es gibt eingebettete Bilder in Produkt- oder Rezeptbeschreibungen auf Ihrem Server, welche das Lese-Limit dieser App überschreiten. Bitte entfernen Sie Bilder mit hoher Qualität oder Größe von Ihren Beschreibungen, das wird auch das Laden der Daten beschleunigen.</string>
 
   <string name="title_overview">Übersicht</string>
   <string name="title_stock_overview">Bestand</string>
@@ -629,6 +638,7 @@
   <string name="subtitle_product_hidden">Produkt ist versteckt</string>
   <string name="subtitle_product_not_hidden">Produkt ist nicht versteckt</string>
   <string name="subtitle_product_not_on_server">Produkt ist nicht auf dem Server</string>
+
   <string name="subtitle_barcodes_will_be_added">Es gibt gespeicherte Barcodes, diese werden mit dem Speichervorgang zum Produkt hinzugefügt.</string>
   <string name="subtitle_unknown">Unbekannt</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
