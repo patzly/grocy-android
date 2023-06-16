@@ -47,6 +47,7 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetProductOverviewBinding;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
@@ -63,6 +64,7 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PictureUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
@@ -306,6 +308,17 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     } else if (activity.isOnline() && hasDetails()) {
       loadStockLocations();
       loadPriceHistory((float) productDetails.getProduct().getQuFactorPurchaseToStockDouble());
+    }
+
+    if (product.getPictureFileName() != null && !product.getPictureFileName().isBlank()) {
+      GrocyApi grocyApi = new GrocyApi(activity.getApplication());
+      PictureUtil.loadPicture(
+          binding.photoView,
+          binding.photoViewCard,
+          grocyApi.getProductPictureServeLarge(product.getPictureFileName())
+      );
+    } else {
+      binding.photoViewCard.setVisibility(View.GONE);
     }
 
     hideDisabledFeatures();

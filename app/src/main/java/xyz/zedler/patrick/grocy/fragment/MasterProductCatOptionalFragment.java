@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -37,14 +36,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.model.GlideUrl;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,6 +58,7 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
+import xyz.zedler.patrick.grocy.util.PictureUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatOptionalViewModel;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
@@ -177,10 +169,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
         new ActivityResultContracts.StartActivityForResult(),
         result -> {
           if (result.getResultCode() == Activity.RESULT_OK) {
-            viewModel.scaleAndUploadBitmap(
-                viewModel.getCurrentFilePath(),
-                viewModel.getCurrentFileName()
-            );
+            viewModel.scaleAndUploadBitmap(viewModel.getCurrentFilePath(), null);
           }
         });
 
@@ -331,32 +320,16 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
   }
 
   private void loadProductPicture(String filename) {
-    if (filename != null) {
+    if (filename != null && !filename.isBlank()) {
       GrocyApi grocyApi = new GrocyApi(activity.getApplication());
-      Glide
-          .with(requireContext())
-          .load(new GlideUrl(
-              grocyApi.getProductPictureServeLarge(filename),
-              RequestHeaders.getGlideGrocyAuthHeaders(requireContext()))
-          )
-          .transform(new CenterCrop())
-          .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-          .transition(DrawableTransitionOptions.withCrossFade())
-          .listener(new RequestListener<>() {
-            @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                Target<Drawable> target, boolean isFirstResource) {
-              binding.picture.setVisibility(View.GONE);
-              return false;
-            }
-            @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
-                DataSource dataSource, boolean isFirstResource) {
-              binding.picture.setVisibility(View.VISIBLE);
-              return false;
-            }
-          })
-          .into(binding.picture);
+      PictureUtil.loadPicture(
+          binding.picture,
+          null,
+          null,
+          grocyApi.getProductPictureServeLarge(filename),
+          RequestHeaders.getGlideGrocyAuthHeaders(requireContext()),
+          true
+      );
     } else {
       binding.picture.setVisibility(View.GONE);
     }
@@ -364,22 +337,20 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
 
   public void dispatchTakePictureIntent() {
     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    if (takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
-      // Create the File where the photo should go
-      File photoFile = null;
-      try {
-        photoFile = viewModel.createImageFile();
-      } catch (IOException ex) {
-        viewModel.showErrorMessage();
-        viewModel.setCurrentFilePath(null);
-      }
-      if (photoFile != null) {
-        Uri photoURI = FileProvider.getUriForFile(requireContext(),
-            "xyz.zedler.patrick.grocy.fileprovider",
-            photoFile);
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-        mActivityResultLauncherTakePicture.launch(takePictureIntent);
-      }
+    // Create the File where the photo should go
+    File photoFile = null;
+    try {
+      photoFile = viewModel.createImageFile();
+    } catch (IOException ex) {
+      viewModel.showErrorMessage();
+      viewModel.setCurrentFilePath(null);
+    }
+    if (photoFile != null) {
+      Uri photoURI = FileProvider.getUriForFile(requireContext(),
+          "xyz.zedler.patrick.grocy.fileprovider",
+          photoFile);
+      takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+      mActivityResultLauncherTakePicture.launch(takePictureIntent);
     }
   }
 

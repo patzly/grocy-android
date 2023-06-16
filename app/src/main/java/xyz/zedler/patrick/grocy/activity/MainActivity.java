@@ -37,6 +37,7 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -677,7 +678,10 @@ public class MainActivity extends AppCompatActivity {
   public void showKeyboard(EditText editText) {
     editText.requestFocus();
     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-    imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+    new Handler().postDelayed(
+        () -> imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT),
+        50
+    );
   }
 
   public void hideKeyboard() {

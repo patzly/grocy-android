@@ -547,7 +547,8 @@
 
                 <com.google.android.material.button.MaterialButton
                   style="@style/Widget.Grocy.Button.IconButton"
-                  android:onClick="@{v -> formData.toggleDisplayHelpLive()}"
+                  android:onClick="@{v -> formData.toggleDisplayPictureWarningLive()}"
+                  android:visibility="@{formData.displayHelpLive ? View.GONE : View.VISIBLE}"
                   app:icon="@drawable/ic_round_error_outline"
                   app:iconTint="?attr/colorSecondary" />
 
@@ -559,7 +560,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="8dp"
-                android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
+                android:visibility="@{formData.displayHelpLive || formData.displayPictureWarningLive ? View.VISIBLE : View.GONE}">
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.Paragraph"
@@ -609,6 +610,14 @@
                   android:layout_marginEnd="8dp"
                   android:onClick="@{v -> fragment.dispatchTakePictureIntent()}"
                   android:text="@string/action_take_photo"/>
+
+                <com.google.android.material.button.MaterialButton
+                  style="@style/Widget.Grocy.Button.UnelevatedButton"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginEnd="8dp"
+                  android:onClick="@{v -> viewModel.pasteFromClipboard()}"
+                  android:text="@string/action_paste"/>
 
               </LinearLayout>
 

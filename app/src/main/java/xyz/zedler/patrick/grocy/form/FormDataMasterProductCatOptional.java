@@ -42,6 +42,7 @@ public class FormDataMasterProductCatOptional {
   private final Application application;
   private final SharedPreferences sharedPrefs;
   private final MutableLiveData<Boolean> displayHelpLive;
+  private final MutableLiveData<Boolean> displayPictureWarningLive;
   private final MutableLiveData<Boolean> isActiveLive;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
   private final MutableLiveData<List<Product>> productsLive;
@@ -72,6 +73,7 @@ public class FormDataMasterProductCatOptional {
     this.application = application;
     this.sharedPrefs = sharedPrefs;
     displayHelpLive = new MutableLiveData<>(beginnerMode);
+    displayPictureWarningLive = new MutableLiveData<>(false);
     isActiveLive = new MutableLiveData<>();
     scannerVisibilityLive = new MutableLiveData<>(false);
     productsLive = new MutableLiveData<>(new ArrayList<>());
@@ -108,6 +110,15 @@ public class FormDataMasterProductCatOptional {
   public void toggleDisplayHelpLive() {
     assert displayHelpLive.getValue() != null;
     displayHelpLive.setValue(!displayHelpLive.getValue());
+  }
+
+  public MutableLiveData<Boolean> getDisplayPictureWarningLive() {
+    return displayPictureWarningLive;
+  }
+
+  public void toggleDisplayPictureWarningLive() {
+    assert displayPictureWarningLive.getValue() != null;
+    displayPictureWarningLive.setValue(!displayPictureWarningLive.getValue());
   }
 
   public MutableLiveData<Boolean> getIsActiveLive() {

@@ -36,6 +36,7 @@ public class FormDataMasterProduct {
 
   private final SharedPreferences sharedPrefs;
   private final MutableLiveData<Boolean> displayHelpLive;
+  private final MutableLiveData<Boolean> displayPictureWarningLive;
   private final MutableLiveData<String> messageCopiedFromLive;
   private final MutableLiveData<String> nameLive;
   private final MediatorLiveData<Integer> nameErrorLive;
@@ -50,6 +51,7 @@ public class FormDataMasterProduct {
   public FormDataMasterProduct(Application application, boolean beginnerMode) {
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);;
     displayHelpLive = new MutableLiveData<>(beginnerMode);
+    displayPictureWarningLive = new MutableLiveData<>(false);
     productLive = new MutableLiveData<>();
     productNamesLive = new MutableLiveData<>();
     messageCopiedFromLive = new MutableLiveData<>();

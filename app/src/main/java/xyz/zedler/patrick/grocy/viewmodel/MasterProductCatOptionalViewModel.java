@@ -20,6 +20,9 @@
 package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,9 +35,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -54,6 +58,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
+import xyz.zedler.patrick.grocy.util.PictureUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class MasterProductCatOptionalViewModel extends BaseViewModel {
@@ -76,7 +81,6 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
   private NetworkQueue currentQueueLoading;
   private final boolean isActionEdit;
   private String currentFilePath;
-  private String currentFileName;
 
   public MasterProductCatOptionalViewModel(
       @NonNull Application application,
@@ -198,58 +202,65 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
     }
   }
 
+  public void pasteFromClipboard() {
+    ClipboardManager clipboard = (ClipboardManager) getApplication()
+        .getSystemService(Context.CLIPBOARD_SERVICE);
+    if (clipboard == null) {
+      showMessage(R.string.error_clipboard_no_image);
+      return;
+    }
+    if (!clipboard.hasPrimaryClip()) {
+      showMessage(R.string.error_clipboard_no_image);
+      return;
+    }
+    ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
+    if (item.getUri() == null) {
+      showMessage(R.string.error_clipboard_no_image);
+      return;
+    }
+    try {
+      InputStream imageStream = getApplication().getContentResolver().openInputStream(item.getUri());
+      Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+      scaleAndUploadBitmap(null, bitmap);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      showMessage(R.string.error_clipboard_no_image);
+    }
+  }
+
   public File createImageFile() throws IOException {
     File storageDir = getApplication().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-    File image = File.createTempFile(
-        String.valueOf(System.currentTimeMillis()),
-        ".jpg",
-        storageDir
-    );
+    File image = PictureUtil.createImageFile(storageDir);
     currentFilePath = image.getAbsolutePath();
-    currentFileName = image.getName();
     return image;
   }
 
-  public void scaleAndUploadBitmap(String filePath, String filename) {
+  public void scaleAndUploadBitmap(@Nullable String filePath, @Nullable Bitmap image) {
+    if (filePath == null && image == null) {
+      showErrorMessage();
+      return;
+    }
     isLoadingLive.setValue(true);
     ExecutorService executor = Executors.newSingleThreadExecutor();
     executor.execute(() -> {
-      Bitmap scaledBitmap = scaleBitmap(filePath);
-      byte[] imageArray = convertBitmapToByteArray(scaledBitmap);
+      Bitmap scaledBitmap = filePath != null
+          ? PictureUtil.scaleBitmap(filePath)
+          : PictureUtil.scaleBitmap(image);
+      byte[] imageArray = PictureUtil.convertBitmapToByteArray(scaledBitmap);
       new Handler(Looper.getMainLooper()).post(() -> {
-        uploadPicture(imageArray, filename);
+        uploadPicture(imageArray);
         executor.shutdown();
       });
     });
   }
 
-  private Bitmap scaleBitmap(String imagePath) {
-    int maxWidth = 1280;
-    int maxHeight = 800;
-    BitmapFactory.Options options = new BitmapFactory.Options();
-    options.inJustDecodeBounds = true;
-    BitmapFactory.decodeFile(imagePath, options);
-    int imageHeight = options.outHeight;
-    int imageWidth = options.outWidth;
-    int scaleFactor = Math.min(imageWidth / maxWidth, imageHeight / maxHeight);
-    options.inJustDecodeBounds = false;
-    options.inSampleSize = scaleFactor;
-    return BitmapFactory.decodeFile(imagePath, options);
-  }
-
-  private byte[] convertBitmapToByteArray(Bitmap bitmap) {
-    if (bitmap == null) return null;
-    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
-    return stream.toByteArray();
-  }
-
-  public void uploadPicture(byte[] pictureData, String filename) {
-    if (pictureData == null || filename == null || filename.isBlank()) {
+  public void uploadPicture(byte[] pictureData) {
+    if (pictureData == null) {
       showErrorMessage();
       isLoadingLive.setValue(false);
       return;
     }
+    String filename = PictureUtil.createImageFilename();
     dlHelper.putFile(
         grocyApi.getProductPicture(filename),
         pictureData,
@@ -265,7 +276,7 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
     if (isActionEdit()) {
       JSONObject jsonObject = new JSONObject();
       try {
-        jsonObject.put("picture_file_name", newFilename);
+        jsonObject.put("picture_file_name", newFilename != null ? newFilename : "");
         dlHelper.put(
             grocyApi.getObject(ENTITY.PRODUCTS, args.getProduct().getId()),
             jsonObject,
@@ -295,10 +306,6 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
 
   public void setCurrentFilePath(String currentFilePath) {
     this.currentFilePath = currentFilePath;
-  }
-
-  public String getCurrentFileName() {
-    return currentFileName;
   }
 
   @NonNull
