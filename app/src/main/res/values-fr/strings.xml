@@ -100,6 +100,8 @@
   <string name="action_clear_form">Effacer le formulaire</string>
   <string name="action_choose_file">Choisir un fichier</string>
   <string name="action_take_photo">Prendre une photo</string>
+  <!-- "Paste" like in "Paste from clipboard" -->
+  <string name="action_paste">Coller</string>
   <!-- Short form for "Only link barcode to existing product", this should fit into a
   button so keep it short. -->
   <string name="action_link_and_clear">Lien seul.</string>
@@ -482,6 +484,7 @@
   <string name="error_api_qr_code">Pas un code QR avec des identifiants pour l\'API grocy</string>
   <string name="error_token_qr_code">Ce n\'est pas un QR code avec un jeton d\'accès de longue durée provenant de Home Assistant.</string>
   <string name="error_loading_qus">Echec de chargement du format des produits</string>
+  <string name="error_clipboard_no_image">Le presse-papiers ne contient pas d\'image ou elle n\'a pas pu être lu</string>
   <string name="error_no_children">Le produit sélectionné n\'a pas d\'enfant</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Ne peut pas être égal à %1$s</string>
