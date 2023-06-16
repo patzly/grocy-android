@@ -25,7 +25,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.SpannedString;
@@ -33,19 +32,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
 import com.google.android.material.elevation.SurfaceColors;
@@ -73,6 +63,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PictureUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -595,25 +586,15 @@ public class ShoppingListItemAdapter extends
     if (activeFields.contains(StockOverviewViewModel.FIELD_PICTURE)
         && pictureFileName != null && !pictureFileName.isEmpty()) {
       binding.picture.layout(0, 0, 0, 0);
-      Glide.with(context)
-          .load(
-              new GlideUrl(grocyApi.getProductPictureServeSmall(pictureFileName), grocyAuthHeaders)
-          ).transform(new CenterCrop())
-          .transition(DrawableTransitionOptions.withCrossFade())
-          .listener(new RequestListener<>() {
-            @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                Target<Drawable> target, boolean isFirstResource) {
-              binding.picture.setVisibility(View.GONE);
-              return false;
-            }
-            @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
-                DataSource dataSource, boolean isFirstResource) {
-              binding.picture.setVisibility(View.VISIBLE);
-              return false;
-            }
-          }).into(binding.picture);
+
+      PictureUtil.loadPicture(
+          binding.picture,
+          null,
+          null,
+          grocyApi.getProductPictureServeSmall(pictureFileName),
+          grocyAuthHeaders,
+          false
+      );
     } else {
       binding.picture.setVisibility(View.GONE);
     }

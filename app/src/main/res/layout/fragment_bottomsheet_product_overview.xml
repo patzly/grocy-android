@@ -249,6 +249,22 @@
 
       </LinearLayout>
 
+      <androidx.cardview.widget.CardView
+        android:id="@+id/photo_view_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="32dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp">
+
+        <xyz.zedler.patrick.grocy.view.photoview.PhotoView
+          android:id="@+id/photo_view"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+
+      </androidx.cardview.widget.CardView>
+
     </LinearLayout>
 
   </androidx.core.widget.NestedScrollView>

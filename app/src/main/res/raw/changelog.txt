@@ -20,6 +20,7 @@
 - Improved: New grid layout on recipe page is default now
 - Improved: Misleading error when trying to save duplicated barcode on product barcode edit (#724)
 - Improved: Message shown when product or recipe is not on server (#718)
+- Improved: Pictures optimized & added pictures to product bottom sheet and recipe page (#536)
 - Fixed: Long click on barcode button on overview page was broken on Android Nougat and lower
 - Fixed: Crash on startup with Android Lollipop (and maybe higher)
 - Fixed: Prevent crash when opening qu conversion page (#708)

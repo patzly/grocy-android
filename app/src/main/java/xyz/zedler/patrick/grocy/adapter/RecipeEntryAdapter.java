@@ -24,14 +24,12 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
@@ -39,16 +37,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestBuilder;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
@@ -68,6 +57,7 @@ import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PictureUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipesViewModel;
@@ -328,35 +318,14 @@ public class RecipeEntryAdapter extends
         && pictureFileName != null && !pictureFileName.isEmpty()) {
       picture.layout(0, 0, 0, 0);
 
-      RequestBuilder<Drawable> requestBuilder = Glide.with(context)
-          .load(new GlideUrl(grocyApi.getRecipePicture(pictureFileName), grocyAuthHeaders));
-      requestBuilder = requestBuilder
-          .transform(new CenterCrop())
-          .transition(DrawableTransitionOptions.withCrossFade());
-      if (viewHolder instanceof RecipeGridViewHolder) {
-        requestBuilder = requestBuilder.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
-      }
-      MaterialCardView finalPicturePlaceholder = picturePlaceholder;
-      requestBuilder.listener(new RequestListener<>() {
-            @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                Target<Drawable> target, boolean isFirstResource) {
-              picture.setVisibility(View.GONE);
-              if (finalPicturePlaceholder != null) {
-                finalPicturePlaceholder.setVisibility(View.VISIBLE);
-              }
-              return false;
-            }
-            @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
-                DataSource dataSource, boolean isFirstResource) {
-              picture.setVisibility(View.VISIBLE);
-              if (finalPicturePlaceholder != null) {
-                finalPicturePlaceholder.setVisibility(View.GONE);
-              }
-              return false;
-            }
-          }).into(picture);
+      PictureUtil.loadPicture(
+          picture,
+          null,
+          picturePlaceholder,
+          grocyApi.getRecipePictureServeSmall(pictureFileName),
+          grocyAuthHeaders,
+          viewHolder instanceof RecipeGridViewHolder
+      );
     } else if (activeFields.contains(RecipesViewModel.FIELD_PICTURE)
         && containsPictures && viewHolder instanceof RecipeViewHolder) {
       picture.setVisibility(View.GONE);

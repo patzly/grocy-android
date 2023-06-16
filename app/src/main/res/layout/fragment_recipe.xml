@@ -70,18 +70,27 @@
         android:paddingBottom="80dp"
         android:animateLayoutChanges="true">
 
-        <xyz.zedler.patrick.grocy.view.RoundedCornerImageView
-          android:id="@+id/picture"
+        <androidx.cardview.widget.CardView
+          android:id="@+id/photo_view_card"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:maxHeight="300dp"
-          android:adjustViewBounds="true"
-          android:scaleType="centerCrop"
           android:layout_marginTop="16dp"
           android:layout_marginBottom="12dp"
           android:layout_marginHorizontal="16dp"
-          android:visibility="gone"
-          tools:ignore="ContentDescription" />
+          app:cardCornerRadius="16dp"
+          app:cardElevation="0dp">
+
+          <xyz.zedler.patrick.grocy.view.photoview.PhotoView
+            android:id="@+id/photo_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="300dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            tools:ignore="ContentDescription"/>
+
+        </androidx.cardview.widget.CardView>
 
         <TextView
           style="@style/TextAppearance.Grocy.HeadlineMedium"

@@ -470,17 +470,16 @@ public class GrocyApi {
     return getUrl(
         "/files/recipepictures/"
             + fileNameEncoded.replace("\n", "")
-            + "?force_serve_as=picture&best_fit_height=240&best_fit_width=360"
     );
   }
 
-  public String getProductPictureServeSmall(String filename) {
-    return getProductPicture(filename)
+  public String getRecipePictureServeSmall(String filename) {
+    return getRecipePicture(filename)
         + "?force_serve_as=picture&best_fit_height=240&best_fit_width=360";
   }
 
-  public String getProductPictureServeLarge(String filename) {
-    return getProductPicture(filename)
+  public String getRecipePictureServeLarge(String filename) {
+    return getRecipePicture(filename)
         + "?force_serve_as=picture&best_fit_height=800&best_fit_width=1280";
   }
 
@@ -493,5 +492,15 @@ public class GrocyApi {
         "/files/productpictures/"
             + fileNameEncoded.replace("\n", "")
     );
+  }
+
+  public String getProductPictureServeSmall(String filename) {
+    return getProductPicture(filename)
+        + "?force_serve_as=picture&best_fit_height=240&best_fit_width=360";
+  }
+
+  public String getProductPictureServeLarge(String filename) {
+    return getProductPicture(filename)
+        + "?force_serve_as=picture&best_fit_height=800&best_fit_width=1280";
   }
 }
