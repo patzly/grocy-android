@@ -101,7 +101,6 @@
   <string name="action_open_scanner">Open scanner</string>
   <string name="action_discard">Discard</string>
   <string name="action_clear_form">Clear form</string>
-  <string name="action_choose_file">Choose file</string>
   <string name="action_take_photo">Take photo</string>
   <!-- "Paste" like in "Paste from clipboard" -->
   <string name="action_paste">Paste</string>
