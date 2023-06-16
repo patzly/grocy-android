@@ -10,7 +10,7 @@
 - New: Shopping mode options are now reachable through shopping mode menu and removed from settings
 - Improved: Database exceptions are now caught and displayed (#698)
 - Improved: Pictures in recipe or product descriptions now can be up to 10MB large (#698)
-- Improved: Other design for recipe page
+- Improved: Design for recipe page
 - Improved: Keyboard is displayed more reliably and quickly
 - Improved: Form focus on master object pages & fixed plural field for English on QU page
 - Improved: "Create recipe" page and "Create product" page now use "save and not close" buttons
@@ -21,6 +21,7 @@
 - Improved: Misleading error when trying to save duplicated barcode on product barcode edit (#724)
 - Improved: Message shown when product or recipe is not on server (#718)
 - Improved: Pictures optimized & added pictures to product bottom sheet and recipe page (#536)
+- Improved: Horizontal actions layout on overview page for smaller screens
 - Fixed: Long click on barcode button on overview page was broken on Android Nougat and lower
 - Fixed: Crash on startup with Android Lollipop (and maybe higher)
 - Fixed: Prevent crash when opening qu conversion page (#708)

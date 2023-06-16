@@ -415,6 +415,7 @@
                     android:scrollbars="none">
 
                     <LinearLayout
+                      android:id="@+id/linear_stock_actions_container"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:orientation="horizontal"
@@ -423,6 +424,7 @@
                       android:layout_gravity="end">
 
                       <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_inventory_text"
                         style="@style/Widget.Grocy.Button.OutlinedButton.Icon"
                         android:layout_marginEnd="8dp"
                         android:text="@string/title_inventory"
@@ -431,10 +433,29 @@
                         app:icon="@drawable/ic_round_inventory" />
 
                       <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_inventory_icon"
+                        style="@style/Widget.Grocy.Button.IconButton.Filled.Tonal.Small"
+                        android:layout_marginEnd="8dp"
+                        android:visibility="gone"
+                        android:onClick="@{() -> activity.navUtil.navigateFragment(R.id.inventoryFragment)}"
+                        app:clickUtil="@{clickUtil}"
+                        app:icon="@drawable/ic_round_inventory" />
+
+                      <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_transfer_text"
                         style="@style/Widget.Grocy.Button.OutlinedButton.Icon"
                         android:layout_marginEnd="8dp"
                         android:text="@string/title_transfer"
                         android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) ? View.VISIBLE : View.GONE}"
+                        android:onClick="@{() -> activity.navUtil.navigateFragment(R.id.transferFragment)}"
+                        app:clickUtil="@{clickUtil}"
+                        app:icon="@drawable/ic_round_swap_horiz" />
+
+                      <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_transfer_icon"
+                        style="@style/Widget.Grocy.Button.IconButton.Filled.Tonal.Small"
+                        android:layout_marginEnd="8dp"
+                        android:visibility="gone"
                         android:onClick="@{() -> activity.navUtil.navigateFragment(R.id.transferFragment)}"
                         app:clickUtil="@{clickUtil}"
                         app:icon="@drawable/ic_round_swap_horiz" />
@@ -523,6 +544,7 @@
                     android:scrollbars="none">
 
                     <LinearLayout
+                      android:id="@+id/linear_shopping_list_actions_container"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:orientation="horizontal"
@@ -531,8 +553,19 @@
                       android:layout_gravity="end">
 
                       <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_shopping_text"
                         style="@style/Widget.Grocy.Button.OutlinedButton.Icon"
+                        android:layout_marginEnd="8dp"
                         android:text="@string/title_shopping_mode"
+                        android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_shoppingModeFragment)}"
+                        app:clickUtil="@{clickUtil}"
+                        app:icon="@drawable/ic_round_storefront" />
+
+                      <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_shopping_icon"
+                        style="@style/Widget.Grocy.Button.IconButton.Filled.Tonal.Small"
+                        android:layout_marginEnd="8dp"
+                        android:visibility="gone"
                         android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_shoppingModeFragment)}"
                         app:clickUtil="@{clickUtil}"
                         app:icon="@drawable/ic_round_storefront" />
@@ -542,7 +575,6 @@
                         style="@style/Widget.Grocy.Button.TonalButton.Icon"
                         android:text="@string/title_entry_new"
                         android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_shoppingListItemEditFragmentCreate)}"
-                        android:layout_marginStart="8dp"
                         app:icon="@drawable/ic_round_add_anim" />
 
                     </LinearLayout>
