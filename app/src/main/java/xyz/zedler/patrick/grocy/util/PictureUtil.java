@@ -19,6 +19,8 @@
 
 package xyz.zedler.patrick.grocy.util;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,6 +36,9 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class PictureUtil {
@@ -98,5 +103,50 @@ public class PictureUtil {
         return false;
       }
     }).into(picture);
+  }
+
+  public static Bitmap scaleBitmap(String imagePath) {
+    int maxWidth = 1280;
+    int maxHeight = 800;
+    BitmapFactory.Options options = new BitmapFactory.Options();
+    options.inJustDecodeBounds = true;
+    BitmapFactory.decodeFile(imagePath, options);
+    int imageHeight = options.outHeight;
+    int imageWidth = options.outWidth;
+    int scaleFactor = Math.min(imageWidth / maxWidth, imageHeight / maxHeight);
+    options.inJustDecodeBounds = false;
+    options.inSampleSize = scaleFactor;
+    return BitmapFactory.decodeFile(imagePath, options);
+  }
+
+  public static Bitmap scaleBitmap(Bitmap bitmap) {
+    int maxWidth = 1280;
+    int maxHeight = 800;
+    float scale = Math.min(
+        ((float)maxWidth / bitmap.getWidth()),
+        ((float)maxHeight / bitmap.getHeight())
+    );
+    int newWidth = Math.round(bitmap.getWidth() * scale);
+    int newHeight = Math.round(bitmap.getHeight() * scale);
+    return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
+  }
+
+  public static byte[] convertBitmapToByteArray(Bitmap bitmap) {
+    if (bitmap == null) return null;
+    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+    return stream.toByteArray();
+  }
+
+  public static File createImageFile(File storageDir) throws IOException {
+    return File.createTempFile(
+        String.valueOf(System.currentTimeMillis()),
+        ".jpg",
+        storageDir
+    );
+  }
+
+  public static String createImageFilename() {
+    return System.currentTimeMillis() + ".jpg";
   }
 }

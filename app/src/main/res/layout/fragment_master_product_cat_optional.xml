@@ -611,6 +611,14 @@
                   android:onClick="@{v -> fragment.dispatchTakePictureIntent()}"
                   android:text="@string/action_take_photo"/>
 
+                <com.google.android.material.button.MaterialButton
+                  style="@style/Widget.Grocy.Button.UnelevatedButton"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginEnd="8dp"
+                  android:onClick="@{v -> viewModel.pasteFromClipboard()}"
+                  android:text="@string/action_paste"/>
+
               </LinearLayout>
 
             </LinearLayout>

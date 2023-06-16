@@ -169,10 +169,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
         new ActivityResultContracts.StartActivityForResult(),
         result -> {
           if (result.getResultCode() == Activity.RESULT_OK) {
-            viewModel.scaleAndUploadBitmap(
-                viewModel.getCurrentFilePath(),
-                viewModel.getCurrentFileName()
-            );
+            viewModel.scaleAndUploadBitmap(viewModel.getCurrentFilePath(), null);
           }
         });
 
