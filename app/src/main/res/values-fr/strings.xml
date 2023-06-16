@@ -98,7 +98,6 @@
   <string name="action_open_scanner">Ouvrir le scanner</string>
   <string name="action_discard">Jeter</string>
   <string name="action_clear_form">Effacer le formulaire</string>
-  <string name="action_choose_file">Choisir un fichier</string>
   <string name="action_take_photo">Prendre une photo</string>
   <!-- "Paste" like in "Paste from clipboard" -->
   <string name="action_paste">Coller</string>
