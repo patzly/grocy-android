@@ -116,6 +116,23 @@ public class MasterProductCatLocationFragment extends BaseFragment {
       }
     });
 
+    Object newLocationId = getFromThisDestinationNow(ARGUMENT.OBJECT_ID);
+    if (newLocationId != null) {  // if user created a new location and navigates back to this fragment this is the new locationId
+      removeForThisDestination(ARGUMENT.OBJECT_ID);
+      String idForValue = (String) getFromThisDestinationNow(ARGUMENT.OBJECT_NAME);
+      viewModel.setQueueEmptyAction(() -> {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(
+            IS_CONSUME_LOCATION,
+            idForValue != null && idForValue.equals(IS_CONSUME_LOCATION)
+        );
+        List<Location> locations = viewModel.getFormData().getLocationsLive().getValue();
+        if (locations == null) return;
+        Location location = Location.getFromId(locations, (Integer) newLocationId);
+        selectLocation(location, bundle);
+      });
+    }
+
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
@@ -208,6 +225,7 @@ public class MasterProductCatLocationFragment extends BaseFragment {
     } else {
       location = viewModel.getFormData().getLocationLive().getValue();
     }
+    bundle.putBoolean(ARGUMENT.DISPLAY_NEW_OPTION, true);
     int locationId = location != null ? location.getId() : -1;
     bundle.putInt(Constants.ARGUMENT.SELECTED_ID, locationId);
     bundle.putBoolean(IS_CONSUME_LOCATION, consumeLocation);
@@ -238,6 +256,14 @@ public class MasterProductCatLocationFragment extends BaseFragment {
     } else {
       viewModel.getFormData().getLocationLive().setValue(location);
     }
+  }
+
+  @Override
+  public void createLocation(Bundle args) {
+    activity.navUtil.navigateFragment(MasterProductCatLocationFragmentDirections
+        .actionMasterProductCatLocationFragmentToMasterLocationFragment()
+        .setIdForReturnValue(args.getBoolean(IS_CONSUME_LOCATION, false)
+            ? IS_CONSUME_LOCATION : null));
   }
 
   @Override

@@ -146,6 +146,17 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
           .setValue(Html.fromHtml((String) descriptionEdited));
     }
 
+    Object newProductGroupId = getFromThisDestinationNow(ARGUMENT.OBJECT_ID);
+    if (newProductGroupId != null) {  // if user created a new product group and navigates back to this fragment this is the new productGroupId
+      removeForThisDestination(ARGUMENT.OBJECT_ID);
+      viewModel.setQueueEmptyAction(() -> {
+        List<ProductGroup> groups = viewModel.getFormData().getProductGroupsLive().getValue();
+        if (groups == null) return;
+        ProductGroup productGroup = ProductGroup.getFromId(groups, (Integer) newProductGroupId);
+        selectProductGroup(productGroup);
+      });
+    }
+
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
@@ -305,6 +316,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
         productGroups != null ? new ArrayList<>(productGroups) : null
     );
     bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
+    bundle.putBoolean(ARGUMENT.DISPLAY_NEW_OPTION, true);
 
     ProductGroup productGroup = viewModel.getFormData().getProductGroupLive().getValue();
     int productGroupId = productGroup != null ? productGroup.getId() : -1;
@@ -312,6 +324,11 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
     activity.showBottomSheet(new ProductGroupsBottomSheet(), bundle);
   }
 
+  @Override
+  public void createProductGroup() {
+    activity.navUtil.navigateFragment(MasterProductCatOptionalFragmentDirections
+        .actionMasterProductCatOptionalFragmentToMasterProductGroupFragment());
+  }
   @Override
   public void selectProductGroup(ProductGroup productGroup) {
     viewModel.getFormData().getProductGroupLive().setValue(

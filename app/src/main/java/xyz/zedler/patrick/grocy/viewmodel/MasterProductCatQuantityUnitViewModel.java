@@ -31,6 +31,7 @@ import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatQuantityUnit;
@@ -65,6 +66,7 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
   private List<QuantityUnitConversion> conversions;
 
   private NetworkQueue currentQueueLoading;
+  private Runnable queueEmptyAction;
   private final boolean isActionEdit;
 
   public MasterProductCatQuantityUnitViewModel(
@@ -157,6 +159,11 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
   }
 
   private void onQueueEmpty() {
+    if (queueEmptyAction != null) {
+      queueEmptyAction.run();
+      queueEmptyAction = null;
+      return;
+    }
     if (isOffline()) {
       setOfflineLive(false);
     }
@@ -164,15 +171,15 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
     updateHasProductAlreadyStockTransactions();
   }
 
-  public void showQuBottomSheet(int type) {
+  public void showQuBottomSheet(String type) {
     assert hasProductAlreadyStockTransactionsLive.getValue() != null
         && isQuantityUnitStockChangeableLive.getValue() != null;
-    if (type == FormDataMasterProductCatQuantityUnit.STOCK && !isQuantityUnitStockChangeableLive.getValue()) {
+    if (type.equals(FormDataMasterProductCatQuantityUnit.STOCK) && !isQuantityUnitStockChangeableLive.getValue()) {
       showMessage(getString(R.string.msg_help_qu_stock));
       return;
     }
     List<QuantityUnit> quantityUnitsAllowed;
-    if (type == FormDataMasterProductCatQuantityUnit.STOCK && isActionEdit
+    if (type.equals(FormDataMasterProductCatQuantityUnit.STOCK) && isActionEdit
         && hasProductAlreadyStockTransactionsLive.getValue()) {
       QuantityUnit quStockOld = QuantityUnit
           .getFromId(this.quantityUnits, getFilledProduct().getQuIdStockInt());
@@ -206,14 +213,15 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
         new ArrayList<>(quantityUnitsAllowed)
     );
     QuantityUnit quantityUnit;
-    if (type == FormDataMasterProductCatQuantityUnit.STOCK) {
+    if (type.equals(FormDataMasterProductCatQuantityUnit.STOCK)) {
       quantityUnit = formData.getQuStockLive().getValue();
     } else {
       quantityUnit = formData.getQuPurchaseLive().getValue();
     }
     int quId = quantityUnit != null ? quantityUnit.getId() : -1;
+    bundle.putBoolean(ARGUMENT.DISPLAY_NEW_OPTION, true);
     bundle.putInt(Constants.ARGUMENT.SELECTED_ID, quId);
-    bundle.putInt(FormDataMasterProductCatQuantityUnit.QUANTITY_UNIT_TYPE, type);
+    bundle.putString(FormDataMasterProductCatQuantityUnit.QUANTITY_UNIT_TYPE, type);
     showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
   }
 
@@ -229,6 +237,10 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
 
   public void setCurrentQueueLoading(NetworkQueue queueLoading) {
     currentQueueLoading = queueLoading;
+  }
+
+  public void setQueueEmptyAction(Runnable queueEmptyAction) {
+    this.queueEmptyAction = queueEmptyAction;
   }
 
   public MutableLiveData<Boolean> getIsQuantityUnitStockChangeableLive() {

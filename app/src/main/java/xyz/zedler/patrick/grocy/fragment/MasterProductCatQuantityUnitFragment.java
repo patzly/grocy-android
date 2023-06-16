@@ -26,12 +26,15 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatQuantityUnitBinding;
+import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatQuantityUnit;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -109,6 +112,23 @@ public class MasterProductCatQuantityUnitFragment extends BaseFragment {
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
       }
     });
+
+    Object newQuId = getFromThisDestinationNow(ARGUMENT.OBJECT_ID);
+    if (newQuId != null) {  // if user created a new QU and navigates back to this fragment this is the new quId
+      removeForThisDestination(ARGUMENT.OBJECT_ID);
+      String idForValue = (String) getFromThisDestinationNow(ARGUMENT.OBJECT_NAME);
+      viewModel.setQueueEmptyAction(() -> {
+        Bundle bundle = new Bundle();
+        bundle.putString(
+            FormDataMasterProductCatQuantityUnit.QUANTITY_UNIT_TYPE,
+            idForValue
+        );
+        List<QuantityUnit> qUs = viewModel.getFormData().getQuantityUnitsLive().getValue();
+        if (qUs == null) return;
+        QuantityUnit quantityUnit = QuantityUnit.getFromId(qUs, (Integer) newQuId);
+        selectQuantityUnit(quantityUnit, bundle);
+      });
+    }
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
     viewModel.getInfoFullscreenLive().observe(
@@ -190,6 +210,16 @@ public class MasterProductCatQuantityUnitFragment extends BaseFragment {
 
   public void clearInputFocus() {
     activity.hideKeyboard();
+  }
+
+  @Override
+  public void createQuantityUnit(Bundle args) {
+    activity.navUtil.navigateFragment(MasterProductCatQuantityUnitFragmentDirections
+        .actionMasterProductCatQuantityUnitFragmentToMasterQuantityUnitFragment()
+        .setIdForReturnValue(args.getString(
+            FormDataMasterProductCatQuantityUnit.QUANTITY_UNIT_TYPE,
+            FormDataMasterProductCatQuantityUnit.STOCK
+        )));
   }
 
   @Override

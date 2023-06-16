@@ -33,8 +33,8 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 public class FormDataMasterProductCatQuantityUnit {
 
   public final static String QUANTITY_UNIT_TYPE = "qu_type";
-  public final static int STOCK = 0;
-  public final static int PURCHASE = 2;
+  public final static String STOCK = "stock";
+  public final static String PURCHASE = "purchase";
 
   private final Application application;
   private final MutableLiveData<Boolean> displayHelpLive;
@@ -111,8 +111,8 @@ public class FormDataMasterProductCatQuantityUnit {
     if (quantityUnit != null && quantityUnit.getId() == -1) {
       quantityUnit = null;
     }
-    int type = argsBundle.getInt(QUANTITY_UNIT_TYPE);
-    if (type == STOCK) {
+    String type = argsBundle.getString(QUANTITY_UNIT_TYPE);
+    if (type.equals(STOCK)) {
       quStockLive.setValue(quantityUnit);
       if (quPurchaseLive.getValue() == null) {
         quPurchaseLive.setValue(quantityUnit);

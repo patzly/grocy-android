@@ -69,6 +69,13 @@ public class LocationsBottomSheet extends BaseBottomSheetDialogFragment
     if (bundle.getBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, false)) {
       locations.add(0, new Location(-1, getString(R.string.subtitle_none_selected)));
     }
+    if (bundle.getBoolean(ARGUMENT.DISPLAY_NEW_OPTION, false)) {
+      binding.buttonListSelectionNew.setVisibility(View.VISIBLE);
+      binding.buttonListSelectionNew.setOnClickListener(v -> {
+        dismiss();
+        activity.getCurrentFragment().createLocation(bundle);
+      });
+    }
     int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
     String title = bundle.getString(ARGUMENT.TITLE);

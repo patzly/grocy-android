@@ -60,6 +60,7 @@ public class MasterProductCatLocationViewModel extends BaseViewModel {
   private List<Store> stores;
 
   private NetworkQueue currentQueueLoading;
+  private Runnable queueEmptyAction;
   private final boolean debug;
   private final boolean isActionEdit;
 
@@ -155,6 +156,11 @@ public class MasterProductCatLocationViewModel extends BaseViewModel {
   }
 
   private void onQueueEmpty() {
+    if (queueEmptyAction != null) {
+      queueEmptyAction.run();
+      queueEmptyAction = null;
+      return;
+    }
     if (isOffline()) {
       setOfflineLive(false);
     }
@@ -173,6 +179,10 @@ public class MasterProductCatLocationViewModel extends BaseViewModel {
 
   public void setCurrentQueueLoading(NetworkQueue queueLoading) {
     currentQueueLoading = queueLoading;
+  }
+
+  public void setQueueEmptyAction(Runnable queueEmptyAction) {
+    this.queueEmptyAction = queueEmptyAction;
   }
 
   public boolean showConsumeLocationOption() {

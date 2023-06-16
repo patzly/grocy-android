@@ -443,6 +443,7 @@ public final class Constants {
     public final static String SHOW_OFFLINE = "show_offline";
     public final static String BARCODE = "barcode";
     public final static String DISPLAY_EMPTY_OPTION = "display_empty_option";
+    public final static String DISPLAY_NEW_OPTION = "display_new_option";
     public final static String DISPLAY_PIN_BUTTONS = "display_pin_buttons";
     public final static String CURRENT_PIN_ID = "current_pin_id";
     public final static String NONE_SELECTABLE = "none_selectable";

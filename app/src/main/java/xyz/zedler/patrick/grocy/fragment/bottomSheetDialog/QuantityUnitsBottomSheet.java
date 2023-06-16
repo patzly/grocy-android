@@ -71,6 +71,13 @@ public class QuantityUnitsBottomSheet extends BaseBottomSheetDialogFragment
           0,
           new QuantityUnit(-1, getString(R.string.subtitle_none_selected)));
     }
+    if (bundle.getBoolean(ARGUMENT.DISPLAY_NEW_OPTION, false)) {
+      binding.buttonListSelectionNew.setVisibility(View.VISIBLE);
+      binding.buttonListSelectionNew.setOnClickListener(v -> {
+        dismiss();
+        activity.getCurrentFragment().createQuantityUnit(bundle);
+      });
+    }
     int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
     binding.textListSelectionTitle.setText(activity.getString(R.string.property_quantity_units));

@@ -209,6 +209,9 @@ public class BaseFragment extends Fragment {
   public void selectProduct(Product product) {
   }
 
+  public void createQuantityUnit(Bundle argsBundle) {
+  }
+
   public void selectQuantityUnit(QuantityUnit quantityUnit) {
   }
 
@@ -227,7 +230,13 @@ public class BaseFragment extends Fragment {
   public void selectStockEntry(StockEntry stockEntry) {
   }
 
+  public void createProductGroup() {
+  }
+
   public void selectProductGroup(ProductGroup productGroup) {
+  }
+
+  public void createLocation(Bundle args) {
   }
 
   public void selectLocation(Location location) {
