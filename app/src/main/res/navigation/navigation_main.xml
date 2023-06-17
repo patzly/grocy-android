@@ -1120,6 +1120,9 @@
       <argument
         android:name="product"
         app:argType="xyz.zedler.patrick.grocy.model.Product" />
+      <action
+        android:id="@+id/action_masterProductCatConversionsEditFragment_to_masterQuantityUnitFragment"
+        app:destination="@id/masterQuantityUnitFragment" />
     </fragment>
     <fragment
       android:id="@+id/masterTaskCategoryFragment"

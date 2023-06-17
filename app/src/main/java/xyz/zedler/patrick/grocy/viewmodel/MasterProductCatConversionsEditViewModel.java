@@ -101,6 +101,7 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
       this.quantityUnits = data.getQuantityUnits();
+      formData.getQuantityUnitsLive().setValue(data.getQuantityUnits());
       this.unitConversions = data.getConversions();
       fillWithConversionIfNecessary();
       if (downloadAfterLoading) {
@@ -128,7 +129,10 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
         QuantityUnitConversion.updateQuantityUnitConversions(
             dlHelper, dbChangedTime, conversions -> this.unitConversions = conversions
         ), QuantityUnit.updateQuantityUnits(
-            dlHelper, dbChangedTime, quantityUnits -> this.quantityUnits = quantityUnits
+            dlHelper, dbChangedTime, quantityUnits -> {
+              this.quantityUnits = quantityUnits;
+              formData.getQuantityUnitsLive().setValue(quantityUnits);
+            }
         )
     );
     if (queue.isEmpty()) {
@@ -204,7 +208,6 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
     if (formData.isFilledWithConversion()) {
       return;
     } else if(!isActionEdit) {
-      formData.getQuantityUnitsLive().setValue(quantityUnits);
       QuantityUnit quStock = QuantityUnit
           .getFromId(quantityUnits, args.getProduct().getQuIdStockInt());
       formData.getQuantityUnitFromLive().setValue(quStock);
@@ -214,8 +217,6 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
 
     QuantityUnitConversion conversion = args.getConversion();
     assert conversion != null;
-
-    formData.getQuantityUnitsLive().setValue(quantityUnits);
     formData.getQuantityUnitFromLive().setValue(
         QuantityUnit.getFromId(quantityUnits, conversion.getFromQuId())
     );
@@ -236,6 +237,7 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
     Bundle bundle = new Bundle();
     bundle.putParcelableArrayList(ARGUMENT.QUANTITY_UNITS, new ArrayList<>(quantityUnits));
     bundle.putBoolean(QUANTITY_UNIT_IS_FROM, from);
+    bundle.putBoolean(ARGUMENT.DISPLAY_NEW_OPTION, true);
     QuantityUnit quantityUnit;
     if (from) {
       quantityUnit = formData.getQuantityUnitFromLive().getValue();
