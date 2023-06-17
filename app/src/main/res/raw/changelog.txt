@@ -31,6 +31,7 @@
 - Fixed: Disabled features with Home Assistant add-on were not disabled in app (#713)
 - Fixed: On product creation with prefilled name there was a plus instead of space character
 - Fixed: On product details sheet, description card was rendered with wrong height sometimes (#717)
+- Fixed: Editing of recipe ingredient with broken quantity unit is possible now
 
 ## 3.2.1
 
