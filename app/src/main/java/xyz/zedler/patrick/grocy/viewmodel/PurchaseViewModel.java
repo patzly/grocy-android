@@ -79,7 +79,6 @@ import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class PurchaseViewModel extends BaseViewModel {
 
@@ -202,56 +201,35 @@ public class PurchaseViewModel extends BaseViewModel {
       }
       if (downloadAfterLoading) {
         downloadData();
+      } else {
+        if (queueEmptyAction != null) {
+          queueEmptyAction.run();
+          queueEmptyAction = null;
+        }
+        if (batchShoppingListItemIds != null) {
+          fillWithShoppingListItem();
+        }
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, null));
-      return;
-    }
-
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, null));
-    queue.append(
-        Product.updateProducts(dlHelper, dbChangedTime, products -> {
-          this.products = products;
-          productHashMap = ArrayUtil.getProductsHashMap(products);
-          formData.getProductsLive().setValue(
-                  appendPendingProducts(Product.getActiveProductsOnly(products), pendingProducts)
-          );
-        }), QuantityUnitConversion.updateQuantityUnitConversions(dlHelper, dbChangedTime,
-            conversions -> {
-          this.unitConversions = conversions;
-          unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(unitConversions);
-        }), ProductBarcode.updateProductBarcodes(dlHelper, dbChangedTime,
-            barcodes -> this.barcodes = appendPendingProductBarcodes(
-                barcodes, pendingProductBarcodes
-            )
-        ), QuantityUnit.updateQuantityUnits(dlHelper, dbChangedTime, quantityUnits -> {
-          this.quantityUnits = quantityUnits;
-          quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
-        }), Store.updateStores(
-            dlHelper, dbChangedTime, stores -> this.stores = stores
-        ), Location.updateLocations(
-            dlHelper, dbChangedTime, locations -> this.locations = locations
-        )
-    );
-    if (batchShoppingListItemIds != null) {
-      ShoppingListItem.updateShoppingListItems(dlHelper, dbChangedTime, (items) -> {
-        this.shoppingListItems = items;
-        shoppingListItemHashMap = ArrayUtil.getShoppingListItemHashMap(shoppingListItems);
-      });
-    }
-    if (queue.isEmpty()) {
-      onQueueEmpty();
-      return;
-    }
-    queue.start();
-  }
-
   public void downloadData() {
-    downloadData(null);
+    if (isOffline()) { // skip downloading
+      isLoadingLive.setValue(false);
+      return;
+    }
+
+    dlHelper.updateData(
+        () -> loadFromDatabase(false),
+        error -> onError(error, TAG),
+        Product.class,
+        ProductBarcode.class,
+        QuantityUnit.class,
+        QuantityUnitConversion.class,
+        Store.class,
+        Location.class,
+        batchShoppingListItemIds != null ? ShoppingListItem.class : null
+    );
   }
 
   public void downloadDataForceUpdate() {
@@ -264,18 +242,6 @@ public class PurchaseViewModel extends BaseViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
     editPrefs.apply();
     downloadData();
-  }
-
-  private void onQueueEmpty() {
-    fillShoppingListItemAmountsHashMap();
-    if (queueEmptyAction != null) {
-      queueEmptyAction.run();
-      queueEmptyAction = null;
-      return;
-    }
-    if (batchShoppingListItemIds != null) {
-      fillWithShoppingListItem();
-    }
   }
 
   public void setProduct(

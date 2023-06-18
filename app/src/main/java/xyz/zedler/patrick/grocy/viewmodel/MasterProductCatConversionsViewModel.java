@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy.viewmodel;
 import android.app.Application;
 import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -40,7 +39,6 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class MasterProductCatConversionsViewModel extends BaseViewModel {
 
@@ -59,8 +57,6 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
   private List<QuantityUnitConversion> unitConversions;
   private List<QuantityUnit> quantityUnits;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-
-  private NetworkQueue currentQueueLoading;
 
   public MasterProductCatConversionsViewModel(
       @NonNull Application application,
@@ -96,41 +92,18 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
+  public void downloadData() {
     if (isOffline()) { // skip downloading
       isLoadingLive.setValue(false);
       return;
     }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, null));
-      return;
-    }
 
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, null));
-    queue.append(
-        QuantityUnit.updateQuantityUnits(dlHelper, dbChangedTime, qUs -> {
-          this.quantityUnits = qUs;
-          this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
-        }), QuantityUnitConversion.updateQuantityUnitConversions(
-            dlHelper,
-            dbChangedTime,
-            conversions -> this.unitConversions = conversions
-        )
+    dlHelper.updateData(
+        () -> loadFromDatabase(false),
+        error -> onError(error, TAG),
+        QuantityUnit.class,
+        QuantityUnitConversion.class
     );
-    if (queue.isEmpty()) {
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null);
   }
 
   public void downloadDataForceUpdate() {
@@ -139,13 +112,6 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
     editPrefs.apply();
     downloadData();
-  }
-
-  private void onQueueEmpty() {
-    if (isOffline()) {
-      setOfflineLive(false);
-    }
-    quantityUnitConversionsLive.setValue(filterConversions(unitConversions));
   }
 
   private ArrayList<QuantityUnitConversion> filterConversions(List<QuantityUnitConversion> conversions) {
@@ -179,10 +145,6 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
   @NonNull
   public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
     return infoFullscreenLive;
-  }
-
-  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
-    currentQueueLoading = queueLoading;
   }
 
   public void showErrorMessage() {

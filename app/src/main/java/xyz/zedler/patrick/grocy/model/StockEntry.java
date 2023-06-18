@@ -270,7 +270,7 @@ public class StockEntry extends GroupedListItem implements Parcelable {
     this.note = note;
   }
 
-  public static StockEntry getStockEntryFromId(ArrayList<StockEntry> stockEntries, String id) {
+  public static StockEntry getStockEntryFromId(List<StockEntry> stockEntries, String id) {
     for (StockEntry stockEntry : stockEntries) {
       if (stockEntry.getStockId().equals(id)) {
         return stockEntry;

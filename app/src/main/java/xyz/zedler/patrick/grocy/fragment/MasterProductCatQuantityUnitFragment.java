@@ -136,12 +136,6 @@ public class MasterProductCatQuantityUnitFragment extends BaseFragment {
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
 
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
-      if (!isLoading) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
-
     viewModel.getFormData().getQuStockErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textQuStockName.setTextColor(
             ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)

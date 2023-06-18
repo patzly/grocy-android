@@ -165,12 +165,6 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
       viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
     });
 
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
-      if (!isLoading) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
-
     Boolean backFromChooseProductPage = (Boolean)
         getFromThisDestinationNow(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE);
     if (backFromChooseProductPage != null) {

@@ -51,13 +51,18 @@ public class NetworkQueue {
 
   public NetworkQueue append(QueueItem... queueItems) {
     for (QueueItem queueItem : queueItems) {
-      if (queueItem == null) {
-        continue;
-      }
+      if (queueItem == null) continue;
       this.queueItems.add(queueItem);
       queueSize++;
     }
     return this;
+  }
+
+  public void appendWhileRunning(QueueItem queueItem) {
+    if (queueItem == null) return;
+    this.queueItems.add(queueItem);
+    queueSize++;
+    executeQueueItem();
   }
 
   public void start() {
@@ -72,26 +77,34 @@ public class NetworkQueue {
       }
       return;
     }
-    while (!queueItems.isEmpty()) {
-      QueueItem queueItem = queueItems.remove(0);
-      queueItem.perform(response -> {
-        queueSize--;
-        if (queueSize > 0) {
-          return;
-        }
-        isRunning = false;
-        if (onQueueEmptyListener != null) {
-          onQueueEmptyListener.onQueueEmpty(true);
-        }
-        reset(false);
-      }, error -> {
-        isRunning = false;
-        if (onErrorListener != null) {
-          onErrorListener.onError(error);
-        }
-        reset(true);
-      }, uuidQueue);
+
+    executeQueueItem();
+  }
+
+  private void executeQueueItem() {
+    if (queueItems.isEmpty() || queueSize == 0) {
+      return;
     }
+
+    QueueItem queueItem = queueItems.remove(0);
+    queueItem.perform(response -> {
+      queueSize--;
+      if (queueSize > 0) {
+        executeQueueItem();
+        return;
+      }
+      isRunning = false;
+      if (onQueueEmptyListener != null) {
+        onQueueEmptyListener.onQueueEmpty(true);
+      }
+      reset(false);
+    }, error -> {
+      isRunning = false;
+      if (onErrorListener != null) {
+        onErrorListener.onError(error);
+      }
+      reset(true);
+    }, uuidQueue);
   }
 
   public int getSize() {

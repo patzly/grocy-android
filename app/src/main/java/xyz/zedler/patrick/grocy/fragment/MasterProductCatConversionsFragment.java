@@ -127,12 +127,6 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
 
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
-      if (!isLoading) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
-
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );

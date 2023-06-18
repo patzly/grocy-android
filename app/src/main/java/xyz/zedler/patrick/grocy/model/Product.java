@@ -959,6 +959,15 @@ public class Product extends GroupedListItem implements Parcelable {
       String dbChangedTime,
       OnObjectsResponseListener<Product> onResponseListener
   ) {
+    return updateProducts(dlHelper, dbChangedTime, onResponseListener, false);
+  }
+
+  public static QueueItem updateProducts(
+      DownloadHelper dlHelper,
+      String dbChangedTime,
+      OnObjectsResponseListener<Product> onResponseListener,
+      boolean alsoRespondIfNotUpdated
+  ) {
     String lastTime = dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_PRODUCTS, null
     );
@@ -1018,7 +1027,37 @@ public class Product extends GroupedListItem implements Parcelable {
       if (dlHelper.debug) {
         Log.i(dlHelper.tag, "downloadData: skipped Products download");
       }
-      return null;
+      if (alsoRespondIfNotUpdated) {
+        return new QueueItem() {
+          @Override
+          public void perform(
+              @Nullable OnStringResponseListener responseListener,
+              @Nullable OnMultiTypeErrorListener errorListener,
+              @Nullable String uuid
+          ) {
+            dlHelper.appDatabase.productDao().getProducts()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSuccess(products -> {
+                  if (onResponseListener != null) {
+                    onResponseListener.onResponse(products);
+                  }
+                  if (responseListener != null) {
+                    responseListener.onResponse(null);
+                  }
+                })
+                .doOnError(throwable -> {
+                  if (errorListener != null) {
+                    errorListener.onError(throwable);
+                  }
+                })
+                .onErrorComplete()
+                .subscribe();
+          }
+        };
+      } else {
+        return null;
+      }
     }
   }
 }

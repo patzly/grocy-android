@@ -35,6 +35,7 @@ import xyz.zedler.patrick.grocy.dao.ProductDao;
 import xyz.zedler.patrick.grocy.dao.ProductGroupDao;
 import xyz.zedler.patrick.grocy.dao.ProductLastPurchasedDao;
 import xyz.zedler.patrick.grocy.dao.QuantityUnitConversionDao;
+import xyz.zedler.patrick.grocy.dao.QuantityUnitConversionResolvedDao;
 import xyz.zedler.patrick.grocy.dao.QuantityUnitDao;
 import xyz.zedler.patrick.grocy.dao.RecipeDao;
 import xyz.zedler.patrick.grocy.dao.RecipeFulfillmentDao;
@@ -64,6 +65,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
@@ -92,6 +94,7 @@ import xyz.zedler.patrick.grocy.model.VolatileItem;
         VolatileItem.class,
         MissingItem.class,
         QuantityUnitConversion.class,
+        QuantityUnitConversionResolved.class,
         ProductBarcode.class,
         StockItem.class,
         StockLocation.class,
@@ -111,7 +114,7 @@ import xyz.zedler.patrick.grocy.model.VolatileItem;
         RecipeFulfillment.class,
         RecipePosition.class
     },
-    version = 43
+    version = 44
 )
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -136,6 +139,8 @@ public abstract class AppDatabase extends RoomDatabase {
   public abstract MissingItemDao missingItemDao();
 
   public abstract QuantityUnitConversionDao quantityUnitConversionDao();
+
+  public abstract QuantityUnitConversionResolvedDao quantityUnitConversionResolvedDao();
 
   public abstract ProductBarcodeDao productBarcodeDao();
 

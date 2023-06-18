@@ -24,7 +24,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -69,7 +68,6 @@ import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class TransferViewModel extends BaseViewModel {
 
@@ -141,45 +139,30 @@ public class TransferViewModel extends BaseViewModel {
       formData.getProductsLive().setValue(Product.getActiveAndStockEnabledProductsOnly(products));
       if (downloadAfterLoading) {
         downloadData();
+      } else {
+        if (queueEmptyAction != null) {
+          queueEmptyAction.run();
+          queueEmptyAction = null;
+        }
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, TAG));
-      return;
-    }
-
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
-    queue.append(
-        Product.updateProducts(dlHelper, dbChangedTime, products -> {
-          this.products = products;
-          formData.getProductsLive().setValue(Product.getActiveAndStockEnabledProductsOnly(products));
-        }), ProductBarcode.updateProductBarcodes(
-            dlHelper, dbChangedTime, barcodes -> this.barcodes = barcodes
-        ), Location.updateLocations(
-            dlHelper, dbChangedTime, locations -> this.locations = locations
-        ), QuantityUnitConversion.updateQuantityUnitConversions(
-            dlHelper, dbChangedTime, conversions -> this.unitConversions = conversions
-        ), QuantityUnit.updateQuantityUnits(
-            dlHelper,
-            dbChangedTime,
-            quantityUnits -> quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits)
-        )
-    );
-    if (queue.isEmpty()) {
-      if (queueEmptyAction != null) {
-        queueEmptyAction.run();
-        queueEmptyAction = null;
-      }
-      return;
-    }
-    queue.start();
-  }
-
   public void downloadData() {
-    downloadData(null);
+    if (isOffline()) { // skip downloading
+      isLoadingLive.setValue(false);
+      return;
+    }
+
+    dlHelper.updateData(
+        () -> loadFromDatabase(false),
+        error -> onError(error, TAG),
+        Product.class,
+        ProductBarcode.class,
+        Location.class,
+        QuantityUnit.class,
+        QuantityUnitConversion.class
+    );
   }
 
   public void downloadDataForceUpdate() {
@@ -191,13 +174,6 @@ public class TransferViewModel extends BaseViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
     editPrefs.apply();
     downloadData();
-  }
-
-  private void onQueueEmpty() {
-    if (queueEmptyAction != null) {
-      queueEmptyAction.run();
-      queueEmptyAction = null;
-    }
   }
 
   public void setProduct(int productId, ProductBarcode barcode, String stockEntryId) {
@@ -220,8 +196,8 @@ public class TransferViewModel extends BaseViewModel {
       formData.getProductNameLive().setValue(product.getName());
 
       // stock location (from location)
-      ArrayList<StockLocation> stockLocations = formData.getStockLocations();
-      StockLocation stockLocation = getStockLocation(
+      List<StockLocation> stockLocations = formData.getStockLocations();
+      StockLocation stockLocation = StockLocation.getFromId(
           stockLocations,
           product.getLocationIdInt()
       );
@@ -509,15 +485,6 @@ public class TransferViewModel extends BaseViewModel {
     }, error -> showMessage(R.string.error_failed_barcode_upload)).perform(dlHelper.getUuid());
   }
 
-  private StockLocation getStockLocation(ArrayList<StockLocation> locations, int locationId) {
-    for (StockLocation stockLocation : locations) {
-      if (stockLocation.getLocationId() == locationId) {
-        return stockLocation;
-      }
-    }
-    return null;
-  }
-
   public void showInputProductBottomSheet(@NonNull String input) {
     Bundle bundle = new Bundle();
     bundle.putString(Constants.ARGUMENT.PRODUCT_INPUT, input);
@@ -544,7 +511,7 @@ public class TransferViewModel extends BaseViewModel {
     if (!formData.isProductNameValid()) {
       return;
     }
-    ArrayList<StockEntry> stockEntries = formData.getStockEntries();
+    List<StockEntry> stockEntries = formData.getStockEntries();
     StockEntry currentStockEntry = formData.getSpecificStockEntryLive().getValue();
     String selectedId = currentStockEntry != null ? currentStockEntry.getStockId() : null;
     ArrayList<StockEntry> filteredStockEntries = new ArrayList<>();
@@ -569,13 +536,16 @@ public class TransferViewModel extends BaseViewModel {
     if (!formData.isProductNameValid()) {
       return;
     }
-    ArrayList<StockLocation> stockLocations = formData.getStockLocations();
+    List<StockLocation> stockLocations = formData.getStockLocations();
     StockLocation currentStockLocation = formData.getFromLocationLive().getValue();
     int selectedId = currentStockLocation != null ? currentStockLocation.getLocationId() : -1;
     ProductDetails productDetails = formData.getProductDetailsLive().getValue();
     QuantityUnit quantityUnitStock = formData.getQuantityUnitStockLive().getValue();
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(Constants.ARGUMENT.STOCK_LOCATIONS, stockLocations);
+    bundle.putParcelableArrayList(
+        Constants.ARGUMENT.STOCK_LOCATIONS,
+        new ArrayList<>(stockLocations)
+    );
     bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedId);
     bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
     bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnitStock);

@@ -28,6 +28,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
@@ -82,11 +83,11 @@ public class SettingsViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> torEnabledLive;
   private final MutableLiveData<Boolean> proxyEnabledLive;
   private final MutableLiveData<String> shoppingModeUpdateIntervalTextLive;
-  private ArrayList<Location> locations;
+  private List<Location> locations;
   private final MutableLiveData<String> presetLocationTextLive;
-  private ArrayList<ProductGroup> productGroups;
+  private List<ProductGroup> productGroups;
   private final MutableLiveData<String> presetProductGroupTextLive;
-  private ArrayList<QuantityUnit> quantityUnits;
+  private List<QuantityUnit> quantityUnits;
   private final MutableLiveData<String> presetQuantityUnitTextLive;
   private final MutableLiveData<String> defaultDueDaysTextLive;
   private final MutableLiveData<String> dueSoonDaysTextLive;
@@ -637,7 +638,7 @@ public class SettingsViewModel extends BaseViewModel {
       return;
     }
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(ARGUMENT.LOCATIONS, locations);
+    bundle.putParcelableArrayList(ARGUMENT.LOCATIONS, new ArrayList<>(locations));
     bundle.putInt(
         ARGUMENT.SELECTED_ID,
         sharedPrefs.getInt(STOCK.LOCATION, SETTINGS_DEFAULT.STOCK.LOCATION)
@@ -651,7 +652,7 @@ public class SettingsViewModel extends BaseViewModel {
       return;
     }
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(ARGUMENT.PRODUCT_GROUPS, productGroups);
+    bundle.putParcelableArrayList(ARGUMENT.PRODUCT_GROUPS, new ArrayList<>(productGroups));
     bundle.putInt(
         ARGUMENT.SELECTED_ID,
         sharedPrefs.getInt(STOCK.PRODUCT_GROUP, SETTINGS_DEFAULT.STOCK.PRODUCT_GROUP)
@@ -665,7 +666,7 @@ public class SettingsViewModel extends BaseViewModel {
       return;
     }
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(ARGUMENT.QUANTITY_UNITS, quantityUnits);
+    bundle.putParcelableArrayList(ARGUMENT.QUANTITY_UNITS, new ArrayList<>(quantityUnits));
     bundle.putInt(
         ARGUMENT.SELECTED_ID,
         sharedPrefs.getInt(STOCK.QUANTITY_UNIT, SETTINGS_DEFAULT.STOCK.QUANTITY_UNIT)
@@ -1087,6 +1088,7 @@ public class SettingsViewModel extends BaseViewModel {
     editPrefs.remove(PREF.DB_LAST_TIME_PRODUCT_GROUPS);
     editPrefs.remove(PREF.DB_LAST_TIME_QUANTITY_UNITS);
     editPrefs.remove(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS);
+    editPrefs.remove(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS_RESOLVED);
     editPrefs.remove(PREF.DB_LAST_TIME_PRODUCTS);
     editPrefs.remove(PREF.DB_LAST_TIME_PRODUCTS_LAST_PURCHASED);
     editPrefs.remove(PREF.DB_LAST_TIME_PRODUCTS_AVERAGE_PRICE);

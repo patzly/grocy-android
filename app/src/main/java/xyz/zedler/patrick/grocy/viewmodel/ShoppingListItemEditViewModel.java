@@ -60,7 +60,6 @@ import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class ShoppingListItemEditViewModel extends BaseViewModel {
 
@@ -82,7 +81,6 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
   private List<QuantityUnitConversion> unitConversions;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
 
-  private NetworkQueue currentQueueLoading;
   private Runnable queueEmptyAction;
   private final boolean debug;
   private final boolean isActionEdit;
@@ -130,51 +128,30 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       fillWithShoppingListItemIfNecessary();
       if (downloadAfterLoading) {
         downloadData();
+      } else {
+        if (queueEmptyAction != null) {
+          queueEmptyAction.run();
+          queueEmptyAction = null;
+        }
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, TAG));
-      return;
-    }
-
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
-    queue.append(
-        ShoppingList.updateShoppingLists(dlHelper, dbChangedTime, shoppingLists -> {
-          this.shoppingLists = shoppingLists;
-          if (!isActionEdit) {
-            formData.getShoppingListLive().setValue(getLastShoppingList());
-          }
-        }), Product.updateProducts(dlHelper, dbChangedTime, products -> {
-          this.products = products;
-          formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
-        }), QuantityUnitConversion.updateQuantityUnitConversions(
-            dlHelper, dbChangedTime, conversions -> this.unitConversions = conversions
-        ), ProductBarcode.updateProductBarcodes(
-            dlHelper, dbChangedTime, barcodes -> this.barcodes = barcodes
-        ), QuantityUnit.updateQuantityUnits(
-            dlHelper,
-            dbChangedTime,
-            quantityUnits -> quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits)
-        )
-    );
-    if (queue.isEmpty()) {
-      onQueueEmpty();
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
   public void downloadData() {
-    downloadData(null);
+    if (isOffline()) { // skip downloading
+      isLoadingLive.setValue(false);
+      return;
+    }
+
+    dlHelper.updateData(
+        () -> loadFromDatabase(false),
+        error -> onError(error, TAG),
+        ShoppingListItem.class,
+        Product.class,
+        QuantityUnit.class,
+        QuantityUnitConversion.class,
+        ProductBarcode.class
+    );
   }
 
   public void downloadDataForceUpdate() {
@@ -186,18 +163,6 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
     editPrefs.apply();
     downloadData();
-  }
-
-  private void onQueueEmpty() {
-    if (queueEmptyAction != null) {
-      queueEmptyAction.run();
-      queueEmptyAction = null;
-      return;
-    }
-    if (isOffline()) {
-      setOfflineLive(false);
-    }
-    fillWithShoppingListItemIfNecessary();
   }
 
   public void saveItem() {
@@ -473,10 +438,6 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
 
   public void setQueueEmptyAction(Runnable queueEmptyAction) {
     this.queueEmptyAction = queueEmptyAction;
-  }
-
-  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
-    currentQueueLoading = queueLoading;
   }
 
   public boolean getExternalScannerEnabled() {

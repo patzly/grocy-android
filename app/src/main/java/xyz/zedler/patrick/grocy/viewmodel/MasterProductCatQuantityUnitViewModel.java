@@ -23,7 +23,6 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -45,7 +44,6 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.StockLogEntry;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
 
@@ -65,7 +63,6 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
   private List<QuantityUnit> quantityUnits;
   private List<QuantityUnitConversion> conversions;
 
-  private NetworkQueue currentQueueLoading;
   private Runnable queueEmptyAction;
   private final boolean isActionEdit;
 
@@ -109,45 +106,26 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
         downloadData();
       } else {
         updateHasProductAlreadyStockTransactions();
+        if (queueEmptyAction != null) {
+          queueEmptyAction.run();
+          queueEmptyAction = null;
+        }
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
+  public void downloadData() {
     if (isOffline()) { // skip downloading
       isLoadingLive.setValue(false);
       return;
     }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, TAG));
-      return;
-    }
 
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
-    queue.append(
-        QuantityUnit.updateQuantityUnits(dlHelper, dbChangedTime, quantityUnits -> {
-          this.quantityUnits = quantityUnits;
-          formData.getQuantityUnitsLive().setValue(quantityUnits);
-        }),
-        QuantityUnitConversion.updateQuantityUnitConversions(
-            dlHelper, dbChangedTime, conversions -> this.conversions = conversions
-        )
+    dlHelper.updateData(
+        () -> loadFromDatabase(false),
+        error -> onError(error, TAG),
+        QuantityUnit.class,
+        QuantityUnitConversion.class
     );
-    if (queue.isEmpty()) {
-      updateHasProductAlreadyStockTransactions();
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null);
   }
 
   public void downloadDataForceUpdate() {
@@ -156,19 +134,6 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
     editPrefs.apply();
     downloadData();
-  }
-
-  private void onQueueEmpty() {
-    if (queueEmptyAction != null) {
-      queueEmptyAction.run();
-      queueEmptyAction = null;
-      return;
-    }
-    if (isOffline()) {
-      setOfflineLive(false);
-    }
-    formData.fillWithProductIfNecessary(args.getProduct());
-    updateHasProductAlreadyStockTransactions();
   }
 
   public void showQuBottomSheet(String type) {
@@ -233,10 +198,6 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
   @NonNull
   public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
     return infoFullscreenLive;
-  }
-
-  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
-    currentQueueLoading = queueLoading;
   }
 
   public void setQueueEmptyAction(Runnable queueEmptyAction) {
