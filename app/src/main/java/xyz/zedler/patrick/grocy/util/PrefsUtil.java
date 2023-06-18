@@ -23,10 +23,52 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 
 public class PrefsUtil {
+
+  public static void clearCachingRelatedSharedPreferences(SharedPreferences sharedPrefs) {
+    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+    editPrefs.remove(PREF.DB_LAST_TIME_STOCK_ITEMS);
+    editPrefs.remove(PREF.DB_LAST_TIME_STORES);
+    editPrefs.remove(PREF.DB_LAST_TIME_LOCATIONS);
+    editPrefs.remove(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS);
+    editPrefs.remove(PREF.DB_LAST_TIME_SHOPPING_LISTS);
+    editPrefs.remove(PREF.DB_LAST_TIME_PRODUCT_GROUPS);
+    editPrefs.remove(PREF.DB_LAST_TIME_QUANTITY_UNITS);
+    editPrefs.remove(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS);
+    editPrefs.remove(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS_RESOLVED);
+    editPrefs.remove(PREF.DB_LAST_TIME_PRODUCTS);
+    editPrefs.remove(PREF.DB_LAST_TIME_PRODUCTS_LAST_PURCHASED);
+    editPrefs.remove(PREF.DB_LAST_TIME_PRODUCTS_AVERAGE_PRICE);
+    editPrefs.remove(PREF.DB_LAST_TIME_PRODUCT_BARCODES);
+    editPrefs.remove(PREF.DB_LAST_TIME_VOLATILE);
+    editPrefs.remove(PREF.DB_LAST_TIME_VOLATILE_MISSING);
+    editPrefs.remove(PREF.DB_LAST_TIME_TASKS);
+    editPrefs.remove(PREF.DB_LAST_TIME_TASK_CATEGORIES);
+    editPrefs.remove(PREF.DB_LAST_TIME_CHORES);
+    editPrefs.remove(PREF.DB_LAST_TIME_CHORE_ENTRIES);
+    editPrefs.remove(PREF.DB_LAST_TIME_USERS);
+    editPrefs.apply();
+  }
+
+  public static void clearServerRelatedSharedPreferences(SharedPreferences sharedPrefs) {
+    clearCachingRelatedSharedPreferences(sharedPrefs);
+
+    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+    editPrefs.remove(PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY);
+    editPrefs.remove(PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY_TIME);
+    editPrefs.remove(PREF.SERVER_URL);
+    editPrefs.remove(PREF.HOME_ASSISTANT_SERVER_URL);
+    editPrefs.remove(PREF.HOME_ASSISTANT_LONG_LIVED_TOKEN);
+    editPrefs.remove(PREF.API_KEY);
+    editPrefs.remove(PREF.SHOPPING_LIST_LAST_ID);
+    editPrefs.remove(PREF.GROCY_VERSION);
+    editPrefs.remove(PREF.CURRENT_USER_ID);
+    editPrefs.apply();
+  }
 
   public static boolean isDebuggingEnabled(SharedPreferences sharedPrefs) {
     return sharedPrefs.getBoolean(

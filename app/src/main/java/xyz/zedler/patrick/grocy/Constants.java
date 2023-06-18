@@ -117,6 +117,7 @@ public final class Constants {
     public final static String VERSION_COMPATIBILITY_IGNORED = "version_ignored_compatibility";
     public final static String UPDATE_INFO_READ = "update_info_read";
     public final static String LAST_VERSION = "last_version";
+    public final static String LAST_VERSION_DATABASE = "last_version_database";
     public final static String OVERVIEW_FAB_INFO_SHOWN = "overview_fab_info_shown";
   }
 

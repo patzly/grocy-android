@@ -24,6 +24,7 @@
 - Improved: Pictures optimized & added pictures to product bottom sheet and recipe page (#536)
 - Improved: On recipe ingredient edit page, product overview sheet now can be displayed
 - Improved: Horizontal actions layout on overview page for smaller screens
+- Improved: Clear caching related info after app update or database update for data refresh (#726)
 - Fixed: Long click on barcode button on overview page was broken on Android Nougat and lower
 - Fixed: Crash on startup with Android Lollipop (and maybe higher)
 - Fixed: Prevent crash when opening qu conversion page (#708)

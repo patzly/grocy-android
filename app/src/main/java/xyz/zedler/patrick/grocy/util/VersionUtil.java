@@ -21,8 +21,6 @@ package xyz.zedler.patrick.grocy.util;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -93,20 +91,29 @@ public class VersionUtil {
     mainActivity.showBottomSheet(new CompatibilityBottomSheet(), bundle);
   }
 
-  public static void showVersionChangelogIfAppUpdated(
-      MainActivity mainActivity,
-      SharedPreferences sharedPrefs
-  ) {
+  public static boolean isAppUpdated(SharedPreferences sharedPrefs) {
     int versionNew = BuildConfig.VERSION_CODE;
     int versionOld = sharedPrefs.getInt(PREF.LAST_VERSION, 0);
     if (versionOld == 0) {
       sharedPrefs.edit().putInt(PREF.LAST_VERSION, versionNew).apply();
+      return false;
     } else if (versionOld != versionNew) {
       sharedPrefs.edit().putInt(PREF.LAST_VERSION, versionNew).apply();
-      new Handler(Looper.getMainLooper()).postDelayed(
-          () -> showChangelogBottomSheet(mainActivity), 900
-      );
+      return true;
     }
+    return false;
+  }
+
+  public static boolean isDatabaseUpdated(SharedPreferences sharedPrefs, int currentVersion) {
+    int versionOld = sharedPrefs.getInt(PREF.LAST_VERSION_DATABASE, 0);
+    if (versionOld == 0) {
+      sharedPrefs.edit().putInt(PREF.LAST_VERSION_DATABASE, currentVersion).apply();
+      return false;
+    } else if (versionOld != currentVersion) {
+      sharedPrefs.edit().putInt(PREF.LAST_VERSION_DATABASE, currentVersion).apply();
+      return true;
+    }
+    return false;
   }
 
   public static void showChangelogBottomSheet(MainActivity mainActivity) {
@@ -116,6 +123,10 @@ public class VersionUtil {
     action.setFile(R.raw.changelog);
     action.setHighlights(new String[]{"New:", "Improved:", "Fixed:"});
     mainActivity.navUtil.navigate(action);
+  }
+
+  public static void clearCachingInfoIfAppOrDatabaseUpdated(SharedPreferences sharedPrefs) {
+
   }
 
   private static class Version implements Comparable<Version> {

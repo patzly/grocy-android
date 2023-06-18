@@ -23,6 +23,9 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import xyz.zedler.patrick.grocy.dao.ChoreDao;
 import xyz.zedler.patrick.grocy.dao.ChoreEntryDao;
 import xyz.zedler.patrick.grocy.dao.LocationDao;
@@ -81,6 +84,7 @@ import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.model.VolatileItem;
+import xyz.zedler.patrick.grocy.repository.MainRepository.OnVersionListener;
 
 @Database(
     entities = {
@@ -191,5 +195,14 @@ public abstract class AppDatabase extends RoomDatabase {
 
   public static void destroyInstance() {
     INSTANCE = null;
+  }
+
+  public void getVersion(OnVersionListener versionListener) {
+    Single.fromCallable(() -> getOpenHelper().getReadableDatabase().getVersion())
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnSuccess(versionListener::onVersion)
+        .onErrorComplete()
+        .subscribe();
   }
 }
