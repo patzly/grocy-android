@@ -31,9 +31,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -45,8 +48,6 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -77,14 +78,14 @@ public class FormDataConsume {
   private final MediatorLiveData<String> amountHelperLive;
   private final LiveData<String> amountHintLive;
   private final MediatorLiveData<String> amountStockLive;
-  private ArrayList<StockLocation> stockLocations;
+  private List<StockLocation> stockLocations;
   private final MutableLiveData<StockLocation> stockLocationLive;
   private final LiveData<String> stockLocationNameLive;
   private final MutableLiveData<Boolean> spoiledLive;
   private final MutableLiveData<Boolean> openVisibilityLive;
   private final MutableLiveData<Boolean> openLive;
   private final MutableLiveData<Boolean> useSpecificLive;
-  private ArrayList<StockEntry> stockEntries;
+  private List<StockEntry> stockEntries;
   private final MutableLiveData<StockEntry> specificStockEntryLive;
   private final PluralUtil pluralUtil;
   private boolean currentProductFlowInterrupted = false;
@@ -390,11 +391,11 @@ public class FormDataConsume {
     return useSpecificLive;
   }
 
-  public ArrayList<StockEntry> getStockEntries() {
+  public List<StockEntry> getStockEntries() {
     return stockEntries;
   }
 
-  public void setStockEntries(ArrayList<StockEntry> stockEntries) {
+  public void setStockEntries(List<StockEntry> stockEntries) {
     this.stockEntries = stockEntries;
   }
 
@@ -402,11 +403,11 @@ public class FormDataConsume {
     return specificStockEntryLive;
   }
 
-  public ArrayList<StockLocation> getStockLocations() {
+  public List<StockLocation> getStockLocations() {
     return stockLocations;
   }
 
-  public void setStockLocations(ArrayList<StockLocation> stockLocations) {
+  public void setStockLocations(List<StockLocation> stockLocations) {
     this.stockLocations = stockLocations;
   }
 

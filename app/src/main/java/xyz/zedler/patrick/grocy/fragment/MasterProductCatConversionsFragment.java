@@ -127,12 +127,6 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
 
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
-      if (!isLoading) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
-
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
@@ -150,7 +144,10 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
         viewModel.getInfoFullscreenLive().setValue(null);
       }
       if (binding.recycler.getAdapter() instanceof QuantityUnitConversionAdapter) {
-        ((QuantityUnitConversionAdapter) binding.recycler.getAdapter()).updateData(conversions);
+        ((QuantityUnitConversionAdapter) binding.recycler.getAdapter()).updateData(
+            conversions,
+            viewModel.getQuantityUnitHashMap()
+        );
       } else {
         binding.recycler.setAdapter(new QuantityUnitConversionAdapter(
             requireContext(),

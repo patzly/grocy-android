@@ -115,14 +115,21 @@ public class QuantityUnitConversionAdapter extends RecyclerView.Adapter<Quantity
     return quantityUnitConversions.size();
   }
 
-  public void updateData(ArrayList<QuantityUnitConversion> quantityUnitConversionsNew) {
+  public void updateData(
+      ArrayList<QuantityUnitConversion> quantityUnitConversionsNew,
+      HashMap<Integer, QuantityUnit> quantityUnitHashMap
+  ) {
     DiffCallback diffCallback = new DiffCallback(
         this.quantityUnitConversions,
-        quantityUnitConversionsNew
+        quantityUnitConversionsNew,
+        this.quantityUnitHashMap,
+        quantityUnitHashMap
     );
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.quantityUnitConversions.clear();
     this.quantityUnitConversions.addAll(quantityUnitConversionsNew);
+    this.quantityUnitHashMap.clear();
+    this.quantityUnitHashMap.putAll(quantityUnitHashMap);
     diffResult.dispatchUpdatesTo(this);
   }
 
@@ -130,13 +137,19 @@ public class QuantityUnitConversionAdapter extends RecyclerView.Adapter<Quantity
 
     ArrayList<QuantityUnitConversion> oldItems;
     ArrayList<QuantityUnitConversion> newItems;
+    HashMap<Integer, QuantityUnit> oldQuantityUnitHashMap;
+    HashMap<Integer, QuantityUnit> newQuantityUnitHashMap;
 
     public DiffCallback(
         ArrayList<QuantityUnitConversion> oldItems,
-        ArrayList<QuantityUnitConversion> newItems
+        ArrayList<QuantityUnitConversion> newItems,
+        HashMap<Integer, QuantityUnit> oldQuantityUnitHashMap,
+        HashMap<Integer, QuantityUnit> newQuantityUnitHashMap
     ) {
       this.newItems = newItems;
       this.oldItems = oldItems;
+      this.oldQuantityUnitHashMap = oldQuantityUnitHashMap;
+      this.newQuantityUnitHashMap = newQuantityUnitHashMap;
     }
 
     @Override
@@ -164,6 +177,9 @@ public class QuantityUnitConversionAdapter extends RecyclerView.Adapter<Quantity
       QuantityUnitConversion oldItem = oldItems.get(oldItemPos);
       if (!compareContent) {
         return newItem.getId() == oldItem.getId();
+      }
+      if (oldQuantityUnitHashMap.size() != newQuantityUnitHashMap.size()) {
+        return false;
       }
 
       return newItem.equals(oldItem);

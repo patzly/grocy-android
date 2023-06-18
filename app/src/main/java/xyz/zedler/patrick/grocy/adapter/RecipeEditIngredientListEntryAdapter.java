@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -127,14 +128,13 @@ public class RecipeEditIngredientListEntryAdapter extends
 
     RecipePosition recipePosition = recipePositions.get(position);
     Product product = Product.getProductFromId(products, recipePosition.getProductId());
-    QuantityUnit quantityUnit = quantityUnitHashMap.get(recipePosition.getQuantityUnitId());
-
-    if (product == null || quantityUnit == null)
-      return;
+    if (product == null) return;
+    @Nullable QuantityUnit quantityUnit = quantityUnitHashMap.get(recipePosition.getQuantityUnitId());
 
     holder.binding.title.setText(product.getName());
 
-    if (recipePosition.getVariableAmount() == null || recipePosition.getVariableAmount().isEmpty()) {
+    if (quantityUnit != null && (recipePosition.getVariableAmount() == null
+        || recipePosition.getVariableAmount().isEmpty())) {
       double amount = recipePosition.getAmount();
       if (!recipePosition.isOnlyCheckSingleUnitInStock()) {
         try {
@@ -152,7 +152,7 @@ public class RecipeEditIngredientListEntryAdapter extends
           )
       );
       holder.binding.variableAmount.setVisibility(View.GONE);
-    } else {
+    } else if (quantityUnit != null) {
       holder.binding.quantity.setText(
           context.getString(
               R.string.subtitle_amount,
@@ -161,6 +161,9 @@ public class RecipeEditIngredientListEntryAdapter extends
           )
       );
       holder.binding.variableAmount.setVisibility(View.VISIBLE);
+    } else {
+      holder.binding.quantity.setText(context.getString(R.string.error_loading_qus));
+      holder.binding.variableAmount.setVisibility(View.GONE);
     }
 
     holder.binding.linearRecipeIngredientContainer.setOnClickListener(

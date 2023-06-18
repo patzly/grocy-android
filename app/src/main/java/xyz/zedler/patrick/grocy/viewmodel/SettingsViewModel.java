@@ -28,11 +28,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.APPEARANCE;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.NETWORK;
@@ -63,6 +63,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.repository.MainRepository;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.ReminderUtil;
 import xyz.zedler.patrick.grocy.util.UnlockUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -83,11 +84,11 @@ public class SettingsViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> torEnabledLive;
   private final MutableLiveData<Boolean> proxyEnabledLive;
   private final MutableLiveData<String> shoppingModeUpdateIntervalTextLive;
-  private ArrayList<Location> locations;
+  private List<Location> locations;
   private final MutableLiveData<String> presetLocationTextLive;
-  private ArrayList<ProductGroup> productGroups;
+  private List<ProductGroup> productGroups;
   private final MutableLiveData<String> presetProductGroupTextLive;
-  private ArrayList<QuantityUnit> quantityUnits;
+  private List<QuantityUnit> quantityUnits;
   private final MutableLiveData<String> presetQuantityUnitTextLive;
   private final MutableLiveData<String> defaultDueDaysTextLive;
   private final MutableLiveData<String> dueSoonDaysTextLive;
@@ -661,7 +662,7 @@ public class SettingsViewModel extends BaseViewModel {
       return;
     }
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(ARGUMENT.LOCATIONS, locations);
+    bundle.putParcelableArrayList(ARGUMENT.LOCATIONS, new ArrayList<>(locations));
     bundle.putInt(
         ARGUMENT.SELECTED_ID,
         sharedPrefs.getInt(STOCK.LOCATION, SETTINGS_DEFAULT.STOCK.LOCATION)
@@ -675,7 +676,7 @@ public class SettingsViewModel extends BaseViewModel {
       return;
     }
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(ARGUMENT.PRODUCT_GROUPS, productGroups);
+    bundle.putParcelableArrayList(ARGUMENT.PRODUCT_GROUPS, new ArrayList<>(productGroups));
     bundle.putInt(
         ARGUMENT.SELECTED_ID,
         sharedPrefs.getInt(STOCK.PRODUCT_GROUP, SETTINGS_DEFAULT.STOCK.PRODUCT_GROUP)
@@ -689,7 +690,7 @@ public class SettingsViewModel extends BaseViewModel {
       return;
     }
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(ARGUMENT.QUANTITY_UNITS, quantityUnits);
+    bundle.putParcelableArrayList(ARGUMENT.QUANTITY_UNITS, new ArrayList<>(quantityUnits));
     bundle.putInt(
         ARGUMENT.SELECTED_ID,
         sharedPrefs.getInt(STOCK.QUANTITY_UNIT, SETTINGS_DEFAULT.STOCK.QUANTITY_UNIT)
@@ -1102,37 +1103,7 @@ public class SettingsViewModel extends BaseViewModel {
   }
 
   public void clearServerRelatedSharedPreferences() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.remove(PREF.DB_LAST_TIME_STOCK_ITEMS);
-    editPrefs.remove(PREF.DB_LAST_TIME_STORES);
-    editPrefs.remove(PREF.DB_LAST_TIME_LOCATIONS);
-    editPrefs.remove(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS);
-    editPrefs.remove(PREF.DB_LAST_TIME_SHOPPING_LISTS);
-    editPrefs.remove(PREF.DB_LAST_TIME_PRODUCT_GROUPS);
-    editPrefs.remove(PREF.DB_LAST_TIME_QUANTITY_UNITS);
-    editPrefs.remove(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS);
-    editPrefs.remove(PREF.DB_LAST_TIME_PRODUCTS);
-    editPrefs.remove(PREF.DB_LAST_TIME_PRODUCTS_LAST_PURCHASED);
-    editPrefs.remove(PREF.DB_LAST_TIME_PRODUCTS_AVERAGE_PRICE);
-    editPrefs.remove(PREF.DB_LAST_TIME_PRODUCT_BARCODES);
-    editPrefs.remove(PREF.DB_LAST_TIME_VOLATILE);
-    editPrefs.remove(PREF.DB_LAST_TIME_VOLATILE_MISSING);
-    editPrefs.remove(PREF.DB_LAST_TIME_TASKS);
-    editPrefs.remove(PREF.DB_LAST_TIME_TASK_CATEGORIES);
-    editPrefs.remove(PREF.DB_LAST_TIME_CHORES);
-    editPrefs.remove(PREF.DB_LAST_TIME_CHORE_ENTRIES);
-    editPrefs.remove(PREF.DB_LAST_TIME_USERS);
-
-    editPrefs.remove(PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY);
-    editPrefs.remove(PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY_TIME);
-    editPrefs.remove(PREF.SERVER_URL);
-    editPrefs.remove(PREF.HOME_ASSISTANT_SERVER_URL);
-    editPrefs.remove(PREF.HOME_ASSISTANT_LONG_LIVED_TOKEN);
-    editPrefs.remove(PREF.API_KEY);
-    editPrefs.remove(PREF.SHOPPING_LIST_LAST_ID);
-    editPrefs.remove(PREF.GROCY_VERSION);
-    editPrefs.remove(PREF.CURRENT_USER_ID);
-    editPrefs.apply();
+    PrefsUtil.clearServerRelatedSharedPreferences(sharedPrefs);
   }
 
   @Override

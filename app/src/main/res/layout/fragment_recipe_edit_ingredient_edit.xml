@@ -156,7 +156,7 @@
               </com.google.android.material.card.MaterialCardView>
 
               <LinearLayout
-                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
+                style="@style/Widget.Grocy.LinearLayout.ListItem"
                 android:paddingTop="8dp"
                 android:paddingBottom="0dp">
 

@@ -88,6 +88,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomScrollBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
+import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
@@ -396,8 +397,18 @@ public class MainActivity extends AppCompatActivity {
       );
     }
 
-    // Show changelog if app was updated
-    VersionUtil.showVersionChangelogIfAppUpdated(this, sharedPrefs);
+    if (VersionUtil.isAppUpdated(sharedPrefs)) {
+      // Show changelog if app was updated
+      VersionUtil.showChangelogBottomSheet(this);
+      PrefsUtil.clearCachingRelatedSharedPreferences(sharedPrefs);
+    } else {
+      // Check if database scheme was updated and clear caching data if necessary
+      AppDatabase.getAppDatabase(getApplication()).getVersion(version -> {
+        if (VersionUtil.isDatabaseUpdated(sharedPrefs, version)) {
+          PrefsUtil.clearCachingRelatedSharedPreferences(sharedPrefs);
+        }
+      });
+    }
   }
 
   @Override

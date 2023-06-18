@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -66,6 +67,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
   private DownloadHelper dlHelper;
   private FragmentMasterQuantityUnitBinding binding;
   private PluralUtil pluralUtil;
+  private MasterQuantityUnitFragmentArgs args;
 
   private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
   private ArrayList<String> quantityUnitNames = new ArrayList<>();
@@ -175,7 +177,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
           }
         });
 
-    MasterQuantityUnitFragmentArgs args = MasterQuantityUnitFragmentArgs
+    args = MasterQuantityUnitFragmentArgs
         .fromBundle(requireArguments());
     editQuantityUnit = args.getQuantityUnit();
     if (editQuantityUnit != null && savedInstanceState == null) {
@@ -427,8 +429,22 @@ public class MasterQuantityUnitFragment extends BaseFragment {
       dlHelper.post(
           grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
           jsonObject,
-          response -> activity.navUtil.navigateUp(),
-          error -> {
+          response -> {
+            int objectId = -1;
+            try {
+              objectId = response.getInt("created_object_id");
+              Log.i(TAG, "saveQuantityUnit: " + objectId);
+            } catch (JSONException e) {
+              if (debug) {
+                Log.e(TAG, "saveQuantityUnit: " + e);
+              }
+            }
+            if (objectId != -1) {
+              setForPreviousDestination(ARGUMENT.OBJECT_ID, objectId);
+              setForPreviousDestination(ARGUMENT.OBJECT_NAME, args.getIdForReturnValue());
+            }
+            activity.navUtil.navigateUp();
+          }, error -> {
             showErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveQuantityUnit: " + error);

@@ -259,7 +259,7 @@ public class QuantityUnitConversion implements Parcelable {
   @NonNull
   @Override
   public String toString() {
-    return "QuantityUnitConversion(" + id + ')';
+    return "QuantityUnitConversion(" + productId + ", " + fromQuId + ", " + toQuId + ", " + factor + ")";
   }
 
   public static QueueItem updateQuantityUnitConversions(
@@ -284,7 +284,7 @@ public class QuantityUnitConversion implements Parcelable {
               response -> {
                 Type type = new TypeToken<List<QuantityUnitConversion>>() {
                 }.getType();
-                ArrayList<QuantityUnitConversion> conversions
+                List<QuantityUnitConversion> conversions
                     = dlHelper.gson.fromJson(response, type);
                 if (dlHelper.debug) {
                   Log.i(dlHelper.tag, "download QuantityUnitConversions: "

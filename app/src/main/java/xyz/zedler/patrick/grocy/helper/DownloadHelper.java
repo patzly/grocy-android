@@ -37,6 +37,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,6 +57,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
@@ -484,7 +487,20 @@ public class DownloadHelper {
       getTimeDbChanged(time -> updateData(onFinished, errorListener, time, types), errorListener);
       return;
     }
+
     NetworkQueue queue = newQueue(onFinished, errorListener);
+
+    boolean hasUnitConversionType = Arrays.stream(types)
+        .anyMatch(type -> type == QuantityUnitConversionResolved.class);
+    if (Arrays.stream(types).anyMatch(type -> type == Product.class) || hasUnitConversionType) {
+      queue.append(Product.updateProducts(this, dbChangedTime, products -> {
+        if (hasUnitConversionType) {
+          queue.appendWhileRunning(QuantityUnitConversionResolved.updateQuantityUnitConversions(
+              DownloadHelper.this, dbChangedTime, products, null
+          ));
+        }
+      }, hasUnitConversionType));
+    }
     for (Class<?> type : types) {
       if (type == ProductGroup.class) {
         queue.append(ProductGroup.updateProductGroups(this, dbChangedTime, null));
@@ -496,8 +512,6 @@ public class DownloadHelper {
         queue.append(Location.updateLocations(this, dbChangedTime, null));
       } else if (type == StockLocation.class) {
         queue.append(StockLocation.updateStockCurrentLocations(this, dbChangedTime, null));
-      } else if (type == Product.class) {
-        queue.append(Product.updateProducts(this, dbChangedTime, null));
       } else if (type == ProductLastPurchased.class) {
         queue.append(ProductLastPurchased.updateProductsLastPurchased(this, dbChangedTime, null, true));
       } else if (type == ProductAveragePrice.class) {
@@ -542,7 +556,7 @@ public class DownloadHelper {
 
   public interface OnObjectsResponseListener<T> {
 
-    void onResponse(ArrayList<T> objects);
+    void onResponse(List<T> objects);
   }
 
   public interface OnObjectResponseListener<T> {

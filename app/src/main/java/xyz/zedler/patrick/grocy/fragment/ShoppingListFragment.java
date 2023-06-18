@@ -394,7 +394,10 @@ public class ShoppingListFragment extends BaseFragment implements
   }
 
   public void showShoppingListsBottomSheet() {
-    activity.showBottomSheet(new ShoppingListsBottomSheet());
+    Bundle bundle = new Bundle();
+    bundle.getBoolean(ARGUMENT.DISPLAY_NEW_OPTION, !isFeatureMultipleListsDisabled()
+        && !viewModel.isOffline());
+    activity.showBottomSheet(new ShoppingListsBottomSheet(), bundle);
   }
 
   public Toolbar.OnMenuItemClickListener getBottomMenuClickListener() {

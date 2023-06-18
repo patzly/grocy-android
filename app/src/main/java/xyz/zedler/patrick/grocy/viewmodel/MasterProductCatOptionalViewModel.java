@@ -79,6 +79,7 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
   private List<ProductBarcode> barcodes;
 
   private NetworkQueue currentQueueLoading;
+  private Runnable queueEmptyAction;
   private final boolean isActionEdit;
   private String currentFilePath;
 
@@ -174,6 +175,11 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
   }
 
   private void onQueueEmpty() {
+    if (queueEmptyAction != null) {
+      queueEmptyAction.run();
+      queueEmptyAction = null;
+      return;
+    }
     if (isOffline()) {
       setOfflineLive(false);
     }
@@ -320,6 +326,10 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
 
   public void setCurrentQueueLoading(NetworkQueue queueLoading) {
     currentQueueLoading = queueLoading;
+  }
+
+  public void setQueueEmptyAction(Runnable queueEmptyAction) {
+    this.queueEmptyAction = queueEmptyAction;
   }
 
   @Override

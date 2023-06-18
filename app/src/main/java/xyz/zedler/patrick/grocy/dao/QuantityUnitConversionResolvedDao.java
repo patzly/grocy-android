@@ -17,30 +17,26 @@
  * Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
  */
 
-package xyz.zedler.patrick.grocy.repository;
+package xyz.zedler.patrick.grocy.dao;
 
-import android.app.Application;
+import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
+import androidx.room.Query;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import xyz.zedler.patrick.grocy.database.AppDatabase;
+import java.util.List;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 
-public class MainRepository {
+@Dao
+public interface QuantityUnitConversionResolvedDao {
 
-  private final AppDatabase appDatabase;
+  @Query("SELECT * FROM quantity_unit_conversion_resolved_table")
+  Single<List<QuantityUnitConversionResolved>> getConversionsResolved();
 
-  public MainRepository(Application application) {
-    this.appDatabase = AppDatabase.getAppDatabase(application);
-  }
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  Single<List<Long>> insertConversionsResolved(List<QuantityUnitConversionResolved> quantityUnitConversionsResolved);
 
-  public void clearAllTables() {
-    Single
-        .just(0)
-        .doFinally(appDatabase::clearAllTables)
-        .subscribeOn(Schedulers.io())
-        .subscribe();
-  }
+  @Query("DELETE FROM quantity_unit_conversion_resolved_table")
+  Single<Integer> deleteConversionsResolved();
 
-  public interface OnVersionListener {
-    void onVersion(int version);
-  }
 }

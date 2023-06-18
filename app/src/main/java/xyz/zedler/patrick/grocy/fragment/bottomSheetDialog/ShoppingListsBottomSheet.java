@@ -20,7 +20,6 @@
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -30,11 +29,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.MutableLiveData;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -72,11 +69,6 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
     );
 
     activity = (MainActivity) requireActivity();
-
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-    boolean multipleListsFeature = sharedPrefs.getBoolean(
-        Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true
-    );
 
     MutableLiveData<Integer> selectedIdLive = activity.getCurrentFragment()
         .getSelectedShoppingListIdLive();
@@ -135,9 +127,8 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
       });
     }
 
-    if (activity.isOnline() && multipleListsFeature
-        && activity.getCurrentFragment() instanceof ShoppingListFragment
-    ) {
+    if (getArguments().getBoolean(ARGUMENT.DISPLAY_NEW_OPTION, false)
+        && activity.getCurrentFragment() instanceof ShoppingListFragment) {
       binding.buttonListSelectionNew.setVisibility(View.VISIBLE);
       binding.buttonListSelectionNew.setOnClickListener(v -> {
         dismiss();

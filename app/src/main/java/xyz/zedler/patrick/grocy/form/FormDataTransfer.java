@@ -31,15 +31,16 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.TransferFragmentArgs;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
@@ -74,14 +75,14 @@ public class FormDataTransfer {
   private final MediatorLiveData<String> amountHelperLive;
   private final LiveData<String> amountHintLive;
   private final MediatorLiveData<String> amountStockLive;
-  private ArrayList<StockLocation> stockLocations;
+  private List<StockLocation> stockLocations;
   private final MutableLiveData<StockLocation> fromLocationLive;
   private final LiveData<String> fromLocationNameLive;
   private final MutableLiveData<Location> toLocationLive;
   private final LiveData<String> toLocationNameLive;
   private final MutableLiveData<Boolean> toLocationErrorLive;
   private final MutableLiveData<Boolean> useSpecificLive;
-  private ArrayList<StockEntry> stockEntries;
+  private List<StockEntry> stockEntries;
   private final MutableLiveData<StockEntry> specificStockEntryLive;
   private final PluralUtil pluralUtil;
   private boolean currentProductFlowInterrupted = false;
@@ -343,11 +344,11 @@ public class FormDataTransfer {
     return useSpecificLive;
   }
 
-  public ArrayList<StockEntry> getStockEntries() {
+  public List<StockEntry> getStockEntries() {
     return stockEntries;
   }
 
-  public void setStockEntries(ArrayList<StockEntry> stockEntries) {
+  public void setStockEntries(List<StockEntry> stockEntries) {
     this.stockEntries = stockEntries;
   }
 
@@ -355,11 +356,11 @@ public class FormDataTransfer {
     return specificStockEntryLive;
   }
 
-  public ArrayList<StockLocation> getStockLocations() {
+  public List<StockLocation> getStockLocations() {
     return stockLocations;
   }
 
-  public void setStockLocations(ArrayList<StockLocation> stockLocations) {
+  public void setStockLocations(List<StockLocation> stockLocations) {
     this.stockLocations = stockLocations;
   }
 

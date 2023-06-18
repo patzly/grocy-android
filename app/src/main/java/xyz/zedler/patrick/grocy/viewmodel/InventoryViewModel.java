@@ -24,7 +24,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -71,7 +70,6 @@ import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class InventoryViewModel extends BaseViewModel {
 
@@ -150,49 +148,32 @@ public class InventoryViewModel extends BaseViewModel {
       this.stores = data.getStores();
       this.locations = data.getLocations();
       formData.getProductsLive().setValue(Product.getActiveAndStockEnabledProductsOnly(products));
-        if (downloadAfterLoading) {
-            downloadData();
+      if (downloadAfterLoading) {
+        downloadData();
+      } else {
+        if (queueEmptyAction != null) {
+          queueEmptyAction.run();
+          queueEmptyAction = null;
         }
+      }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, TAG));
-      return;
-    }
-
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
-    queue.append(
-        Product.updateProducts(dlHelper, dbChangedTime, products -> {
-          this.products = products;
-          formData.getProductsLive().setValue(Product.getActiveAndStockEnabledProductsOnly(products));
-        }), QuantityUnitConversion.updateQuantityUnitConversions(
-            dlHelper, dbChangedTime, conversions -> this.unitConversions = conversions
-        ), ProductBarcode.updateProductBarcodes(
-            dlHelper, dbChangedTime, barcodes -> this.barcodes = barcodes
-        ), QuantityUnit.updateQuantityUnits(
-            dlHelper,
-            dbChangedTime,
-            quantityUnits -> quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits)
-        ), Store.updateStores(
-            dlHelper, dbChangedTime, stores -> this.stores = stores
-        ), Location.updateLocations(
-            dlHelper, dbChangedTime, locations -> this.locations = locations
-        )
-    );
-    if (queue.isEmpty()) {
-      if (queueEmptyAction != null) {
-        queueEmptyAction.run();
-        queueEmptyAction = null;
-      }
-      return;
-    }
-    queue.start();
-  }
-
   public void downloadData() {
-    downloadData(null);
+    if (isOffline()) { // skip downloading
+      isLoadingLive.setValue(false);
+      return;
+    }
+    dlHelper.updateData(
+        () -> loadFromDatabase(false),
+        error -> onError(error, TAG),
+        Product.class,
+        QuantityUnit.class,
+        QuantityUnitConversion.class,
+        ProductBarcode.class,
+        Store.class,
+        Location.class
+    );
   }
 
   public void downloadDataForceUpdate() {
@@ -205,13 +186,6 @@ public class InventoryViewModel extends BaseViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
     editPrefs.apply();
     downloadData();
-  }
-
-  private void onQueueEmpty() {
-    if (queueEmptyAction != null) {
-      queueEmptyAction.run();
-      queueEmptyAction = null;
-    }
   }
 
   public void setProduct(int productId, ProductBarcode barcode) {

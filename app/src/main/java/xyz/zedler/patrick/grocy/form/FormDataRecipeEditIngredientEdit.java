@@ -43,6 +43,7 @@ import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class FormDataRecipeEditIngredientEdit {
@@ -211,35 +212,16 @@ public class FormDataRecipeEditIngredientEdit {
   }
 
   private String getAmountStock() {
-    QuantityUnit stock = getStockQuantityUnit();
-    QuantityUnit current = quantityUnitLive.getValue();
-    if (!NumUtil.isStringDouble(amountLive.getValue())
-        || quantityUnitsFactorsLive.getValue() == null
-        || onlyCheckSingleUnitInStockLive.getValue()
-    ) {
-      return null;
-    }
-    assert amountLive.getValue() != null;
-
-    if (stock != null && current != null && stock.getId() != current.getId()) {
-      HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-      double amount = NumUtil.toDouble(amountLive.getValue());
-      Object currentFactor = hashMap.get(current);
-      if (currentFactor == null) {
-        amountHelperLive.setValue(null);
-        return null;
-      }
-      double amountMultiplied;
-      if (productDetailsLive.getValue() != null
-          && current.getId() == productDetailsLive.getValue().getProduct().getQuIdPurchaseInt()) {
-        amountMultiplied = amount * (double) currentFactor;
-      } else {
-        amountMultiplied = amount / (double) currentFactor;
-      }
-      return NumUtil.trimAmount(amountMultiplied, maxDecimalPlacesAmount);
-    } else {
-      return null;
-    }
+    if (productDetailsLive.getValue() == null) return null;
+    return QuantityUnitConversionUtil.getAmountStock(
+        productDetailsLive.getValue().getProduct(),
+        getStockQuantityUnit(),
+        quantityUnitLive.getValue(),
+        amountLive.getValue(),
+        quantityUnitsFactorsLive.getValue(),
+        Boolean.TRUE.equals(onlyCheckSingleUnitInStockLive.getValue()),
+        maxDecimalPlacesAmount
+    );
   }
 
   private String getAmountHelpText() {

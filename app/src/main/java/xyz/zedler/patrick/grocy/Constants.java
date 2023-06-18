@@ -85,6 +85,7 @@ public final class Constants {
     public final static String DB_LAST_TIME_PRODUCT_GROUPS = "db_last_time_product_groups";
     public final static String DB_LAST_TIME_QUANTITY_UNITS = "db_last_time_quantity_units";
     public final static String DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS = "db_last_time_quantity_unit_conversions";
+    public final static String DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS_RESOLVED = "db_last_time_quantity_unit_conversions_resolved";
     public final static String DB_LAST_TIME_PRODUCTS = "db_last_time_products";
     public final static String DB_LAST_TIME_PRODUCTS_LAST_PURCHASED = "db_last_time_products_last_purchased";
     public final static String DB_LAST_TIME_PRODUCTS_AVERAGE_PRICE = "db_last_time_products_average_price";
@@ -115,7 +116,8 @@ public final class Constants {
     public final static String INTRO_SHOWN = "intro_shown";
     public final static String VERSION_COMPATIBILITY_IGNORED = "version_ignored_compatibility";
     public final static String UPDATE_INFO_READ = "update_info_read";
-    public static final String LAST_VERSION = "last_version";
+    public final static String LAST_VERSION = "last_version";
+    public final static String LAST_VERSION_DATABASE = "last_version_database";
     public final static String ZXING_PROMPT = "zxing_prompt";
     public final static String OVERVIEW_FAB_INFO_SHOWN = "overview_fab_info_shown";
   }
@@ -446,6 +448,7 @@ public final class Constants {
     public final static String SHOW_OFFLINE = "show_offline";
     public final static String BARCODE = "barcode";
     public final static String DISPLAY_EMPTY_OPTION = "display_empty_option";
+    public final static String DISPLAY_NEW_OPTION = "display_new_option";
     public final static String DISPLAY_PIN_BUTTONS = "display_pin_buttons";
     public final static String CURRENT_PIN_ID = "current_pin_id";
     public final static String NONE_SELECTABLE = "none_selectable";

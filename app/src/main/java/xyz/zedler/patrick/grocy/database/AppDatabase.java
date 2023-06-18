@@ -23,6 +23,9 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import xyz.zedler.patrick.grocy.dao.ChoreDao;
 import xyz.zedler.patrick.grocy.dao.ChoreEntryDao;
 import xyz.zedler.patrick.grocy.dao.LocationDao;
@@ -35,6 +38,7 @@ import xyz.zedler.patrick.grocy.dao.ProductDao;
 import xyz.zedler.patrick.grocy.dao.ProductGroupDao;
 import xyz.zedler.patrick.grocy.dao.ProductLastPurchasedDao;
 import xyz.zedler.patrick.grocy.dao.QuantityUnitConversionDao;
+import xyz.zedler.patrick.grocy.dao.QuantityUnitConversionResolvedDao;
 import xyz.zedler.patrick.grocy.dao.QuantityUnitDao;
 import xyz.zedler.patrick.grocy.dao.RecipeDao;
 import xyz.zedler.patrick.grocy.dao.RecipeFulfillmentDao;
@@ -64,6 +68,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
@@ -79,6 +84,7 @@ import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.model.VolatileItem;
+import xyz.zedler.patrick.grocy.repository.MainRepository.OnVersionListener;
 
 @Database(
     entities = {
@@ -92,6 +98,7 @@ import xyz.zedler.patrick.grocy.model.VolatileItem;
         VolatileItem.class,
         MissingItem.class,
         QuantityUnitConversion.class,
+        QuantityUnitConversionResolved.class,
         ProductBarcode.class,
         StockItem.class,
         StockLocation.class,
@@ -111,7 +118,7 @@ import xyz.zedler.patrick.grocy.model.VolatileItem;
         RecipeFulfillment.class,
         RecipePosition.class
     },
-    version = 43
+    version = 44
 )
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -136,6 +143,8 @@ public abstract class AppDatabase extends RoomDatabase {
   public abstract MissingItemDao missingItemDao();
 
   public abstract QuantityUnitConversionDao quantityUnitConversionDao();
+
+  public abstract QuantityUnitConversionResolvedDao quantityUnitConversionResolvedDao();
 
   public abstract ProductBarcodeDao productBarcodeDao();
 
@@ -186,5 +195,14 @@ public abstract class AppDatabase extends RoomDatabase {
 
   public static void destroyInstance() {
     INSTANCE = null;
+  }
+
+  public void getVersion(OnVersionListener versionListener) {
+    Single.fromCallable(() -> getOpenHelper().getReadableDatabase().getVersion())
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnSuccess(versionListener::onVersion)
+        .onErrorComplete()
+        .subscribe();
   }
 }

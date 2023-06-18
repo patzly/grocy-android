@@ -833,6 +833,11 @@
         app:argType="xyz.zedler.patrick.grocy.model.Location"
         app:nullable="true"
         android:defaultValue="@null" />
+      <argument
+        android:name="idForReturnValue"
+        app:argType="string"
+        app:nullable="true"
+        android:defaultValue="@null" />
     </fragment>
     <fragment
       android:id="@+id/masterStoreFragment"
@@ -853,6 +858,11 @@
       <argument
         android:name="quantityUnit"
         app:argType="xyz.zedler.patrick.grocy.model.QuantityUnit"
+        app:nullable="true"
+        android:defaultValue="@null" />
+      <argument
+        android:name="idForReturnValue"
+        app:argType="string"
         app:nullable="true"
         android:defaultValue="@null" />
     </fragment>
@@ -977,6 +987,9 @@
           app:exitAnim="@anim/slide_to_start"
           app:popEnterAnim="@anim/slide_from_start"
           app:popExitAnim="@anim/slide_to_end"/>
+      <action
+        android:id="@+id/action_masterProductCatOptionalFragment_to_masterProductGroupFragment"
+        app:destination="@id/masterProductGroupFragment" />
     </fragment>
     <fragment
       android:id="@+id/masterProductCatLocationFragment"
@@ -995,6 +1008,9 @@
         android:name="forceSaveWithClose"
         app:argType="boolean"
         android:defaultValue="false" />
+      <action
+        android:id="@+id/action_masterProductCatLocationFragment_to_masterLocationFragment"
+        app:destination="@id/masterLocationFragment" />
     </fragment>
     <fragment
       android:id="@+id/masterProductCatDueDateFragment"
@@ -1049,6 +1065,9 @@
         android:name="forceSaveWithClose"
         app:argType="boolean"
         android:defaultValue="false" />
+      <action
+        android:id="@+id/action_masterProductCatQuantityUnitFragment_to_masterQuantityUnitFragment"
+        app:destination="@id/masterQuantityUnitFragment" />
     </fragment>
     <fragment
       android:id="@+id/masterProductCatBarcodesFragment"
@@ -1117,6 +1136,9 @@
       <argument
         android:name="product"
         app:argType="xyz.zedler.patrick.grocy.model.Product" />
+      <action
+        android:id="@+id/action_masterProductCatConversionsEditFragment_to_masterQuantityUnitFragment"
+        app:destination="@id/masterQuantityUnitFragment" />
     </fragment>
     <fragment
       android:id="@+id/masterTaskCategoryFragment"

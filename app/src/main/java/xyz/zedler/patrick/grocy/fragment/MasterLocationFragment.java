@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -64,6 +65,7 @@ public class MasterLocationFragment extends BaseFragment {
   private GrocyApi grocyApi;
   private DownloadHelper dlHelper;
   private FragmentMasterLocationBinding binding;
+  private MasterLocationFragmentArgs args;
 
   private ArrayList<Location> locations;
   private ArrayList<String> locationNames;
@@ -168,7 +170,7 @@ public class MasterLocationFragment extends BaseFragment {
       );
     });
 
-    MasterLocationFragmentArgs args = MasterLocationFragmentArgs.fromBundle(requireArguments());
+    args = MasterLocationFragmentArgs.fromBundle(requireArguments());
     editLocation = args.getLocation();
     if (editLocation != null && savedInstanceState == null) {
       fillWithEditReferences();
@@ -411,7 +413,22 @@ public class MasterLocationFragment extends BaseFragment {
       dlHelper.post(
           grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
           jsonObject,
-          response -> activity.navUtil.navigateUp(),
+          response -> {
+            int objectId = -1;
+            try {
+              objectId = response.getInt("created_object_id");
+              Log.i(TAG, "saveLocation: " + objectId);
+            } catch (JSONException e) {
+              if (debug) {
+                Log.e(TAG, "saveLocation: " + e);
+              }
+            }
+            if (objectId != -1) {
+              setForPreviousDestination(ARGUMENT.OBJECT_ID, objectId);
+              setForPreviousDestination(ARGUMENT.OBJECT_NAME, args.getIdForReturnValue());
+            }
+            activity.navUtil.navigateUp();
+          },
           error -> {
             showErrorMessage(error);
             if (debug) {
