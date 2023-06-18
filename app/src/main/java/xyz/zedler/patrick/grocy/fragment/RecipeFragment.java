@@ -125,10 +125,8 @@ public class RecipeFragment extends BaseFragment implements
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setToolbar(binding.toolbar);
-    systemBarBehavior.setContainer(binding.container);
+    systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setScroll(binding.scroll, binding.linearContainer);
-    systemBarBehavior.applyAppBarInsetOnContainer(false);
-    systemBarBehavior.applyStatusBarInsetOnContainer(false);
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
@@ -234,13 +232,12 @@ public class RecipeFragment extends BaseFragment implements
 
   public void updateDataWithServings() {
     Recipe recipe = viewModel.getRecipeLive().getValue();
-    if (recipe == null) {
+    RecipeFulfillment recipeFulfillment = viewModel.getRecipeFulfillment();
+    List<RecipePosition> recipePositions = viewModel.getRecipePositions();
+    if (recipe == null || recipeFulfillment == null) {
       activity.showSnackbar(R.string.error_undefined, false);
       return;
     }
-
-    RecipeFulfillment recipeFulfillment = viewModel.getRecipeFulfillment();
-    List<RecipePosition> recipePositions = viewModel.getRecipePositions();
 
     ColorRoles colorBlue = ResUtil.getHarmonizedRoles(activity, R.color.blue);
     ColorRoles colorGreen = ResUtil.getHarmonizedRoles(activity, R.color.green);
