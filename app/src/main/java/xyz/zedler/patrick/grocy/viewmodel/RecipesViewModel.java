@@ -43,6 +43,7 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
@@ -81,7 +82,7 @@ public class RecipesViewModel extends BaseViewModel {
   private List<RecipePosition> recipePositions;
   private List<Product> products;
   private List<QuantityUnit> quantityUnits;
-  private List<QuantityUnitConversion> quantityUnitConversions;
+  private List<QuantityUnitConversionResolved> quantityUnitConversions;
 
   private String searchInput;
 
@@ -124,7 +125,7 @@ public class RecipesViewModel extends BaseViewModel {
       recipePositions = data.getRecipePositions();
       products = data.getProducts();
       quantityUnits = data.getQuantityUnits();
-      quantityUnitConversions = data.getQuantityUnitConversions();
+      quantityUnitConversions = data.getQuantityUnitConversionsResolved();
 
       updateFilteredRecipes();
       if (downloadAfterLoading) {
@@ -303,8 +304,8 @@ public class RecipesViewModel extends BaseViewModel {
     return new ArrayList<>(quantityUnits);
   }
 
-  public List<QuantityUnitConversion> getQuantityUnitConversions() {
-    return new ArrayList<>(quantityUnitConversions);
+  public List<QuantityUnitConversionResolved> getQuantityUnitConversions() {
+    return quantityUnitConversions;
   }
 
   public boolean isSearchActive() {

@@ -40,6 +40,23 @@ import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
 @Entity(tableName = "quantity_unit_conversion_resolved_table")
 public class QuantityUnitConversionResolved extends QuantityUnitConversion {
 
+  public static QuantityUnitConversionResolved findConversion(
+      List<QuantityUnitConversionResolved> conversionsResolved,
+      int productId,
+      int fromQuId,
+      int toQuId
+  ) {
+    String productIdStr = String.valueOf(productId);
+    for (QuantityUnitConversionResolved tmpConversion : conversionsResolved) {
+      if (productIdStr.equals(tmpConversion.getProductId())
+          && tmpConversion.getFromQuId() == fromQuId
+          && tmpConversion.getToQuId() == toQuId) {
+        return tmpConversion;
+      }
+    }
+    return null;
+  }
+
   public static QueueItem updateQuantityUnitConversions(
       DownloadHelper dlHelper,
       String dbChangedTime,

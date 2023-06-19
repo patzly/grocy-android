@@ -1,6 +1,5 @@
 ## 3.3.0
 
-- New: Japanese translation (thanks daigoume!)
 - New: Product choose page after barcode scan now has really useful copy option for products (#636)
 - New: Product pictures now can be removed and added with camera and clipboard (#536)
 - New: On purchase page, store now can be pinned (always initially selected in session) (#525)
@@ -9,6 +8,7 @@
 - New: Shopping pages now also has checkbox options for fields and picture (#663, #671, #710)
 - New: Shopping mode options are now reachable through shopping mode menu and removed from settings
 - New: Product groups, locations & quantity units now can be created while creating product
+- New: Japanese translation (thanks daigoume!)
 - Improved: Database exceptions are now caught and displayed (#698)
 - Improved: Pictures in recipe or product descriptions now can be up to 10MB large (#698)
 - Improved: Design for recipe page
@@ -25,6 +25,7 @@
 - Improved: On recipe ingredient edit page, product overview sheet now can be displayed
 - Improved: Horizontal actions layout on overview page for smaller screens
 - Improved: Clear caching related info after app update or database update for data refresh (#726)
+- Fixed: Recipe ingredient amounts with conversions are consistent over all pages now (#612, #626)
 - Fixed: Long click on barcode button on overview page was broken on Android Nougat and lower
 - Fixed: Crash on startup with Android Lollipop (and maybe higher)
 - Fixed: Prevent crash when opening qu conversion page (#708)

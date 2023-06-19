@@ -42,6 +42,7 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
@@ -55,9 +56,6 @@ import xyz.zedler.patrick.grocy.util.PrefsUtil;
 public class RecipeViewModel extends BaseViewModel {
 
   private final static String TAG = RecipeViewModel.class.getSimpleName();
-  public final static String SORT_NAME = "sort_name";
-  public final static String SORT_CALORIES = "sort_calories";
-  public final static String SORT_DUE_SCORE = "sort_due_score";
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
@@ -76,7 +74,7 @@ public class RecipeViewModel extends BaseViewModel {
   private List<RecipePosition> recipePositions;
   private List<Product> products;
   private List<QuantityUnit> quantityUnits;
-  private List<QuantityUnitConversion> quantityUnitConversions;
+  private List<QuantityUnitConversionResolved> quantityUnitConversions;
   private HashMap<Integer, StockItem> stockItemHashMap;
   private List<ShoppingListItem> shoppingListItems;
   private RecipeFulfillment recipeFulfillment;
@@ -122,7 +120,7 @@ public class RecipeViewModel extends BaseViewModel {
           .getRecipePositionsFromRecipeId(data.getRecipePositions(), args.getRecipeId());
       products = data.getProducts();
       quantityUnits = data.getQuantityUnits();
-      quantityUnitConversions = data.getQuantityUnitConversions();
+      quantityUnitConversions = data.getQuantityUnitConversionsResolved();
       stockItemHashMap = ArrayUtil.getStockItemHashMap(data.getStockItems());
       shoppingListItems = data.getShoppingListItems();
 
@@ -294,7 +292,7 @@ public class RecipeViewModel extends BaseViewModel {
     return quantityUnits;
   }
 
-  public List<QuantityUnitConversion> getQuantityUnitConversions() {
+  public List<QuantityUnitConversionResolved> getQuantityUnitConversions() {
     return quantityUnitConversions;
   }
 

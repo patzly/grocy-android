@@ -29,7 +29,7 @@ import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 
 public class RecipeEditRepository {
@@ -50,14 +50,14 @@ public class RecipeEditRepository {
     private final List<ProductBarcode> productBarcodes;
     private final List<RecipePosition> recipePositions;
     private final List<QuantityUnit> quantityUnits;
-    private final List<QuantityUnitConversion> quantityUnitConversions;
+    private final List<QuantityUnitConversionResolved> quantityUnitConversions;
 
     public RecipeEditData(
             List<Product> products,
             List<ProductBarcode> productBarcodes,
             List<RecipePosition> recipePositions,
             List<QuantityUnit> quantityUnits,
-            List<QuantityUnitConversion> quantityUnitConversions
+            List<QuantityUnitConversionResolved> quantityUnitConversions
     ) {
       this.products = products;
       this.productBarcodes = productBarcodes;
@@ -82,7 +82,7 @@ public class RecipeEditRepository {
       return quantityUnits;
     }
 
-    public List<QuantityUnitConversion> getQuantityUnitConversions() {
+    public List<QuantityUnitConversionResolved> getQuantityUnitConversionsResolved() {
       return quantityUnitConversions;
     }
   }
@@ -94,7 +94,7 @@ public class RecipeEditRepository {
             appDatabase.productBarcodeDao().getProductBarcodes(),
             appDatabase.recipePositionDao().getRecipePositions(),
             appDatabase.quantityUnitDao().getQuantityUnits(),
-            appDatabase.quantityUnitConversionDao().getConversions(),
+            appDatabase.quantityUnitConversionResolvedDao().getConversionsResolved(),
             RecipeEditData::new
         )
         .subscribeOn(Schedulers.io())

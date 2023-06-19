@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.form.FormDataRecipeEditIngredientList;
 import xyz.zedler.patrick.grocy.fragment.RecipeEditIngredientListFragmentArgs;
@@ -37,7 +38,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.repository.RecipeEditRepository;
@@ -59,7 +60,7 @@ public class RecipeEditIngredientListViewModel extends BaseViewModel {
   private ArrayList<RecipePosition> recipePositions;
   private List<Product> products;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-  private List<QuantityUnitConversion> unitConversions;
+  private List<QuantityUnitConversionResolved> unitConversions;
 
   private final Recipe recipe;
   private final boolean isActionEdit;
@@ -100,7 +101,7 @@ public class RecipeEditIngredientListViewModel extends BaseViewModel {
       this.recipePositions = (ArrayList<RecipePosition>) RecipePosition.getRecipePositionsFromRecipeId(data.getRecipePositions(), recipe.getId());
       this.products = Product.getProductsForRecipePositions(data.getProducts(), recipePositions);
       this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
-      this.unitConversions = data.getQuantityUnitConversions();
+      this.unitConversions = data.getQuantityUnitConversionsResolved();
 
       formData.getRecipePositionsLive().setValue(recipePositions);
       formData.getProductsLive().setValue(products);
@@ -124,16 +125,16 @@ public class RecipeEditIngredientListViewModel extends BaseViewModel {
         RecipePosition.class,
         Product.class,
         QuantityUnit.class,
-        QuantityUnitConversion.class
+        QuantityUnitConversionResolved.class
     );
   }
 
   public void downloadDataForceUpdate() {
     SharedPreferences.Editor editPrefs = getSharedPrefs().edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_RECIPE_POSITIONS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_RECIPE_POSITIONS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS_RESOLVED, null);
     editPrefs.apply();
     downloadData();
   }
@@ -174,7 +175,7 @@ public class RecipeEditIngredientListViewModel extends BaseViewModel {
     return quantityUnitHashMap;
   }
 
-  public List<QuantityUnitConversion> getUnitConversions() {
+  public List<QuantityUnitConversionResolved> getUnitConversions() {
     return unitConversions;
   }
 

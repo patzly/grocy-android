@@ -30,7 +30,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
@@ -67,6 +66,7 @@ public class FormDataRecipeEditIngredientEdit {
   private final MutableLiveData<HashMap<QuantityUnit, Double>> quantityUnitsFactorsLive;
   private final MutableLiveData<QuantityUnit> quantityUnitLive;
   private final MutableLiveData<String> quantityUnitLabelLive;
+  private final MutableLiveData<QuantityUnit> quantityUnitStockLive;
   private final MutableLiveData<String> variableAmountLive;
   private final MutableLiveData<Boolean> notCheckStockFulfillmentLive;
   private final MutableLiveData<String> ingredientGroupLive;
@@ -119,6 +119,7 @@ public class FormDataRecipeEditIngredientEdit {
     quantityUnitsFactorsLive = new MutableLiveData<>();
     quantityUnitLive = new MutableLiveData<>();
     quantityUnitLabelLive = new MutableLiveData<>(getString(R.string.subtitle_none_selected));
+    quantityUnitStockLive = new MutableLiveData<>();
     amountHintLive = Transformations.map(
         quantityUnitLive,
         quantityUnit -> quantityUnit != null ? application.getString(
@@ -135,6 +136,8 @@ public class FormDataRecipeEditIngredientEdit {
         .addSource(amountStockLive, i -> amountHelperLive.setValue(getAmountHelpText()));
     amountHelperLive
         .addSource(quantityUnitsFactorsLive, i -> amountHelperLive.setValue(getAmountHelpText()));
+    amountHelperLive
+        .addSource(quantityUnitStockLive, i -> amountHelperLive.setValue(getAmountHelpText()));
     variableAmountLive = new MutableLiveData<>();
     notCheckStockFulfillmentLive = new MutableLiveData<>(false);
     ingredientGroupLive = new MutableLiveData<>();
@@ -198,24 +201,10 @@ public class FormDataRecipeEditIngredientEdit {
     return amountHintLive;
   }
 
-  private QuantityUnit getStockQuantityUnit() {
-    HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-    if (hashMap == null || !hashMap.containsValue((double) -1)) {
-      return null;
-    }
-    for (Map.Entry<QuantityUnit, Double> entry : hashMap.entrySet()) {
-      if (entry.getValue() == -1) {
-        return entry.getKey();
-      }
-    }
-    return null;
-  }
-
   private String getAmountStock() {
     if (productDetailsLive.getValue() == null) return null;
     return QuantityUnitConversionUtil.getAmountStock(
-        productDetailsLive.getValue().getProduct(),
-        getStockQuantityUnit(),
+        quantityUnitStockLive.getValue(),
         quantityUnitLive.getValue(),
         amountLive.getValue(),
         quantityUnitsFactorsLive.getValue(),
@@ -225,7 +214,7 @@ public class FormDataRecipeEditIngredientEdit {
   }
 
   private String getAmountHelpText() {
-    QuantityUnit stock = getStockQuantityUnit();
+    QuantityUnit stock = quantityUnitStockLive.getValue();
     if (stock == null || !NumUtil.isStringDouble(amountStockLive.getValue())) {
       return null;
     }
@@ -253,6 +242,10 @@ public class FormDataRecipeEditIngredientEdit {
     quantityUnitLabelLive.setValue(
             quantityUnit == null ? getString(R.string.subtitle_none_selected) : quantityUnit.getName()
     );
+  }
+
+  public MutableLiveData<QuantityUnit> getQuantityUnitStockLive() {
+    return quantityUnitStockLive;
   }
 
   public MutableLiveData<String> getVariableAmountLive() {
@@ -392,6 +385,7 @@ public class FormDataRecipeEditIngredientEdit {
     amountErrorLive.setValue(null);
     quantityUnitLive.setValue(null);
     quantityUnitLabelLive.setValue(getString(R.string.subtitle_none_selected));
+    quantityUnitStockLive.setValue(null);
     variableAmountLive.setValue(null);
     notCheckStockFulfillmentLive.setValue(false);
     ingredientGroupLive.setValue(null);

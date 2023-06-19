@@ -93,8 +93,12 @@ public class QuantityUnitConversionUtil {
         .collect(Collectors.toList());
 
     // Now build the closure of possible conversions using a recursive function
+    // As a base case, select the conversions that refer to a concrete product
     for (QuantityUnitConversion conversion : conversionFactors) {
-      buildConversionChains(conversionFactors, defaultConversions, paths, new QuantityUnitConversionPath(conversion));
+      // create base path with two units from one conversion
+      QuantityUnitConversionPath newPath = new QuantityUnitConversionPath(conversion);
+      // call recursive function which finds all possible paths for this base path
+      buildConversionChains(conversionFactors, defaultConversions, paths, newPath);
     }
 
     List<QuantityUnitConversionPath> pathsFiltered = paths.stream().distinct()
@@ -133,7 +137,6 @@ public class QuantityUnitConversionUtil {
       List<QuantityUnitConversionPath> paths,
       QuantityUnitConversionPath currentPath
   ) {
-    // Base case: We reached the end of a path
     if (currentPath.getDepth() >= 1) {
       paths.add(currentPath);
     }
@@ -232,7 +235,7 @@ public class QuantityUnitConversionUtil {
 
   public static HashMap<QuantityUnit, Double> getUnitFactors(
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
-      List<QuantityUnitConversion> unitConversions,
+      List<QuantityUnitConversionResolved> unitConversions,
       Product product
   ) {
     HashMap<QuantityUnit, Double> unitFactors = new HashMap<>();
@@ -307,7 +310,6 @@ public class QuantityUnitConversionUtil {
   }
 
   public static String getAmountStock(
-      Product product,
       QuantityUnit stock,
       QuantityUnit current,
       String amountStr,
@@ -320,20 +322,11 @@ public class QuantityUnitConversionUtil {
     ) {
       return null;
     }
-
     if (stock != null && current != null && stock.getId() != current.getId()) {
       double amount = NumUtil.toDouble(amountStr);
       Object currentFactor = quantityUnitsFactors.get(current);
-      if (currentFactor == null) {
-        return null;
-      }
-      double amountMultiplied;
-      if (product != null && current.getId() == product.getQuIdPurchaseInt()) {
-        amountMultiplied = amount * (double) currentFactor;
-      } else {
-        amountMultiplied = amount / (double) currentFactor;
-      }
-      return NumUtil.trimAmount(amountMultiplied, maxDecimalPlacesAmount);
+      if (currentFactor == null) return null;
+      return NumUtil.trimAmount(amount / (double) currentFactor, maxDecimalPlacesAmount);
     } else {
       return null;
     }

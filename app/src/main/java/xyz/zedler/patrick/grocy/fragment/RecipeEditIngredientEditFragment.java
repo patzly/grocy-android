@@ -219,7 +219,7 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
     if (product == null) {
       return;
     }
-    viewModel.setProduct(product.getId(), null, null, null);
+    viewModel.setProduct(product.getId(), null, null);
   }
 
   public void clearFocusAndCheckProductInput() {
