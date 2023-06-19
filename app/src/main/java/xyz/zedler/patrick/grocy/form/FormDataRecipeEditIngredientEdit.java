@@ -142,7 +142,7 @@ public class FormDataRecipeEditIngredientEdit {
     notCheckStockFulfillmentLive = new MutableLiveData<>(false);
     ingredientGroupLive = new MutableLiveData<>();
     noteLive = new MutableLiveData<>();
-    priceFactorLive = new MutableLiveData<>(String.valueOf(1));
+    priceFactorLive = new MutableLiveData<>();
     priceFactorErrorLive = new MutableLiveData<>();
 
     filledWithRecipePosition = false;

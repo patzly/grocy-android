@@ -300,15 +300,6 @@ public class QuantityUnitConversionUtil {
     return unitFactors;
   }
 
-  public static HashMap<QuantityUnit, Double> getUnitFactors(
-      Context context,
-      HashMap<Integer, QuantityUnit> quantityUnitHashMap,
-      List<QuantityUnitConversion> unitConversions,
-      Product product
-  ) {
-    return getUnitFactors(context, quantityUnitHashMap, unitConversions, product, true);
-  }
-
   public static String getAmountStock(
       QuantityUnit stock,
       QuantityUnit current,

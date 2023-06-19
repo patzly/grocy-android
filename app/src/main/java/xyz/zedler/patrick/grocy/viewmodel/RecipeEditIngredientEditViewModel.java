@@ -173,6 +173,14 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
       if (formData.getQuantityUnitLive().getValue() == null) {
         formData.setQuantityUnit(productDetails.getQuantityUnitStock());
       }
+      String amount = formData.getAmountLive().getValue();
+      if (amount == null || amount.isEmpty()) {
+        formData.getAmountLive().setValue(String.valueOf(1));
+      }
+      String priceFactor = formData.getPriceFactorLive().getValue();
+      if (priceFactor == null || priceFactor.isEmpty()) {
+        formData.getPriceFactorLive().setValue(String.valueOf(1));
+      }
 
       formData.isProductNameValid();
     };

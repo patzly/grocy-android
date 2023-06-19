@@ -189,6 +189,17 @@ public class RecipeViewModel extends BaseViewModel {
     }
   }
 
+  public void updateSaveDesiredServingsVisibility() {
+    Recipe recipe = recipeLive.getValue();
+    if (recipe == null) return;
+    if (NumUtil.isStringDouble(servingsDesiredLive.getValue())) {
+      double servings = NumUtil.toDouble(servingsDesiredLive.getValue());
+      servingsDesiredSaveEnabledLive.setValue(servings != recipe.getDesiredServings());
+    } else {
+      servingsDesiredSaveEnabledLive.setValue(1 != recipe.getDesiredServings());
+    }
+  }
+
   public void saveDesiredServings() {
     double servingsDesired;
     if (NumUtil.isStringDouble(servingsDesiredLive.getValue())) {

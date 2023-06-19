@@ -49,7 +49,6 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
-import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.repository.RecipeEditRepository;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
@@ -142,43 +141,18 @@ public class RecipeEditViewModel extends BaseViewModel {
     downloadData();
   }
 
-  public void setProduct(int productId, ProductBarcode barcode, String stockEntryId) {
-    Runnable onQueueEmptyListener = () -> {
-      ProductDetails productDetails = formData.getProductDetailsLive().getValue();
-      assert productDetails != null;
-      Product product = productDetails.getProduct();
-
-      if (productDetails.getStockAmountAggregated() == 0) {
-        String name = product.getName();
-        showMessageAndContinueScanning(getApplication().getString(R.string.msg_not_in_stock, name));
-        return;
-      }
-
-      formData.getProductDetailsLive().setValue(productDetails);
-      formData.getProductNameLive().setValue(product.getName());
-
-      formData.isFormValid();
-    };
-
-    dlHelper.newQueue(
-        onQueueEmptyListener,
-        error -> showMessageAndContinueScanning(getString(R.string.error_no_product_details))
-    ).append(
-        ProductDetails.getProductDetails(
-            dlHelper,
-            productId,
-            productDetails -> formData.getProductDetailsLive().setValue(productDetails)
-        )
-    ).start();
+  public void setProduct(Product product) {
+    formData.getProductProducedLive().setValue(product);
+    formData.getProductProducedNameLive().setValue(product.getName());
+    formData.isFormValid();
   }
 
   public void onBarcodeRecognized(String barcode) {
-    if (formData.getProductDetailsLive().getValue() != null) {
+    if (formData.getProductProducedLive().getValue() != null) {
       formData.getBarcodeLive().setValue(barcode);
       return;
     }
     Product product = null;
-    String stockEntryId = null;
     GrocycodeUtil.Grocycode grocycode = GrocycodeUtil.getGrocycode(barcode);
     if (grocycode != null && grocycode.isProduct()) {
       product = Product.getProductFromId(products, grocycode.getObjectId());
@@ -186,22 +160,19 @@ public class RecipeEditViewModel extends BaseViewModel {
         showMessageAndContinueScanning(R.string.msg_not_found);
         return;
       }
-      stockEntryId = grocycode.getProductStockEntryId();
     } else if (grocycode != null) {
       showMessageAndContinueScanning(R.string.error_wrong_grocycode_type);
       return;
     }
-    ProductBarcode productBarcode = null;
     if (product == null) {
       for (ProductBarcode code : productBarcodes) {
         if (code.getBarcode().equals(barcode)) {
-          productBarcode = code;
           product = Product.getProductFromId(products, code.getProductIdInt());
         }
       }
     }
     if (product != null) {
-      setProduct(product.getId(), productBarcode, stockEntryId);
+      setProduct(product);
     } else {
       Bundle bundle = new Bundle();
       bundle.putString(ARGUMENT.BARCODE, barcode);
@@ -211,7 +182,7 @@ public class RecipeEditViewModel extends BaseViewModel {
 
   public void checkProductInput() {
     formData.isProductNameValid();
-    String input = formData.getProductNameLive().getValue();
+    String input = formData.getProductProducedNameLive().getValue();
     if (input == null || input.isEmpty()) {
       return;
     }
@@ -229,28 +200,24 @@ public class RecipeEditViewModel extends BaseViewModel {
       return;
     }
     if (product == null) {
-      ProductBarcode productBarcode = null;
       for (ProductBarcode code : productBarcodes) {
         if (code.getBarcode().equals(input.trim())) {
-          productBarcode = code;
           product = Product.getProductFromId(products, code.getProductIdInt());
         }
       }
       if (product != null) {
-        setProduct(product.getId(), productBarcode, null);
+        setProduct(product);
         return;
       }
     }
 
-    ProductDetails currentProductDetails = formData.getProductDetailsLive().getValue();
-    Product currentProduct = currentProductDetails != null
-            ? currentProductDetails.getProduct() : null;
+    Product currentProduct = formData.getProductProducedLive().getValue();
     if (currentProduct != null && product != null && currentProduct.getId() == product.getId()) {
       return;
     }
 
     if (product != null) {
-      setProduct(product.getId(), null, null);
+      setProduct(product);
     } else {
       showInputProductBottomSheet(input);
     }

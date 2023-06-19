@@ -143,6 +143,10 @@ public class RecipeFragment extends BaseFragment implements
       setupMenuButtons();
       updateDataWithServings();
     });
+    viewModel.getServingsDesiredLive().observe(
+        getViewLifecycleOwner(),
+        servings -> viewModel.updateSaveDesiredServingsVisibility()
+    );
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -313,6 +317,7 @@ public class RecipeFragment extends BaseFragment implements
     binding.textInputServings.getEditText().setOnEditorActionListener((v, actionId, event) -> {
       if (actionId == EditorInfo.IME_ACTION_DONE) {
         viewModel.saveDesiredServings();
+        binding.editTextServings.clearFocus();
       }
       return false;
     });
@@ -585,6 +590,10 @@ public class RecipeFragment extends BaseFragment implements
     if (isOnline) {
       viewModel.downloadData();
     }
+  }
+
+  public void clearInputFocus() {
+    binding.editTextServings.clearFocus();
   }
 
   private int[] getExcludedProductIds() {

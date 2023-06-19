@@ -414,6 +414,8 @@
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_not_check_shopping_list">By default the amount to be added to the shopping list is \"needed amount - stock amount - shopping list amount\". When this is enabled, it is only checked against the stock amount, not against what is already on the shopping list.</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_servings">The ingredients of this recipe result in this amount of servings.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_produces_product">When a product is selected, one unit (per serving in stock quantity unit) will be added to stock on consuming this recipe.</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_only_check_any_amount">A different amount/unit can then be used below while for stock fulfillment checking it is sufficient when any amount of the product in stock.</string>

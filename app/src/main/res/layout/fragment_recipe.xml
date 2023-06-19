@@ -86,6 +86,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="12dp"
             android:layout_marginHorizontal="16dp"
+            android:visibility="gone"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp">
 
@@ -173,7 +174,8 @@
                 app:helperTextEnabled="true"
                 app:helperText="Base servings: 1"
                 app:endIconMode="custom"
-                app:endIconDrawable="@drawable/ic_round_check_circle">
+                app:endIconDrawable="@drawable/ic_round_check_circle"
+                app:endIconVisible="@{viewModel.servingsDesiredSaveEnabledLive}">
 
                 <com.google.android.material.textfield.TextInputEditText
                   android:id="@+id/edit_text_servings"
@@ -182,10 +184,9 @@
                   android:inputType="number|numberDecimal"
                   android:imeOptions="actionDone"
                   android:maxLength="10"
-                  android:text="@{viewModel.servingsDesiredLive}"/>
+                  android:text="@={viewModel.servingsDesiredLive}"/>
 
               </com.google.android.material.textfield.TextInputLayout>
-
 
             </LinearLayout>
 
@@ -194,6 +195,7 @@
               style="@style/Widget.Grocy.Button.IconButton"
               android:layout_marginStart="8dp"
               android:layout_marginBottom="8dp"
+              android:onClick="@{v -> viewModel.changeAmount(true)}"
               app:icon="@drawable/ic_round_expand_less" />
 
             <com.google.android.material.button.MaterialButton
@@ -201,6 +203,7 @@
               style="@style/Widget.Grocy.Button.IconButton"
               android:layout_marginBottom="8dp"
               android:layout_marginEnd="8dp"
+              android:onClick="@{v -> viewModel.changeAmount(false)}"
               app:icon="@drawable/ic_round_expand_more" />
 
           </LinearLayout>
