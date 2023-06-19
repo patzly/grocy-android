@@ -34,6 +34,7 @@ import java.util.List;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -50,7 +51,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.repository.ShoppingListItemEditRepository;
@@ -78,7 +79,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
   private List<ShoppingList> shoppingLists;
   private List<Product> products;
   private List<ProductBarcode> barcodes;
-  private List<QuantityUnitConversion> unitConversions;
+  private List<QuantityUnitConversionResolved> unitConversions;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
 
   private Runnable queueEmptyAction;
@@ -149,18 +150,18 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
         ShoppingListItem.class,
         Product.class,
         QuantityUnit.class,
-        QuantityUnitConversion.class,
+        QuantityUnitConversionResolved.class,
         ProductBarcode.class
     );
   }
 
   public void downloadDataForceUpdate() {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS_RESOLVED, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
     editPrefs.apply();
     downloadData();
   }
@@ -239,22 +240,19 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       formData.getProductLive().setValue(product);
       formData.getProductNameLive().setValue(product.getName());
 
-      try {
-        HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
-            getApplication(),
-            quantityUnitHashMap,
-            unitConversions,
-            product
-        );
-        formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+      HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
+          quantityUnitHashMap,
+          unitConversions,
+          product
+      );
+      formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+      formData.getQuantityUnitStockLive().setValue(
+          quantityUnitHashMap.get(product.getQuIdStockInt())
+      );
 
-        quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
-        amount = QuantityUnitConversionUtil
-            .getAmountRelativeToUnit(unitFactors, product, quantityUnit, amount);
-      } catch (IllegalArgumentException e) {
-        showMessage(e.getMessage());
-        return;
-      }
+      quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
+      amount = QuantityUnitConversionUtil
+          .getAmountRelativeToUnit(unitFactors, product, quantityUnit, amount);
     }
     formData.getAmountLive().setValue(NumUtil.trimAmount(amount, maxDecimalPlacesAmount));
     formData.getQuantityUnitLive().setValue(quantityUnit);
@@ -270,19 +268,15 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     formData.getProductLive().setValue(product);
     formData.getProductNameLive().setValue(product.getName());
 
-
-    try {
-      HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
-          getApplication(),
-          quantityUnitHashMap,
-          unitConversions,
-          product
-      );
-      formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
-    } catch (IllegalArgumentException e) {
-      showMessage(e.getMessage());
-      formData.getQuantityUnitsFactorsLive().setValue(null);
-    }
+    HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
+        quantityUnitHashMap,
+        unitConversions,
+        product
+    );
+    formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+    formData.getQuantityUnitStockLive().setValue(
+        quantityUnitHashMap.get(product.getQuIdStockInt())
+    );
 
     QuantityUnit purchase = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
     formData.getQuantityUnitLive().setValue(purchase);

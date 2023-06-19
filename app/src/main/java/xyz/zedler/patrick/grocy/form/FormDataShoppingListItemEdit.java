@@ -32,7 +32,6 @@ import androidx.lifecycle.Transformations;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -43,6 +42,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class FormDataShoppingListItemEdit {
@@ -67,6 +67,7 @@ public class FormDataShoppingListItemEdit {
   private final MutableLiveData<QuantityUnit> quantityUnitLive;
   private final LiveData<String> quantityUnitNameLive;
   private final MutableLiveData<Boolean> quantityUnitErrorLive;
+  private final MutableLiveData<QuantityUnit> quantityUnitStockLive;
   private final MutableLiveData<Boolean> useMultilineNoteLive;
   private final MutableLiveData<String> noteLive;
   private final MutableLiveData<Integer> noteErrorLive;
@@ -113,6 +114,7 @@ public class FormDataShoppingListItemEdit {
         quantityUnitLive,
         quantityUnit -> !isQuantityUnitValid()
     );
+    quantityUnitStockLive = new MutableLiveData<>();
     amountHintLive = Transformations.map(
         quantityUnitLive,
         quantityUnit -> quantityUnit != null ? application.getString(
@@ -232,52 +234,24 @@ public class FormDataShoppingListItemEdit {
     return quantityUnitErrorLive;
   }
 
-  private QuantityUnit getStockQuantityUnit() {
-    HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-    if (hashMap == null || !hashMap.containsValue((double) -1)) {
-      return null;
-    }
-    for (Map.Entry<QuantityUnit, Double> entry : hashMap.entrySet()) {
-      if (entry.getValue() == -1) {
-        return entry.getKey();
-      }
-    }
-    return null;
+  public MutableLiveData<QuantityUnit> getQuantityUnitStockLive() {
+    return quantityUnitStockLive;
   }
 
   private String getAmountStock() {
-    QuantityUnit stock = getStockQuantityUnit();
-    QuantityUnit current = quantityUnitLive.getValue();
-    if (!NumUtil.isStringDouble(amountLive.getValue())
-        || quantityUnitsFactorsLive.getValue() == null
-    ) {
-      return null;
-    }
-    assert amountLive.getValue() != null;
-
-    if (stock != null && current != null && stock.getId() != current.getId()) {
-      HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-      double amount = NumUtil.toDouble(amountLive.getValue());
-      Object currentFactor = hashMap.get(current);
-      if (currentFactor == null) {
-        amountHelperLive.setValue(null);
-        return null;
-      }
-      double amountMultiplied;
-      if (productLive.getValue() != null
-          && current.getId() == productLive.getValue().getQuIdPurchaseInt()) {
-        amountMultiplied = amount * (double) currentFactor;
-      } else {
-        amountMultiplied = amount / (double) currentFactor;
-      }
-      return NumUtil.trimAmount(amountMultiplied, maxDecimalPlacesAmount);
-    } else {
-      return null;
-    }
+    if (productLive.getValue() == null) return null;
+    return QuantityUnitConversionUtil.getAmountStock(
+        quantityUnitStockLive.getValue(),
+        quantityUnitLive.getValue(),
+        amountLive.getValue(),
+        quantityUnitsFactorsLive.getValue(),
+        false,
+        maxDecimalPlacesAmount
+    );
   }
 
   private String getAmountHelpText() {
-    QuantityUnit stock = getStockQuantityUnit();
+    QuantityUnit stock = quantityUnitStockLive.getValue();
     if (stock == null || !NumUtil.isStringDouble(amountStockLive.getValue())) {
       return null;
     }
@@ -433,6 +407,7 @@ public class FormDataShoppingListItemEdit {
     amountLive.setValue(null);
     quantityUnitLive.setValue(null);
     quantityUnitsFactorsLive.setValue(null);
+    quantityUnitStockLive.setValue(null);
     productLive.setValue(null);
     productNameLive.setValue(null);
     barcodeLive.setValue(null);
