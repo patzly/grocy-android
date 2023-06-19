@@ -50,6 +50,7 @@ public class GrocyApi {
     public final static String STORES = "shopping_locations";
     public final static String QUANTITY_UNITS = "quantity_units";
     public final static String QUANTITY_UNIT_CONVERSIONS = "quantity_unit_conversions";
+    public final static String QUANTITY_UNIT_CONVERSIONS_RESOLVED = "quantity_unit_conversions_resolved";
     public final static String SHOPPING_LIST = "shopping_list";
     public final static String SHOPPING_LISTS = "shopping_lists";
     public final static String RECIPES = "recipes";

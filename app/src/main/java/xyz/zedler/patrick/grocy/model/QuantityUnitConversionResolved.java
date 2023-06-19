@@ -29,13 +29,14 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.lang.reflect.Type;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants.PREF;
-import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 @Entity(tableName = "quantity_unit_conversion_resolved_table")
 public class QuantityUnitConversionResolved extends QuantityUnitConversion {
@@ -74,23 +75,34 @@ public class QuantityUnitConversionResolved extends QuantityUnitConversion {
             @Nullable OnMultiTypeErrorListener errorListener,
             @Nullable String uuid
         ) {
+          boolean isServerVersion4 = VersionUtil.isGrocyServerMin400(dlHelper.sharedPrefs);
           dlHelper.get(
-              dlHelper.grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNIT_CONVERSIONS),
+              dlHelper.grocyApi.getObjects(isServerVersion4
+                  ? ENTITY.QUANTITY_UNIT_CONVERSIONS_RESOLVED : ENTITY.QUANTITY_UNIT_CONVERSIONS),
               uuid,
               response -> {
                 Type type = new TypeToken<List<QuantityUnitConversionResolved>>() {
                 }.getType();
-                List<QuantityUnitConversion> conversions
-                    = dlHelper.gson.fromJson(response, type);
-                if (dlHelper.debug) {
-                  Log.i(dlHelper.tag, "download QuantityUnitConversions: "
-                      + conversions);
-                }
-                List<QuantityUnitConversionResolved> conversionsResolved = QuantityUnitConversionUtil
-                    .calculateConversions(conversions, products);
-                if (dlHelper.debug) {
-                  Log.i(dlHelper.tag, "resolved QuantityUnitConversions: "
-                      + conversionsResolved);
+                List<QuantityUnitConversionResolved> conversionsResolved;
+                if (isServerVersion4) {
+                  conversionsResolved = dlHelper.gson.fromJson(response, type);
+                  if (dlHelper.debug) {
+                    Log.i(dlHelper.tag, "download QuantityUnitConversionsResolved: "
+                        + conversionsResolved);
+                  }
+                } else {
+                  List<QuantityUnitConversion> conversions
+                      = dlHelper.gson.fromJson(response, type);
+                  if (dlHelper.debug) {
+                    Log.i(dlHelper.tag, "download QuantityUnitConversions: "
+                        + conversions);
+                  }
+                  conversionsResolved = QuantityUnitConversionUtil
+                      .calculateConversions(conversions, products);
+                  if (dlHelper.debug) {
+                    Log.i(dlHelper.tag, "resolved QuantityUnitConversions: "
+                        + conversionsResolved);
+                  }
                 }
                 Single.fromCallable(() -> {
                   dlHelper.appDatabase.quantityUnitConversionResolvedDao()
