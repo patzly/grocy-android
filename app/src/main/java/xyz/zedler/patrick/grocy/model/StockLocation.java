@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.model;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -234,6 +235,7 @@ public class StockLocation implements Parcelable {
     return getStockLocations(dlHelper, productId, onResponseListener, null);
   }
 
+  @SuppressLint("CheckResult")
   public static QueueItem updateStockCurrentLocations(
       DownloadHelper dlHelper,
       String dbChangedTime,
@@ -271,11 +273,6 @@ public class StockLocation implements Parcelable {
                 })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError(throwable -> {
-                      if (errorListener != null) {
-                        errorListener.onError(throwable);
-                      }
-                    })
                     .doFinally(() -> {
                       if (onResponseListener != null) {
                         onResponseListener.onResponse(locations);
@@ -284,7 +281,11 @@ public class StockLocation implements Parcelable {
                         responseListener.onResponse(response);
                       }
                     })
-                    .subscribe();
+                    .subscribe(ignored -> {}, throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    });
               },
               error -> {
                 if (errorListener != null) {

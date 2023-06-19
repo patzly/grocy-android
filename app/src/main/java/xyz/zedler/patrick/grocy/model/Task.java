@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.model;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -297,6 +298,7 @@ public class Task implements Parcelable {
     return "Task(" + name + ")";
   }
 
+  @SuppressLint("CheckResult")
   public static QueueItem updateTasks(
       DownloadHelper dlHelper,
       String dbChangedTime,
@@ -332,20 +334,19 @@ public class Task implements Parcelable {
                 })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError(throwable -> {
-                      if (errorListener != null) {
-                        errorListener.onError(throwable);
-                      }
-                    })
                     .doFinally(() -> {
-                      if (onResponseListener != null) {{
+                      if (onResponseListener != null) {
                         onResponseListener.onResponse(tasks);
-                      }}
+                      }
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
                     })
-                    .subscribe();
+                    .subscribe(ignored -> {}, throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    });
               },
               error -> {
                 if (errorListener != null) {

@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.model;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.room.Entity;
@@ -59,6 +60,7 @@ public class QuantityUnitConversionResolved extends QuantityUnitConversion {
     return null;
   }
 
+  @SuppressLint("CheckResult")
   public static QueueItem updateQuantityUnitConversions(
       DownloadHelper dlHelper,
       String dbChangedTime,
@@ -124,11 +126,6 @@ public class QuantityUnitConversionResolved extends QuantityUnitConversion {
                 })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError(throwable -> {
-                      if (errorListener != null) {
-                        errorListener.onError(throwable);
-                      }
-                    })
                     .doFinally(() -> {
                       if (onResponseListener != null) {
                         onResponseListener.onResponse(conversionsResolved);
@@ -137,7 +134,11 @@ public class QuantityUnitConversionResolved extends QuantityUnitConversion {
                         responseListener.onResponse(response);
                       }
                     })
-                    .subscribe();
+                    .subscribe(ignored -> {}, throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    });
               },
               error -> {
                 if (errorListener != null) {

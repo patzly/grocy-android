@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.model;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -195,6 +196,7 @@ public class ProductLastPurchased implements Parcelable {
     return "ProductLastPurchased(" + productId + ')';
   }
 
+  @SuppressLint("CheckResult")
   public static QueueItem updateProductsLastPurchased(
       DownloadHelper dlHelper,
       String dbChangedTime,
@@ -233,11 +235,6 @@ public class ProductLastPurchased implements Parcelable {
                 })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError(throwable -> {
-                      if (errorListener != null) {
-                        errorListener.onError(throwable);
-                      }
-                    })
                     .doFinally(() -> {
                       if (onResponseListener != null) {
                         onResponseListener.onResponse(productsLastPurchased);
@@ -246,7 +243,11 @@ public class ProductLastPurchased implements Parcelable {
                         responseListener.onResponse(response);
                       }
                     })
-                    .subscribe();
+                    .subscribe(ignored -> {}, throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    });
               },
               error -> {
                 if (isOptional) {

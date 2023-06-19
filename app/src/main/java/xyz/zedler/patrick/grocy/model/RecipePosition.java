@@ -19,30 +19,27 @@
 
 package xyz.zedler.patrick.grocy.model;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
 import com.google.gson.annotations.SerializedName;
-
 import com.google.gson.reflect.TypeToken;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.lang.reflect.Type;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.json.JSONException;
+import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
@@ -344,6 +341,7 @@ public class RecipePosition implements Parcelable {
     return "RecipePosition(" + id + ")";
   }
 
+  @SuppressLint("CheckResult")
   public static QueueItem updateRecipePositions(
       DownloadHelper dlHelper,
       String dbChangedTime,
@@ -388,11 +386,6 @@ public class RecipePosition implements Parcelable {
                 })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError(throwable -> {
-                      if (errorListener != null) {
-                        errorListener.onError(throwable);
-                      }
-                    })
                     .doFinally(() -> {
                       if (onResponseListener != null) {
                         onResponseListener.onResponse(recipePositions);
@@ -400,7 +393,12 @@ public class RecipePosition implements Parcelable {
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
-                    }).subscribe();
+                    })
+                    .subscribe(ignored -> {}, throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    });
               },
               error -> {
                 if (errorListener != null) {

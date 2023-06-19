@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.model;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -155,6 +156,7 @@ public class Store implements Parcelable {
     return "Store(" + name + ')';
   }
 
+  @SuppressLint("CheckResult")
   public static QueueItem updateStores(
       DownloadHelper dlHelper,
       String dbChangedTime,
@@ -190,11 +192,6 @@ public class Store implements Parcelable {
                     })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError(throwable -> {
-                      if (errorListener != null) {
-                        errorListener.onError(throwable);
-                      }
-                    })
                     .doFinally(() -> {
                       if (onResponseListener != null) {
                         onResponseListener.onResponse(stores);
@@ -203,7 +200,11 @@ public class Store implements Parcelable {
                         responseListener.onResponse(response);
                       }
                     })
-                    .subscribe();
+                    .subscribe(ignored -> {}, throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    });
               },
               error -> {
                 if (errorListener != null) {

@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.model;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -206,6 +207,7 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
     };
   }
 
+  @SuppressLint("CheckResult")
   public static QueueItem updateProductGroups(
       DownloadHelper dlHelper,
       String dbChangedTime,
@@ -243,12 +245,6 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
                     })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError(throwable -> {
-                      if (errorListener != null) {
-                        errorListener.onError(throwable);
-                      }
-                    })
-                    .onErrorComplete()
                     .doFinally(() -> {
                       if (onResponseListener != null) {
                         onResponseListener.onResponse(productGroups);
@@ -257,7 +253,11 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
                         responseListener.onResponse(response);
                       }
                     })
-                    .subscribe();
+                    .subscribe(ignored -> {}, throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    });
               },
               error -> {
                 if (errorListener != null) {

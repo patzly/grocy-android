@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.model;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -189,11 +190,7 @@ public class TaskCategory extends GroupedListItem implements Parcelable {
     return "TaskCategory(" + name + ')';
   }
 
-  @NonNull
-  public TaskCategory getClone() {
-    return new TaskCategory(this.id, this.name, this.description, this.displayDivider);
-  }
-
+  @SuppressLint("CheckResult")
   public static QueueItem updateTaskCategories(
       DownloadHelper dlHelper,
       String dbChangedTime,
@@ -230,11 +227,6 @@ public class TaskCategory extends GroupedListItem implements Parcelable {
                 })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError(throwable -> {
-                      if (errorListener != null) {
-                        errorListener.onError(throwable);
-                      }
-                    })
                     .doFinally(() -> {
                       if (onResponseListener != null) {
                         onResponseListener.onResponse(taskCategories);
@@ -243,7 +235,11 @@ public class TaskCategory extends GroupedListItem implements Parcelable {
                         responseListener.onResponse(response);
                       }
                     })
-                    .subscribe();
+                    .subscribe(ignored -> {}, throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    });
               },
               error -> {
                 if (errorListener != null) {
