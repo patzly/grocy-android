@@ -195,7 +195,6 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
       return;
     }
     Product product = null;
-    String stockEntryId = null;
     GrocycodeUtil.Grocycode grocycode = GrocycodeUtil.getGrocycode(barcode);
     if (grocycode != null && grocycode.isProduct()) {
       product = Product.getProductFromId(products, grocycode.getObjectId());
@@ -203,7 +202,6 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
         showMessageAndContinueScanning(R.string.msg_not_found);
         return;
       }
-      stockEntryId = grocycode.getProductStockEntryId();
     } else if (grocycode != null) {
       showMessageAndContinueScanning(R.string.error_wrong_grocycode_type);
       return;
@@ -328,6 +326,10 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
     assert entry != null;
 
     QuantityUnit quantityUnit = quantityUnitHashMap.get(entry.getQuantityUnitId());
+    int maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
 
     setProduct(entry.getProductId(), null, (product, unitFactors) -> {
       double amount = entry.getAmount();
@@ -335,10 +337,7 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
       if (!entry.isOnlyCheckSingleUnitInStock() && factor != null) {
         amount *= factor;
       }
-      formData.getAmountLive().setValue(NumUtil.trimAmount(amount, sharedPrefs.getInt(
-          STOCK.DECIMAL_PLACES_AMOUNT,
-          SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
-      )));
+      formData.getAmountLive().setValue(NumUtil.trimAmount(amount, maxDecimalPlacesAmount));
     });
     formData.getOnlyCheckSingleUnitInStockLive().setValue(entry.isOnlyCheckSingleUnitInStock());
     formData.setQuantityUnit(quantityUnitHashMap.get(entry.getQuantityUnitId()));
@@ -346,6 +345,7 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
     formData.getNotCheckStockFulfillmentLive().setValue(entry.isNotCheckStockFulfillment());
     formData.getIngredientGroupLive().setValue(entry.getIngredientGroup());
     formData.getNoteLive().setValue(entry.getNote());
+    formData.getPriceFactorLive().setValue(NumUtil.trimAmount(entry.getPriceFactor(), maxDecimalPlacesAmount));
 
     formData.setFilledWithRecipePosition(true);
   }

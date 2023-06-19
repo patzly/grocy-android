@@ -26,6 +26,7 @@
 - Improved: On recipe ingredient edit page, product overview sheet now can be displayed
 - Improved: Horizontal actions layout on overview page for smaller screens
 - Improved: Clear caching related info after app update or database update for data refresh (#726)
+- Improved: Recipe ingredient price factor now can be set (#615)
 - Fixed: Amounts with conversions are consistent over all pages now (#612, #626)
 - Fixed: Long click on barcode button on overview page was broken on Android Nougat and lower
 - Fixed: Crash on startup with Android Lollipop (and maybe higher)
@@ -36,6 +37,7 @@
 - Fixed: On product creation with prefilled name there was a plus instead of space character
 - Fixed: On product details sheet, description card was rendered with wrong height sometimes (#717)
 - Fixed: Editing of recipe ingredient with broken quantity unit is possible now
+- Fixed: Recipe ingredient price factor is not saved wrong anymore when creating ingredient (#615)
 
 ## 3.2.1
 
