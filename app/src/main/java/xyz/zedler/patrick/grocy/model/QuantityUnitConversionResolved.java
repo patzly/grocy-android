@@ -27,6 +27,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
@@ -85,10 +86,18 @@ public class QuantityUnitConversionResolved extends QuantityUnitConversion {
                 }.getType();
                 List<QuantityUnitConversionResolved> conversionsResolved;
                 if (isServerVersion4) {
-                  conversionsResolved = dlHelper.gson.fromJson(response, type);
+                  List<QuantityUnitConversionResolved> conversionsResolvedNotForDb = dlHelper.gson
+                      .fromJson(response, type);
                   if (dlHelper.debug) {
                     Log.i(dlHelper.tag, "download QuantityUnitConversionsResolved: "
-                        + conversionsResolved);
+                        + conversionsResolvedNotForDb);
+                  }
+                  conversionsResolved = new ArrayList<>();
+                  int id = 0;
+                  for (QuantityUnitConversionResolved conversion : conversionsResolvedNotForDb) {
+                    conversion.setId(id);
+                    conversionsResolved.add(conversion);
+                    id++;
                   }
                 } else {
                   List<QuantityUnitConversion> conversions
