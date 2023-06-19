@@ -38,6 +38,7 @@
 - Fixed: On product details sheet, description card was rendered with wrong height sometimes (#717)
 - Fixed: Editing of recipe ingredient with broken quantity unit is possible now
 - Fixed: Recipe ingredient price factor is not saved wrong anymore when creating ingredient (#615)
+- Fixed: Product description popup animation doesn't have glitches anymore
 
 ## 3.2.1
 

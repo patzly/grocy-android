@@ -81,6 +81,10 @@
 
     </activity>
 
+    <activity android:name=".activity.WebDialogActivity"
+      android:theme="@style/Theme.Grocy.WebDialog">
+    </activity>
+
     <service
       android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
       android:enabled="false"

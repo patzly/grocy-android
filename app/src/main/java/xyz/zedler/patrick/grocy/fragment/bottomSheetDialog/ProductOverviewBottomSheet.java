@@ -266,7 +266,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       binding.description.setVisibility(View.GONE);
     } else {
       binding.description.setDialogTitle(R.string.property_description);
-      binding.description.setHtml(description);
+      binding.description.setHtml(description, activity);
     }
 
     refreshButtonStates();
