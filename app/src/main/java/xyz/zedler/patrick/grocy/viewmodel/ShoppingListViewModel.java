@@ -51,7 +51,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.Store;
@@ -89,7 +89,7 @@ public class ShoppingListViewModel extends BaseViewModel {
   private List<ShoppingList> shoppingLists;
   private HashMap<Integer, ProductGroup> productGroupHashMap;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-  private HashMap<Integer, ArrayList<QuantityUnitConversion>> unitConversionHashMap;
+  private List<QuantityUnitConversionResolved> unitConversions;
   private HashMap<Integer, Double> shoppingListItemAmountsHashMap;
   private HashMap<Integer, Product> productHashMap;
   private HashMap<Integer, String> productNamesHashMap;
@@ -160,7 +160,7 @@ public class ShoppingListViewModel extends BaseViewModel {
       this.shoppingLists = data.getShoppingLists();
       productGroupHashMap = ArrayUtil.getProductGroupsHashMap(data.getProductGroups());
       quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
-      unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(data.getUnitConversions());
+      unitConversions = data.getUnitConversionsResolved();
       storeHashMap = ArrayUtil.getStoresHashMap(data.getStores());
       missingProductIds = ArrayUtil.getMissingProductsIds(data.getMissingItems());
       productHashMap = ArrayUtil.getProductsHashMap(data.getProducts());
@@ -307,14 +307,15 @@ public class ShoppingListViewModel extends BaseViewModel {
             dlHelper,
             dbChangedTime,
             quantityUnits -> quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits)
-        ), QuantityUnitConversion.updateQuantityUnitConversions(
-            dlHelper,
-            dbChangedTime,
-            unitConversions -> unitConversionHashMap = ArrayUtil
-                .getUnitConversionsHashMap(unitConversions)
         ), Product.updateProducts(dlHelper, dbChangedTime, products -> {
           productHashMap = ArrayUtil.getProductsHashMap(products);
           productNamesHashMap = ArrayUtil.getProductNamesHashMap(products);
+          queue.append(QuantityUnitConversionResolved.updateQuantityUnitConversions(
+              dlHelper,
+              dbChangedTime,
+              products,
+              unitConversions -> this.unitConversions = unitConversions
+          ));
         }), ProductLastPurchased.updateProductsLastPurchased(
             dlHelper,
             dbChangedTime,
@@ -347,15 +348,15 @@ public class ShoppingListViewModel extends BaseViewModel {
 
   public void downloadDataForceUpdate() {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS_LAST_PURCHASED, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS_RESOLVED, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_VOLATILE_MISSING, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS_LAST_PURCHASED, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_STORES, null);
     editPrefs.apply();
     downloadData(null, true);
   }
@@ -816,7 +817,7 @@ public class ShoppingListViewModel extends BaseViewModel {
     shoppingListItemAmountsHashMap = new HashMap<>();
     for (ShoppingListItem item : shoppingListItems) {
       Double amount = AmountUtil.getShoppingListItemAmount(
-          item, productHashMap, quantityUnitHashMap, unitConversionHashMap
+          item, productHashMap, quantityUnitHashMap, unitConversions
       );
       if (amount != null) {
         shoppingListItemAmountsHashMap.put(item.getId(), amount);

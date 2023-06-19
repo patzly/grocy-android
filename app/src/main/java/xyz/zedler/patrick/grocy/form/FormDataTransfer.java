@@ -32,7 +32,6 @@ import androidx.lifecycle.Transformations;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
@@ -50,6 +49,7 @@ import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class FormDataTransfer {
@@ -66,7 +66,7 @@ public class FormDataTransfer {
   private final MutableLiveData<Integer> productNameErrorLive;
   private final MutableLiveData<String> barcodeLive;
   private final MutableLiveData<HashMap<QuantityUnit, Double>> quantityUnitsFactorsLive;
-  private final LiveData<QuantityUnit> quantityUnitStockLive;
+  private final MutableLiveData<QuantityUnit> quantityUnitStockLive;
   private final MutableLiveData<QuantityUnit> quantityUnitLive;
   private final LiveData<String> quantityUnitNameLive;
   private final MutableLiveData<Boolean> quantityUnitErrorLive;
@@ -115,10 +115,7 @@ public class FormDataTransfer {
     productNameErrorLive = new MutableLiveData<>();
     barcodeLive = new MutableLiveData<>();
     quantityUnitsFactorsLive = new MutableLiveData<>();
-    quantityUnitStockLive = Transformations.map(
-        quantityUnitsFactorsLive,
-        this::getStockQuantityUnit
-    );
+    quantityUnitStockLive = new MutableLiveData<>();
     quantityUnitsFactorsLive.setValue(null);
     quantityUnitLive = new MutableLiveData<>();
     quantityUnitNameLive = Transformations.map(
@@ -210,7 +207,7 @@ public class FormDataTransfer {
     return quantityUnitsFactorsLive;
   }
 
-  public LiveData<QuantityUnit> getQuantityUnitStockLive() {
+  public MutableLiveData<QuantityUnit> getQuantityUnitStockLive() {
     return quantityUnitStockLive;
   }
 
@@ -224,18 +221,6 @@ public class FormDataTransfer {
 
   public MutableLiveData<Boolean> getQuantityUnitErrorLive() {
     return quantityUnitErrorLive;
-  }
-
-  private QuantityUnit getStockQuantityUnit(HashMap<QuantityUnit, Double> unitsFactors) {
-    if (unitsFactors == null || !unitsFactors.containsValue((double) -1)) {
-      return null;
-    }
-    for (Map.Entry<QuantityUnit, Double> entry : unitsFactors.entrySet()) {
-      if (entry.getValue() == -1) {
-        return entry.getKey();
-      }
-    }
-    return null;
   }
 
   public MutableLiveData<String> getBarcodeLive() {
@@ -260,32 +245,15 @@ public class FormDataTransfer {
 
   private String getAmountStock() {
     ProductDetails productDetails = productDetailsLive.getValue();
-    QuantityUnit stock = quantityUnitStockLive.getValue();
-    QuantityUnit current = quantityUnitLive.getValue();
-    if (!isAmountValid() || quantityUnitsFactorsLive.getValue() == null) {
-      return null;
-    }
-    assert amountLive.getValue() != null;
-
-    if (stock == null || current == null || productDetails == null) {
-      return null;
-    }
-    HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-    double amount = NumUtil.toDouble(amountLive.getValue());
-    Object currentFactor = hashMap.get(current);
-    if (currentFactor == null) {
-      return null;
-    }
-    double amountMultiplied;
-    if ((double) currentFactor == -1) {
-      amountMultiplied = amount;
-    } else if (current.getId() == productDetails.getProduct()
-        .getQuIdPurchaseInt()) {
-      amountMultiplied = amount * (double) currentFactor;
-    } else {
-      amountMultiplied = amount / (double) currentFactor;
-    }
-    return NumUtil.trimAmount(amountMultiplied, maxDecimalPlacesAmount);
+    if (productDetails == null) return null;
+    return QuantityUnitConversionUtil.getAmountStock(
+        quantityUnitStockLive.getValue(),
+        quantityUnitLive.getValue(),
+        amountLive.getValue(),
+        quantityUnitsFactorsLive.getValue(),
+        false,
+        maxDecimalPlacesAmount
+    );
   }
 
   private String getAmountHelpText() {
@@ -578,6 +546,7 @@ public class FormDataTransfer {
     amountLive.setValue(null);
     quantityUnitLive.setValue(null);
     quantityUnitsFactorsLive.setValue(null);
+    quantityUnitStockLive.setValue(null);
     productDetailsLive.setValue(null);
     productNameLive.setValue(null);
     fromLocationLive.setValue(null);

@@ -33,16 +33,15 @@ import androidx.lifecycle.Transformations;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
@@ -56,6 +55,7 @@ import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
@@ -81,7 +81,7 @@ public class FormDataPurchase {
   private final MutableLiveData<Integer> productNameErrorLive;
   private final MutableLiveData<String> barcodeLive;
   private final MutableLiveData<HashMap<QuantityUnit, Double>> quantityUnitsFactorsLive;
-  private final LiveData<QuantityUnit> quantityUnitStockLive;
+  private final MutableLiveData<QuantityUnit> quantityUnitStockLive;
   private final MutableLiveData<QuantityUnit> quantityUnitLive;
   private final LiveData<String> quantityUnitNameLive;
   private final MutableLiveData<Boolean> quantityUnitErrorLive;
@@ -176,10 +176,7 @@ public class FormDataPurchase {
     productNameErrorLive = new MutableLiveData<>();
     barcodeLive = new MutableLiveData<>();
     quantityUnitsFactorsLive = new MutableLiveData<>();
-    quantityUnitStockLive = Transformations.map(
-        quantityUnitsFactorsLive,
-        this::getStockQuantityUnit
-    );
+    quantityUnitStockLive = new MutableLiveData<>();
     quantityUnitsFactorsLive.setValue(null);
     quantityUnitLive = new MutableLiveData<>();
     quantityUnitNameLive = Transformations.map(
@@ -263,7 +260,7 @@ public class FormDataPurchase {
     priceHelperLive = new MediatorLiveData<>();
     priceHelperLive.addSource(priceStockLive, i -> priceHelperLive.setValue(getPriceHelpText()));
     priceHelperLive.addSource(quantityUnitLive, i -> priceHelperLive.setValue(getPriceHelpText()));
-    if (currency != null && !currency.isEmpty()) {
+    if (!currency.isEmpty()) {
       priceHint = application.getString(R.string.property_price_in, currency);
     } else {
       priceHint = getString(R.string.property_price);
@@ -354,8 +351,7 @@ public class FormDataPurchase {
   }
 
   public boolean isTareWeightEnabled() {
-    assert isTareWeightEnabledLive.getValue() != null;
-    return isTareWeightEnabledLive.getValue();
+    return isTareWeightEnabledLive.getValue() != null && isTareWeightEnabledLive.getValue();
   }
 
   public MutableLiveData<String> getProductNameLive() {
@@ -370,7 +366,7 @@ public class FormDataPurchase {
     return quantityUnitsFactorsLive;
   }
 
-  public LiveData<QuantityUnit> getQuantityUnitStockLive() {
+  public MutableLiveData<QuantityUnit> getQuantityUnitStockLive() {
     return quantityUnitStockLive;
   }
 
@@ -384,18 +380,6 @@ public class FormDataPurchase {
 
   public MutableLiveData<Boolean> getQuantityUnitErrorLive() {
     return quantityUnitErrorLive;
-  }
-
-  private QuantityUnit getStockQuantityUnit(HashMap<QuantityUnit, Double> unitsFactors) {
-    if (unitsFactors == null || !unitsFactors.containsValue((double) -1)) {
-      return null;
-    }
-    for (Map.Entry<QuantityUnit, Double> entry : unitsFactors.entrySet()) {
-      if (entry.getValue() == -1) {
-        return entry.getKey();
-      }
-    }
-    return null;
   }
 
   public MutableLiveData<String> getBarcodeLive() {
@@ -420,32 +404,15 @@ public class FormDataPurchase {
 
   private String getAmountStock() {
     ProductDetails productDetails = productDetailsLive.getValue();
-    QuantityUnit stock = quantityUnitStockLive.getValue();
-    QuantityUnit current = quantityUnitLive.getValue();
-    if (!isAmountValid() || quantityUnitsFactorsLive.getValue() == null) {
-      return null;
-    }
-    assert amountLive.getValue() != null;
-
-    if (stock == null || current == null || productDetails == null) {
-      return null;
-    }
-    HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-    double amount = NumUtil.toDouble(amountLive.getValue());
-    Object currentFactor = hashMap.get(current);
-    if (currentFactor == null) {
-      return null;
-    }
-    double amountMultiplied;
-    if (isTareWeightEnabled() || (double) currentFactor == -1) {
-      amountMultiplied = amount;
-    } else if (current.getId() == productDetails.getProduct()
-        .getQuIdPurchaseInt()) {
-      amountMultiplied = amount * (double) currentFactor;
-    } else {
-      amountMultiplied = amount / (double) currentFactor;
-    }
-    return NumUtil.trimAmount(amountMultiplied, maxDecimalPlacesAmount);
+    if (productDetails == null) return null;
+    return QuantityUnitConversionUtil.getAmountStock(
+        quantityUnitStockLive.getValue(),
+        quantityUnitLive.getValue(),
+        amountLive.getValue(),
+        quantityUnitsFactorsLive.getValue(),
+        false,
+        maxDecimalPlacesAmount
+    );
   }
 
   private String getAmountHelpText() {
@@ -539,40 +506,15 @@ public class FormDataPurchase {
   }
 
   private String getPriceStock() {
-    ProductDetails productDetails = productDetailsLive.getValue();
-    QuantityUnit stock = quantityUnitStockLive.getValue();
-    QuantityUnit current = quantityUnitLive.getValue();
-    HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-    String amountString = amountLive.getValue();
-    String priceString = priceLive.getValue();
-
-    if (!NumUtil.isStringDouble(priceString) || !NumUtil.isStringDouble(amountString)) {
-      return null;
-    }
-    if (stock == null || current == null || productDetails == null || hashMap == null) {
-      return null;
-    }
-
-    double amount = NumUtil.toDouble(amountString);
-    double price = NumUtil.toDouble(priceString);
-    Object currentFactor = hashMap.get(current);
-    if (currentFactor == null) {
-      return null;
-    }
-
-    double priceMultiplied;
-    if (isTareWeightEnabled() || (double) currentFactor == -1) {
-      priceMultiplied = price;
-    } else if (current.getId() == productDetails.getProduct()
-        .getQuIdPurchaseInt()) {
-      priceMultiplied = price / (double) currentFactor;
-    } else {
-      priceMultiplied = price * (double) currentFactor;
-    }
-    if (isTotalPriceLive.getValue() != null && isTotalPriceLive.getValue()) {
-      priceMultiplied /= amount;
-    }
-    return NumUtil.trimPrice(priceMultiplied, decimalPlacesPriceInput);
+    return QuantityUnitConversionUtil.getPriceStock(
+        quantityUnitLive.getValue(),
+        amountLive.getValue(),
+        priceLive.getValue(),
+        quantityUnitsFactorsLive.getValue(),
+        isTareWeightEnabled(),
+        isTotalPriceLive.getValue() != null && isTotalPriceLive.getValue(),
+        decimalPlacesPriceDisplay
+    );
   }
 
   public MediatorLiveData<String> getPriceStockLive() {
@@ -1012,6 +954,7 @@ public class FormDataPurchase {
     amountLive.setValue(null);
     quantityUnitLive.setValue(null);
     quantityUnitsFactorsLive.setValue(null);
+    quantityUnitStockLive.setValue(null);
     productDetailsLive.setValue(null);
     pendingProductLive.setValue(null);
     productNameLive.setValue(null);

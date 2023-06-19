@@ -33,7 +33,6 @@ import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.Store;
@@ -134,22 +133,6 @@ public class ArrayUtil {
     HashMap<Integer, QuantityUnit> hashMap = new HashMap<>();
     for (QuantityUnit q : quantityUnits) {
       hashMap.put(q.getId(), q);
-    }
-    return hashMap;
-  }
-
-  public static HashMap<Integer, ArrayList<QuantityUnitConversion>> getUnitConversionsHashMap(
-      List<QuantityUnitConversion> unitConversions
-  ) {
-    HashMap<Integer, ArrayList<QuantityUnitConversion>> hashMap = new HashMap<>();
-    for (QuantityUnitConversion unitConversion : unitConversions) {
-      ArrayList<QuantityUnitConversion> unitConversionArrayList
-          = hashMap.get(unitConversion.getProductIdInt());
-      if (unitConversionArrayList == null) {
-        unitConversionArrayList = new ArrayList<>();
-        hashMap.put(unitConversion.getProductIdInt(), unitConversionArrayList);
-      }
-      unitConversionArrayList.add(unitConversion);
     }
     return hashMap;
   }

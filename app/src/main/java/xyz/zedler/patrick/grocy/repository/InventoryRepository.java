@@ -30,7 +30,7 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Store;
 
 public class InventoryRepository {
@@ -51,7 +51,7 @@ public class InventoryRepository {
     private final List<Product> products;
     private final List<ProductBarcode> barcodes;
     private final List<QuantityUnit> quantityUnits;
-    private final List<QuantityUnitConversion> quantityUnitConversions;
+    private final List<QuantityUnitConversionResolved> quantityUnitConversions;
     private final List<Store> stores;
     private final List<Location> locations;
 
@@ -59,7 +59,7 @@ public class InventoryRepository {
         List<Product> products,
         List<ProductBarcode> barcodes,
         List<QuantityUnit> quantityUnits,
-        List<QuantityUnitConversion> quantityUnitConversions,
+        List<QuantityUnitConversionResolved> quantityUnitConversions,
         List<Store> stores,
         List<Location> locations
     ) {
@@ -83,7 +83,7 @@ public class InventoryRepository {
       return quantityUnits;
     }
 
-    public List<QuantityUnitConversion> getQuantityUnitConversions() {
+    public List<QuantityUnitConversionResolved> getQuantityUnitConversionsResolved() {
       return quantityUnitConversions;
     }
 
@@ -102,7 +102,7 @@ public class InventoryRepository {
             appDatabase.productDao().getProducts(),
             appDatabase.productBarcodeDao().getProductBarcodes(),
             appDatabase.quantityUnitDao().getQuantityUnits(),
-            appDatabase.quantityUnitConversionDao().getConversions(),
+            appDatabase.quantityUnitConversionResolvedDao().getConversionsResolved(),
             appDatabase.storeDao().getStores(),
             appDatabase.locationDao().getLocations(),
             InventoryData::new

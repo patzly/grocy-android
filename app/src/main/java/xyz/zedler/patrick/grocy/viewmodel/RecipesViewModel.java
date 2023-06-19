@@ -42,7 +42,6 @@ import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
@@ -152,7 +151,7 @@ public class RecipesViewModel extends BaseViewModel {
         RecipePosition.class,
         Product.class,
         QuantityUnit.class,
-        QuantityUnitConversion.class,
+        QuantityUnitConversionResolved.class,
         StockItem.class,
         ShoppingListItem.class
     );
@@ -169,7 +168,7 @@ public class RecipesViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_RECIPE_POSITIONS, null);
     editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
     editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS_RESOLVED, null);
     editPrefs.putString(PREF.DB_LAST_TIME_STOCK_ITEMS, null);
     editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
     editPrefs.apply();

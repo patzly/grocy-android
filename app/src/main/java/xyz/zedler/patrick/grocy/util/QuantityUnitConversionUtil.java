@@ -332,6 +332,34 @@ public class QuantityUnitConversionUtil {
     }
   }
 
+  public static String getPriceStock(
+      QuantityUnit current,
+      String amountStr,
+      String priceStr,
+      HashMap<QuantityUnit, Double> quantityUnitsFactors,
+      boolean isTareWeightEnabled,
+      boolean isTotalPrice,
+      int decimalPlacesPriceDisplay
+  ) {
+    if (!NumUtil.isStringDouble(priceStr) || !NumUtil.isStringDouble(amountStr)
+        || current == null) {
+      return null;
+    }
+    if (!NumUtil.isStringDouble(amountStr) || quantityUnitsFactors == null) {
+      return null;
+    }
+    double amount = NumUtil.toDouble(amountStr);
+    double price = NumUtil.toDouble(priceStr);
+    Object currentFactor = quantityUnitsFactors.get(current);
+    if (currentFactor == null) return null;
+
+    double priceMultiplied = isTareWeightEnabled ? price : price * (double) currentFactor;
+    if (isTotalPrice) {
+      priceMultiplied /= amount;
+    }
+    return NumUtil.trimPrice(priceMultiplied, decimalPlacesPriceDisplay);
+  }
+
   public static double getAmountRelativeToUnit(
       HashMap<QuantityUnit, Double> unitFactors,
       Product product,

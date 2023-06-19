@@ -57,7 +57,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockLocation;
@@ -81,7 +81,7 @@ public class ConsumeViewModel extends BaseViewModel {
   private final FormDataConsume formData;
 
   private List<Product> products;
-  private List<QuantityUnitConversion> unitConversions;
+  private List<QuantityUnitConversionResolved> unitConversions;
   private List<ProductBarcode> barcodes;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
 
@@ -138,7 +138,7 @@ public class ConsumeViewModel extends BaseViewModel {
       this.products = data.getProducts();
       this.barcodes = data.getBarcodes();
       this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
-      this.unitConversions = data.getQuantityUnitConversions();
+      this.unitConversions = data.getQuantityUnitConversionsResolved();
       formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
       if (downloadAfterLoading) {
         downloadData();
@@ -163,16 +163,16 @@ public class ConsumeViewModel extends BaseViewModel {
         Product.class,
         ProductBarcode.class,
         QuantityUnit.class,
-        QuantityUnitConversion.class
+        QuantityUnitConversionResolved.class
     );
   }
 
   public void downloadDataForceUpdate() {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS_RESOLVED, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
     editPrefs.apply();
     downloadData();
   }
@@ -194,28 +194,23 @@ public class ConsumeViewModel extends BaseViewModel {
       formData.getConsumeExactAmountLive().setValue(false);
 
       // quantity unit
-      try {
-        HashMap<QuantityUnit, Double> unitFactors= QuantityUnitConversionUtil.getUnitFactors(
-            getApplication(),
-            quantityUnitHashMap,
-            unitConversions,
-            product
-        );
-        formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+      HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
+          quantityUnitHashMap,
+          unitConversions,
+          product
+      );
+      formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+      QuantityUnit stock = quantityUnitHashMap.get(product.getQuIdStockInt());
+      formData.getQuantityUnitStockLive().setValue(stock);
 
-        QuantityUnit barcodeUnit = null;
-        if (barcode != null && barcode.hasQuId()) {
-          barcodeUnit = quantityUnitHashMap.get(barcode.getQuIdInt());
-        }
-        if (barcodeUnit != null && unitFactors.containsKey(barcodeUnit)) {
-          formData.getQuantityUnitLive().setValue(barcodeUnit);
-        } else {
-          QuantityUnit stock = quantityUnitHashMap.get(product.getQuIdStockInt());
-          formData.getQuantityUnitLive().setValue(stock);
-        }
-      } catch (IllegalArgumentException e) {
-        showMessageAndContinueScanning(e.getMessage());
-        return;
+      QuantityUnit barcodeUnit = null;
+      if (barcode != null && barcode.hasQuId()) {
+        barcodeUnit = quantityUnitHashMap.get(barcode.getQuIdInt());
+      }
+      if (barcodeUnit != null && unitFactors.containsKey(barcodeUnit)) {
+        formData.getQuantityUnitLive().setValue(barcodeUnit);
+      } else {
+        formData.getQuantityUnitLive().setValue(stock);
       }
 
       // amount
