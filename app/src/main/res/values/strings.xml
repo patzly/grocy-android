@@ -336,6 +336,7 @@
   <string name="msg_logout_demo_short">Public demo server. Tap for details.</string>
   <string name="msg_restart">The app must be restarted to apply the current configuration. Do you want to restart it now?</string>
   <string name="msg_full_description">Tap here to show the full description.</string>
+  <string name="msg_copied_clipboard">Copied to clipboard</string>
   <string name="msg_shortcuts">You can enable up to 4 shortcuts:</string>
   <string name="msg_shortcuts_not_supported">Shortcuts are not supported on this Android version.</string>
   <string name="msg_barcode_formats">You can improve the speed of the barcode detector by configuring it to only detect those formats which you expect to read.</string>
