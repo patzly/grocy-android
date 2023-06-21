@@ -26,13 +26,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.List;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields;
@@ -221,47 +217,6 @@ public class RecipesViewModel extends BaseViewModel {
             .emitCounts();
 
     filteredRecipesLive.setValue(filteredRecipes);
-  }
-
-  public void deleteRecipe(int recipeId) {
-    dlHelper.delete(
-        grocyApi.getObject(ENTITY.RECIPES, recipeId),
-        response -> downloadData(false),
-        this::showNetworkErrorMessage
-    );
-  }
-
-  public void consumeRecipe(int recipeId) {
-    dlHelper.post(
-        grocyApi.consumeRecipe(recipeId),
-        response -> downloadData(false),
-        this::showNetworkErrorMessage
-    );
-  }
-
-  public void addNotFulfilledProductsToCartForRecipe(int recipeId, int[] excludedProductIds) {
-    JSONObject jsonObject = new JSONObject();
-    try {
-      JSONArray array = new JSONArray();
-      for (int id : excludedProductIds) array.put(id);
-      jsonObject.put("excludedProductIds", array);
-    } catch (JSONException e) {
-      throw new RuntimeException(e);
-    }
-    dlHelper.postWithArray(
-        grocyApi.addNotFulfilledProductsToCartForRecipe(recipeId),
-        jsonObject,
-        response -> downloadData(false),
-        this::showNetworkErrorMessage
-    );
-  }
-
-  public void copyRecipe(int recipeId) {
-    dlHelper.post(
-        grocyApi.copyRecipe(recipeId),
-        response -> downloadData(false),
-        this::showNetworkErrorMessage
-    );
   }
 
   public ArrayList<RecipeFulfillment> getRecipeFulfillments() {

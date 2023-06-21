@@ -244,50 +244,6 @@ public class RecipesFragment extends BaseFragment implements
     });
   }
 
-
-  @Override
-  public void consumeRecipe(int recipeId) {
-    if (showOfflineError()) {
-      return;
-    }
-    viewModel.consumeRecipe(recipeId);
-  }
-
-  @Override
-  public void addNotFulfilledProductsToCartForRecipe(int recipeId, int[] excludedProductIds) {
-    if (showOfflineError()) {
-      return;
-    }
-    viewModel.addNotFulfilledProductsToCartForRecipe(recipeId, excludedProductIds);
-  }
-
-  @Override
-  public void editRecipe(Recipe recipe) {
-    if (showOfflineError()) {
-      return;
-    }
-    activity.navUtil.navigateFragment(
-        RecipesFragmentDirections.actionRecipesFragmentToRecipeEditFragment(ACTION.EDIT)
-            .setRecipe(recipe)
-    );
-  }
-
-  @Override
-  public void copyRecipe(int recipeId) {
-    if (showOfflineError()) {
-      return;
-    }
-    viewModel.copyRecipe(recipeId);
-  }
-
-  @Override
-  public void deleteRecipe(int recipeId) {
-    if (showOfflineError()) {
-      return;
-    }
-    viewModel.deleteRecipe(recipeId);
-  }
-
   @Override
   public void onSaveInstanceState(@NonNull Bundle outState) {
     if (appBarBehavior != null) {

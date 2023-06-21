@@ -114,7 +114,6 @@ public class RecipeFragment extends BaseFragment implements
         .RecipeViewModelFactory(activity.getApplication(), args)
     ).get(RecipeViewModel.class);
     viewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
     binding.setFragment(this);
@@ -127,6 +126,8 @@ public class RecipeFragment extends BaseFragment implements
     systemBarBehavior.setToolbar(binding.toolbar);
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setScroll(binding.scroll, binding.linearContainer);
+    systemBarBehavior.applyAppBarInsetOnContainer(false);
+    systemBarBehavior.applyStatusBarInsetOnContainer(false);
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
@@ -509,57 +510,6 @@ public class RecipeFragment extends BaseFragment implements
     dialogDelete.show();
   }
 
-  @Override
-  public void consumeRecipe(int recipeId) {
-    if (showOfflineError()) {
-      return;
-    }
-    viewModel.consumeRecipe(recipeId);
-  }
-
-  @Override
-  public void addNotFulfilledProductsToCartForRecipe(int recipeId, int[] excludedProductIds) {
-    if (showOfflineError()) {
-      return;
-    }
-    viewModel.addNotFulfilledProductsToCartForRecipe(recipeId, excludedProductIds);
-  }
-
-  @Override
-  public void editRecipe(Recipe recipe) {
-    if (showOfflineError()) {
-      return;
-    }
-    activity.navUtil.navigateFragment(
-        RecipesFragmentDirections.actionRecipesFragmentToRecipeEditFragment(ACTION.EDIT)
-            .setRecipe(recipe)
-    );
-  }
-
-  @Override
-  public void copyRecipe(int recipeId) {
-    if (showOfflineError()) {
-      return;
-    }
-    viewModel.copyRecipe(recipeId);
-  }
-
-  @Override
-  public void deleteRecipe(int recipeId) {
-    if (showOfflineError()) {
-      return;
-    }
-    viewModel.deleteRecipe(recipeId);
-  }
-
-  private boolean showOfflineError() {
-    if (viewModel.isOffline()) {
-      activity.showSnackbar(R.string.error_offline, false);
-      return true;
-    }
-    return false;
-  }
-
   private boolean onMenuItemClick(MenuItem item) {
     Recipe recipe = viewModel.getRecipeLive().getValue();
     if (recipe == null) {
@@ -572,7 +522,6 @@ public class RecipeFragment extends BaseFragment implements
       return true;
     } else if (item.getItemId() == R.id.action_copy_recipe) {
       viewModel.copyRecipe(recipe.getId());
-      activity.navUtil.navigateUp();
       return true;
     } else if (item.getItemId() == R.id.action_delete_recipe) {
       showDeleteConfirmationDialog();

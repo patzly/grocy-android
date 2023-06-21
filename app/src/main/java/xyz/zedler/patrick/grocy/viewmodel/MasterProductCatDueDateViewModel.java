@@ -42,7 +42,6 @@ public class MasterProductCatDueDateViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
 
   private final boolean isActionEdit;
 
@@ -58,9 +57,7 @@ public class MasterProductCatDueDateViewModel extends BaseViewModel {
     formData = new FormDataMasterProductCatDueDate(application, getBeginnerModeEnabled());
     args = startupArgs;
     isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
-
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
   }
 
   public FormDataMasterProductCatDueDate getFormData() {
@@ -77,19 +74,6 @@ public class MasterProductCatDueDateViewModel extends BaseViewModel {
 
   public void fillData() {
     formData.fillWithProductIfNecessary(args.getProduct());
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

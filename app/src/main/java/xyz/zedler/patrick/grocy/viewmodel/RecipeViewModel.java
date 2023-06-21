@@ -64,7 +64,6 @@ public class RecipeViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<Recipe> recipeLive;
   private final MutableLiveData<String> servingsDesiredLive;
   private final MutableLiveData<Boolean> servingsDesiredSaveEnabledLive;
@@ -95,7 +94,6 @@ public class RecipeViewModel extends BaseViewModel {
     repository = new RecipesRepository(application);
 
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
     recipeLive = new MutableLiveData<>();
     servingsDesiredLive = new MutableLiveData<>();
     servingsDesiredSaveEnabledLive = new MutableLiveData<>(false);
@@ -261,7 +259,7 @@ public class RecipeViewModel extends BaseViewModel {
   public void copyRecipe(int recipeId) {
     dlHelper.post(
         grocyApi.copyRecipe(recipeId),
-        response -> downloadData(false),
+        response -> navigateUp(),
         this::showNetworkErrorMessage
     );
   }
@@ -317,19 +315,6 @@ public class RecipeViewModel extends BaseViewModel {
   @Override
   public SharedPreferences getSharedPrefs() {
     return sharedPrefs;
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

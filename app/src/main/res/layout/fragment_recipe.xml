@@ -39,10 +39,13 @@
       type="xyz.zedler.patrick.grocy.fragment.RecipeFragment" />
   </data>
 
-  <androidx.coordinatorlayout.widget.CoordinatorLayout
+  <RelativeLayout
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground"
+    android:animateLayoutChanges="true"
+    app:transitionTypeChanging="@{true}">
 
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
@@ -54,13 +57,31 @@
         style="@style/Widget.Grocy.Toolbar.Back"
         app:title="@string/title_recipe" />
 
+      <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorError">
+
+        <TextView
+          style="@style/Widget.Grocy.TextView.LabelLarge"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="4dp"
+          android:layout_marginBottom="4dp"
+          android:layout_gravity="center"
+          android:visibility="@{viewModel.offlineLive ? View.VISIBLE : View.GONE}"
+          android:textColor="?attr/colorOnError"
+          android:text="@string/error_offline" />
+
+      </FrameLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout
       android:id="@+id/swipe"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginTop="?attr/actionBarSize"
+      android:layout_below="@+id/app_bar"
       android:overScrollMode="never"
       app:setRefreshing="@{viewModel.isLoadingLive}"
       app:onRefreshListener="@{() -> viewModel.downloadData(true)}">
@@ -336,7 +357,7 @@
 
     </xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout>
 
-  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+  </RelativeLayout>
 
 
 </layout>
