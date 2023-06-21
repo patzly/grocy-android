@@ -110,16 +110,13 @@ public class BaseViewModel extends AndroidViewModel {
 
   public void onError(Object error, String TAG) {
     if (error instanceof VolleyError) {
-      Log.e(TAG, "onError: VolleyError: " + (VolleyError) error);
-      if (!isOffline()) {
-        setOfflineLive(true);
-      }
+      Log.e(TAG, "onError: VolleyError: " + error);
       showNetworkErrorMessage((VolleyError) error);
     } else if (error instanceof JSONException) {
-      Log.e(TAG, "onError: JSONException: " + (JSONException) error);
+      Log.e(TAG, "onError: JSONException: " + error);
       showJSONErrorMessage((JSONException) error);
     } else if (error instanceof Throwable) {
-      Log.e(TAG, "onError: Throwable: " + (Throwable) error);
+      Log.e(TAG, "onError: Throwable: " + error);
       showThrowableErrorMessage((Throwable) error);
     }
   }
@@ -308,7 +305,7 @@ public class BaseViewModel extends AndroidViewModel {
   }
 
   void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
+    if (isOffline() != isOffline) offlineLive.setValue(isOffline);
   }
 
   String getString(@StringRes int resId) {

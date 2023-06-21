@@ -282,12 +282,18 @@ public class ShoppingListViewModel extends BaseViewModel {
     if (dbChangedTime == null) {
       dlHelper.getTimeDbChanged(
           time -> downloadData(time, skipOfflineCheck),
-          error -> onError(error, TAG)
+          error -> {
+            if (skipOfflineCheck) onError(error, TAG);
+            setOfflineLive(true);
+          }
       );
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(updated -> onQueueEmpty(), error -> onError(error, TAG));
+    NetworkQueue queue = dlHelper.newQueue(updated -> onQueueEmpty(), error -> {
+      if (skipOfflineCheck) onError(error, TAG);
+      setOfflineLive(true);
+    });
     queue.append(
         ShoppingListItem.updateShoppingListItems(
             dlHelper,
@@ -362,7 +368,7 @@ public class ShoppingListViewModel extends BaseViewModel {
   }
 
   private void onQueueEmpty() {
-    if (isOffline()) setOfflineLive(false);
+    setOfflineLive(false);
 
     if (itemsToSyncTemp == null || itemsToSyncTemp.isEmpty() || serverItemHashMapTemp == null) {
       tidyUpItems(itemsChanged -> {

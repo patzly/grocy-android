@@ -251,14 +251,6 @@ public class RecipesFragment extends BaseFragment implements
     }
   }
 
-  private boolean showOfflineError() {
-    if (viewModel.isOffline()) {
-      activity.showSnackbar(R.string.error_offline, false);
-      return true;
-    }
-    return false;
-  }
-
   private boolean onMenuItemClick(MenuItem item) {
     if (item.getItemId() == R.id.action_search) {
       ViewUtil.startIcon(item);
