@@ -117,12 +117,6 @@ public class MasterProductCatAmountFragment extends BaseFragment {
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
 
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
-      if (!isLoading) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
-
     viewModel.getFormData().getTareWeightErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textTareWeightLabel.setTextColor(
             ResUtil.getColorAttr(
@@ -233,7 +227,7 @@ public class MasterProductCatAmountFragment extends BaseFragment {
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
+    viewModel.downloadData(false);
   }
 
   @NonNull

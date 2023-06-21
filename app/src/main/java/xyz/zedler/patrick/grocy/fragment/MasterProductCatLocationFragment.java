@@ -139,12 +139,6 @@ public class MasterProductCatLocationFragment extends BaseFragment {
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
 
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
-      if (!isLoading) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
-
     viewModel.getFormData().getLocationErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textLocation.setTextColor(
             ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
@@ -288,10 +282,7 @@ public class MasterProductCatLocationFragment extends BaseFragment {
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
   }
 
   @NonNull

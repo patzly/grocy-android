@@ -175,10 +175,7 @@ public class ShoppingListEditFragment extends BaseFragment {
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
   }
 
   @NonNull

@@ -40,7 +40,6 @@ import org.json.JSONObject;
 
 public class CustomJsonArrayRequest extends JsonRequest<JSONArray> {
 
-  private final Runnable onRequestFinished;
   private final String url;
   private final String apiKey;
   private final String homeAssistantIngressSessionKey;
@@ -50,27 +49,17 @@ public class CustomJsonArrayRequest extends JsonRequest<JSONArray> {
       String url,
       String apiKey,
       String homeAssistantIngressSessionKey,
-      @Nullable JSONObject jsonRequest,
+      JSONObject jsonRequest,
       Response.Listener<JSONArray> listener,
       @Nullable Response.ErrorListener errorListener,
-      @Nullable Runnable onRequestFinished,
       int timeoutSeconds,
       String tag
   ) {
-    super(method, url, jsonRequest.toString(), response -> {
-      if (onRequestFinished != null) {
-        onRequestFinished.run();
-      }
-      listener.onResponse(response);
-    }, error -> {
-      if (onRequestFinished != null) {
-        onRequestFinished.run();
-      }
+    super(method, url, jsonRequest.toString(), listener, error -> {
       if (errorListener != null) {
         errorListener.onErrorResponse(error);
       }
     });
-    this.onRequestFinished = onRequestFinished;
     this.url = url;
     this.apiKey = apiKey;
     this.homeAssistantIngressSessionKey = homeAssistantIngressSessionKey;
@@ -100,14 +89,6 @@ public class CustomJsonArrayRequest extends JsonRequest<JSONArray> {
       return Response.success(result, HttpHeaderParser.parseCacheHeaders(response));
     } catch (UnsupportedEncodingException | JSONException e) {
       return Response.error(new ParseError(e));
-    }
-  }
-
-  @Override
-  public void cancel() {
-    super.cancel();
-    if (onRequestFinished != null) {
-      onRequestFinished.run();
     }
   }
 

@@ -46,7 +46,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
+import xyz.zedler.patrick.grocy.web.NetworkQueue.QueueItem;
 
 @Entity(tableName = "product_group_table")
 public class ProductGroup extends GroupedListItem implements Parcelable {
@@ -211,11 +211,12 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
   public static QueueItem updateProductGroups(
       DownloadHelper dlHelper,
       String dbChangedTime,
+      boolean forceUpdate,
       OnObjectsResponseListener<ProductGroup> onResponseListener
   ) {
-    String lastTime = dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
+    String lastTime = !forceUpdate ? dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null
-    );
+    ) : null;
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
       return new QueueItem() {
         @Override

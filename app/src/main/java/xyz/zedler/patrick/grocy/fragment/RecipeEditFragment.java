@@ -333,10 +333,7 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
   }
 
   @NonNull

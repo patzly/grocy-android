@@ -305,10 +305,7 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
     if (systemBarBehavior != null) {
       systemBarBehavior.refresh();
     }

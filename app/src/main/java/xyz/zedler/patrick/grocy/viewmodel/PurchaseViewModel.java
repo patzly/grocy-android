@@ -132,7 +132,7 @@ public class PurchaseViewModel extends BaseViewModel {
     );
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new PurchaseRepository(application);
     formData = new FormDataPurchase(application, sharedPrefs, args);
@@ -198,7 +198,7 @@ public class PurchaseViewModel extends BaseViewModel {
         storedPurchase = StoredPurchase.getFromId(data.getStoredPurchases(), storedPurchaseId);
       }
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       } else {
         if (queueEmptyAction != null) {
           queueEmptyAction.run();
@@ -211,15 +211,24 @@ public class PurchaseViewModel extends BaseViewModel {
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData() {
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            if (queueEmptyAction != null) {
+              queueEmptyAction.run();
+              queueEmptyAction = null;
+            }
+            if (batchShoppingListItemIds != null) {
+              fillWithShoppingListItem();
+            }
+          }
+        },
         error -> onError(error, TAG),
+        forceUpdate,
+        false,
         Product.class,
         ProductBarcode.class,
         QuantityUnit.class,
@@ -228,18 +237,6 @@ public class PurchaseViewModel extends BaseViewModel {
         Location.class,
         batchShoppingListItemIds != null ? ShoppingListItem.class : null
     );
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_LOCATIONS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_STORES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS_RESOLVED, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.apply();
-    downloadData();
   }
 
   public void setProduct(

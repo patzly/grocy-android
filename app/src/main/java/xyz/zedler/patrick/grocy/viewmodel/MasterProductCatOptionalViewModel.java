@@ -59,7 +59,6 @@ import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.PictureUtil;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class MasterProductCatOptionalViewModel extends BaseViewModel {
 
@@ -78,7 +77,6 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
   private List<ProductGroup> productGroups;
   private List<ProductBarcode> barcodes;
 
-  private NetworkQueue currentQueueLoading;
   private Runnable queueEmptyAction;
   private final boolean isActionEdit;
   private String currentFilePath;
@@ -90,7 +88,7 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
     super(application);
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(application);
     repository = new MasterProductRepository(application);
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
@@ -119,71 +117,37 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
       this.barcodes = data.getBarcodes();
       formData.getProductsLive().setValue(products);
       formData.getProductGroupsLive().setValue(productGroups);
-      formData.fillWithProductIfNecessary(args.getProduct());
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
+      } else {
+        if (queueEmptyAction != null) {
+          queueEmptyAction.run();
+          queueEmptyAction = null;
+        }
+        formData.fillWithProductIfNecessary(args.getProduct());
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, TAG));
-      return;
-    }
-
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
-    queue.append(
-        Product.updateProducts(dlHelper, dbChangedTime, products -> {
-          this.products = products;
-          formData.getProductsLive().setValue(products);
-        }), ProductGroup.updateProductGroups(dlHelper, dbChangedTime, productGroups -> {
-          this.productGroups = productGroups;
-          formData.getProductGroupsLive().setValue(productGroups);
-        }), ProductBarcode.updateProductBarcodes(
-            dlHelper,
-            dbChangedTime,
-            barcodes -> this.barcodes = barcodes
-        )
+  public void downloadData(boolean forceUpdate) {
+    dlHelper.updateData(
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            if (queueEmptyAction != null) {
+              queueEmptyAction.run();
+              queueEmptyAction = null;
+            }
+            formData.fillWithProductIfNecessary(args.getProduct());
+          }
+        }, error -> onError(error, null),
+        forceUpdate,
+        false,
+        Product.class,
+        ProductBarcode.class,
+        ProductGroup.class
     );
-    if (queue.isEmpty()) {
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = getSharedPrefs().edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.apply();
-    downloadData();
-  }
-
-  private void onQueueEmpty() {
-    if (queueEmptyAction != null) {
-      queueEmptyAction.run();
-      queueEmptyAction = null;
-      return;
-    }
-    if (isOffline()) {
-      setOfflineLive(false);
-    }
-    formData.fillWithProductIfNecessary(args.getProduct());
   }
 
   public void onBarcodeRecognized(String barcode) {
@@ -322,10 +286,6 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
   @NonNull
   public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
     return infoFullscreenLive;
-  }
-
-  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
-    currentQueueLoading = queueLoading;
   }
 
   public void setQueueEmptyAction(Runnable queueEmptyAction) {

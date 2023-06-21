@@ -82,7 +82,6 @@ public class OverviewStartFragment extends BaseFragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
     viewModel = new ViewModelProvider(this).get(OverviewStartViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
     binding.setFragment(this);
     binding.setActivity(activity);
@@ -303,7 +302,6 @@ public class OverviewStartFragment extends BaseFragment {
     if (!online == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!online);
     viewModel.downloadData(false);
   }
 

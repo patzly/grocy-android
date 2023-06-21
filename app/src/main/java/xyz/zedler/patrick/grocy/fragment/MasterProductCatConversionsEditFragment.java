@@ -237,10 +237,7 @@ public class MasterProductCatConversionsEditFragment extends BaseFragment {
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
     if (systemBarBehavior != null) {
       systemBarBehavior.refresh();
     }

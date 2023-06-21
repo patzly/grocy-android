@@ -93,7 +93,6 @@ public class RecipesFragment extends BaseFragment implements
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
     viewModel = new ViewModelProvider(this).get(RecipesViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
     binding.setFragment(this);
@@ -290,11 +289,6 @@ public class RecipesFragment extends BaseFragment implements
   }
 
   @Override
-  public void updateData() {
-    viewModel.downloadData();
-  }
-
-  @Override
   public void onSaveInstanceState(@NonNull Bundle outState) {
     if (appBarBehavior != null) {
       appBarBehavior.saveInstanceState(outState);
@@ -339,10 +333,7 @@ public class RecipesFragment extends BaseFragment implements
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
   }
 
   private void setUpSearch() {

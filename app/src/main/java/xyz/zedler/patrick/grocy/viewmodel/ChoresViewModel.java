@@ -23,7 +23,6 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
@@ -49,7 +48,6 @@ import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class ChoresViewModel extends BaseViewModel {
 
@@ -73,7 +71,6 @@ public class ChoresViewModel extends BaseViewModel {
   private HashMap<Integer, Chore> choreHashMap;
   private HashMap<Integer, User> usersHashMap;
 
-  private NetworkQueue currentQueueLoading;
   private String searchInput;
   private int choresDueTodayCount;
   private int choresDueSoonCount;
@@ -87,7 +84,7 @@ public class ChoresViewModel extends BaseViewModel {
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new ChoresRepository(application);
     dateUtil = new DateUtil(application);
@@ -145,94 +142,23 @@ public class ChoresViewModel extends BaseViewModel {
 
       updateFilteredChoreEntries();
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime, boolean skipOfflineCheck) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
-    if (!skipOfflineCheck && isOffline()) { // skip downloading and update recyclerview
-      isLoadingLive.setValue(false);
-      updateFilteredChoreEntries();
-      return;
-    }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(
-          time -> downloadData(time, skipOfflineCheck),
-          error -> onError(error, null)
-      );
-      return;
-    }
-
-    NetworkQueue queue = dlHelper.newQueue(() -> {
-      setOfflineLive(false);
-      updateFilteredChoreEntries();
-    }, error -> onError(error, null));
-    queue.append(
-        ChoreEntry.updateChoreEntries(dlHelper, dbChangedTime, choreEntries -> {
-          this.choreEntries = choreEntries;
-
-          choresDueTodayCount = 0;
-          choresDueSoonCount = 0;
-          choresOverdueCount = 0;
-          for (ChoreEntry choreEntry : choreEntries) {
-            if (choreEntry.getNextEstimatedExecutionTime() == null
-                || choreEntry.getNextEstimatedExecutionTime().isEmpty()) {
-              continue;
-            }
-            int daysFromNow = DateUtil.getDaysFromNow(choreEntry.getNextEstimatedExecutionTime());
-            if (daysFromNow < 0) {
-              choresOverdueCount++;
-            }
-            if (daysFromNow == 0) {
-              choresDueTodayCount++;
-            }
-            if (daysFromNow >= 0 && daysFromNow <= 5) {
-              choresDueSoonCount++;
-            }
-          }
-
-          filterChipLiveDataStatus
-              .setDueTodayCount(choresDueTodayCount)
-              .setDueSoonCount(choresDueSoonCount)
-              .setOverdueCount(choresOverdueCount)
-              .emitCounts();
-
-          updateFilteredChoreEntries();
-        }), Chore.updateChores(
-            dlHelper,
-            dbChangedTime,
-            chores -> this.choreHashMap = ArrayUtil.getChoresHashMap(chores)
-        ), User.updateUsers(dlHelper, dbChangedTime, users -> {
-          usersHashMap = ArrayUtil.getUsersHashMap(users);
-          filterChipLiveDataAssignment.setUsers(users);
-        })
+  public void downloadData(boolean forceUpdate) {
+    dlHelper.updateData(
+        updated -> {
+          if (updated) loadFromDatabase(false);
+        },
+        error -> onError(error, TAG),
+        forceUpdate,
+        true,
+        ChoreEntry.class,
+        Chore.class,
+        User.class
     );
-
-    if (queue.isEmpty()) {
-      updateFilteredChoreEntries();
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null, false);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_CHORE_ENTRIES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_CHORES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_USERS, null);
-    editPrefs.apply();
-    downloadData(null, true);
   }
 
   public void updateFilteredChoreEntries() {
@@ -307,7 +233,7 @@ public class ChoresViewModel extends BaseViewModel {
         body,
         response -> {
           showMessage(getApplication().getString(R.string.msg_chore_executed));
-          downloadData();
+          downloadData(false);
           if (debug) {
             Log.i(TAG, "executeChore: " + response);
           }
@@ -317,7 +243,7 @@ public class ChoresViewModel extends BaseViewModel {
           if (debug) {
             Log.i(TAG, "executeChore: " + error);
           }
-          downloadData();
+          downloadData(false);
         }
     );
   }
@@ -387,10 +313,6 @@ public class ChoresViewModel extends BaseViewModel {
   @NonNull
   public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
     return infoFullscreenLive;
-  }
-
-  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
-    currentQueueLoading = queueLoading;
   }
 
   public boolean isFeatureEnabled(String pref) {

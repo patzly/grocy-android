@@ -134,7 +134,6 @@ public class MasterObjectListFragment extends BaseFragment
     viewModel = new ViewModelProvider(this, new MasterObjectListViewModel
         .MasterObjectListViewModelFactory(activity.getApplication(), entity)
     ).get(MasterObjectListViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
@@ -146,14 +145,6 @@ public class MasterObjectListFragment extends BaseFragment
     systemBarBehavior.applyStatusBarInsetOnContainer(false);
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
-
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
-      binding.swipe.setRefreshing(state);
-      if (!state) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
-    binding.swipe.setOnRefreshListener(() -> viewModel.downloadDataForceUpdate());
 
     viewModel.getDisplayedItemsLive().observe(getViewLifecycleOwner(), objects -> {
       if (objects == null) {
@@ -194,7 +185,7 @@ public class MasterObjectListFragment extends BaseFragment
         ((MasterObjectListAdapter) binding.recycler.getAdapter()).updateData(objects);
       } else {
         binding.recycler.setAdapter(new MasterObjectListAdapter(
-            getContext(),
+            requireContext(),
             entity,
             objects,
             this,
@@ -464,8 +455,7 @@ public class MasterObjectListFragment extends BaseFragment
     if (!online == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!online);
-    if (online) viewModel.downloadData();
+    viewModel.downloadData(false);
   }
 
   @NonNull

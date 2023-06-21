@@ -192,9 +192,6 @@ public class BaseFragment extends Fragment {
   public void deleteRecipePosition(int recipePositionId) {
   }
 
-  public void updateData() {
-  }
-
   @Nullable
   public MutableLiveData<Integer> getSelectedShoppingListIdLive() {
     return null;

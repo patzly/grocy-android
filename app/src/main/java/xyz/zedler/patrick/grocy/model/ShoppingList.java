@@ -44,7 +44,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
+import xyz.zedler.patrick.grocy.web.NetworkQueue.QueueItem;
 
 @Entity(tableName = "shopping_list_table")
 public class ShoppingList implements Parcelable {
@@ -174,11 +174,12 @@ public class ShoppingList implements Parcelable {
   public static QueueItem updateShoppingLists(
       DownloadHelper dlHelper,
       String dbChangedTime,
+      boolean forceUpdate,
       OnObjectsResponseListener<ShoppingList> onResponseListener
   ) {
-    String lastTime = dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
+    String lastTime = !forceUpdate ? dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null
-    );
+    ) : null;
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
       return new QueueItem() {
         @Override

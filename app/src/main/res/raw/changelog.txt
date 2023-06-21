@@ -10,6 +10,7 @@
 - New: Shopping mode options are now reachable through shopping mode menu and removed from settings
 - New: Product groups, locations & quantity units now can be created while creating product
 - New: Japanese translation (thanks daigoume!)
+- Improved: Better and unified network behavior across pages
 - Improved: Database exceptions are now caught and displayed (#698)
 - Improved: Pictures in recipe or product descriptions now can be up to 10MB large (#698)
 - Improved: Design for recipe page
@@ -39,6 +40,7 @@
 - Fixed: Editing of recipe ingredient with broken quantity unit is possible now
 - Fixed: Recipe ingredient price factor is not saved wrong anymore when creating ingredient (#615)
 - Fixed: Product description popup animation doesn't have glitches anymore
+- Fixed: App was sometimes offline when opened from background (#722)
 
 ## 3.2.1
 

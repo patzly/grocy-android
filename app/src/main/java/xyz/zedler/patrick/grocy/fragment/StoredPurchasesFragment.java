@@ -84,21 +84,12 @@ public class StoredPurchasesFragment extends BaseFragment
     activity = (MainActivity) requireActivity();
     clickUtil = new ClickUtil();
     viewModel = new ViewModelProvider(this).get(StoredPurchasesViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
 
     binding.setFragment(this);
     binding.setActivity(activity);
     binding.setViewModel(viewModel);
     binding.setLifecycleOwner(getViewLifecycleOwner());
     binding.setClickUtil(clickUtil);
-
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
-      binding.swipe.setRefreshing(state);
-      if (!state) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
-    binding.swipe.setOnRefreshListener(() -> viewModel.downloadDataForceUpdate());
 
     viewModel.getDisplayedItemsLive().observe(getViewLifecycleOwner(), items -> {
       if (items == null) {
@@ -215,8 +206,7 @@ public class StoredPurchasesFragment extends BaseFragment
     if (!online == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!online);
-    viewModel.downloadData();
+    viewModel.downloadData(false);
   }
 
   @NonNull

@@ -34,7 +34,6 @@ import java.util.List;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -101,7 +100,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     );
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new ShoppingListItemEditRepository(application);
     formData = new FormDataShoppingListItemEdit(application);
@@ -126,10 +125,10 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       if (!isActionEdit) {
         formData.getShoppingListLive().setValue(getLastShoppingList());
       }
-      fillWithShoppingListItemIfNecessary();
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       } else {
+        fillWithShoppingListItemIfNecessary();
         if (queueEmptyAction != null) {
           queueEmptyAction.run();
           queueEmptyAction = null;
@@ -138,32 +137,28 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData() {
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            fillWithShoppingListItemIfNecessary();
+            if (queueEmptyAction != null) {
+              queueEmptyAction.run();
+              queueEmptyAction = null;
+            }
+          }
+        },
         error -> onError(error, TAG),
+        forceUpdate,
+        false,
         ShoppingListItem.class,
         Product.class,
         QuantityUnit.class,
         QuantityUnitConversionResolved.class,
         ProductBarcode.class
     );
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS_RESOLVED, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.apply();
-    downloadData();
   }
 
   public void saveItem() {

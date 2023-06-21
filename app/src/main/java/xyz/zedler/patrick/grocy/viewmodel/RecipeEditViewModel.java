@@ -35,7 +35,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -91,7 +90,7 @@ public class RecipeEditViewModel extends BaseViewModel {
     );
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(application, TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(application, TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(application);
     repository = new RecipeEditRepository(application);
     formData = new FormDataRecipeEdit(application, sharedPrefs, startupArgs);
@@ -112,33 +111,29 @@ public class RecipeEditViewModel extends BaseViewModel {
       this.productBarcodes = data.getProductBarcodes();
 
       formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
-      fillWithRecipeIfNecessary();
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
+      } else {
+        fillWithRecipeIfNecessary();
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData() {
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            fillWithRecipeIfNecessary();
+          }
+        },
         error -> onError(error, null),
+        forceUpdate,
+        false,
         Product.class,
         ProductBarcode.class
     );
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-    editPrefs.apply();
-    downloadData();
   }
 
   public void setProduct(Product product) {

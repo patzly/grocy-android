@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatQuantityUnit;
 import xyz.zedler.patrick.grocy.fragment.MasterProductCatQuantityUnitFragmentArgs;
@@ -73,7 +72,7 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
     super(application);
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     repository = new MasterProductRepository(application);
     formData = new FormDataMasterProductCatQuantityUnit(application, getBeginnerModeEnabled());
     args = startupArgs;
@@ -103,7 +102,7 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
       formData.getQuantityUnitsLive().setValue(this.quantityUnits);
       formData.fillWithProductIfNecessary(args.getProduct());
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       } else {
         updateHasProductAlreadyStockTransactions();
         if (queueEmptyAction != null) {
@@ -114,26 +113,25 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData() {
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            updateHasProductAlreadyStockTransactions();
+            if (queueEmptyAction != null) {
+              queueEmptyAction.run();
+              queueEmptyAction = null;
+            }
+          }
+        },
         error -> onError(error, TAG),
+        forceUpdate,
+        false,
         QuantityUnit.class,
         QuantityUnitConversion.class
     );
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
-    editPrefs.apply();
-    downloadData();
   }
 
   public void showQuBottomSheet(String type) {

@@ -90,7 +90,7 @@ public class RecipeViewModel extends BaseViewModel {
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new RecipesRepository(application);
 
@@ -132,23 +132,19 @@ public class RecipeViewModel extends BaseViewModel {
         );
       }
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(boolean skipOfflineCheck) {
-    if (!skipOfflineCheck && isOffline()) { // skip downloading and update recyclerview
-      isLoadingLive.setValue(false);
-      return;
-    }
-
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        () -> {
-          if (isOffline()) setOfflineLive(false);
-          loadFromDatabase(false);
+        updated -> {
+          if (updated) loadFromDatabase(false);
         },
         error -> onError(error, TAG),
+        forceUpdate,
+        true,
         Recipe.class,
         RecipeFulfillment.class,
         RecipePosition.class,
@@ -158,24 +154,6 @@ public class RecipeViewModel extends BaseViewModel {
         StockItem.class,
         ShoppingListItem.class
     );
-  }
-
-  public void downloadData() {
-    downloadData(false);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_RECIPES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_RECIPE_FULFILLMENTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_RECIPE_POSITIONS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS_RESOLVED, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_STOCK_ITEMS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
-    editPrefs.apply();
-    downloadData(true);
   }
 
   public void changeAmount(boolean more) {
@@ -226,20 +204,22 @@ public class RecipeViewModel extends BaseViewModel {
         args.getRecipeId(),
         body,
         response -> dlHelper.updateData(
-            () -> {
+            updated -> {
               servingsDesiredSaveEnabledLive.setValue(false);
-              downloadData();
+              loadFromDatabase(false);
             },
-            volleyError -> {
-              showErrorMessage();
+            error -> {
+              onError(error, TAG);
               servingsDesiredSaveEnabledLive.setValue(true);
             },
+            false,
+            false,
             Recipe.class,
             RecipeFulfillment.class,
             RecipePosition.class
         ),
         error -> {
-          showErrorMessage();
+          onError(error, TAG);
           servingsDesiredSaveEnabledLive.setValue(true);
         }
     ).perform(dlHelper.getUuid());
@@ -248,7 +228,7 @@ public class RecipeViewModel extends BaseViewModel {
   public void deleteRecipe(int recipeId) {
     dlHelper.delete(
         grocyApi.getObject(ENTITY.RECIPES, recipeId),
-        response -> downloadData(),
+        response -> downloadData(false),
         this::showNetworkErrorMessage
     );
   }
@@ -256,7 +236,7 @@ public class RecipeViewModel extends BaseViewModel {
   public void consumeRecipe(int recipeId) {
     dlHelper.post(
         grocyApi.consumeRecipe(recipeId),
-        response -> downloadData(),
+        response -> downloadData(false),
         this::showNetworkErrorMessage
     );
   }
@@ -273,7 +253,7 @@ public class RecipeViewModel extends BaseViewModel {
     dlHelper.postWithArray(
         grocyApi.addNotFulfilledProductsToCartForRecipe(recipeId),
         jsonObject,
-        response -> downloadData(),
+        response -> downloadData(false),
         this::showNetworkErrorMessage
     );
   }
@@ -281,7 +261,7 @@ public class RecipeViewModel extends BaseViewModel {
   public void copyRecipe(int recipeId) {
     dlHelper.post(
         grocyApi.copyRecipe(recipeId),
-        response -> downloadData(),
+        response -> downloadData(false),
         this::showNetworkErrorMessage
     );
   }

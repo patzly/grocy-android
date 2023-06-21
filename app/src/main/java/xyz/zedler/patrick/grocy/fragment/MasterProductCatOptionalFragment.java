@@ -167,12 +167,6 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
         viewModel.getFormData().getScannerVisibilityLive()
     );
 
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
-      if (!isLoading) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
-
     viewModel.getFormData().getPictureFilenameLive().observe(getViewLifecycleOwner(),
         this::loadProductPicture);
 
@@ -386,10 +380,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
   }
 
   @NonNull

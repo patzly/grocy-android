@@ -586,10 +586,7 @@ public class RecipeFragment extends BaseFragment implements
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
   }
 
   public void clearInputFocus() {

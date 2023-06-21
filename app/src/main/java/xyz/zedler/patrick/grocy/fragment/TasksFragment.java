@@ -98,7 +98,6 @@ public class TasksFragment extends BaseFragment implements
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
     viewModel = new ViewModelProvider(this).get(TasksViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
     binding.setFragment(this);
@@ -136,12 +135,6 @@ public class TasksFragment extends BaseFragment implements
       binding.recycler.scrollToPosition(0);
       viewModel.resetSearch();
     }
-
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
-      if (!state) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
 
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
@@ -320,10 +313,7 @@ public class TasksFragment extends BaseFragment implements
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
   }
 
   private void hideDisabledFeatures() {

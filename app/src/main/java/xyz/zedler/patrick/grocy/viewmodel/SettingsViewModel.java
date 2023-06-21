@@ -75,7 +75,7 @@ public class SettingsViewModel extends BaseViewModel {
 
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
-  private MainRepository repository;
+  private final MainRepository repository;
 
   private MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<Boolean> getExternalScannerEnabledLive;
@@ -106,16 +106,11 @@ public class SettingsViewModel extends BaseViewModel {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-
-    dlHelper = new DownloadHelper(
-        getApplication(),
-        TAG,
-        isLoading -> isLoadingLive.setValue(isLoading)
-    );
+    isLoadingLive = new MutableLiveData<>(false);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new MainRepository(getApplication());
 
-    isLoadingLive = new MutableLiveData<>(false);
     getExternalScannerEnabledLive = new MutableLiveData<>(getExternalScannerEnabled());
     needsRestartLive = new MutableLiveData<>(false);
     torEnabledLive = new MutableLiveData<>(getTorEnabled());

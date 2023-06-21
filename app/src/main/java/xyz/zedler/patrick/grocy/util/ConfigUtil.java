@@ -33,8 +33,8 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
+import xyz.zedler.patrick.grocy.web.NetworkQueue.QueueItem;
 
 public class ConfigUtil {
 
@@ -53,7 +53,7 @@ public class ConfigUtil {
         Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_DEBUGGING
     );
 
-    NetworkQueue queue = dlHelper.newQueue(() -> {
+    NetworkQueue queue = dlHelper.newQueue(updated -> {
       if (onSuccessAction != null) {
         onSuccessAction.run();
       }

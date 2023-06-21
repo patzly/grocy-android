@@ -107,7 +107,7 @@ public class StockEntriesViewModel extends BaseViewModel {
         ? Integer.parseInt(args.getProductId()) : null;
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new StockEntriesRepository(application);
     pluralUtil = new PluralUtil(application);
@@ -143,23 +143,19 @@ public class StockEntriesViewModel extends BaseViewModel {
 
       updateFilteredStockEntries();
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(boolean skipOfflineCheck) {
-    if (!skipOfflineCheck && isOffline()) { // skip downloading and update recyclerview
-      isLoadingLive.setValue(false);
-      updateFilteredStockEntries();
-      return;
-    }
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        () -> {
-          if (isOffline()) setOfflineLive(false);
-          loadFromDatabase(false);
+        updated -> {
+          if (updated) loadFromDatabase(false);
         },
         error -> onError(error, TAG),
+        forceUpdate,
+        true,
         QuantityUnit.class,
         StockEntry.class,
         Product.class,
@@ -167,22 +163,6 @@ public class StockEntriesViewModel extends BaseViewModel {
         Location.class,
         Store.class
     );
-  }
-
-  public void downloadData() {
-    downloadData(false);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_STOCK_ENTRIES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_LOCATIONS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_STORES, null);
-    editPrefs.apply();
-    downloadData(true);
   }
 
   public void updateFilteredStockEntries() {
@@ -329,7 +309,7 @@ public class StockEntriesViewModel extends BaseViewModel {
             snackbarMsg.setAction(getString(R.string.action_undo), v -> dlHelper.post(
                 grocyApi.undoStockTransaction(finalTransactionId),
                 response1 -> {
-                  downloadData();
+                  downloadData(false);
                   showSnackbar(new SnackbarMessage(
                       getString(R.string.msg_undone_transaction),
                       Snackbar.LENGTH_SHORT
@@ -341,7 +321,7 @@ public class StockEntriesViewModel extends BaseViewModel {
                 this::showNetworkErrorMessage
             ));
           }
-          downloadData();
+          downloadData(false);
           showSnackbar(snackbarMsg);
           if (debug) {
             Log.i(
@@ -403,7 +383,7 @@ public class StockEntriesViewModel extends BaseViewModel {
             snackbarMsg.setAction(getString(R.string.action_undo), v -> dlHelper.post(
                 grocyApi.undoStockTransaction(finalTransactionId),
                 response1 -> {
-                  downloadData();
+                  downloadData(false);
                   showSnackbar(new SnackbarMessage(
                       getString(R.string.msg_undone_transaction),
                       Snackbar.LENGTH_SHORT
@@ -415,7 +395,7 @@ public class StockEntriesViewModel extends BaseViewModel {
                 this::showNetworkErrorMessage
             ));
           }
-          downloadData();
+          downloadData(false);
           showSnackbar(snackbarMsg);
           if (debug) {
             Log.i(

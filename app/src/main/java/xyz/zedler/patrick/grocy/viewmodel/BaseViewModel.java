@@ -283,7 +283,7 @@ public class BaseViewModel extends AndroidViewModel {
     return offlineLive.getValue();
   }
 
-  public void setOfflineLive(boolean isOffline) {
+  void setOfflineLive(boolean isOffline) {
     offlineLive.setValue(isOffline);
   }
 

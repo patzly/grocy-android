@@ -55,7 +55,6 @@ import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ObjectUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class MasterObjectListViewModel extends BaseViewModel {
 
@@ -75,7 +74,6 @@ public class MasterObjectListViewModel extends BaseViewModel {
   private List<QuantityUnit> quantityUnits;
   private List<Location> locations;
 
-  private NetworkQueue currentQueueLoading;
   private final HorizontalFilterBarMulti horizontalFilterBarMulti;
   private boolean sortAscending;
   private String search;
@@ -90,7 +88,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new MasterObjectListRepository(application);
 
@@ -131,120 +129,28 @@ public class MasterObjectListViewModel extends BaseViewModel {
 
       displayItems();
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime, boolean skipOfflineCheck) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
-    if (!skipOfflineCheck && isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(
-          time -> downloadData(time, skipOfflineCheck),
-          error -> onError(error, TAG)
-      );
-      return;
-    }
-
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
-    if (entity.equals(GrocyApi.ENTITY.STORES)) {
-      queue.append(Store.updateStores(dlHelper, dbChangedTime, stores -> objects = stores));
-    }
-    if ((entity.equals(GrocyApi.ENTITY.LOCATIONS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))) {
-      queue.append(Location.updateLocations(dlHelper, dbChangedTime, locations -> {
-        if (entity.equals(GrocyApi.ENTITY.LOCATIONS)) {
-          objects = locations;
-        } else {
-          this.locations = locations;
-        }
-      }));
-    }
-    if ((entity.equals(GrocyApi.ENTITY.PRODUCT_GROUPS) || entity
-        .equals(GrocyApi.ENTITY.PRODUCTS))) {
-      queue.append(ProductGroup.updateProductGroups(dlHelper, dbChangedTime, productGroups -> {
-        if (entity.equals(GrocyApi.ENTITY.PRODUCT_GROUPS)) {
-          objects = productGroups;
-        } else {
-          this.productGroups = productGroups;
-        }
-      }));
-    }
-    if ((entity.equals(GrocyApi.ENTITY.QUANTITY_UNITS) || entity
-        .equals(GrocyApi.ENTITY.PRODUCTS))) {
-      queue.append(QuantityUnit.updateQuantityUnits(dlHelper, dbChangedTime, quantityUnits -> {
-        if (entity.equals(GrocyApi.ENTITY.QUANTITY_UNITS)) {
-          objects = quantityUnits;
-        } else {
-          this.quantityUnits = quantityUnits;
-        }
-      }));
-    }
-    if ((entity.equals(ENTITY.TASK_CATEGORIES))) {
-      queue.append(TaskCategory.updateTaskCategories(
-          dlHelper,
-          dbChangedTime,
-          taskCategories -> this.objects = taskCategories
-      ));
-    }
-    if (entity.equals(GrocyApi.ENTITY.PRODUCTS)) {
-      queue.append(Product.updateProducts(
-          dlHelper,
-          dbChangedTime,
-          products -> objects = products)
-      );
-    }
-
-    if (queue.isEmpty()) {
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null, false);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    switch (entity) {
-      case GrocyApi.ENTITY.STORES:
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
-        break;
-      case GrocyApi.ENTITY.LOCATIONS:
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
-        break;
-      case GrocyApi.ENTITY.PRODUCT_GROUPS:
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
-        break;
-      case GrocyApi.ENTITY.QUANTITY_UNITS:
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-        break;
-      case GrocyApi.ENTITY.TASK_CATEGORIES:
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_TASK_CATEGORIES, null);
-        break;
-      default:  // products
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-        break;
-    }
-    editPrefs.apply();
-    downloadData(null, true);
-  }
-
-  private void onQueueEmpty() {
-    if (isOffline()) setOfflineLive(false);
-    displayItems();
+  public void downloadData(boolean forceUpdate) {
+    dlHelper.updateData(
+        updated -> {
+          if (updated) loadFromDatabase(false);
+        }, error -> onError(error, TAG),
+        forceUpdate,
+        true,
+        entity.equals(GrocyApi.ENTITY.STORES) ? Store.class : null,
+        (entity.equals(GrocyApi.ENTITY.LOCATIONS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))
+            ? Product.class : null,
+        (entity.equals(GrocyApi.ENTITY.PRODUCT_GROUPS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))
+            ? ProductGroup.class : null,
+        (entity.equals(GrocyApi.ENTITY.QUANTITY_UNITS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))
+            ? QuantityUnit.class : null,
+        entity.equals(ENTITY.TASK_CATEGORIES) ? TaskCategory.class : null,
+        entity.equals(GrocyApi.ENTITY.PRODUCTS) ? Product.class : null
+    );
   }
 
   public void displayItems() {
@@ -366,7 +272,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
   public void deleteObject(int objectId) {
     dlHelper.delete(
         grocyApi.getObject(entity, objectId),
-        response -> downloadData(),
+        response -> downloadData(false),
         error -> showMessage(getString(R.string.error_undefined))
     );
   }
@@ -462,10 +368,6 @@ public class MasterObjectListViewModel extends BaseViewModel {
   @NonNull
   public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
     return infoFullscreenLive;
-  }
-
-  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
-    currentQueueLoading = queueLoading;
   }
 
   public boolean isFeatureEnabled(String pref) {

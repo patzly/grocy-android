@@ -104,7 +104,7 @@ public class ConsumeViewModel extends BaseViewModel {
     );
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new InventoryRepository(application);
     formData = new FormDataConsume(application, sharedPrefs, args);
@@ -141,40 +141,32 @@ public class ConsumeViewModel extends BaseViewModel {
       this.unitConversions = data.getQuantityUnitConversionsResolved();
       formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
       if (downloadAfterLoading) {
-        downloadData();
-      } else {
-        if (queueEmptyAction != null) {
-          queueEmptyAction.run();
-          queueEmptyAction = null;
-        }
+        downloadData(false);
+      } else if (queueEmptyAction != null) {
+        queueEmptyAction.run();
+        queueEmptyAction = null;
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData() {
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else if (queueEmptyAction != null) {
+            queueEmptyAction.run();
+            queueEmptyAction = null;
+          }
+        },
         error -> onError(error, TAG),
+        forceUpdate,
+        false,
         Product.class,
         ProductBarcode.class,
         QuantityUnit.class,
         QuantityUnitConversionResolved.class
     );
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS_RESOLVED, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.apply();
-    downloadData();
   }
 
   public void setProduct(int productId, ProductBarcode barcode, String stockEntryId) {
@@ -302,7 +294,7 @@ public class ConsumeViewModel extends BaseViewModel {
     };
 
     dlHelper.newQueue(
-        onQueueEmptyListener,
+        updated -> onQueueEmptyListener.run(),
         error -> showMessageAndContinueScanning(getString(R.string.error_no_product_details))
     ).append(
         ProductDetails.getProductDetails(

@@ -253,11 +253,8 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
+    viewModel.downloadData(false);
     systemBarBehavior.refresh();
-    if (isOnline) {
-      viewModel.downloadData();
-    }
   }
 
   @NonNull

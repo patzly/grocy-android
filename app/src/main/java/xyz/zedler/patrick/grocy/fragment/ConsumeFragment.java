@@ -122,9 +122,7 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
         getViewLifecycleOwner(),
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isDownloading ->
-        binding.swipe.setRefreshing(isDownloading)
-    );
+
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(

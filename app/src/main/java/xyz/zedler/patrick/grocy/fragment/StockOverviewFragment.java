@@ -105,7 +105,6 @@ public class StockOverviewFragment extends BaseFragment implements
     viewModel = new ViewModelProvider(this, new StockOverviewViewModel
         .StockOverviewViewModelFactory(activity.getApplication(), args)
     ).get(StockOverviewViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
     binding.setFragment(this);
@@ -406,10 +405,7 @@ public class StockOverviewFragment extends BaseFragment implements
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
   }
 
   private void hideDisabledFeatures() {

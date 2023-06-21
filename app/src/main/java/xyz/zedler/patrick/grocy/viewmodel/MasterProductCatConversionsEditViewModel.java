@@ -33,7 +33,6 @@ import java.util.List;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -82,7 +81,7 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new MasterProductRepository(application);
     formData = new FormDataMasterProductCatConversionsEdit(application, startupArgs.getProduct());
@@ -100,10 +99,10 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
       this.quantityUnits = data.getQuantityUnits();
       formData.getQuantityUnitsLive().setValue(data.getQuantityUnits());
       this.unitConversions = data.getConversions();
-      fillWithConversionIfNecessary();
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       } else {
+        fillWithConversionIfNecessary();
         if (queueEmptyAction != null) {
           queueEmptyAction.run();
           queueEmptyAction = null;
@@ -112,26 +111,25 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData() {
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            fillWithConversionIfNecessary();
+            if (queueEmptyAction != null) {
+              queueEmptyAction.run();
+              queueEmptyAction = null;
+            }
+          }
+        },
         error -> onError(error, TAG),
+        forceUpdate,
+        false,
         QuantityUnit.class,
         QuantityUnitConversion.class
     );
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.apply();
-    downloadData();
   }
 
   public void saveItem() {

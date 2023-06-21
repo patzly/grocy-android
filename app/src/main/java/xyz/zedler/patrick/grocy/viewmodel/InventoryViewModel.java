@@ -113,7 +113,7 @@ public class InventoryViewModel extends BaseViewModel {
     );
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new InventoryRepository(application);
     formData = new FormDataInventory(application, sharedPrefs, args);
@@ -149,7 +149,7 @@ public class InventoryViewModel extends BaseViewModel {
       this.locations = data.getLocations();
       formData.getProductsLive().setValue(Product.getActiveAndStockEnabledProductsOnly(products));
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       } else {
         if (queueEmptyAction != null) {
           queueEmptyAction.run();
@@ -159,14 +159,25 @@ public class InventoryViewModel extends BaseViewModel {
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData() {
+  public void downloadData(boolean forceUpdate) {
     if (isOffline()) { // skip downloading
       isLoadingLive.setValue(false);
       return;
     }
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            if (queueEmptyAction != null) {
+              queueEmptyAction.run();
+              queueEmptyAction = null;
+            }
+          }
+        },
         error -> onError(error, TAG),
+        forceUpdate,
+        false,
         Product.class,
         QuantityUnit.class,
         QuantityUnitConversionResolved.class,
@@ -174,18 +185,6 @@ public class InventoryViewModel extends BaseViewModel {
         Store.class,
         Location.class
     );
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_LOCATIONS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_STORES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS_RESOLVED, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.apply();
-    downloadData();
   }
 
   public void setProduct(int productId, ProductBarcode barcode) {

@@ -117,7 +117,7 @@ public class ShoppingListViewModel extends BaseViewModel {
     );
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, null);
     grocyApi = new GrocyApi(getApplication());
     repository = new ShoppingListRepository(application);
 
@@ -287,7 +287,7 @@ public class ShoppingListViewModel extends BaseViewModel {
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
+    NetworkQueue queue = dlHelper.newQueue(updated -> onQueueEmpty(), error -> onError(error, TAG));
     queue.append(
         ShoppingListItem.updateShoppingListItems(
             dlHelper,
@@ -298,37 +298,37 @@ public class ShoppingListViewModel extends BaseViewModel {
               this.serverItemHashMapTemp = serverItemsHashMap;
             }
         ), ShoppingList.updateShoppingLists(
-            dlHelper, dbChangedTime, shoppingLists -> this.shoppingLists = shoppingLists
+            dlHelper, dbChangedTime, false, shoppingLists -> this.shoppingLists = shoppingLists
         ), ProductGroup.updateProductGroups(
             dlHelper,
-            dbChangedTime,
+            dbChangedTime, false,
             productGroups -> productGroupHashMap = ArrayUtil.getProductGroupsHashMap(productGroups)
         ), QuantityUnit.updateQuantityUnits(
             dlHelper,
-            dbChangedTime,
+            dbChangedTime, false,
             quantityUnits -> quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits)
         ), Product.updateProducts(dlHelper, dbChangedTime, products -> {
           productHashMap = ArrayUtil.getProductsHashMap(products);
           productNamesHashMap = ArrayUtil.getProductNamesHashMap(products);
           queue.append(QuantityUnitConversionResolved.updateQuantityUnitConversions(
               dlHelper,
-              dbChangedTime,
+              dbChangedTime, false,
               products,
               unitConversions -> this.unitConversions = unitConversions
           ));
         }), ProductLastPurchased.updateProductsLastPurchased(
             dlHelper,
-            dbChangedTime,
+            dbChangedTime, false,
             productsLastPurchased -> productLastPurchasedHashMap = ArrayUtil
             .getProductLastPurchasedHashMap(productsLastPurchased),
             true
         ), Store.updateStores(
             dlHelper,
-            dbChangedTime,
+            dbChangedTime, false,
             stores -> storeHashMap = ArrayUtil.getStoresHashMap(stores)
         ), MissingItem.updateMissingItems(
             dlHelper,
-            dbChangedTime,
+            dbChangedTime, false,
             missing -> missingProductIds = ArrayUtil.getMissingProductsIds(missing)
         )
     );
@@ -400,7 +400,7 @@ public class ShoppingListViewModel extends BaseViewModel {
       showMessage(getString(R.string.msg_failed_to_sync));
       downloadData();
     };
-    NetworkQueue queue = dlHelper.newQueue(emptyListener, errorListener);
+    NetworkQueue queue = dlHelper.newQueue(updated -> emptyListener.run(), errorListener);
     for (ShoppingListItem itemToSync : itemsToSyncTemp) {
       JSONObject body = new JSONObject();
       try {
@@ -435,7 +435,7 @@ public class ShoppingListViewModel extends BaseViewModel {
     }
 
     NetworkQueue queue = dlHelper.newQueue(
-        () -> {
+        updated -> {
           if (onFinished != null) {
             onFinished.run(true);
           }
@@ -710,7 +710,7 @@ public class ShoppingListViewModel extends BaseViewModel {
 
   public void clearDoneItems(ShoppingList shoppingList) {
     NetworkQueue queue = dlHelper.newQueue(
-        () -> {
+        updated -> {
           showMessage(getApplication().getString(
               R.string.msg_shopping_list_cleared,
               shoppingList.getName()
