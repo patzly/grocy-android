@@ -348,6 +348,7 @@
   <string name="msg_logout_demo_short">Serveur public de démonstration. Appuyez pour plus de détails.</string>
   <string name="msg_restart">Un redémarrage de l\'application est nécessaire pour appliquer correctement la configuration actuelle. Voulez-vous redémarrer maintenant ?</string>
   <string name="msg_full_description">Appuyez ici pour afficher la description complète.</string>
+  <string name="msg_copied_clipboard">Copié dans le presse-papier</string>
   <string name="msg_shortcuts">Vous pouvez activer jusqu\'à 4 raccourcis :</string>
   <string name="msg_shortcuts_not_supported">Les raccourcis ne sont pas supportés sur cette version d\'Android.</string>
   <string name="msg_barcode_formats">Vous pouvez améliorer la vitesse du détecteur de codes-barres en le configurant pour détecter uniquement les formats que vous avez l\'habitude de lire.</string>
