@@ -239,6 +239,7 @@ public class RecipeEntryAdapter extends
         ), colorRed.getOnAccentContainer());
         dueScoreChip.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getAccentContainer()));
       }
+      dueScoreChip.setEnabled(false);
       chips.addView(dueScoreChip);
     }
 
