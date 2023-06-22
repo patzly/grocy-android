@@ -55,7 +55,8 @@ public class GrocyApi {
     public final static String SHOPPING_LISTS = "shopping_lists";
     public final static String RECIPES = "recipes";
     public final static String RECIPES_POS = "recipes_pos";
-    public final static String RECIPES_NEST = "recipes_nestings";
+    public final static String RECIPES_POS_RESOLVED = "recipes_pos_resolved";
+    public final static String RECIPES_NESTINGS = "recipes_nestings";
     public final static String PRODUCT_GROUPS = "product_groups";
     public final static String MEAL_PLAN = "meal_plan";
     public final static String TASKS = "tasks";
@@ -430,23 +431,34 @@ public class GrocyApi {
    */
   public String getRecipes() {
     return getObjects(
-            "recipes",
-            new COMPARISON("id", COMPARISON_OPERATOR.GREATER, "0")
+        ENTITY.RECIPES,
+        new COMPARISON("id", COMPARISON_OPERATOR.GREATER, "0")
     );
   }
 
   public String getRecipeFulfillments() {
     return getUrl(
-            "/recipes/fulfillment",
-            new COMPARISON("recipe_id", COMPARISON_OPERATOR.GREATER, "0")
+        "/recipes/fulfillment",
+        new COMPARISON("recipe_id", COMPARISON_OPERATOR.GREATER, "0")
     );
   }
 
   public String getRecipePositions() {
     return getObjects(
-            "recipes_pos",
-            new COMPARISON("recipe_id", COMPARISON_OPERATOR.GREATER, "0")
+        ENTITY.RECIPES_POS,
+        new COMPARISON("recipe_id", COMPARISON_OPERATOR.GREATER, "0")
     );
+  }
+
+  public String getRecipePositionsResolved() {
+    return getObjects(
+        ENTITY.RECIPES_POS_RESOLVED,
+        new COMPARISON("recipe_id", COMPARISON_OPERATOR.GREATER, "0")
+    );
+  }
+
+  public String getRecipeNestings() {
+    return getObjects(ENTITY.RECIPES_NESTINGS);
   }
 
   public String consumeRecipe(int recipeId) {
