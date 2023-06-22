@@ -107,7 +107,6 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
         .StockEntriesViewModelFactory(activity.getApplication(),
         StockEntriesFragmentArgs.fromBundle(requireArguments())
     )).get(StockEntriesViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
     binding.setFragment(this);
@@ -350,10 +349,7 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
   }
 
   private void setUpSearch() {

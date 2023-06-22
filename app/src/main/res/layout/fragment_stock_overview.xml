@@ -256,7 +256,7 @@
       android:layout_below="@+id/app_bar"
       android:overScrollMode="never"
       app:setRefreshing="@{viewModel.isLoadingLive}"
-      app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
+      app:onRefreshListener="@{() -> viewModel.downloadData(true)}">
 
       <FrameLayout
         android:id="@+id/frame"

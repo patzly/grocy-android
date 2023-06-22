@@ -93,7 +93,6 @@ public class RecipesFragment extends BaseFragment implements
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
     viewModel = new ViewModelProvider(this).get(RecipesViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
     binding.setFragment(this);
@@ -245,68 +244,11 @@ public class RecipesFragment extends BaseFragment implements
     });
   }
 
-
-  @Override
-  public void consumeRecipe(int recipeId) {
-    if (showOfflineError()) {
-      return;
-    }
-    viewModel.consumeRecipe(recipeId);
-  }
-
-  @Override
-  public void addNotFulfilledProductsToCartForRecipe(int recipeId, int[] excludedProductIds) {
-    if (showOfflineError()) {
-      return;
-    }
-    viewModel.addNotFulfilledProductsToCartForRecipe(recipeId, excludedProductIds);
-  }
-
-  @Override
-  public void editRecipe(Recipe recipe) {
-    if (showOfflineError()) {
-      return;
-    }
-    activity.navUtil.navigateFragment(
-        RecipesFragmentDirections.actionRecipesFragmentToRecipeEditFragment(ACTION.EDIT)
-            .setRecipe(recipe)
-    );
-  }
-
-  @Override
-  public void copyRecipe(int recipeId) {
-    if (showOfflineError()) {
-      return;
-    }
-    viewModel.copyRecipe(recipeId);
-  }
-
-  @Override
-  public void deleteRecipe(int recipeId) {
-    if (showOfflineError()) {
-      return;
-    }
-    viewModel.deleteRecipe(recipeId);
-  }
-
-  @Override
-  public void updateData() {
-    viewModel.downloadData();
-  }
-
   @Override
   public void onSaveInstanceState(@NonNull Bundle outState) {
     if (appBarBehavior != null) {
       appBarBehavior.saveInstanceState(outState);
     }
-  }
-
-  private boolean showOfflineError() {
-    if (viewModel.isOffline()) {
-      activity.showSnackbar(R.string.error_offline, false);
-      return true;
-    }
-    return false;
   }
 
   private boolean onMenuItemClick(MenuItem item) {
@@ -339,10 +281,7 @@ public class RecipesFragment extends BaseFragment implements
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
   }
 
   private void setUpSearch() {

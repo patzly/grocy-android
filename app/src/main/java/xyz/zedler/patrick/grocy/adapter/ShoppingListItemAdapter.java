@@ -706,6 +706,7 @@ public class ShoppingListItemAdapter extends
       stringBuilderAmount.append(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
     }
 
+    binding.flexboxLayout.removeAllViews();
     Chip chipAmount = createChip(context, stringBuilderAmount.toString());
     if (item.isUndone()) {
       chipAmount.setPaintFlags(chipAmount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));

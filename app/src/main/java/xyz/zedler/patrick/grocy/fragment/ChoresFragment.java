@@ -95,7 +95,6 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
     viewModel = new ViewModelProvider(this).get(ChoresViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
     binding.setFragment(this);
@@ -133,12 +132,6 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
       binding.recycler.scrollToPosition(0);
       viewModel.resetSearch();
     }
-
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
-      if (!state) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
 
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
@@ -323,10 +316,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
   }
 
   private void hideDisabledFeatures() {

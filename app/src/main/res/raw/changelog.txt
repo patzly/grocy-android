@@ -1,6 +1,6 @@
 ## 3.3.0
 
-- New: Japanese translation (thanks daigoume!)
+- New: Quantity unit conversions can be transitive now (unlimited QU levels) (with work of @esclear)
 - New: Product choose page after barcode scan now has really useful copy option for products (#636)
 - New: Product pictures now can be removed and added with camera and clipboard (#536)
 - New: On purchase page, store now can be pinned (always initially selected in session) (#525)
@@ -9,6 +9,8 @@
 - New: Shopping pages now also has checkbox options for fields and picture (#663, #671, #710)
 - New: Shopping mode options are now reachable through shopping mode menu and removed from settings
 - New: Product groups, locations & quantity units now can be created while creating product
+- New: Japanese translation (thanks daigoume!)
+- Improved: Better and unified network behavior across pages
 - Improved: Database exceptions are now caught and displayed (#698)
 - Improved: Pictures in recipe or product descriptions now can be up to 10MB large (#698)
 - Improved: Design for recipe page
@@ -25,6 +27,8 @@
 - Improved: On recipe ingredient edit page, product overview sheet now can be displayed
 - Improved: Horizontal actions layout on overview page for smaller screens
 - Improved: Clear caching related info after app update or database update for data refresh (#726)
+- Improved: Recipe ingredient price factor now can be set (#615)
+- Fixed: Amounts with conversions are consistent over all pages now (#612, #626)
 - Fixed: Long click on barcode button on overview page was broken on Android Nougat and lower
 - Fixed: Crash on startup with Android Lollipop (and maybe higher)
 - Fixed: Prevent crash when opening qu conversion page (#708)
@@ -34,6 +38,9 @@
 - Fixed: On product creation with prefilled name there was a plus instead of space character
 - Fixed: On product details sheet, description card was rendered with wrong height sometimes (#717)
 - Fixed: Editing of recipe ingredient with broken quantity unit is possible now
+- Fixed: Recipe ingredient price factor is not saved wrong anymore when creating ingredient (#615)
+- Fixed: Product description popup animation doesn't have glitches anymore
+- Fixed: App was sometimes offline when opened from background (#722)
 
 ## 3.2.1
 

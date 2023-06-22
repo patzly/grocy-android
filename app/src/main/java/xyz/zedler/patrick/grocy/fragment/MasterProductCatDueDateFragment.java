@@ -227,14 +227,6 @@ public class MasterProductCatDueDateFragment extends BaseFragment {
     return false;
   }
 
-  @Override
-  public void updateConnectivity(boolean isOnline) {
-    if (!isOnline == viewModel.isOffline()) {
-      return;
-    }
-    viewModel.setOfflineLive(!isOnline);
-  }
-
   @NonNull
   @Override
   public String toString() {

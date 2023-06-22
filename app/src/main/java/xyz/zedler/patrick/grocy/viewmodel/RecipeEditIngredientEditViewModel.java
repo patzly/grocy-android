@@ -35,7 +35,6 @@ import java.util.List;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -51,7 +50,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.repository.RecipeEditRepository;
@@ -78,7 +77,7 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
   private List<Product> products;
   private List<ProductBarcode> productBarcodes;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-  private List<QuantityUnitConversion> unitConversions;
+  private List<QuantityUnitConversionResolved> unitConversions;
 
   private final boolean debug;
   private final boolean isActionEdit;
@@ -93,7 +92,7 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(application, TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(application, TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(application);
     repository = new RecipeEditRepository(application);
     formData = new FormDataRecipeEditIngredientEdit(application, sharedPrefs, startupArgs);
@@ -111,43 +110,43 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
       this.products = data.getProducts();
       this.productBarcodes = data.getProductBarcodes();
       this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
-      this.unitConversions = data.getQuantityUnitConversions();
+      this.unitConversions = data.getQuantityUnitConversionsResolved();
 
-      formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
-      fillWithRecipeIfNecessary();
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
+      } else {
+        formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
+        fillWithRecipeIfNecessary();
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData() {
+  public void downloadData(boolean forceUpdate) {
     if (isOffline()) { // skip downloading
       isLoadingLive.setValue(false);
       return;
     }
 
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
+            fillWithRecipeIfNecessary();
+          }
+        },
         error -> onError(error, TAG),
+        forceUpdate,
+        false,
         Product.class,
         ProductBarcode.class,
         QuantityUnit.class,
-        QuantityUnitConversion.class
+        QuantityUnitConversionResolved.class
     );
   }
 
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
-    editPrefs.apply();
-    downloadData();
-  }
-
-  public void setProduct(int productId, ProductBarcode barcode, String stockEntryId, ProductLoadedListener productLoadedListener) {
+  public void setProduct(int productId, ProductBarcode barcode, ProductLoadedListener productLoadedListener) {
     Runnable onQueueEmptyListener = () -> {
       ProductDetails productDetails = formData.getProductDetailsLive().getValue();
       assert productDetails != null;
@@ -156,32 +155,37 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
       formData.getProductDetailsLive().setValue(productDetails);
       formData.getProductNameLive().setValue(product.getName());
 
-      try {
-        HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
-            getApplication(),
-            quantityUnitHashMap,
-            unitConversions,
-            product
-        );
-        formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+      HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
+          quantityUnitHashMap,
+          unitConversions,
+          product
+      );
+      formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+      formData.getQuantityUnitStockLive().setValue(
+          quantityUnitHashMap.get(product.getQuIdStockInt())
+      );
 
-        if (productLoadedListener != null) {
-          productLoadedListener.onProductLoaded(product, unitFactors);
-        }
-      } catch (IllegalArgumentException e) {
-        showMessage(e.getMessage());
-        formData.getQuantityUnitsFactorsLive().setValue(null);
+      if (productLoadedListener != null) {
+        productLoadedListener.onProductLoaded(product, unitFactors);
       }
 
       if (formData.getQuantityUnitLive().getValue() == null) {
         formData.setQuantityUnit(productDetails.getQuantityUnitStock());
+      }
+      String amount = formData.getAmountLive().getValue();
+      if (amount == null || amount.isEmpty()) {
+        formData.getAmountLive().setValue(String.valueOf(1));
+      }
+      String priceFactor = formData.getPriceFactorLive().getValue();
+      if (priceFactor == null || priceFactor.isEmpty()) {
+        formData.getPriceFactorLive().setValue(String.valueOf(1));
       }
 
       formData.isProductNameValid();
     };
 
     dlHelper.newQueue(
-        onQueueEmptyListener,
+        updated -> onQueueEmptyListener.run(),
         error -> showMessageAndContinueScanning(getString(R.string.error_no_product_details))
     ).append(
         ProductDetails.getProductDetails(
@@ -198,7 +202,6 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
       return;
     }
     Product product = null;
-    String stockEntryId = null;
     GrocycodeUtil.Grocycode grocycode = GrocycodeUtil.getGrocycode(barcode);
     if (grocycode != null && grocycode.isProduct()) {
       product = Product.getProductFromId(products, grocycode.getObjectId());
@@ -206,7 +209,6 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
         showMessageAndContinueScanning(R.string.msg_not_found);
         return;
       }
-      stockEntryId = grocycode.getProductStockEntryId();
     } else if (grocycode != null) {
       showMessageAndContinueScanning(R.string.error_wrong_grocycode_type);
       return;
@@ -221,7 +223,7 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
       }
     }
     if (product != null) {
-      setProduct(product.getId(), productBarcode, stockEntryId, null);
+      setProduct(product.getId(), productBarcode, null);
     } else {
       Bundle bundle = new Bundle();
       bundle.putString(ARGUMENT.BARCODE, barcode);
@@ -257,7 +259,7 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
         }
       }
       if (product != null) {
-        setProduct(product.getId(), null, null, null);
+        setProduct(product.getId(), null, null);
         return;
       }
     }
@@ -270,7 +272,7 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
     }
 
     if (product != null) {
-      setProduct(product.getId(), null, null, null);
+      setProduct(product.getId(), null, null);
     } else {
       showInputProductBottomSheet(input);
     }
@@ -331,16 +333,18 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
     assert entry != null;
 
     QuantityUnit quantityUnit = quantityUnitHashMap.get(entry.getQuantityUnitId());
+    int maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
 
-    setProduct(entry.getProductId(), null, null, (product, unitFactors) -> {
+    setProduct(entry.getProductId(), null, (product, unitFactors) -> {
       double amount = entry.getAmount();
-      if (!entry.isOnlyCheckSingleUnitInStock()) {
-        amount = QuantityUnitConversionUtil.getAmountRelativeToUnit(unitFactors, product, quantityUnit, amount);
+      Double factor = unitFactors.get(quantityUnit);
+      if (!entry.isOnlyCheckSingleUnitInStock() && factor != null) {
+        amount *= factor;
       }
-      formData.getAmountLive().setValue(NumUtil.trimAmount(amount, sharedPrefs.getInt(
-          STOCK.DECIMAL_PLACES_AMOUNT,
-          SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
-      )));
+      formData.getAmountLive().setValue(NumUtil.trimAmount(amount, maxDecimalPlacesAmount));
     });
     formData.getOnlyCheckSingleUnitInStockLive().setValue(entry.isOnlyCheckSingleUnitInStock());
     formData.setQuantityUnit(quantityUnitHashMap.get(entry.getQuantityUnitId()));
@@ -348,6 +352,7 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
     formData.getNotCheckStockFulfillmentLive().setValue(entry.isNotCheckStockFulfillment());
     formData.getIngredientGroupLive().setValue(entry.getIngredientGroup());
     formData.getNoteLive().setValue(entry.getNote());
+    formData.getPriceFactorLive().setValue(NumUtil.trimAmount(entry.getPriceFactor(), maxDecimalPlacesAmount));
 
     formData.setFilledWithRecipePosition(true);
   }

@@ -108,7 +108,7 @@ public class OverviewStartViewModel extends BaseViewModel {
     );
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     repository = new OverviewStartRepository(application);
 
     stockItemsLive = new MutableLiveData<>();
@@ -481,18 +481,24 @@ public class OverviewStartViewModel extends BaseViewModel {
       alreadyLoadedFromDatabase = true;
       if (downloadAfterLoading) {
         downloadData(false);
+      } else {
+        onQueueEmpty();
       }
     }, this::showThrowableErrorMessage);
   }
 
-  public void downloadData(boolean skipOfflineCheck) {
-    if (!skipOfflineCheck && isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        this::onQueueEmpty,
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            onQueueEmpty();
+          }
+        },
         error -> onError(error, TAG),
+        forceUpdate,
+        true,
         StockItem.class,
         ShoppingListItem.class,
         ShoppingList.class,
@@ -504,23 +510,7 @@ public class OverviewStartViewModel extends BaseViewModel {
     );
   }
 
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_STOCK_ITEMS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_VOLATILE, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_RECIPES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_TASKS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_CHORE_ENTRIES, null);
-    editPrefs.apply();
-    downloadData(true);
-  }
-
-  private void onQueueEmpty() {
-    if (isOffline()) setOfflineLive(false);
-
+  private void onQueueEmpty() { // TODO: Test
     if (sharedPrefs.getInt(PREF.CURRENT_USER_ID, -1) == -1) {
       User.getCurrentUserId(dlHelper, id -> {
         if (id != -1) {
@@ -540,12 +530,10 @@ public class OverviewStartViewModel extends BaseViewModel {
           }
         }
       }).perform(
-          i -> loadFromDatabase(false),
-          error -> loadFromDatabase(false),
+          i -> {},
+          error -> {},
           dlHelper.getUuid()
       );
-    } else {
-      loadFromDatabase(false);
     }
   }
 

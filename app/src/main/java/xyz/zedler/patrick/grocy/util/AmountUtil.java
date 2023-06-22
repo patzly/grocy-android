@@ -22,13 +22,13 @@ package xyz.zedler.patrick.grocy.util;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockItem;
@@ -39,52 +39,23 @@ public class AmountUtil {
       ShoppingListItem item,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
-      HashMap<Integer, ArrayList<QuantityUnitConversion>> unitConversionHashMap
+      List<QuantityUnitConversionResolved> unitConversions
   ) {
     if (!item.hasProduct()) {
       return null;
     }
     Product product = productHashMap.get(item.getProductIdInt());
-    ArrayList<QuantityUnitConversion> unitConversions
-        = unitConversionHashMap.get(item.getProductIdInt());
-    if (product == null) {
-      return null;
-    }
-    if (unitConversions == null) {
-      unitConversions = new ArrayList<>();
-    }
+    if (product == null) return null;
 
     QuantityUnit stock = quantityUnitHashMap.get(product.getQuIdStockInt());
     QuantityUnit purchase = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
     if (stock == null || purchase == null) {
       return null;
     }
-    HashMap<Integer, Double> unitFactors = new HashMap<>();
-    ArrayList<Integer> quIdsInHashMap = new ArrayList<>();
-    unitFactors.put(stock.getId(), (double) -1);
-    quIdsInHashMap.add(stock.getId());
-    if (!quIdsInHashMap.contains(purchase.getId())) {
-      unitFactors.put(purchase.getId(), product.getQuFactorPurchaseToStockDouble());
-    }
-    for (QuantityUnitConversion conversion : unitConversions) {
-      QuantityUnit unit = quantityUnitHashMap.get(conversion.getToQuId());
-      if (unit == null || quIdsInHashMap.contains(unit.getId())) {
-        continue;
-      }
-      unitFactors.put(unit.getId(), conversion.getFactor());
-    }
-    if (!unitFactors.containsKey(item.getQuIdInt())) {
-      return null;
-    }
-    Double factor = unitFactors.get(item.getQuIdInt());
-    assert factor != null;
-    if (factor != -1 && item.getQuIdInt() == product.getQuIdPurchaseInt()) {
-      return item.getAmountDouble() / factor;
-    } else if (factor != -1) {
-      return item.getAmountDouble() * factor;
-    } else {
-      return null;
-    }
+    HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil
+        .getUnitFactors(quantityUnitHashMap, unitConversions, product);
+    Double factor = unitFactors.get(quantityUnitHashMap.get(item.getQuIdInt()));
+    return factor != null ? item.getAmountDouble() * factor : item.getAmountDouble();
   }
 
   public static void addStockAmountNormalInfo(

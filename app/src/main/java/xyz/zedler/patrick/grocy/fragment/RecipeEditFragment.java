@@ -231,7 +231,7 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
         viewModel.isActionEdit() ? Constants.FAB.TAG.SAVE : Constants.FAB.TAG.SAVE_NOT_CLOSE,
         savedInstanceState == null,
         () -> {
-          if (!viewModel.getFormData().isNameValid()) {
+          if (!viewModel.getFormData().isFormValid()) {
             clearInputFocus();
             activity.showKeyboard(binding.editTextName);
           } else {
@@ -261,7 +261,7 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     if (product == null) {
       return;
     }
-    viewModel.setProduct(product.getId(), null, null);
+    viewModel.setProduct(product);
   }
 
   public void clearFocusAndCheckProductInput() {
@@ -271,9 +271,9 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
 
   public void clearFocusAndCheckProductInputExternal() {
     clearInputFocus();
-    String input = viewModel.getFormData().getProductNameLive().getValue();
+    String input = viewModel.getFormData().getProductProducedNameLive().getValue();
     if (input == null || input.isEmpty()) return;
-    viewModel.onBarcodeRecognized(viewModel.getFormData().getProductNameLive().getValue());
+    viewModel.onBarcodeRecognized(viewModel.getFormData().getProductProducedNameLive().getValue());
   }
 
   private boolean onMenuItemClick(MenuItem item) {
@@ -333,10 +333,7 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
   }
 
   @NonNull

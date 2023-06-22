@@ -47,7 +47,7 @@ import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.Store;
@@ -83,7 +83,7 @@ public class ShoppingModeViewModel extends BaseViewModel {
   private List<ShoppingList> shoppingLists;
   private HashMap<Integer, ProductGroup> productGroupHashMap;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-  private HashMap<Integer, ArrayList<QuantityUnitConversion>> unitConversionHashMap;
+  private List<QuantityUnitConversionResolved> unitConversions;
   private HashMap<Integer, Double> shoppingListItemAmountsHashMap;
   private HashMap<Integer, Store> storeHashMap;
   private HashMap<Integer, Product> productHashMap;
@@ -103,7 +103,7 @@ public class ShoppingModeViewModel extends BaseViewModel {
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, null);
     grocyApi = new GrocyApi(getApplication());
     repository = new ShoppingListRepository(application);
 
@@ -141,7 +141,7 @@ public class ShoppingModeViewModel extends BaseViewModel {
       this.shoppingLists = data.getShoppingLists();
       productGroupHashMap = ArrayUtil.getProductGroupsHashMap(data.getProductGroups());
       quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
-      unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(data.getUnitConversions());
+      unitConversions = data.getUnitConversionsResolved();
       productHashMap = ArrayUtil.getProductsHashMap(data.getProducts());
       productNamesHashMap = ArrayUtil.getProductNamesHashMap(data.getProducts());
       storeHashMap = ArrayUtil.getStoresHashMap(data.getStores());
@@ -201,7 +201,7 @@ public class ShoppingModeViewModel extends BaseViewModel {
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
+    NetworkQueue queue = dlHelper.newQueue(updated -> onQueueEmpty(), error -> onError(error, TAG));
     queue.append(
         ShoppingListItem.updateShoppingListItems(
             dlHelper,
@@ -212,29 +212,31 @@ public class ShoppingModeViewModel extends BaseViewModel {
               this.serverItemHashMapTemp = serverItemsHashMap;
             }
         ), ShoppingList.updateShoppingLists(
-            dlHelper, dbChangedTime, shoppingLists -> this.shoppingLists = shoppingLists
+            dlHelper, dbChangedTime, false, shoppingLists -> this.shoppingLists = shoppingLists
         ), ProductGroup.updateProductGroups(
             dlHelper,
-            dbChangedTime,
+            dbChangedTime, false,
             productGroups -> productGroupHashMap = ArrayUtil.getProductGroupsHashMap(productGroups)
         ), QuantityUnit.updateQuantityUnits(
             dlHelper,
-            dbChangedTime,
+            dbChangedTime, false,
             quantityUnits -> quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits)
-        ), QuantityUnitConversion.updateQuantityUnitConversions(
-            dlHelper,
-            dbChangedTime,
-            unitConversions -> unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(unitConversions)
         ), Product.updateProducts(dlHelper, dbChangedTime, products -> {
           productHashMap = ArrayUtil.getProductsHashMap(products);
           productNamesHashMap = ArrayUtil.getProductNamesHashMap(products);
+          queue.append(QuantityUnitConversionResolved.updateQuantityUnitConversions(
+              dlHelper,
+              dbChangedTime, false,
+              products,
+              unitConversions -> this.unitConversions = unitConversions
+          ));
         }), Store.updateStores(
             dlHelper,
-            dbChangedTime,
+            dbChangedTime, false,
             stores -> storeHashMap = ArrayUtil.getStoresHashMap(stores)
         ), MissingItem.updateMissingItems(
             dlHelper,
-            dbChangedTime,
+            dbChangedTime, false,
             missing -> missingProductIds = ArrayUtil.getMissingProductsIds(missing)
         )
     );
@@ -254,14 +256,14 @@ public class ShoppingModeViewModel extends BaseViewModel {
 
   public void downloadDataForceUpdate() {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS_RESOLVED, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_VOLATILE_MISSING, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_STORES, null);
     editPrefs.apply();
     downloadData(null, true);
   }
@@ -299,7 +301,7 @@ public class ShoppingModeViewModel extends BaseViewModel {
       showMessage(getString(R.string.msg_failed_to_sync));
       downloadData();
     };
-    NetworkQueue queue = dlHelper.newQueue(emptyListener, errorListener);
+    NetworkQueue queue = dlHelper.newQueue(updated -> emptyListener.run(), errorListener);
     for (ShoppingListItem itemToSync : itemsToSyncTemp) {
       JSONObject body = new JSONObject();
       try {
@@ -451,7 +453,7 @@ public class ShoppingModeViewModel extends BaseViewModel {
     shoppingListItemAmountsHashMap = new HashMap<>();
     for (ShoppingListItem item : shoppingListItems) {
       Double amount = AmountUtil.getShoppingListItemAmount(
-          item, productHashMap, quantityUnitHashMap, unitConversionHashMap
+          item, productHashMap, quantityUnitHashMap, unitConversions
       );
       if (amount != null) {
         shoppingListItemAmountsHashMap.put(item.getId(), amount);

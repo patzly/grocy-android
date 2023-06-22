@@ -52,6 +52,15 @@
     <item name="android:navigationBarColor">@color/transparent</item>
   </style>
 
+  <style name="Theme.Grocy.WebDialog" parent="Theme.AppCompat.Light.Dialog">
+    <item name="android:windowAnimationStyle">@null</item>
+    <item name="android:windowBackground">@android:color/transparent</item>
+    <item name="windowNoTitle">true</item>
+    <item name="windowActionBar">false</item>
+    <item name="colorPrimary">?attr/colorPrimary</item>
+    <item name="colorPrimaryDark">?attr/colorPrimaryDark</item>
+  </style>
+
   <style name="Theme.Grocy.Red" parent="Theme.Grocy">
     <item name="colorPrimary">@color/red_primary_40</item>
     <item name="colorOnPrimary">@color/white</item>

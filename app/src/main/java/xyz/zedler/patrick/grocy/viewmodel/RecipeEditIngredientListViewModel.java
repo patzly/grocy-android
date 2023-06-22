@@ -37,7 +37,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.repository.RecipeEditRepository;
@@ -59,7 +59,7 @@ public class RecipeEditIngredientListViewModel extends BaseViewModel {
   private ArrayList<RecipePosition> recipePositions;
   private List<Product> products;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-  private List<QuantityUnitConversion> unitConversions;
+  private List<QuantityUnitConversionResolved> unitConversions;
 
   private final Recipe recipe;
   private final boolean isActionEdit;
@@ -71,7 +71,7 @@ public class RecipeEditIngredientListViewModel extends BaseViewModel {
     super(application);
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(application, TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(application, TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(application);
     repository = new RecipeEditRepository(application);
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
@@ -97,45 +97,33 @@ public class RecipeEditIngredientListViewModel extends BaseViewModel {
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
 
-      this.recipePositions = (ArrayList<RecipePosition>) RecipePosition.getRecipePositionsFromRecipeId(data.getRecipePositions(), recipe.getId());
+      this.recipePositions = (ArrayList<RecipePosition>) RecipePosition
+          .getRecipePositionsFromRecipeId(data.getRecipePositions(), recipe.getId());
       this.products = Product.getProductsForRecipePositions(data.getProducts(), recipePositions);
       this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
-      this.unitConversions = data.getQuantityUnitConversions();
+      this.unitConversions = data.getQuantityUnitConversionsResolved();
 
       formData.getRecipePositionsLive().setValue(recipePositions);
       formData.getProductsLive().setValue(products);
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData() {
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        dataLoaded -> {
-          if (dataLoaded) loadFromDatabase(false);
+        updated -> {
+          if (updated) loadFromDatabase(false);
         },
         error -> onError(error, TAG),
+        forceUpdate,
+        false,
         RecipePosition.class,
         Product.class,
         QuantityUnit.class,
-        QuantityUnitConversion.class
+        QuantityUnitConversionResolved.class
     );
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = getSharedPrefs().edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_RECIPE_POSITIONS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
-    editPrefs.apply();
-    downloadData();
   }
 
   @NonNull
@@ -174,14 +162,14 @@ public class RecipeEditIngredientListViewModel extends BaseViewModel {
     return quantityUnitHashMap;
   }
 
-  public List<QuantityUnitConversion> getUnitConversions() {
+  public List<QuantityUnitConversionResolved> getUnitConversions() {
     return unitConversions;
   }
 
   public void deleteRecipePosition(int recipePositionId) {
     dlHelper.delete(
             grocyApi.getObject(GrocyApi.ENTITY.RECIPES_POS, recipePositionId),
-            response -> downloadData(),
+            response -> downloadData(false),
             this::showNetworkErrorMessage
     );
   }

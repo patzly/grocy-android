@@ -45,6 +45,7 @@ import xyz.zedler.patrick.grocy.databinding.RowRecipePositionEntryBinding;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
@@ -66,14 +67,13 @@ public class RecipePositionAdapter extends
   private final List<RecipePosition> recipePositions;
   private final List<Product> products;
   private final List<QuantityUnit> quantityUnits;
-  private final List<QuantityUnitConversion> quantityUnitConversions;
+  private final List<QuantityUnitConversionResolved> quantityUnitConversions;
   private final HashMap<Integer, StockItem> stockItemHashMap;
   private final List<ShoppingListItem> shoppingListItems;
   private final RecipePositionsItemAdapterListener listener;
 
   private final PluralUtil pluralUtil;
   private final int maxDecimalPlacesAmount;
-  private final ColorRoles colorBlue;
   private final ColorRoles colorGreen;
   private final ColorRoles colorYellow;
   private final ColorRoles colorRed;
@@ -85,7 +85,7 @@ public class RecipePositionAdapter extends
       List<RecipePosition> recipePositions,
       List<Product> products,
       List<QuantityUnit> quantityUnits,
-      List<QuantityUnitConversion> quantityUnitConversions,
+      List<QuantityUnitConversionResolved> quantityUnitConversions,
       HashMap<Integer, StockItem> stockItemHashMap,
       List<ShoppingListItem> shoppingListItems,
       RecipePositionsItemAdapterListener listener
@@ -110,7 +110,6 @@ public class RecipePositionAdapter extends
     this.listener = listener;
     this.pluralUtil = new PluralUtil(context);
 
-    colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
     colorGreen = ResUtil.getHarmonizedRoles(context, R.color.green);
     colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
     colorRed = ResUtil.getHarmonizedRoles(context, R.color.red);
@@ -153,32 +152,26 @@ public class RecipePositionAdapter extends
     ArrayList<Product> missingProducts = new ArrayList<>();
     for (RecipePosition recipePosition : recipePositions) {
       Product product = Product.getProductFromId(products, recipePosition.getProductId());
-      QuantityUnitConversion quantityUnitConversion = product != null
-          ? QuantityUnitConversion.getFromTwoUnits(
+      QuantityUnitConversion conversion = product != null
+          ? QuantityUnitConversionResolved.findConversion(
           quantityUnitConversions,
+          product.getId(),
           product.getQuIdStockInt(),
-          recipePosition.getQuantityUnitId(),
-          product.getId()
+          recipePosition.getQuantityUnitId()
       ) : null;
-      double amountStockUnit = recipePosition.getAmount() /
-          recipe.getBaseServings() * recipe.getDesiredServings();
-      double amountRecipeUnit = amountStockUnit;
-      if (quantityUnitConversion != null && !recipePosition.isOnlyCheckSingleUnitInStock()) {
-        amountRecipeUnit *= quantityUnitConversion.getFactor();
-      }
       if (stockItemHashMap.isEmpty()) continue;
-      StockItem stockItem = stockItemHashMap.get(recipePosition.getProductId());
-      double amountMissing = getAmountMissing(
-          recipePosition, stockItem, amountStockUnit, amountRecipeUnit
-      );
-      double amountShoppingList = getAmountOnShoppingList(recipePosition, quantityUnitConversion);
+      double amountMissing = conversion != null
+          ? recipePosition.getAmount() * conversion.getFactor() : recipePosition.getAmount();
+      double amountShoppingList = getAmountOnShoppingList(recipePosition, conversion);
       if (amountMissing > 0 && amountShoppingList < amountMissing) missingProducts.add(product);
     }
     return missingProducts;
   }
 
-  private double getAmountOnShoppingList(RecipePosition recipePosition,
-      QuantityUnitConversion conversion) {
+  private double getAmountOnShoppingList(
+      RecipePosition recipePosition,
+      QuantityUnitConversion conversion
+  ) {
     double amountStockUnit = 0;
     for (ShoppingListItem shoppingListItem : shoppingListItems) {
       if (!shoppingListItem.hasProduct()
@@ -186,22 +179,6 @@ public class RecipePositionAdapter extends
       amountStockUnit += shoppingListItem.getAmountDouble();
     }
     return conversion != null ? amountStockUnit * conversion.getFactor() : amountStockUnit;
-  }
-
-  private double getAmountMissing(
-      RecipePosition recipePosition,
-      StockItem stockItem,
-      double amountStockUnit,
-      double amountRecipeUnit
-  ) {
-    double amountStock = stockItem != null ? stockItem.getAmountDouble() : 0;
-    double amountMissing;
-    if (recipePosition.isOnlyCheckSingleUnitInStock()) {
-      amountMissing = amountStockUnit / amountRecipeUnit - amountStock;
-    } else {
-      amountMissing = amountStockUnit - amountStock;
-    }
-    return amountMissing >= 0 ? amountMissing : 0;
   }
 
   @SuppressLint("ClickableViewAccessibility")
@@ -217,17 +194,16 @@ public class RecipePositionAdapter extends
         quantityUnits, recipePosition.getQuantityUnitId()
     );
     QuantityUnitConversion conversion = product != null
-        ? QuantityUnitConversion.getFromTwoUnits(
+        ? QuantityUnitConversionResolved.findConversion(
             quantityUnitConversions,
+            product.getId(),
             product.getQuIdStockInt(),
-            recipePosition.getQuantityUnitId(),
-            product.getId()
+            recipePosition.getQuantityUnitId()
         ) : null;
 
     // AMOUNT
-    double amountStockUnit = recipePosition.getAmount() /
-        recipe.getBaseServings() * recipe.getDesiredServings();
-    double amountRecipeUnit = amountStockUnit;
+    double amountRecipeUnit = recipePosition.getAmount() /
+        recipe.getBaseServings() * recipe.getDesiredServings(); // stock unit
     if (conversion != null && !recipePosition.isOnlyCheckSingleUnitInStock()) {
       amountRecipeUnit *= conversion.getFactor();
     }
@@ -259,9 +235,8 @@ public class RecipePositionAdapter extends
     } else {
       holder.binding.fulfillment.setVisibility(View.VISIBLE);
 
-      double amountMissing = getAmountMissing(
-          recipePosition, stockItem, amountStockUnit, amountRecipeUnit
-      );
+      double amountMissing = conversion != null
+          ? recipePosition.getAmount() * conversion.getFactor() : recipePosition.getAmount();
       double amountShoppingList = getAmountOnShoppingList(recipePosition, conversion);
       if (amountMissing == 0) {
         if (stockItem != null) {
@@ -360,7 +335,7 @@ public class RecipePositionAdapter extends
       List<RecipePosition> newList,
       List<Product> newProducts,
       List<QuantityUnit> newQuantityUnits,
-      List<QuantityUnitConversion> newQuantityUnitConversions,
+      List<QuantityUnitConversionResolved> newQuantityUnitConversions,
       HashMap<Integer, StockItem> newStockItemHashMap,
       List<ShoppingListItem> newShoppingListItems
   ) {
@@ -408,8 +383,8 @@ public class RecipePositionAdapter extends
     List<Product> newProducts;
     List<QuantityUnit> oldQuantityUnits;
     List<QuantityUnit> newQuantityUnits;
-    List<QuantityUnitConversion> oldQuantityUnitConversions;
-    List<QuantityUnitConversion> newQuantityUnitConversions;
+    List<QuantityUnitConversionResolved> oldQuantityUnitConversions;
+    List<QuantityUnitConversionResolved> newQuantityUnitConversions;
     HashMap<Integer, StockItem> oldStockItemHashMap;
     HashMap<Integer, StockItem> newStockItemHashMap;
     List<ShoppingListItem> oldShoppingListItems;
@@ -424,8 +399,8 @@ public class RecipePositionAdapter extends
         List<Product> newProducts,
         List<QuantityUnit> oldQuantityUnits,
         List<QuantityUnit> newQuantityUnits,
-        List<QuantityUnitConversion> oldQuantityUnitConversions,
-        List<QuantityUnitConversion> newQuantityUnitConversions,
+        List<QuantityUnitConversionResolved> oldQuantityUnitConversions,
+        List<QuantityUnitConversionResolved> newQuantityUnitConversions,
         HashMap<Integer, StockItem> oldStockItemHashMap,
         HashMap<Integer, StockItem> newStockItemHashMap,
         List<ShoppingListItem> oldShoppingListItems,
@@ -482,18 +457,18 @@ public class RecipePositionAdapter extends
           oldQuantityUnits, oldItem.getQuantityUnitId()
       );
       QuantityUnitConversion newQuantityUnitConversion = newItemProduct != null
-          ? QuantityUnitConversion.getFromTwoUnits(
+          ? QuantityUnitConversionResolved.findConversion(
               newQuantityUnitConversions,
+              newItemProduct.getId(),
               newItemProduct.getQuIdStockInt(),
-              newItem.getQuantityUnitId(),
-              newItemProduct.getId()
+              newItem.getQuantityUnitId()
           ) : null;
       QuantityUnitConversion oldQuantityUnitConversion = oldItemProduct != null
-          ? QuantityUnitConversion.getFromTwoUnits(
+          ? QuantityUnitConversionResolved.findConversion(
               oldQuantityUnitConversions,
+              oldItemProduct.getId(),
               oldItemProduct.getQuIdStockInt(),
-              oldItem.getQuantityUnitId(),
-              oldItemProduct.getId()
+              oldItem.getQuantityUnitId()
           ) : null;
       StockItem newStockItem = newStockItemHashMap.get(newItem.getProductId());
       StockItem oldStockItem = oldStockItemHashMap.get(oldItem.getProductId());

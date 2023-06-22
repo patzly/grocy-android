@@ -29,7 +29,6 @@ import androidx.preference.PreferenceManager;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatDueDate;
 import xyz.zedler.patrick.grocy.fragment.MasterProductCatDueDateFragmentArgs;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 
@@ -38,13 +37,11 @@ public class MasterProductCatDueDateViewModel extends BaseViewModel {
   private static final String TAG = MasterProductCatDueDateViewModel.class.getSimpleName();
 
   private final SharedPreferences sharedPrefs;
-  private final DownloadHelper dlHelper;
   private final FormDataMasterProductCatDueDate formData;
   private final MasterProductCatDueDateFragmentArgs args;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
 
   private final boolean isActionEdit;
 
@@ -57,13 +54,10 @@ public class MasterProductCatDueDateViewModel extends BaseViewModel {
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     formData = new FormDataMasterProductCatDueDate(application, getBeginnerModeEnabled());
     args = startupArgs;
     isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
-
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
   }
 
   public FormDataMasterProductCatDueDate getFormData() {
@@ -83,19 +77,6 @@ public class MasterProductCatDueDateViewModel extends BaseViewModel {
   }
 
   @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
-  }
-
-  @NonNull
   public MutableLiveData<Boolean> getIsLoadingLive() {
     return isLoadingLive;
   }
@@ -110,12 +91,6 @@ public class MasterProductCatDueDateViewModel extends BaseViewModel {
         Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
         Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
     );
-  }
-
-  @Override
-  protected void onCleared() {
-    dlHelper.destroy();
-    super.onCleared();
   }
 
   public static class MasterProductCatDueDateViewModelFactory implements ViewModelProvider.Factory {

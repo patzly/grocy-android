@@ -100,7 +100,6 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
     viewModel = new ViewModelProvider(this).get(StockJournalViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
     binding.setFragment(this);
@@ -304,10 +303,7 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData(true);
-    }
+    viewModel.downloadData(true);
   }
 
   private void showConfirmationDialog(StockLogEntry entry) {

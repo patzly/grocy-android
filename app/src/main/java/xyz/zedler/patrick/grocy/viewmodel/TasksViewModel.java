@@ -23,7 +23,6 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
@@ -31,7 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
@@ -49,7 +47,6 @@ import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class TasksViewModel extends BaseViewModel {
 
@@ -74,7 +71,6 @@ public class TasksViewModel extends BaseViewModel {
   private HashMap<Integer, TaskCategory> taskCategoriesHashMap;
   private HashMap<Integer, User> usersHashMap;
 
-  private NetworkQueue currentQueueLoading;
   private String searchInput;
   private int tasksDueTodayCount;
   private int tasksDueSoonCount;
@@ -88,7 +84,7 @@ public class TasksViewModel extends BaseViewModel {
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new TasksRepository(application);
     pluralUtil = new PluralUtil(application);
@@ -139,91 +135,22 @@ public class TasksViewModel extends BaseViewModel {
 
       updateFilteredTasks();
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime, boolean skipOfflineCheck) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
-    if (!skipOfflineCheck && isOffline()) { // skip downloading and update recyclerview
-      isLoadingLive.setValue(false);
-      updateFilteredTasks();
-      return;
-    }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(
-          time -> downloadData(time, skipOfflineCheck),
-          error -> onError(error, TAG)
-      );
-      return;
-    }
-
-    NetworkQueue queue = dlHelper.newQueue(() -> {
-      if (isOffline()) setOfflineLive(false);
-      updateFilteredTasks();
-    }, error -> onError(error, TAG));
-    queue.append(
-        TaskCategory.updateTaskCategories(dlHelper, dbChangedTime, taskCategories -> {
-          this.taskCategories = taskCategories;
-          taskCategoriesHashMap = ArrayUtil.getTaskCategoriesHashMap(taskCategories);
-        }), Task.updateTasks(dlHelper, dbChangedTime, tasks -> {
-          this.tasks = tasks;
-
-          tasksDueTodayCount = 0;
-          tasksDueSoonCount = 0;
-          tasksOverdueCount = 0;
-          for (Task task : tasks) {
-            if (task.isDone()) continue;
-            int daysFromNow = DateUtil.getDaysFromNow(task.getDueDate());
-            if (daysFromNow < 0) {
-              tasksOverdueCount++;
-            }
-            if (daysFromNow == 0) {
-              tasksDueTodayCount++;
-            }
-            if (daysFromNow >= 0 && daysFromNow <= 5) {
-              tasksDueSoonCount++;
-            }
-          }
-
-          filterChipLiveDataStatus
-              .setDueTodayCount(tasksDueTodayCount)
-              .setDueSoonCount(tasksDueSoonCount)
-              .setOverdueCount(tasksOverdueCount)
-              .emitCounts();
-
-          updateFilteredTasks();
-        }), User.updateUsers(
-            dlHelper,
-            dbChangedTime,
-            users -> usersHashMap = ArrayUtil.getUsersHashMap(users)
-        )
+  public void downloadData(boolean forceUpdate) {
+    dlHelper.updateData(
+        updated -> {
+          if (updated) loadFromDatabase(false);
+        }, error -> onError(error, TAG),
+        forceUpdate,
+        true,
+        TaskCategory.class,
+        Task.class,
+        User.class
     );
-
-    if (queue.isEmpty()) {
-      updateFilteredTasks();
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null, false);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_TASKS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_TASK_CATEGORIES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_USERS, null);
-    editPrefs.apply();
-    downloadData(null, true);
   }
 
   public void updateFilteredTasks() {
@@ -285,7 +212,7 @@ public class TasksViewModel extends BaseViewModel {
               !task.isDone() ? R.string.msg_task_completed : R.string.msg_task_not_completed
           );
           showMessage(msg);
-          downloadData();
+          downloadData(false);
 
           if (!task.isDone()) {
             Log.i(
@@ -311,7 +238,7 @@ public class TasksViewModel extends BaseViewModel {
   public void deleteTask(int taskId) {
     dlHelper.delete(
         grocyApi.getObject(ENTITY.TASKS, taskId),
-        response -> downloadData(),
+        response -> downloadData(false),
         this::showNetworkErrorMessage
     );
   }
@@ -366,10 +293,6 @@ public class TasksViewModel extends BaseViewModel {
   @NonNull
   public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
     return infoFullscreenLive;
-  }
-
-  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
-    currentQueueLoading = queueLoading;
   }
 
   public boolean isFeatureEnabled(String pref) {

@@ -135,7 +135,7 @@ public class StockOverviewViewModel extends BaseViewModel {
     alreadyLoadedFromDatabase = false;
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new StockOverviewRepository(application);
     pluralUtil = new PluralUtil(application);
@@ -283,18 +283,14 @@ public class StockOverviewViewModel extends BaseViewModel {
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(boolean skipOfflineCheck) {
-    if (!skipOfflineCheck && isOffline()) { // skip downloading and update recyclerview
-      isLoadingLive.setValue(false);
-      updateFilteredStockItems();
-      return;
-    }
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        () -> {
-          if (isOffline()) setOfflineLive(false);
-          loadFromDatabase(false);
+        updated -> {
+          if (updated) loadFromDatabase(false);
         },
         error -> onError(error, TAG),
+        forceUpdate,
+        true,
         QuantityUnit.class,
         ProductGroup.class,
         StockItem.class,
@@ -307,27 +303,6 @@ public class StockOverviewViewModel extends BaseViewModel {
         ProductLastPurchased.class,
         StockLocation.class
     );
-  }
-
-  public void downloadData() {
-    downloadData(false);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_STOCK_ITEMS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS_AVERAGE_PRICE, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS_LAST_PURCHASED, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_STOCK_LOCATIONS, null);
-    editPrefs.apply();
-    downloadData(true);
   }
 
   public void updateFilteredStockItems() {
@@ -512,7 +487,7 @@ public class StockOverviewViewModel extends BaseViewModel {
             snackbarMsg.setAction(getString(R.string.action_undo), v -> dlHelper.post(
                 grocyApi.undoStockTransaction(finalTransactionId),
                 response1 -> {
-                  downloadData();
+                  downloadData(false);
                   showSnackbar(new SnackbarMessage(
                       getString(R.string.msg_undone_transaction),
                       Snackbar.LENGTH_SHORT
@@ -524,7 +499,7 @@ public class StockOverviewViewModel extends BaseViewModel {
                 this::showNetworkErrorMessage
             ));
           }
-          downloadData();
+          downloadData(false);
           showSnackbar(snackbarMsg);
           if (debug) {
             Log.i(
@@ -586,7 +561,7 @@ public class StockOverviewViewModel extends BaseViewModel {
             snackbarMsg.setAction(getString(R.string.action_undo), v -> dlHelper.post(
                 grocyApi.undoStockTransaction(finalTransactionId),
                 response1 -> {
-                  downloadData();
+                  downloadData(false);
                   showSnackbar(new SnackbarMessage(
                       getString(R.string.msg_undone_transaction),
                       Snackbar.LENGTH_SHORT
@@ -598,7 +573,7 @@ public class StockOverviewViewModel extends BaseViewModel {
                 this::showNetworkErrorMessage
             ));
           }
-          downloadData();
+          downloadData(false);
           showSnackbar(snackbarMsg);
           if (debug) {
             Log.i(

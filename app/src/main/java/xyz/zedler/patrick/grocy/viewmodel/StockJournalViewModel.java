@@ -37,7 +37,6 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockLogEntry;
@@ -79,7 +78,7 @@ public class StockJournalViewModel extends BaseViewModel {
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new StockEntriesRepository(application);
 
@@ -99,7 +98,7 @@ public class StockJournalViewModel extends BaseViewModel {
         downloadData(false);
       } else {
         NetworkQueue queue = dlHelper.newQueue(
-            this::updateFilteredStockLogEntries,
+            updated -> updateFilteredStockLogEntries(),
             error -> onError(error, TAG)
         );
         queue.append(StockLogEntry.getStockLogEntries(
@@ -113,38 +112,24 @@ public class StockJournalViewModel extends BaseViewModel {
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(boolean skipOfflineCheck) {
-    if (!skipOfflineCheck && isOffline()) { // skip downloading and update recyclerview
-      isLoadingLive.setValue(false);
-      updateFilteredStockLogEntries();
-      return;
-    }
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        dataLoaded -> {
+        updated -> {
           if (isOffline()) setOfflineLive(false);
           loadFromDatabase(false);
         },
         error -> onError(error, TAG),
+        forceUpdate,
+        false,
         QuantityUnit.class,
         Product.class,
-        ProductBarcode.class,
-        Location.class
+        Location.class,
+        User.class
     );
   }
 
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_LOCATIONS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_USERS, null);
-    editPrefs.apply();
-    downloadData(true);
-  }
-
   public void loadNextPage(OnObjectsResponseListener<StockLogEntry> responseListener) {
-    NetworkQueue queue = dlHelper.newQueue(() -> {
+    NetworkQueue queue = dlHelper.newQueue(updated -> {
       if (isOffline()) setOfflineLive(false);
     }, error -> onError(error, TAG));
     queue.append(StockLogEntry.getStockLogEntries(

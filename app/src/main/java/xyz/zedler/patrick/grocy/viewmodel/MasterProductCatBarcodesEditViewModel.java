@@ -94,7 +94,7 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
     );
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new MasterProductRepository(application);
     formData = new FormDataMasterProductCatBarcodesEdit(application, startupArgs.getProduct());
@@ -113,42 +113,39 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
       formData.getBarcodesLive().setValue(getBarcodes(data.getBarcodes()));
       this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
       this.unitConversions = data.getConversions();
-      fillWithProductBarcodeIfNecessary();
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       } else {
         if (queueEmptyAction != null) {
           queueEmptyAction.run();
           queueEmptyAction = null;
         }
+        fillWithProductBarcodeIfNecessary();
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData() {
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            if (queueEmptyAction != null) {
+              queueEmptyAction.run();
+              queueEmptyAction = null;
+            }
+            fillWithProductBarcodeIfNecessary();
+          }
+        },
         error -> onError(error, TAG),
+        forceUpdate,
+        false,
         Store.class,
         ProductBarcode.class,
         QuantityUnit.class,
         QuantityUnitConversion.class
     );
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.apply();
-    downloadData();
   }
 
   public void saveItem() {

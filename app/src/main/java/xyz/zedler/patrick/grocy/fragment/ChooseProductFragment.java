@@ -108,21 +108,12 @@ public class ChooseProductFragment extends BaseFragment
         .ChooseProductViewModelFactory(
                 activity.getApplication(), barcode, forbidCreateProduct, pendingProductsActive
     )).get(ChooseProductViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
 
     binding.setFragment(this);
     binding.setActivity(activity);
     binding.setViewModel(viewModel);
     binding.setLifecycleOwner(getViewLifecycleOwner());
     binding.setClickUtil(clickUtil);
-
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
-      binding.swipe.setRefreshing(state);
-      if (!state) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
-    binding.swipe.setOnRefreshListener(() -> viewModel.downloadDataForceUpdate());
 
     viewModel.getDisplayedItemsLive().observe(getViewLifecycleOwner(), products -> {
       if (products == null) {
@@ -254,8 +245,7 @@ public class ChooseProductFragment extends BaseFragment
     if (!online == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!online);
-    viewModel.downloadData();
+    viewModel.downloadData(false);
   }
 
   @NonNull

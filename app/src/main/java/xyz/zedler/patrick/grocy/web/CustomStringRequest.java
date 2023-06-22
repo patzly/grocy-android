@@ -34,7 +34,6 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 
 public class CustomStringRequest extends StringRequest {
 
-  private final Runnable onRequestFinished;
   private final String url;
   private final String apiKey;
   private final String homeAssistantIngressSessionKey;
@@ -47,7 +46,6 @@ public class CustomStringRequest extends StringRequest {
       String homeAssistantIngressSessionKey,
       Response.Listener<String> listener,
       @Nullable Response.ErrorListener errorListener,
-      @Nullable Runnable onRequestFinished,
       int timeoutSeconds,
       String tag,
       @Nullable String userAgent,
@@ -62,8 +60,6 @@ public class CustomStringRequest extends StringRequest {
             if (onLoadingListener != null) {
               onLoadingListener.onLoadingChanged(false);
             }
-          } else if (onRequestFinished != null) {
-            onRequestFinished.run();
           }
           listener.onResponse(response);
         },
@@ -72,15 +68,12 @@ public class CustomStringRequest extends StringRequest {
             if (onLoadingListener != null) {
               onLoadingListener.onLoadingChanged(false);
             }
-          } else if (onRequestFinished != null) {
-            onRequestFinished.run();
           }
           if (errorListener != null) {
             errorListener.onErrorResponse(error);
           }
         }
     );
-    this.onRequestFinished = onRequestFinished;
     this.url = url;
     this.apiKey = apiKey;
     this.homeAssistantIngressSessionKey = homeAssistantIngressSessionKey;
@@ -104,7 +97,6 @@ public class CustomStringRequest extends StringRequest {
       String homeAssistantIngressSessionKey,
       Response.Listener<String> listener,
       @Nullable Response.ErrorListener errorListener,
-      @Nullable Runnable onRequestFinished,
       int timeoutSeconds,
       String tag
   ) {
@@ -115,7 +107,6 @@ public class CustomStringRequest extends StringRequest {
         homeAssistantIngressSessionKey,
         listener,
         errorListener,
-        onRequestFinished,
         timeoutSeconds,
         tag,
         null,
@@ -131,7 +122,6 @@ public class CustomStringRequest extends StringRequest {
       String homeAssistantIngressSessionKey,
       Response.Listener<String> listener,
       @Nullable Response.ErrorListener errorListener,
-      @Nullable Runnable onRequestFinished,
       int timeoutSeconds,
       String tag,
       String userAgent
@@ -143,7 +133,6 @@ public class CustomStringRequest extends StringRequest {
         homeAssistantIngressSessionKey,
         listener,
         errorListener,
-        onRequestFinished,
         timeoutSeconds,
         tag,
         userAgent,
@@ -159,7 +148,6 @@ public class CustomStringRequest extends StringRequest {
       String homeAssistantIngressSessionKey,
       Response.Listener<String> listener,
       @Nullable Response.ErrorListener errorListener,
-      @Nullable Runnable onRequestFinished,
       int timeoutSeconds,
       String tag,
       boolean noLoadingProgress,
@@ -172,21 +160,12 @@ public class CustomStringRequest extends StringRequest {
         homeAssistantIngressSessionKey,
         listener,
         errorListener,
-        onRequestFinished,
         timeoutSeconds,
         tag,
         null,
         noLoadingProgress,
         onLoadingListener
     );
-  }
-
-  @Override
-  public void cancel() {
-    super.cancel();
-    if (onRequestFinished != null) {
-      onRequestFinished.run();
-    }
   }
 
   @Override

@@ -92,7 +92,7 @@
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never"
       app:setRefreshing="@{viewModel.isLoadingLive}"
-      app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
+      app:onRefreshListener="@{() -> viewModel.downloadData(true)}">
 
       <FrameLayout
         android:id="@+id/container"
@@ -243,74 +243,6 @@
               </LinearLayout>
 
               <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:animateLayoutChanges="true"
-                transitionTypeChanging="@{true}">
-
-                <LinearLayout
-                  style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
-                  android:layout_width="0dp"
-                  android:layout_weight="1"
-                  android:paddingTop="8dp"
-                  android:paddingBottom="8dp"
-                  android:paddingStart="16dp"
-                  android:paddingEnd="0dp"
-                  android:animateLayoutChanges="true"
-                  transitionTypeChanging="@{true}">
-
-                  <ImageView
-                    android:id="@+id/image_amount"
-                    style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                    android:src="@drawable/ic_round_scatter_plot_anim"
-                    tools:ignore="ContentDescription" />
-
-                  <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/text_input_amount"
-                    style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                    android:hint="@{formData.amountHintLive}"
-                    app:helperText="@{formData.amountHelperLive}"
-                    app:errorText="@{formData.amountErrorLive}"
-                    app:endIconMode="clear_text"
-                    app:endIconOnClickListener="@{v -> fragment.clearAmountFieldAndFocusIt()}">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                      android:id="@+id/edit_text_amount"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:inputType="number|numberDecimal"
-                      android:imeOptions="actionDone"
-                      android:maxLength="10"
-                      android:text="@={formData.amountLive}"
-                      android:afterTextChanged="@{() -> formData.isAmountValid()}"
-                      app:onFocusChangeListener="@{(v, focus) -> activity.startIconAnimation(imageAmount, focus)}"
-                      app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}" />
-
-                  </com.google.android.material.textfield.TextInputLayout>
-
-                </LinearLayout>
-
-                <com.google.android.material.button.MaterialButton
-                  android:id="@+id/amount_more"
-                  style="@style/Widget.Grocy.Button.IconButton"
-                  android:layout_marginStart="8dp"
-                  android:layout_marginTop="2dp"
-                  android:onClick="@{() -> formData.moreAmount(imageAmount)}"
-                  app:icon="@drawable/ic_round_expand_less" />
-
-                <com.google.android.material.button.MaterialButton
-                  android:id="@+id/amount_less"
-                  style="@style/Widget.Grocy.Button.IconButton"
-                  android:layout_marginEnd="8dp"
-                  android:layout_marginTop="2dp"
-                  android:onClick="@{() -> formData.lessAmount(imageAmount)}"
-                  app:icon="@drawable/ic_round_expand_more" />
-
-              </LinearLayout>
-
-              <LinearLayout
                 android:id="@+id/category_quantity_unit"
                 style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
                 android:layout_width="match_parent"
@@ -338,6 +270,91 @@
                 </LinearLayout>
 
               </LinearLayout>
+
+              <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:animateLayoutChanges="true"
+                transitionTypeChanging="@{true}">
+
+                <LinearLayout
+                  style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
+                  android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:paddingTop="8dp"
+                  android:paddingBottom="8dp"
+                  android:paddingStart="16dp"
+                  android:paddingEnd="0dp"
+                  android:animateLayoutChanges="true"
+                  transitionTypeChanging="@{true}">
+
+                  <ImageView
+                    android:id="@+id/image_amount"
+                    style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                    android:src="@drawable/ic_round_scatter_plot_anim"
+                    tools:ignore="ContentDescription" />
+
+                  <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_input_amount"
+                    style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+                    android:hint="@{formData.amountHintLive ?? @string/property_amount}"
+                    app:helperText="@{formData.amountHelperLive}"
+                    app:errorText="@{formData.amountErrorLive}"
+                    app:endIconMode="clear_text"
+                    app:endIconOnClickListener="@{v -> fragment.clearAmountFieldAndFocusIt()}">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                      android:id="@+id/edit_text_amount"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:inputType="number|numberDecimal"
+                      android:imeOptions="actionDone"
+                      android:maxLength="10"
+                      android:selectAllOnFocus="true"
+                      android:text="@={formData.amountLive}"
+                      android:afterTextChanged="@{() -> formData.isAmountValid()}"
+                      app:onFocusChangeListener="@{(v, focus) -> activity.startIconAnimation(imageAmount, focus)}"
+                      app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}" />
+
+                  </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                  android:id="@+id/amount_more"
+                  style="@style/Widget.Grocy.Button.IconButton"
+                  android:layout_marginStart="8dp"
+                  android:layout_marginTop="2dp"
+                  android:onClick="@{() -> formData.moreAmount(imageAmount)}"
+                  app:icon="@drawable/ic_round_expand_less" />
+
+                <com.google.android.material.button.MaterialButton
+                  android:id="@+id/amount_less"
+                  style="@style/Widget.Grocy.Button.IconButton"
+                  android:layout_marginEnd="8dp"
+                  android:layout_marginTop="2dp"
+                  android:onClick="@{() -> formData.lessAmount(imageAmount)}"
+                  app:icon="@drawable/ic_round_expand_more" />
+
+              </LinearLayout>
+
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card.Text"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="@string/msg_help_variable_amount" />
+
+              </com.google.android.material.card.MaterialCardView>
 
               <LinearLayout
                 style="@style/Widget.Grocy.LinearLayout.ListItem"
@@ -396,6 +413,22 @@
                   android:checked="@={formData.notCheckStockFulfillmentLive}" />
 
               </LinearLayout>
+
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card.Text"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="@string/msg_help_recipe_group" />
+
+              </com.google.android.material.card.MaterialCardView>
 
               <LinearLayout
                 style="@style/Widget.Grocy.LinearLayout.ListItem"
@@ -456,6 +489,81 @@
                     app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+              </LinearLayout>
+
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card.Text"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="@string/msg_help_recipe_price_factor" />
+
+              </com.google.android.material.card.MaterialCardView>
+
+              <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                  style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
+                  android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:paddingTop="8dp"
+                  android:paddingBottom="8dp"
+                  android:paddingStart="16dp"
+                  android:paddingEnd="0dp">
+
+                  <ImageView
+                    style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                    android:src="@drawable/ic_round_factor"
+                    tools:ignore="ContentDescription" />
+
+                  <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_input_price_factor"
+                    style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+                    android:hint="@string/property_price_factor"
+                    app:errorText="@{formData.priceFactorErrorLive}"
+                    app:endIconMode="clear_text"
+                    app:endIconOnClickListener="@{v -> fragment.clearAmountFieldAndFocusIt()}">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                      android:id="@+id/edit_text_price_factor"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:inputType="number|numberDecimal"
+                      android:imeOptions="actionDone"
+                      android:maxLength="10"
+                      android:selectAllOnFocus="true"
+                      android:text="@={formData.priceFactorLive}"
+                      android:afterTextChanged="@{() -> formData.isPriceFactorValid()}"
+                      app:onFocusChangeListener="@{(v, focus) -> activity.startIconAnimation(imageAmount, focus)}"
+                      app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}" />
+
+                  </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                  style="@style/Widget.Grocy.Button.IconButton"
+                  android:layout_marginStart="8dp"
+                  android:onClick="@{() -> formData.morePriceFactor()}"
+                  app:icon="@drawable/ic_round_expand_less" />
+
+                <com.google.android.material.button.MaterialButton
+                  style="@style/Widget.Grocy.Button.IconButton"
+                  android:layout_marginEnd="8dp"
+                  android:onClick="@{() -> formData.lessPriceFactor()}"
+                  app:icon="@drawable/ic_round_expand_more" />
 
               </LinearLayout>
 

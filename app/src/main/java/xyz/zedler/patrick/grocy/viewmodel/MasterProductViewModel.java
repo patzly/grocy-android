@@ -68,9 +68,10 @@ public class MasterProductViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
 
   private List<Product> products;
+  private List<ProductBarcode> productBarcodes;
+  private List<PendingProductBarcode> pendingProductBarcodes;
 
-  private NetworkQueue currentQueueLoading;
-  private DownloadHelper.QueueItem extraQueueItem;
+  private NetworkQueue.QueueItem extraQueueItem;
   private final boolean debug;
   private final MutableLiveData<Boolean> actionEditLive;
   private final MasterProductFragmentArgs args;
@@ -87,7 +88,7 @@ public class MasterProductViewModel extends BaseViewModel {
 
     args = startupArgs;
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new MasterProductRepository(application);
     formData = new FormDataMasterProduct(application, getBeginnerModeEnabled());
@@ -181,76 +182,50 @@ public class MasterProductViewModel extends BaseViewModel {
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
       this.products = data.getProducts();
+      this.productBarcodes = data.getBarcodes();
+      this.pendingProductBarcodes = data.getPendingProductBarcodes();
       formData.getProductNamesLive().setValue(getProductNames(this.products, null));
-      if (args.getPendingProductBarcodes() != null) {
-        ArrayList<PendingProductBarcode> filteredBarcodes = new ArrayList<>();
-        String[] barcodeIds = args.getPendingProductBarcodes().split(",");
-        for (PendingProductBarcode barcode : data.getPendingProductBarcodes()) {
-          if (ArrayUtil.contains(barcodeIds, String.valueOf(barcode.getId()))) {
-            filteredBarcodes.add(barcode);
-          }
-        }
-        if (!filteredBarcodes.isEmpty()) {
-          this.pendingProductBarcodesLive.setValue(filteredBarcodes);
-        }
-        removeBarcodesWhichExistOnline(data.getBarcodes());
-      }
+
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
+      } else {
+        onQueueEmpty();
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, TAG));
-      return;
-    }
-
-    NetworkQueue queue = dlHelper.newQueue(() -> {
-      if (isOffline()) {
-        setOfflineLive(false);
-      }
-    }, error -> onError(error, TAG));
-    queue.append(
-        Product.updateProducts(dlHelper, dbChangedTime, products -> {
-          this.products = products;
-          formData.getProductNamesLive().setValue(getProductNames(products, null));
-        }), ProductBarcode.updateProductBarcodes(
-            dlHelper,
-            dbChangedTime,
-            this::removeBarcodesWhichExistOnline
-        )
+  public void downloadData(boolean forceUpdate) {
+    dlHelper.updateData(
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            onQueueEmpty();
+          }
+        }, error -> onError(error, TAG),
+        null,
+        forceUpdate,
+        false,
+        extraQueueItem,
+        Product.class,
+        ProductBarcode.class
     );
-    if (extraQueueItem != null) {
-      queue.append(extraQueueItem);
-    }
-    if (queue.isEmpty()) {
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
   }
 
-  public void downloadData() {
-    downloadData(null);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-    editPrefs.apply();
-    downloadData();
+  private void onQueueEmpty() {
+    if (args.getPendingProductBarcodes() != null) {
+      ArrayList<PendingProductBarcode> filteredBarcodes = new ArrayList<>();
+      String[] barcodeIds = args.getPendingProductBarcodes().split(",");
+      for (PendingProductBarcode barcode : pendingProductBarcodes) {
+        if (ArrayUtil.contains(barcodeIds, String.valueOf(barcode.getId()))) {
+          filteredBarcodes.add(barcode);
+        }
+      }
+      if (!filteredBarcodes.isEmpty()) {
+        this.pendingProductBarcodesLive.setValue(filteredBarcodes);
+      }
+      removeBarcodesWhichExistOnline(productBarcodes);
+    }
   }
 
   private ArrayList<String> getProductNames(List<Product> products, @Nullable String nameToRemove) {
@@ -340,7 +315,7 @@ public class MasterProductViewModel extends BaseViewModel {
       return;
     }
     NetworkQueue queue = dlHelper.newQueue(
-        () -> {
+        updated -> {
           pendingProductBarcodesLive.setValue(null);
           onFinished.run();
         }, error -> onFinished.run()
@@ -357,7 +332,6 @@ public class MasterProductViewModel extends BaseViewModel {
       onFinished.run();
       return;
     }
-    currentQueueLoading = queue;
     queue.start();
   }
 
@@ -383,15 +357,6 @@ public class MasterProductViewModel extends BaseViewModel {
         response -> sendEvent(Event.NAVIGATE_UP),
         error -> showMessage(getString(R.string.error_undefined))
     );
-  }
-
-  public Product getProduct(int id) {
-    for (Product product : products) {
-      if (product.getId() == id) {
-        return product;
-      }
-    }
-    return null;
   }
 
   public MutableLiveData<List<PendingProductBarcode>> getPendingProductBarcodesLive() {
@@ -428,17 +393,6 @@ public class MasterProductViewModel extends BaseViewModel {
   @NonNull
   public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
     return infoFullscreenLive;
-  }
-
-  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
-    currentQueueLoading = queueLoading;
-  }
-
-  public boolean getBeginnerModeEnabled() {
-    return sharedPrefs.getBoolean(
-        Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
-        Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
-    );
   }
 
   @Override

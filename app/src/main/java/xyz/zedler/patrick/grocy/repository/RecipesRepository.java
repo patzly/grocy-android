@@ -28,7 +28,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
@@ -55,7 +55,7 @@ public class RecipesRepository {
     private final List<RecipePosition> recipePositions;
     private final List<Product> products;
     private final List<QuantityUnit> quantityUnits;
-    private final List<QuantityUnitConversion> quantityUnitConversions;
+    private final List<QuantityUnitConversionResolved> quantityUnitConversions;
     private final List<StockItem> stockItems;
     private final List<ShoppingListItem> shoppingListItems;
 
@@ -65,7 +65,7 @@ public class RecipesRepository {
         List<RecipePosition> recipePositions,
         List<Product> products,
         List<QuantityUnit> quantityUnits,
-        List<QuantityUnitConversion> quantityUnitConversions,
+        List<QuantityUnitConversionResolved> quantityUnitConversions,
         List<StockItem> stockItems,
         List<ShoppingListItem> shoppingListItems) {
       this.recipes = recipes;
@@ -98,7 +98,7 @@ public class RecipesRepository {
       return quantityUnits;
     }
 
-    public List<QuantityUnitConversion> getQuantityUnitConversions() {
+    public List<QuantityUnitConversionResolved> getQuantityUnitConversionsResolved() {
       return quantityUnitConversions;
     }
 
@@ -119,7 +119,7 @@ public class RecipesRepository {
             appDatabase.recipePositionDao().getRecipePositions(),
             appDatabase.productDao().getProducts(),
             appDatabase.quantityUnitDao().getQuantityUnits(),
-            appDatabase.quantityUnitConversionDao().getConversions(),
+            appDatabase.quantityUnitConversionResolvedDao().getConversionsResolved(),
             appDatabase.stockItemDao().getStockItems(),
             appDatabase.shoppingListItemDao().getShoppingListItems(),
             RecipesData::new

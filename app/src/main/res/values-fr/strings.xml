@@ -348,6 +348,7 @@
   <string name="msg_logout_demo_short">Serveur public de démonstration. Appuyez pour plus de détails.</string>
   <string name="msg_restart">Un redémarrage de l\'application est nécessaire pour appliquer correctement la configuration actuelle. Voulez-vous redémarrer maintenant ?</string>
   <string name="msg_full_description">Appuyez ici pour afficher la description complète.</string>
+  <string name="msg_copied_clipboard">Copié dans le presse-papier</string>
   <string name="msg_shortcuts">Vous pouvez activer jusqu\'à 4 raccourcis :</string>
   <string name="msg_shortcuts_not_supported">Les raccourcis ne sont pas supportés sur cette version d\'Android.</string>
   <string name="msg_barcode_formats">Vous pouvez améliorer la vitesse du détecteur de codes-barres en le configurant pour détecter uniquement les formats que vous avez l\'habitude de lire.</string>
@@ -426,9 +427,17 @@
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_not_check_shopping_list">Par défaut, la quantité à ajouter à la liste de courses est \"quantité nécessaire - quantité en stock - quantité dans la liste de courses\". Lorsque cette option est activée, la quantité à ajouter n\'est vérifiée que par rapport à la quantité en stock, et non par rapport à ce qui figure déjà sur la liste de courses.</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_servings">Les ingrédients de cette recette donnent ce nombre de portions.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_produces_product">Lorsqu\'un produit est sélectionné, une unité (par portion en unité de quantité du stock) sera ajoutée au stock lors de la consommation de cette recette.</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_only_check_any_amount">Une quantité/unité différente peut être utilisée ci-dessous, tandis que pour la vérification des stocks,  n\'importe quelle quantité du produit en stock est suffisante.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_variable_amount">Lorsque ce champ n\'est pas vide, la valeur sera affiché à la place de celle saisi ci-dessus mais la valeur initiale restera utilisé pour la vérification des quantités minimales du stock.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_group">Cela sera utilisé comme titre pour regrouper les ingrédients ensemble.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_price_factor">Le prix final de cet ingrédient sera multiplié par ce facteur.</string>
   <string name="msg_help_date_chooser">Vous pouvez passer à la saisie au clavier dans les paramètres, cela pourrait augmenter la vitesse de saisie pour vous.</string>
   <string name="msg_help_date_chooser_keyboard">Vous pouvez activer le format de date inversé dans les paramètres si JJMMAA est préféré dans votre pays.\nPour appliquer la saisie et fermer cette page, vous pouvez utiliser la touche Entrée de votre clavier.</string>
   <string name="msg_help_quick_mode">Vous pouvez appuyer longuement sur la barre de titre ci-dessus afin d\'activer le mode rapide. Dans ce mode, une opération sera exécutée immédiatement si un produit a été entré ou scanné et que tous les champs ont pu être automatiquement remplis (grâce aux paramètres par défaut du produit ou du code-barres).</string>
@@ -1022,6 +1031,7 @@
   <string name="property_variable_amount">Quantité variable</string>
   <string name="property_requirements_fulfilled">Prérequis remplis</string>
   <string name="property_produces_product">Crée un produit</string>
+  <string name="property_price_factor">Facteur de prix</string>
 
   <string name="date_today">Aujourd\'hui</string>
   <string name="date_unknown">Inconnue</string>

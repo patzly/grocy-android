@@ -336,6 +336,7 @@
   <string name="msg_logout_demo_short">Public demo server. Tap for details.</string>
   <string name="msg_restart">The app must be restarted to apply the current configuration. Do you want to restart it now?</string>
   <string name="msg_full_description">Tap here to show the full description.</string>
+  <string name="msg_copied_clipboard">Copied to clipboard</string>
   <string name="msg_shortcuts">You can enable up to 4 shortcuts:</string>
   <string name="msg_shortcuts_not_supported">Shortcuts are not supported on this Android version.</string>
   <string name="msg_barcode_formats">You can improve the speed of the barcode detector by configuring it to only detect those formats which you expect to read.</string>
@@ -414,9 +415,17 @@
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_not_check_shopping_list">By default the amount to be added to the shopping list is \"needed amount - stock amount - shopping list amount\". When this is enabled, it is only checked against the stock amount, not against what is already on the shopping list.</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_servings">The ingredients of this recipe result in this amount of servings.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_produces_product">When a product is selected, one unit (per serving in stock quantity unit) will be added to stock on consuming this recipe.</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_only_check_any_amount">A different amount/unit can then be used below while for stock fulfillment checking it is sufficient when any amount of the product in stock.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_variable_amount">When this is not empty, it will be shown instead of the amount entered above while the amount there will still be used for stock fulfillment checking.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_group">This will be used as a headline to group ingredients together.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_price_factor">The resulting price of this ingredient will be multiplied by this factor.</string>
   <string name="msg_help_date_chooser">You can switch to keyboard input in settings, this could increase input speed for you.</string>
   <string name="msg_help_date_chooser_keyboard">You can activate reverse date format in settings if DDMMYY is preferred in your country.\nTo apply input and close this page you can use the Done key on your keyboard.</string>
   <string name="msg_help_quick_mode">You can long tap on the title bar above to activate the quick mode. In this mode, a transaction will be executed immediately if a product has been entered or scanned and all fields could be automatically populated (by product and/or barcode defaults).</string>
@@ -996,6 +1005,7 @@
   <string name="property_variable_amount">Variable amount</string>
   <string name="property_requirements_fulfilled">Requirements fulfilled</string>
   <string name="property_produces_product">Produces product</string>
+  <string name="property_price_factor">Price factor</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>

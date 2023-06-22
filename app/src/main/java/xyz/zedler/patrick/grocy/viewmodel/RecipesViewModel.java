@@ -26,13 +26,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.List;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields;
@@ -42,7 +38,7 @@ import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
@@ -81,7 +77,7 @@ public class RecipesViewModel extends BaseViewModel {
   private List<RecipePosition> recipePositions;
   private List<Product> products;
   private List<QuantityUnit> quantityUnits;
-  private List<QuantityUnitConversion> quantityUnitConversions;
+  private List<QuantityUnitConversionResolved> quantityUnitConversions;
 
   private String searchInput;
 
@@ -90,7 +86,7 @@ public class RecipesViewModel extends BaseViewModel {
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new RecipesRepository(application);
 
@@ -124,55 +120,32 @@ public class RecipesViewModel extends BaseViewModel {
       recipePositions = data.getRecipePositions();
       products = data.getProducts();
       quantityUnits = data.getQuantityUnits();
-      quantityUnitConversions = data.getQuantityUnitConversions();
+      quantityUnitConversions = data.getQuantityUnitConversionsResolved();
 
       updateFilteredRecipes();
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(boolean skipOfflineCheck) {
-    if (!skipOfflineCheck && isOffline()) { // skip downloading and update recyclerview
-      isLoadingLive.setValue(false);
-      updateFilteredRecipes();
-      return;
-    }
-
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        dataLoaded -> {
-          if (isOffline()) setOfflineLive(false);
-          if (dataLoaded) loadFromDatabase(false);
+        updated -> {
+          if (updated) loadFromDatabase(false);
         },
         error -> onError(error, TAG),
+        forceUpdate,
+        true,
         Recipe.class,
         RecipeFulfillment.class,
         RecipePosition.class,
         Product.class,
         QuantityUnit.class,
-        QuantityUnitConversion.class,
+        QuantityUnitConversionResolved.class,
         StockItem.class,
         ShoppingListItem.class
     );
-  }
-
-  public void downloadData() {
-    downloadData(false);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_RECIPES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_RECIPE_FULFILLMENTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_RECIPE_POSITIONS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_STOCK_ITEMS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
-    editPrefs.apply();
-    downloadData(true);
   }
 
   public void updateFilteredRecipes() {
@@ -246,47 +219,6 @@ public class RecipesViewModel extends BaseViewModel {
     filteredRecipesLive.setValue(filteredRecipes);
   }
 
-  public void deleteRecipe(int recipeId) {
-    dlHelper.delete(
-        grocyApi.getObject(ENTITY.RECIPES, recipeId),
-        response -> downloadData(),
-        this::showNetworkErrorMessage
-    );
-  }
-
-  public void consumeRecipe(int recipeId) {
-    dlHelper.post(
-        grocyApi.consumeRecipe(recipeId),
-        response -> downloadData(),
-        this::showNetworkErrorMessage
-    );
-  }
-
-  public void addNotFulfilledProductsToCartForRecipe(int recipeId, int[] excludedProductIds) {
-    JSONObject jsonObject = new JSONObject();
-    try {
-      JSONArray array = new JSONArray();
-      for (int id : excludedProductIds) array.put(id);
-      jsonObject.put("excludedProductIds", array);
-    } catch (JSONException e) {
-      throw new RuntimeException(e);
-    }
-    dlHelper.postWithArray(
-        grocyApi.addNotFulfilledProductsToCartForRecipe(recipeId),
-        jsonObject,
-        response -> downloadData(),
-        this::showNetworkErrorMessage
-    );
-  }
-
-  public void copyRecipe(int recipeId) {
-    dlHelper.post(
-        grocyApi.copyRecipe(recipeId),
-        response -> downloadData(),
-        this::showNetworkErrorMessage
-    );
-  }
-
   public ArrayList<RecipeFulfillment> getRecipeFulfillments() {
     return new ArrayList<>(recipeFulfillments);
   }
@@ -303,8 +235,8 @@ public class RecipesViewModel extends BaseViewModel {
     return new ArrayList<>(quantityUnits);
   }
 
-  public List<QuantityUnitConversion> getQuantityUnitConversions() {
-    return new ArrayList<>(quantityUnitConversions);
+  public List<QuantityUnitConversionResolved> getQuantityUnitConversions() {
+    return quantityUnitConversions;
   }
 
   public boolean isSearchActive() {

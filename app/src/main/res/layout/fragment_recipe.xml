@@ -39,10 +39,13 @@
       type="xyz.zedler.patrick.grocy.fragment.RecipeFragment" />
   </data>
 
-  <androidx.coordinatorlayout.widget.CoordinatorLayout
+  <RelativeLayout
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground"
+    android:animateLayoutChanges="true"
+    app:transitionTypeChanging="@{true}">
 
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
@@ -54,16 +57,34 @@
         style="@style/Widget.Grocy.Toolbar.Back"
         app:title="@string/title_recipe" />
 
+      <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorError">
+
+        <TextView
+          style="@style/Widget.Grocy.TextView.LabelLarge"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="4dp"
+          android:layout_marginBottom="4dp"
+          android:layout_gravity="center"
+          android:visibility="@{viewModel.offlineLive ? View.VISIBLE : View.GONE}"
+          android:textColor="?attr/colorOnError"
+          android:text="@string/error_offline" />
+
+      </FrameLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout
       android:id="@+id/swipe"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginTop="?attr/actionBarSize"
+      android:layout_below="@+id/app_bar"
       android:overScrollMode="never"
       app:setRefreshing="@{viewModel.isLoadingLive}"
-      app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
+      app:onRefreshListener="@{() -> viewModel.downloadData(true)}">
 
       <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll"
@@ -86,6 +107,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="12dp"
             android:layout_marginHorizontal="16dp"
+            android:visibility="gone"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp">
 
@@ -173,7 +195,8 @@
                 app:helperTextEnabled="true"
                 app:helperText="Base servings: 1"
                 app:endIconMode="custom"
-                app:endIconDrawable="@drawable/ic_round_check_circle">
+                app:endIconDrawable="@drawable/ic_round_check_circle"
+                app:endIconVisible="@{viewModel.servingsDesiredSaveEnabledLive}">
 
                 <com.google.android.material.textfield.TextInputEditText
                   android:id="@+id/edit_text_servings"
@@ -182,10 +205,9 @@
                   android:inputType="number|numberDecimal"
                   android:imeOptions="actionDone"
                   android:maxLength="10"
-                  android:text="@{viewModel.servingsDesiredLive}"/>
+                  android:text="@={viewModel.servingsDesiredLive}"/>
 
               </com.google.android.material.textfield.TextInputLayout>
-
 
             </LinearLayout>
 
@@ -194,6 +216,7 @@
               style="@style/Widget.Grocy.Button.IconButton"
               android:layout_marginStart="8dp"
               android:layout_marginBottom="8dp"
+              android:onClick="@{v -> viewModel.changeAmount(true)}"
               app:icon="@drawable/ic_round_expand_less" />
 
             <com.google.android.material.button.MaterialButton
@@ -201,6 +224,7 @@
               style="@style/Widget.Grocy.Button.IconButton"
               android:layout_marginBottom="8dp"
               android:layout_marginEnd="8dp"
+              android:onClick="@{v -> viewModel.changeAmount(false)}"
               app:icon="@drawable/ic_round_expand_more" />
 
           </LinearLayout>
@@ -333,7 +357,7 @@
 
     </xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout>
 
-  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+  </RelativeLayout>
 
 
 </layout>

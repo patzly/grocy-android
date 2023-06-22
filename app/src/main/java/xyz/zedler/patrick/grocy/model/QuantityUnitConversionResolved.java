@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.model;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.room.Entity;
@@ -27,28 +28,49 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants.PREF;
-import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
+import xyz.zedler.patrick.grocy.web.NetworkQueue.QueueItem;
 
 @Entity(tableName = "quantity_unit_conversion_resolved_table")
 public class QuantityUnitConversionResolved extends QuantityUnitConversion {
 
+  public static QuantityUnitConversionResolved findConversion(
+      List<QuantityUnitConversionResolved> conversionsResolved,
+      int productId,
+      int fromQuId,
+      int toQuId
+  ) {
+    String productIdStr = String.valueOf(productId);
+    for (QuantityUnitConversionResolved tmpConversion : conversionsResolved) {
+      if (productIdStr.equals(tmpConversion.getProductId())
+          && tmpConversion.getFromQuId() == fromQuId
+          && tmpConversion.getToQuId() == toQuId) {
+        return tmpConversion;
+      }
+    }
+    return null;
+  }
+
+  @SuppressLint("CheckResult")
   public static QueueItem updateQuantityUnitConversions(
       DownloadHelper dlHelper,
       String dbChangedTime,
+      boolean forceUpdate,
       List<Product> products,
       OnObjectsResponseListener<QuantityUnitConversionResolved> onResponseListener
   ) {
-    String lastTime = dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
+    String lastTime = !forceUpdate ? dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
         PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS_RESOLVED, null
-    );
+    ) : null;
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
       return new QueueItem() {
         @Override
@@ -57,23 +79,42 @@ public class QuantityUnitConversionResolved extends QuantityUnitConversion {
             @Nullable OnMultiTypeErrorListener errorListener,
             @Nullable String uuid
         ) {
+          boolean isServerVersion4 = VersionUtil.isGrocyServerMin400(dlHelper.sharedPrefs);
           dlHelper.get(
-              dlHelper.grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNIT_CONVERSIONS),
+              dlHelper.grocyApi.getObjects(isServerVersion4
+                  ? ENTITY.QUANTITY_UNIT_CONVERSIONS_RESOLVED : ENTITY.QUANTITY_UNIT_CONVERSIONS),
               uuid,
               response -> {
                 Type type = new TypeToken<List<QuantityUnitConversionResolved>>() {
                 }.getType();
-                List<QuantityUnitConversion> conversions
-                    = dlHelper.gson.fromJson(response, type);
-                if (dlHelper.debug) {
-                  Log.i(dlHelper.tag, "download QuantityUnitConversions: "
-                      + conversions);
-                }
-                List<QuantityUnitConversionResolved> conversionsResolved = QuantityUnitConversionUtil
-                    .calculateConversions(conversions, products);
-                if (dlHelper.debug) {
-                  Log.i(dlHelper.tag, "resolved QuantityUnitConversions: "
-                      + conversionsResolved);
+                List<QuantityUnitConversionResolved> conversionsResolved;
+                if (isServerVersion4) {
+                  List<QuantityUnitConversionResolved> conversionsResolvedNotForDb = dlHelper.gson
+                      .fromJson(response, type);
+                  if (dlHelper.debug) {
+                    Log.i(dlHelper.tag, "download QuantityUnitConversionsResolved: "
+                        + conversionsResolvedNotForDb);
+                  }
+                  conversionsResolved = new ArrayList<>();
+                  int id = 0;
+                  for (QuantityUnitConversionResolved conversion : conversionsResolvedNotForDb) {
+                    conversion.setId(id);
+                    conversionsResolved.add(conversion);
+                    id++;
+                  }
+                } else {
+                  List<QuantityUnitConversion> conversions
+                      = dlHelper.gson.fromJson(response, type);
+                  if (dlHelper.debug) {
+                    Log.i(dlHelper.tag, "download QuantityUnitConversions: "
+                        + conversions);
+                  }
+                  conversionsResolved = QuantityUnitConversionUtil
+                      .calculateConversions(conversions, products);
+                  if (dlHelper.debug) {
+                    Log.i(dlHelper.tag, "resolved QuantityUnitConversions: "
+                        + conversionsResolved);
+                  }
                 }
                 Single.fromCallable(() -> {
                   dlHelper.appDatabase.quantityUnitConversionResolvedDao()
@@ -86,11 +127,6 @@ public class QuantityUnitConversionResolved extends QuantityUnitConversion {
                 })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError(throwable -> {
-                      if (errorListener != null) {
-                        errorListener.onError(throwable);
-                      }
-                    })
                     .doFinally(() -> {
                       if (onResponseListener != null) {
                         onResponseListener.onResponse(conversionsResolved);
@@ -99,7 +135,11 @@ public class QuantityUnitConversionResolved extends QuantityUnitConversion {
                         responseListener.onResponse(response);
                       }
                     })
-                    .subscribe();
+                    .subscribe(ignored -> {}, throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    });
               },
               error -> {
                 if (errorListener != null) {

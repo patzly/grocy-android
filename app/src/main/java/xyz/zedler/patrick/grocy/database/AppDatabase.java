@@ -42,7 +42,9 @@ import xyz.zedler.patrick.grocy.dao.QuantityUnitConversionResolvedDao;
 import xyz.zedler.patrick.grocy.dao.QuantityUnitDao;
 import xyz.zedler.patrick.grocy.dao.RecipeDao;
 import xyz.zedler.patrick.grocy.dao.RecipeFulfillmentDao;
+import xyz.zedler.patrick.grocy.dao.RecipeNestingDao;
 import xyz.zedler.patrick.grocy.dao.RecipePositionDao;
+import xyz.zedler.patrick.grocy.dao.RecipePositionResolvedDao;
 import xyz.zedler.patrick.grocy.dao.ServerDao;
 import xyz.zedler.patrick.grocy.dao.ShoppingListDao;
 import xyz.zedler.patrick.grocy.dao.ShoppingListItemDao;
@@ -71,7 +73,10 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
+import xyz.zedler.patrick.grocy.model.RecipeNesting;
+import xyz.zedler.patrick.grocy.model.RecipeNestingResolved;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
+import xyz.zedler.patrick.grocy.model.RecipePositionResolved;
 import xyz.zedler.patrick.grocy.model.Server;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
@@ -116,9 +121,14 @@ import xyz.zedler.patrick.grocy.repository.MainRepository.OnVersionListener;
         Server.class,
         Recipe.class,
         RecipeFulfillment.class,
-        RecipePosition.class
+        RecipePosition.class,
+        RecipePositionResolved.class,
+        RecipeNesting.class
     },
-    version = 44
+    views = {
+        RecipeNestingResolved.class
+    },
+    version = 45
 )
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -177,6 +187,10 @@ public abstract class AppDatabase extends RoomDatabase {
   public abstract RecipeFulfillmentDao recipeFulfillmentDao();
 
   public abstract RecipePositionDao recipePositionDao();
+
+  public abstract RecipePositionResolvedDao recipePositionResolvedDao();
+
+  public abstract RecipeNestingDao recipeNestingDao();
 
   public abstract StockEntryDao stockEntryDao();
 

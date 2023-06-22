@@ -20,13 +20,9 @@
 package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
-import androidx.preference.PreferenceManager;
 import java.util.List;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -35,19 +31,15 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.repository.MasterDataOverviewRepository;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class MasterDataOverviewViewModel extends BaseViewModel {
 
   private static final String TAG = MasterDataOverviewViewModel.class.getSimpleName();
 
-  private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
   private final MasterDataOverviewRepository repository;
 
   private final MutableLiveData<Boolean> isLoadingLive;
-  private final MutableLiveData<Boolean> offlineLive;
-
   private final MutableLiveData<List<Store>> storesLive;
   private final MutableLiveData<List<Location>> locationsLive;
   private final MutableLiveData<List<ProductGroup>> productGroupsLive;
@@ -55,18 +47,13 @@ public class MasterDataOverviewViewModel extends BaseViewModel {
   private final MutableLiveData<List<Product>> productsLive;
   private final MutableLiveData<List<TaskCategory>> taskCategoriesLive;
 
-  private NetworkQueue currentQueueLoading;
-
   public MasterDataOverviewViewModel(@NonNull Application application) {
     super(application);
 
-    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     repository = new MasterDataOverviewRepository(application);
 
-    offlineLive = new MutableLiveData<>(false);
     storesLive = new MutableLiveData<>();
     locationsLive = new MutableLiveData<>();
     productGroupsLive = new MutableLiveData<>();
@@ -84,77 +71,25 @@ public class MasterDataOverviewViewModel extends BaseViewModel {
       this.productsLive.setValue(data.getProducts());
       this.taskCategoriesLive.setValue(data.getTaskCategories());
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime, boolean skipOfflineCheck) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
-    if (!skipOfflineCheck && isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(
-          time -> downloadData(time, skipOfflineCheck),
-          error -> onError(error, TAG)
-      );
-      return;
-    }
-
-    NetworkQueue queue = dlHelper.newQueue(() -> {
-      if (isOffline()) {
-        setOfflineLive(false);
-      }
-    }, error -> onError(error, TAG));
-    queue.append(
-        Store.updateStores(dlHelper, dbChangedTime, this.storesLive::setValue),
-        Location.updateLocations(dlHelper, dbChangedTime, this.locationsLive::setValue),
-        ProductGroup.updateProductGroups(dlHelper, dbChangedTime, this.productGroupsLive::setValue),
-        QuantityUnit.updateQuantityUnits(dlHelper, dbChangedTime, this.quantityUnitsLive::setValue),
-        Product.updateProducts(dlHelper, dbChangedTime, this.productsLive::setValue),
-        TaskCategory.updateTaskCategories(dlHelper, dbChangedTime, this.taskCategoriesLive::setValue)
+  public void downloadData(boolean forceUpdate) {
+    dlHelper.updateData(
+        updated -> {
+          if (updated) loadFromDatabase(false);
+        }, error -> onError(error, TAG),
+        forceUpdate,
+        true,
+        Store.class,
+        Location.class,
+        ProductGroup.class,
+        QuantityUnit.class,
+        Product.class,
+        TaskCategory.class
     );
-
-    if (queue.isEmpty()) {
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null, false);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_TASK_CATEGORIES, null);
-    editPrefs.apply();
-    downloadData(null, true);
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull
@@ -185,10 +120,6 @@ public class MasterDataOverviewViewModel extends BaseViewModel {
 
   public MutableLiveData<List<TaskCategory>> getTaskCategoriesLive() {
     return taskCategoriesLive;
-  }
-
-  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
-    currentQueueLoading = queueLoading;
   }
 
   @Override

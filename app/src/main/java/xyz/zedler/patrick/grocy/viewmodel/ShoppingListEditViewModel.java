@@ -72,7 +72,7 @@ public class ShoppingListEditViewModel extends BaseViewModel {
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new ShoppingListRepository(application);
     formData = new FormDataShoppingListEdit(startupShoppingList);
@@ -90,7 +90,7 @@ public class ShoppingListEditViewModel extends BaseViewModel {
         shoppingLists -> {
           formData.setShoppingListNames(getShoppingListNames(shoppingLists));
           if (downloadAfterLoading) {
-            downloadData();
+            downloadData(false);
           }
         }, error -> onError(error, TAG)
     );
@@ -104,53 +104,15 @@ public class ShoppingListEditViewModel extends BaseViewModel {
     return shoppingListNames;
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(
-          this::downloadData,
-          error -> onError(error, TAG)
-      );
-      return;
-    }
-
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
-    queue.append(ShoppingList.updateShoppingLists(
-        dlHelper,
-        dbChangedTime,
-        shoppingLists -> formData.setShoppingListNames(getShoppingListNames(shoppingLists))
-    ));
-
-    if (queue.isEmpty()) {
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
-    editPrefs.apply();
-    downloadData();
-  }
-
-  private void onQueueEmpty() {
-    if (isOffline()) {
-      setOfflineLive(false);
-    }
+  public void downloadData(boolean forceUpdate) {
+    dlHelper.updateData(
+        updated -> {
+          if (updated) loadFromDatabase(false);
+        }, error -> onError(error, TAG),
+        forceUpdate,
+        false,
+        ShoppingList.class
+    );
   }
 
   public void saveShoppingList() {
@@ -239,7 +201,7 @@ public class ShoppingListEditViewModel extends BaseViewModel {
           if (debug) {
             Log.i(TAG, "deleteShoppingList: " + error);
           }
-          downloadData();
+          downloadData(false);
         }
     );
   }

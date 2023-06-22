@@ -50,7 +50,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.repository.ShoppingListItemEditRepository;
@@ -78,7 +78,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
   private List<ShoppingList> shoppingLists;
   private List<Product> products;
   private List<ProductBarcode> barcodes;
-  private List<QuantityUnitConversion> unitConversions;
+  private List<QuantityUnitConversionResolved> unitConversions;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
 
   private Runnable queueEmptyAction;
@@ -100,7 +100,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     );
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new ShoppingListItemEditRepository(application);
     formData = new FormDataShoppingListItemEdit(application);
@@ -125,10 +125,10 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       if (!isActionEdit) {
         formData.getShoppingListLive().setValue(getLastShoppingList());
       }
-      fillWithShoppingListItemIfNecessary();
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       } else {
+        fillWithShoppingListItemIfNecessary();
         if (queueEmptyAction != null) {
           queueEmptyAction.run();
           queueEmptyAction = null;
@@ -137,32 +137,28 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData() {
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            fillWithShoppingListItemIfNecessary();
+            if (queueEmptyAction != null) {
+              queueEmptyAction.run();
+              queueEmptyAction = null;
+            }
+          }
+        },
         error -> onError(error, TAG),
+        forceUpdate,
+        false,
         ShoppingListItem.class,
         Product.class,
         QuantityUnit.class,
-        QuantityUnitConversion.class,
+        QuantityUnitConversionResolved.class,
         ProductBarcode.class
     );
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.apply();
-    downloadData();
   }
 
   public void saveItem() {
@@ -239,22 +235,19 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       formData.getProductLive().setValue(product);
       formData.getProductNameLive().setValue(product.getName());
 
-      try {
-        HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
-            getApplication(),
-            quantityUnitHashMap,
-            unitConversions,
-            product
-        );
-        formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+      HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
+          quantityUnitHashMap,
+          unitConversions,
+          product
+      );
+      formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+      formData.getQuantityUnitStockLive().setValue(
+          quantityUnitHashMap.get(product.getQuIdStockInt())
+      );
 
-        quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
-        amount = QuantityUnitConversionUtil
-            .getAmountRelativeToUnit(unitFactors, product, quantityUnit, amount);
-      } catch (IllegalArgumentException e) {
-        showMessage(e.getMessage());
-        return;
-      }
+      quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
+      amount = QuantityUnitConversionUtil
+          .getAmountRelativeToUnit(unitFactors, product, quantityUnit, amount);
     }
     formData.getAmountLive().setValue(NumUtil.trimAmount(amount, maxDecimalPlacesAmount));
     formData.getQuantityUnitLive().setValue(quantityUnit);
@@ -270,19 +263,15 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     formData.getProductLive().setValue(product);
     formData.getProductNameLive().setValue(product.getName());
 
-
-    try {
-      HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
-          getApplication(),
-          quantityUnitHashMap,
-          unitConversions,
-          product
-      );
-      formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
-    } catch (IllegalArgumentException e) {
-      showMessage(e.getMessage());
-      formData.getQuantityUnitsFactorsLive().setValue(null);
-    }
+    HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
+        quantityUnitHashMap,
+        unitConversions,
+        product
+    );
+    formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+    formData.getQuantityUnitStockLive().setValue(
+        quantityUnitHashMap.get(product.getQuIdStockInt())
+    );
 
     QuantityUnit purchase = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
     formData.getQuantityUnitLive().setValue(purchase);

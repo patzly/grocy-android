@@ -22,30 +22,34 @@ package xyz.zedler.patrick.grocy.web;
 import com.android.volley.RequestQueue;
 import java.util.ArrayList;
 import java.util.UUID;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnLoadingListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
 
 public class NetworkQueue {
 
   private final ArrayList<QueueItem> queueItems;
   private final OnQueueEmptyListener onQueueEmptyListener;
   private final OnMultiTypeErrorListener onErrorListener;
+  private final OnLoadingListener onLoadingListener;
   private final RequestQueue requestQueue;
   private final String uuidQueue;
-  private int queueSize;
+  private int requestsNotFinishedCount;
   private boolean isRunning;
 
   public NetworkQueue(
+      RequestQueue requestQueue,
       OnQueueEmptyListener onQueueEmptyListener,
       OnMultiTypeErrorListener onErrorListener,
-      RequestQueue requestQueue
+      OnLoadingListener onLoadingListener
   ) {
     this.onQueueEmptyListener = onQueueEmptyListener;
     this.onErrorListener = onErrorListener;
+    this.onLoadingListener = onLoadingListener;
     this.requestQueue = requestQueue;
     queueItems = new ArrayList<>();
     uuidQueue = UUID.randomUUID().toString();
-    queueSize = 0;
+    requestsNotFinishedCount = 0;
     isRunning = false;
   }
 
@@ -53,7 +57,7 @@ public class NetworkQueue {
     for (QueueItem queueItem : queueItems) {
       if (queueItem == null) continue;
       this.queueItems.add(queueItem);
-      queueSize++;
+      requestsNotFinishedCount++;
     }
     return this;
   }
@@ -61,8 +65,8 @@ public class NetworkQueue {
   public void appendWhileRunning(QueueItem queueItem) {
     if (queueItem == null) return;
     this.queueItems.add(queueItem);
-    queueSize++;
-    executeQueueItem();
+    requestsNotFinishedCount++;
+    executeQueueItems();
   }
 
   public void start() {
@@ -70,49 +74,61 @@ public class NetworkQueue {
       return;
     } else {
       isRunning = true;
+      if (onLoadingListener != null) {
+        onLoadingListener.onLoadingChanged(true);
+      }
     }
     if (queueItems.isEmpty()) {
+      if (onLoadingListener != null) {
+        onLoadingListener.onLoadingChanged(false);
+      }
       if (onQueueEmptyListener != null) {
         onQueueEmptyListener.onQueueEmpty(false);
       }
       return;
     }
-
-    executeQueueItem();
+    executeQueueItems();
   }
 
-  private void executeQueueItem() {
-    if (queueItems.isEmpty() || queueSize == 0) {
+  private void executeQueueItems() {
+    if (queueItems.isEmpty() || requestsNotFinishedCount == 0) {
       return;
     }
 
-    QueueItem queueItem = queueItems.remove(0);
-    queueItem.perform(response -> {
-      queueSize--;
-      if (queueSize > 0) {
-        executeQueueItem();
-        return;
-      }
-      isRunning = false;
-      if (onQueueEmptyListener != null) {
-        onQueueEmptyListener.onQueueEmpty(true);
-      }
-      reset(false);
-    }, error -> {
-      isRunning = false;
-      if (onErrorListener != null) {
-        onErrorListener.onError(error);
-      }
-      reset(true);
-    }, uuidQueue);
+    for (QueueItem queueItem : queueItems) {
+      queueItem.perform(response -> {
+        requestsNotFinishedCount--;
+        if (requestsNotFinishedCount > 0) {
+          return;
+        }
+        isRunning = false;
+        if (onLoadingListener != null) {
+          onLoadingListener.onLoadingChanged(false);
+        }
+        if (onQueueEmptyListener != null) {
+          onQueueEmptyListener.onQueueEmpty(true); // TODO: Test it
+        }
+        reset(false);
+      }, error -> {
+        isRunning = false;
+        if (onLoadingListener != null) {
+          onLoadingListener.onLoadingChanged(false);
+        }
+        if (onErrorListener != null) {
+          onErrorListener.onError(error);
+        }
+        reset(true);
+      }, uuidQueue);
+    }
+    queueItems.clear();
   }
 
   public int getSize() {
-    return queueSize;
+    return requestsNotFinishedCount;
   }
 
   public boolean isEmpty() {
-    return queueSize == 0;
+    return requestsNotFinishedCount == 0;
   }
 
   public void reset(boolean cancelAll) {
@@ -120,10 +136,23 @@ public class NetworkQueue {
       requestQueue.cancelAll(uuidQueue);
     }
     queueItems.clear();
-    queueSize = 0;
+    requestsNotFinishedCount = 0;
+  }
+
+  public abstract static class QueueItem {
+    public abstract void perform(
+        OnStringResponseListener responseListener,
+        OnMultiTypeErrorListener errorListener,
+        String uuid
+    );
+
+    public void perform(String uuid) {
+      // UUID is for cancelling the requests; should be uuidHelper from above
+      perform(null, null, uuid);
+    }
   }
 
   public interface OnQueueEmptyListener {
-    void onQueueEmpty(boolean dataLoaded); // dataLoaded = queue was not empty on start
+    void onQueueEmpty(boolean updated);
   }
 }

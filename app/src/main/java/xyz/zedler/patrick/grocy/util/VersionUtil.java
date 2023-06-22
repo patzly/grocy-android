@@ -37,6 +37,7 @@ public class VersionUtil {
   public final static String SERVER_3_2_0 = "3.2.0";
   public final static String SERVER_3_3_0 = "3.3.0";
   public final static String SERVER_3_3_1 = "3.3.1";
+  public final static String SERVER_4_0_0 = "4.0.0";
 
   public static boolean isGrocyServerMin320(SharedPreferences prefs) {
     return isGrocyThisVersionOrHigher(prefs, SERVER_3_2_0);
@@ -48,6 +49,10 @@ public class VersionUtil {
 
   public static boolean isGrocyServerMin331(SharedPreferences prefs) {
     return isGrocyThisVersionOrHigher(prefs, SERVER_3_3_1);
+  }
+
+  public static boolean isGrocyServerMin400(SharedPreferences prefs) {
+    return isGrocyThisVersionOrHigher(prefs, SERVER_4_0_0);
   }
 
   public static boolean isGrocyThisVersionOrHigher(SharedPreferences prefs, @NonNull String version) {

@@ -65,7 +65,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
@@ -96,8 +96,7 @@ public class PurchaseViewModel extends BaseViewModel {
   private List<PendingProduct> pendingProducts;
   private List<QuantityUnit> quantityUnits;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-  private List<QuantityUnitConversion> unitConversions;
-  private HashMap<Integer, ArrayList<QuantityUnitConversion>> unitConversionHashMap;
+  private List<QuantityUnitConversionResolved> unitConversions;
   private HashMap<Integer, Double> shoppingListItemAmountsHashMap;
   private List<ProductBarcode> barcodes;
   private List<PendingProductBarcode> pendingProductBarcodes;
@@ -133,7 +132,7 @@ public class PurchaseViewModel extends BaseViewModel {
     );
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new PurchaseRepository(application);
     formData = new FormDataPurchase(application, sharedPrefs, args);
@@ -189,8 +188,7 @@ public class PurchaseViewModel extends BaseViewModel {
       this.barcodes = appendPendingProductBarcodes(data.getBarcodes(), pendingProductBarcodes);
       this.quantityUnits = data.getQuantityUnits();
       quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
-      this.unitConversions = data.getQuantityUnitConversions();
-      unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(unitConversions);
+      this.unitConversions = data.getQuantityUnitConversionsResolved();
       this.stores = data.getStores();
       this.locations = data.getLocations();
       this.shoppingListItems = data.getShoppingListItems();
@@ -200,7 +198,7 @@ public class PurchaseViewModel extends BaseViewModel {
         storedPurchase = StoredPurchase.getFromId(data.getStoredPurchases(), storedPurchaseId);
       }
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       } else {
         if (queueEmptyAction != null) {
           queueEmptyAction.run();
@@ -213,35 +211,32 @@ public class PurchaseViewModel extends BaseViewModel {
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData() {
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            if (queueEmptyAction != null) {
+              queueEmptyAction.run();
+              queueEmptyAction = null;
+            }
+            if (batchShoppingListItemIds != null) {
+              fillWithShoppingListItem();
+            }
+          }
+        },
         error -> onError(error, TAG),
+        forceUpdate,
+        false,
         Product.class,
         ProductBarcode.class,
         QuantityUnit.class,
-        QuantityUnitConversion.class,
+        QuantityUnitConversionResolved.class,
         Store.class,
         Location.class,
         batchShoppingListItemIds != null ? ShoppingListItem.class : null
     );
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.apply();
-    downloadData();
   }
 
   public void setProduct(
@@ -268,39 +263,35 @@ public class PurchaseViewModel extends BaseViewModel {
       formData.getProductNameLive().setValue(updatedProduct.getName());
 
       // quantity unit
-      double initialUnitFactor;
-      try {
-        Integer forcedQuId = null;
-        if (barcode != null && barcode.hasQuId()) {
-          forcedQuId = barcode.getQuIdInt();
-        } else if (shoppingListItem != null && shoppingListItem.hasQuId()) {
-          forcedQuId = shoppingListItem.getQuIdInt();
-        }
-        HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
-            getApplication(),
-            quantityUnitHashMap,
-            unitConversions,
-            updatedProduct
-        );
-        formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
-        QuantityUnit forcedUnit = null;
-        if (forcedQuId != null) {
-          forcedUnit = quantityUnitHashMap.get(forcedQuId);
-        }
-        Double factor;
-        if (forcedUnit != null && unitFactors.containsKey(forcedUnit)) {
-          formData.getQuantityUnitLive().setValue(forcedUnit);
-          factor = unitFactors.get(forcedUnit);
-        } else {
-          QuantityUnit purchase = quantityUnitHashMap.get(updatedProduct.getQuIdPurchaseInt());
-          formData.getQuantityUnitLive().setValue(purchase);
-          factor = unitFactors.get(purchase);
-        }
-        initialUnitFactor = factor != null && factor != -1 ? factor : 1;
-      } catch (IllegalArgumentException e) {
-        showMessageAndContinueScanning(e.getMessage());
-        return;
+      Integer forcedQuId = null;
+      if (barcode != null && barcode.hasQuId()) {
+        forcedQuId = barcode.getQuIdInt();
+      } else if (shoppingListItem != null && shoppingListItem.hasQuId()) {
+        forcedQuId = shoppingListItem.getQuIdInt();
       }
+      HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
+          quantityUnitHashMap,
+          unitConversions,
+          updatedProduct
+      );
+      formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+      formData.getQuantityUnitStockLive().setValue(
+          quantityUnitHashMap.get(updatedProduct.getQuIdStockInt())
+      );
+      QuantityUnit forcedUnit = null;
+      if (forcedQuId != null) {
+        forcedUnit = quantityUnitHashMap.get(forcedQuId);
+      }
+      Double factor;
+      if (forcedUnit != null && unitFactors.containsKey(forcedUnit)) {
+        formData.getQuantityUnitLive().setValue(forcedUnit);
+        factor = unitFactors.get(forcedUnit);
+      } else {
+        QuantityUnit purchase = quantityUnitHashMap.get(updatedProduct.getQuIdPurchaseInt());
+        formData.getQuantityUnitLive().setValue(purchase);
+        factor = unitFactors.get(purchase);
+      }
+      double initialUnitFactor = factor != null ? factor : 1;
 
       // amount
       boolean isTareWeightEnabled = formData.isTareWeightEnabled();
@@ -310,7 +301,7 @@ public class PurchaseViewModel extends BaseViewModel {
         formData.getAmountLive().setValue(NumUtil.trimAmount(barcode.getAmountDouble(), maxDecimalPlacesAmount));
       } else if (!isTareWeightEnabled && shoppingListItem != null) {
         Double amountInUnit = AmountUtil.getShoppingListItemAmount(
-            shoppingListItem, productHashMap, quantityUnitHashMap, unitConversionHashMap
+            shoppingListItem, productHashMap, quantityUnitHashMap, unitConversions
         );
         formData.getAmountLive().setValue(
             NumUtil.trimAmount(
@@ -853,7 +844,7 @@ public class PurchaseViewModel extends BaseViewModel {
     }
     for (ShoppingListItem item : shoppingListItems) {
       Double amount = AmountUtil.getShoppingListItemAmount(
-          item, productHashMap, quantityUnitHashMap, unitConversionHashMap
+          item, productHashMap, quantityUnitHashMap, unitConversions
       );
       if (amount != null) {
         shoppingListItemAmountsHashMap.put(item.getId(), amount);

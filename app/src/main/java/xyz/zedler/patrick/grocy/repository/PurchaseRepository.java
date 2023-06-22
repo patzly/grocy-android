@@ -31,7 +31,7 @@ import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.StoredPurchase;
@@ -56,7 +56,7 @@ public class PurchaseRepository {
     private final List<ProductBarcode> barcodes;
     private final List<PendingProductBarcode> pendingProductBarcodes;
     private final List<QuantityUnit> quantityUnits;
-    private final List<QuantityUnitConversion> quantityUnitConversions;
+    private final List<QuantityUnitConversionResolved> quantityUnitConversions;
     private final List<Store> stores;
     private final List<Location> locations;
     private final List<ShoppingListItem> shoppingListItems;
@@ -68,7 +68,7 @@ public class PurchaseRepository {
         List<ProductBarcode> barcodes,
         List<PendingProductBarcode> pendingProductBarcodes,
         List<QuantityUnit> quantityUnits,
-        List<QuantityUnitConversion> quantityUnitConversions,
+        List<QuantityUnitConversionResolved> quantityUnitConversions,
         List<Store> stores,
         List<Location> locations,
         List<ShoppingListItem> shoppingListItems,
@@ -106,7 +106,7 @@ public class PurchaseRepository {
       return quantityUnits;
     }
 
-    public List<QuantityUnitConversion> getQuantityUnitConversions() {
+    public List<QuantityUnitConversionResolved> getQuantityUnitConversionsResolved() {
       return quantityUnitConversions;
     }
 
@@ -135,7 +135,7 @@ public class PurchaseRepository {
             appDatabase.productBarcodeDao().getProductBarcodes(),
             appDatabase.pendingProductBarcodeDao().getProductBarcodes(),
             appDatabase.quantityUnitDao().getQuantityUnits(),
-            appDatabase.quantityUnitConversionDao().getConversions(),
+            appDatabase.quantityUnitConversionResolvedDao().getConversionsResolved(),
             appDatabase.storeDao().getStores(),
             appDatabase.locationDao().getLocations(),
             appDatabase.shoppingListItemDao().getShoppingListItems(),

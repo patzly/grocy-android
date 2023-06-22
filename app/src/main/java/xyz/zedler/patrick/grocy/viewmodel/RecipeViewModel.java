@@ -41,7 +41,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
@@ -55,9 +55,6 @@ import xyz.zedler.patrick.grocy.util.PrefsUtil;
 public class RecipeViewModel extends BaseViewModel {
 
   private final static String TAG = RecipeViewModel.class.getSimpleName();
-  public final static String SORT_NAME = "sort_name";
-  public final static String SORT_CALORIES = "sort_calories";
-  public final static String SORT_DUE_SCORE = "sort_due_score";
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
@@ -67,7 +64,6 @@ public class RecipeViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<Recipe> recipeLive;
   private final MutableLiveData<String> servingsDesiredLive;
   private final MutableLiveData<Boolean> servingsDesiredSaveEnabledLive;
@@ -76,7 +72,7 @@ public class RecipeViewModel extends BaseViewModel {
   private List<RecipePosition> recipePositions;
   private List<Product> products;
   private List<QuantityUnit> quantityUnits;
-  private List<QuantityUnitConversion> quantityUnitConversions;
+  private List<QuantityUnitConversionResolved> quantityUnitConversions;
   private HashMap<Integer, StockItem> stockItemHashMap;
   private List<ShoppingListItem> shoppingListItems;
   private RecipeFulfillment recipeFulfillment;
@@ -93,12 +89,11 @@ public class RecipeViewModel extends BaseViewModel {
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new RecipesRepository(application);
 
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
     recipeLive = new MutableLiveData<>();
     servingsDesiredLive = new MutableLiveData<>();
     servingsDesiredSaveEnabledLive = new MutableLiveData<>(false);
@@ -122,7 +117,7 @@ public class RecipeViewModel extends BaseViewModel {
           .getRecipePositionsFromRecipeId(data.getRecipePositions(), args.getRecipeId());
       products = data.getProducts();
       quantityUnits = data.getQuantityUnits();
-      quantityUnitConversions = data.getQuantityUnitConversions();
+      quantityUnitConversions = data.getQuantityUnitConversionsResolved();
       stockItemHashMap = ArrayUtil.getStockItemHashMap(data.getStockItems());
       shoppingListItems = data.getShoppingListItems();
 
@@ -135,50 +130,28 @@ public class RecipeViewModel extends BaseViewModel {
         );
       }
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(boolean skipOfflineCheck) {
-    if (!skipOfflineCheck && isOffline()) { // skip downloading and update recyclerview
-      isLoadingLive.setValue(false);
-      return;
-    }
-
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        () -> {
-          if (isOffline()) setOfflineLive(false);
-          loadFromDatabase(false);
+        updated -> {
+          if (updated) loadFromDatabase(false);
         },
         error -> onError(error, TAG),
+        forceUpdate,
+        true,
         Recipe.class,
         RecipeFulfillment.class,
         RecipePosition.class,
         Product.class,
         QuantityUnit.class,
-        QuantityUnitConversion.class,
+        QuantityUnitConversionResolved.class,
         StockItem.class,
         ShoppingListItem.class
     );
-  }
-
-  public void downloadData() {
-    downloadData(false);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_RECIPES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_RECIPE_FULFILLMENTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_RECIPE_POSITIONS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_STOCK_ITEMS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
-    editPrefs.apply();
-    downloadData(true);
   }
 
   public void changeAmount(boolean more) {
@@ -189,6 +162,17 @@ public class RecipeViewModel extends BaseViewModel {
       double servingsNew = more ? servings + 1 : servings - 1;
       if (servingsNew <= 0) servingsNew = 1;
       servingsDesiredLive.setValue(NumUtil.trimAmount(servingsNew, maxDecimalPlacesAmount));
+    }
+  }
+
+  public void updateSaveDesiredServingsVisibility() {
+    Recipe recipe = recipeLive.getValue();
+    if (recipe == null) return;
+    if (NumUtil.isStringDouble(servingsDesiredLive.getValue())) {
+      double servings = NumUtil.toDouble(servingsDesiredLive.getValue());
+      servingsDesiredSaveEnabledLive.setValue(servings != recipe.getDesiredServings());
+    } else {
+      servingsDesiredSaveEnabledLive.setValue(1 != recipe.getDesiredServings());
     }
   }
 
@@ -218,20 +202,22 @@ public class RecipeViewModel extends BaseViewModel {
         args.getRecipeId(),
         body,
         response -> dlHelper.updateData(
-            () -> {
+            updated -> {
               servingsDesiredSaveEnabledLive.setValue(false);
-              downloadData();
+              loadFromDatabase(false);
             },
-            volleyError -> {
-              showErrorMessage();
+            error -> {
+              onError(error, TAG);
               servingsDesiredSaveEnabledLive.setValue(true);
             },
+            false,
+            false,
             Recipe.class,
             RecipeFulfillment.class,
             RecipePosition.class
         ),
         error -> {
-          showErrorMessage();
+          onError(error, TAG);
           servingsDesiredSaveEnabledLive.setValue(true);
         }
     ).perform(dlHelper.getUuid());
@@ -240,7 +226,7 @@ public class RecipeViewModel extends BaseViewModel {
   public void deleteRecipe(int recipeId) {
     dlHelper.delete(
         grocyApi.getObject(ENTITY.RECIPES, recipeId),
-        response -> downloadData(),
+        response -> downloadData(false),
         this::showNetworkErrorMessage
     );
   }
@@ -248,7 +234,7 @@ public class RecipeViewModel extends BaseViewModel {
   public void consumeRecipe(int recipeId) {
     dlHelper.post(
         grocyApi.consumeRecipe(recipeId),
-        response -> downloadData(),
+        response -> downloadData(false),
         this::showNetworkErrorMessage
     );
   }
@@ -265,7 +251,7 @@ public class RecipeViewModel extends BaseViewModel {
     dlHelper.postWithArray(
         grocyApi.addNotFulfilledProductsToCartForRecipe(recipeId),
         jsonObject,
-        response -> downloadData(),
+        response -> downloadData(false),
         this::showNetworkErrorMessage
     );
   }
@@ -273,7 +259,7 @@ public class RecipeViewModel extends BaseViewModel {
   public void copyRecipe(int recipeId) {
     dlHelper.post(
         grocyApi.copyRecipe(recipeId),
-        response -> downloadData(),
+        response -> navigateUp(),
         this::showNetworkErrorMessage
     );
   }
@@ -294,7 +280,7 @@ public class RecipeViewModel extends BaseViewModel {
     return quantityUnits;
   }
 
-  public List<QuantityUnitConversion> getQuantityUnitConversions() {
+  public List<QuantityUnitConversionResolved> getQuantityUnitConversions() {
     return quantityUnitConversions;
   }
 
@@ -329,19 +315,6 @@ public class RecipeViewModel extends BaseViewModel {
   @Override
   public SharedPreferences getSharedPrefs() {
     return sharedPrefs;
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

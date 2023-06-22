@@ -40,11 +40,10 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowRecipeEditListEntryBinding;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
-import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
 
 public class RecipeEditIngredientListEntryAdapter extends
     RecyclerView.Adapter<RecipeEditIngredientListEntryAdapter.ViewHolder> {
@@ -57,7 +56,7 @@ public class RecipeEditIngredientListEntryAdapter extends
   private final ArrayList<RecipePosition> recipePositions;
   private final ArrayList<Product> products;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-  private final List<QuantityUnitConversion> unitConversions;
+  private final List<QuantityUnitConversionResolved> unitConversions;
   private final RecipeEditIngredientListEntryAdapterListener listener;
 
   private final PluralUtil pluralUtil;
@@ -69,7 +68,7 @@ public class RecipeEditIngredientListEntryAdapter extends
       ArrayList<RecipePosition> recipePositions,
       ArrayList<Product> products,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
-      List<QuantityUnitConversion> unitConversions,
+      List<QuantityUnitConversionResolved> unitConversions,
       RecipeEditIngredientListEntryAdapterListener listener
   ) {
     this.context = context;
@@ -77,7 +76,7 @@ public class RecipeEditIngredientListEntryAdapter extends
     this.recipePositions = new ArrayList<>(recipePositions);
     this.products = new ArrayList<>(products);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
-    this.unitConversions = new ArrayList<>(unitConversions);
+    this.unitConversions = unitConversions;
     this.listener = listener;
     this.pluralUtil = new PluralUtil(context);
     maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(context).getInt(
@@ -137,12 +136,10 @@ public class RecipeEditIngredientListEntryAdapter extends
         || recipePosition.getVariableAmount().isEmpty())) {
       double amount = recipePosition.getAmount();
       if (!recipePosition.isOnlyCheckSingleUnitInStock()) {
-        try {
-          HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil
-              .getUnitFactors(context, quantityUnitHashMap, unitConversions, product);
-          amount = QuantityUnitConversionUtil.getAmountRelativeToUnit(unitFactors, product, quantityUnit, amount);
-        } catch (IllegalArgumentException ignored) {
-        }
+        QuantityUnitConversionResolved conversionResolved = QuantityUnitConversionResolved
+            .findConversion(unitConversions, product.getId(), product.getQuIdStockInt(),
+                recipePosition.getQuantityUnitId());
+        if (conversionResolved != null) amount *= conversionResolved.getFactor();
       }
       holder.binding.quantity.setText(
           context.getString(

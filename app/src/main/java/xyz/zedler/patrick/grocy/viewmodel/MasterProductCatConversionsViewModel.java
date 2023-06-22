@@ -29,7 +29,6 @@ import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -67,7 +66,7 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     eventHandler = new EventHandler();
     repository = new MasterProductRepository(application);
     args = startupArgs;
@@ -87,31 +86,22 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
       this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(this.quantityUnits);
       quantityUnitConversionsLive.setValue(filterConversions(this.unitConversions));
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData() {
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        updated -> {
+          if (updated) loadFromDatabase(false);
+        },
         error -> onError(error, TAG),
+        forceUpdate,
+        false,
         QuantityUnit.class,
         QuantityUnitConversion.class
     );
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
-    editPrefs.apply();
-    downloadData();
   }
 
   private ArrayList<QuantityUnitConversion> filterConversions(List<QuantityUnitConversion> conversions) {

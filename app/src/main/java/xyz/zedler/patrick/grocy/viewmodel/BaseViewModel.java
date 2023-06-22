@@ -23,15 +23,19 @@ import android.app.Application;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteBlobTooBigException;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
@@ -106,16 +110,13 @@ public class BaseViewModel extends AndroidViewModel {
 
   public void onError(Object error, String TAG) {
     if (error instanceof VolleyError) {
-      Log.e(TAG, "onError: VolleyError: " + (VolleyError) error);
-      if (!isOffline()) {
-        setOfflineLive(true);
-      }
+      Log.e(TAG, "onError: VolleyError: " + error);
       showNetworkErrorMessage((VolleyError) error);
     } else if (error instanceof JSONException) {
-      Log.e(TAG, "onError: JSONException: " + (JSONException) error);
+      Log.e(TAG, "onError: JSONException: " + error);
       showJSONErrorMessage((JSONException) error);
     } else if (error instanceof Throwable) {
-      Log.e(TAG, "onError: Throwable: " + (Throwable) error);
+      Log.e(TAG, "onError: Throwable: " + error);
       showThrowableErrorMessage((Throwable) error);
     }
   }
@@ -125,74 +126,94 @@ public class BaseViewModel extends AndroidViewModel {
   }
 
   public void showThrowableErrorMessage(@Nullable Throwable error) {
-    String message;
+    String messageShort;
+    String messageLong;
     if (error instanceof SQLiteBlobTooBigException) {
-      message = getString(R.string.error_pictures_size_exceeds_limit);
+      messageShort = getString(R.string.error_database);
+      messageLong = getString(R.string.error_pictures_size_exceeds_limit);
     } else if (error != null && error.getLocalizedMessage() != null) {
-      message = getApplication()
+      messageShort = getString(R.string.error_undefined);
+      messageLong = getApplication()
           .getString(R.string.error_insert, error.getLocalizedMessage());
     } else {
-      message = getString(R.string.error_undefined);
+      messageShort = getString(R.string.error_undefined);
+      messageLong = messageShort;
     }
     if (error != null) {
       error.printStackTrace();
-      showSnackbarWithDetailsAction(error, message);
+      showSnackbarWithDetailsAction(error, messageShort, messageLong);
     } else {
-      showMessageLong(message);
+      showMessageLongDuration(messageShort);
     }
   }
 
   public void showNetworkErrorMessage(VolleyError error) {
     // similar method is also in BaseFragment
-    String message;
+    String messageShort;
+    String messageLong;
     if (error != null && error.networkResponse != null
         && error.networkResponse.statusCode == 403) {
-      message = getString(R.string.error_permission);
+      messageShort = getString(R.string.error_permission);
+      messageLong = messageShort;
     } else if (error != null && error.getLocalizedMessage() != null) {
-      message = getString(R.string.error_network_exact, error.getLocalizedMessage());
+      messageShort = getString(R.string.error_network);
+      messageLong = getString(R.string.error_network_exact, error.getLocalizedMessage());
     } else {
-      message = getString(R.string.error_network);
+      messageShort = getString(R.string.error_network);
+      messageLong = messageShort;
     }
     if (error != null) {
       error.printStackTrace();
-      showSnackbarWithDetailsAction(error, message);
+      showSnackbarWithDetailsAction(error, messageShort, messageLong);
     } else {
-      showMessageLong(message);
+      showMessageLongDuration(messageShort);
     }
   }
 
   public void showJSONErrorMessage(JSONException error) {
-    String message;
+    String messageShort;
+    String messageLong;
     if (error != null && error.getLocalizedMessage() != null) {
-      message = getApplication()
+      messageShort = getString(R.string.error_undefined);
+      messageLong = getApplication()
           .getString(R.string.error_insert, error.getLocalizedMessage());
     } else {
-      message = getString(R.string.error_undefined);
+      messageShort = getString(R.string.error_undefined);
+      messageLong = messageShort;
     }
     if (error != null) {
       error.printStackTrace();
-      showSnackbarWithDetailsAction(error, message);
+      showSnackbarWithDetailsAction(error, messageShort, messageLong);
     } else {
-      showMessageLong(message);
+      showMessageLongDuration(messageShort);
     }
   }
 
   private void showErrorDetailsAlertDialog(Context context, String message) {
-    new MaterialAlertDialogBuilder(
+    AlertDialog alertDialog = new MaterialAlertDialogBuilder(
         context, R.style.ThemeOverlay_Grocy_AlertDialog
     ).setTitle(R.string.error_details)
         .setMessage(message)
         .setPositiveButton(R.string.action_close, (dialog, which) -> dialog.cancel())
-        .setNegativeButton(R.string.action_copy, (dialog, which) -> {
-          ClipboardManager clipboard = (ClipboardManager) context
-              .getSystemService(Context.CLIPBOARD_SERVICE);
-          ClipData clip = ClipData.newPlainText("Error details", message);
-          clipboard.setPrimaryClip(clip);
-        }).create().show();
+        .setNegativeButton(R.string.action_copy, (dialog, which) -> {}).create();
+    alertDialog.show();
+
+    Button negativeButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+    negativeButton.setOnClickListener(v -> {
+      ClipboardManager clipboard = (ClipboardManager) context
+          .getSystemService(Context.CLIPBOARD_SERVICE);
+      ClipData clip = ClipData.newPlainText("Error details", message);
+      clipboard.setPrimaryClip(clip);
+      Toast.makeText(context, getString(R.string.msg_copied_clipboard), Toast.LENGTH_SHORT).show();
+    });
   }
 
-  private void showSnackbarWithDetailsAction(@NonNull Throwable error, String message) {
-    SnackbarMessage snackbarMessage = new SnackbarMessage(message);
+  private void showSnackbarWithDetailsAction(
+      @NonNull Throwable error,
+      String messageShort,
+      String messageLong
+  ) {
+    SnackbarMessage snackbarMessage = new SnackbarMessage(messageShort);
     error.printStackTrace();
 
     StringWriter sw = new StringWriter();
@@ -201,13 +222,13 @@ public class BaseViewModel extends AndroidViewModel {
     String stackTrace = sw.toString();
     snackbarMessage.setAction(
         getString(R.string.action_details),
-        v -> showErrorDetailsAlertDialog(v.getContext(), message + "\n\n" + stackTrace)
+        v -> showErrorDetailsAlertDialog(v.getContext(), messageLong + "\n\n" + stackTrace)
     );
     snackbarMessage.setDurationSecs(5);
     showSnackbar(snackbarMessage);
   }
 
-  public void showMessageLong(@Nullable String message) {
+  public void showMessageLongDuration(@Nullable String message) {
     if (message == null) {
       return;
     }
@@ -283,8 +304,8 @@ public class BaseViewModel extends AndroidViewModel {
     return offlineLive.getValue();
   }
 
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
+  void setOfflineLive(boolean isOffline) {
+    if (isOffline() != isOffline) offlineLive.setValue(isOffline);
   }
 
   String getString(@StringRes int resId) {

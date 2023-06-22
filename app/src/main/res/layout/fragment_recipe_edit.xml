@@ -92,7 +92,7 @@
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never"
       app:setRefreshing="@{viewModel.isLoadingLive}"
-      app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
+      app:onRefreshListener="@{() -> viewModel.downloadData(true)}">
 
       <FrameLayout
         android:id="@+id/container"
@@ -164,6 +164,22 @@
 
               </LinearLayout>
 
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card.Text"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="@string/msg_help_recipe_servings" />
+
+              </com.google.android.material.card.MaterialCardView>
+
               <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -207,6 +223,7 @@
                       android:inputType="number|numberDecimal"
                       android:imeOptions="actionDone"
                       android:maxLength="10"
+                      android:selectAllOnFocus="true"
                       android:text="@={formData.baseServingsLive}"
                       android:afterTextChanged="@{() -> formData.isBaseServingsValid()}"
                       app:onFocusChangeListener="@{(v, focus) -> activity.startIconAnimation(imageAmount, focus)}"
@@ -295,7 +312,7 @@
                   app:helperText=" "
                   app:errorIconDrawable="@{null}"
                   app:endIconOnClickListener="@{v -> fragment.toggleScannerVisibility()}"
-                  app:errorText="@{formData.productNameErrorLive}">
+                  app:errorText="@{formData.productProducedNameErrorLive}">
 
                   <xyz.zedler.patrick.grocy.view.CustomAutoCompleteTextView
                     android:id="@+id/auto_complete_product"
@@ -305,7 +322,7 @@
                     android:imeOptions="actionDone"
                     android:completionThreshold="1"
                     android:popupBackground="@drawable/bg_auto_complete"
-                    android:text="@={formData.productNameLive}"
+                    android:text="@={formData.productProducedNameLive}"
                     android:onItemClick="@{(parent, view, pos, id) -> fragment.onItemAutoCompleteClick(parent, pos)}"
                     android:afterTextChanged="@{() -> formData.isProductNameValid()}"
                     app:productList="@{formData.productsLive}"
