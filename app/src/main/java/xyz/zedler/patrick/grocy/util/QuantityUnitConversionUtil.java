@@ -313,7 +313,7 @@ public class QuantityUnitConversionUtil {
     ) {
       return null;
     }
-    if (stock != null && current != null && stock.getId() != current.getId()) {
+    if (stock != null && current != null) {
       double amount = NumUtil.toDouble(amountStr);
       Object currentFactor = quantityUnitsFactors.get(current);
       if (currentFactor == null) return null;
