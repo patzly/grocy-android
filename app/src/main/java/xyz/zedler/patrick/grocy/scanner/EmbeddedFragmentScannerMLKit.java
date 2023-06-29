@@ -237,8 +237,6 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
       return;
     }
 
-    cameraController.bindToLifecycle(fragment.getViewLifecycleOwner());
-
     if (barcodeScanner != null) {
       barcodeScanner.close();
     }
@@ -254,6 +252,8 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
             result -> onScanSuccess(result.getValue(barcodeScanner))
         )
     );
+
+    cameraController.bindToLifecycle(fragment.getViewLifecycleOwner());
 
     keepScreenOn(true);
   }
