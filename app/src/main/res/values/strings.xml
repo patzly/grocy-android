@@ -330,7 +330,7 @@
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">Transaction which will be executed:\n\nSet stock amount of %1$s to %2$s %3$s\nApply for added items:\nDue date: %4$s\nPrice: %5$s\nStore: %6$s\nLocation: %7$s</string>
   <string name="msg_quantity_unit_plurals" translatable="false">The plural rules of the current language are not implemented, so maybe a field is missing here where you can enter additional plural forms. You can help translating this app into your language on Transifex (link on our GitHub page) and as soon as your language reaches 80% we will add its plural rules.</string>
-  <string name="msg_compatibility">This app version is not compatible with the grocy version on the server.\n\nCurrent server version: %1$s\n\nSupported server versions:\n%2$s\nIf the current server version has a higher major version number (first digit) than the supported versions and you ignore this warning, data loss (unlikely) or crashes (likely) may occur.\nIf there is only a minor difference (e.g. third digit is higher) you can probably ignore this warning.</string>
+  <string name="msg_compatibility">This app version is not compatible with the Grocy version on the server.\n\nCurrent server version: %1$s\n\nSupported server versions:\n%2$s\nIf the current server version has a higher major version number (first digit) than the supported versions and you ignore this warning, data loss (unlikely) or crashes (likely) may occur.\nIf there is only a minor difference (e.g. third digit is higher) you can probably ignore this warning.</string>
   <string name="msg_logout">Nothing on your server will be changed. You will be redirected to the login page.</string>
   <string name="msg_logout_demo">You\'re using the public demo server <u>https://grocy.info</u>.\n\n<b>None of your changes here are saved forever!\nThey remain public until the server automatically overwrites them once a day.</b>\n\nOn the login screen you can enter your own server address.</string>
   <string name="msg_logout_demo_short">Public demo server. Tap for details.</string>
@@ -349,10 +349,10 @@
   <string name="msg_recipe_consume_ask">Are you sure you want to consume all ingredients needed by the recipe for \"%1$s\"? (ingredients marked with \"only check if any amount is in stock\" will be ignored)</string>
   <string name="msg_recipe_shopping_list_ask">Are you sure you want to put all missing ingredients needed by the recipe for \"%1$s\" on the shopping list?\n\nUncheck ingredients to not put them on the shopping list:</string>
   <string name="msg_welcome">Welcome to Grocy Android!</string>
-  <string name="msg_welcome_introduce">To use grocy productively you need your own server or the grocy add-on for Home Assistant.\nIf you just want to try out this app you can use the demo server from Bernd Bestel, the creator of grocy.</string>
+  <string name="msg_welcome_introduce">To use Grocy productively you need your own server or the Grocy add-on for Home Assistant.\nIf you just want to try out this app you can use the demo server from Bernd Bestel, the creator of grocy.</string>
   <string name="msg_choose_option_below">Please choose an option below.</string>
-  <string name="msg_qr_code_scan">On another device, visit your grocy website and go to \'API keys\' page. Click \'Add\', then click on the little QR code symbol and scan the QR code.</string>
-  <string name="msg_qr_code_scan_token">You\'re using the grocy Home Assistant add-on. Create a long-lived access token in your Home Assistant profile settings (last section). Below the token field, click on \"Generate QR code\" and scan it here.</string>
+  <string name="msg_qr_code_scan">On another device, visit your Grocy website and go to \'API keys\' page. Click \'Add\', then click on the little QR code symbol and scan the QR code.</string>
+  <string name="msg_qr_code_scan_token">You\'re using the Grocy Home Assistant add-on. Create a long-lived access token in your Home Assistant profile settings (last section). Below the token field, click on \"Generate QR code\" and scan it here.</string>
   <string name="msg_port_connection_info_without_port">The app will connect to port %1$s.\nIf you want it to connect to a different port, you can add one to the URL.\nExample: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">The app will connect to port %1$s.</string>
   <string name="msg_clear_form_first">Clear the form first before scanning another known barcode.</string>
@@ -426,21 +426,22 @@
   <string name="msg_help_recipe_group">This will be used as a headline to group ingredients together.</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_price_factor">The resulting price of this ingredient will be multiplied by this factor.</string>
+  <string name="msg_help_recipe_ingredients_wrong">With Grocy server version below 4.0.0 this list can contain wrong fulfillment information. Please update your server to version 4.0.0 or later to see correct values.</string>
   <string name="msg_help_date_chooser">You can switch to keyboard input in settings, this could increase input speed for you.</string>
   <string name="msg_help_date_chooser_keyboard">You can activate reverse date format in settings if DDMMYY is preferred in your country.\nTo apply input and close this page you can use the Done key on your keyboard.</string>
   <string name="msg_help_quick_mode">You can long tap on the title bar above to activate the quick mode. In this mode, a transaction will be executed immediately if a product has been entered or scanned and all fields could be automatically populated (by product and/or barcode defaults).</string>
   <string name="msg_help_loading_circle_settings">On each page where something has to be loaded from server, the app first checks with a tiny request whether the server database has changed since last time and only updates outdated data. Enable the option below to show a loading circle even for this tiny request.</string>
   <string name="msg_help_start">Beginner mode is active: Help texts are displayed by default on all pages if available. Tap to change.</string>
   <string name="msg_help_purchased_date_settings">If the option below is enabled, a field for purchased date will be displayed on purchase and inventory page. Otherwise the purchased date defaults to today.</string>
-  <string name="msg_help_normal_login">Tap on this card if you use Home Assistant with the grocy add-on.</string>
-  <string name="msg_help_home_assistant_login">You\'re using the grocy Home Assistant add-on. Therefore a few more details are required. Tap on this card to switch to normal login.</string>
+  <string name="msg_help_normal_login">Tap on this card if you use Home Assistant with the Grocy add-on.</string>
+  <string name="msg_help_home_assistant_login">You\'re using the Grocy Home Assistant add-on. Therefore a few more details are required. Tap on this card to switch to normal login.</string>
   <string name="msg_help_home_assistant_login_help_show">Tap here to show help texts.</string>
   <string name="msg_help_home_assistant_login_help_hide">Tap here to hide help texts.</string>
   <string name="msg_help_home_assistant_login_server">In the field below you can also enter your Nabu Casa cloud URL if you\'re using that service. Tap this card to visit the Nabu Casa website.</string>
   <string name="msg_help_home_assistant_login_token">You can create a long-lived access token in your Home Assistant profile settings (last section). Tap here to open the URL from above.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Navigate back or tap this card to scan a QR code which fills the fields below.</string>
   <string name="msg_help_fab_overview_start">The action button on this overview page has two actions:\n\n- Short tap: consume with barcode scanner\n- Long tap: purchase with barcode scanner\n\nWith this button the quick mode on the respective pages is turned on by default. You can change this in behavior settings.</string>
-  <string name="msg_share">Check out this Android client for the awesome grocy-project: \nhttps://github.com/patzly/grocy-android</string>
+  <string name="msg_share">Check out this Android client for the awesome Grocy project: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">API key not working</string>
   <string name="error_orbot_not_installed">Orbot is not installed</string>
@@ -477,7 +478,7 @@
   <string name="error_invalid_price">Invalid price</string>
   <string name="error_invalid_factor">Invalid factor</string>
   <string name="error_invalid_date_format">Invalid date format</string>
-  <string name="error_api_qr_code">Not a QR code with grocy API credentials</string>
+  <string name="error_api_qr_code">Not a QR code with Grocy API credentials</string>
   <string name="error_token_qr_code">Not a QR code with a long-lived access token from Home Assistant</string>
   <string name="error_loading_qus">Failed to load quantity units from product</string>
   <string name="error_clipboard_no_image">Clipboard does not contain an image or it could not be read</string>
@@ -503,7 +504,7 @@
   <string name="error_insert">Error: %1$s</string>
   <string name="error_details">Error details</string>
   <string name="error_unknown">Oops!</string>
-  <string name="error_not_grocy_instance">Not a valid grocy instance</string>
+  <string name="error_not_grocy_instance">Not a valid Grocy instance</string>
   <string name="error_timeout">Timeout error</string>
   <string name="error_no_product_selected">No product selected</string>
   <string name="error_failed_to_connect_to">Failed to connect to server</string>
@@ -579,7 +580,7 @@
   <string name="title_recipe_edit">Edit recipe</string>
 
   <string name="title_home_assistant" translatable="false">Home Assistant</string>
-  <string name="title_grocy" translatable="false">grocy</string>
+  <string name="title_grocy" translatable="false">Grocy</string>
   <string name="title_http" translatable="false">HTTP</string>
   <string name="title_https" translatable="false">HTTPS</string>
   <string name="title_long_lived_access_token" translatable="false">Long-lived access token</string>
@@ -1057,7 +1058,7 @@
     <item quantity="other">%d years from now</item>
   </plurals>
 
-  <string name="info_acknowledgement">We\'d like to thank the developer of grocy, Bernd Bestel, without whose great work this app would never have been possible.</string>
+  <string name="info_acknowledgement">We\'d like to thank the developer of Grocy, Bernd Bestel, without whose great work this app would never have been possible.</string>
   <string name="info_intro">Replay intro</string>
   <string name="info_intro_description">Showcasing features</string>
   <string name="info_dev_beginning">Beginning of development</string>
