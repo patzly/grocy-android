@@ -26,9 +26,6 @@
     <import type="android.view.View" />
     <import type="xyz.zedler.patrick.grocy.R" />
     <variable
-      name="formData"
-      type="xyz.zedler.patrick.grocy.form.FormDataRecipeEdit" />
-    <variable
       name="viewModel"
       type="xyz.zedler.patrick.grocy.viewmodel.RecipeViewModel" />
     <variable
@@ -302,7 +299,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="16dp"
+            android:animateLayoutChanges="true"
+            app:transitionTypeChanging="@{true}">
 
             <com.google.android.material.divider.MaterialDivider
               style="@style/Widget.Grocy.Divider"
@@ -310,20 +309,47 @@
               android:layout_marginTop="8dp"
               android:layout_marginBottom="4dp"/>
 
-            <TextView
-              android:id="@+id/ingredients_headline"
-              style="@style/TextAppearance.Grocy.TitleMedium"
+            <LinearLayout
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              android:gravity="center_vertical">
+
+              <TextView
+                style="@style/TextAppearance.Grocy.TitleMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/property_ingredients"/>
+
+              <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_fulfillment_info"
+                style="@style/Widget.Grocy.Button.IconButton"
+                android:onClick="@{v -> viewModel.toggleDisplayFulfillmentWrongInfo()}"
+                app:icon="@drawable/ic_round_warning"
+                app:iconTint="?attr/colorSecondary" />
+
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+              style="@style/Widget.Grocy.Card.Text"
               android:layout_marginStart="16dp"
+              android:layout_marginEnd="16dp"
               android:layout_marginBottom="8dp"
-              android:text="@string/property_ingredients"/>
+              android:layout_marginTop="0dp"
+              android:visibility="@{viewModel.displayFulfillmentWrongInfo ? View.VISIBLE : View.GONE}">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.Paragraph.Card"
+                android:text="@string/msg_help_recipe_ingredients_wrong" />
+
+            </com.google.android.material.card.MaterialCardView>
 
             <androidx.recyclerview.widget.RecyclerView
               android:id="@+id/recycler"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:paddingTop="4dp"
+              android:paddingTop="0dp"
               android:paddingBottom="8dp"
               android:overScrollMode="never"
               android:clipToPadding="false"

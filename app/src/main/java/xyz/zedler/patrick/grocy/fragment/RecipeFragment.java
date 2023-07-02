@@ -133,6 +133,9 @@ public class RecipeFragment extends BaseFragment implements
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
+    ColorRoles colorYellow = ResUtil.getHarmonizedRoles(requireContext(), R.color.yellow);
+    binding.buttonFulfillmentInfo.setIconTint(ColorStateList.valueOf(colorYellow.getAccent()));
+
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
