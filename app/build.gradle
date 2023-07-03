@@ -24,7 +24,6 @@ plugins {
 
 android {
     namespace 'xyz.zedler.patrick.grocy'
-    compileSdkVersion 33
     buildToolsVersion '33.0.2'
 
     buildFeatures {
@@ -39,8 +38,9 @@ android {
 
     defaultConfig {
         applicationId "xyz.zedler.patrick.grocy"
-        minSdkVersion 21
-        targetSdkVersion 33
+        minSdk 21
+        targetSdk 33
+        compileSdk 33
         versionCode 47
         versionName "3.2.1"
         resourceConfigurations += ['ca', 'cs', 'de', 'en', 'es', 'et', 'fr', 'hu', 'it', 'iw', 'ja', 'nb', 'nl', 'pl', 'pt-rBR', 'pt-rPT', 'ru', 'sk', 'sv', 'uk', 'zh-rCN', 'zh-rTW']
@@ -104,9 +104,9 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.6.0'
 
     // Android Room for database and RxJava for Async access of database
-    implementation 'androidx.room:room-runtime:2.5.1'
-    implementation 'androidx.room:room-rxjava3:2.5.1'
-    annotationProcessor 'androidx.room:room-compiler:2.5.1'
+    implementation 'androidx.room:room-runtime:2.5.2'
+    implementation 'androidx.room:room-rxjava3:2.5.2'
+    annotationProcessor 'androidx.room:room-compiler:2.5.2'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
 
     // Nice material views
