@@ -302,7 +302,7 @@
   <string name="msg_quick_mode_confirm_transfer">以下のトランザクションを実行します：%3$sを%1$s%2$s移動\n移動元：%4$s\n移動先：%5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">以下のトランザクションを実行します：\n\n在庫を%1$sから%2$s%3$sへ変更\n追加された製品：\n期限：%4$s\n価格：\n購入店：%5$s\n場所：%7$s</string>
-  <string name="msg_compatibility">このアプリのバージョンは、サーバー上の Grocy バージョンと互換性がありません。\n\n現在のサーバー バージョン: %1$s \n\nサポートされているサーバー バージョン:%2$s\n\n現在のサーバー バージョンのメジャー バージョン番号(最初の桁)がサポートされているバージョンよりも大きい場合、この警告を無視すると、(可能性は低いですが)データ損失またはクラッシュが発生する可能性があります。\nわずかな違いしかない場合(たとえば3 桁目が大きいなど)、この警告はおそらく無視しても問題ありません。</string>
+  <string name="msg_compatibility">このアプリのバージョンは、サーバー上の Grocy バージョンと互換性がありません。\n\n現在のサーバー バージョン: %1$s \n\nサポートされているサーバー バージョン:%2$s\n\n現在のサーバー バージョンのメジャー バージョン番号(最初の桁)がサポートされているバージョンよりも大きい場合、この警告を無視すると、(低い確率で)データ損失または(高い確率で)クラッシュが発生する可能性があります。\nわずかな違いしかない場合(たとえば3 桁目が大きいなど)、この警告はおそらく無視しても問題ありません。</string>
   <string name="msg_logout">サーバー上のデータは何も変更されません。 ログインページにリダイレクトされます。</string>
   <string name="msg_logout_demo">パブリック デモ サーバー <u>https://grocy.info</u> を使用しています。\n\n<b>ここでの変更は永久に保存されません!\nサーバーが 1 日に 1 回自動的に上書きするまで、変更は公開されたままになります。</b>\n\nログイン画面で、自前サーバーのアドレスを入力できます。</string>
   <string name="msg_logout_demo_short">パブリックデモサーバーです。 タップで詳細表示</string>
