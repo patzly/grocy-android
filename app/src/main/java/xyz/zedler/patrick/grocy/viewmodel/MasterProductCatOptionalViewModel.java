@@ -238,7 +238,10 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
           deleteCurrentPicture(filename);
           formData.getPictureFilenameLive().setValue(filename);
         },
-        this::showNetworkErrorMessage
+        error -> {
+          isLoadingLive.setValue(false);
+          showNetworkErrorMessage(error);
+        }
     );
   }
 
@@ -259,14 +262,21 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
     if (lastFilename != null && !lastFilename.isBlank()) {
       dlHelper.delete(
           grocyApi.getProductPicture(lastFilename),
-          response -> formData.getPictureFilenameLive().setValue(""),
+          response -> {
+            isLoadingLive.setValue(false);
+            formData.getPictureFilenameLive().setValue("");
+          },
           volleyError -> {
+            isLoadingLive.setValue(false);
             showNetworkErrorMessage(volleyError);
             formData.getPictureFilenameLive().setValue(lastFilename);
           }
       );
     } else if (lastFilename != null && lastFilename.isBlank()) {
+      isLoadingLive.setValue(false);
       formData.getPictureFilenameLive().setValue("");
+    } else {
+      isLoadingLive.setValue(false);
     }
   }
 
