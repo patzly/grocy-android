@@ -127,7 +127,8 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
       });
     }
 
-    if (getArguments().getBoolean(ARGUMENT.DISPLAY_NEW_OPTION, false)
+    if (getArguments() != null
+        && getArguments().getBoolean(ARGUMENT.DISPLAY_NEW_OPTION, false)
         && activity.getCurrentFragment() instanceof ShoppingListFragment) {
       binding.buttonListSelectionNew.setVisibility(View.VISIBLE);
       binding.buttonListSelectionNew.setOnClickListener(v -> {

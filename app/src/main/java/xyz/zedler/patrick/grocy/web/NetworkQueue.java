@@ -35,7 +35,8 @@ public class NetworkQueue {
   private final RequestQueue requestQueue;
   private final String uuidQueue;
   private int requestsNotFinishedCount;
-  private boolean isRunning;
+  private boolean isRunning; // state of queue
+  private boolean isLoading; // state of "loading" circle
 
   public NetworkQueue(
       RequestQueue requestQueue,
@@ -51,6 +52,7 @@ public class NetworkQueue {
     uuidQueue = UUID.randomUUID().toString();
     requestsNotFinishedCount = 0;
     isRunning = false;
+    isLoading = false;
   }
 
   public NetworkQueue append(QueueItem... queueItems) {
@@ -74,9 +76,7 @@ public class NetworkQueue {
       return;
     } else {
       isRunning = true;
-      if (onLoadingListener != null) {
-        onLoadingListener.onLoadingChanged(true);
-      }
+      isLoading = false;
     }
     if (queueItems.isEmpty()) {
       if (onLoadingListener != null) {
@@ -96,12 +96,23 @@ public class NetworkQueue {
     }
 
     for (QueueItem queueItem : queueItems) {
+      if (!(queueItem instanceof QueueItemWithoutLoading) && !isLoading
+          && onLoadingListener != null) {
+        // this prevents loading circle to appear when shopping mode updates data but nothing has
+        // changed on server. In this case, all QueueItems are null except for products because
+        // QuantityUnitConversions rely on it and are updated after products. So loading circle
+        // only appears if QueueItem is not QueueItemWithoutLoading, which is always the case
+        // except in the condition explained.
+        onLoadingListener.onLoadingChanged(true);
+        isLoading = true;
+      }
       queueItem.perform(response -> {
         requestsNotFinishedCount--;
         if (requestsNotFinishedCount > 0) {
           return;
         }
         isRunning = false;
+        isLoading = false;
         if (onLoadingListener != null) {
           onLoadingListener.onLoadingChanged(false);
         }
@@ -111,6 +122,7 @@ public class NetworkQueue {
         reset(false);
       }, error -> {
         isRunning = false;
+        isLoading = false;
         if (onLoadingListener != null) {
           onLoadingListener.onLoadingChanged(false);
         }
@@ -150,6 +162,10 @@ public class NetworkQueue {
       // UUID is for cancelling the requests; should be uuidHelper from above
       perform(null, null, uuid);
     }
+  }
+
+  public abstract static class QueueItemWithoutLoading extends QueueItem {
+
   }
 
   public interface OnQueueEmptyListener {

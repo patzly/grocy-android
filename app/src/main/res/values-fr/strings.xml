@@ -342,7 +342,7 @@
   <string name="msg_quick_mode_confirm_transfer">Opération qui sera exécutée :\n\nTransférer %1$s %2$s de %3$s\nDe l\'emplacement : %4$s\nÀ l\'emplacement : %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">Opération qui sera exécutée :\n\nDéfinir le stock de %1$s à %2$s %3$s\nAppliqué aux articles ajoutés :\nDate de péremption : %4$s\nPrix : %5$s\nMagasin : %6$s\nEmplacement : %7$s</string>
-  <string name="msg_compatibility">Cette version de l\'application n\'est pas compatible avec la version de grocy sur le serveur.\n\nVersion actuelle du serveur : %1$s\n\nVersions prises en charge :\n%2$s\nSi vous ignorez cet avertissement, une perte de données (peu probable) ou des plantages (probable) peuvent se produire. \nVous êtes prévenu !</string>
+  <string name="msg_compatibility">Cette version de l\'application n\'est pas compatible avec la version de Grocy sur le serveur.\n\nVersion actuelle du serveur : %1$s \n\nVersions de serveur prises en charge :\n%2$s\nSi la version actuelle du serveur a un numéro de version majeur (premier chiffre) supérieur aux versions prises en charge et que vous ignorez cet avertissement, une perte de données (peu probable) ou des plantages (probables) peuvent se produire.\nS\'il n\'y a qu\'une différence mineure (par exemple, le troisième chiffre est plus élevé), vous pouvez probablement ignorer cet avertissement.</string>
   <string name="msg_logout">Rien sur votre serveur ne sera modifié. Vous serez redirigé vers la page de connexion.</string>
   <string name="msg_logout_demo">Vous utilisez le serveur public grocy de démonstration <u>https://grocy.info.</u>\n\n <b>Aucune de vos modifications n\'est enregistrée à long terme !\nElles restent publiques jusqu\'à ce que le serveur les écrase automatiquement une fois par jour.</b>\n\nSur l\'écran de connexion, vous pouvez entrer l\'adresse de votre propre serveur.</string>
   <string name="msg_logout_demo_short">Serveur public de démonstration. Appuyez pour plus de détails.</string>
@@ -361,9 +361,9 @@
   <string name="msg_recipe_consume_ask">Êtes-vous sûr de vouloir consommer tous les ingrédients nécessaires à la recette \"%1$s\" ? (les ingrédients marqués avec \"uniquement vérifier si une quantité est en stock\" seront ignorés)</string>
   <string name="msg_recipe_shopping_list_ask">Êtes-vous sûr de vouloir mettre tous les ingrédients manquants nécessaires à la recette \"%1$s\" sur la liste de courses ?\n\nDécochez les ingrédients pour ne pas les mettre sur la liste de courses :</string>
   <string name="msg_welcome">Bienvenue sur Grocy Android !</string>
-  <string name="msg_welcome_introduce">Pour utiliser grocy de manière productive, vous avez besoin de votre propre serveur ou du module complémentaire grocy pour Home Assistant.\nSi vous souhaitez simplement essayer cette application, vous pouvez utiliser le serveur de démonstration de Bernd Bestel, le créateur de grocy.</string>
+  <string name="msg_welcome_introduce">Pour utiliser Grocy de manière productive, vous avez besoin de votre propre serveur ou du module complémentaire Grocy pour Home Assistant.\nSi vous souhaitez simplement essayer cette application, vous pouvez utiliser le serveur de démonstration de Bernd Bestel, le créateur de grocy.</string>
   <string name="msg_choose_option_below">Veuillez choisir une option ci-dessous.</string>
-  <string name="msg_qr_code_scan">Sur un autre appareil, visitez votre site web grocy et allez sur la page \"Clefs API\". Cliquez sur \"Ajouter\", puis cliquez sur la petite icône avec un code QR et scannez le code QR.</string>
+  <string name="msg_qr_code_scan">Sur un autre appareil, visitez votre site Web Grocy et accédez à la page \"Clés API\". Cliquez sur \"Ajouter\", puis cliquez sur le petit symbole de QR code et scannez le QR code.</string>
   <string name="msg_qr_code_scan_token">Vous utilisez le module complémentaire Grocy Home Assistant. Créez un jeton d\'accès de longue durée dans les paramètres de votre profil Home Assistant (dernière section). Sous le champ du jeton, cliquez sur \"Générer le QR code\" et scannez-le ici.</string>
   <string name="msg_port_connection_info_without_port">L\'application se connectera au port %1$s.\nSi vous souhaitez qu\'elle se connecte à un autre port, vous pouvez en ajouter un à l\'URL.\nExemple : http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">L\'application se connectera au port %1$s.</string>
@@ -438,21 +438,22 @@
   <string name="msg_help_recipe_group">Cela sera utilisé comme titre pour regrouper les ingrédients ensemble.</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_price_factor">Le prix final de cet ingrédient sera multiplié par ce facteur.</string>
+  <string name="msg_help_recipe_ingredients_wrong">Avec une version du serveur Grocy inférieure à 4.0.0, cette liste peut contenir des informations d\'exécution erronées. Veuillez mettre à jour votre serveur vers la version 4.0.0 ou ultérieure pour voir les valeurs correctement.</string>
   <string name="msg_help_date_chooser">Vous pouvez passer à la saisie au clavier dans les paramètres, cela pourrait augmenter la vitesse de saisie pour vous.</string>
   <string name="msg_help_date_chooser_keyboard">Vous pouvez activer le format de date inversé dans les paramètres si JJMMAA est préféré dans votre pays.\nPour appliquer la saisie et fermer cette page, vous pouvez utiliser la touche Entrée de votre clavier.</string>
   <string name="msg_help_quick_mode">Vous pouvez appuyer longuement sur la barre de titre ci-dessus afin d\'activer le mode rapide. Dans ce mode, une opération sera exécutée immédiatement si un produit a été entré ou scanné et que tous les champs ont pu être automatiquement remplis (grâce aux paramètres par défaut du produit ou du code-barres).</string>
   <string name="msg_help_loading_circle_settings">Sur chaque page où quelque chose a été chargé depuis le serveur, l\'application vérifie en premier, avec une petite requête, si la base de donnée du serveur a changé depuis la dernière fois et ne met à jour que les données obsolètes. Activez l\'option ci-dessous pour afficher une animation de chargement durant cette petite requête.</string>
   <string name="msg_help_start">Le mode débutant est actif : les messages d\'aide sont affichés par défaut sur toutes les pages, si disponible. Appuyez pour changer.</string>
   <string name="msg_help_purchased_date_settings">Si l\'option ci-dessous est activée, un champ pour la date d\'achat sera affiché sur les pages d\'achat et d\'inventaire. Sinon, la date d\'achat est le jour-même par défaut.</string>
-  <string name="msg_help_normal_login">Appuyez ici si vous utilisez Home Assistant avec l\'add-on grocy.</string>
-  <string name="msg_help_home_assistant_login">Vous utilisez l\'extension pour Home Assistant. Quelques informations supplémentaires sont requises. Appuyez ici pour passer à l\'authentification classique.</string>
+  <string name="msg_help_normal_login">Appuyez sur cette carte si vous utilisez Home Assistant avec le module complémentaire Grocy.</string>
+  <string name="msg_help_home_assistant_login">Vous utilisez le module complémentaire Grocy Home Assistant. Quelques détails supplémentaires sont donc nécessaires. Appuyez sur cette carte pour passer à la connexion normale.</string>
   <string name="msg_help_home_assistant_login_help_show">Appuyez ici pour afficher les messages d\'aide.</string>
   <string name="msg_help_home_assistant_login_help_hide">Appuyez ici pour cacher les messages d\'aide.</string>
   <string name="msg_help_home_assistant_login_server">Dans le champ ci-dessous, vous pouvez saisir l\'URL de votre instance Nabu Casa, si vous utilisez ce service. Appuyer ici pour consulter le site de Nabu Casa.</string>
   <string name="msg_help_home_assistant_login_token">Vous pouvez créer un jeton d\'accès de longue durée dans les paramètres de votre profil Home Assistant (dernière section). Appuyez ici pour ouvrir l\'URL ci-dessus.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Appuyez ici pour scanner un code QR afin de remplir les champs ci-dessous.</string>
   <string name="msg_help_fab_overview_start">Le bouton d\'action sur cette page d\'aperçu a deux actions :\n\n- Appui court : consommer avec le lecteur de code-barres\n- Appui long : acheter avec le lecteur de code-barres\n\nAvec ce bouton, le mode rapide sur les pages respectives est activé par défaut. Vous pouvez modifier cela dans les paramètres de comportement.</string>
-  <string name="msg_share">Découvrez ce client Android pour l\'excellent projet grocy : \nhttps://github.com/patzly/grocy-android</string>
+  <string name="msg_share">Découvrez ce client Android pour le super projet Grocy : \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">La clé API ne fonctionne pas</string>
   <string name="error_orbot_not_installed">Orbot n\'est pas installé</string>
@@ -489,7 +490,7 @@
   <string name="error_invalid_price">Prix invalide</string>
   <string name="error_invalid_factor">Facteur invalide</string>
   <string name="error_invalid_date_format">Format de date invalide</string>
-  <string name="error_api_qr_code">Pas un code QR avec des identifiants pour l\'API grocy</string>
+  <string name="error_api_qr_code">Ceci n\'est pas un QR code avec les informations d\'identification de l\'API Grocy</string>
   <string name="error_token_qr_code">Ce n\'est pas un QR code avec un jeton d\'accès de longue durée provenant de Home Assistant.</string>
   <string name="error_loading_qus">Echec de chargement du format des produits</string>
   <string name="error_clipboard_no_image">Le presse-papiers ne contient pas d\'image ou elle n\'a pas pu être lu</string>
@@ -515,7 +516,7 @@
   <string name="error_insert">Erreur : %1$s</string>
   <string name="error_details">Détails de l\'erreur</string>
   <string name="error_unknown">Oups !</string>
-  <string name="error_not_grocy_instance">Ce n\'est pas une instance de grocy valide</string>
+  <string name="error_not_grocy_instance">Ceci n\'est pas une instance Grocy valide</string>
   <string name="error_timeout">Erreur de temporisation</string>
   <string name="error_no_product_selected">Pas de produit sélectionné</string>
   <string name="error_failed_to_connect_to">Impossible de se connecter au serveur</string>
@@ -1092,7 +1093,7 @@
     <item quantity="other">Dans %d ans</item>
   </plurals>
 
-  <string name="info_acknowledgement">Nous aimerions remercier le développeur de grocy, Bernd Bestel. Sans son super travail, cette application n\'aurait jamais été possible.</string>
+  <string name="info_acknowledgement">Nous tenons à remercier le développeur de Grocy, Bernd Bestel, sans l\'excellent travail duquel cette application n\'aurait jamais été possible.</string>
   <string name="info_intro">Rejouer l\'intro</string>
   <string name="info_intro_description">Présentation des fonctionnalités</string>
   <string name="info_dev_beginning">Début du développement</string>

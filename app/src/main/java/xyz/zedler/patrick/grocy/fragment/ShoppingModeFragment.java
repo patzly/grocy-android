@@ -136,12 +136,6 @@ public class ShoppingModeFragment extends BaseFragment implements
     );
     binding.recycler.setAdapter(new ShoppingPlaceholderAdapter());
 
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
-      if (!state) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
-
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
@@ -329,7 +323,7 @@ public class ShoppingModeFragment extends BaseFragment implements
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.downloadData();
+    viewModel.downloadData(false, false);
   }
 
   private void hideDisabledFeatures() {
@@ -389,7 +383,7 @@ public class ShoppingModeFragment extends BaseFragment implements
         if (debug) {
           Log.i(TAG, "auto sync shopping list (but may skip download)");
         }
-        handler.post(() -> viewModel.downloadData());
+        handler.post(() -> viewModel.downloadData(false, false));
       }
     };
   }

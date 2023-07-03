@@ -28,6 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,6 +51,8 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.ShoppingListItem.ShoppingListItemWithSync;
+import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
@@ -89,11 +92,6 @@ public class ShoppingModeViewModel extends BaseViewModel {
   private HashMap<Integer, Product> productHashMap;
   private HashMap<Integer, String> productNamesHashMap;
   private ArrayList<Integer> missingProductIds;
-
-  private ArrayList<ShoppingListItem> itemsToSyncTemp;
-  private HashMap<Integer, ShoppingListItem> serverItemHashMapTemp;
-
-  private NetworkQueue currentQueueLoading;
   private final boolean debug;
 
   public ShoppingModeViewModel(@NonNull Application application) {
@@ -103,7 +101,7 @@ public class ShoppingModeViewModel extends BaseViewModel {
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, null);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new ShoppingListRepository(application);
 
@@ -149,7 +147,9 @@ public class ShoppingModeViewModel extends BaseViewModel {
       fillShoppingListItemAmountsHashMap();
       updateFilteredShoppingListItems();
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false, false);
+      } else {
+        syncShoppingListItems();
       }
     }, error -> onError(error, TAG));
   }
@@ -183,126 +183,64 @@ public class ShoppingModeViewModel extends BaseViewModel {
     return selectedShoppingListIdLive;
   }
 
-  public void downloadData(@Nullable String dbChangedTime, boolean skipOfflineCheck) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
-    if (!skipOfflineCheck && isOffline()) { // skip downloading and update recyclerview
-      isLoadingLive.setValue(false);
-      updateFilteredShoppingListItems();
-      return;
-    }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(
-          time -> downloadData(time, skipOfflineCheck),
-          error -> onError(error, TAG)
-      );
-      return;
-    }
-
-    NetworkQueue queue = dlHelper.newQueue(updated -> onQueueEmpty(), error -> onError(error, TAG));
-    queue.append(
-        ShoppingListItem.updateShoppingListItems(
-            dlHelper,
-            dbChangedTime,
-            (shoppingListItems, itemsToSync, serverItemsHashMap) -> {
-              this.shoppingListItems = shoppingListItems;
-              this.itemsToSyncTemp = itemsToSync;
-              this.serverItemHashMapTemp = serverItemsHashMap;
-            }
-        ), ShoppingList.updateShoppingLists(
-            dlHelper, dbChangedTime, false, shoppingLists -> this.shoppingLists = shoppingLists
-        ), ProductGroup.updateProductGroups(
-            dlHelper,
-            dbChangedTime, false,
-            productGroups -> productGroupHashMap = ArrayUtil.getProductGroupsHashMap(productGroups)
-        ), QuantityUnit.updateQuantityUnits(
-            dlHelper,
-            dbChangedTime, false,
-            quantityUnits -> quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits)
-        ), Product.updateProducts(dlHelper, dbChangedTime, products -> {
-          productHashMap = ArrayUtil.getProductsHashMap(products);
-          productNamesHashMap = ArrayUtil.getProductNamesHashMap(products);
-          queue.append(QuantityUnitConversionResolved.updateQuantityUnitConversions(
-              dlHelper,
-              dbChangedTime, false,
-              products,
-              unitConversions -> this.unitConversions = unitConversions
-          ));
-        }), Store.updateStores(
-            dlHelper,
-            dbChangedTime, false,
-            stores -> storeHashMap = ArrayUtil.getStoresHashMap(stores)
-        ), MissingItem.updateMissingItems(
-            dlHelper,
-            dbChangedTime, false,
-            missing -> missingProductIds = ArrayUtil.getMissingProductsIds(missing)
-        )
+  public void downloadData(boolean forceUpdate, boolean noSync) {
+    dlHelper.updateData(
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            syncShoppingListItems();
+          }
+        },
+        error -> onError(error, TAG),
+        forceUpdate,
+        true,
+        noSync ? ShoppingListItem.class : ShoppingListItemWithSync.class,
+        ShoppingList.class,
+        ProductGroup.class,
+        Product.class,
+        Store.class,
+        MissingItem.class,
+        QuantityUnit.class,
+        QuantityUnitConversionResolved.class
     );
+  }
 
-    if (queue.isEmpty()) {
-      onQueueEmpty();
-      return;
+  private void syncShoppingListItems() {
+    if (isOffline()) return;
+    ArrayList<ShoppingListItem> itemsToSync = new ArrayList<>();
+    for (ShoppingListItem item : shoppingListItems) {
+      if (item.getDoneSynced() != -1) {
+        itemsToSync.add(item);
+      }
     }
-
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null, false);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS_RESOLVED, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_VOLATILE_MISSING, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_STORES, null);
-    editPrefs.apply();
-    downloadData(null, true);
-  }
-
-  private void onQueueEmpty() {
-    if (isOffline()) setOfflineLive(false);
-
-    if (itemsToSyncTemp == null || itemsToSyncTemp.isEmpty() || serverItemHashMapTemp == null) {
-      fillShoppingListItemAmountsHashMap();
-      updateFilteredShoppingListItems();
-      return;
-    }
+    if (itemsToSync.isEmpty()) return;
     Runnable emptyListener = () -> {
       ArrayList<ShoppingListItem> itemsToUpdate = new ArrayList<>();
-      for (ShoppingListItem itemToSync : itemsToSyncTemp) {
-        int itemId = itemToSync.getId();
-        ShoppingListItem itemToUpdate = serverItemHashMapTemp.get(itemId);
-        if (itemToUpdate == null) {
-          continue;
-        }
-        itemToUpdate.setDone(itemToSync.getDoneInt());
-        itemsToUpdate.add(itemToUpdate);
+      for (ShoppingListItem itemToSync : itemsToSync) {
+        itemToSync.setDoneSynced(-1);
+        itemsToUpdate.add(itemToSync);
       }
       repository.insertShoppingListItems(
           () -> {
-            itemsToSyncTemp = null;
-            serverItemHashMapTemp = null;
             showMessage(getString(R.string.msg_synced));
-            loadFromDatabase(true);
+            loadFromDatabase(false);
           },
           itemsToUpdate.toArray(new ShoppingListItem[0])
       );
     };
     DownloadHelper.OnMultiTypeErrorListener errorListener = error -> {
+      SnackbarMessage snackbarMessage = new SnackbarMessage(getString(R.string.msg_failed_to_sync));
+      snackbarMessage.setAction(
+          getString(R.string.action_details),
+          v -> showSyncErrorDetailsAlertDialog()
+      );
+      snackbarMessage.setDurationSecs(5);
+      showSnackbar(snackbarMessage);
       showMessage(getString(R.string.msg_failed_to_sync));
-      downloadData();
     };
     NetworkQueue queue = dlHelper.newQueue(updated -> emptyListener.run(), errorListener);
-    for (ShoppingListItem itemToSync : itemsToSyncTemp) {
+    for (ShoppingListItem itemToSync : itemsToSync) {
       JSONObject body = new JSONObject();
       try {
         body.put("done", itemToSync.getDoneInt());
@@ -313,8 +251,18 @@ public class ShoppingModeViewModel extends BaseViewModel {
       }
       queue.append(ShoppingListItem.editShoppingListItem(dlHelper, itemToSync.getId(), body));
     }
-    currentQueueLoading = queue;
     queue.start();
+  }
+
+  private void showSyncErrorDetailsAlertDialog() {
+    new MaterialAlertDialogBuilder(
+        getApplication(), R.style.ThemeOverlay_Grocy_AlertDialog
+    ).setTitle(R.string.msg_failed_to_sync)
+        .setPositiveButton(R.string.action_try_again, (dialog, which) -> syncShoppingListItems())
+        .setNegativeButton(
+            R.string.action_reload,
+            (dialog, which) -> downloadData(true, true)
+        ).create().show();
   }
 
   public int getSelectedShoppingListId() {
@@ -341,16 +289,16 @@ public class ShoppingModeViewModel extends BaseViewModel {
     }
     ShoppingListItem shoppingListItem = listItem.getClone();
 
-    if (shoppingListItem.getDoneSynced() == -1) {
-      shoppingListItem.setDoneSynced(shoppingListItem.getDoneInt());
-    }
-
-    shoppingListItem.setDone(shoppingListItem.getDoneInt() == 0 ? 1 : 0);  // toggle state
-
     if (isOffline()) {
+      if (shoppingListItem.getDoneSynced() == -1) {
+        shoppingListItem.setDoneSynced(shoppingListItem.getDoneInt());
+      }
+      shoppingListItem.setDone(shoppingListItem.getDoneInt() == 0 ? 1 : 0);  // toggle state
       updateDoneStatus(shoppingListItem);
       return;
     }
+
+    shoppingListItem.setDone(shoppingListItem.getDoneInt() == 0 ? 1 : 0);  // toggle state
 
     JSONObject body = new JSONObject();
     try {
@@ -405,14 +353,14 @@ public class ShoppingModeViewModel extends BaseViewModel {
             return;
           }
           shoppingList.setNotes(notesHtml);
-          downloadData();
+          downloadData(false, false);
         },
         error -> {
           showMessage(getString(R.string.error_undefined));
           if (debug) {
             Log.e(TAG, "saveNotes: " + error);
           }
-          downloadData();
+          downloadData(false, false);
         }
     );
   }
@@ -513,10 +461,6 @@ public class ShoppingModeViewModel extends BaseViewModel {
 
   public List<String> getActiveFields() {
     return filterChipLiveDataFields.getActiveFields();
-  }
-
-  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
-    currentQueueLoading = queueLoading;
   }
 
   @Override

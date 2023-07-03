@@ -32,6 +32,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
+import xyz.zedler.patrick.grocy.model.RecipePositionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 
@@ -53,6 +54,7 @@ public class RecipesRepository {
     private final List<Recipe> recipes;
     private final List<RecipeFulfillment> recipeFulfillments;
     private final List<RecipePosition> recipePositions;
+    private final List<RecipePositionResolved> recipePositionsResolved;
     private final List<Product> products;
     private final List<QuantityUnit> quantityUnits;
     private final List<QuantityUnitConversionResolved> quantityUnitConversions;
@@ -63,6 +65,7 @@ public class RecipesRepository {
         List<Recipe> recipes,
         List<RecipeFulfillment> recipeFulfillments,
         List<RecipePosition> recipePositions,
+        List<RecipePositionResolved> recipePositionsResolved,
         List<Product> products,
         List<QuantityUnit> quantityUnits,
         List<QuantityUnitConversionResolved> quantityUnitConversions,
@@ -71,6 +74,7 @@ public class RecipesRepository {
       this.recipes = recipes;
       this.recipeFulfillments = recipeFulfillments;
       this.recipePositions = recipePositions;
+      this.recipePositionsResolved = recipePositionsResolved;
       this.products = products;
       this.quantityUnits = quantityUnits;
       this.quantityUnitConversions = quantityUnitConversions;
@@ -88,6 +92,10 @@ public class RecipesRepository {
 
     public List<RecipePosition> getRecipePositions() {
       return recipePositions;
+    }
+
+    public List<RecipePositionResolved> getRecipePositionsResolved() {
+      return recipePositionsResolved;
     }
 
     public List<Product> getProducts() {
@@ -117,6 +125,7 @@ public class RecipesRepository {
             appDatabase.recipeDao().getRecipes(),
             appDatabase.recipeFulfillmentDao().getRecipeFulfillments(),
             appDatabase.recipePositionDao().getRecipePositions(),
+            appDatabase.recipePositionResolvedDao().getRecipePositionsResolved(),
             appDatabase.productDao().getProducts(),
             appDatabase.quantityUnitDao().getQuantityUnits(),
             appDatabase.quantityUnitConversionResolvedDao().getConversionsResolved(),

@@ -45,12 +45,14 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
+import xyz.zedler.patrick.grocy.model.RecipePositionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.repository.RecipesRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class RecipeViewModel extends BaseViewModel {
 
@@ -67,9 +69,11 @@ public class RecipeViewModel extends BaseViewModel {
   private final MutableLiveData<Recipe> recipeLive;
   private final MutableLiveData<String> servingsDesiredLive;
   private final MutableLiveData<Boolean> servingsDesiredSaveEnabledLive;
+  private final MutableLiveData<Boolean> displayFulfillmentWrongInfo;
 
   private List<Recipe> recipes;
   private List<RecipePosition> recipePositions;
+  private List<RecipePositionResolved> recipePositionsResolved;
   private List<Product> products;
   private List<QuantityUnit> quantityUnits;
   private List<QuantityUnitConversionResolved> quantityUnitConversions;
@@ -97,6 +101,7 @@ public class RecipeViewModel extends BaseViewModel {
     recipeLive = new MutableLiveData<>();
     servingsDesiredLive = new MutableLiveData<>();
     servingsDesiredSaveEnabledLive = new MutableLiveData<>(false);
+    displayFulfillmentWrongInfo = new MutableLiveData<>(false);
 
     maxDecimalPlacesAmount = sharedPrefs.getInt(
         STOCK.DECIMAL_PLACES_AMOUNT,
@@ -118,6 +123,8 @@ public class RecipeViewModel extends BaseViewModel {
       products = data.getProducts();
       quantityUnits = data.getQuantityUnits();
       quantityUnitConversions = data.getQuantityUnitConversionsResolved();
+      recipePositions = data.getRecipePositions();
+      recipePositionsResolved = data.getRecipePositionsResolved();
       stockItemHashMap = ArrayUtil.getStockItemHashMap(data.getStockItems());
       shoppingListItems = data.getShoppingListItems();
 
@@ -145,7 +152,8 @@ public class RecipeViewModel extends BaseViewModel {
         true,
         Recipe.class,
         RecipeFulfillment.class,
-        RecipePosition.class,
+        VersionUtil.isGrocyServerMin400(sharedPrefs)
+            ? RecipePositionResolved.class : RecipePosition.class,
         Product.class,
         QuantityUnit.class,
         QuantityUnitConversionResolved.class,
@@ -302,6 +310,15 @@ public class RecipeViewModel extends BaseViewModel {
 
   public MutableLiveData<Boolean> getServingsDesiredSaveEnabledLive() {
     return servingsDesiredSaveEnabledLive;
+  }
+
+  public MutableLiveData<Boolean> getDisplayFulfillmentWrongInfo() {
+    return displayFulfillmentWrongInfo;
+  }
+
+  public void toggleDisplayFulfillmentWrongInfo() {
+    assert displayFulfillmentWrongInfo.getValue() != null;
+    displayFulfillmentWrongInfo.setValue(!displayFulfillmentWrongInfo.getValue());
   }
 
   public int getMaxDecimalPlacesAmount() {

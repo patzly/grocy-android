@@ -98,6 +98,9 @@
   <string name="action_open_scanner">スキャナを開く</string>
   <string name="action_discard">取消</string>
   <string name="action_clear_form">フォームをクリアする</string>
+  <string name="action_take_photo">写真を撮影</string>
+  <!-- "Paste" like in "Paste from clipboard" -->
+  <string name="action_paste">ペースト</string>
   <!-- Short form for "Only link barcode to existing product", this should fit into a
   button so keep it short. -->
   <string name="action_link_and_clear">リンクのみ</string>
@@ -299,30 +302,34 @@
   <string name="msg_quick_mode_confirm_transfer">以下のトランザクションを実行します：%3$sを%1$s%2$s移動\n移動元：%4$s\n移動先：%5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">以下のトランザクションを実行します：\n\n在庫を%1$sから%2$s%3$sへ変更\n追加された製品：\n期限：%4$s\n価格：\n購入店：%5$s\n場所：%7$s</string>
-  <string name="msg_compatibility">このアプリのバージョンは、サーバー上の grocy バージョンと互換性がありません。\n\n現在のサーバー バージョン: %1$s\n\nサポートされているサーバー バージョン:\n\n現在のサーバー バージョンのメジャー バージョン番号 (最初の桁) がサポートされているバージョンよりも新しい場合、この警告を無視すると、(可能性は低いですが) データ損失またはクラッシュが発生する可能性があります。\nわずかな違いしかない場合 (たとえば、3 桁目が新しいなど) はこの警告を無視してもおそらく問題ありません。</string>
+  <string name="msg_compatibility">このアプリのバージョンは、サーバー上の Grocy バージョンと互換性がありません。\n\n現在のサーバー バージョン: %1$s \n\nサポートされているサーバー バージョン:%2$s\n\n現在のサーバー バージョンのメジャー バージョン番号(最初の桁)がサポートされているバージョンよりも大きい場合、この警告を無視すると、(低い確率で)データ損失または(高い確率で)クラッシュが発生する可能性があります。\nわずかな違いしかない場合(たとえば3 桁目が大きいなど)、この警告はおそらく無視しても問題ありません。</string>
   <string name="msg_logout">サーバー上のデータは何も変更されません。 ログインページにリダイレクトされます。</string>
   <string name="msg_logout_demo">パブリック デモ サーバー <u>https://grocy.info</u> を使用しています。\n\n<b>ここでの変更は永久に保存されません!\nサーバーが 1 日に 1 回自動的に上書きするまで、変更は公開されたままになります。</b>\n\nログイン画面で、自前サーバーのアドレスを入力できます。</string>
   <string name="msg_logout_demo_short">パブリックデモサーバーです。 タップで詳細表示</string>
   <string name="msg_restart">現在の構成を適用するには、アプリを再起動する必要があります。 今すぐ再起動しますか?</string>
   <string name="msg_full_description">ここをタップすると完全な説明が表示されます</string>
+  <string name="msg_copied_clipboard">クリップボードにコピーしました</string>
   <string name="msg_shortcuts">最大 4 つのショートカットを有効にできます</string>
   <string name="msg_shortcuts_not_supported">この Android バージョンではショートカットはサポートされていません</string>
   <string name="msg_barcode_formats">予想される形式のみを検出するようバーコード検出器を構成することで、バーコードの検出速度を向上させることができます</string>
   <string name="msg_features">「概要」からイントロをもう一度開始</string>
   <string name="msg_feedback">ご要望、ご質問、間違いなどございましたら私たちにご連絡ください。お手伝いいたします!\nまたはPlay ストアで素敵なレビューをいただければ幸いです。</string>
   <string name="msg_point_at_barcode">カメラをバーコードに向けます</string>
+  <string name="msg_save_product_first">製品を保存してください</string>
+  <string name="msg_save_recipe_first">レシピを保存してください</string>
   <string name="msg_press_hold_confirm">長押しして削除</string>
   <string name="msg_recipe_consume_ask">レシピ「%1$s」に必要な材料をすべて消費しますか？ （「在庫が存在する場合のみチェック」がチェックされている食材は無視されます）</string>
   <string name="msg_recipe_shopping_list_ask">レシピ「%1$s」に必要な不足材料をすべて買い物リストに追加してもよろしいですか?\n\n材料を買い物リストに追加しない場合は、材料のチェックを外してください:</string>
   <string name="msg_welcome">Grocy Android へようこそ!</string>
-  <string name="msg_welcome_introduce">grocy を生産的に使用するには、独自のサーバーまたは Home Assistant 用の grocy アドオンが必要です。\nこのアプリを試してみたいだけの場合は、grocy の作成者 Bernd Bestel のデモ サーバーを使用できます。</string>
+  <string name="msg_welcome_introduce">Grocy を生産的に使用するには、独自のサーバーまたは Home Assistant 用の Grocy アドオンが必要です。\nこのアプリを試してみたいだけの場合は、grocy の作成者である Bernd Bestel のデモ サーバーを使用できます。</string>
   <string name="msg_choose_option_below">以下のオプションを選択してください</string>
-  <string name="msg_qr_code_scan">別のデバイスで、grocy webサイトにアクセスし、「API キー」ページに移動します。 [追加] をクリックし、小さく表示されている QR コード シンボルをクリックしてQR コードをスキャンします。</string>
-  <string name="msg_qr_code_scan_token">grocy Home Assistant アドオンを使用しています。 ホーム アシスタントのプロファイル設定で、長有効期間のアクセス トークンを作成します (最後のセクション)。 トークンフィールドの下にある「QRコードを生成」をクリックし、ここでスキャンします。</string>
+  <string name="msg_qr_code_scan">別のデバイスで、Grocy Web サイトにアクセスし、「API キー」ページに移動します。 「追加」をクリックし、小さな QR コード シンボルをクリックして QR コードをスキャンします。</string>
+  <string name="msg_qr_code_scan_token">Grocy Home Assistant アドオンを使用しています。 ホーム アシスタントのプロファイル設定で、有効期間の長いアクセス トークンを作成します (最後のセクション)。 トークンフィールドの下にある「QRコードを生成」をクリックし、ここでスキャンします。</string>
   <string name="msg_port_connection_info_without_port">このアプリはポート%1$sに接続します。\n別のポートに接続する場合は、URL にポートを追加できます。\n例: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">このアプリはポート%1$sに接続します</string>
   <string name="msg_clear_form_first">別の既知のバーコードをスキャンする前に、まずフォームをクリアしてください。</string>
   <string name="msg_not_implemented_yet">近日実装予定です。 サーバー インターフェイスをご利用ください。</string>
+  <string name="msg_help_picture_changes">画像の変更は、保存時だけでなく、すぐにサーバーと同期されます。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_stock_label_type">これは、購入時に事前入力されるデフォルトの在庫項目ラベル タイプです。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -380,24 +387,33 @@
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_not_check_shopping_list">デフォルトでは、買い物リストに追加される数量は「必要量 - 在庫量 - 買い物リストの金額」となります。 これを有効にすると、既に買い物リストにあるものではなく、在庫量に対してのみチェックされます。</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_servings">このレシピの材料を使用した際に生産される量</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_produces_product">製品が選択されると、このレシピを消費した際に1 単位 (在庫数量単位で 1 食分あたり) が在庫に追加されます。</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_only_check_any_amount">在庫確認の際、以下の数量/単位を使用します。その製品の数量が十分であれば在庫確認しますが、不足している場合は確認しません。</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_variable_amount">値を設定すると、上で設定した量の代わりにレシピに表示されますが、在庫量を確認するときの値は変更されません</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_group">材料をグループ化するための見出しとして使用されます。</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_price_factor">価格計算時に、この材料の価格に乗算する係数</string>
+  <string name="msg_help_recipe_ingredients_wrong">Grocy サーバーのバージョンが 4.0.0 未満の場合、このリストには間違ったフルフィルメント情報が含まれる可能性があります。 正しい値を確認するには、サーバーをバージョン 4.0.0 以降に更新してください。</string>
   <string name="msg_help_date_chooser">設定からキーボードによる入力を選択できます。入力スピードを向上できます。</string>
   <string name="msg_help_date_chooser_keyboard">お住まいの国で DDMMYY が使用されている場合は、設定で逆順日付形式を有効化できます。\n入力を適用してこのページを閉じるには、キーボードの「完了」キーを使用できます。</string>
   <string name="msg_help_quick_mode">上のタイトル バーを長押しすると、クイック モードが起動します。 このモードでは、製品が入力またはスキャンされ、すべてのフィールド (製品および/またはバーコードのデフォルト値) が自動的に入力され、トランザクションがすぐに実行されます。</string>
   <string name="msg_help_loading_circle_settings">各ページでサーバーから何かを読み込む際、アプリは最初にサーバー データベースの変更があるかどうかを確認し、古いデータのみを更新します。 こうした小さいリクエストでもローディング サークルを表示するには、以下のオプションを有効にします。</string>
   <string name="msg_help_start">初心者モードがアクティブです。ヘルプ テキストが利用可能な場合、デフォルトですべてのページに表示されます。 タップで変更できます。</string>
   <string name="msg_help_purchased_date_settings">以下のオプションを有効にすると、購入日のフィールドが購入・在庫目録ページに表示されます。 それ以外の場合、購入日はデフォルトで今日になります。</string>
-  <string name="msg_help_normal_login">grocy アドオンで Home Assistant を使用している場合は、このカードをタップします。</string>
-  <string name="msg_help_home_assistant_login">grocy Home Assistant アドオンを使用しています。 追加の詳細が必要です。 このカードをタップすると、通常のログインに切り替わります。</string>
+  <string name="msg_help_normal_login">Grocy アドオンで Home Assistant を使用している場合は、このカードをタップします。</string>
+  <string name="msg_help_home_assistant_login">Grocy Home Assistant アドオンを使用しているため、追加でいくつかの詳細が必要になります。 このカードをタップすると、通常のログインに切り替わります。</string>
   <string name="msg_help_home_assistant_login_help_show">タップしてヘルプを表示</string>
   <string name="msg_help_home_assistant_login_help_hide">タップしてヘルプを非表示</string>
   <string name="msg_help_home_assistant_login_server">Nabu Casa クラウドのサービスを使用している場合は、下のフィールドにその URL を入力できます。 このカードをタップすると、Nabu Casa の Web サイトにアクセスします。</string>
   <string name="msg_help_home_assistant_login_token">ホーム アシスタントのプロファイル設定 (最後のセクション) から長有効期間アクセス トークンを作成できます。 ここをタップすると上記URLを開きます。</string>
   <string name="msg_help_home_assistant_login_proxy_id">戻るか、このカードをタップして、下のフィールドに入力する QR コードをスキャンします。</string>
   <string name="msg_help_fab_overview_start">この概要ページのアクション ボタンには 2 つのアクションがあります:\n\n- 短くタップ: バーコード スキャナで消費\n- 長タップ: バーコード スキャナで購入\n\nこのボタンを使用すると、各ページのクイック モードがデフォルトでオンになります。 これは動作設定で変更できます。</string>
-  <string name="msg_share">素晴らしい grocy プロジェクトについては、この Android クライアントをチェックしてください: \nhttps://github.com/patzly/grocy-android</string>
+  <string name="msg_share">素晴らしい Grocy プロジェクトについては、この Android クライアントをチェックしてください: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">APIキーが無効です</string>
   <string name="error_orbot_not_installed">Orbotがインストールされていません</string>
@@ -434,9 +450,10 @@
   <string name="error_invalid_price">無効な価格</string>
   <string name="error_invalid_factor">無効な係数</string>
   <string name="error_invalid_date_format">無効な日付フォーマット</string>
-  <string name="error_api_qr_code">grocy API認証のQRコードではありません</string>
+  <string name="error_api_qr_code">Grocy API 認証情報を含む QR コードではありません</string>
   <string name="error_token_qr_code">Home Assistantの長有効期間アクセストークンによるQRコードではありません</string>
   <string name="error_loading_qus">製品から数量単位をロードできません</string>
+  <string name="error_clipboard_no_image">クリップボードに画像が含まれていないか、読み取ることができませんでした</string>
   <string name="error_no_children">選択した製品には子製品がありません</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">%1$sと等しくできません</string>
@@ -451,6 +468,7 @@
   <string name="error_offline">オフライン</string>
   <string name="error_offline_subtitle">ネット接続が必要です。接続されていますか？</string>
   <string name="error_no_done_items">実行済のアイテムがありません</string>
+  <string name="error_already_exists">すでに存在します</string>
   <string name="error_network">ネットワークエラー</string>
   <string name="error_network_subtitle">必要なデータを完全にはロードできませんでした</string>
   <string name="error_network_exact">ネットワークエラー：%1$s</string>
@@ -458,7 +476,7 @@
   <string name="error_insert">エラー：%1$s</string>
   <string name="error_details">エラーの詳細</string>
   <string name="error_unknown">おっと！</string>
-  <string name="error_not_grocy_instance">無効なgrocyインスタンスです</string>
+  <string name="error_not_grocy_instance">有効な Grocy インスタンスではありません</string>
   <string name="error_timeout">タイムアウトエラー</string>
   <string name="error_no_product_selected">製品が未選択</string>
   <string name="error_failed_to_connect_to">サーバーに接続できません</string>
@@ -476,6 +494,7 @@
   <string name="error_permission">実行権限がありません</string>
   <string name="error_undefined">エラーが発生しました</string>
   <string name="error_invalid_base_servings">無効な提供数</string>
+  <string name="error_pictures_size_exceeds_limit">サーバー上の製品またはレシピの説明に埋め込まれた画像があり、このアプリで処理できる限界を超えています。 説明から高品質で大きなサイズの写真を削除してください。これにより、データの読み込みも高速化されます。</string>
 
   <string name="title_overview">概要</string>
   <string name="title_stock_overview">在庫の概要</string>
@@ -609,6 +628,7 @@
   <string name="subtitle_product_hidden">製品が非表示です</string>
   <string name="subtitle_product_not_hidden">製品が表示されています</string>
   <string name="subtitle_product_not_on_server">サーバーに製品がありません</string>
+
   <string name="subtitle_barcodes_will_be_added">バーコードが保存されており、保存の操作によって製品に追加されます。</string>
   <string name="subtitle_unknown">不明</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
@@ -932,6 +952,7 @@
   <string name="property_variable_amount">変動可能な数量</string>
   <string name="property_requirements_fulfilled">必要条件が満たされました</string>
   <string name="property_produces_product">製品を製造</string>
+  <string name="property_price_factor">価格の係数</string>
 
   <string name="date_today">今日</string>
   <string name="date_unknown">不明</string>
@@ -974,7 +995,7 @@
     <item quantity="other">%d年後</item>
   </plurals>
 
-  <string name="info_acknowledgement">grocy の開発者である Bernd Bestel に感謝します。彼の素晴らしい仕事がなければ、このアプリは決して実現できなかったでしょう。</string>
+  <string name="info_acknowledgement">Grocy の開発者である Bernd Bestel に感謝します。彼の素晴らしい仕事がなければ、このアプリは決して実現できなかったでしょう。</string>
   <string name="info_intro">イントロを再表示</string>
   <string name="info_intro_description">ショーケース機能</string>
   <string name="info_dev_beginning">開発の開始</string>
