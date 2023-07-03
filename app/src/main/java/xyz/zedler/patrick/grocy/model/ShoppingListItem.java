@@ -422,14 +422,15 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     }
   }
 
-  public static QueueItem updateShoppingListItems(
+  public static QueueItem updateShoppingListItemsWithoutNotSyncedItems(
       DownloadHelper dlHelper,
       String dbChangedTime,
-      OnShoppingListItemsWithSyncResponseListener onResponseListener
+      boolean forceUpdate,
+      OnObjectsResponseListener<ShoppingListItem> onResponseListener
   ) {
-    String lastTime = dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
+    String lastTime = !forceUpdate ? dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null
-    );
+    ) : null;
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
       return new QueueItem() {
         @Override
@@ -448,35 +449,30 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
                 if (dlHelper.debug) {
                   Log.i(dlHelper.tag, "download ShoppingListItems: " + shoppingListItems);
                 }
-                ArrayList<ShoppingListItem> itemsToSync = new ArrayList<>();
-                HashMap<Integer, ShoppingListItem> serverItemsHashMap = new HashMap<>();
-                for (ShoppingListItem s : shoppingListItems) {
-                  serverItemsHashMap.put(s.getId(), s);
-                }
 
                 dlHelper.appDatabase.shoppingListItemDao().getShoppingListItems()
                     .doOnSuccess(offlineItems -> {
-                      // compare server items with offline items and add modified to separate list
-                      for (ShoppingListItem offlineItem : offlineItems) {
-                        ShoppingListItem serverItem = serverItemsHashMap.get(offlineItem.getId());
-                        if (serverItem != null  // sync only items which are still on server
-                            && offlineItem.getDoneSynced() != -1
-                            && offlineItem.getDoneInt() != offlineItem.getDoneSynced()
+                      HashMap<Integer, ShoppingListItem> offlineItemsHashMap = new HashMap<>();
+                      for (ShoppingListItem s : offlineItems) {
+                        offlineItemsHashMap.put(s.getId(), s);
+                      }
+                      for (ShoppingListItem serverItem : shoppingListItems) {
+                        ShoppingListItem offlineItem = offlineItemsHashMap.get(serverItem.getId());
+                        if (offlineItem == null) continue;
+                        if (offlineItem.getDoneSynced() != -1
                             && offlineItem.getDoneInt() != serverItem.getDoneInt()
-                            || serverItem != null
-                            && serverItem.getDoneSynced() != -1  // server database hasn't changed
-                            && offlineItem.getDoneSynced() != -1
-                            && offlineItem.getDoneInt() != offlineItem.getDoneSynced()
                         ) {
-                          itemsToSync.add(offlineItem);
+                          serverItem.setDone(offlineItem.getDone());
+                          serverItem.setDoneSynced(offlineItem.getDoneSynced());
                         }
                       }
-                      dlHelper.sharedPrefs.edit()
-                          .putString(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime).apply();
                     })
-                    .doFinally(() -> {
+                    .flatMap(completeItems -> {
                       dlHelper.appDatabase.shoppingListItemDao().deleteAll();
                       dlHelper.appDatabase.shoppingListItemDao().insertAll(shoppingListItems);
+                      dlHelper.sharedPrefs.edit()
+                          .putString(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime).apply();
+                      return Single.just(shoppingListItems);
                     })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -487,14 +483,15 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
                     })
                     .doFinally(() -> {
                       if (onResponseListener != null) {
-                        onResponseListener.onResponse(shoppingListItems, itemsToSync,
-                            serverItemsHashMap);
+                        onResponseListener.onResponse(shoppingListItems);
                       }
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
                     })
                     .subscribe();
+
+
               },
               error -> {
                 if (errorListener != null) {
@@ -612,5 +609,9 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         ArrayList<ShoppingListItem> itemsToSync,
         HashMap<Integer, ShoppingListItem> serverItemHashMap
     );
+  }
+
+  public static class ShoppingListItemWithSync extends ShoppingListItem {
+
   }
 }

@@ -53,6 +53,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue.QueueItem;
+import xyz.zedler.patrick.grocy.web.NetworkQueue.QueueItemWithoutLoading;
 
 @Entity(tableName = "product_table")
 public class Product extends GroupedListItem implements Parcelable {
@@ -1030,7 +1031,7 @@ public class Product extends GroupedListItem implements Parcelable {
         Log.i(dlHelper.tag, "downloadData: skipped Products download");
       }
       if (alsoRespondIfNotUpdated) {
-        return new QueueItem() {
+        return new QueueItemWithoutLoading() {
           @Override
           public void perform(
               @Nullable OnStringResponseListener responseListener,

@@ -65,6 +65,7 @@ import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.ShoppingListItem.ShoppingListItemWithSync;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
@@ -535,6 +536,9 @@ public class DownloadHelper {
         queue.append(MissingItem.updateMissingItems(this, dbChangedTime, forceUpdate, null));
       } else if (type == ShoppingListItem.class) {
         queue.append(ShoppingListItem.updateShoppingListItems(this, dbChangedTime, forceUpdate,
+            null));
+      } else if (type == ShoppingListItemWithSync.class) {
+        queue.append(ShoppingListItem.updateShoppingListItemsWithoutNotSyncedItems(this, dbChangedTime, forceUpdate,
             null));
       } else if (type == ShoppingList.class) {
         queue.append(ShoppingList.updateShoppingLists(this, dbChangedTime, forceUpdate, null));

@@ -157,12 +157,6 @@ public class ShoppingListFragment extends BaseFragment implements
       removeForThisDestination(Constants.ARGUMENT.SELECTED_ID);
     }
 
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
-      if (!state) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
-
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
@@ -547,7 +541,7 @@ public class ShoppingListFragment extends BaseFragment implements
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.downloadData();
+    viewModel.downloadData(false, false);
   }
 
   private void hideDisabledFeatures() {
