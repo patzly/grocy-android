@@ -208,6 +208,8 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
 
   private void updateHasProductAlreadyStockTransactions() {
     if (!isActionEdit) {
+      hasProductAlreadyStockTransactionsLive.setValue(false);
+      isQuantityUnitStockChangeableLive.setValue(true);
       return;
     }
     StockLogEntry.getStockLogEntries(dlHelper, 10, 0, getFilledProduct().getId(),

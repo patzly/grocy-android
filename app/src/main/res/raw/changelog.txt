@@ -41,6 +41,7 @@
 - Fixed: Recipe ingredient price factor is not saved wrong anymore when creating ingredient (#615)
 - Fixed: Product description popup animation doesn't have glitches anymore
 - Fixed: App was sometimes offline when opened from background (#722)
+- Fixed: With server version below 3.3.0, stock quantity unit could not be set in new product (#678)
 
 ## 3.2.1
 
