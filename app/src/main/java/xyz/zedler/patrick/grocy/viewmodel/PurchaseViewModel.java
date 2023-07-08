@@ -79,6 +79,7 @@ import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class PurchaseViewModel extends BaseViewModel {
 
@@ -272,7 +273,8 @@ public class PurchaseViewModel extends BaseViewModel {
       HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
           quantityUnitHashMap,
           unitConversions,
-          updatedProduct
+          updatedProduct,
+          VersionUtil.isGrocyServerMin400(sharedPrefs)
       );
       formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
       formData.getQuantityUnitStockLive().setValue(
@@ -301,7 +303,8 @@ public class PurchaseViewModel extends BaseViewModel {
         formData.getAmountLive().setValue(NumUtil.trimAmount(barcode.getAmountDouble(), maxDecimalPlacesAmount));
       } else if (!isTareWeightEnabled && shoppingListItem != null) {
         Double amountInUnit = AmountUtil.getShoppingListItemAmount(
-            shoppingListItem, productHashMap, quantityUnitHashMap, unitConversions
+            shoppingListItem, productHashMap, quantityUnitHashMap, unitConversions,
+            VersionUtil.isGrocyServerMin400(sharedPrefs)
         );
         formData.getAmountLive().setValue(
             NumUtil.trimAmount(
@@ -389,11 +392,7 @@ public class PurchaseViewModel extends BaseViewModel {
       }
 
       // note
-      if (barcode != null
-          && barcode.getNote() != null
-          && sharedPrefs.getBoolean(BEHAVIOR.COPY_BARCODE_NOTE,
-          SETTINGS_DEFAULT.BEHAVIOR.COPY_BARCODE_NOTE)
-      ) {
+      if (barcode != null && barcode.getNote() != null) {
         formData.getNoteLive().setValue(barcode.getNote());
       }
 
@@ -842,9 +841,10 @@ public class PurchaseViewModel extends BaseViewModel {
     if (shoppingListItems == null) {
       return;
     }
+    boolean isGrocyServerMin400 = VersionUtil.isGrocyServerMin400(sharedPrefs);
     for (ShoppingListItem item : shoppingListItems) {
       Double amount = AmountUtil.getShoppingListItemAmount(
-          item, productHashMap, quantityUnitHashMap, unitConversions
+          item, productHashMap, quantityUnitHashMap, unitConversions, isGrocyServerMin400
       );
       if (amount != null) {
         shoppingListItemAmountsHashMap.put(item.getId(), amount);

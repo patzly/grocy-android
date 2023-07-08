@@ -1,6 +1,24 @@
 ## 3.3.0
 
-- New: Quantity unit conversions can be transitive now (unlimited QU levels) (with work of @esclear)
+Grocy server version 4.0.0 has some bigger changes with quantity units and unit conversions. So
+please read the server changelog carefully for longer explanations of the changes before or after
+your server update. We recommend installing the update as our app was mainly tested with it and
+recipe fulfillment information in our app are finally all correct with it, but older supported
+versions still work.
+
+Specific changes for Grocy server 4.0.0 (other versions behave the same way as before):
+
+- New: Full compatibility for server version 4.0.0 (#644)
+- New: Quantity unit conversions can be transitive now (unlimited QU levels)
+- New: Product option "Factor purchase to stock unit" is disabled - Use normal product specific
+  QU conversions instead, if needed
+- New: Product option "Default quantity unit consume"
+- New: Product option "Quantity unit for prices"
+- Improved: Load label for energy values from server (was fixed kcal before)
+- Fixed: Network error when saving a new product (#642)
+
+All other changes:
+
 - New: Product choose page after barcode scan now has really useful copy option for products (#636)
 - New: Product pictures now can be removed and added with camera and clipboard (#536)
 - New: On purchase page, store now can be pinned (always initially selected in session) (#525)
@@ -28,6 +46,9 @@
 - Improved: Horizontal actions layout on overview page for smaller screens
 - Improved: Clear caching related info after app update or database update for data refresh (#726)
 - Improved: Recipe ingredient price factor now can be set (#615)
+- Improved: "Factor purchase to stock unit" was moved to quantity units category in master product
+- Improved: When scanning a product barcode and the purchase or inventory page, the note will now
+  also be prefilled from the barcode (was option before, but server v4 has that behavior now) (#644)
 - Fixed: Amounts with conversions are consistent over all pages now (#612, #626)
 - Fixed: Long click on barcode button on overview page was broken on Android Nougat and lower
 - Fixed: Crash on startup with Android Lollipop (and maybe higher)
@@ -42,6 +63,8 @@
 - Fixed: Product description popup animation doesn't have glitches anymore
 - Fixed: App was sometimes offline when opened from background (#722)
 - Fixed: With server version below 3.3.0, stock quantity unit could not be set in new product (#678)
+- Fixed: Total product count on overview page in stock section also included products with
+  option "Never show on stock overview" enabled (#644)
 
 ## 3.2.1
 

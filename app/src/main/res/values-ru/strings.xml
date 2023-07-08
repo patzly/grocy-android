@@ -1229,8 +1229,6 @@
   <string name="setting_date_keyboard_input_description">Вместо колес для выбора даты</string>
   <string name="setting_date_keyboard_reverse">Использовать обратный формат даты для ввода</string>
   <string name="setting_date_keyboard_reverse_description">ДДММГГ вместо ГГММВВ</string>
-  <string name="setting_copy_barcode_note">Скопировать примечания штрихкода в примечания запаса</string>
-  <string name="setting_copy_barcode_note_description">При покупке продукта</string>
   <string name="setting_loading_circle">Показывать анимацию загрузки для всех запросов</string>
   <string name="setting_loading_circle_description">Полезно для медленных соединений</string>
   <string name="setting_tor">Использовать Tor</string>

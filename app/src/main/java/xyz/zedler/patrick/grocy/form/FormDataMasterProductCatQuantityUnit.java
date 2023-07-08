@@ -20,38 +20,63 @@
 package xyz.zedler.patrick.grocy.form;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
-import java.util.List;
+import java.util.HashMap;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class FormDataMasterProductCatQuantityUnit {
 
   public final static String QUANTITY_UNIT_TYPE = "qu_type";
   public final static String STOCK = "stock";
   public final static String PURCHASE = "purchase";
+  public final static String CONSUME = "consume";
+  public final static String PRICE = "price";
 
   private final Application application;
   private final MutableLiveData<Boolean> displayHelpLive;
-  private final MutableLiveData<List<QuantityUnit>> quantityUnitsLive;
+  private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
   private final MutableLiveData<QuantityUnit> quStockLive;
   private final LiveData<String> quStockNameLive;
   private final LiveData<Boolean> quStockErrorLive;
   private final MutableLiveData<QuantityUnit> quPurchaseLive;
   private final LiveData<String> quPurchaseNameLive;
   private final LiveData<Boolean> quPurchaseErrorLive;
+  private final boolean factorPurchaseToStockEnabled;
+  private final MutableLiveData<String> factorPurchaseToStockLive;
+  private final MutableLiveData<QuantityUnit> quConsumeLive;
+  private final LiveData<String> quConsumeNameLive;
+  private final LiveData<Boolean> quConsumeErrorLive;
+  private final MutableLiveData<QuantityUnit> quPriceLive;
+  private final LiveData<String> quPriceNameLive;
+  private final LiveData<Boolean> quPriceErrorLive;
+  private final int maxDecimalPlacesAmount;
+  private final boolean isGrocyVersionMin400;
 
   private boolean filledWithProduct;
 
-  public FormDataMasterProductCatQuantityUnit(Application application, boolean beginnerMode) {
+  public FormDataMasterProductCatQuantityUnit(
+      Application application,
+      SharedPreferences sharedPrefs,
+      boolean beginnerMode
+  ) {
     this.application = application;
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        SETTINGS.STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
+    isGrocyVersionMin400 = VersionUtil.isGrocyServerMin400(sharedPrefs);
     displayHelpLive = new MutableLiveData<>(beginnerMode);
-    quantityUnitsLive = new MutableLiveData<>();
     quStockLive = new MutableLiveData<>();
     quStockNameLive = Transformations.map(
         quStockLive,
@@ -66,6 +91,22 @@ public class FormDataMasterProductCatQuantityUnit {
     );
     //noinspection Convert2MethodRef
     quPurchaseErrorLive = Transformations.map(quPurchaseLive, qu -> qu == null);
+    factorPurchaseToStockEnabled = !VersionUtil.isGrocyServerMin400(sharedPrefs);
+    factorPurchaseToStockLive = new MutableLiveData<>();
+    quConsumeLive = new MutableLiveData<>();
+    quConsumeNameLive = Transformations.map(
+        quConsumeLive,
+        qu -> qu != null ? qu.getName() : null
+    );
+    //noinspection Convert2MethodRef
+    quConsumeErrorLive = Transformations.map(quConsumeLive, qu -> qu == null);
+    quPriceLive = new MutableLiveData<>();
+    quPriceNameLive = Transformations.map(
+        quPriceLive,
+        qu -> qu != null ? qu.getName() : null
+    );
+    //noinspection Convert2MethodRef
+    quPriceErrorLive = Transformations.map(quPriceLive, qu -> qu == null);
 
     filledWithProduct = false;
   }
@@ -79,8 +120,17 @@ public class FormDataMasterProductCatQuantityUnit {
     displayHelpLive.setValue(!displayHelpLive.getValue());
   }
 
-  public MutableLiveData<List<QuantityUnit>> getQuantityUnitsLive() {
-    return quantityUnitsLive;
+  public boolean isGrocyVersionMin400() {
+    return isGrocyVersionMin400;
+  }
+
+  public QuantityUnit getQuantityUnitFromId(int id) {
+    return quantityUnitHashMap.get(id);
+  }
+
+  public void setQuantityUnitHashMap(
+      HashMap<Integer, QuantityUnit> quantityUnitHashMap) {
+    this.quantityUnitHashMap = quantityUnitHashMap;
   }
 
   public MutableLiveData<QuantityUnit> getQuStockLive() {
@@ -107,34 +157,106 @@ public class FormDataMasterProductCatQuantityUnit {
     return quPurchaseErrorLive;
   }
 
+  public boolean isFactorPurchaseToStockEnabled() {
+    return factorPurchaseToStockEnabled;
+  }
+
+  public MutableLiveData<String> getFactorPurchaseToStockLive() {
+    return factorPurchaseToStockLive;
+  }
+
+  public double getFactorPurchaseToStock() {
+    String numberString = factorPurchaseToStockLive.getValue();
+    double number = 1;
+    if (NumUtil.isStringDouble(numberString)) {
+      number = NumUtil.toDouble(numberString);
+    }
+    return number;
+  }
+
+  public void setFactorPurchaseToStock(String number) {
+    if (NumUtil.toDouble(number) <= 0) {
+      factorPurchaseToStockLive.setValue(String.valueOf(1));
+    } else {
+      factorPurchaseToStockLive.setValue(number);
+    }
+  }
+
+  public MutableLiveData<QuantityUnit> getQuConsumeLive() {
+    return quConsumeLive;
+  }
+
+  public LiveData<String> getQuConsumeNameLive() {
+    return quConsumeNameLive;
+  }
+
+  public LiveData<Boolean> getQuConsumeErrorLive() {
+    return quConsumeErrorLive;
+  }
+
+  public MutableLiveData<QuantityUnit> getQuPriceLive() {
+    return quPriceLive;
+  }
+
+  public LiveData<String> getQuPriceNameLive() {
+    return quPriceNameLive;
+  }
+
+  public LiveData<Boolean> getQuPriceErrorLive() {
+    return quPriceErrorLive;
+  }
+
   public void selectQuantityUnit(QuantityUnit quantityUnit, Bundle argsBundle) {
     if (quantityUnit != null && quantityUnit.getId() == -1) {
       quantityUnit = null;
     }
     String type = argsBundle.getString(QUANTITY_UNIT_TYPE);
-    if (type.equals(STOCK)) {
-      quStockLive.setValue(quantityUnit);
-      if (quPurchaseLive.getValue() == null) {
+    switch (type) {
+      case STOCK:
+        quStockLive.setValue(quantityUnit);
+        if (quPurchaseLive.getValue() == null) {
+          quPurchaseLive.setValue(quantityUnit);
+        }
+        if (quConsumeLive.getValue() == null) {
+          quConsumeLive.setValue(quantityUnit);
+        }
+        if (quPriceLive.getValue() == null) {
+          quPriceLive.setValue(quantityUnit);
+        }
+        break;
+      case PURCHASE:
         quPurchaseLive.setValue(quantityUnit);
-      }
-    } else {
-      quPurchaseLive.setValue(quantityUnit);
+        break;
+      case CONSUME:
+        quConsumeLive.setValue(quantityUnit);
+        break;
+      default:
+        quPriceLive.setValue(quantityUnit);
+        break;
     }
   }
 
-  public static boolean isFormInvalid(@Nullable Product product) {
+  public static boolean isFormInvalid(@Nullable Product product, boolean isGrocyVersionMin400) {
     if (product == null) {
       return true;
     }
     boolean valid = product.getQuIdStockInt() != -1 && product.getQuIdPurchaseInt() != -1;
+    if (isGrocyVersionMin400) {
+      valid = product.getQuIdStockInt() != -1 && product.getQuIdPurchaseInt() != -1 && valid;
+    }
     return !valid;
   }
 
   public Product fillProduct(@NonNull Product product) {
     QuantityUnit quStock = quStockLive.getValue();
     QuantityUnit quPurchase = quPurchaseLive.getValue();
+    QuantityUnit quConsume = quConsumeLive.getValue();
+    QuantityUnit quPrice = quPriceLive.getValue();
     product.setQuIdStock(quStock != null ? quStock.getId() : -1);
     product.setQuIdPurchase(quPurchase != null ? quPurchase.getId() : -1);
+    product.setQuFactorPurchaseToStock(factorPurchaseToStockLive.getValue());
+    product.setQuIdConsume(quConsume != null ? quConsume.getId() : -1);
+    product.setQuIdPrice(quPrice != null ? quPrice.getId() : -1);
     return product;
   }
 
@@ -143,8 +265,12 @@ public class FormDataMasterProductCatQuantityUnit {
       return;
     }
 
-    quStockLive.setValue(QuantityUnit.getFromId(quantityUnitsLive.getValue(), product.getQuIdStockInt()));
-    quPurchaseLive.setValue(QuantityUnit.getFromId(quantityUnitsLive.getValue(), product.getQuIdPurchaseInt()));
+    quStockLive.setValue(getQuantityUnitFromId(product.getQuIdStockInt()));
+    quPurchaseLive.setValue(getQuantityUnitFromId(product.getQuIdPurchaseInt()));
+    String factor = NumUtil.trimAmount(product.getQuFactorPurchaseToStockDouble(), maxDecimalPlacesAmount);
+    factorPurchaseToStockLive.setValue(factor);
+    quConsumeLive.setValue(getQuantityUnitFromId(product.getQuIdConsumeInt()));
+    quPriceLive.setValue(getQuantityUnitFromId(product.getQuIdPriceInt()));
     filledWithProduct = true;
   }
 }

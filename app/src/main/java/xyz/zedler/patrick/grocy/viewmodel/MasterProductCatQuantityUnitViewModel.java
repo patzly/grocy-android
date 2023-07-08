@@ -28,6 +28,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
@@ -40,8 +41,11 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.StockLogEntry;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
@@ -60,7 +64,8 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> hasProductAlreadyStockTransactionsLive;
 
   private List<QuantityUnit> quantityUnits;
-  private List<QuantityUnitConversion> conversions;
+  private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+  private List<QuantityUnitConversionResolved> conversionsResolved;
 
   private Runnable queueEmptyAction;
   private final boolean isActionEdit;
@@ -74,7 +79,7 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     repository = new MasterProductRepository(application);
-    formData = new FormDataMasterProductCatQuantityUnit(application, getBeginnerModeEnabled());
+    formData = new FormDataMasterProductCatQuantityUnit(application, sharedPrefs, getBeginnerModeEnabled());
     args = startupArgs;
     isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
     isQuantityUnitStockChangeableLive = new MutableLiveData<>(VersionUtil.isGrocyServerMin330(sharedPrefs));
@@ -98,13 +103,15 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
       this.quantityUnits = data.getQuantityUnits();
-      this.conversions = data.getConversions();
-      formData.getQuantityUnitsLive().setValue(this.quantityUnits);
-      formData.fillWithProductIfNecessary(args.getProduct());
+      this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
+      this.conversionsResolved = data.getConversionsResolved();
+      formData.setQuantityUnitHashMap(this.quantityUnitHashMap);
       if (downloadAfterLoading) {
         downloadData(false);
       } else {
+        formData.fillWithProductIfNecessary(args.getProduct());
         updateHasProductAlreadyStockTransactions();
+        removeNotAllowedQuantityUnits();
         if (queueEmptyAction != null) {
           queueEmptyAction.run();
           queueEmptyAction = null;
@@ -119,7 +126,9 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
           if (updated) {
             loadFromDatabase(false);
           } else {
+            formData.fillWithProductIfNecessary(args.getProduct());
             updateHasProductAlreadyStockTransactions();
+            removeNotAllowedQuantityUnits();
             if (queueEmptyAction != null) {
               queueEmptyAction.run();
               queueEmptyAction = null;
@@ -130,45 +139,124 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
         forceUpdate,
         false,
         QuantityUnit.class,
-        QuantityUnitConversion.class
+        QuantityUnitConversionResolved.class
     );
   }
 
-  public void showQuBottomSheet(String type) {
+  private void removeNotAllowedQuantityUnits() {
+    List<QuantityUnit> selectableStock = getSelectableQuantityUnits(
+        FormDataMasterProductCatQuantityUnit.STOCK, false);
+    QuantityUnit currentStock = formData.getQuStockLive().getValue();
+    assert isQuantityUnitStockChangeableLive.getValue() != null;
+    if (!selectableStock.isEmpty() && currentStock != null
+        && !selectableStock.contains(currentStock)
+        && isQuantityUnitStockChangeableLive.getValue()) {
+      formData.getQuStockLive().setValue(null);
+    }
+    List<QuantityUnit> selectablePurchase = getSelectableQuantityUnits(
+        FormDataMasterProductCatQuantityUnit.PURCHASE, false);
+    QuantityUnit currentPurchase = formData.getQuPurchaseLive().getValue();
+    if (!selectablePurchase.isEmpty() && currentPurchase != null
+        && !selectablePurchase.contains(currentPurchase)) {
+      formData.getQuPurchaseLive().setValue(null);
+    }
+    if (!VersionUtil.isGrocyServerMin400(sharedPrefs)) return;
+    List<QuantityUnit> selectableConsume = getSelectableQuantityUnits(
+        FormDataMasterProductCatQuantityUnit.CONSUME, false);
+    QuantityUnit currentConsume = formData.getQuConsumeLive().getValue();
+    if (!selectableConsume.isEmpty() && currentConsume != null
+        && !selectableConsume.contains(currentConsume)) {
+      formData.getQuConsumeLive().setValue(null);
+    }
+    List<QuantityUnit> selectablePrice = getSelectableQuantityUnits(
+        FormDataMasterProductCatQuantityUnit.PRICE, false);
+    QuantityUnit currentPrice = formData.getQuPriceLive().getValue();
+    if (!selectablePrice.isEmpty() && currentPrice != null
+        && !selectablePrice.contains(currentPrice)) {
+      formData.getQuPriceLive().setValue(null);
+    }
+  }
+
+  public List<QuantityUnit> getSelectableQuantityUnits(String type, boolean showBottomSheet) {
     assert hasProductAlreadyStockTransactionsLive.getValue() != null
         && isQuantityUnitStockChangeableLive.getValue() != null;
-    if (type.equals(FormDataMasterProductCatQuantityUnit.STOCK) && !isQuantityUnitStockChangeableLive.getValue()) {
-      showMessage(getString(R.string.msg_help_qu_stock));
-      return;
-    }
+    assert args.getProduct() != null;
     List<QuantityUnit> quantityUnitsAllowed;
-    if (type.equals(FormDataMasterProductCatQuantityUnit.STOCK) && isActionEdit
-        && hasProductAlreadyStockTransactionsLive.getValue()) {
-      QuantityUnit quStockOld = QuantityUnit
-          .getFromId(this.quantityUnits, getFilledProduct().getQuIdStockInt());
-      quantityUnitsAllowed = new ArrayList<>();
-      ArrayList<Integer> addedQuIds = new ArrayList<>();
-      for (QuantityUnitConversion conversion : conversions) {
-        if (conversion.getProductIdInt() == getFilledProduct().getId()
-            && conversion.getFromQuId() == quStockOld.getId()
-            && !addedQuIds.contains(conversion.getToQuId())) {
-          QuantityUnit quantityUnit = QuantityUnit
-              .getFromId(this.quantityUnits, conversion.getToQuId());
-          if (quantityUnit != null) {
-            quantityUnitsAllowed.add(quantityUnit);
-            addedQuIds.add(quantityUnit.getId());
+    boolean displayNewOption;
+    if (!isActionEdit) {
+      // On product creation, all units are allowed.
+      quantityUnitsAllowed = this.quantityUnits;
+      displayNewOption = true;
+    } else if (VersionUtil.isGrocyServerMin400(sharedPrefs)) {
+      // With Grocy server v4.0.0 and higher, only units for
+      // which a conversion exist, can be selected.
+      // Transitive conversions allowed.
+      if (hasProductAlreadyStockTransactionsLive.getValue()
+          || !type.equals(FormDataMasterProductCatQuantityUnit.STOCK)) {
+        QuantityUnit quStockOld = quantityUnitHashMap.get(args.getProduct().getQuIdStockInt());
+        quantityUnitsAllowed = new ArrayList<>();
+        ArrayList<Integer> addedQuIds = new ArrayList<>();
+        for (QuantityUnitConversion conversion : conversionsResolved) {
+          if ((conversion.getProductIdInt() == args.getProduct().getId())
+              && quStockOld != null && conversion.getFromQuId() == quStockOld.getId()
+              && !addedQuIds.contains(conversion.getToQuId())) {
+            QuantityUnit quantityUnit = QuantityUnit
+                .getFromId(this.quantityUnits, conversion.getToQuId());
+            if (quantityUnit != null) {
+              quantityUnitsAllowed.add(quantityUnit);
+              addedQuIds.add(quantityUnit.getId());
+            }
           }
         }
-      }
-      if (!addedQuIds.contains(quStockOld.getId())) {
-        quantityUnitsAllowed.add(quStockOld);
+        displayNewOption = false;
+      } else {
+        quantityUnitsAllowed = this.quantityUnits;
+        displayNewOption = true;
       }
     } else {
-      quantityUnitsAllowed = this.quantityUnits;
+      // Old behavior: With Grocy server version until 3.3.2, stock unit can be edited
+      // after creation as long as no transactions have been made or purchase unit can always be
+      // edited because of available stock to purchase factor.
+      // No transitive conversions allowed (conversionsResolved only contain normal conversions
+      // with server version < v4).
+      if (type.equals(FormDataMasterProductCatQuantityUnit.STOCK)
+          && hasProductAlreadyStockTransactionsLive.getValue()) {
+        QuantityUnit quStockOld = quantityUnitHashMap.get(args.getProduct().getQuIdStockInt());
+        quantityUnitsAllowed = new ArrayList<>();
+        ArrayList<Integer> addedQuIds = new ArrayList<>();
+        for (QuantityUnitConversion conversion : conversionsResolved) {
+          if ((conversion.getProductIdInt() == args.getProduct().getId()
+              || !NumUtil.isStringInt(conversion.getProductId()))
+              && quStockOld != null && conversion.getFromQuId() == quStockOld.getId()
+              && !addedQuIds.contains(conversion.getToQuId())) {
+            QuantityUnit quantityUnit = QuantityUnit
+                .getFromId(this.quantityUnits, conversion.getToQuId());
+            if (quantityUnit != null) {
+              quantityUnitsAllowed.add(quantityUnit);
+              addedQuIds.add(quantityUnit.getId());
+            }
+          }
+        }
+        if (quStockOld != null && !addedQuIds.contains(quStockOld.getId())) {
+          quantityUnitsAllowed.add(quStockOld);
+        }
+        displayNewOption = false;
+      } else {
+        quantityUnitsAllowed = this.quantityUnits;
+        displayNewOption = true;
+      }
     }
-    if (quantityUnitsAllowed == null || quantityUnitsAllowed.isEmpty()) {
-      showErrorMessage();
-      return;
+    if (showBottomSheet) {
+      if (type.equals(FormDataMasterProductCatQuantityUnit.STOCK)
+          && !isQuantityUnitStockChangeableLive.getValue()) {
+        showMessage(getString(R.string.msg_help_qu_stock));
+        return quantityUnitsAllowed;
+      } else if (quantityUnitsAllowed == null || quantityUnitsAllowed.isEmpty()) {
+        showErrorMessage();
+        return quantityUnitsAllowed;
+      }
+    } else {
+      return quantityUnitsAllowed;
     }
     Bundle bundle = new Bundle();
     bundle.putParcelableArrayList(
@@ -176,16 +264,26 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
         new ArrayList<>(quantityUnitsAllowed)
     );
     QuantityUnit quantityUnit;
-    if (type.equals(FormDataMasterProductCatQuantityUnit.STOCK)) {
-      quantityUnit = formData.getQuStockLive().getValue();
-    } else {
-      quantityUnit = formData.getQuPurchaseLive().getValue();
+    switch (type) {
+      case FormDataMasterProductCatQuantityUnit.STOCK:
+        quantityUnit = formData.getQuStockLive().getValue();
+        break;
+      case FormDataMasterProductCatQuantityUnit.PURCHASE:
+        quantityUnit = formData.getQuPurchaseLive().getValue();
+        break;
+      case FormDataMasterProductCatQuantityUnit.CONSUME:
+        quantityUnit = formData.getQuConsumeLive().getValue();
+        break;
+      default:
+        quantityUnit = formData.getQuPriceLive().getValue();
+        break;
     }
     int quId = quantityUnit != null ? quantityUnit.getId() : -1;
-    bundle.putBoolean(ARGUMENT.DISPLAY_NEW_OPTION, true);
+    bundle.putBoolean(ARGUMENT.DISPLAY_NEW_OPTION, displayNewOption);
     bundle.putInt(Constants.ARGUMENT.SELECTED_ID, quId);
     bundle.putString(FormDataMasterProductCatQuantityUnit.QUANTITY_UNIT_TYPE, type);
     showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
+    return quantityUnitsAllowed;
   }
 
   @NonNull

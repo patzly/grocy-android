@@ -99,6 +99,14 @@ public class Product extends GroupedListItem implements Parcelable {
   @SerializedName("qu_factor_purchase_to_stock")
   private String quFactorPurchaseToStock; // quantity unit
 
+  @ColumnInfo(name = "qu_id_consume")
+  @SerializedName("qu_id_consume")
+  private String quIdConsume;
+
+  @ColumnInfo(name = "qu_id_price")
+  @SerializedName("qu_id_price")
+  private String quIdPrice;
+
   @ColumnInfo(name = "min_stock_amount")
   @SerializedName("min_stock_amount")
   private String minStockAmount;
@@ -155,6 +163,10 @@ public class Product extends GroupedListItem implements Parcelable {
   @SerializedName("quick_consume_amount")
   private String quickConsumeAmount;
 
+  @ColumnInfo(name = "quick_open_amount")
+  @SerializedName("quick_open_amount")
+  private String quickOpenAmount;
+
   @ColumnInfo(name = "hide_on_stock_overview")
   @SerializedName("hide_on_stock_overview")
   private String hideOnStockOverview;
@@ -162,6 +174,10 @@ public class Product extends GroupedListItem implements Parcelable {
   @ColumnInfo(name = "default_stock_label_type")
   @SerializedName("default_stock_label_type")
   private String defaultStockLabelType;
+
+  @ColumnInfo(name = "auto_reprint_stock_label")
+  @SerializedName("auto_reprint_stock_label")
+  private String autoReprintStockLabel;
 
   @ColumnInfo(name = "should_not_be_frozen")
   @SerializedName("should_not_be_frozen")
@@ -234,6 +250,8 @@ public class Product extends GroupedListItem implements Parcelable {
     quIdStock = presetQuIdStr;
     quIdPurchase = presetQuIdStr;
     quFactorPurchaseToStock = "1";
+    quIdConsume = presetQuIdStr;
+    quIdPrice = presetQuIdStr;
     enableTareWeightHandling = "0";
     tareWeight = "0";
     notCheckStockFulfillmentForRecipes = "0";
@@ -241,8 +259,10 @@ public class Product extends GroupedListItem implements Parcelable {
     defaultDueDaysAfterFreezing = "0";
     defaultDueDaysAfterThawing = "0";
     quickConsumeAmount = "1";
+    quickOpenAmount = "1";
     hideOnStockOverview = "0";
     defaultStockLabelType = "0";
+    autoReprintStockLabel = "0";
     shouldNotBeFrozen = "0";
     treatOpenedAsOutOfStock = presetTreatOpened ? "1" : "0";
     noOwnStock = "0";
@@ -262,6 +282,8 @@ public class Product extends GroupedListItem implements Parcelable {
     quIdPurchase = parcel.readString();
     quIdStock = parcel.readString();
     quFactorPurchaseToStock = parcel.readString();
+    quIdConsume = parcel.readString();
+    quIdPrice = parcel.readString();
     minStockAmount = parcel.readString();
     defaultDueDays = parcel.readString();
     defaultDueDaysAfterOpen = parcel.readString();
@@ -276,8 +298,10 @@ public class Product extends GroupedListItem implements Parcelable {
     accumulateSubProductsMinStockAmount = parcel.readString();
     dueDateType = parcel.readString();
     quickConsumeAmount = parcel.readString();
+    quickOpenAmount = parcel.readString();
     hideOnStockOverview = parcel.readString();
     defaultStockLabelType = parcel.readString();
+    autoReprintStockLabel = parcel.readString();
     shouldNotBeFrozen = parcel.readString();
     treatOpenedAsOutOfStock = parcel.readString();
     noOwnStock = parcel.readString();
@@ -297,6 +321,8 @@ public class Product extends GroupedListItem implements Parcelable {
     dest.writeString(quIdPurchase);
     dest.writeString(quIdStock);
     dest.writeString(quFactorPurchaseToStock);
+    dest.writeString(quIdConsume);
+    dest.writeString(quIdPrice);
     dest.writeString(minStockAmount);
     dest.writeString(defaultDueDays);
     dest.writeString(defaultDueDaysAfterOpen);
@@ -311,8 +337,10 @@ public class Product extends GroupedListItem implements Parcelable {
     dest.writeString(accumulateSubProductsMinStockAmount);
     dest.writeString(dueDateType);
     dest.writeString(quickConsumeAmount);
+    dest.writeString(quickOpenAmount);
     dest.writeString(hideOnStockOverview);
     dest.writeString(defaultStockLabelType);
+    dest.writeString(autoReprintStockLabel);
     dest.writeString(shouldNotBeFrozen);
     dest.writeString(treatOpenedAsOutOfStock);
     dest.writeString(noOwnStock);
@@ -445,6 +473,38 @@ public class Product extends GroupedListItem implements Parcelable {
 
   public void setQuFactorPurchaseToStock(String quFactorPurchaseToStock) {
     this.quFactorPurchaseToStock = quFactorPurchaseToStock;
+  }
+
+  public String getQuIdConsume() {
+    return quIdConsume;
+  }
+
+  public int getQuIdConsumeInt() {
+    return NumUtil.isStringInt(quIdConsume) ? Integer.parseInt(quIdConsume) : getQuIdStockInt();
+  }
+
+  public void setQuIdConsume(String quIdConsume) {
+    this.quIdConsume = quIdConsume;
+  }
+
+  public void setQuIdConsume(int quIdConsume) {
+    this.quIdConsume = String.valueOf(quIdConsume);
+  }
+
+  public String getQuIdPrice() {
+    return quIdPrice;
+  }
+
+  public int getQuIdPriceInt() {
+    return NumUtil.isStringInt(quIdPrice) ? Integer.parseInt(quIdPrice) : getQuIdPurchaseInt();
+  }
+
+  public void setQuIdPrice(String quIdPrice) {
+    this.quIdPrice = quIdPrice;
+  }
+
+  public void setQuIdPrice(int quIdPrice) {
+    this.quIdPrice = String.valueOf(quIdPrice);
   }
 
   public String getMinStockAmount() {
@@ -622,6 +682,19 @@ public class Product extends GroupedListItem implements Parcelable {
     this.quickConsumeAmount = quickConsumeAmount;
   }
 
+  public String getQuickOpenAmount() {
+    return quickOpenAmount;
+  }
+
+  public double getQuickOpenAmountDouble() {
+    return NumUtil.isStringDouble(quickOpenAmount) ? NumUtil.toDouble(quickOpenAmount)
+        : getQuickConsumeAmountDouble();
+  }
+
+  public void setQuickOpenAmount(String quickOpenAmount) {
+    this.quickOpenAmount = quickOpenAmount;
+  }
+
   public String getHideOnStockOverview() {
     return hideOnStockOverview;
   }
@@ -648,6 +721,14 @@ public class Product extends GroupedListItem implements Parcelable {
 
   public void setDefaultStockLabelType(String defaultStockLabelType) {
     this.defaultStockLabelType = defaultStockLabelType;
+  }
+
+  public String getAutoReprintStockLabel() {
+    return autoReprintStockLabel;
+  }
+
+  public void setAutoReprintStockLabel(String autoReprintStockLabel) {
+    this.autoReprintStockLabel = autoReprintStockLabel;
   }
 
   public String getShouldNotBeFrozen() {
@@ -779,7 +860,6 @@ public class Product extends GroupedListItem implements Parcelable {
       json.put("shopping_location_id", storeId);
       json.put("qu_id_purchase", product.quIdPurchase);
       json.put("qu_id_stock", product.quIdStock);
-      json.put("qu_factor_purchase_to_stock", product.quFactorPurchaseToStock);
       json.put("min_stock_amount", product.minStockAmount);
       json.put("default_best_before_days", defaultDueDays);
       json.put("default_best_before_days_after_open", defaultDueDaysOpen);
@@ -797,6 +877,13 @@ public class Product extends GroupedListItem implements Parcelable {
       json.put("hide_on_stock_overview", hideOnStock);
       json.put("default_stock_label_type", defaultStockLabelType);
       json.put("should_not_be_frozen", shouldNotBeFrozen);
+      if (!VersionUtil.isGrocyServerMin400(prefs)) {
+        json.put("qu_factor_purchase_to_stock", product.quFactorPurchaseToStock);
+      }
+      if (VersionUtil.isGrocyServerMin400(prefs)) {
+        json.put("qu_id_consume", product.quIdConsume);
+        json.put("qu_id_price", product.quIdPrice);
+      }
       if (treatOpened != null && VersionUtil.isGrocyServerMin320(prefs)) {
         json.put("treat_opened_as_out_of_stock", treatOpened);
       }
@@ -907,47 +994,51 @@ public class Product extends GroupedListItem implements Parcelable {
       return false;
     }
     Product product = (Product) o;
-    return id == product.id && displayDivider == product.displayDivider && Objects
-        .equals(name, product.name) && Objects.equals(description, product.description)
-        && Objects.equals(productGroupId, product.productGroupId) && Objects
-        .equals(active, product.active) && Objects.equals(locationId, product.locationId)
-        && Objects.equals(storeId, product.storeId) && Objects
-        .equals(quIdPurchase, product.quIdPurchase) && Objects
-        .equals(quIdStock, product.quIdStock) && Objects
-        .equals(quFactorPurchaseToStock, product.quFactorPurchaseToStock) && Objects
-        .equals(minStockAmount, product.minStockAmount) && Objects
-        .equals(defaultDueDays, product.defaultDueDays) && Objects
-        .equals(defaultDueDaysAfterOpen, product.defaultDueDaysAfterOpen) && Objects
-        .equals(defaultDueDaysAfterFreezing, product.defaultDueDaysAfterFreezing) && Objects
-        .equals(defaultDueDaysAfterThawing, product.defaultDueDaysAfterThawing) && Objects
-        .equals(pictureFileName, product.pictureFileName) && Objects
-        .equals(enableTareWeightHandling, product.enableTareWeightHandling) && Objects
-        .equals(tareWeight, product.tareWeight) && Objects
-        .equals(notCheckStockFulfillmentForRecipes, product.notCheckStockFulfillmentForRecipes)
-        && Objects.equals(parentProductId, product.parentProductId) && Objects
-        .equals(calories, product.calories) && Objects
-        .equals(accumulateSubProductsMinStockAmount, product.accumulateSubProductsMinStockAmount)
-        && Objects.equals(treatOpenedAsOutOfStock, product.treatOpenedAsOutOfStock)
-        && Objects.equals(dueDateType, product.dueDateType) && Objects
-        .equals(quickConsumeAmount, product.quickConsumeAmount) && Objects
-        .equals(hideOnStockOverview, product.hideOnStockOverview) && Objects
-        .equals(noOwnStock, product.noOwnStock) && Objects
-        .equals(defaultConsumeLocationId, product.defaultConsumeLocationId) && Objects
-        .equals(moveOnOpen, product.moveOnOpen) && Objects
-        .equals(pendingProductId, product.pendingProductId);
+    return id == product.id && displayDivider == product.displayDivider && Objects.equals(
+        name, product.name) && Objects.equals(description, product.description)
+        && Objects.equals(productGroupId, product.productGroupId)
+        && Objects.equals(active, product.active) && Objects.equals(locationId,
+        product.locationId) && Objects.equals(storeId, product.storeId)
+        && Objects.equals(quIdPurchase, product.quIdPurchase) && Objects.equals(
+        quIdStock, product.quIdStock) && Objects.equals(quFactorPurchaseToStock,
+        product.quFactorPurchaseToStock) && Objects.equals(quIdConsume, product.quIdConsume)
+        && Objects.equals(quIdPrice, product.quIdPrice) && Objects.equals(
+        minStockAmount, product.minStockAmount) && Objects.equals(defaultDueDays,
+        product.defaultDueDays) && Objects.equals(defaultDueDaysAfterOpen,
+        product.defaultDueDaysAfterOpen) && Objects.equals(defaultDueDaysAfterFreezing,
+        product.defaultDueDaysAfterFreezing) && Objects.equals(defaultDueDaysAfterThawing,
+        product.defaultDueDaysAfterThawing) && Objects.equals(pictureFileName,
+        product.pictureFileName) && Objects.equals(enableTareWeightHandling,
+        product.enableTareWeightHandling) && Objects.equals(tareWeight, product.tareWeight)
+        && Objects.equals(notCheckStockFulfillmentForRecipes,
+        product.notCheckStockFulfillmentForRecipes) && Objects.equals(parentProductId,
+        product.parentProductId) && Objects.equals(calories, product.calories)
+        && Objects.equals(accumulateSubProductsMinStockAmount,
+        product.accumulateSubProductsMinStockAmount) && Objects.equals(dueDateType,
+        product.dueDateType) && Objects.equals(quickConsumeAmount,
+        product.quickConsumeAmount) && Objects.equals(quickOpenAmount,
+        product.quickOpenAmount) && Objects.equals(hideOnStockOverview,
+        product.hideOnStockOverview) && Objects.equals(defaultStockLabelType,
+        product.defaultStockLabelType) && Objects.equals(autoReprintStockLabel,
+        product.autoReprintStockLabel) && Objects.equals(shouldNotBeFrozen,
+        product.shouldNotBeFrozen) && Objects.equals(treatOpenedAsOutOfStock,
+        product.treatOpenedAsOutOfStock) && Objects.equals(noOwnStock, product.noOwnStock)
+        && Objects.equals(defaultConsumeLocationId, product.defaultConsumeLocationId)
+        && Objects.equals(moveOnOpen, product.moveOnOpen) && Objects.equals(
+        pendingProductId, product.pendingProductId);
   }
 
   @Override
   public int hashCode() {
-    return Objects
-        .hash(id, name, description, productGroupId, active, locationId, storeId, quIdPurchase,
-            quIdStock, quFactorPurchaseToStock, minStockAmount, defaultDueDays,
-            defaultDueDaysAfterOpen, defaultDueDaysAfterFreezing, defaultDueDaysAfterThawing,
-            pictureFileName, enableTareWeightHandling, tareWeight,
-            notCheckStockFulfillmentForRecipes,
-            parentProductId, calories, accumulateSubProductsMinStockAmount, treatOpenedAsOutOfStock,
-            dueDateType, quickConsumeAmount, hideOnStockOverview, noOwnStock,
-            defaultConsumeLocationId, moveOnOpen, pendingProductId, displayDivider);
+    return Objects.hash(id, name, description, productGroupId, active, locationId, storeId,
+        quIdPurchase, quIdStock, quFactorPurchaseToStock, quIdConsume, quIdPrice, minStockAmount,
+        defaultDueDays, defaultDueDaysAfterOpen, defaultDueDaysAfterFreezing,
+        defaultDueDaysAfterThawing, pictureFileName, enableTareWeightHandling, tareWeight,
+        notCheckStockFulfillmentForRecipes, parentProductId, calories,
+        accumulateSubProductsMinStockAmount, dueDateType, quickConsumeAmount, quickOpenAmount,
+        hideOnStockOverview, defaultStockLabelType, autoReprintStockLabel, shouldNotBeFrozen,
+        treatOpenedAsOutOfStock, noOwnStock, defaultConsumeLocationId, moveOnOpen, pendingProductId,
+        displayDivider);
   }
 
   @NonNull

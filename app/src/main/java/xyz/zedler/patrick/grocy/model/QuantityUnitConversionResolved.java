@@ -36,12 +36,23 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
-import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue.QueueItem;
 
 @Entity(tableName = "quantity_unit_conversion_resolved_table")
 public class QuantityUnitConversionResolved extends QuantityUnitConversion {
+
+  public QuantityUnitConversionResolved() {
+  }
+
+  public QuantityUnitConversionResolved(QuantityUnitConversion conversion) {
+    setId(conversion.getId());
+    setFactor(conversion.getFactor());
+    setFromQuId(conversion.getFromQuId());
+    setToQuId(conversion.getToQuId());
+    setProductId(conversion.getProductId());
+    setRowCreatedTimestamp(conversion.getRowCreatedTimestamp());
+  }
 
   public static QuantityUnitConversionResolved findConversion(
       List<QuantityUnitConversionResolved> conversionsResolved,
@@ -84,63 +95,56 @@ public class QuantityUnitConversionResolved extends QuantityUnitConversion {
               dlHelper.grocyApi.getObjects(isServerVersion4
                   ? ENTITY.QUANTITY_UNIT_CONVERSIONS_RESOLVED : ENTITY.QUANTITY_UNIT_CONVERSIONS),
               uuid,
-              response -> {
-                Type type = new TypeToken<List<QuantityUnitConversionResolved>>() {
-                }.getType();
-                List<QuantityUnitConversionResolved> conversionsResolved;
-                if (isServerVersion4) {
-                  List<QuantityUnitConversionResolved> conversionsResolvedNotForDb = dlHelper.gson
-                      .fromJson(response, type);
-                  if (dlHelper.debug) {
-                    Log.i(dlHelper.tag, "download QuantityUnitConversionsResolved: "
-                        + conversionsResolvedNotForDb);
-                  }
-                  conversionsResolved = new ArrayList<>();
-                  int id = 0;
-                  for (QuantityUnitConversionResolved conversion : conversionsResolvedNotForDb) {
-                    conversion.setId(id);
-                    conversionsResolved.add(conversion);
-                    id++;
-                  }
-                } else {
-                  List<QuantityUnitConversion> conversions
-                      = dlHelper.gson.fromJson(response, type);
-                  if (dlHelper.debug) {
-                    Log.i(dlHelper.tag, "download QuantityUnitConversions: "
-                        + conversions);
-                  }
-                  conversionsResolved = QuantityUnitConversionUtil
-                      .calculateConversions(conversions, products);
-                  if (dlHelper.debug) {
-                    Log.i(dlHelper.tag, "resolved QuantityUnitConversions: "
-                        + conversionsResolved);
-                  }
-                }
-                Single.fromCallable(() -> {
-                  dlHelper.appDatabase.quantityUnitConversionResolvedDao()
-                      .deleteConversionsResolved().blockingSubscribe();
-                  dlHelper.appDatabase.quantityUnitConversionResolvedDao()
-                      .insertConversionsResolved(conversionsResolved).blockingSubscribe();
-                  dlHelper.sharedPrefs.edit()
-                      .putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS_RESOLVED, dbChangedTime).apply();
-                  return true;
-                })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doFinally(() -> {
-                      if (onResponseListener != null) {
-                        onResponseListener.onResponse(conversionsResolved);
+              response -> Single.fromCallable(() -> {
+                    Type type = new TypeToken<List<QuantityUnitConversionResolved>>() {
+                    }.getType();
+                    List<QuantityUnitConversionResolved> conversionsResolved;
+                    if (isServerVersion4) {
+                      List<QuantityUnitConversionResolved> conversionsResolvedNotForDb = dlHelper.gson
+                          .fromJson(response, type);
+                      if (dlHelper.debug) {
+                        Log.i(dlHelper.tag, "download QuantityUnitConversionsResolved: "
+                            + conversionsResolvedNotForDb);
                       }
-                      if (responseListener != null) {
-                        responseListener.onResponse(response);
+                      conversionsResolved = new ArrayList<>();
+                      int id = 0;
+                      for (QuantityUnitConversionResolved conversion : conversionsResolvedNotForDb) {
+                        conversion.setId(id);
+                        conversionsResolved.add(conversion);
+                        id++;
                       }
-                    })
-                    .subscribe(ignored -> {}, throwable -> {
-                      if (errorListener != null) {
-                        errorListener.onError(throwable);
+                    } else {
+                      // Below server version 4.0.0, transitive conversions are not
+                      // working and thus disallowed.
+                      conversionsResolved = dlHelper.gson
+                          .fromJson(response, type);
+                      if (dlHelper.debug) {
+                        Log.i(dlHelper.tag, "download QuantityUnitConversions: "
+                            + conversionsResolved);
                       }
-                    });
-              },
+                    }
+                dlHelper.appDatabase.quantityUnitConversionResolvedDao()
+                    .deleteConversionsResolved().blockingSubscribe();
+                dlHelper.appDatabase.quantityUnitConversionResolvedDao()
+                    .insertConversionsResolved(conversionsResolved).blockingSubscribe();
+                dlHelper.sharedPrefs.edit()
+                    .putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS_RESOLVED, dbChangedTime).apply();
+                return conversionsResolved;
+              })
+                  .subscribeOn(Schedulers.io())
+                  .observeOn(AndroidSchedulers.mainThread())
+                  .subscribe(conversionsResolved -> {
+                    if (onResponseListener != null) {
+                      onResponseListener.onResponse(conversionsResolved);
+                    }
+                    if (responseListener != null) {
+                      responseListener.onResponse(response);
+                    }
+                  }, throwable -> {
+                    if (errorListener != null) {
+                      errorListener.onError(throwable);
+                    }
+                  }),
               error -> {
                 if (errorListener != null) {
                   errorListener.onError(error);

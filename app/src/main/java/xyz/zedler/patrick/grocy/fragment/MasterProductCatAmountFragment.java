@@ -193,8 +193,6 @@ public class MasterProductCatAmountFragment extends BaseFragment {
       hint = getString(R.string.property_amount_min_stock);
     } else if (type == FormDataMasterProductCatAmount.QUICK_CONSUME_AMOUNT) {
       hint = getString(R.string.property_amount_quick_consume);
-    } else if (type == FormDataMasterProductCatAmount.FACTOR_AMOUNT) {
-      hint = getString(R.string.property_qu_factor);
     } else if (type == FormDataMasterProductCatAmount.TARE_WEIGHT) {
       hint = getString(R.string.property_tare_weight);
     }

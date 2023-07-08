@@ -378,6 +378,7 @@ public class OverviewStartViewModel extends BaseViewModel {
       this.stockItemsLive.setValue(data.getStockItems());
       this.shoppingListItemsLive.setValue(data.getShoppingListItems());
       this.productsLive.setValue(data.getProducts());
+      HashMap<Integer, Product> productHashMap = ArrayUtil.getProductsHashMap(data.getProducts());
       this.storedPurchasesOnDevice.setValue(data.getStoredPurchases().size() > 0);
       this.recipesLive.setValue(data.getRecipes());
       this.choreEntriesLive.setValue(data.getChoreEntries());
@@ -433,6 +434,8 @@ public class OverviewStartViewModel extends BaseViewModel {
       int itemsInStockCount = 0;
       double stockValue = 0;
       for (StockItem stockItem : data.getStockItems()) {
+        Product product = productHashMap.get(stockItem.getProductId());
+        if (product != null && product.getHideOnStockOverviewBoolean()) continue;
         if (!stockItem.isItemMissing() || stockItem.isItemMissingAndPartlyInStock()) {
           itemsInStockCount++;
           stockValue += stockItem.getValueDouble();

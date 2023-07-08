@@ -1081,8 +1081,6 @@
   <string name="setting_date_keyboard_input_description">En comptes del selector de dates</string>
   <string name="setting_date_keyboard_reverse">Utilitzar format de data invers per a l\'entrada</string>
   <string name="setting_date_keyboard_reverse_description">DDMMYY en comptes de YYMMDD</string>
-  <string name="setting_copy_barcode_note">Copiar la nota del codi de barres a la nota de l\'entrada de l\'inventari</string>
-  <string name="setting_copy_barcode_note_description">Quan es compra un producte</string>
   <string name="setting_loading_circle">Mostrar cercle de càrrega per a totes les sol·licituds</string>
   <string name="setting_loading_circle_description">Útil per a connexions lentes</string>
   <string name="setting_tor">Utilitzar Tor</string>

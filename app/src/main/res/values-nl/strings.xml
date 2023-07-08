@@ -1036,8 +1036,6 @@ Bezoek ons op GitHub om te leren hoe u kunt helpen Grocy Android beschikbaar te 
   <string name="setting_date_keyboard_input_description">In plaats van schijven als datumkiezer</string>
   <string name="setting_date_keyboard_reverse">Gebruik omgekeerd datumformaat voor invoer</string>
   <string name="setting_date_keyboard_reverse_description">DDMMYY-notering in plaats van YYMMDD-notering</string>
-  <string name="setting_copy_barcode_note">Kopieer notities van de streepjescode naar notities van voorraadinvoer.   </string>
-  <string name="setting_copy_barcode_note_description">Bij aankoop van een product</string>
   <string name="setting_loading_circle">Laat een laad cirkel zien voor alle verzoeken</string>
   <string name="setting_loading_circle_description">Handig voor langzame netwerken</string>
   <string name="setting_tor">Gebruik Tor</string>

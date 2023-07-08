@@ -1222,8 +1222,6 @@
   <string name="setting_date_keyboard_input_description">Au lieu du sélecteur de date</string>
   <string name="setting_date_keyboard_reverse">Utiliser le format de date inversé pour la saisie</string>
   <string name="setting_date_keyboard_reverse_description">JJMMAA au lieu de AAMMJJ</string>
-  <string name="setting_copy_barcode_note">Copier la note du code-barres sur la note d\'entrée de stock</string>
-  <string name="setting_copy_barcode_note_description">En achetant un produit</string>
   <string name="setting_loading_circle">Afficher une animation de chargement pour toutes les requêtes</string>
   <string name="setting_loading_circle_description">Utile pour les connexions lentes</string>
   <string name="setting_tor">Utiliser Tor</string>

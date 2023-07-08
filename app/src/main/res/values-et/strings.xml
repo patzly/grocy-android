@@ -1173,8 +1173,6 @@
   <string name="setting_date_keyboard_input_description">Kuupäeva valimise ratta asemel</string>
   <string name="setting_date_keyboard_reverse">Kasuta vastupidist kuupäeva formaati sisestamisel</string>
   <string name="setting_date_keyboard_reverse_description">DDMMYY formaadi YYMMDD asemel</string>
-  <string name="setting_copy_barcode_note">Kopeeri triipkoodi märkus varude sisendi märkusesse</string>
-  <string name="setting_copy_barcode_note_description">Toodet ostes</string>
   <string name="setting_loading_circle">Näita laadimisringi kõikide päringute jaoks</string>
   <string name="setting_loading_circle_description">Kasulik aeglase võrgu korral</string>
   <string name="setting_tor">Kasuta Tor\'i</string>

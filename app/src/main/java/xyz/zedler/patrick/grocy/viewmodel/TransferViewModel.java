@@ -68,6 +68,7 @@ import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class TransferViewModel extends BaseViewModel {
 
@@ -201,7 +202,8 @@ public class TransferViewModel extends BaseViewModel {
       HashMap<QuantityUnit, Double> unitFactors= QuantityUnitConversionUtil.getUnitFactors(
           quantityUnitHashMap,
           unitConversions,
-          product
+          product,
+          VersionUtil.isGrocyServerMin400(sharedPrefs)
       );
       formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
       QuantityUnit stock = quantityUnitHashMap.get(product.getQuIdStockInt());

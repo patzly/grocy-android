@@ -146,23 +146,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/Widget.Grocy.Card.Text"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:visibility="@{viewModel.hasProductAlreadyStockTransactionsLive ? View.VISIBLE : View.GONE}">
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="8dp"
+                android:visibility="@{viewModel.hasProductAlreadyStockTransactionsLive || formData.grocyVersionMin400 &amp;&amp; viewModel.actionEdit ? View.VISIBLE : View.GONE}">
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.Paragraph"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:textColor="?attr/colorOnSurfaceVariant"
-                  android:text="@string/msg_help_qu_stock_changeable" />
+                  android:text="@{formData.grocyVersionMin400 ? @string/msg_help_qu_changeable : @string/msg_help_qu_stock_changeable}" />
 
               </com.google.android.material.card.MaterialCardView>
 
               <LinearLayout
                 style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-                android:onClick="@{() -> viewModel.showQuBottomSheet(formData.STOCK)}"
+                android:onClick="@{() -> viewModel.getSelectableQuantityUnits(formData.STOCK, true)}"
                 android:alpha="@{viewModel.isQuantityUnitStockChangeableLive ? 1.0f : 0.4f}">
 
                 <ImageView
@@ -206,7 +205,7 @@
 
               <LinearLayout
                 style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-                android:onClick="@{() -> viewModel.showQuBottomSheet(formData.PURCHASE)}">
+                android:onClick="@{() -> viewModel.getSelectableQuantityUnits(formData.PURCHASE, true)}">
 
                 <ImageView
                   style="@style/Widget.Grocy.ImageView.ListItem.Icon"
@@ -223,6 +222,119 @@
                   <TextView
                     style="@style/Widget.Grocy.TextView.ListItem.Title"
                     android:text="@{formData.quPurchaseNameLive ?? @string/subtitle_none_selected}" />
+
+                </LinearLayout>
+
+              </LinearLayout>
+
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+                android:onClick="@{() -> fragment.showInputNumberBottomSheet()}"
+                android:visibility="@{formData.factorPurchaseToStockEnabled ? View.VISIBLE : View.GONE}">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_factor"
+                  tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                    android:singleLine="false"
+                    android:text="@string/property_qu_factor" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@{formData.factorPurchaseToStockLive}" />
+
+                </LinearLayout>
+
+              </LinearLayout>
+
+              <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Grocy.Card.Text"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="@{formData.grocyVersionMin400 &amp;&amp; formData.displayHelpLive ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="?attr/colorOnSurfaceVariant"
+                  android:text="@string/msg_help_qu_consume" />
+
+              </com.google.android.material.card.MaterialCardView>
+
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+                android:onClick="@{() -> viewModel.getSelectableQuantityUnits(formData.CONSUME, true)}"
+                android:visibility="@{formData.grocyVersionMin400 ? View.VISIBLE : View.GONE}">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_weights"
+                  tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+                  <TextView
+                    android:id="@+id/text_qu_consume_name"
+                    style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                    android:text="@string/property_default_qu_consume" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@{formData.quConsumeNameLive ?? @string/subtitle_none_selected}" />
+
+                </LinearLayout>
+
+              </LinearLayout>
+
+              <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Grocy.Card.Text"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="@{formData.grocyVersionMin400 &amp;&amp; formData.displayHelpLive ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="?attr/colorOnSurfaceVariant"
+                  android:text="@string/msg_help_qu_price" />
+
+              </com.google.android.material.card.MaterialCardView>
+
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+                android:onClick="@{() -> viewModel.getSelectableQuantityUnits(formData.PRICE, true)}"
+                android:visibility="@{formData.grocyVersionMin400 ? View.VISIBLE : View.GONE}">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_weights"
+                  tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+                  <TextView
+                    android:id="@+id/text_qu_price_name"
+                    style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                    android:text="@string/property_qu_prices" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@{formData.quPriceNameLive ?? @string/subtitle_none_selected}" />
 
                 </LinearLayout>
 

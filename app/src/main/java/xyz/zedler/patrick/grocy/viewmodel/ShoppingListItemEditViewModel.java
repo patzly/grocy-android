@@ -60,6 +60,7 @@ import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class ShoppingListItemEditViewModel extends BaseViewModel {
 
@@ -238,7 +239,8 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
           quantityUnitHashMap,
           unitConversions,
-          product
+          product,
+          VersionUtil.isGrocyServerMin400(sharedPrefs)
       );
       formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
       formData.getQuantityUnitStockLive().setValue(
@@ -246,9 +248,15 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       );
 
       quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
-      amount = QuantityUnitConversionUtil
-          .getAmountRelativeToUnit(unitFactors, product, quantityUnit, amount);
+
+      Double factor = unitFactors.get(quantityUnit);
+      if (factor != null && VersionUtil.isGrocyServerMin400(sharedPrefs) && quantityUnit != null
+          && quantityUnit.getId() == product.getQuIdPurchaseInt()) {
+        factor = 1 / factor;
+      }
+      if (factor != null) amount *= factor;
     }
+
     formData.getAmountLive().setValue(NumUtil.trimAmount(amount, maxDecimalPlacesAmount));
     formData.getQuantityUnitLive().setValue(quantityUnit);
 
@@ -266,7 +274,8 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
         quantityUnitHashMap,
         unitConversions,
-        product
+        product,
+        VersionUtil.isGrocyServerMin400(sharedPrefs)
     );
     formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
     formData.getQuantityUnitStockLive().setValue(

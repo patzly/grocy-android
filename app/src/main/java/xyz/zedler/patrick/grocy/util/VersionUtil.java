@@ -130,10 +130,6 @@ public class VersionUtil {
     mainActivity.navUtil.navigate(action);
   }
 
-  public static void clearCachingInfoIfAppOrDatabaseUpdated(SharedPreferences sharedPrefs) {
-
-  }
-
   private static class Version implements Comparable<Version> {
 
     private final String version;

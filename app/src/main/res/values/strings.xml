@@ -385,8 +385,13 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_stock">Quantity unit stock cannot be changed after first purchase.</string>
   <string name="msg_help_qu_stock_changeable">Quantity unit stock can only be changed if unit conversions for the current quantity unit exist.</string>
+  <string name="msg_help_qu_changeable">Quantity units can only be changed if unit conversions exist for them.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_qu_purchase">This is the default quantity unit used when adding this product to the shopping list.</string>
+  <string name="msg_help_qu_purchase">This is the default quantity unit used on purchase and when adding this product to the shopping list.</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_consume">This is the default quantity unit used when consuming this product.</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_price">When displaying prices for this product, they will be related to this quantity unit.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">If enabled, the min. stock amount of sub products will be accumulated into this product, means the sub product will never be \"missing\", only this product.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -844,6 +849,10 @@
   <string name="property_qu_stock">Quantity unit stock</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Factor purchase to stock quantity unit</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_default_qu_consume">Default quantity unit consume</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_prices">Quantity unit for prices</string>
   <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
   <string name="property_quantity_unit_from">Convert from</string>
   <!-- Example: "Convert to cup"; This string is part of a pair, there is also 'Convert from' -->
@@ -1187,8 +1196,6 @@
   <string name="setting_date_keyboard_input_description">Instead of date picker wheels</string>
   <string name="setting_date_keyboard_reverse">Use reverse date format for input</string>
   <string name="setting_date_keyboard_reverse_description">DDMMYY instead of YYMMDD</string>
-  <string name="setting_copy_barcode_note">Copy barcode note to stock entry note</string>
-  <string name="setting_copy_barcode_note_description">When purchasing a product</string>
   <string name="setting_loading_circle">Show loading circle for all requests</string>
   <string name="setting_loading_circle_description">Helpful for slow networks</string>
   <string name="setting_tor">Use Tor</string>

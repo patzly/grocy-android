@@ -59,6 +59,7 @@ import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class RecipeEditIngredientEditViewModel extends BaseViewModel {
 
@@ -158,7 +159,8 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
       HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
           quantityUnitHashMap,
           unitConversions,
-          product
+          product,
+          VersionUtil.isGrocyServerMin400(sharedPrefs)
       );
       formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
       formData.getQuantityUnitStockLive().setValue(

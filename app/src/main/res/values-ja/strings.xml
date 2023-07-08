@@ -1124,8 +1124,6 @@
   <string name="setting_date_keyboard_input_description">日付ホイールを使用しない</string>
   <string name="setting_date_keyboard_reverse">逆順日付形式を入力に使用</string>
   <string name="setting_date_keyboard_reverse_description">YYMMDD の代わりに DDMMYY</string>
-  <string name="setting_copy_barcode_note">在庫項目のノートにバーコードのノートをコピー</string>
-  <string name="setting_copy_barcode_note_description">製品の購入時</string>
   <string name="setting_loading_circle">全リクエストでローディングサークルを表示</string>
   <string name="setting_loading_circle_description">低速ネットワークに適する</string>
   <string name="setting_tor">Torを使用</string>

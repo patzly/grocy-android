@@ -1275,8 +1275,6 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="setting_date_keyboard_input_description">místo vybírání z nabídky</string>
   <string name="setting_date_keyboard_reverse">Zadávat nejprve den v datumu</string>
   <string name="setting_date_keyboard_reverse_description">DDMMRR (DenMěsícRok) místo RRMMDD</string>
-  <string name="setting_copy_barcode_note">Zkopírovat poznámku z čárového kódu do poznámky v Seznamu zásob</string>
-  <string name="setting_copy_barcode_note_description">Při nákupu</string>
   <string name="setting_loading_circle">Zobrazovat symbol čtení ze serveru u všech požadavků</string>
   <string name="setting_loading_circle_description">vhodné pro pomalé připojení k internetu nebo serveru</string>
   <string name="setting_tor">Použít službu Tor</string>

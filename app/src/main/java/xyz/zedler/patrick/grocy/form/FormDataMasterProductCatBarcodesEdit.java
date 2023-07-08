@@ -33,7 +33,6 @@ import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -43,6 +42,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class FormDataMasterProductCatBarcodesEdit {
@@ -68,12 +68,15 @@ public class FormDataMasterProductCatBarcodesEdit {
   private final PluralUtil pluralUtil;
   private boolean filledWithProductBarcode;
   private QuantityUnit quantityUnitPurchase;
+  private QuantityUnit quantityUnitStock;
+  private final boolean isGrocyServerMin400;
   private final int maxDecimalPlacesAmount;
 
   public FormDataMasterProductCatBarcodesEdit(Application application, Product product) {
     this.application = application;
     this.product = product;
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
+    isGrocyServerMin400 = VersionUtil.isGrocyServerMin400(sharedPrefs);
     maxDecimalPlacesAmount = sharedPrefs.getInt(
         STOCK.DECIMAL_PLACES_AMOUNT,
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
@@ -197,6 +200,10 @@ public class FormDataMasterProductCatBarcodesEdit {
     this.quantityUnitPurchase = quantityUnitPurchase;
   }
 
+  public void setQuantityUnitStock(QuantityUnit quantityUnitStock) {
+    this.quantityUnitStock = quantityUnitStock;
+  }
+
   public MutableLiveData<QuantityUnit> getQuantityUnitLive() {
     return quantityUnitLive;
   }
@@ -205,21 +212,7 @@ public class FormDataMasterProductCatBarcodesEdit {
     return quantityUnitNameLive;
   }
 
-  private QuantityUnit getStockQuantityUnit() {
-    HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-    if (hashMap == null || !hashMap.containsValue((double) -1)) {
-      return null;
-    }
-    for (Map.Entry<QuantityUnit, Double> entry : hashMap.entrySet()) {
-      if (entry.getValue() == -1) {
-        return entry.getKey();
-      }
-    }
-    return null;
-  }
-
   private String getAmountPurchase() {
-    QuantityUnit purchase = quantityUnitPurchase;
     QuantityUnit current = quantityUnitLive.getValue();
     if (!NumUtil.isStringDouble(amountLive.getValue())
         || quantityUnitsFactorsLive.getValue() == null
@@ -228,10 +221,17 @@ public class FormDataMasterProductCatBarcodesEdit {
     }
     assert amountLive.getValue() != null;
 
-    if (purchase != null && current != null && purchase.getId() != current.getId()) {
+    if (quantityUnitPurchase != null && current != null
+        && quantityUnitPurchase.getId() != current.getId()) {
       HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
       double amount = NumUtil.toDouble(amountLive.getValue());
-      Object currentFactor = hashMap.get(current);
+      Double currentFactor = hashMap.get(current);
+      if (!isGrocyServerMin400 && quantityUnitStock != null
+          && current.getId() == quantityUnitStock.getId()) {
+        // !isGrocyServerMin400 == true -> transitive conversions are not active
+        currentFactor = hashMap.get(quantityUnitPurchase);
+        if (currentFactor != null) currentFactor = 1 / currentFactor;
+      }
       if (currentFactor == null) {
         amountHelperLive.setValue(null);
         return null;

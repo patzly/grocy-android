@@ -62,6 +62,7 @@ import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class ShoppingListViewModel extends BaseViewModel {
@@ -700,9 +701,10 @@ public class ShoppingListViewModel extends BaseViewModel {
 
   private void fillShoppingListItemAmountsHashMap() {
     shoppingListItemAmountsHashMap = new HashMap<>();
+    boolean isGrocyServerMin400 = VersionUtil.isGrocyServerMin400(sharedPrefs);
     for (ShoppingListItem item : shoppingListItems) {
       Double amount = AmountUtil.getShoppingListItemAmount(
-          item, productHashMap, quantityUnitHashMap, unitConversions
+          item, productHashMap, quantityUnitHashMap, unitConversions, isGrocyServerMin400
       );
       if (amount != null) {
         shoppingListItemAmountsHashMap.put(item.getId(), amount);

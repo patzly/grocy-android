@@ -91,7 +91,6 @@ public class FormattedTextView extends LinearLayout {
       for (String highlight : highlights) {
         part = part.replaceAll(highlight, "<b>" + highlight + "</b>");
       }
-      part = part.replaceAll("\n", "<br/>");
 
       if (part.startsWith("#")) {
         String[] h = part.split(" ");
@@ -139,6 +138,7 @@ public class FormattedTextView extends LinearLayout {
         );
         addView(optionTransition);
       } else {
+        part = part.replaceAll("\n", " ");
         addBottomMargin = addBottomMargin && !partNext.startsWith("=> ");
         addView(getParagraph(part, addBottomMargin));
       }
