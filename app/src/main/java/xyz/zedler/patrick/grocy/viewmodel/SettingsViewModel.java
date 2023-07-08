@@ -330,7 +330,7 @@ public class SettingsViewModel extends BaseViewModel {
 
   public boolean getTurnOnQuickModeEnabled() {
     return sharedPrefs.getBoolean(
-        BEHAVIOR.DATE_KEYBOARD_INPUT,
+        BEHAVIOR.TURN_ON_QUICK_MODE,
         SETTINGS_DEFAULT.BEHAVIOR.TURN_ON_QUICK_MODE
     );
   }
