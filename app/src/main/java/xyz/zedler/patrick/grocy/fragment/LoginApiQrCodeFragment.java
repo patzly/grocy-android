@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -84,7 +86,7 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
     binding.setActivity(activity);
     binding.setFragment(this);
     binding.setClickUtil(new ClickUtil());
-    embeddedFragmentScanner.setScannerVisibilityLive(new MutableLiveData<>(true));
+    embeddedFragmentScanner.setScannerVisibilityLive(new MutableLiveData<>(isPageForGrocyKey()));
 
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
@@ -108,6 +110,18 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
       }
       return true;
     });
+
+    if (!isPageForGrocyKey()) {
+      new Handler().postDelayed(() -> new MaterialAlertDialogBuilder(
+          requireContext(), R.style.ThemeOverlay_Grocy_AlertDialog
+      )
+          .setMessage(R.string.msg_qr_code_scan_token)
+          .setPositiveButton(R.string.action_scan, (dialog, which) -> {
+            embeddedFragmentScanner.setScannerVisibilityLive(new MutableLiveData<>(true));
+            dialog.dismiss();
+          })
+          .create().show(), 100);
+    }
 
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setProvideTopScroll(false);
