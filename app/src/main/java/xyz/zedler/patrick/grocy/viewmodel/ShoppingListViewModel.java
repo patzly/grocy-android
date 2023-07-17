@@ -132,13 +132,16 @@ public class ShoppingListViewModel extends BaseViewModel {
         getApplication(),
         this::updateFilteredShoppingListItems
     );
+    boolean featurePriceEnabled = isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING);
     filterChipLiveDataFields = new FilterChipLiveDataFields(
         getApplication(),
-        PREF.SHOPPING_MODE_FIELDS,
+        PREF.SHOPPING_LIST_FIELDS,
         this::updateFilteredShoppingListItems,
         new Field(FIELD_AMOUNT, R.string.property_amount, true),
-        new Field(FIELD_PRICE_LAST_TOTAL, R.string.property_last_price_total, false),
-        new Field(FIELD_PRICE_LAST_UNIT, R.string.property_last_price_unit, false),
+        featurePriceEnabled
+            ? new Field(FIELD_PRICE_LAST_TOTAL, R.string.property_last_price_total, false) : null,
+        featurePriceEnabled
+            ? new Field(FIELD_PRICE_LAST_UNIT, R.string.property_last_price_unit, false) : null,
         new Field(FIELD_NOTES, R.string.property_notes, true),
         new Field(FIELD_PICTURE, R.string.property_picture, false)
     );

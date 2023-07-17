@@ -112,6 +112,7 @@ public class FilterChipLiveDataFields extends FilterChipLiveData {
 
     List<Field> fieldList = new ArrayList<>();
     for (Field field : fields) {
+      if (field == null) continue;
       if (savedStates.containsKey(field.name)) {
         field.currentValue = Boolean.TRUE.equals(savedStates.get(field.name));
       } else {

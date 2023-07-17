@@ -39,12 +39,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.load.model.LazyHeaders;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
+import com.google.android.material.elevation.SurfaceColors;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.SHOPPING_MODE;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
@@ -58,11 +60,11 @@ import xyz.zedler.patrick.grocy.model.GroupHeader;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.Store;
-import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PictureUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
@@ -70,6 +72,7 @@ import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
+import xyz.zedler.patrick.grocy.viewmodel.ShoppingListViewModel;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingModeViewModel;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
@@ -80,6 +83,7 @@ public class ShoppingModeItemAdapter extends
   private final LinearLayoutManager linearLayoutManager;
   private final ArrayList<GroupedListItem> groupedListItems;
   private final HashMap<Integer, Product> productHashMap;
+  private final HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
   private final HashMap<Integer, Double> shoppingListItemAmountsHashMap;
   private final ArrayList<Integer> missingProductIds;
@@ -87,10 +91,14 @@ public class ShoppingModeItemAdapter extends
   private final GrocyApi grocyApi;
   private final LazyHeaders grocyAuthHeaders;
   private final PluralUtil pluralUtil;
+  private String groupingMode;
   private final boolean useSmallerFonts;
   private final boolean showDoneItems;
   private final List<String> activeFields;
   private final int maxDecimalPlacesAmount;
+  private final int decimalPlacesPriceDisplay;
+  private final String currency;
+  private final boolean priceTrackingEnabled;
 
   public ShoppingModeItemAdapter(
       Context context,
@@ -98,6 +106,7 @@ public class ShoppingModeItemAdapter extends
       ArrayList<ShoppingListItem> shoppingListItems,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, String> productNamesHashMap,
+      HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
       HashMap<Integer, ProductGroup> productGroupHashMap,
       HashMap<Integer, Store> storeHashMap,
@@ -112,6 +121,7 @@ public class ShoppingModeItemAdapter extends
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     this.linearLayoutManager = linearLayoutManager;
     this.productHashMap = new HashMap<>(productHashMap);
+    this.productLastPurchasedHashMap = new HashMap<>(productLastPurchasedHashMap);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
     this.shoppingListItemAmountsHashMap = new HashMap<>(shoppingListItemAmountsHashMap);
     this.missingProductIds = new ArrayList<>(missingProductIds);
@@ -130,11 +140,21 @@ public class ShoppingModeItemAdapter extends
         STOCK.DECIMAL_PLACES_AMOUNT,
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
     );
+    this.decimalPlacesPriceDisplay = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_PRICES_DISPLAY,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_DISPLAY
+    );
+    this.currency = sharedPrefs.getString(PREF.CURRENCY, "");
+    this.priceTrackingEnabled = sharedPrefs
+        .getBoolean(PREF.FEATURE_STOCK_PRICE_TRACKING, true);
+    this.groupingMode = groupingMode;
     this.activeFields = activeFields;
     this.pluralUtil = new PluralUtil(context);
     this.groupedListItems = getGroupedListItems(context, shoppingListItems,
         productGroupHashMap, productHashMap, productNamesHashMap, storeHashMap,
-        shoppingListNotes, groupingMode, showDoneItems);
+        productLastPurchasedHashMap, shoppingListItemAmountsHashMap,
+        shoppingListNotes, groupingMode, priceTrackingEnabled,
+        decimalPlacesPriceDisplay, currency, showDoneItems);
   }
 
   static ArrayList<GroupedListItem> getGroupedListItems(
@@ -144,8 +164,13 @@ public class ShoppingModeItemAdapter extends
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, String> productNamesHashMap,
       HashMap<Integer, Store> storeHashMap,
+      HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap,
+      HashMap<Integer, Double> shoppingListItemAmountsHashMap,
       String shoppingListNotes,
       String groupingMode,
+      boolean priceTrackingEnabled,
+      int decimalPlacesPriceDisplay,
+      String currency,
       boolean showDoneItems
   ) {
     if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_NONE)) {
@@ -163,7 +188,7 @@ public class ShoppingModeItemAdapter extends
         groupedListItems.add(new GroupHeader(context.getString(R.string.subtitle_done)));
         groupedListItems.addAll(doneItems);
       }
-      addBottomNotes(
+      ShoppingListItemAdapter.addBottomNotes(
           context,
           shoppingListNotes,
           groupedListItems,
@@ -213,32 +238,18 @@ public class ShoppingModeItemAdapter extends
       groupedListItems.add(new GroupHeader(context.getString(R.string.subtitle_done)));
       groupedListItems.addAll(doneItems);
     }
-    addBottomNotes(
+    ShoppingListItemAdapter.addBottomNotes(
         context,
         shoppingListNotes,
         groupedListItems,
         !ungroupedItems.isEmpty() || !groupsSorted.isEmpty()
     );
+    if ((!ungroupedItems.isEmpty() || !groupsSorted.isEmpty()) && priceTrackingEnabled) {
+      ShoppingListItemAdapter.addTotalPrice(context, shoppingListItems, groupedListItems,
+          productLastPurchasedHashMap, shoppingListItemAmountsHashMap,
+          decimalPlacesPriceDisplay, currency);
+    }
     return groupedListItems;
-  }
-
-  private static void addBottomNotes(
-      Context context,
-      String shoppingListNotes,
-      ArrayList<GroupedListItem> groupedListItems,
-      boolean displayDivider
-  ) {
-    if (shoppingListNotes == null) {
-      return;
-    }
-    Spanned spanned = Html.fromHtml(shoppingListNotes.trim());
-    Spanned notes = (Spanned) TextUtil.trimCharSequence(spanned);
-    if (notes != null && !notes.toString().trim().isEmpty()) {
-      GroupHeader h = new GroupHeader(context.getString(R.string.property_notes));
-      h.setDisplayDivider(displayDivider);
-      groupedListItems.add(h);
-      groupedListItems.add(new ShoppingListBottomNotes(notes));
-    }
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -340,7 +351,7 @@ public class ShoppingModeItemAdapter extends
       }
       binding.name.setText(productGroupName);
 
-      boolean isDone = productGroupName.equals(
+      boolean isDone = productGroupName != null && productGroupName.equals(
           binding.name.getContext().getString(R.string.subtitle_done)
       );
       binding.name.setTextColor(isDone ? colorTertiary : colorPrimary);
@@ -359,8 +370,7 @@ public class ShoppingModeItemAdapter extends
     ShoppingListItem item = (ShoppingListItem) groupedListItem;
     RowShoppingModeItemBinding binding = ((ShoppingItemViewHolder) viewHolder).binding;
 
-    ColorRoles colorRolesBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
-    binding.amount.setTextColor(colorRolesBlue.getAccent());
+    ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
 
     if (useSmallerFonts) {
       int dp8 = UiUtil.dpToPx(binding.name.getContext(), 8);
@@ -408,48 +418,53 @@ public class ShoppingModeItemAdapter extends
       binding.noteAsName.setText(null);
     }
 
+    binding.flexboxLayout.removeAllViews();
+
     // AMOUNT
 
-    if (activeFields.contains(ShoppingModeViewModel.FIELD_AMOUNT)) {
-      Double amountInQuUnit = shoppingListItemAmountsHashMap.get(item.getId());
+    Double amountInQuUnit = shoppingListItemAmountsHashMap.get(item.getId());
+    if (activeFields.contains(ShoppingListViewModel.FIELD_AMOUNT)) {
+      StringBuilder stringBuilderAmount = new StringBuilder();
       if (product != null && amountInQuUnit != null) {
         QuantityUnit quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
         String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, amountInQuUnit);
         if (quStr != null) {
-          binding.amount.setText(
-              binding.amount.getContext()
-                  .getString(R.string.subtitle_amount, NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount), quStr)
-          );
+          stringBuilderAmount.append(context.getString(
+              R.string.subtitle_amount,
+              NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount),
+              quStr
+          ));
         } else {
-          binding.amount.setText(NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount));
+          stringBuilderAmount.append(NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount));
         }
       } else if (product != null) {
         QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
         String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble());
         if (quStr != null) {
-          binding.amount.setText(
-              binding.amount.getContext()
-                  .getString(R.string.subtitle_amount, NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount), quStr)
-          );
+          stringBuilderAmount.append(context.getString(
+              R.string.subtitle_amount,
+              NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount),
+              quStr
+          ));
         } else {
-          binding.amount.setText(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
+          stringBuilderAmount.append(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
         }
       } else {
-        binding.amount.setText(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
+        stringBuilderAmount.append(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
       }
-
+      Chip chipAmount = createChip(context, stringBuilderAmount.toString());
+      if (item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {
+        chipAmount.setTextColor(colorBlue.getOnAccentContainer());
+        chipAmount.setChipBackgroundColor(ColorStateList.valueOf(colorBlue.getAccentContainer()));
+      }
       if (item.isUndone()) {
-        binding.amount.setPaintFlags(
-            binding.amount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
-        );
+        chipAmount.setPaintFlags(chipAmount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+        chipAmount.setAlpha(1);
       } else {
-        binding.amount.setPaintFlags(
-            binding.amount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-        );
+        chipAmount.setPaintFlags(chipAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        chipAmount.setAlpha(0.61f);
       }
-      binding.amount.setVisibility(View.VISIBLE);
-    } else {
-      binding.amount.setVisibility(View.GONE);
+      binding.flexboxLayout.addView(chipAmount);
     }
 
     // NOTE
@@ -530,6 +545,40 @@ public class ShoppingModeItemAdapter extends
       binding.picture.setVisibility(View.GONE);
     }
 
+    if (activeFields.contains(ShoppingListViewModel.FIELD_PRICE_LAST_TOTAL)) {
+      ProductLastPurchased p = product != null
+          ? productLastPurchasedHashMap.get(product.getId()) : null;
+      if (p != null && p.getPrice() != null && !p.getPrice().isEmpty()) {
+        double amount = amountInQuUnit != null ? amountInQuUnit : item.getAmountDouble();
+        String price = NumUtil.isStringDouble(p.getPrice())
+            ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice()) * amount,
+            decimalPlacesPriceDisplay) : p.getPrice();
+        Chip chipValue = createChip(context, context.getString(
+            R.string.property_insert_total,
+            context.getString(R.string.property_price_with_currency, price, currency)
+        ));
+        binding.flexboxLayout.addView(chipValue);
+      }
+    }
+    if (activeFields.contains(ShoppingListViewModel.FIELD_PRICE_LAST_UNIT)) {
+      ProductLastPurchased p = product != null
+          ? productLastPurchasedHashMap.get(product.getId()) : null;
+      if (p != null && p.getPrice() != null && !p.getPrice().isEmpty()) {
+        String price = NumUtil.isStringDouble(p.getPrice())
+            ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice()),
+            decimalPlacesPriceDisplay) : p.getPrice();
+        Chip chipValue = createChip(context, context.getString(
+            R.string.property_insert_per_unit,
+            context.getString(R.string.property_price_with_currency, price, currency)
+        ));
+        binding.flexboxLayout.addView(chipValue);
+      }
+    }
+
+    binding.flexboxLayout.setVisibility(
+        binding.flexboxLayout.getChildCount() > 0 ? View.VISIBLE : View.GONE
+    );
+
     binding.card.setAlpha(item.getDoneInt() == 1 ? 0.61f : 1);
 
     // CONTAINER
@@ -537,11 +586,30 @@ public class ShoppingModeItemAdapter extends
     binding.card.setOnClickListener(view -> listener.onItemRowClicked(groupedListItem));
   }
 
+  private Chip createChip(Context ctx, String text) {
+    @SuppressLint("InflateParams")
+    Chip chip = (Chip) LayoutInflater.from(ctx)
+        .inflate(R.layout.view_info_chip, null, false);
+    chip.setChipBackgroundColor(ColorStateList.valueOf(SurfaceColors.SURFACE_4.getColor(ctx)));
+    chip.setText(text);
+    chip.setEnabled(false);
+    chip.setClickable(false);
+    chip.setFocusable(false);
+    chip.setChipMinHeight(
+        useSmallerFonts ? UiUtil.dpToPx(ctx, 28) : UiUtil.dpToPx(ctx, 32)
+    );
+    chip.setTextSize(
+        useSmallerFonts ? 12 : 14
+    );
+    return chip;
+  }
+
   public void updateData(
       Context context,
       ArrayList<ShoppingListItem> shoppingListItems,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, String> productNamesHashMap,
+      HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
       HashMap<Integer, ProductGroup> productGroupHashMap,
       HashMap<Integer, Store> storeHashMap,
@@ -551,20 +619,27 @@ public class ShoppingModeItemAdapter extends
       String groupingMode,
       List<String> activeFields
   ) {
-    ArrayList<GroupedListItem> newGroupedListItems = getGroupedListItems(context, shoppingListItems,
+    ArrayList<GroupedListItem> newGroupedListItems = getGroupedListItems(
+        context, shoppingListItems,
         productGroupHashMap, productHashMap, productNamesHashMap, storeHashMap,
-        shoppingListNotes, groupingMode, showDoneItems);
-    ShoppingModeItemAdapter.DiffCallback diffCallback = new ShoppingModeItemAdapter.DiffCallback(
+        productLastPurchasedHashMap, shoppingListItemAmountsHashMap,
+        shoppingListNotes, groupingMode, priceTrackingEnabled, decimalPlacesPriceDisplay,
+        currency, showDoneItems);
+    ShoppingListItemAdapter.DiffCallback diffCallback = new ShoppingListItemAdapter.DiffCallback(
         this.groupedListItems,
         newGroupedListItems,
         this.productHashMap,
         productHashMap,
+        this.productLastPurchasedHashMap,
+        productLastPurchasedHashMap,
         this.quantityUnitHashMap,
         quantityUnitHashMap,
         this.shoppingListItemAmountsHashMap,
         shoppingListItemAmountsHashMap,
         this.missingProductIds,
         missingProductIds,
+        this.groupingMode,
+        groupingMode,
         this.activeFields,
         activeFields
     );
@@ -575,148 +650,16 @@ public class ShoppingModeItemAdapter extends
     this.productHashMap.putAll(productHashMap);
     this.quantityUnitHashMap.clear();
     this.quantityUnitHashMap.putAll(quantityUnitHashMap);
+    this.productLastPurchasedHashMap.clear();
+    this.productLastPurchasedHashMap.putAll(productLastPurchasedHashMap);
     this.shoppingListItemAmountsHashMap.clear();
     this.shoppingListItemAmountsHashMap.putAll(shoppingListItemAmountsHashMap);
     this.missingProductIds.clear();
     this.missingProductIds.addAll(missingProductIds);
+    this.groupingMode = groupingMode;
     this.activeFields.clear();
     this.activeFields.addAll(activeFields);
     diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this, linearLayoutManager));
-  }
-
-  static class DiffCallback extends DiffUtil.Callback {
-
-    final ArrayList<GroupedListItem> oldItems;
-    final ArrayList<GroupedListItem> newItems;
-    final HashMap<Integer, Product> productHashMapOld;
-    final HashMap<Integer, Product> productHashMapNew;
-    final HashMap<Integer, QuantityUnit> quantityUnitHashMapOld;
-    final HashMap<Integer, QuantityUnit> quantityUnitHashMapNew;
-    HashMap<Integer, Double> shoppingListItemAmountsHashMapOld;
-    HashMap<Integer, Double> shoppingListItemAmountsHashMapNew;
-    final ArrayList<Integer> missingProductIdsOld;
-    final ArrayList<Integer> missingProductIdsNew;
-    List<String> activeFieldsOld;
-    List<String> activeFieldsNew;
-
-    public DiffCallback(
-        ArrayList<GroupedListItem> oldItems,
-        ArrayList<GroupedListItem> newItems,
-        HashMap<Integer, Product> productHashMapOld,
-        HashMap<Integer, Product> productHashMapNew,
-        HashMap<Integer, QuantityUnit> quantityUnitHashMapOld,
-        HashMap<Integer, QuantityUnit> quantityUnitHashMapNew,
-        HashMap<Integer, Double> shoppingListItemAmountsHashMapOld,
-        HashMap<Integer, Double> shoppingListItemAmountsHashMapNew,
-        ArrayList<Integer> missingProductIdsOld,
-        ArrayList<Integer> missingProductIdsNew,
-        List<String> activeFieldsOld,
-        List<String> activeFieldsNew
-    ) {
-      this.oldItems = oldItems;
-      this.newItems = newItems;
-      this.productHashMapOld = productHashMapOld;
-      this.productHashMapNew = productHashMapNew;
-      this.quantityUnitHashMapOld = quantityUnitHashMapOld;
-      this.quantityUnitHashMapNew = quantityUnitHashMapNew;
-      this.shoppingListItemAmountsHashMapOld = shoppingListItemAmountsHashMapOld;
-      this.shoppingListItemAmountsHashMapNew = shoppingListItemAmountsHashMapNew;
-      this.missingProductIdsOld = missingProductIdsOld;
-      this.missingProductIdsNew = missingProductIdsNew;
-      this.activeFieldsOld = activeFieldsOld;
-      this.activeFieldsNew = activeFieldsNew;
-    }
-
-    @Override
-    public int getOldListSize() {
-      return oldItems.size();
-    }
-
-    @Override
-    public int getNewListSize() {
-      return newItems.size();
-    }
-
-    @Override
-    public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-      return compare(oldItemPosition, newItemPosition, false);
-    }
-
-    @Override
-    public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-      return compare(oldItemPosition, newItemPosition, true);
-    }
-
-    private boolean compare(int oldItemPos, int newItemPos, boolean compareContent) {
-      int oldItemType = GroupedListItem.getType(
-          oldItems.get(oldItemPos),
-          GroupedListItem.CONTEXT_SHOPPING_LIST
-      );
-      int newItemType = GroupedListItem.getType(
-          newItems.get(newItemPos),
-          GroupedListItem.CONTEXT_SHOPPING_LIST
-      );
-      if (oldItemType != newItemType) {
-        return false;
-      }
-      if (oldItemType == GroupedListItem.TYPE_ENTRY) {
-        ShoppingListItem newItem = (ShoppingListItem) newItems.get(newItemPos);
-        ShoppingListItem oldItem = (ShoppingListItem) oldItems.get(oldItemPos);
-        if (!compareContent) {
-          return newItem.getId() == oldItem.getId();
-        }
-        if (!ArrayUtil.areListsEqualIgnoreOrder(activeFieldsOld, activeFieldsNew)) {
-          return false;
-        }
-
-        Integer productIdOld =
-            NumUtil.isStringInt(oldItem.getProductId()) ? Integer.parseInt(oldItem.getProductId())
-                : null;
-        Product productOld = productIdOld != null ? productHashMapOld.get(productIdOld) : null;
-
-        Integer productIdNew =
-            NumUtil.isStringInt(newItem.getProductId()) ? Integer.parseInt(newItem.getProductId())
-                : null;
-        Product productNew = productIdNew != null ? productHashMapNew.get(productIdNew) : null;
-
-        Integer quIdOld =
-            NumUtil.isStringInt(oldItem.getQuId()) ? Integer.parseInt(oldItem.getQuId()) : null;
-        QuantityUnit quOld = quIdOld != null ? quantityUnitHashMapOld.get(quIdOld) : null;
-
-        Integer quIdNew =
-            NumUtil.isStringInt(newItem.getQuId()) ? Integer.parseInt(newItem.getQuId()) : null;
-        QuantityUnit quNew = quIdNew != null ? quantityUnitHashMapNew.get(quIdNew) : null;
-
-        Double amountOld = shoppingListItemAmountsHashMapOld.get(oldItem.getId());
-        Double amountNew = shoppingListItemAmountsHashMapNew.get(newItem.getId());
-
-        Boolean missingOld =
-            productIdOld != null ? missingProductIdsOld.contains(productIdOld) : null;
-        Boolean missingNew =
-            productIdNew != null ? missingProductIdsNew.contains(productIdNew) : null;
-
-        if (productOld == null && productNew != null
-            || productOld != null && productNew != null && productOld.getId() != productNew.getId()
-            || quOld == null && quNew != null
-            || quOld != null && quNew != null && quOld.getId() != quNew.getId()
-            || !Objects.equals(amountOld, amountNew)
-            || missingOld == null && missingNew != null
-            || missingOld != null && missingNew != null && missingOld != missingNew
-        ) {
-          return false;
-        }
-
-        return newItem.equals(oldItem);
-      } else if (oldItemType == GroupedListItem.TYPE_HEADER) {
-        GroupHeader newGroup = (GroupHeader) newItems.get(newItemPos);
-        GroupHeader oldGroup = (GroupHeader) oldItems.get(oldItemPos);
-        return newGroup.equals(oldGroup);
-      } else { // Type: Bottom notes
-        ShoppingListBottomNotes newNotes = (ShoppingListBottomNotes) newItems.get(newItemPos);
-        ShoppingListBottomNotes oldNotes = (ShoppingListBottomNotes) oldItems.get(oldItemPos);
-        return newNotes.equals(oldNotes);
-      }
-    }
   }
 
   @Override

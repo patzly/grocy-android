@@ -136,7 +136,8 @@ public class ShoppingListItemAdapter extends
     this.groupedListItems = getGroupedListItems(context, shoppingListItems,
         productGroupHashMap, productHashMap, productNamesHashMap, storeHashMap,
         productLastPurchasedHashMap, shoppingListItemAmountsHashMap,
-        shoppingListNotes, groupingMode, priceTrackingEnabled, decimalPlacesPriceDisplay, currency);
+        shoppingListNotes, groupingMode, priceTrackingEnabled,
+        decimalPlacesPriceDisplay, currency);
   }
 
   static ArrayList<GroupedListItem> getGroupedListItems(
@@ -215,7 +216,7 @@ public class ShoppingListItemAdapter extends
     return groupedListItems;
   }
 
-  public static String getGroupName(
+  static String getGroupName(
       ShoppingListItem shoppingListItem,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, ProductGroup> productGroupHashMap,
@@ -247,7 +248,7 @@ public class ShoppingListItemAdapter extends
     return groupName;
   }
 
-  private static void addBottomNotes(
+  static void addBottomNotes(
       Context context,
       String shoppingListNotes,
       ArrayList<GroupedListItem> groupedListItems,
@@ -266,7 +267,7 @@ public class ShoppingListItemAdapter extends
     }
   }
 
-  private static void addTotalPrice(
+  static void addTotalPrice(
       Context context,
       List<ShoppingListItem> shoppingListItems,
       ArrayList<GroupedListItem> groupedListItems,
