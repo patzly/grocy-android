@@ -335,7 +335,7 @@ public class ShoppingModeItemAdapter extends
         LinearLayout.LayoutParams paramsGroup = new LinearLayout.LayoutParams(
             LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT
         );
-        paramsGroup.setMargins(isRtl ? 0 : dp8 * 2, dp8, isRtl ? dp8 * 2 : 0, dp8 * 2);
+        paramsGroup.setMargins(isRtl ? 0 : dp8 * 2, 0, isRtl ? dp8 * 2 : 0, dp8);
         binding.container.setLayoutParams(paramsGroup);
       }
       binding.name.setText(productGroupName);
@@ -364,7 +364,7 @@ public class ShoppingModeItemAdapter extends
 
     if (useSmallerFonts) {
       int dp8 = UiUtil.dpToPx(binding.name.getContext(), 8);
-      binding.card.setContentPadding(dp8 * 2, dp8, dp8 * 2, dp8);
+      binding.card.setContentPadding(dp8, 0, dp8, 0);
       LinearLayout.LayoutParams paramsCard = new LinearLayout.LayoutParams(
           LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT
       );
