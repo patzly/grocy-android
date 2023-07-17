@@ -33,6 +33,7 @@ import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Store;
 
 public class MasterProductRepository {
@@ -57,6 +58,7 @@ public class MasterProductRepository {
     private final List<Location> locations;
     private final List<QuantityUnit> quantityUnits;
     private final List<QuantityUnitConversion> conversions;
+    private final List<QuantityUnitConversionResolved> conversionsResolved;
 
     public MasterProductData(
         List<Product> products,
@@ -66,7 +68,8 @@ public class MasterProductRepository {
         List<Store> stores,
         List<Location> locations,
         List<QuantityUnit> quantityUnits,
-        List<QuantityUnitConversion> conversions
+        List<QuantityUnitConversion> conversions,
+        List<QuantityUnitConversionResolved> conversionsResolved
     ) {
       this.products = products;
       this.productGroups = productGroups;
@@ -76,6 +79,7 @@ public class MasterProductRepository {
       this.locations = locations;
       this.quantityUnits = quantityUnits;
       this.conversions = conversions;
+      this.conversionsResolved = conversionsResolved;
     }
 
     public List<Product> getProducts() {
@@ -109,6 +113,10 @@ public class MasterProductRepository {
     public List<QuantityUnitConversion> getConversions() {
       return conversions;
     }
+
+    public List<QuantityUnitConversionResolved> getConversionsResolved() {
+      return conversionsResolved;
+    }
   }
 
   public void loadFromDatabase(DataListener onSuccess, Consumer<Throwable> onError) {
@@ -122,6 +130,7 @@ public class MasterProductRepository {
             appDatabase.locationDao().getLocations(),
             appDatabase.quantityUnitDao().getQuantityUnits(),
             appDatabase.quantityUnitConversionDao().getConversions(),
+            appDatabase.quantityUnitConversionResolvedDao().getConversionsResolved(),
             MasterProductData::new
         )
         .subscribeOn(Schedulers.io())

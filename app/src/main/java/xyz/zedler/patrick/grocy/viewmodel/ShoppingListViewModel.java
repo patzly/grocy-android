@@ -62,6 +62,7 @@ import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class ShoppingListViewModel extends BaseViewModel {
@@ -131,13 +132,16 @@ public class ShoppingListViewModel extends BaseViewModel {
         getApplication(),
         this::updateFilteredShoppingListItems
     );
+    boolean featurePriceEnabled = isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING);
     filterChipLiveDataFields = new FilterChipLiveDataFields(
         getApplication(),
-        PREF.SHOPPING_MODE_FIELDS,
+        PREF.SHOPPING_LIST_FIELDS,
         this::updateFilteredShoppingListItems,
         new Field(FIELD_AMOUNT, R.string.property_amount, true),
-        new Field(FIELD_PRICE_LAST_TOTAL, R.string.property_last_price_total, false),
-        new Field(FIELD_PRICE_LAST_UNIT, R.string.property_last_price_unit, false),
+        featurePriceEnabled
+            ? new Field(FIELD_PRICE_LAST_TOTAL, R.string.property_last_price_total, false) : null,
+        featurePriceEnabled
+            ? new Field(FIELD_PRICE_LAST_UNIT, R.string.property_last_price_unit, false) : null,
         new Field(FIELD_NOTES, R.string.property_notes, true),
         new Field(FIELD_PICTURE, R.string.property_picture, false)
     );
@@ -700,9 +704,10 @@ public class ShoppingListViewModel extends BaseViewModel {
 
   private void fillShoppingListItemAmountsHashMap() {
     shoppingListItemAmountsHashMap = new HashMap<>();
+    boolean isGrocyServerMin400 = VersionUtil.isGrocyServerMin400(sharedPrefs);
     for (ShoppingListItem item : shoppingListItems) {
       Double amount = AmountUtil.getShoppingListItemAmount(
-          item, productHashMap, quantityUnitHashMap, unitConversions
+          item, productHashMap, quantityUnitHashMap, unitConversions, isGrocyServerMin400
       );
       if (amount != null) {
         shoppingListItemAmountsHashMap.put(item.getId(), amount);

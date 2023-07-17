@@ -39,7 +39,8 @@ public class AmountUtil {
       ShoppingListItem item,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
-      List<QuantityUnitConversionResolved> unitConversions
+      List<QuantityUnitConversionResolved> unitConversions,
+      boolean isServerVersionMin400
   ) {
     if (!item.hasProduct()) {
       return null;
@@ -53,7 +54,7 @@ public class AmountUtil {
       return null;
     }
     HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil
-        .getUnitFactors(quantityUnitHashMap, unitConversions, product);
+        .getUnitFactors(quantityUnitHashMap, unitConversions, product, isServerVersionMin400);
     Double factor = unitFactors.get(quantityUnitHashMap.get(item.getQuIdInt()));
     return factor != null ? item.getAmountDouble() * factor : item.getAmountDouble();
   }

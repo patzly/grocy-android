@@ -1162,8 +1162,6 @@
   <string name="setting_date_keyboard_input_description">Anstatt mit Auswahlrädern</string>
   <string name="setting_date_keyboard_reverse">Umgekehrtes Datumsformat für Eingabe benutzen</string>
   <string name="setting_date_keyboard_reverse_description">DDMMYY anstatt YYMMDD</string>
-  <string name="setting_copy_barcode_note">Barcode-Notiz zu Bestandseintrag-Notiz kopieren</string>
-  <string name="setting_copy_barcode_note_description">Beim Kauf eines Produkts</string>
   <string name="setting_loading_circle">Ladekreis für alle Serveranfragen anzeigen</string>
   <string name="setting_loading_circle_description">Hilfreich für langsame Netzwerke</string>
   <string name="setting_tor">Tor verwenden</string>

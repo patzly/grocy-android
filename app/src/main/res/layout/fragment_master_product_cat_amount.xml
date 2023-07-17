@@ -282,30 +282,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
-              android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.FACTOR_AMOUNT)}">
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_factor"
-                tools:ignore="ContentDescription" />
-
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                  android:singleLine="false"
-                  android:text="@string/property_qu_factor" />
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@{formData.factorPurchaseToStockLive}" />
-
-              </LinearLayout>
-
-            </LinearLayout>
-
             <com.google.android.material.card.MaterialCardView
               style="@style/Widget.Grocy.Card.Text"
               android:layout_width="match_parent"

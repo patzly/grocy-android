@@ -1011,8 +1011,6 @@
   <string name="setting_date_keyboard_input_description">Namiesto valcov pre výber dátumu</string>
   <string name="setting_date_keyboard_reverse">Použiť obrátený formát dátumu pri vstupe</string>
   <string name="setting_date_keyboard_reverse_description">DDMMRR namiesto RRMMDD</string>
-  <string name="setting_copy_barcode_note">Skopírovať poznámku z čiarového kódu do poznámky v zozname zásob</string>
-  <string name="setting_copy_barcode_note_description">Pri kúpe produktu</string>
   <string name="setting_loading_circle">Zobraziť indikátor načítania pre všetky požiadavky</string>
   <string name="setting_loading_circle_description">Pomáha na pomalých sieťach</string>
   <string name="setting_tor">Použiť TOR</string>

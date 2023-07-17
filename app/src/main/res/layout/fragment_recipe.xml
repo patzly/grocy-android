@@ -326,6 +326,7 @@
                 android:id="@+id/button_fulfillment_info"
                 style="@style/Widget.Grocy.Button.IconButton"
                 android:onClick="@{v -> viewModel.toggleDisplayFulfillmentWrongInfo()}"
+                android:visibility="@{viewModel.grocyVersionMin400 ? View.GONE : View.VISIBLE}"
                 app:icon="@drawable/ic_round_warning"
                 app:iconTint="?attr/colorSecondary" />
 

@@ -1180,8 +1180,6 @@
   <string name="setting_date_keyboard_input_description">Em vez de rodas seletoras de datas</string>
   <string name="setting_date_keyboard_reverse">Use o formato de data reversa para entrada</string>
   <string name="setting_date_keyboard_reverse_description">DDMMAAAA no lugar de  AAMMDD</string>
-  <string name="setting_copy_barcode_note">Copiar nota de código de barras para nota de entrada de estoque</string>
-  <string name="setting_copy_barcode_note_description">Ao comprar um produto</string>
   <string name="setting_loading_circle">Mostrar círculo de carregamento para todas as solicitações</string>
   <string name="setting_loading_circle_description">Útil para redes lentas</string>
   <string name="setting_tor">Usar Tor</string>

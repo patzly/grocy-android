@@ -46,7 +46,7 @@
       <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         style="@style/Widget.Grocy.Toolbar.Back"
-        app:title="@string/action_login"
+        app:title="@{fragment.pageForGrocyKey ? @string/title_grocy : @string/title_home_assistant}"
         app:menu="@menu/menu_login" />
 
     </com.google.android.material.appbar.AppBarLayout>

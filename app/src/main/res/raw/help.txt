@@ -12,69 +12,105 @@ At the bottom, you can find out how to ask other questions, request features, an
 
 #### All pages are just blank?
 
-That's a bug on a few devices out there, mostly with Android 8.1 and 9. For a workaround please activate the following option:
+That's a bug on a few devices out there, mostly with Android 8.1 and 9. For a workaround please
+activate the following option:
 
 OPTION_USE_SLIDING
 
 #### How do I know what something does?
 
-Starting with Android 8 you can long-press almost every clickable element without a label to see what it will do.
+Starting with Android 8 you can long-press almost every clickable element without a label to see
+what it will do.
 
 #### My API key is invalid. What can I do?
 
 Tap <b>Create key</b> to open the key management page of your grocy instance.
-Create a new key and copy it to your clipboard, then paste it in the key field of Grocy Android and try again.
+Create a new key and copy it to your clipboard, then paste it in the key field of Grocy Android
+and try again.
 
 If you use Hass.io with the Grocy Add-on, continue to the next section.
 
 #### How can I use this app with the grocy Home Assistant add-on?
 
-After tapping <b>Own server</b> on the login page, you will be prompted to scan the QR code from an API key of your grocy server. Once you do that, the app will detect that you are using Home Assistant and prompt you to scan the QR code of a long-lived access token from Home Assistant. You can get this in your Home Assistant user profile in the bottom section. Once you scan the QR code, you will be directed to a form where you will need to fill in any missing data. If you have followed the steps up to this point, all that should be left is the server URL of Home Assistant (i.e. the URL where you can reach your Home Assistant instance). Be aware that you may add the port if your server uses another port than 443 or 80 (e.g. the local port of Home Assistant server is 8123).
+After tapping <b>Own server</b> on the login page, you will be prompted to scan the QR code from
+an API key of your grocy server. Once you do that, the app will detect that you are using Home
+Assistant and prompt you to scan the QR code of a long-lived access token from Home Assistant. You
+can get this in your Home Assistant user profile in the bottom section. Once you scan the QR code,
+you will be directed to a form where you will need to fill in any missing data. If you have followed
+the steps up to this point, all that should be left is the server URL of Home Assistant (i.e. the
+URL where you can reach your Home Assistant instance). Be aware that you may add the port if your
+server uses another port than 443 or 80 (e.g. the local port of Home Assistant server is 8123).
 
-You can also enter the URL of your Home Assistant Cloud (Nabu Casa), if you use this service. The URL must then be in the form `https://xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.ui.nabu.casa/`. Since typing can cause typos, we recommend copying the URL from somewhere else via Android's clipboard and pasting it into the field.
+You can also enter the URL of your Home Assistant Cloud (Nabu Casa), if you use this service. The
+URL must then be in the form `https://xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.ui.nabu.casa/`. Since typing
+can cause typos, we recommend copying the URL from somewhere else via Android's clipboard and
+pasting it into the field.
 
 #### Why are my barcodes unreadable if I use the selfie camera?
 
-Most devices have a front camera with a fixed focus for the normal distance between your face and the device.
-With this distance, the picture resolution is sometimes too low for the scanning algorithm.
+Most devices have a front camera with a fixed focus for the normal distance between your face and
+the device. With this distance, the picture resolution is sometimes too low for the scanning
+algorithm.
 
 #### What is ML Kit barcode scanner?
 
-ML Kit is an alternative AI-based barcode scanner which is implemented in the Google Play and GitHub version of our app since v2.0.0, F-Droid doesn't allow closed-source app components and thus we can't offer the same version there. ML Kit is from Google and doesn't make recognition mistakes compared to ZXing (the primary scanner option in our app). Additionaly, you don't have to align the barcode horizontally in your camera because it recognizes barcodes with any orientation. Go to <b>App settings > Scanner > Choose barcode scanner</b> to use ML Kit. You can either purchase the required unlock app in Google Play Store (which would make us happy) or you can download the unlock APK on GitHub.
+ML Kit is an alternative AI-based barcode scanner which is implemented in the Google Play and
+GitHub version of our app since v2.0.0, F-Droid doesn't allow closed-source app components and
+thus we can't offer the same version there. ML Kit is from Google and doesn't make recognition
+mistakes compared to ZXing (the primary scanner option in our app). Additionaly, you don't have
+to align the barcode horizontally in your camera because it recognizes barcodes with any
+orientation. Go to <b>App settings > Scanner > Choose barcode scanner</b> to use ML Kit. You can
+either purchase the required unlock app in Google Play Store (which would make us happy) or you
+can download the unlock APK on GitHub.
 
 #### How can I connect to my instance through Tor Hidden Service or Proxy?
 
-Go to <b>App settings > Network</b> and enable Tor support or HTTP-Proxy. Orbot is required for Tor support.
+Go to <b>App settings > Network</b> and enable Tor support or HTTP-Proxy. Orbot is required for
+Tor support.
 
 #### How can I use my USB or Bluetooth™ barcode scanner device?
 
-Go to <b>App settings > Scanner</b> and enable support for external scanners. Then you can connect a scanner for example using USB or Bluetooth™ and use it on the purchase/consume/transfer/inventory pages (the product field must be focused). Your scanner should have TAB or Enter as suffix, otherwise the workflow won't start after a scan.
+Go to <b>App settings > Scanner</b> and enable support for external scanners. Then you can connect
+a scanner for example using USB or Bluetooth™ and use it on the purchase/consume/transfer/inventory
+pages (the product field must be focused). Your scanner should have TAB or Enter as suffix,
+otherwise the workflow won't start after a scan.
 
 ## How to
 
 #### How to consume a product?
 
-Every time you (fully) consume something, you consume it in grocy as well. Ways to consume a product in Grocy Android:
+Every time you (fully) consume something, you consume it in grocy as well. Ways to consume a
+product in Grocy Android:
 
 - <b>Stock overview:</b> search for the product, swipe right on it and tap the <b>consume</b> icon
-- <b>Stock overview:</b> search for the product, tap on it to open the product overview, then tap the <b>consume</b> icon
-- <b>Overview page:</b> Tap the big button at the bottom to go into consume scan mode, then scan your product
-- <b>Shortcut:</b> Tap on the <b>consume</b> shortcut of Grocy in your app launcher on Android 7.1+ and scan your product
-- <b>Consume page:</b> Open the <b>consume</b> page from the bottom drawer or on the overview page and fill out the form, then tap the big button at the bottom
+- <b>Stock overview:</b> search for the product, tap on it to open the product overview, then tap
+  the <b>consume</b> icon
+- <b>Overview page:</b> Tap the big button at the bottom to go into consume scan mode, then scan
+  your product
+- <b>Shortcut:</b> Tap on the <b>consume</b> shortcut of Grocy in your app launcher on Android 7.1+
+  and scan your product
+- <b>Consume page:</b> Open the <b>consume</b> page from the bottom drawer or on the overview page
+  and fill out the form, then tap the big button at the bottom
 
 #### How to mark a product as opened?
 
-Every time you open or broach something, you mark one of it in grocy as open. Ways to mark a product as opened in Grocy Android:
+Every time you open or broach something, you mark one of it in grocy as open. Ways to mark a
+product as opened in Grocy Android:
 
 - <b>Stock overview:</b> search for the product, swipe right on it and tap the <b>open</b> icon
-- <b>Stock overview:</b> search for the product, tap on it to open the product overview, then tap the <b>open</b> icon
-- <b>Overview page:</b> Tap the big button at the bottom to go into consume scan mode, check <b>Mark as opened</b>, then scan your product
-- <b>Shortcut:</b> Tap on the <b>consume</b> shortcut of Grocy in your app launcher on Android 7.1+ and continue as described previously
-- <b>Consume page:</b> Open the <b>consume</b> page in the bottom drawer or on the overview page and fill out the form, then check <b>Mark as opened</b> and tap on the big button at the bottom
+- <b>Stock overview:</b> search for the product, tap on it to open the product overview, then tap
+  the <b>open</b> icon
+- <b>Overview page:</b> Tap the big button at the bottom to go into consume scan mode,
+  check <b>Mark as opened</b>, then scan your product
+- <b>Shortcut:</b> Tap on the <b>consume</b> shortcut of Grocy in your app launcher on Android
+  7.1+ and continue as described previously
+- <b>Consume page:</b> Open the <b>consume</b> page in the bottom drawer or on the overview page
+  and fill out the form, then check <b>Mark as opened</b> and tap on the big button at the bottom
 
 ## Deeplinks
 
-You can open a desired page of the app using an URI. This could be written e.g. into a NFC tag for easy navigation to the consume page or other pages in the app using physical interaction.
+You can open a desired page of the app using an URI. This could be written e.g. into a NFC tag for
+easy navigation to the consume page or other pages in the app using physical interaction.
 
 #### URIs:
 
@@ -95,9 +131,10 @@ You can open a desired page of the app using an URI. This could be written e.g. 
 - grocy://masterDataOverviewFragment
 - grocy://stockEntriesFragment
 
-The value of parameter statusFilterId for the second URI can be 0 for all items, 1 for due soon, 3 for overdue, 4 for expired, 5 for in stock, 6 for opened and 7 for "not fresh" combination.
+The value of parameter statusFilterId for the second URI can be 0 for all items, 1 for due soon,
+3 for overdue, 4 for expired, 5 for in stock, 6 for opened and 7 for "not fresh" combination.
 
 ## Support
 
-Please go to our project page on GitHub (patzy/grocy-android) and open a new issue with your question.
-We will try to help you as fast as possible.
+Please go to our project page on GitHub (patzy/grocy-android) and open a new issue with
+your question. We will try to help you as fast as possible.

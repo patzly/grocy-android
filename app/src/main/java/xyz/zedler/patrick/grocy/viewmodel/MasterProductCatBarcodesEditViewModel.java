@@ -49,13 +49,14 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
 
@@ -73,7 +74,7 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
 
   private List<Store> stores;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-  private List<QuantityUnitConversion> unitConversions;
+  private List<QuantityUnitConversionResolved> unitConversions;
 
   private Runnable queueEmptyAction;
   private final boolean debug;
@@ -112,7 +113,7 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
       this.stores = data.getStores();
       formData.getBarcodesLive().setValue(getBarcodes(data.getBarcodes()));
       this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
-      this.unitConversions = data.getConversions();
+      this.unitConversions = data.getConversionsResolved();
       if (downloadAfterLoading) {
         downloadData(false);
       } else {
@@ -144,7 +145,7 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
         Store.class,
         ProductBarcode.class,
         QuantityUnit.class,
-        QuantityUnitConversion.class
+        QuantityUnitConversionResolved.class
     );
   }
 
@@ -224,15 +225,14 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
   private void setProductQuantityUnitsAndFactors(Product product) {
     try {
       HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
-          getApplication(),
           quantityUnitHashMap,
           unitConversions,
           product,
-          false
+          VersionUtil.isGrocyServerMin400(sharedPrefs)
       );
       formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
-      QuantityUnit purchase = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
-      formData.setQuantityUnitPurchase(purchase);
+      formData.setQuantityUnitPurchase(quantityUnitHashMap.get(product.getQuIdPurchaseInt()));
+      formData.setQuantityUnitStock(quantityUnitHashMap.get(product.getQuIdStockInt()));
     } catch (IllegalArgumentException e) {
       showMessage(e.getMessage());
     }

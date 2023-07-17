@@ -997,8 +997,6 @@
   <string name="setting_date_keyboard_input_description">取代日期選擇器</string>
   <string name="setting_date_keyboard_reverse">使用反向日期格式進行輸入‎</string>
   <string name="setting_date_keyboard_reverse_description">‎DDMMYY 而不是 YYMMDD‎</string>
-  <string name="setting_copy_barcode_note">將條碼的備註複製到庫存條目</string>
-  <string name="setting_copy_barcode_note_description">購買物品時</string>
   <string name="setting_loading_circle">顯示載入圖示</string>
   <string name="setting_loading_circle_description">在較慢的網路中有幫助</string>
   <string name="setting_tor">使用Tor</string>

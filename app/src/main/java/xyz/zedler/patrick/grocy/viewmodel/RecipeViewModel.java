@@ -321,6 +321,10 @@ public class RecipeViewModel extends BaseViewModel {
     displayFulfillmentWrongInfo.setValue(!displayFulfillmentWrongInfo.getValue());
   }
 
+  public boolean isGrocyVersionMin400() {
+    return VersionUtil.isGrocyServerMin400(sharedPrefs);
+  }
+
   public int getMaxDecimalPlacesAmount() {
     return maxDecimalPlacesAmount;
   }

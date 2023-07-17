@@ -42,7 +42,6 @@ public class FormDataMasterProductCatAmount {
   public static final String AMOUNT_ARG = "amount_arg";
   public static final int MIN_AMOUNT = 0;
   public static final int QUICK_CONSUME_AMOUNT = 2;
-  public static final int FACTOR_AMOUNT = 4;
   public static final int TARE_WEIGHT = 6;
 
   private final Application application;
@@ -53,7 +52,6 @@ public class FormDataMasterProductCatAmount {
   private final MutableLiveData<Boolean> treatOpenedAsOutOfStock;
   private final MutableLiveData<String> quickConsumeAmountLive;
   private final LiveData<String> quickConsumeAmountTitleLive;
-  private final MutableLiveData<String> factorPurchaseToStockLive;
   private final MutableLiveData<Boolean> enableTareWeightHandlingLive;
   private final MutableLiveData<String> tareWeightLive;
   private final LiveData<String> tareWeightTitleLive;
@@ -90,7 +88,6 @@ public class FormDataMasterProductCatAmount {
                 quantityUnit.getNamePlural()
             )
     );
-    factorPurchaseToStockLive = new MutableLiveData<>();
     enableTareWeightHandlingLive = new MutableLiveData<>(false);
     tareWeightLive = new MutableLiveData<>();
     tareWeightTitleLive = Transformations.map(
@@ -145,10 +142,6 @@ public class FormDataMasterProductCatAmount {
     return quickConsumeAmountTitleLive;
   }
 
-  public MutableLiveData<String> getFactorPurchaseToStockLive() {
-    return factorPurchaseToStockLive;
-  }
-
   public MutableLiveData<Boolean> getEnableTareWeightHandlingLive() {
     return enableTareWeightHandlingLive;
   }
@@ -184,12 +177,6 @@ public class FormDataMasterProductCatAmount {
       } else {
         quickConsumeAmountLive.setValue(number);
       }
-    } else if (type == FACTOR_AMOUNT) {
-      if (NumUtil.toDouble(number) <= 0) {
-        factorPurchaseToStockLive.setValue(String.valueOf(1));
-      } else {
-        factorPurchaseToStockLive.setValue(number);
-      }
     } else { // TARE_WEIGHT
       if (NumUtil.toDouble(number) < 0) {
         tareWeightLive.setValue(String.valueOf(0));
@@ -205,8 +192,6 @@ public class FormDataMasterProductCatAmount {
       numberString = minAmountLive.getValue();
     } else if (type == QUICK_CONSUME_AMOUNT) {
       numberString = quickConsumeAmountLive.getValue();
-    } else if (type == FACTOR_AMOUNT) {
-      numberString = factorPurchaseToStockLive.getValue();
     } else { // TARE_WEIGHT
       numberString = tareWeightLive.getValue();
     }
@@ -249,7 +234,6 @@ public class FormDataMasterProductCatAmount {
       product.setTreatOpenedAsOutOfStock(treatOpened ? "1" : "0");
     }
     product.setQuickConsumeAmount(quickConsumeAmountLive.getValue());
-    product.setQuFactorPurchaseToStock(factorPurchaseToStockLive.getValue());
     product.setEnableTareWeightHandling(enableTareWeightHandlingLive.getValue());
     product.setTareWeight(tareWeightLive.getValue());
     product.setNotCheckStockFulfillmentForRecipes(disableStockCheckLive.getValue());
@@ -263,13 +247,11 @@ public class FormDataMasterProductCatAmount {
 
     String minAmount = NumUtil.trimAmount(product.getMinStockAmountDouble(), maxDecimalPlacesAmount);
     String quickAmount = NumUtil.trimAmount(product.getQuickConsumeAmountDouble(), maxDecimalPlacesAmount);
-    String factor = NumUtil.trimAmount(product.getQuFactorPurchaseToStockDouble(), maxDecimalPlacesAmount);
     String tareWeight = NumUtil.trimAmount(product.getTareWeightDouble(), maxDecimalPlacesAmount);
     minAmountLive.setValue(minAmount);
     accumulateMinAmount.setValue(product.getAccumulateSubProductsMinStockAmountBoolean());
     treatOpenedAsOutOfStock.setValue(product.getTreatOpenedAsOutOfStockBoolean());
     quickConsumeAmountLive.setValue(quickAmount);
-    factorPurchaseToStockLive.setValue(factor);
     enableTareWeightHandlingLive.setValue(product.getEnableTareWeightHandlingBoolean());
     tareWeightLive.setValue(tareWeight);
     disableStockCheckLive.setValue(product.getNotCheckStockFulfillmentForRecipesBoolean());

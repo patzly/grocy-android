@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class FormDataMasterProduct {
 
@@ -76,7 +77,8 @@ public class FormDataMasterProduct {
     );
     catQuErrorLive = Transformations.map(
         productLive,
-        FormDataMasterProductCatQuantityUnit::isFormInvalid
+        p -> FormDataMasterProductCatQuantityUnit
+            .isFormInvalid(p, VersionUtil.isGrocyServerMin400(sharedPrefs))
     );
     catAmountErrorLive = Transformations.map(
         productLive,

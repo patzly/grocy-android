@@ -333,7 +333,7 @@ public class SettingsViewModel extends BaseViewModel {
 
   public boolean getTurnOnQuickModeEnabled() {
     return sharedPrefs.getBoolean(
-        BEHAVIOR.DATE_KEYBOARD_INPUT,
+        BEHAVIOR.TURN_ON_QUICK_MODE,
         SETTINGS_DEFAULT.BEHAVIOR.TURN_ON_QUICK_MODE
     );
   }
@@ -398,18 +398,6 @@ public class SettingsViewModel extends BaseViewModel {
   public void setKeepScreenOnRecipesEnabled(boolean enabled) {
     sharedPrefs.edit()
             .putBoolean(Constants.SETTINGS.RECIPES.KEEP_SCREEN_ON, enabled).apply();
-  }
-
-  public boolean getCopyBarcodeNoteEnabled() {
-    return sharedPrefs.getBoolean(
-        BEHAVIOR.COPY_BARCODE_NOTE,
-        SETTINGS_DEFAULT.BEHAVIOR.COPY_BARCODE_NOTE
-    );
-  }
-
-  public void setCopyBarcodeNoteEnabled(boolean enabled) {
-    sharedPrefs.edit()
-        .putBoolean(Constants.SETTINGS.BEHAVIOR.COPY_BARCODE_NOTE, enabled).apply();
   }
 
   public boolean getFrontCamEnabled() {

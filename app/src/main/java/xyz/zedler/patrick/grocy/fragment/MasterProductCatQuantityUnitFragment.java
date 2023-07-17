@@ -26,7 +26,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
@@ -35,6 +34,7 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatQuantityUnitBinding;
 import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatQuantityUnit;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -123,9 +123,8 @@ public class MasterProductCatQuantityUnitFragment extends BaseFragment {
             FormDataMasterProductCatQuantityUnit.QUANTITY_UNIT_TYPE,
             idForValue
         );
-        List<QuantityUnit> qUs = viewModel.getFormData().getQuantityUnitsLive().getValue();
-        if (qUs == null) return;
-        QuantityUnit quantityUnit = QuantityUnit.getFromId(qUs, (Integer) newQuId);
+        QuantityUnit quantityUnit = viewModel.getFormData()
+            .getQuantityUnitFromId((Integer) newQuId);
         selectQuantityUnit(quantityUnit, bundle);
       });
     }
@@ -143,6 +142,16 @@ public class MasterProductCatQuantityUnitFragment extends BaseFragment {
     );
     viewModel.getFormData().getQuPurchaseErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textQuPurchaseName.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+        )
+    );
+    viewModel.getFormData().getQuConsumeErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textQuConsumeName.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+        )
+    );
+    viewModel.getFormData().getQuPriceErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textQuPriceName.setTextColor(
             ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
         )
     );
@@ -219,6 +228,18 @@ public class MasterProductCatQuantityUnitFragment extends BaseFragment {
   @Override
   public void selectQuantityUnit(QuantityUnit quantityUnit, Bundle argsBundle) {
     viewModel.getFormData().selectQuantityUnit(quantityUnit, argsBundle);
+  }
+
+  public void showInputNumberBottomSheet() {
+    Bundle bundle = new Bundle();
+    bundle.putDouble(Constants.ARGUMENT.NUMBER, viewModel.getFormData().getFactorPurchaseToStock());
+    bundle.putString(ARGUMENT.HINT, getString(R.string.property_qu_factor));
+    activity.showBottomSheet(new InputBottomSheet(), bundle);
+  }
+
+  @Override
+  public void saveInput(String text, Bundle argsBundle) {
+    viewModel.getFormData().setFactorPurchaseToStock(text);
   }
 
   @Override

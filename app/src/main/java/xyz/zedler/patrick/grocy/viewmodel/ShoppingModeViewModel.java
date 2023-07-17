@@ -47,6 +47,7 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
@@ -58,6 +59,7 @@ import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class ShoppingModeViewModel extends BaseViewModel {
@@ -66,6 +68,8 @@ public class ShoppingModeViewModel extends BaseViewModel {
   private static final int DEFAULT_SHOPPING_LIST_ID = 1;
 
   public final static String FIELD_AMOUNT = "field_amount";
+  public final static String FIELD_PRICE_LAST_UNIT = "field_price_last_unit";
+  public final static String FIELD_PRICE_LAST_TOTAL = "field_price_last_total";
   public final static String FIELD_NOTES = "field_notes";
   public final static String FIELD_PRODUCT_DESCRIPTION = "field_product_description";
   public final static String FIELD_PICTURE = "field_picture";
@@ -91,6 +95,7 @@ public class ShoppingModeViewModel extends BaseViewModel {
   private HashMap<Integer, Store> storeHashMap;
   private HashMap<Integer, Product> productHashMap;
   private HashMap<Integer, String> productNamesHashMap;
+  private HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap;
   private ArrayList<Integer> missingProductIds;
   private final boolean debug;
 
@@ -112,11 +117,16 @@ public class ShoppingModeViewModel extends BaseViewModel {
         getApplication(),
         this::updateFilteredShoppingListItems
     );
+    boolean featurePriceEnabled = isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING);
     filterChipLiveDataFields = new FilterChipLiveDataFields(
         getApplication(),
         PREF.SHOPPING_MODE_FIELDS,
         this::updateFilteredShoppingListItems,
         new Field(FIELD_AMOUNT, R.string.property_amount, true),
+        featurePriceEnabled
+            ? new Field(FIELD_PRICE_LAST_TOTAL, R.string.property_last_price_total, false) : null,
+        featurePriceEnabled
+            ? new Field(FIELD_PRICE_LAST_UNIT, R.string.property_last_price_unit, false) : null,
         new Field(FIELD_NOTES, R.string.property_notes, true),
         new Field(FIELD_PRODUCT_DESCRIPTION, R.string.property_product_description, false),
         new Field(FIELD_PICTURE, R.string.property_picture, false)
@@ -142,6 +152,8 @@ public class ShoppingModeViewModel extends BaseViewModel {
       unitConversions = data.getUnitConversionsResolved();
       productHashMap = ArrayUtil.getProductsHashMap(data.getProducts());
       productNamesHashMap = ArrayUtil.getProductNamesHashMap(data.getProducts());
+      productLastPurchasedHashMap = ArrayUtil
+          .getProductLastPurchasedHashMap(data.getProductsLastPurchased());
       storeHashMap = ArrayUtil.getStoresHashMap(data.getStores());
       missingProductIds = ArrayUtil.getMissingProductsIds(data.getMissingItems());
       fillShoppingListItemAmountsHashMap();
@@ -399,9 +411,10 @@ public class ShoppingModeViewModel extends BaseViewModel {
 
   private void fillShoppingListItemAmountsHashMap() {
     shoppingListItemAmountsHashMap = new HashMap<>();
+    boolean isGrocyServerMin400 = VersionUtil.isGrocyServerMin400(sharedPrefs);
     for (ShoppingListItem item : shoppingListItems) {
       Double amount = AmountUtil.getShoppingListItemAmount(
-          item, productHashMap, quantityUnitHashMap, unitConversions
+          item, productHashMap, quantityUnitHashMap, unitConversions, isGrocyServerMin400
       );
       if (amount != null) {
         shoppingListItemAmountsHashMap.put(item.getId(), amount);
@@ -423,6 +436,10 @@ public class ShoppingModeViewModel extends BaseViewModel {
 
   public HashMap<Integer, String> getProductNamesHashMap() {
     return productNamesHashMap;
+  }
+
+  public HashMap<Integer, ProductLastPurchased> getProductLastPurchasedHashMap() {
+    return productLastPurchasedHashMap;
   }
 
   public HashMap<Integer, ProductGroup> getProductGroupHashMap() {

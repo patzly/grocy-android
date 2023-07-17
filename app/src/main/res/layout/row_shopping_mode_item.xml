@@ -65,12 +65,16 @@
           android:textStyle="italic"
           android:visibility="gone" />
 
-        <TextView
-          android:id="@+id/amount"
-          style="@style/Widget.Grocy.TextView.TitleMedium"
+        <com.google.android.flexbox.FlexboxLayout
+          android:id="@+id/flexbox_layout"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:singleLine="true" />
+          android:layout_marginTop="4dp"
+          app:flexWrap="wrap"
+          app:alignItems="stretch"
+          app:alignContent="stretch"
+          app:showDivider="middle"
+          app:dividerDrawable="@drawable/shape_flex_layout_divider"/>
 
         <TextView
           android:id="@+id/note"

@@ -37,7 +37,6 @@ import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.PREF;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -70,6 +69,7 @@ import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class InventoryViewModel extends BaseViewModel {
 
@@ -197,7 +197,8 @@ public class InventoryViewModel extends BaseViewModel {
       HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
           quantityUnitHashMap,
           unitConversions,
-          updatedProduct
+          updatedProduct,
+          VersionUtil.isGrocyServerMin400(sharedPrefs)
       );
       formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
       QuantityUnit stock = quantityUnitHashMap.get(updatedProduct.getQuIdStockInt());
@@ -255,11 +256,7 @@ public class InventoryViewModel extends BaseViewModel {
       }
 
       // note
-      if (barcode != null
-          && barcode.getNote() != null
-          && sharedPrefs.getBoolean(BEHAVIOR.COPY_BARCODE_NOTE,
-          SETTINGS_DEFAULT.BEHAVIOR.COPY_BARCODE_NOTE)
-      ) {
+      if (barcode != null && barcode.getNote() != null) {
         formData.getNoteLive().setValue(barcode.getNote());
       }
 

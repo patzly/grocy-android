@@ -362,7 +362,7 @@
   <string name="msg_quick_mode_confirm_transfer">Provede se:\nPřesun %1$s %2$s produktu %3$s\nZ: %4$s\nDo: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">Provede se:\nZměna množství produktu %1$s na %2$s %3$s\nna všech přidaných baleních\nDatum min. trvanlivosti:%4$s \nCena: %5$s\nObchod: %6$s\nUmístění: %7$s</string>
-  <string name="msg_compatibility">Tato verze aplikace není kompatibilní s verzí grocy na serveru.\n\nVerze na serveru: %1$s\n\nPodporovaná verze: %2$s\n\nJestliže má aktuální verze vyšší první číslo než podporovaná verze, mohlo by dojít až ke ztrátě dat na serveru nebo (což je pravděpodobnější) ke zhroucení aplikace.\nJestliže má nová verze vyšší druhé nebo třetí číslo, pak je riziko problémů malé.</string>
+  <string name="msg_compatibility">Tato verze aplikace není kompatibilní s verzí Grocy na serveru.\n\nVerze na serveru: %1$s\n\nPodporovaná verze: %2$s\n\nJestliže má aktuální verze vyšší první číslo než podporovaná verze, mohlo by dojít až ke ztrátě dat na serveru nebo (což je pravděpodobnější) ke zhroucení této aplikace.\nJestlinJestliže má nová verze vyšší druhé nebo třetí číslo, pak je riziko problémů malé.</string>
   <string name="msg_logout">Na váš server se nic neuloží. Budete přesměrováni na přihlašovací stránku.</string>
   <string name="msg_logout_demo">Používáte veřejně přístupný demo server <u>https://grocy.info</u>.\n\n<b>Žádné vaše změny nebudou trvalé!\nVše co zapíšete ale zůstane veřejné, dokud se server neuvede do výchozího stavu, což se děje jednou za den.</b>\n\nNa přihlašovací stránce můžete zadat adresu vlastního serveru.</string>
   <string name="msg_logout_demo_short">Toto je veřejný grocy demo server. Klepněte pro více informací.</string>
@@ -381,10 +381,10 @@
   <string name="msg_recipe_consume_ask">Opravdu si přejete spotřebovat všechny ingredience receptu „%1$s“? Suroviny označené „Zkontrolovat pouze zda je v zásobě jakékoliv množství“ budou ignorovány.</string>
   <string name="msg_recipe_shopping_list_ask">Chcete přidat všechny chybějící ingredience z receptu „%1$s“ do nákupního seznamu?\nOdškrtněte ty, které v nákupním seznamu nechcete.</string>
   <string name="msg_welcome">Grocy pro Android vás vítá</string>
-  <string name="msg_welcome_introduce">Chcete-li grocy používat, musíte si ji nejprve nainstalovat na svůj server nebo jako grocy add-on pro Home Assistant.\nPokud si jen chcete aplikaci vyzkoušet, můžete použít demo server od Bernda Bestela, tvůrce grocy.</string>
+  <string name="msg_welcome_introduce">Chcete-li Grocy používat, musíte si ji nejprve nainstalovat na svůj server nebo jako Grocy add-on pro Home Assistant.\nPokud si jen chcete aplikaci vyzkoušet, můžete použít demo server od Bernda Bestela, tvůrce Grocy.</string>
   <string name="msg_choose_option_below">Vyberte si jednu z možností</string>
-  <string name="msg_qr_code_scan">Nejprve navštivte web vašeho grocy serveru a přejděte na stránku \'Spravovat API klíče\'. Klikněte na „Přidat”. Poté API klíč zkopírujte a použijte v této aplikaci. Pohodlnější je otevřít web grocy na jiném zařízení. Tam na stránce \'Spravovat API klíče\' klikněte na ikonu QR kódu a API klíč naskenujte.</string>
-  <string name="msg_qr_code_scan_token">Používáte doplněk pro Home Assistant. Vytvořte přístupový kód s dlouhou životností ve svém profilu aplikace Home Assistant. Funkci najdete v poslední sekci. Po vytvoření klikněte na Generate QR Code a sejměte ho tu.</string>
+  <string name="msg_qr_code_scan">Nejprve navštivte web vašeho Grocy serveru a přejděte na stránku „Spravovat API klíče”. Klikněte na „Přidat”. Poté API klíč zkopírujte a použijte v této aplikaci. Pohodlnější způsob je otevřít web Grocy na jiném zařízení. Tam na stránce „Spravovat API klíče” klikněte na ikonu QR kódu a API klíč naskenujte.</string>
+  <string name="msg_qr_code_scan_token">Používáte doplněk pro Home Assistant. Vytvořte přístupový kód s dlouhou životností ve svém profilu aplikace Home Assistant. Funkci najdete v poslední sekci. Po vytvoření klikněte na „Generate QR Code” a sejměte ho tu.</string>
   <string name="msg_port_connection_info_without_port">Aplikace se připojuje k portu %1$s.\nJestliže ji chcete připojit k jinému číslu portu, přidejte toto číslo (např. 81) k URL vašeho serveru.\nPříklad: http://mujserver.cz:81/</string>
   <string name="msg_port_connection_info_with_port">Aplikace se připojuje k portu č.: %1$s</string>
   <string name="msg_clear_form_first">Nejprve smažte všechny údaje než začnete skenovat další čárový kód</string>
@@ -417,8 +417,13 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_stock">Jednotku množství zásoby již není možné po prvním nákupu změnit.</string>
   <string name="msg_help_qu_stock_changeable">Měrnou jednotka zásoby můžete změnit jen tehdy, pokud je definován její převod do jiné jednotky.</string>
+  <string name="msg_help_qu_changeable">Měrnou jednotku produktu lze změnit jen tehdy, pokud jste pro ni definovali převodní poměr</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_qu_purchase">Toto je výchozí měrná jednotka produktu při jeho přidání do nákupního seznamu</string>
+  <string name="msg_help_qu_purchase">Výchozí množstevní jednotka pro akci Nakoupit a pro vkládání produktu do nákupního seznamu</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_consume">Měrná jednotka produktu pro funkci Spotřebovat</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_price">Zobrazované ceny produktu budou odpovídat této množstevní jednotce</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">Pokud je zaškrtnuto, minimální množství zásob podřízených produktů bude přičteno do tohoto produktu. To znamená že podřízené produkty nikdy nebudou chybět, ale pouze tento produkt.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -462,21 +467,22 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="msg_help_recipe_group">Text bude použit jako nadpis pro skupinu ingrediencí</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_price_factor">Konečná cena této ingredience bude vynásobena tímto číslem. Vhodné např. pro prodej produktu vyrobeného z receptu.</string>
+  <string name="msg_help_recipe_ingredients_wrong">Pokud ne serveru používáte verzi Grocy nižší, než 4.0.0, mohou se v tomto seznamu objevit chybné informace. Aktualizujte, prosím, serverovou verzi alespoň na 4.0.0.</string>
   <string name="msg_help_date_chooser">Můžete si nastavit i vkládání dat klávesnicí. Urychlí to práci.</string>
   <string name="msg_help_date_chooser_keyboard">Můžete si změnit formát zápisu data na DDMMRR.\nPomocí klávesy Done (Hotovo, Enter...) na klávesnici tuto stránku uložíte a zavřete.</string>
   <string name="msg_help_quick_mode">Podržením prstu na titulku se přepnete do zrychleného režimu. Pokud jsou k produktu nebo k jeho čárovému kódu vyplněny všechny informace, pak stačí naskenovat jeho čárový kód a přidání do zásoby se provede z těchto dat.</string>
   <string name="msg_help_loading_circle_settings">Na každé stránce, kde se něco čte ze serveru, aplikace nejprve zkontroluje, zda se databáze na serveru změnila od poslední aktualizace a pokud ano, načte nová data. Zapněte tuto volbu pokud chcete zobrazit symbol komunikace i pro ověřování aktuálnosti databáze.</string>
   <string name="msg_help_start">Je aktivní režim pro začátečníky. Texty nápovědy jsou automaticky zobrazeny na všech stránkách, kde jsou dostupné. Klepnutím to změníte.</string>
   <string name="msg_help_purchased_date_settings">Zobrazit možnost zadání data nákupu na stránce nákupu. Jinak se bude ukládat aktuální datum.</string>
-  <string name="msg_help_normal_login">Klepněte na tuto kartu pokud používáte Home Assistant s doplňkem pro grocy.</string>
-  <string name="msg_help_home_assistant_login">Používáte doplněk grocy pro Home Assistant. To vyžaduje doplňkové informace. Klepněte na tuto kartu pro přepnutí na běžné přihlášení.</string>
+  <string name="msg_help_normal_login">Klepněte na tuto kartu pokud používáte Home Assistant s doplňkem pro Grocy</string>
+  <string name="msg_help_home_assistant_login">Používáte doplněk Grocy pro Home Assistant. To vyžaduje doplňkové informace. Klepněte na tuto kartu pro přepnutí na běžné přihlašování.</string>
   <string name="msg_help_home_assistant_login_help_show">Klepnutím zobrazíte nápovědu</string>
   <string name="msg_help_home_assistant_login_help_hide">Klepnutím nápovědu skryjete</string>
   <string name="msg_help_home_assistant_login_server">Zde můžete zadat URL adresu vašeho Nabu Casa cloudu, pokud ho používáte. Klepněte na tuto kartu pro otevření webu Nabu Casa.</string>
   <string name="msg_help_home_assistant_login_token">Můžete si vytvořit přístupový kód s dlouhou životností ve svém profilu aplikace Home Assistant. Klepnutím otevřete výše uvedenou adresu</string>
   <string name="msg_help_home_assistant_login_proxy_id">Vraťte se zpět nebo klikněte na tuto kartu pro naskenování QR kódu, který vyplní všechny údaje.</string>
   <string name="msg_help_fab_overview_start">V tomto přehledu má tlačítko dvě funkce:\n\n– sejmutím čárového kódu a klepnutím produkt spotřebujete\n– sejmutím čárového kódu a podržením produkt nakoupíte\n\nTtoto tlačítko je vždy aktivní a můžete jím produkty spotřebovat nebo nakoupit. V nastavení aplikace to můžete změnit.</string>
-  <string name="msg_share">Tato aplikace je klient projektu grocy: \nhttps://github.com/patzly/grocy-android</string>
+  <string name="msg_share">Tato aplikace je klient projektu Grocy: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">Tento API klíč nefunguje</string>
   <string name="error_orbot_not_installed">Orbot není instalován</string>
@@ -513,7 +519,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="error_invalid_price">Neplatná cena</string>
   <string name="error_invalid_factor">Neplatný násobitel</string>
   <string name="error_invalid_date_format">Nesprávný formát data</string>
-  <string name="error_api_qr_code">Tento QR kód neobsahuje přihlašovací údaje Grocy API</string>
+  <string name="error_api_qr_code">Tento QR kód neobsahuje autorizační údaje Grocy API</string>
   <string name="error_token_qr_code">Toto není správný QR kód z Home Assistant s dlouhou životností</string>
   <string name="error_loading_qus">Nepodařilo se načíst měrné jednotky produktu</string>
   <string name="error_clipboard_no_image">Ve schránce není obrázek nebo není čitelný</string>
@@ -539,7 +545,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="error_insert">Chyba: %1$s</string>
   <string name="error_details">Podrobnosti k chybě</string>
   <string name="error_unknown">Jejda!</string>
-  <string name="error_not_grocy_instance">Neplatná instance grocy</string>
+  <string name="error_not_grocy_instance">Neplatná instance Grocy</string>
   <string name="error_timeout">Odezva serveru byla příliš dlouhá</string>
   <string name="error_no_product_selected">Nebyl vybrán žádný produkt</string>
   <string name="error_failed_to_connect_to">Nepodařilo se připojit k serveru</string>
@@ -913,6 +919,10 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_qu_stock">Měrná jednotka zásoby</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Převodní koeficient (násobek) měrné jednotky nákupu produktu do měrné jednotky zásob</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_default_qu_consume">Výchozí měrná jednotka pro spotřebu</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_prices">Množstevní jednotka pro ceny</string>
   <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
   <string name="property_quantity_unit_from">Převést z jednotky</string>
   <!-- Example: "Convert to cup"; This string is part of a pair, there is also 'Convert from' -->
@@ -1145,7 +1155,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
     <item quantity="other">Za %d let</item>
   </plurals>
 
-  <string name="info_acknowledgement">Děkujeme vývojáři grocy Berndu Bestelovi, bez jehož skvělé práce by tato aplikace nevznikla.</string>
+  <string name="info_acknowledgement">Děkujeme vývojáři Grocy, Berndu Bestelovi, bez jehož skvělé práce by tato aplikace nevznikla.</string>
   <string name="info_intro">Přehrát úvodní animaci</string>
   <string name="info_intro_description">Představení funkcí</string>
   <string name="info_dev_beginning">Vyvíjeno od</string>
@@ -1274,8 +1284,6 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="setting_date_keyboard_input_description">místo vybírání z nabídky</string>
   <string name="setting_date_keyboard_reverse">Zadávat nejprve den v datumu</string>
   <string name="setting_date_keyboard_reverse_description">DDMMRR (DenMěsícRok) místo RRMMDD</string>
-  <string name="setting_copy_barcode_note">Zkopírovat poznámku z čárového kódu do poznámky v Seznamu zásob</string>
-  <string name="setting_copy_barcode_note_description">Při nákupu</string>
   <string name="setting_loading_circle">Zobrazovat symbol čtení ze serveru u všech požadavků</string>
   <string name="setting_loading_circle_description">vhodné pro pomalé připojení k internetu nebo serveru</string>
   <string name="setting_tor">Použít službu Tor</string>

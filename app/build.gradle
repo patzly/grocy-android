@@ -87,10 +87,8 @@ android {
 
 dependencies {
     // Fix for Kotlin build error from some AndroidX dependencies
-    constraints {
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0") {
-            because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
-        }
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20") {
+        because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
     }
 
     implementation 'androidx.appcompat:appcompat:1.6.1'

@@ -159,7 +159,6 @@ public final class Constants {
       public final static String DATE_KEYBOARD_INPUT = "date_keyboard_input";
       public final static String DATE_KEYBOARD_REVERSE = "date_keyboard_reverse";
       public final static String MESSAGE_DURATION = "message_duration";
-      public final static String COPY_BARCODE_NOTE = "copy_barcode_note";
     }
 
     public final static class SCANNER {
@@ -264,7 +263,6 @@ public final class Constants {
       public final static boolean DATE_KEYBOARD_INPUT = false;
       public final static boolean DATE_KEYBOARD_REVERSE = false;
       public final static int MESSAGE_DURATION = 10;
-      public final static boolean COPY_BARCODE_NOTE = false;
     }
 
     public final static class SCANNER {

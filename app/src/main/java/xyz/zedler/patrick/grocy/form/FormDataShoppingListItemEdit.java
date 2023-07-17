@@ -252,7 +252,9 @@ public class FormDataShoppingListItemEdit {
 
   private String getAmountHelpText() {
     QuantityUnit stock = quantityUnitStockLive.getValue();
-    if (stock == null || !NumUtil.isStringDouble(amountStockLive.getValue())) {
+    if (stock == null || !NumUtil.isStringDouble(amountStockLive.getValue())
+        || quantityUnitLive.getValue() != null
+        && stock.getId() == quantityUnitLive.getValue().getId()) {
       return null;
     }
     return application.getString(
