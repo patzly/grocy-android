@@ -123,6 +123,7 @@ public class BottomScrollBehavior {
       } else {
         fabTopScroll.setTranslationY(translationY);
       }
+      Log.i(TAG, "updateSnackbarAnchor() in OnDrawListener of bottomAppBar");
       updateSnackbarAnchor();
     });
 
@@ -130,6 +131,7 @@ public class BottomScrollBehavior {
       @Override
       public void onAnimationEnd(Animator animation) {
         useFabAsAnchor = false;
+        Log.i(TAG, "updateSnackbarAnchor() after fab hide animation ended");
         updateSnackbarAnchor();
       }
     });
@@ -137,6 +139,7 @@ public class BottomScrollBehavior {
       @Override
       public void onAnimationStart(Animator animation) {
         useFabAsAnchor = true;
+        Log.i(TAG, "updateSnackbarAnchor() after fab show animation started");
         updateSnackbarAnchor();
       }
     });
@@ -145,6 +148,7 @@ public class BottomScrollBehavior {
       @Override
       public void onAnimationEnd(Animator animation) {
         useTopScrollAsAnchor = false;
+        Log.i(TAG, "updateSnackbarAnchor() after topScroll hide animation ended");
         updateSnackbarAnchor();
       }
     });
@@ -152,6 +156,7 @@ public class BottomScrollBehavior {
       @Override
       public void onAnimationStart(Animator animation) {
         useTopScrollAsAnchor = true;
+        Log.i(TAG, "updateSnackbarAnchor() after topScroll show animation started");
         updateSnackbarAnchor();
       }
     });
@@ -161,17 +166,6 @@ public class BottomScrollBehavior {
     useOverScrollFix = Build.VERSION.SDK_INT < 31;
     useFabAsAnchor = true;
     useTopScrollAsAnchor = false;
-  }
-
-  private void test(MainActivity activity) {
-    activity.getScrollBehavior().setUpScroll(
-        appBar, liftOnScroll, scrollView, provideTopScroll, false
-    );
-    activity.getScrollBehavior().setUpScroll(appBar, liftOnScroll, scrollView, false);
-    activity.getScrollBehavior().setUpScroll(appBar, liftOnScroll, scrollView);
-    activity.getScrollBehavior().setBottomBarVisibility(true, false, false);
-    activity.getScrollBehavior().setBottomBarVisibility(true, true);
-    activity.getScrollBehavior().setBottomBarVisibility(true);
   }
 
   /**
@@ -466,10 +460,19 @@ public class BottomScrollBehavior {
 
   public float getSnackbarAnchorY() {
     if (useTopScrollAsAnchor) {
+      Log.i(TAG, "getSnackbarAnchorY: topScroll");
       return fabTopScroll.getY();
     } else if (useFabAsAnchor) {
+      if (fabMain.getY() < bottomAppBar.getY()) {
+        Log.i(TAG, "getSnackbarAnchorY: fab or bottomAppBar: fab");
+      } else if (fabMain.getY() > bottomAppBar.getY()) {
+        Log.i(TAG, "getSnackbarAnchorY: fab or bottomAppBar: bottomAppBar");
+      } else {
+        Log.i(TAG, "getSnackbarAnchorY: fab or bottomAppBar: equal");
+      }
       return Math.min(fabMain.getY(), bottomAppBar.getY());
     } else {
+      Log.i(TAG, "getSnackbarAnchorY: bottomAppBar");
       return bottomAppBar.getY();
     }
   }
