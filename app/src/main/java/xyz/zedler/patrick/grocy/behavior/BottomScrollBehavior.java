@@ -57,7 +57,7 @@ public class BottomScrollBehavior {
   private final FloatingActionButton fabMain, fabTopScroll;
   private AppBarLayout appBar;
   private ViewGroup scrollView;
-  private final View snackbarAnchor;
+  private final View snackbarAnchor, snackbarAnchorMaxBottom;
   private boolean liftOnScroll;
   private boolean provideTopScroll;
 
@@ -76,12 +76,13 @@ public class BottomScrollBehavior {
   public BottomScrollBehavior(
       @NonNull Context context, @NonNull BottomAppBar bottomAppBar,
       @NonNull FloatingActionButton fabMain, @NonNull FloatingActionButton fabTopScroll,
-      @NonNull View snackbarAnchor
+      @NonNull View snackbarAnchor, @NonNull View snackbarAnchorMaxBottom
   ) {
     this.bottomAppBar = bottomAppBar;
     this.fabMain = fabMain;
     this.fabTopScroll = fabTopScroll;
     this.snackbarAnchor = snackbarAnchor;
+    this.snackbarAnchorMaxBottom = snackbarAnchorMaxBottom;
 
     ViewCompat.setOnApplyWindowInsetsListener(fabTopScroll, (v, insets) -> {
       int insetBottom = insets.getInsets(Type.systemBars()).bottom;
@@ -123,7 +124,6 @@ public class BottomScrollBehavior {
       } else {
         fabTopScroll.setTranslationY(translationY);
       }
-      Log.i(TAG, "updateSnackbarAnchor() in OnDrawListener of bottomAppBar");
       updateSnackbarAnchor();
     });
 
@@ -131,7 +131,6 @@ public class BottomScrollBehavior {
       @Override
       public void onAnimationEnd(Animator animation) {
         useFabAsAnchor = false;
-        Log.i(TAG, "updateSnackbarAnchor() after fab hide animation ended");
         updateSnackbarAnchor();
       }
     });
@@ -139,7 +138,6 @@ public class BottomScrollBehavior {
       @Override
       public void onAnimationStart(Animator animation) {
         useFabAsAnchor = true;
-        Log.i(TAG, "updateSnackbarAnchor() after fab show animation started");
         updateSnackbarAnchor();
       }
     });
@@ -148,7 +146,6 @@ public class BottomScrollBehavior {
       @Override
       public void onAnimationEnd(Animator animation) {
         useTopScrollAsAnchor = false;
-        Log.i(TAG, "updateSnackbarAnchor() after topScroll hide animation ended");
         updateSnackbarAnchor();
       }
     });
@@ -156,7 +153,6 @@ public class BottomScrollBehavior {
       @Override
       public void onAnimationStart(Animator animation) {
         useTopScrollAsAnchor = true;
-        Log.i(TAG, "updateSnackbarAnchor() after topScroll show animation started");
         updateSnackbarAnchor();
       }
     });
@@ -460,20 +456,12 @@ public class BottomScrollBehavior {
 
   public float getSnackbarAnchorY() {
     if (useTopScrollAsAnchor) {
-      Log.i(TAG, "getSnackbarAnchorY: topScroll");
       return fabTopScroll.getY();
     } else if (useFabAsAnchor) {
-      if (fabMain.getY() < bottomAppBar.getY()) {
-        Log.i(TAG, "getSnackbarAnchorY: fab or bottomAppBar: fab");
-      } else if (fabMain.getY() > bottomAppBar.getY()) {
-        Log.i(TAG, "getSnackbarAnchorY: fab or bottomAppBar: bottomAppBar");
-      } else {
-        Log.i(TAG, "getSnackbarAnchorY: fab or bottomAppBar: equal");
-      }
-      return Math.min(fabMain.getY(), bottomAppBar.getY());
+      float bottomAppbarY = Math.min(bottomAppBar.getY(), snackbarAnchorMaxBottom.getY());
+      return Math.min(fabMain.getY(), bottomAppbarY);
     } else {
-      Log.i(TAG, "getSnackbarAnchorY: bottomAppBar");
-      return bottomAppBar.getY();
+      return Math.min(bottomAppBar.getY(), snackbarAnchorMaxBottom.getY());
     }
   }
 

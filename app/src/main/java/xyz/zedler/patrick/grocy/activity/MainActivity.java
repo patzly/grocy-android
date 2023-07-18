@@ -57,6 +57,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.ViewCompat;
@@ -268,7 +269,9 @@ public class MainActivity extends AppCompatActivity {
     ViewUtil.setTooltipText(binding.fabMainScroll, R.string.action_top_scroll);
 
     scrollBehavior = new BottomScrollBehavior(
-        this, binding.bottomAppBar, binding.fabMain, binding.fabMainScroll, binding.anchor
+        this,
+        binding.bottomAppBar, binding.fabMain, binding.fabMainScroll,
+        binding.anchor, binding.anchorMaxBottom
     );
 
     // IME ANIMATION
@@ -337,15 +340,21 @@ public class MainActivity extends AppCompatActivity {
       }
     };
     ViewCompat.setOnApplyWindowInsetsListener(binding.coordinatorMain, (v, insets) -> {
-      int bottomInset = insets.getInsets(Type.ime()).bottom;
+      int bottomInsetIme = insets.getInsets(Type.ime()).bottom;
+      int bottomInsetBars = insets.getInsets(Type.systemBars()).bottom;
       if (systemBarBehavior != null) {
-        systemBarBehavior.setAdditionalBottomInset(bottomInset);
+        systemBarBehavior.setAdditionalBottomInset(bottomInsetIme);
         systemBarBehavior.refresh(false);
       }
+      // view for calculating snackbar anchor's max bottom position
+      // to prevent snackbar flickering (caused by itself when it's drawn behind navbar
+      CoordinatorLayout.LayoutParams paramsAnchor =
+          (CoordinatorLayout.LayoutParams) binding.anchorMaxBottom.getLayoutParams();
+      paramsAnchor.bottomMargin = bottomInsetBars - UiUtil.dpToPx(this, 12);
       if (insets.isVisible(Type.ime())) {
         wasKeyboardOpened = true;
-        binding.fabMain.setTranslationY(-bottomInset - UiUtil.dpToPx(this, 16));
-        int keyboardY = UiUtil.getDisplayHeight(this) - bottomInset;
+        binding.fabMain.setTranslationY(-bottomInsetIme - UiUtil.dpToPx(this, 16));
+        int keyboardY = UiUtil.getDisplayHeight(this) - bottomInsetIme;
         if (keyboardY < scrollBehavior.getSnackbarAnchorY()) {
           binding.anchor.setY(keyboardY);
         } else {
@@ -363,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
           location[1] += focused.getHeight();
           int screenHeight = UiUtil.getDisplayHeight(this);
           int bottomSpace = screenHeight - location[1];
-          focusedScrollOffset = bottomInset - bottomSpace;
+          focusedScrollOffset = bottomInsetIme - bottomSpace;
         } else {
           focusedScrollOffset = 0;
         }
@@ -424,7 +433,9 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   protected void onPause() {
-    if (netUtil != null) netUtil.cancelHassSessionTimer();
+    if (netUtil != null) {
+      netUtil.cancelHassSessionTimer();
+    }
     super.onPause();
   }
 

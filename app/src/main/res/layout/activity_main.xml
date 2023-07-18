@@ -77,4 +77,13 @@
     android:background="?attr/colorTertiary"
     android:visibility="invisible" />
 
+  <View
+    android:id="@+id/anchor_max_bottom"
+    android:layout_width="12dp"
+    android:layout_height="12dp"
+    android:layout_marginStart="24dp"
+    android:layout_gravity="start|bottom"
+    android:background="?attr/colorPrimary"
+    android:visibility="invisible" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
