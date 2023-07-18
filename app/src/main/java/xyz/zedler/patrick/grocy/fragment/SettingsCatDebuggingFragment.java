@@ -91,6 +91,8 @@ public class SettingsCatDebuggingFragment extends BaseFragment {
       }
     });
 
+    binding.switchLogging.post(() -> binding.switchLogging.jumpDrawablesToCurrentState());
+
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, false

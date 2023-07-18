@@ -94,6 +94,12 @@ public class SettingsCatScannerFragment extends BaseFragment {
 
     updateBarcodeFormats();
 
+    binding.switchFrontCam.post(() -> {
+      binding.switchFrontCam.jumpDrawablesToCurrentState();
+      binding.switchScannerFormat.jumpDrawablesToCurrentState();
+      binding.switchExternalScanner.jumpDrawablesToCurrentState();
+    });
+
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, false
