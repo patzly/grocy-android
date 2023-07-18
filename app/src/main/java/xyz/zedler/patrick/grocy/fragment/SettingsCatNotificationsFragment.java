@@ -96,6 +96,10 @@ public class SettingsCatNotificationsFragment extends BaseFragment {
       }
     });
 
+    binding.switchStockEnableNotifications.post(
+        () -> binding.switchStockEnableNotifications.jumpDrawablesToCurrentState()
+    );
+
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, false

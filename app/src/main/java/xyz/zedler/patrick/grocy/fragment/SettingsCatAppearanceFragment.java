@@ -157,6 +157,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
         )
     );
     binding.partialOptionTransition.switchOtherTransition.setOnCheckedChangeListener(this);
+    binding.partialOptionTransition.switchOtherTransition.jumpDrawablesToCurrentState();
 
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(

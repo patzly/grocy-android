@@ -327,8 +327,7 @@ public class SettingsViewModel extends BaseViewModel {
   }
 
   public void setSpeedUpStartEnabled(boolean enabled) {
-    sharedPrefs.edit()
-        .putBoolean(Constants.SETTINGS.BEHAVIOR.SPEED_UP_START, enabled).apply();
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.BEHAVIOR.SPEED_UP_START, enabled).apply();
   }
 
   public boolean getTurnOnQuickModeEnabled() {
@@ -339,8 +338,7 @@ public class SettingsViewModel extends BaseViewModel {
   }
 
   public void setTurnOnQuickModeEnabled(boolean enabled) {
-    sharedPrefs.edit()
-        .putBoolean(Constants.SETTINGS.BEHAVIOR.TURN_ON_QUICK_MODE, enabled).apply();
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.BEHAVIOR.TURN_ON_QUICK_MODE, enabled).apply();
   }
 
   public boolean getDateKeyboardInputEnabled() {

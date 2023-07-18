@@ -108,6 +108,19 @@ public class SettingsCatBehaviorFragment extends BaseFragment {
       performHapticClick();
       ViewUtil.startIcon(binding.imageHaptic);
     });
+    binding.switchHaptic.jumpDrawablesToCurrentState();
+
+    binding.switchBeginner.post(() -> {
+      binding.switchBeginner.jumpDrawablesToCurrentState();
+      binding.switchBottomMenu.jumpDrawablesToCurrentState();
+      binding.switchExpand.jumpDrawablesToCurrentState();
+      binding.switchKeepScreenOnRecipes.jumpDrawablesToCurrentState();
+      binding.switchTurnOnQuickMode.jumpDrawablesToCurrentState();
+      binding.switchDateKeyboardInput.jumpDrawablesToCurrentState();
+      binding.switchDateKeyboardReverse.jumpDrawablesToCurrentState();
+      binding.switchOpenFoodFacts.jumpDrawablesToCurrentState();
+      binding.switchSpeedUpStart.jumpDrawablesToCurrentState();
+    });
 
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(
