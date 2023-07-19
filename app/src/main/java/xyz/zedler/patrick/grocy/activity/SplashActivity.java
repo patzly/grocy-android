@@ -60,6 +60,11 @@ public class SplashActivity extends MainActivity {
           Constants.SETTINGS_DEFAULT.BEHAVIOR.SPEED_UP_START
       );
 
+      if (Build.VERSION.SDK_INT >= 33 && !speedUpStart) {
+        // SDK 33+ manages splash screen animation duration itself
+        return;
+      }
+
       getSplashScreen().setOnExitAnimationListener(view -> {
         AnimatorSet set = new AnimatorSet();
         set.playTogether(
