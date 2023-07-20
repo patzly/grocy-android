@@ -128,7 +128,7 @@ import xyz.zedler.patrick.grocy.repository.MainRepository.OnVersionListener;
     views = {
         RecipeNestingResolved.class
     },
-    version = 46
+    version = 47
 )
 public abstract class AppDatabase extends RoomDatabase {
 

@@ -120,11 +120,14 @@ public class RecipeViewModel extends BaseViewModel {
           .getRecipeFulfillmentFromRecipeId(data.getRecipeFulfillments(), args.getRecipeId());
       recipePositions = RecipePosition
           .getRecipePositionsFromRecipeId(data.getRecipePositions(), args.getRecipeId());
+      recipePositionsResolved = RecipePositionResolved
+          .getRecipePositionsFromRecipeId(data.getRecipePositionsResolved(), args.getRecipeId());
+      RecipePositionResolved.fillRecipePositionsResolvedWithNotCheckStockFulfillment(
+          recipePositionsResolved, ArrayUtil.getRecipePositionHashMap(recipePositions)
+      );
       products = data.getProducts();
       quantityUnits = data.getQuantityUnits();
       quantityUnitConversions = data.getQuantityUnitConversionsResolved();
-      recipePositions = data.getRecipePositions();
-      recipePositionsResolved = data.getRecipePositionsResolved();
       stockItemHashMap = ArrayUtil.getStockItemHashMap(data.getStockItems());
       shoppingListItems = data.getShoppingListItems();
 
@@ -278,6 +281,10 @@ public class RecipeViewModel extends BaseViewModel {
 
   public List<RecipePosition> getRecipePositions() {
     return recipePositions;
+  }
+
+  public List<RecipePositionResolved> getRecipePositionsResolved() {
+    return recipePositionsResolved;
   }
 
   public List<Product> getProducts() {

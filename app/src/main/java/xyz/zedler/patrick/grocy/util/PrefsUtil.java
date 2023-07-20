@@ -32,8 +32,10 @@ public class PrefsUtil {
   public static void clearCachingRelatedSharedPreferences(SharedPreferences sharedPrefs) {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
     editPrefs.remove(PREF.DB_LAST_TIME_STOCK_ITEMS);
+    editPrefs.remove(PREF.DB_LAST_TIME_STOCK_ENTRIES);
     editPrefs.remove(PREF.DB_LAST_TIME_STORES);
     editPrefs.remove(PREF.DB_LAST_TIME_LOCATIONS);
+    editPrefs.remove(PREF.DB_LAST_TIME_STOCK_LOCATIONS);
     editPrefs.remove(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS);
     editPrefs.remove(PREF.DB_LAST_TIME_SHOPPING_LISTS);
     editPrefs.remove(PREF.DB_LAST_TIME_PRODUCT_GROUPS);
@@ -51,6 +53,11 @@ public class PrefsUtil {
     editPrefs.remove(PREF.DB_LAST_TIME_CHORES);
     editPrefs.remove(PREF.DB_LAST_TIME_CHORE_ENTRIES);
     editPrefs.remove(PREF.DB_LAST_TIME_USERS);
+    editPrefs.remove(PREF.DB_LAST_TIME_RECIPES);
+    editPrefs.remove(PREF.DB_LAST_TIME_RECIPE_FULFILLMENTS);
+    editPrefs.remove(PREF.DB_LAST_TIME_RECIPE_POSITIONS);
+    editPrefs.remove(PREF.DB_LAST_TIME_RECIPE_POSITIONS_RESOLVED);
+    editPrefs.remove(PREF.DB_LAST_TIME_RECIPE_NESTINGS);
     editPrefs.apply();
   }
 

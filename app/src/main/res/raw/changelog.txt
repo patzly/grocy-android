@@ -16,6 +16,7 @@ Specific changes for Grocy server 4.0.0 (other versions behave the same way as b
 - New: Product option "Quantity unit for prices"
 - Improved: Load label for energy values from server (was fixed kcal before)
 - Fixed: Network error when saving a new product (#642)
+- Fixed: Fulfillment info on recipe ingredients list was wrong with substituted products (#669)
 
 All other changes:
 

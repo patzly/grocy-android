@@ -50,6 +50,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.RecipePositionAdapter;
+import xyz.zedler.patrick.grocy.adapter.RecipePositionResolvedAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentRecipeBinding;
@@ -58,6 +59,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
+import xyz.zedler.patrick.grocy.model.RecipePositionResolved;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -69,7 +71,9 @@ import xyz.zedler.patrick.grocy.viewmodel.RecipeViewModel;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class RecipeFragment extends BaseFragment implements
-    RecipePositionAdapter.RecipePositionsItemAdapterListener {
+    RecipePositionAdapter.RecipePositionsItemAdapterListener,
+    RecipePositionResolvedAdapter.RecipePositionsItemAdapterListener
+{
 
   private final static String TAG = RecipeFragment.class.getSimpleName();
 
@@ -242,6 +246,7 @@ public class RecipeFragment extends BaseFragment implements
     Recipe recipe = viewModel.getRecipeLive().getValue();
     RecipeFulfillment recipeFulfillment = viewModel.getRecipeFulfillment();
     List<RecipePosition> recipePositions = viewModel.getRecipePositions();
+    List<RecipePositionResolved> recipePositionsResolved = viewModel.getRecipePositionsResolved();
     if (recipe == null || recipeFulfillment == null) {
       activity.showSnackbar(R.string.error_undefined, false);
       return;
@@ -340,9 +345,30 @@ public class RecipeFragment extends BaseFragment implements
       binding.costs.setVisibility(View.GONE);
     }
 
-    if (recipePositions.isEmpty()) {
-      binding.ingredientContainer.setVisibility(View.GONE);
-    } else {
+    if (!recipePositionsResolved.isEmpty()) {
+      if (binding.recycler.getAdapter() instanceof RecipePositionResolvedAdapter) {
+        ((RecipePositionResolvedAdapter) binding.recycler.getAdapter()).updateData(
+            recipe,
+            recipePositionsResolved,
+            viewModel.getProducts(),
+            viewModel.getQuantityUnits(),
+            viewModel.getQuantityUnitConversions()
+        );
+      } else {
+        binding.recycler.setAdapter(
+            new RecipePositionResolvedAdapter(
+                requireContext(),
+                (LinearLayoutManager) binding.recycler.getLayoutManager(),
+                recipe,
+                recipePositionsResolved,
+                viewModel.getProducts(),
+                viewModel.getQuantityUnits(),
+                viewModel.getQuantityUnitConversions(),
+                this
+            )
+        );
+      }
+    } else if (!recipePositions.isEmpty()) {
       if (binding.recycler.getAdapter() instanceof RecipePositionAdapter) {
         ((RecipePositionAdapter) binding.recycler.getAdapter()).updateData(
             recipe,
@@ -369,11 +395,8 @@ public class RecipeFragment extends BaseFragment implements
             )
         );
       }
-
-      for (RecipePosition recipePosition: recipePositions) {
-        if (recipePosition.isChecked())
-          recipePosition.setChecked(false);
-      }
+    } else {
+      binding.ingredientContainer.setVisibility(View.GONE);
     }
 
     CharSequence trimmedDescription = TextUtil.trimCharSequence(recipe.getDescription());
@@ -395,6 +418,20 @@ public class RecipeFragment extends BaseFragment implements
 
     recipePosition.toggleChecked();
     RecipePositionAdapter adapter = (RecipePositionAdapter) binding.recycler.getAdapter();
+    if (adapter != null) {
+      adapter.notifyItemChanged(position, recipePosition);
+    }
+  }
+
+  @Override
+  public void onItemRowClicked(RecipePositionResolved recipePosition, int position) {
+    if (recipePosition == null) {
+      return;
+    }
+
+    recipePosition.toggleChecked();
+    RecipePositionResolvedAdapter adapter = (RecipePositionResolvedAdapter) binding.recycler
+        .getAdapter();
     if (adapter != null) {
       adapter.notifyItemChanged(position, recipePosition);
     }
@@ -428,10 +465,15 @@ public class RecipeFragment extends BaseFragment implements
     // Hashmap with all missing products for the dialog (at first all should be checked)
     // global variable for alert dialog management
     dialogShoppingListMultiChoiceItems.clear();
-    if (binding.recycler.getAdapter() == null
-        || !(binding.recycler.getAdapter() instanceof RecipePositionAdapter)) return;
-    for (Product product : ((RecipePositionAdapter) binding.recycler.getAdapter()).getMissingProducts()) {
-      dialogShoppingListMultiChoiceItems.put(product.getName(), true);
+    if (binding.recycler.getAdapter() == null) return;
+    if (binding.recycler.getAdapter() instanceof RecipePositionAdapter) {
+      for (Product product : ((RecipePositionAdapter) binding.recycler.getAdapter()).getMissingProducts()) {
+        dialogShoppingListMultiChoiceItems.put(product.getName(), true);
+      }
+    } else {
+      for (Product product : ((RecipePositionResolvedAdapter) binding.recycler.getAdapter()).getMissingProducts()) {
+        dialogShoppingListMultiChoiceItems.put(product.getName(), true);
+      }
     }
     showShoppingListConfirmationDialog();
   }
