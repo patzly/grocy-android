@@ -775,7 +775,7 @@ public class FormDataPurchase {
       amountAdded -= details.getStockAmount();
       amountAdded -= details.getProduct().getTareWeightDouble();
     }
-    QuantityUnit qU = quantityUnitLive.getValue();
+    QuantityUnit qU = quantityUnitStockLive.getValue();
     String price = getString(R.string.subtitle_feature_disabled);
     if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
       price = priceLive.getValue();

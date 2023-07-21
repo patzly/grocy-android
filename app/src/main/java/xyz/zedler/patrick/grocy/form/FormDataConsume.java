@@ -537,7 +537,7 @@ public class FormDataConsume {
       amountRemoved -= NumUtil.toDouble(amountStockLive.getValue());
       amountRemoved += productDetails.getProduct().getTareWeightDouble();
     }
-    QuantityUnit qU = quantityUnitLive.getValue();
+    QuantityUnit qU = quantityUnitStockLive.getValue();
     String stockLocationName;
     if (isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
       StockLocation stockLocation = stockLocationLive.getValue();

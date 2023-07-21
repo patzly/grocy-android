@@ -69,6 +69,7 @@ All other changes:
 - Fixed: With server version below 3.3.0, stock quantity unit could not be set in new product (#678)
 - Fixed: Total product count on overview page in stock section also included products with
   option "Never show on stock overview" enabled (#644)
+- Fixed: Wrong quantity units in confirmation dialog of quick mode (#732)
 
 ## 3.2.1
 
