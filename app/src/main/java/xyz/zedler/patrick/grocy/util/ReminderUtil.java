@@ -136,12 +136,7 @@ public class ReminderUtil {
     }
     if (alarmManager != null) {
       alarmManager.cancel(pendingIntent);
-      if (sharedPrefs.getBoolean(NOTIFICATIONS.EXACT_DELIVERY,
-          SETTINGS_DEFAULT.NOTIFICATIONS.EXACT_DELIVERY)) {
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-      } else {
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-      }
+      alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
   }
 

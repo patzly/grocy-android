@@ -1050,18 +1050,6 @@ public class SettingsViewModel extends BaseViewModel {
     setChoresNotificationsEnabled(true);
   }
 
-  public boolean getNotificationsExactEnabled() {
-    return sharedPrefs.getBoolean(
-        NOTIFICATIONS.EXACT_DELIVERY,
-        SETTINGS_DEFAULT.NOTIFICATIONS.EXACT_DELIVERY
-    );
-  }
-
-  public void setNotificationsExactEnabled(boolean enabled) {
-    sharedPrefs.edit().putBoolean(NOTIFICATIONS.EXACT_DELIVERY, enabled).apply();
-    reminderUtil.rescheduleReminders();
-  }
-
   public ArrayList<String> getSupportedVersions() {
     return new ArrayList<>(Arrays.asList(
         getApplication().getResources().getStringArray(R.array.compatible_grocy_versions)

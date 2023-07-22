@@ -230,8 +230,6 @@ public final class Constants {
       public final static String CHORES_TIME = "notification_chores_time";
       public final static String CHORES_CHANNEL = "xyz.zedler.patrick.grocy.chores";
       public final static int CHORES_ID = 2;
-
-      public final static String EXACT_DELIVERY = "notification_exact_delivery";
     }
   }
 
@@ -347,8 +345,6 @@ public final class Constants {
 
       public final static boolean CHORES_ENABLE = false;
       public final static String CHORES_TIME = "12:00";
-
-      public final static boolean EXACT_DELIVERY = false;
     }
   }
 

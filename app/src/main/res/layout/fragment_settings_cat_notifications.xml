@@ -80,6 +80,22 @@
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintEnd_toEndOf="parent">
 
+          <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Grocy.Card.Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.Paragraph"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:textColor="?attr/colorOnSurfaceVariant"
+              android:text="@string/msg_help_notifications" />
+
+          </com.google.android.material.card.MaterialCardView>
+
           <TextView
             style="@style/Widget.Grocy.TextView.Category"
             android:text="@string/setting_notifications_due_soon" />
@@ -205,56 +221,6 @@
                 android:text="@string/setting_notification_time_description" />
 
             </LinearLayout>
-
-          </LinearLayout>
-
-          <TextView
-            style="@style/Widget.Grocy.TextView.Category"
-            android:text="@string/category_general" />
-
-          <com.google.android.material.card.MaterialCardView
-            style="@style/Widget.Grocy.Card.Text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="8dp">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.Paragraph"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:textColor="?attr/colorOnSurfaceVariant"
-              android:text="@string/msg_help_notifications_exact" />
-
-          </com.google.android.material.card.MaterialCardView>
-
-          <LinearLayout
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{v -> switchExactNotifications.setChecked(!switchExactNotifications.isChecked())}">
-
-            <ImageView
-              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              app:srcCompat="@drawable/ic_round_notification_important"
-              tools:ignore="ContentDescription" />
-
-            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-              <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:text="@string/setting_notifications_exact" />
-
-              <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.Description"
-                android:text="@string/setting_notifications_exact_description" />
-
-            </LinearLayout>
-
-            <com.google.android.material.materialswitch.MaterialSwitch
-              android:id="@+id/switch_exact_notifications"
-              style="@style/Widget.Grocy.Switch"
-              android:checked="@={viewModel.notificationsExactEnabled}" />
 
           </LinearLayout>
 
