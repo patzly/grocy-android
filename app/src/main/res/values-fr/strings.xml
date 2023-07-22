@@ -276,6 +276,7 @@
   <!-- %1$s is a product name -->
   <string name="msg_no_stock_entries">Aucune entrée de stock pour %1$s</string>
   <string name="msg_not_found">Produit non trouvé</string>
+  <string name="msg_returning_to_overview">Retour à la page d\'accueil dans quelques secondes</string>
   <string name="msg_editor_hint">Écrivez ici</string>
   <string name="msg_coming_soon">Cette fonctionnalité sera bientôt disponible</string>
   <string name="msg_undo_transaction">Annuler la transaction ?</string>
@@ -1225,6 +1226,8 @@
   <string name="setting_bottom_menu_button_description">Dans la barre inférieure de l\'application</string>
   <string name="setting_turn_on_quick_mode">Activer le mode rapide par défaut</string>
   <string name="setting_turn_on_quick_mode_description">Lors de l\'utilisation du scanner de code barres sur la page d\'accueil</string>
+  <string name="setting_quick_mode_return">Retour à la page d\'accueil après 20 secondes</string>
+  <string name="setting_quick_mode_return_description">Lors de l\'utilisation du scanner de codes barres sur la page d\'accueil et lorsque le mode rapide n\'est pas utilisé</string>
   <string name="setting_speed_up_start">Réduire le temps de chargement de l\'application</string>
   <string name="setting_speed_up_start_description">N\'a un effet que sur les appareils performants</string>
   <string name="setting_date_keyboard_input">Saisir les dates avec le clavier</string>
