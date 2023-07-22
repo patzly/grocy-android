@@ -24,9 +24,12 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
+import androidx.preference.PreferenceManager;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.NOTIFICATIONS;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -43,6 +46,17 @@ public class ChoresNotificationReceiver extends BroadcastReceiver {
     if (notificationManager == null) {
       return;
     }
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    String reminderTime = sharedPrefs.getString(
+        NOTIFICATIONS.CHORES_TIME, SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_TIME
+    );
+    new ReminderUtil(context).scheduleReminder(
+        ReminderUtil.CHORES_TYPE,
+        NOTIFICATIONS.CHORES_ID,
+        reminderTime,
+        DueSoonNotificationReceiver.class
+    );
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       CharSequence name = context.getString(R.string.title_chores);
       String description = context.getString(R.string.setting_notifications_chores_description);

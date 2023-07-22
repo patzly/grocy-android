@@ -58,6 +58,17 @@ public class DueSoonNotificationReceiver extends BroadcastReceiver {
     if (notificationManager == null) {
       return;
     }
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    String reminderTime = sharedPrefs.getString(
+        NOTIFICATIONS.DUE_SOON_TIME, SETTINGS_DEFAULT.NOTIFICATIONS.DUE_SOON_TIME
+    );
+    new ReminderUtil(context).scheduleReminder(
+        ReminderUtil.DUE_SOON_TYPE,
+        NOTIFICATIONS.DUE_SOON_ID,
+        reminderTime,
+        DueSoonNotificationReceiver.class
+    );
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       CharSequence name = context.getString(R.string.setting_notifications_due_soon);
       String description = context.getString(R.string.setting_notifications_due_soon_description);
@@ -68,7 +79,6 @@ public class DueSoonNotificationReceiver extends BroadcastReceiver {
       channel.setDescription(description);
       notificationManager.createNotificationChannel(channel);
     }
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     DownloadHelper dlHelper = new DownloadHelper(context, DueSoonNotificationReceiver.class.getSimpleName());
 
     VolatileItem.getVolatile(dlHelper, response -> {
