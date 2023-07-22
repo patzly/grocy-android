@@ -51,6 +51,7 @@ All other changes:
 - Improved: When scanning a product barcode and the purchase or inventory page, the note will now
   also be prefilled from the barcode (was option before, but server v4 has that behavior now) (#644)
 - Improved: It is now clearer which QR code is to be scanned when using Home Assistant (#627)
+- Improved: Option for quick mode in behavior settings to return to overview after some time (#659)
 - Fixed: Amounts with conversions are consistent over all pages now (#612, #626)
 - Fixed: Long click on barcode button on overview page was broken on Android Nougat and lower
 - Fixed: Crash on startup with Android Lollipop (and maybe higher)

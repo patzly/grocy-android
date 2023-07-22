@@ -23,6 +23,7 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -52,6 +53,7 @@ import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
+import xyz.zedler.patrick.grocy.util.ClickUtil.InactivityUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -67,6 +69,7 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
   private Boolean backFromChooseProductPage;
+  private InactivityUtil inactivityUtil;
 
   @Override
   public View onCreateView(
@@ -115,6 +118,16 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
     activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
+
+    if (args.getStartWithScanner() && viewModel.isQuickModeReturnEnabled()
+        && viewModel.isTurnOnQuickModeEnabled()) {
+      inactivityUtil = new InactivityUtil(getLifecycle(), util -> viewModel.showMessageWithAction(
+          R.string.msg_returning_to_overview,
+          R.string.action_cancel,
+          util::stopTimer,
+          5
+      ), this::navigateUp, 20);
+    }
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
 
@@ -260,6 +273,15 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
   public void onDestroy() {
     if (embeddedFragmentScanner != null) embeddedFragmentScanner.onDestroy();
     super.onDestroy();
+  }
+
+  @Override
+  public boolean dispatchTouchEvent(MotionEvent event) {
+    if (inactivityUtil != null && (event.getAction() == MotionEvent.ACTION_DOWN
+        || event.getAction() == MotionEvent.ACTION_UP)) {
+      inactivityUtil.resetTimer();
+    }
+    return false;
   }
 
   @Override

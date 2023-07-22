@@ -228,6 +228,18 @@ public class BaseViewModel extends AndroidViewModel {
     showSnackbar(snackbarMessage);
   }
 
+  public void showMessageWithAction(
+      @StringRes int message,
+      @StringRes int actionText,
+      Runnable action,
+      int durationSecs
+  ) {
+    SnackbarMessage snackbarMessage = new SnackbarMessage(getString(message));
+    snackbarMessage.setAction(getString(actionText), v -> action.run());
+    snackbarMessage.setDurationSecs(durationSecs);
+    showSnackbar(snackbarMessage);
+  }
+
   public void showMessageLongDuration(@Nullable String message) {
     if (message == null) {
       return;

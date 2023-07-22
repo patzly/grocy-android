@@ -133,10 +133,7 @@ public class FormDataInventory {
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_INPUT
     );
     scannerVisibilityLive = new MutableLiveData<>(false);
-    if (args.getStartWithScanner() && !getExternalScannerEnabled() && !args
-        .getCloseWhenFinished()) {
-      scannerVisibilityLive.setValue(true);
-    } else if (getCameraScannerWasVisibleLastTime() && !getExternalScannerEnabled() && !args
+    if (getCameraScannerWasVisibleLastTime() && !getExternalScannerEnabled() && !args
         .getCloseWhenFinished()) {
       scannerVisibilityLive.setValue(true);
     }

@@ -265,6 +265,7 @@
   <!-- %1$s is a product name -->
   <string name="msg_no_stock_entries">No stock entries for %1$s</string>
   <string name="msg_not_found">Product not found</string>
+  <string name="msg_returning_to_overview">Going back to overview page in a few seconds</string>
   <string name="msg_editor_hint">Write text here</string>
   <string name="msg_coming_soon">This feature will be available soon</string>
   <string name="msg_undo_transaction">Undo transaction?</string>
@@ -1190,6 +1191,8 @@
   <string name="setting_bottom_menu_button_description">In bottom app bar</string>
   <string name="setting_turn_on_quick_mode">Turn on quick mode by default</string>
   <string name="setting_turn_on_quick_mode_description">When using scan button on overview page</string>
+  <string name="setting_quick_mode_return">Return to overview page after 20 seconds</string>
+  <string name="setting_quick_mode_return_description">When using scan button on overview page and when quick mode is not in use</string>
   <string name="setting_speed_up_start">Reduce app startup time</string>
   <string name="setting_speed_up_start_description">Has an effect only on fast devices</string>
   <string name="setting_date_keyboard_input">Enter dates with keyboard</string>

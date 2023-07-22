@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Spanned;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -97,6 +98,10 @@ public class BaseFragment extends Fragment {
       }
     }
     return getString(R.string.error_undefined);
+  }
+
+  public boolean dispatchTouchEvent(MotionEvent event) {
+    return false;
   }
 
   public void getActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

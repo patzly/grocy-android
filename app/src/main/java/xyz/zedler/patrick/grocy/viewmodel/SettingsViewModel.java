@@ -338,6 +338,17 @@ public class SettingsViewModel extends BaseViewModel {
     sharedPrefs.edit().putBoolean(Constants.SETTINGS.BEHAVIOR.TURN_ON_QUICK_MODE, enabled).apply();
   }
 
+  public boolean getQuickModeReturnEnabled() {
+    return sharedPrefs.getBoolean(
+        BEHAVIOR.QUICK_MODE_RETURN,
+        SETTINGS_DEFAULT.BEHAVIOR.QUICK_MODE_RETURN
+    );
+  }
+
+  public void setQuickModeReturnEnabled(boolean enabled) {
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.BEHAVIOR.QUICK_MODE_RETURN, enabled).apply();
+  }
+
   public boolean getDateKeyboardInputEnabled() {
     return sharedPrefs.getBoolean(
         BEHAVIOR.DATE_KEYBOARD_INPUT,

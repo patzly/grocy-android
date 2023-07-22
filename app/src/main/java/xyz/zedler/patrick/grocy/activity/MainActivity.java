@@ -40,6 +40,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -790,6 +791,13 @@ public class MainActivity extends AppCompatActivity {
     }
     ViewUtil.startIcon(view);
   }
+
+  @Override
+  public boolean dispatchTouchEvent(MotionEvent event) {
+    boolean dispatch = getCurrentFragment().dispatchTouchEvent(event);
+    return dispatch || super.dispatchTouchEvent(event);
+  }
+
 
   public void setHapticEnabled(boolean enabled) {
     hapticUtil.setEnabled(enabled);

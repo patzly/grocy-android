@@ -157,6 +157,7 @@ public final class Constants {
       public final static String EXPAND_BOTTOM_SHEETS = "expand_bottom_sheets";
       public final static String SPEED_UP_START = "speed_up_start";
       public final static String TURN_ON_QUICK_MODE = "turn_on_quick_mode";
+      public final static String QUICK_MODE_RETURN = "quick_mode_return";
       public final static String DATE_KEYBOARD_INPUT = "date_keyboard_input";
       public final static String DATE_KEYBOARD_REVERSE = "date_keyboard_reverse";
       public final static String MESSAGE_DURATION = "message_duration";
@@ -260,6 +261,7 @@ public final class Constants {
       public final static boolean EXPAND_BOTTOM_SHEETS = false;
       public final static boolean SPEED_UP_START = false;
       public final static boolean TURN_ON_QUICK_MODE = true;
+      public final static boolean QUICK_MODE_RETURN = false;
       public final static boolean DATE_KEYBOARD_INPUT = false;
       public final static boolean DATE_KEYBOARD_REVERSE = false;
       public final static int MESSAGE_DURATION = 10;

@@ -173,10 +173,6 @@
     <deepLink
       android:id="@+id/deepLink7"
       app:uri="@string/deep_link_inventoryFragment" />
-    <argument
-      android:name="startWithScanner"
-      app:argType="boolean"
-      android:defaultValue="false" />
     <action
       android:id="@+id/action_inventoryFragment_to_chooseProductFragment"
       app:destination="@id/chooseProductFragment"
