@@ -19,7 +19,10 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,7 +76,6 @@ public class SettingsCatNotificationsFragment extends BaseFragment {
     binding.setActivity(activity);
     binding.setFragment(this);
     binding.setViewModel(viewModel);
-    //binding.setSharedPrefs(PreferenceManager.getDefaultSharedPreferences(activity));
     binding.setClickUtil(new ClickUtil());
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
@@ -164,5 +166,12 @@ public class SettingsCatNotificationsFragment extends BaseFragment {
 
   public interface TimePickerFinishedListener {
     void onFinished(String time);
+  }
+
+  public void openAppInfoPage() {
+    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+    Uri uri = Uri.fromParts("package", requireContext().getPackageName(), null);
+    intent.setData(uri);
+    requireContext().startActivity(intent);
   }
 }

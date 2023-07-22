@@ -6,7 +6,7 @@ your server update. We recommend installing the update as our app was mainly tes
 recipe fulfillment information in our app are finally all correct with it, but older supported
 versions still work.
 
-Specific changes for Grocy server 4.0.0 (other versions behave the same way as before):
+Specific changes for Grocy server 4.0.0 (other versions should behave the same way as before):
 
 - New: Full compatibility for server version 4.0.0 (#644)
 - New: Quantity unit conversions can be transitive now (unlimited QU levels)
@@ -28,8 +28,7 @@ All other changes:
 - New: Shopping pages now also has checkbox options for fields and picture (#663, #671, #710)
 - New: Shopping mode options are now reachable through shopping mode menu and removed from settings
 - New: Product groups, locations & quantity units now can be created while creating product
-- New: Daily reminder can now be set also for chores and option to show notifications
-  immediately (#149)
+- New: Daily reminder can now be set also for chores (#149)
 - New: Japanese translation (thanks daigoume!)
 - Improved: Better and unified network behavior across pages
 - Improved: Database exceptions are now caught and displayed (#698)
