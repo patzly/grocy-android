@@ -109,6 +109,10 @@
       android:enabled="true" />
 
     <receiver
+      android:name=".notification.ChoresNotificationReceiver"
+      android:enabled="true" />
+
+    <receiver
       android:name=".notification.BootReceiver"
       android:enabled="false"
       android:exported="true">

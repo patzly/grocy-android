@@ -76,6 +76,7 @@ public class SettingsViewModel extends BaseViewModel {
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
   private final MainRepository repository;
+  private final ReminderUtil reminderUtil;
 
   private MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<Boolean> getExternalScannerEnabledLive;
@@ -110,6 +111,7 @@ public class SettingsViewModel extends BaseViewModel {
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new MainRepository(getApplication());
+    reminderUtil = new ReminderUtil(getApplication());
 
     getExternalScannerEnabledLive = new MutableLiveData<>(getExternalScannerEnabled());
     needsRestartLive = new MutableLiveData<>(false);
@@ -995,7 +997,7 @@ public class SettingsViewModel extends BaseViewModel {
 
   public void setDueSoonNotificationsEnabled(boolean enabled) {
     dueSoonNotificationsEnabledLive.setValue(enabled);
-    (new ReminderUtil(getApplication())).setReminderEnabled(enabled);
+    reminderUtil.setReminderEnabled(ReminderUtil.DUE_SOON_TYPE, enabled);
   }
 
   public String getDueSoonNotificationsTime() {
@@ -1027,8 +1029,8 @@ public class SettingsViewModel extends BaseViewModel {
   }
 
   public void setChoresNotificationsEnabled(boolean enabled) {
-    //choresNotificationsEnabledLive.setValue(enabled);
-    //(new ReminderUtil(getApplication())).setReminderEnabled(enabled);
+    choresNotificationsEnabledLive.setValue(enabled);
+    reminderUtil.setReminderEnabled(ReminderUtil.CHORES_TYPE, enabled);
   }
 
   public String getChoresNotificationsTime() {
@@ -1046,6 +1048,18 @@ public class SettingsViewModel extends BaseViewModel {
     sharedPrefs.edit().putString(NOTIFICATIONS.CHORES_TIME, text).apply();
     choresNotificationsTimeTextLive.setValue(text);
     setChoresNotificationsEnabled(true);
+  }
+
+  public boolean getNotificationsExactEnabled() {
+    return sharedPrefs.getBoolean(
+        NOTIFICATIONS.EXACT_DELIVERY,
+        SETTINGS_DEFAULT.NOTIFICATIONS.EXACT_DELIVERY
+    );
+  }
+
+  public void setNotificationsExactEnabled(boolean enabled) {
+    sharedPrefs.edit().putBoolean(NOTIFICATIONS.EXACT_DELIVERY, enabled).apply();
+    reminderUtil.rescheduleReminders();
   }
 
   public ArrayList<String> getSupportedVersions() {

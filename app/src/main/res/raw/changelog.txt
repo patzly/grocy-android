@@ -28,6 +28,8 @@ All other changes:
 - New: Shopping pages now also has checkbox options for fields and picture (#663, #671, #710)
 - New: Shopping mode options are now reachable through shopping mode menu and removed from settings
 - New: Product groups, locations & quantity units now can be created while creating product
+- New: Daily reminder can now be set also for chores and option to show notifications
+  immediately (#149)
 - New: Japanese translation (thanks daigoume!)
 - Improved: Better and unified network behavior across pages
 - Improved: Database exceptions are now caught and displayed (#698)

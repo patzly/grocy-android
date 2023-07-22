@@ -334,7 +334,7 @@ public class RecipePositionResolved {
     return calories;
   }
 
-  public void setCalories(int calories) {
+  public void setCalories(double calories) {
     this.calories = calories;
   }
 

@@ -24,17 +24,14 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
-import androidx.preference.PreferenceManager;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.NOTIFICATIONS;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS.CHORES;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS.NOTIFICATIONS;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
+import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.ReminderUtil;
 
 public class ChoresNotificationReceiver extends BroadcastReceiver {
@@ -56,19 +53,28 @@ public class ChoresNotificationReceiver extends BroadcastReceiver {
       channel.setDescription(description);
       notificationManager.createNotificationChannel(channel);
     }
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     DownloadHelper dlHelper = new DownloadHelper(context, ChoresNotificationReceiver.class.getSimpleName());
 
     ChoreEntry.getChoreEntries(dlHelper, choreEntries -> {
       if (choreEntries.size() == 0) return;
 
-      int days = sharedPrefs.getInt(
-          CHORES.DUE_SOON_DAYS,
-          SETTINGS_DEFAULT.CHORES.DUE_SOON_DAYS
-      );
+      int choresDueTodayCount = 0;
+      for (ChoreEntry choreEntry : choreEntries) {
+        if (choreEntry.getNextEstimatedExecutionTime() == null
+            || choreEntry.getNextEstimatedExecutionTime().isEmpty()) {
+          continue;
+        }
+        int daysFromNow = DateUtil
+            .getDaysFromNow(choreEntry.getNextEstimatedExecutionTime());
+        if (daysFromNow < 0) {
+          choresDueTodayCount++;
+        } else if (daysFromNow == 0) {
+          choresDueTodayCount++;
+        }
+      }
       String titleText = context.getResources().getQuantityString(
           R.plurals.description_overview_chores_due_today,
-          choreEntries.size(), choreEntries.size(), days
+          choresDueTodayCount, choresDueTodayCount
       );
 
       Uri uri = Uri.parse(context.getString(R.string.deep_link_choresFragment));
