@@ -73,6 +73,7 @@ Chores:
 - New: Daily reminder can now be set also for chores (#149)
 - New: Filter for all chores which are due, used by the reminder
 - Improved: Shortcut for chores available now (in settings, go to appearance page then shortcuts)
+- Fixed: Unable to do multiple chores with swipe gestures (#686)
 
 General:
 
@@ -96,6 +97,7 @@ General:
   vertical position is now animated smoothly instead of jumping
 - Fixed: Disabled features with Home Assistant add-on were not disabled in app (#713)
 - Fixed: Shortcut for new task was not working anymore after first usage
+- Fixed: Swipe gestures accessed wrong item in list after first usage (#686)
 
 ## 3.2.1
 

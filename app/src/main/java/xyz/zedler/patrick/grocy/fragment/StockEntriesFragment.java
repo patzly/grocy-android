@@ -29,7 +29,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
@@ -209,26 +208,23 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
           if (viewHolder.getItemViewType() != GroupedListItem.TYPE_ENTRY) return;
           if (!(binding.recycler.getAdapter() instanceof StockEntryAdapter)) return;
           int position = viewHolder.getAdapterPosition();
-          ArrayList<GroupedListItem> groupedListItems =
-              ((StockEntryAdapter) binding.recycler.getAdapter()).getGroupedListItems();
-          if (groupedListItems == null || position < 0
-              || position >= groupedListItems.size()) {
+          GroupedListItem groupedListItem = ((StockEntryAdapter) binding.recycler.getAdapter())
+                  .getGroupedListItemForPos(position);
+          if (!(groupedListItem instanceof StockEntry)) {
             return;
           }
-          GroupedListItem item = groupedListItems.get(position);
-          if (!(item instanceof StockEntry)) {
-            return;
-          }
-          StockEntry stockEntry = (StockEntry) item;
+          StockEntry stockEntry = (StockEntry) groupedListItem;
           underlayButtons.add(new UnderlayButton(
               activity,
               R.drawable.ic_round_consume_product,
               pos -> {
-                if (pos >= groupedListItems.size()) {
+                GroupedListItem item1 = ((StockEntryAdapter) binding.recycler.getAdapter())
+                    .getGroupedListItemForPos(position);
+                if (!(item1 instanceof StockEntry)) {
                   return;
                 }
                 swipeBehavior.recoverLatestSwipedItem();
-                viewModel.performAction(Constants.ACTION.CONSUME, stockEntry);
+                viewModel.performAction(Constants.ACTION.CONSUME, (StockEntry) item1);
               }
           ));
           Product product = viewModel.getProductHashMap().get(stockEntry.getProductId());
@@ -240,11 +236,13 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
                 activity,
                 R.drawable.ic_round_open,
                 pos -> {
-                  if (pos >= groupedListItems.size()) {
+                  GroupedListItem item1 = ((StockEntryAdapter) binding.recycler.getAdapter())
+                      .getGroupedListItemForPos(position);
+                  if (!(item1 instanceof StockEntry)) {
                     return;
                   }
                   swipeBehavior.recoverLatestSwipedItem();
-                  viewModel.performAction(Constants.ACTION.OPEN, stockEntry);
+                  viewModel.performAction(Constants.ACTION.OPEN, (StockEntry) item1);
                 }
             ));
           }

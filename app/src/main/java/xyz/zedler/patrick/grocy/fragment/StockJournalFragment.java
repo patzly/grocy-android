@@ -33,7 +33,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -213,22 +212,22 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
         ) {
           if (!(binding.recycler.getAdapter() instanceof StockLogEntryAdapter)) return;
           int position = viewHolder.getAdapterPosition();
-          ArrayList<StockLogEntry> stockLogEntries =
-              ((StockLogEntryAdapter) binding.recycler.getAdapter()).getStockLogEntries();
-          if (stockLogEntries == null || position < 0 || position >= stockLogEntries.size()) {
+          StockLogEntry stockLogEntry =
+              ((StockLogEntryAdapter) binding.recycler.getAdapter()).getEntryForPos(position);
+          if (stockLogEntry == null || stockLogEntry.getUndoneBoolean()) {
             return;
           }
-          StockLogEntry entry = stockLogEntries.get(position);
-          if (entry.getUndoneBoolean()) return;
           underlayButtons.add(new UnderlayButton(
               activity,
               R.drawable.ic_round_undo,
               pos -> {
-                if (pos >= stockLogEntries.size()) {
+                StockLogEntry entry1 = ((StockLogEntryAdapter) binding.recycler.getAdapter())
+                    .getEntryForPos(position);
+                if (entry1 == null) {
                   return;
                 }
                 swipeBehavior.recoverLatestSwipedItem();
-                viewModel.undoTransaction(entry);
+                viewModel.undoTransaction(entry1);
               }
           ));
         }

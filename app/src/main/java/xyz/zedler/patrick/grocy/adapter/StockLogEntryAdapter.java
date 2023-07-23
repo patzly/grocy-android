@@ -33,6 +33,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowStockLogEntryBinding;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -40,9 +43,6 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockLogEntry;
 import xyz.zedler.patrick.grocy.model.User;
-import xyz.zedler.patrick.grocy.Constants.PREF;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
@@ -246,8 +246,12 @@ public class StockLogEntryAdapter extends
     }
   }
 
-  public ArrayList<StockLogEntry> getStockLogEntries() {
-    return stockLogEntries;
+  public StockLogEntry getEntryForPos(int position) {
+    if (stockLogEntries == null || position < 0
+        || position >= stockLogEntries.size()) {
+      return null;
+    }
+    return stockLogEntries.get(position);
   }
 
   public interface StockLogEntryAdapterListener {

@@ -30,7 +30,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
@@ -200,23 +199,25 @@ public class TasksFragment extends BaseFragment implements
             RecyclerView.ViewHolder viewHolder,
             List<UnderlayButton> underlayButtons
         ) {
+          if (!(binding.recycler.getAdapter() instanceof TaskEntryAdapter)) return;
           int position = viewHolder.getAdapterPosition();
-          ArrayList<Task> displayedItems = viewModel.getFilteredTasksLive()
-              .getValue();
-          if (displayedItems == null || position < 0
-              || position >= displayedItems.size()) {
+          Task task = ((TaskEntryAdapter) binding.recycler.getAdapter())
+              .getTaskForPos(position);
+          if (task == null) {
             return;
           }
           underlayButtons.add(new UnderlayButton(
               activity,
               R.drawable.ic_round_done,
               pos -> {
-                if (pos >= displayedItems.size()) {
+                Task task1 = ((TaskEntryAdapter) binding.recycler.getAdapter())
+                    .getTaskForPos(position);
+                if (task1 == null) {
                   return;
                 }
                 swipeBehavior.recoverLatestSwipedItem();
                 new Handler().postDelayed(() -> viewModel
-                    .changeTaskDoneStatus(displayedItems.get(pos).getId()), 100);
+                    .changeTaskDoneStatus(task1.getId()), 100);
               }
           ));
         }

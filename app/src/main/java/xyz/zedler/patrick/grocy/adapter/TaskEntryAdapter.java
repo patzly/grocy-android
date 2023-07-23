@@ -226,6 +226,13 @@ public class TaskEntryAdapter extends
     void onItemRowClicked(Task task);
   }
 
+  public Task getTaskForPos(int position) {
+    if (position < 0 || position >= tasks.size()) {
+      return null;
+    }
+    return tasks.get(position);
+  }
+
   public void updateData(
       ArrayList<Task> newList,
       HashMap<Integer, TaskCategory> taskCategoriesHashMap,
