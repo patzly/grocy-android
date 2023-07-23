@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
@@ -33,10 +34,13 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
+import com.google.android.material.elevation.SurfaceColors;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -69,9 +73,12 @@ public class RecipePositionResolvedAdapter extends
 
   private final PluralUtil pluralUtil;
   private final int maxDecimalPlacesAmount;
+  private final int maxDecimalPlacesPrice;
   private final ColorRoles colorGreen;
   private final ColorRoles colorYellow;
   private final ColorRoles colorRed;
+  private final String energyUnit;
+  private final String currency;
 
   public RecipePositionResolvedAdapter(
       Context context,
@@ -84,10 +91,17 @@ public class RecipePositionResolvedAdapter extends
       RecipePositionsItemAdapterListener listener
   ) {
     this.context = context;
-    maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(context).getInt(
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
         STOCK.DECIMAL_PLACES_AMOUNT,
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
     );
+    maxDecimalPlacesPrice = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_PRICES_DISPLAY,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_DISPLAY
+    );
+    energyUnit = sharedPrefs.getString(PREF.ENERGY_UNIT, PREF.ENERGY_UNIT_DEFAULT);
+    currency = sharedPrefs.getString(PREF.CURRENCY, "");
     this.linearLayoutManager = linearLayoutManager;
     this.recipe = recipe;
     this.recipePositions = new ArrayList<>(recipePositions);
@@ -264,6 +278,22 @@ public class RecipePositionResolvedAdapter extends
       holder.binding.note.setVisibility(View.VISIBLE);
     }
 
+    // CALORIES & PRICE
+    holder.binding.flexboxLayout.removeAllViews();
+    Chip chipCalories = createChip(context,
+        NumUtil.trimAmount(recipePosition.getCalories(), maxDecimalPlacesAmount)
+            + " " + energyUnit, -1);
+    holder.binding.flexboxLayout.addView(chipCalories);
+    Chip chipPrice = createChip(context, context.getString(
+        R.string.property_price_with_currency,
+        NumUtil.trimPrice(recipePosition.getCosts(), maxDecimalPlacesPrice),
+        currency
+    ), -1);
+    holder.binding.flexboxLayout.addView(chipPrice);
+    holder.binding.flexboxLayout.setVisibility(
+        holder.binding.flexboxLayout.getChildCount() > 0 ? View.VISIBLE : View.GONE
+    );
+
     if (recipePosition.isChecked()) {
       holder.binding.linearRecipePositionContainer.setAlpha(0.5f);
       holder.binding.ingredient.setPaintFlags(
@@ -283,6 +313,18 @@ public class RecipePositionResolvedAdapter extends
     holder.binding.linearRecipePositionContainer.setOnClickListener(
         view -> listener.onItemRowClicked(recipePosition, position)
     );
+  }
+
+  private static Chip createChip(Context ctx, String text, int textColor) {
+    @SuppressLint("InflateParams")
+    Chip chip = (Chip) LayoutInflater.from(ctx)
+        .inflate(R.layout.view_info_chip, null, false);
+    chip.setChipBackgroundColor(ColorStateList.valueOf(SurfaceColors.SURFACE_4.getColor(ctx)));
+    chip.setText(text);
+    if (textColor != -1) {
+      chip.setTextColor(textColor);
+    }
+    return chip;
   }
 
   @Override

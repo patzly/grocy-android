@@ -95,7 +95,8 @@
           android:layout_height="wrap_content"
           android:orientation="vertical"
           android:paddingBottom="80dp"
-          android:animateLayoutChanges="true">
+          android:animateLayoutChanges="true"
+          app:transitionTypeChanging="@{true}">
 
           <androidx.cardview.widget.CardView
             android:id="@+id/photo_view_card"
