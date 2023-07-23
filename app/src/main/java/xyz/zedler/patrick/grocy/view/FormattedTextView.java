@@ -98,7 +98,7 @@ public class FormattedTextView extends LinearLayout {
             getHeadline(h[0].length(), part.substring(h[0].length() + 1), addBottomMargin)
         );
       } else if (part.startsWith("- ")) {
-        String[] bullets = part.trim().split("- ");
+        String[] bullets = part.trim().split("(?m)^- ");
         for (int index = 1; index < bullets.length; index++) {
           addView(getBullet(bullets[index], index == bullets.length - 1, addBottomMargin));
         }
