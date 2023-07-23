@@ -223,7 +223,7 @@ public class ShortcutUtil {
     intent.setClass(context, MainActivity.class);
     return new ShortcutInfo.Builder(context, CHORES)
         .setShortLabel(label)
-        .setIcon(Icon.createWithResource(context, R.mipmap.ic_tasks))
+        .setIcon(Icon.createWithResource(context, R.mipmap.ic_chores))
         .setIntent(intent).build();
   }
 
