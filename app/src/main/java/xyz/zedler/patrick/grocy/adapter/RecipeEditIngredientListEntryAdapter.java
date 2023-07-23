@@ -178,6 +178,13 @@ public class RecipeEditIngredientListEntryAdapter extends
     void onItemRowClicked(RecipePosition recipePosition, int position);
   }
 
+  public RecipePosition getEntryForPos(int position) {
+    if (position < 0 || position >= recipePositions.size()) {
+      return null;
+    }
+    return recipePositions.get(position);
+  }
+
   public void updateData(
       ArrayList<RecipePosition> newList,
       ArrayList<Product> newProducts

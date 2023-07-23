@@ -102,6 +102,8 @@ public final class Constants {
     public final static String DB_LAST_TIME_RECIPE_POSITIONS = "db_last_time_recipe_positions";
     public final static String DB_LAST_TIME_RECIPE_POSITIONS_RESOLVED = "db_last_time_recipe_positions_resolved";
     public final static String DB_LAST_TIME_RECIPE_NESTINGS = "db_last_time_recipe_nestings";
+    // when adding new constant for DB, also add it to clearCachingRelatedSharedPreferences()
+    // in PrefsUtil
 
     public final static String QUICK_MODE_ACTIVE_CONSUME = "quick_mode_active_consume";
     public final static String QUICK_MODE_ACTIVE_PURCHASE = "quick_mode_active_purchase";
@@ -156,6 +158,7 @@ public final class Constants {
       public final static String EXPAND_BOTTOM_SHEETS = "expand_bottom_sheets";
       public final static String SPEED_UP_START = "speed_up_start";
       public final static String TURN_ON_QUICK_MODE = "turn_on_quick_mode";
+      public final static String QUICK_MODE_RETURN = "quick_mode_return";
       public final static String DATE_KEYBOARD_INPUT = "date_keyboard_input";
       public final static String DATE_KEYBOARD_REVERSE = "date_keyboard_reverse";
       public final static String MESSAGE_DURATION = "message_duration";
@@ -220,10 +223,10 @@ public final class Constants {
 
     public final static class NOTIFICATIONS {
 
-      public final static String DUE_SOON_ENABLE = "notification_due_soon_enable";
-      public final static String DUE_SOON_TIME = "notification_due_soon_time";
-      public final static String DUE_SOON_CHANNEL = "xyz.zedler.patrick.grocy.due_soon";
-      public final static int DUE_SOON_ID = 1;
+      public final static String STOCK_ENABLE = "notification_stock_enable";
+      public final static String STOCK_TIME = "notification_stock_time";
+      public final static String STOCK_CHANNEL = "xyz.zedler.patrick.grocy.stock";
+      public final static int STOCK_ID = 1;
 
       public final static String CHORES_ENABLE = "notification_chores_enable";
       public final static String CHORES_TIME = "notification_chores_time";
@@ -260,6 +263,7 @@ public final class Constants {
       public final static boolean EXPAND_BOTTOM_SHEETS = false;
       public final static boolean SPEED_UP_START = false;
       public final static boolean TURN_ON_QUICK_MODE = true;
+      public final static boolean QUICK_MODE_RETURN = false;
       public final static boolean DATE_KEYBOARD_INPUT = false;
       public final static boolean DATE_KEYBOARD_REVERSE = false;
       public final static int MESSAGE_DURATION = 10;
@@ -339,8 +343,8 @@ public final class Constants {
     }
 
     public final static class NOTIFICATIONS {
-      public final static boolean DUE_SOON_ENABLE = false;
-      public final static String DUE_SOON_TIME = "12:00";
+      public final static boolean STOCK_ENABLE = false;
+      public final static String STOCK_TIME = "12:00";
 
       public final static boolean CHORES_ENABLE = false;
       public final static String CHORES_TIME = "12:00";

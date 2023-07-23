@@ -31,11 +31,13 @@ public class FilterChipLiveDataChoresStatus extends FilterChipLiveData {
   public final static int STATUS_DUE_TODAY = 1;
   public final static int STATUS_DUE_SOON = 2;
   public final static int STATUS_OVERDUE = 3;
+  public final static int STATUS_DUE = 4;
 
   private final Application application;
   private int dueTodayCount = 0;
   private int dueSoonCount = 0;
   private int overdueCount = 0;
+  private int dueCount = 0;
 
   public FilterChipLiveDataChoresStatus(Application application, Runnable clickListener) {
     this.application = application;
@@ -55,17 +57,19 @@ public class FilterChipLiveDataChoresStatus extends FilterChipLiveData {
     return getItemIdChecked();
   }
 
-  public FilterChipLiveDataChoresStatus setStatus(int status, @Nullable String text) {
+  public void setStatus(int status, @Nullable String text) {
     if (status == STATUS_ALL) {
       setActive(false);
       setText(application.getString(R.string.property_status));
+    } else if (status == STATUS_DUE) {
+      setActive(true);
+      setText(getQuString(R.plurals.msg_due_tasks_short, dueCount));
     } else {
       setActive(true);
       assert text != null;
       setText(text);
     }
     setItemIdChecked(status);
-    return this;
   }
 
   public FilterChipLiveDataChoresStatus setDueTodayCount(int dueTodayCount) {
@@ -83,6 +87,11 @@ public class FilterChipLiveDataChoresStatus extends FilterChipLiveData {
     return this;
   }
 
+  public FilterChipLiveDataChoresStatus setDueCount(int dueCount) {
+    this.dueCount = dueCount;
+    return this;
+  }
+
   public void emitCounts() {
     ArrayList<MenuItemData> menuItemDataList = new ArrayList<>();
     menuItemDataList.add(new MenuItemData(
@@ -91,29 +100,32 @@ public class FilterChipLiveDataChoresStatus extends FilterChipLiveData {
         application.getString(R.string.action_no_filter)
     ));
     menuItemDataList.add(new MenuItemData(
+        STATUS_DUE,
+        1,
+        getQuString(R.plurals.msg_due_tasks_long, dueCount)
+    ));
+    menuItemDataList.add(new MenuItemData(
         STATUS_OVERDUE,
-        0,
+        1,
         getQuString(R.plurals.msg_overdue_tasks, overdueCount)
     ));
     menuItemDataList.add(new MenuItemData(
         STATUS_DUE_TODAY,
-        0,
+        1,
         getQuString(R.plurals.msg_due_today_tasks, dueTodayCount)
     ));
     menuItemDataList.add(new MenuItemData(
         STATUS_DUE_SOON,
-        0,
+        2,
         getQuString(R.plurals.msg_due_tasks, dueSoonCount)
     ));
     setMenuItemDataList(menuItemDataList);
     setMenuItemGroups(
-        new MenuItemGroup(0, true, true)
+        new MenuItemGroup(0, true, true),
+        new MenuItemGroup(1, true, true),
+        new MenuItemGroup(2, true, true)
     );
-    for (MenuItemData menuItemData : menuItemDataList) {
-      if (getItemIdChecked() != STATUS_ALL && getItemIdChecked() == menuItemData.getItemId()) {
-        setText(menuItemData.getText());
-      }
-    }
+    setStatus(getStatus(), null);
     emitValue();
   }
 

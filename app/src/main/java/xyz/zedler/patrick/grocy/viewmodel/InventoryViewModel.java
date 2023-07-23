@@ -120,9 +120,7 @@ public class InventoryViewModel extends BaseViewModel {
 
     infoFullscreenLive = new MutableLiveData<>();
     boolean quickModeStart;
-    if (args.getStartWithScanner()) {
-      quickModeStart = true;
-    } else if (!args.getCloseWhenFinished()) {
+    if (!args.getCloseWhenFinished()) {
       quickModeStart = sharedPrefs.getBoolean(
           Constants.PREF.QUICK_MODE_ACTIVE_INVENTORY,
           false

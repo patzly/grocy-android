@@ -106,7 +106,11 @@
     </provider>
 
     <receiver
-      android:name=".notification.DueSoonNotificationReceiver"
+      android:name=".notification.StockNotificationReceiver"
+      android:enabled="true" />
+
+    <receiver
+      android:name=".notification.ChoresNotificationReceiver"
       android:enabled="true" />
 
     <receiver

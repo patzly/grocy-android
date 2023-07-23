@@ -175,10 +175,11 @@ public class RecipeEditIngredientListFragment extends BaseFragment
                 RecyclerView.ViewHolder viewHolder,
                 List<UnderlayButton> underlayButtons
         ) {
+          if (!(binding.recycler.getAdapter() instanceof RecipeEditIngredientListEntryAdapter)) return;
           int position = viewHolder.getAdapterPosition();
-          List<RecipePosition> displayedItems = viewModel.getRecipePositions();
-          if (displayedItems == null || position < 0
-                  || position >= displayedItems.size()) {
+          RecipePosition entry = ((RecipeEditIngredientListEntryAdapter) binding.recycler.getAdapter())
+              .getEntryForPos(position);
+          if (entry == null) {
             return;
           }
 
@@ -186,14 +187,14 @@ public class RecipeEditIngredientListFragment extends BaseFragment
               activity,
               R.drawable.ic_round_delete_anim,
               pos -> {
-                if (pos >= displayedItems.size()) {
+                RecipePosition entry1 = ((RecipeEditIngredientListEntryAdapter) binding
+                    .recycler.getAdapter()).getEntryForPos(position);
+                if (entry1 == null) {
                   return;
                 }
                 swipeBehavior.recoverLatestSwipedItem();
-                new Handler().postDelayed(() -> {
-                  RecipePosition recipePosition = displayedItems.get(pos);
-                  deleteRecipePosition(recipePosition.getId());
-                }, 100);
+                new Handler().postDelayed(() ->
+                    deleteRecipePosition(entry1.getId()), 100);
               }
           ));
         }

@@ -20,6 +20,7 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:id="@+id/linear_recipe_position_container"
   style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
   android:orientation="vertical"
@@ -103,5 +104,16 @@
     android:layout_height="wrap_content"
     android:gravity="end"
     android:textStyle="italic"/>
+
+  <com.google.android.flexbox.FlexboxLayout
+    android:id="@+id/flexbox_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="6dp"
+    app:flexWrap="wrap"
+    app:alignItems="stretch"
+    app:alignContent="stretch"
+    app:showDivider="middle"
+    app:dividerDrawable="@drawable/shape_flex_layout_divider"/>
 
 </LinearLayout>

@@ -137,7 +137,6 @@ public class LoginRequestViewModel extends BaseViewModel {
             loginErrorMsg.setValue(getString(R.string.error_not_grocy_instance));
             return;
           }
-          appendHassLog(" Success.\n");
           try {
             String grocyVersion = new JSONObject(response)
                 .getJSONObject("grocy_version")
@@ -146,12 +145,17 @@ public class LoginRequestViewModel extends BaseViewModel {
                 Arrays.asList(getResources()
                     .getStringArray(R.array.compatible_grocy_versions))
             );
+            appendHassLog(" Success.");
             if (checkVersion && !supportedVersions.contains(grocyVersion)) {
               showCompatibilityBottomSheet(supportedVersions, grocyVersion);
               return;
             }
           } catch (JSONException e) {
             Log.e(TAG, "requestLogin: " + e);
+            appendHassLog(" Error.\nFailed to parse system info response.\n");
+            loginErrorOccurred.setValue(true);
+            loginErrorMsg.setValue(getString(R.string.error_not_grocy_instance));
+            return;
           }
 
           if (debug) {

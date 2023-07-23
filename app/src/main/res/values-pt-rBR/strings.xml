@@ -1197,8 +1197,6 @@
   <string name="setting_notifications_enable">Ativar notificações</string>
   <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
   few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_due_soon">Itens que vencem em breve</string>
-  <string name="setting_notifications_due_soon_description">Verifica o estoque diariamente e avisa quando os produtos vencem em breve</string>
   <string name="setting_notifications_chores_description">Verifica as atividades domésticas diariamente e avisa sobre as tarefas previstas hoje</string>
   <string name="setting_notification_time">Tempo de notificação</string>
   <!-- the description of the notification time preference.
@@ -1206,8 +1204,6 @@
   many products in stock are due soon, so check means a check of the products in stock -->
   <string name="setting_notification_time_description">Quando a marcação estiver feita</string>
   <string name="setting_keep_screen_on_recipes_description">Ao visualizar uma receita</string>
-
-  <string name="notification_due_soon_content">Consuma-os nos próximos dias para ajudar a reduzir o desperdício de alimentos.</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->

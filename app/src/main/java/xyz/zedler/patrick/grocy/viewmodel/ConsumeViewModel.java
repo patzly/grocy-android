@@ -113,10 +113,7 @@ public class ConsumeViewModel extends BaseViewModel {
     infoFullscreenLive = new MutableLiveData<>();
     boolean quickModeStart;
     if (args.getStartWithScanner()) {
-      quickModeStart = sharedPrefs.getBoolean(
-          BEHAVIOR.TURN_ON_QUICK_MODE,
-          Constants.SETTINGS_DEFAULT.BEHAVIOR.TURN_ON_QUICK_MODE
-      );
+      quickModeStart = isTurnOnQuickModeEnabled();
     } else if (!args.getCloseWhenFinished()) {
       quickModeStart = sharedPrefs.getBoolean(
           PREF.QUICK_MODE_ACTIVE_CONSUME,
@@ -641,11 +638,18 @@ public class ConsumeViewModel extends BaseViewModel {
     return true;
   }
 
-  public boolean isFeatureEnabled(String pref) {
-    if (pref == null) {
-      return true;
-    }
-    return sharedPrefs.getBoolean(pref, true);
+  public boolean isTurnOnQuickModeEnabled() {
+    return sharedPrefs.getBoolean(
+        BEHAVIOR.TURN_ON_QUICK_MODE,
+        SETTINGS_DEFAULT.BEHAVIOR.TURN_ON_QUICK_MODE
+    );
+  }
+
+  public boolean isQuickModeReturnEnabled() {
+    return sharedPrefs.getBoolean(
+        BEHAVIOR.QUICK_MODE_RETURN,
+        Constants.SETTINGS_DEFAULT.BEHAVIOR.QUICK_MODE_RETURN
+    );
   }
 
   @Override

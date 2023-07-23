@@ -29,11 +29,51 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 
 public class PrefsUtil {
 
+  public static void migratePrefs(SharedPreferences sharedPrefs) {
+    // Due soon notification is now stock notification
+    migratePref(
+        sharedPrefs,
+        "notification_due_soon_enable",
+        "notification_stock_enable"
+    );
+    migratePref(
+        sharedPrefs,
+        "notification_due_soon_time",
+        "notification_stock_time"
+    );
+  }
+
+  private static void migratePref(
+      SharedPreferences sharedPrefs,
+      String oldKey,
+      String newKey
+  ) {
+    if (sharedPrefs.contains(oldKey)) {
+      Object value = sharedPrefs.getAll().get(oldKey);
+      SharedPreferences.Editor editor = sharedPrefs.edit();
+      if (value instanceof Boolean) {
+        editor.putBoolean(newKey, (Boolean) value);
+      } else if (value instanceof Float) {
+        editor.putFloat(newKey, (Float) value);
+      } else if (value instanceof Integer) {
+        editor.putInt(newKey, (Integer) value);
+      } else if (value instanceof Long) {
+        editor.putLong(newKey, (Long) value);
+      } else if (value instanceof String) {
+        editor.putString(newKey, (String) value);
+      }
+      editor.remove(oldKey);
+      editor.apply();
+    }
+  }
+
   public static void clearCachingRelatedSharedPreferences(SharedPreferences sharedPrefs) {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
     editPrefs.remove(PREF.DB_LAST_TIME_STOCK_ITEMS);
+    editPrefs.remove(PREF.DB_LAST_TIME_STOCK_ENTRIES);
     editPrefs.remove(PREF.DB_LAST_TIME_STORES);
     editPrefs.remove(PREF.DB_LAST_TIME_LOCATIONS);
+    editPrefs.remove(PREF.DB_LAST_TIME_STOCK_LOCATIONS);
     editPrefs.remove(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS);
     editPrefs.remove(PREF.DB_LAST_TIME_SHOPPING_LISTS);
     editPrefs.remove(PREF.DB_LAST_TIME_PRODUCT_GROUPS);
@@ -51,6 +91,11 @@ public class PrefsUtil {
     editPrefs.remove(PREF.DB_LAST_TIME_CHORES);
     editPrefs.remove(PREF.DB_LAST_TIME_CHORE_ENTRIES);
     editPrefs.remove(PREF.DB_LAST_TIME_USERS);
+    editPrefs.remove(PREF.DB_LAST_TIME_RECIPES);
+    editPrefs.remove(PREF.DB_LAST_TIME_RECIPE_FULFILLMENTS);
+    editPrefs.remove(PREF.DB_LAST_TIME_RECIPE_POSITIONS);
+    editPrefs.remove(PREF.DB_LAST_TIME_RECIPE_POSITIONS_RESOLVED);
+    editPrefs.remove(PREF.DB_LAST_TIME_RECIPE_NESTINGS);
     editPrefs.apply();
   }
 

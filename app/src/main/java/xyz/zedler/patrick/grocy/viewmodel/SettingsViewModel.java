@@ -77,6 +77,7 @@ public class SettingsViewModel extends BaseViewModel {
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
   private final MainRepository repository;
+  private final ReminderUtil reminderUtil;
 
   private MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<Boolean> getExternalScannerEnabledLive;
@@ -112,6 +113,7 @@ public class SettingsViewModel extends BaseViewModel {
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new MainRepository(getApplication());
+    reminderUtil = new ReminderUtil(getApplication());
 
     getExternalScannerEnabledLive = new MutableLiveData<>(getExternalScannerEnabled());
     needsRestartLive = new MutableLiveData<>(false);
@@ -130,8 +132,8 @@ public class SettingsViewModel extends BaseViewModel {
         SHOPPING_LIST.AUTO_ADD, SETTINGS_DEFAULT.SHOPPING_LIST.AUTO_ADD
     ));
     autoAddToShoppingListTextLive = new MutableLiveData<>(getString(R.string.setting_loading));
-    dueSoonNotificationsEnabledLive = new MutableLiveData<>(getDueSoonNotificationsEnabled());
-    dueSoonNotificationsTimeTextLive = new MutableLiveData<>(getDueSoonNotificationsTime());
+    dueSoonNotificationsEnabledLive = new MutableLiveData<>(getStockNotificationsEnabled());
+    dueSoonNotificationsTimeTextLive = new MutableLiveData<>(getStockNotificationsTime());
     choresNotificationsEnabledLive = new MutableLiveData<>(getChoresNotificationsEnabled());
     choresNotificationsTimeTextLive = new MutableLiveData<>(getChoresNotificationsTime());
 
@@ -339,6 +341,17 @@ public class SettingsViewModel extends BaseViewModel {
 
   public void setTurnOnQuickModeEnabled(boolean enabled) {
     sharedPrefs.edit().putBoolean(Constants.SETTINGS.BEHAVIOR.TURN_ON_QUICK_MODE, enabled).apply();
+  }
+
+  public boolean getQuickModeReturnEnabled() {
+    return sharedPrefs.getBoolean(
+        BEHAVIOR.QUICK_MODE_RETURN,
+        SETTINGS_DEFAULT.BEHAVIOR.QUICK_MODE_RETURN
+    );
+  }
+
+  public void setQuickModeReturnEnabled(boolean enabled) {
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.BEHAVIOR.QUICK_MODE_RETURN, enabled).apply();
   }
 
   public boolean getDateKeyboardInputEnabled() {
@@ -995,44 +1008,55 @@ public class SettingsViewModel extends BaseViewModel {
     showBottomSheet(new InputBottomSheet(), bundle);
   }
 
-  public boolean getDueSoonNotificationsEnabled() {
-    return sharedPrefs.getBoolean(
-        NOTIFICATIONS.DUE_SOON_ENABLE,
-        SETTINGS_DEFAULT.NOTIFICATIONS.DUE_SOON_ENABLE
-    );
+  public ReminderUtil getReminderUtil() {
+    return reminderUtil;
   }
 
-  public MutableLiveData<Boolean> getDueSoonNotificationsEnabledLive() {
+  public boolean getStockNotificationsEnabled() {
+    boolean isActivated = sharedPrefs.getBoolean(
+        NOTIFICATIONS.STOCK_ENABLE, SETTINGS_DEFAULT.NOTIFICATIONS.STOCK_ENABLE
+    );
+    if (isActivated && !reminderUtil.hasPermission()) {
+      isActivated = false;
+      setStockNotificationsEnabled(false);
+    }
+    return isActivated;
+  }
+
+  public MutableLiveData<Boolean> getStockNotificationsEnabledLive() {
     return dueSoonNotificationsEnabledLive;
   }
 
-  public void setDueSoonNotificationsEnabled(boolean enabled) {
+  public void setStockNotificationsEnabled(boolean enabled) {
     dueSoonNotificationsEnabledLive.setValue(enabled);
-    (new ReminderUtil(getApplication())).setReminderEnabled(enabled);
+    reminderUtil.setReminderEnabled(ReminderUtil.STOCK_TYPE, enabled);
   }
 
-  public String getDueSoonNotificationsTime() {
+  public String getStockNotificationsTime() {
     return sharedPrefs.getString(
-        NOTIFICATIONS.DUE_SOON_TIME,
-        SETTINGS_DEFAULT.NOTIFICATIONS.DUE_SOON_TIME
+        NOTIFICATIONS.STOCK_TIME, SETTINGS_DEFAULT.NOTIFICATIONS.STOCK_TIME
     );
   }
 
-  public MutableLiveData<String> getDueSoonNotificationsTimeTextLive() {
+  public MutableLiveData<String> getStockNotificationsTimeTextLive() {
     return dueSoonNotificationsTimeTextLive;
   }
 
-  public void setDueSoonNotificationsTime(String text) {
-    sharedPrefs.edit().putString(NOTIFICATIONS.DUE_SOON_TIME, text).apply();
+  public void setStockNotificationsTime(String text) {
+    sharedPrefs.edit().putString(NOTIFICATIONS.STOCK_TIME, text).apply();
     dueSoonNotificationsTimeTextLive.setValue(text);
-    setDueSoonNotificationsEnabled(true);
+    setStockNotificationsEnabled(reminderUtil.hasPermission());
   }
 
   public boolean getChoresNotificationsEnabled() {
-    return sharedPrefs.getBoolean(
-        NOTIFICATIONS.CHORES_ENABLE,
-        SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_ENABLE
+    boolean isActivated = sharedPrefs.getBoolean(
+        NOTIFICATIONS.CHORES_ENABLE, SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_ENABLE
     );
+    if (isActivated && !reminderUtil.hasPermission()) {
+      isActivated = false;
+      setChoresNotificationsEnabled(false);
+    }
+    return isActivated;
   }
 
   public MutableLiveData<Boolean> getChoresNotificationsEnabledLive() {
@@ -1040,14 +1064,13 @@ public class SettingsViewModel extends BaseViewModel {
   }
 
   public void setChoresNotificationsEnabled(boolean enabled) {
-    //choresNotificationsEnabledLive.setValue(enabled);
-    //(new ReminderUtil(getApplication())).setReminderEnabled(enabled);
+    choresNotificationsEnabledLive.setValue(enabled);
+    reminderUtil.setReminderEnabled(ReminderUtil.CHORES_TYPE, enabled);
   }
 
   public String getChoresNotificationsTime() {
     return sharedPrefs.getString(
-        NOTIFICATIONS.CHORES_TIME,
-        SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_TIME
+        NOTIFICATIONS.CHORES_TIME, SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_TIME
     );
   }
 
@@ -1058,7 +1081,7 @@ public class SettingsViewModel extends BaseViewModel {
   public void setChoresNotificationsTime(String text) {
     sharedPrefs.edit().putString(NOTIFICATIONS.CHORES_TIME, text).apply();
     choresNotificationsTimeTextLive.setValue(text);
-    setChoresNotificationsEnabled(true);
+    setChoresNotificationsEnabled(reminderUtil.hasPermission());
   }
 
   public ArrayList<String> getSupportedVersions() {

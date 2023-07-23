@@ -127,12 +127,16 @@ easy navigation to the consume page or other pages in the app using physical int
 - grocy://tasksFragment
 - grocy://taskEntryEditFragment?action=create
 - grocy://choresFragment
+- grocy://choresFragment?statusFilterId={statusFilterId}
 - grocy://recipesFragment
 - grocy://masterDataOverviewFragment
 - grocy://stockEntriesFragment
 
-The value of parameter statusFilterId for the second URI can be 0 for all items, 1 for due soon,
-3 for overdue, 4 for expired, 5 for in stock, 6 for opened and 7 for "not fresh" combination.
+The value of parameter statusFilterId for the stockOverviewFragment URI can be 0 for all items,
+1 for due soon, 2 for overdue, 3 for expired, 4 for below min. stock amount, 5 for in stock, 6 for
+opened and 7 for "not fresh" combination. The value of parameter statusFilterId for the
+choresFragment URI can be 0 for all items, 1 for due today, 2 for due soon, 3 for overdue
+and 4 for due.
 
 ## Support
 

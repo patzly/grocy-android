@@ -36,7 +36,6 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.NOTIFICATIONS;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -46,10 +45,9 @@ import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.VolatileItem;
 import xyz.zedler.patrick.grocy.util.NavUtil;
-import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ReminderUtil;
 
-public class DueSoonNotificationReceiver extends BroadcastReceiver {
+public class StockNotificationReceiver extends BroadcastReceiver {
 
   public void onReceive(Context context, Intent intent) {
     NotificationManager notificationManager = (NotificationManager) context.getSystemService(
@@ -58,18 +56,28 @@ public class DueSoonNotificationReceiver extends BroadcastReceiver {
     if (notificationManager == null) {
       return;
     }
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    String reminderTime = sharedPrefs.getString(
+        NOTIFICATIONS.STOCK_TIME, SETTINGS_DEFAULT.NOTIFICATIONS.STOCK_TIME
+    );
+    new ReminderUtil(context).scheduleReminder(
+        ReminderUtil.STOCK_TYPE,
+        NOTIFICATIONS.STOCK_ID,
+        reminderTime,
+        StockNotificationReceiver.class
+    );
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      CharSequence name = context.getString(R.string.setting_notifications_due_soon);
-      String description = context.getString(R.string.setting_notifications_due_soon_description);
+      CharSequence name = context.getString(R.string.category_stock);
+      String description = context.getString(R.string.setting_notifications_stock_description);
       int importance = NotificationManager.IMPORTANCE_HIGH;
       NotificationChannel channel = new NotificationChannel(
-          NOTIFICATIONS.DUE_SOON_CHANNEL, name, importance
+          NOTIFICATIONS.STOCK_CHANNEL, name, importance
       );
       channel.setDescription(description);
       notificationManager.createNotificationChannel(channel);
     }
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-    DownloadHelper dlHelper = new DownloadHelper(context, DueSoonNotificationReceiver.class.getSimpleName());
+    DownloadHelper dlHelper = new DownloadHelper(context, StockNotificationReceiver.class.getSimpleName());
 
     VolatileItem.getVolatile(dlHelper, response -> {
       try {
@@ -79,22 +87,18 @@ public class DueSoonNotificationReceiver extends BroadcastReceiver {
         ArrayList<StockItem> dueItems = (new Gson()).fromJson(
             jsonObject.getJSONArray("due_products").toString(), typeStockItem
         );
-
-        if (dueItems.size() == 0) return;
-
-        String days = sharedPrefs.getString(
-            STOCK.DUE_SOON_DAYS,
-            SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS
+        ArrayList<StockItem> overdueItems = dlHelper.gson.fromJson(
+            jsonObject.getJSONArray("overdue_products").toString(), typeStockItem
         );
-        int daysInt;
-        if (NumUtil.isStringInt(days)) {
-          daysInt = Integer.parseInt(days);
-        } else {
-          daysInt = Integer.parseInt(SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS);
-        }
+        ArrayList<StockItem> expiredItems = dlHelper.gson.fromJson(
+            jsonObject.getJSONArray("expired_products").toString(), typeStockItem
+        );
+        int notFreshCount = dueItems.size() + overdueItems.size() + expiredItems.size();
+        if (notFreshCount == 0 ) return;
+
         String titleText = context.getResources().getQuantityString(
-            R.plurals.description_overview_stock_due_soon,
-            dueItems.size(), dueItems.size(), daysInt
+            R.plurals.notification_stock_not_fresh_title,
+            notFreshCount, notFreshCount
         );
 
         Uri uri = NavUtil.getUriWithArgs(
@@ -107,20 +111,26 @@ public class DueSoonNotificationReceiver extends BroadcastReceiver {
         notificationIntent.setClass(context, MainActivity.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        notificationManager.notify(NOTIFICATIONS.DUE_SOON_ID, ReminderUtil.getNotification(
+        notificationManager.notify(NOTIFICATIONS.STOCK_ID, ReminderUtil.getNotification(
             context,
             titleText,
-            context.getString(R.string.notification_due_soon_content),
-            NOTIFICATIONS.DUE_SOON_ID,
-            NOTIFICATIONS.DUE_SOON_CHANNEL,
+            context.getString(R.string.notification_stock_content),
+            NOTIFICATIONS.STOCK_ID,
+            NOTIFICATIONS.STOCK_CHANNEL,
             notificationIntent
         ));
         dlHelper.destroy();
       } catch (JSONException e) {
         e.printStackTrace();
-        // exception handling
         dlHelper.destroy();
       }
-    }, error -> dlHelper.destroy());
+    }, error -> {
+      dlHelper.destroy();
+
+      new ReminderUtil(context).scheduleAgainIn10Minutes(
+          NOTIFICATIONS.STOCK_ID,
+          StockNotificationReceiver.class
+      );
+    });
   }
 }

@@ -1141,8 +1141,6 @@
   <string name="setting_notifications_enable">通知を有効化</string>
   <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
   few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_due_soon">期限切れが近いアイテム</string>
-  <string name="setting_notifications_due_soon_description">毎日在庫を確認し、期限が近い製品を通知</string>
   <string name="setting_notifications_chores_description">毎日家事を確認し、期限が近い家事を通知</string>
   <string name="setting_notification_time">通知の時刻</string>
   <!-- the description of the notification time preference.
@@ -1151,6 +1149,4 @@
   <string name="setting_notification_time_description">確認完了時</string>
   <string name="setting_keep_screen_on_recipes_description">レシピ閲覧中</string>
 
-  <string name="notification_due_soon_content">食品ロスを減らすために数日間で消費。</string>
-
-  </resources>
+</resources>

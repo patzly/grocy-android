@@ -227,6 +227,13 @@ public class ChoreEntryAdapter extends
     void onItemRowClicked(ChoreEntry choreEntry);
   }
 
+  public ChoreEntry getEntryForPos(int position) {
+    if (position < 0 || position >= choreEntries.size()) {
+      return null;
+    }
+    return choreEntries.get(position);
+  }
+
   public void updateData(
       ArrayList<ChoreEntry> newList,
       HashMap<Integer, Chore> choreHashMap,

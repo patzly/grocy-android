@@ -80,19 +80,37 @@
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintEnd_toEndOf="parent">
 
+          <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Grocy.Card.Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            android:onClick="@{v -> fragment.openAppInfoPage()}">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.Paragraph"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:textColor="?attr/colorOnSurfaceVariant"
+              android:text="@string/msg_help_notifications" />
+
+          </com.google.android.material.card.MaterialCardView>
+
           <TextView
             style="@style/Widget.Grocy.TextView.Category"
-            android:text="@string/setting_notifications_due_soon" />
+            android:text="@string/category_stock" />
 
           <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{v -> switchStockEnableNotifications.setChecked(!switchStockEnableNotifications.isChecked())}">
+            android:onClick="@{v -> switchStockEnableNotifications.toggle()}">
 
             <ImageView
+              android:id="@+id/image_stock_enable_notifications"
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              app:srcCompat="@drawable/ic_round_notifications"
+              app:srcCompat="@drawable/ic_round_notifications_anim"
               tools:ignore="ContentDescription" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
@@ -103,22 +121,20 @@
 
               <TextView
                 style="@style/Widget.Grocy.TextView.ListItem.Description"
-                android:text="@string/setting_notifications_due_soon_description" />
+                android:text="@string/setting_notifications_stock_description" />
 
             </LinearLayout>
 
             <com.google.android.material.materialswitch.MaterialSwitch
               android:id="@+id/switch_stock_enable_notifications"
-              style="@style/Widget.Grocy.Switch"
-              android:onCheckedChanged="@{(view, checked) -> viewModel.setDueSoonNotificationsEnabled(checked)}"
-              app:initialChecked="@{viewModel.getDueSoonNotificationsEnabled()}" />
+              style="@style/Widget.Grocy.Switch" />
 
           </LinearLayout>
 
           <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
             app:clickUtil="@{clickUtil}"
-            android:visibility="@{viewModel.dueSoonNotificationsEnabledLive ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.stockNotificationsEnabledLive ? View.VISIBLE : View.GONE}"
             android:onClick="@{() -> fragment.showDueSoonTimePickerDialog()}">
 
             <ImageView
@@ -134,7 +150,7 @@
 
               <TextView
                 style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:text="@{viewModel.dueSoonNotificationsTimeTextLive}" />
+                android:text="@{viewModel.stockNotificationsTimeTextLive}" />
 
               <TextView
                 style="@style/Widget.Grocy.TextView.ListItem.Description"
@@ -148,24 +164,16 @@
             style="@style/Widget.Grocy.TextView.Category"
             android:text="@string/title_chores" />
 
-          <TextView
-            style="@style/Widget.Grocy.TextView.ListItem.Description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="56dp"
-            android:text="@string/msg_coming_soon" />
-
           <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:onClick="@{v -> switchChoresEnableNotifications.setChecked(!switchChoresEnableNotifications.isChecked())}">
 
             <ImageView
+              android:id="@+id/image_chores_enable_notifications"
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              app:srcCompat="@drawable/ic_round_notifications"
+              app:srcCompat="@drawable/ic_round_notifications_anim"
               tools:ignore="ContentDescription" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
@@ -182,16 +190,14 @@
 
             <com.google.android.material.materialswitch.MaterialSwitch
               android:id="@+id/switch_chores_enable_notifications"
-              style="@style/Widget.Grocy.Switch"
-              android:onCheckedChanged="@{(view, checked) -> viewModel.setChoresNotificationsEnabled(checked)}"
-              app:initialChecked="@{viewModel.getChoresNotificationsEnabled()}" />
+              style="@style/Widget.Grocy.Switch" />
 
           </LinearLayout>
 
           <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
             app:clickUtil="@{clickUtil}"
-            android:visibility="gone"
+            android:visibility="@{viewModel.choresNotificationsEnabledLive ? View.VISIBLE : View.GONE}"
             android:onClick="@{() -> fragment.showChoresTimePickerDialog()}">
 
             <ImageView

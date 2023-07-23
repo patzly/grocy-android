@@ -488,7 +488,7 @@ public class FormDataTransfer {
     ProductDetails productDetails = productDetailsLive.getValue();
     assert productDetails != null && amountStockLive.getValue() != null;
     double amountRemoved = NumUtil.toDouble(amountStockLive.getValue());
-    QuantityUnit qU = quantityUnitLive.getValue();
+    QuantityUnit qU = quantityUnitStockLive.getValue();
     StockLocation fromLocation = fromLocationLive.getValue();
     Location toLocation = toLocationLive.getValue();
     assert qU != null && fromLocation != null && toLocation != null;

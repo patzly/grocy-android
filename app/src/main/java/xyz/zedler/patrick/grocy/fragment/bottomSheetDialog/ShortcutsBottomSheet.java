@@ -94,6 +94,8 @@ public class ShortcutsBottomSheet extends BaseBottomSheetDialogFragment {
         setCheckBoxChecked(R.id.transfer);
       } else if (shortcutInfo.getId().equals(ShortcutUtil.INVENTORY)) {
         setCheckBoxChecked(R.id.inventory);
+      } else if (shortcutInfo.getId().equals(ShortcutUtil.CHORES)) {
+        setCheckBoxChecked(R.id.chores);
       } else if (shortcutInfo.getId().equals(ShortcutUtil.TASKS)) {
         setCheckBoxChecked(R.id.tasks);
       } else if (shortcutInfo.getId().equals(ShortcutUtil.ADD_TASK)) {
@@ -167,6 +169,8 @@ public class ShortcutsBottomSheet extends BaseBottomSheetDialogFragment {
         shortcutInfos.add(ShortcutUtil.createShortcutInventory(context, checkBox.getText()));
       } else if (checkBox.getId() == R.id.transfer) {
         shortcutInfos.add(ShortcutUtil.createShortcutTransfer(context, checkBox.getText()));
+      } else if (checkBox.getId() == R.id.chores) {
+        shortcutInfos.add(ShortcutUtil.createShortcutChores(context, checkBox.getText()));
       } else if (checkBox.getId() == R.id.tasks) {
         shortcutInfos.add(ShortcutUtil.createShortcutTasks(context, checkBox.getText()));
       } else if (checkBox.getId() == R.id.task_add) {

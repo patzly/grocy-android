@@ -29,7 +29,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
@@ -218,13 +217,8 @@ public class StockOverviewFragment extends BaseFragment implements
           if (viewHolder.getItemViewType() != GroupedListItem.TYPE_ENTRY) return;
           if (!(binding.recycler.getAdapter() instanceof StockOverviewItemAdapter)) return;
           int position = viewHolder.getAdapterPosition();
-          ArrayList<GroupedListItem> groupedListItems =
-              ((StockOverviewItemAdapter) binding.recycler.getAdapter()).getGroupedListItems();
-          if (groupedListItems == null || position < 0
-              || position >= groupedListItems.size()) {
-            return;
-          }
-          GroupedListItem item = groupedListItems.get(position);
+          GroupedListItem item = ((StockOverviewItemAdapter) binding.recycler.getAdapter())
+              .getGroupedListItemForPos(position);
           if (!(item instanceof StockItem)) {
             return;
           }
@@ -236,13 +230,15 @@ public class StockOverviewFragment extends BaseFragment implements
                 activity,
                 R.drawable.ic_round_consume_product,
                 pos -> {
-                  if (pos >= groupedListItems.size()) {
+                  GroupedListItem item1 = ((StockOverviewItemAdapter) binding.recycler.getAdapter())
+                      .getGroupedListItemForPos(position);
+                  if (!(item1 instanceof StockItem)) {
                     return;
                   }
                   swipeBehavior.recoverLatestSwipedItem();
                   viewModel.performAction(
                       Constants.ACTION.CONSUME,
-                      stockItem
+                      (StockItem) item1
                   );
                 }
             ));
@@ -256,13 +252,15 @@ public class StockOverviewFragment extends BaseFragment implements
                 activity,
                 R.drawable.ic_round_open,
                 pos -> {
-                  if (pos >= groupedListItems.size()) {
+                  GroupedListItem item1 = ((StockOverviewItemAdapter) binding.recycler.getAdapter())
+                      .getGroupedListItemForPos(position);
+                  if (!(item1 instanceof StockItem)) {
                     return;
                   }
                   swipeBehavior.recoverLatestSwipedItem();
                   viewModel.performAction(
                       Constants.ACTION.OPEN,
-                      stockItem
+                      (StockItem) item1
                   );
                 }
             ));

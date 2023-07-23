@@ -28,13 +28,15 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import androidx.preference.PreferenceManager;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.NOTIFICATIONS;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS.CHORES;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS.NOTIFICATIONS;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataChoresStatus;
+import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.util.NavUtil;
 import xyz.zedler.patrick.grocy.util.ReminderUtil;
 
 public class ChoresNotificationReceiver extends BroadcastReceiver {
@@ -46,6 +48,17 @@ public class ChoresNotificationReceiver extends BroadcastReceiver {
     if (notificationManager == null) {
       return;
     }
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    String reminderTime = sharedPrefs.getString(
+        NOTIFICATIONS.CHORES_TIME, SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_TIME
+    );
+    new ReminderUtil(context).scheduleReminder(
+        ReminderUtil.CHORES_TYPE,
+        NOTIFICATIONS.CHORES_ID,
+        reminderTime,
+        StockNotificationReceiver.class
+    );
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       CharSequence name = context.getString(R.string.title_chores);
       String description = context.getString(R.string.setting_notifications_chores_description);
@@ -56,22 +69,34 @@ public class ChoresNotificationReceiver extends BroadcastReceiver {
       channel.setDescription(description);
       notificationManager.createNotificationChannel(channel);
     }
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     DownloadHelper dlHelper = new DownloadHelper(context, ChoresNotificationReceiver.class.getSimpleName());
 
     ChoreEntry.getChoreEntries(dlHelper, choreEntries -> {
       if (choreEntries.size() == 0) return;
 
-      int days = sharedPrefs.getInt(
-          CHORES.DUE_SOON_DAYS,
-          SETTINGS_DEFAULT.CHORES.DUE_SOON_DAYS
-      );
+      int choresDueCount = 0;
+      for (ChoreEntry choreEntry : choreEntries) {
+        if (choreEntry.getNextEstimatedExecutionTime() == null
+            || choreEntry.getNextEstimatedExecutionTime().isEmpty()) {
+          continue;
+        }
+        int daysFromNow = DateUtil
+            .getDaysFromNow(choreEntry.getNextEstimatedExecutionTime());
+        if (daysFromNow <= 0) {
+          choresDueCount++;
+        }
+      }
       String titleText = context.getResources().getQuantityString(
-          R.plurals.description_overview_chores_due_today,
-          choreEntries.size(), choreEntries.size(), days
+          R.plurals.notification_chores_due_title,
+          choresDueCount, choresDueCount
       );
 
-      Uri uri = Uri.parse(context.getString(R.string.deep_link_choresFragment));
+      Uri uri = NavUtil.getUriWithArgs(
+          context.getString(R.string.deep_link_choresFragment),
+          new xyz.zedler.patrick.grocy.fragment.ChoresFragmentArgs.Builder()
+              .setStatusFilterId(String.valueOf(FilterChipLiveDataChoresStatus.STATUS_DUE))
+              .build().toBundle()
+      );
       Intent notificationIntent = new Intent(Intent.ACTION_VIEW, uri);
       notificationIntent.setClass(context, MainActivity.class);
       notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -79,12 +104,19 @@ public class ChoresNotificationReceiver extends BroadcastReceiver {
       notificationManager.notify(NOTIFICATIONS.CHORES_ID, ReminderUtil.getNotification(
           context,
           titleText,
-          null,
+          context.getString(R.string.notification_chores_content),
           NOTIFICATIONS.CHORES_ID,
           NOTIFICATIONS.CHORES_CHANNEL,
           notificationIntent
       ));
       dlHelper.destroy();
-    }, error -> dlHelper.destroy());
+    }, error -> {
+      dlHelper.destroy();
+
+      new ReminderUtil(context).scheduleAgainIn10Minutes(
+          NOTIFICATIONS.STOCK_ID,
+          StockNotificationReceiver.class
+      );
+    });
   }
 }

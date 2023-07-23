@@ -30,7 +30,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
@@ -94,7 +93,10 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    viewModel = new ViewModelProvider(this).get(ChoresViewModel.class);
+    viewModel = new ViewModelProvider(this, new ChoresViewModel.ChoresViewModelFactory(
+        activity.getApplication(),
+        ChoresFragmentArgs.fromBundle(requireArguments())
+    )).get(ChoresViewModel.class);
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
     binding.setFragment(this);
@@ -197,38 +199,39 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
             RecyclerView.ViewHolder viewHolder,
             List<UnderlayButton> underlayButtons
         ) {
+          if (!(binding.recycler.getAdapter() instanceof ChoreEntryAdapter)) return;
           int position = viewHolder.getAdapterPosition();
-          ArrayList<ChoreEntry> displayedItems = viewModel.getFilteredChoreEntriesLive().getValue();
-          if (displayedItems == null || position < 0
-              || position >= displayedItems.size()) {
+          ChoreEntry entry = ((ChoreEntryAdapter) binding.recycler.getAdapter())
+              .getEntryForPos(position);
+          if (entry == null) {
             return;
           }
           underlayButtons.add(new UnderlayButton(
               activity,
               R.drawable.ic_round_play_arrow,
               pos -> {
-                if (pos >= displayedItems.size()) {
-                  return;
-                }
                 swipeBehavior.recoverLatestSwipedItem();
+                ChoreEntry entry1 = ((ChoreEntryAdapter) binding.recycler.getAdapter())
+                    .getEntryForPos(position);
+                if (entry1 == null) return;
                 new Handler().postDelayed(
-                    () -> viewModel.executeChore(displayedItems.get(pos).getChoreId(), false),
+                    () -> viewModel.executeChore(entry1.getChoreId(), false),
                     100
                 );
               }
           ));
           if (VersionUtil.isGrocyServerMin320(viewModel.getSharedPrefs())
-              && !viewModel.hasManualScheduling(displayedItems.get(position).getChoreId())) {
+              && !viewModel.hasManualScheduling(entry.getChoreId())) {
             underlayButtons.add(new UnderlayButton(
                 activity,
                 R.drawable.ic_round_skip_next,
                 pos -> {
-                  if (pos >= displayedItems.size()) {
-                    return;
-                  }
                   swipeBehavior.recoverLatestSwipedItem();
+                  ChoreEntry entry1 = ((ChoreEntryAdapter) binding.recycler.getAdapter())
+                      .getEntryForPos(position);
+                  if (entry1 == null) return;
                   new Handler().postDelayed(
-                      () -> viewModel.executeChore(displayedItems.get(pos).getChoreId(), true),
+                      () -> viewModel.executeChore(entry1.getChoreId(), true),
                       100
                   );
                 }

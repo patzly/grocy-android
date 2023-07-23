@@ -225,6 +225,16 @@
     <item quantity="one">%1$d overdue</item>
     <item quantity="other">%1$d overdue</item>
   </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_short">
+    <item quantity="one">%1$d due</item>
+    <item quantity="other">%1$d due</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_long">
+    <item quantity="one">%1$d due (all below)</item>
+    <item quantity="other">%1$d due (all below)</item>
+  </plurals>
   <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
   <plurals name="msg_assigned_tasks">
     <item quantity="one">%1$d assigned</item>
@@ -265,6 +275,7 @@
   <!-- %1$s is a product name -->
   <string name="msg_no_stock_entries">No stock entries for %1$s</string>
   <string name="msg_not_found">Product not found</string>
+  <string name="msg_returning_to_overview">Going back to overview page in a few seconds</string>
   <string name="msg_editor_hint">Write text here</string>
   <string name="msg_coming_soon">This feature will be available soon</string>
   <string name="msg_undo_transaction">Undo transaction?</string>
@@ -434,6 +445,7 @@
   <string name="msg_help_recipe_ingredients_wrong">With Grocy server version below 4.0.0 this list can contain wrong fulfillment information. Please update your server to version 4.0.0 or later to see correct values.</string>
   <string name="msg_help_date_chooser">You can switch to keyboard input in settings, this could increase input speed for you.</string>
   <string name="msg_help_date_chooser_keyboard">You can activate reverse date format in settings if DDMMYY is preferred in your country.\nTo apply input and close this page you can use the Done key on your keyboard.</string>
+  <string name="msg_help_notifications">If you do not receive notifications, tap here to open the Android app info page and check if notifications are allowed and if power saving measures can be disabled. Android sometimes delivers notifications later than the set time to reduce battery consumption, which is normal behavior.</string>
   <string name="msg_help_quick_mode">You can long tap on the title bar above to activate the quick mode. In this mode, a transaction will be executed immediately if a product has been entered or scanned and all fields could be automatically populated (by product and/or barcode defaults).</string>
   <string name="msg_help_loading_circle_settings">On each page where something has to be loaded from server, the app first checks with a tiny request whether the server database has changed since last time and only updates outdated data. Enable the option below to show a loading circle even for this tiny request.</string>
   <string name="msg_help_start">Beginner mode is active: Help texts are displayed by default on all pages if available. Tap to change.</string>
@@ -525,6 +537,7 @@
   <string name="error_wrong_grocycode_type">grocycode contains wrong entity type</string>
   <string name="error_stock_entry_grocycode">Stock entry from grocycode not found</string>
   <string name="error_permission">No permission for this action</string>
+  <string name="error_permission_notification">Notification permission is required for reminders to work</string>
   <string name="error_undefined">An error occurred</string>
   <string name="error_invalid_base_servings">Servings invalid</string>
   <string name="error_pictures_size_exceeds_limit">There are embedded pictures in product or recipe descriptions on your server, which exceed the parsing limit of this app. Please remove high quality and large sized pictures from your descriptions, this will also speed up data loading.</string>
@@ -1190,6 +1203,8 @@
   <string name="setting_bottom_menu_button_description">In bottom app bar</string>
   <string name="setting_turn_on_quick_mode">Turn on quick mode by default</string>
   <string name="setting_turn_on_quick_mode_description">When using scan button on overview page</string>
+  <string name="setting_quick_mode_return">Return to overview page after 20 seconds</string>
+  <string name="setting_quick_mode_return_description">When using scan button on overview page and when quick mode is not in use</string>
   <string name="setting_speed_up_start">Reduce app startup time</string>
   <string name="setting_speed_up_start_description">Has an effect only on fast devices</string>
   <string name="setting_date_keyboard_input">Enter dates with keyboard</string>
@@ -1211,19 +1226,26 @@
   <string name="setting_message_duration">Display time for messages</string>
   <string name="setting_message_duration_description">Only concerns transaction messages</string>
   <string name="setting_notifications_enable">Enable notifications</string>
-  <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
-  few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_due_soon">Due soon items</string>
-  <string name="setting_notifications_due_soon_description">Checks stock daily and notifies you when products are due soon</string>
-  <string name="setting_notifications_chores_description">Checks chores daily and notifies you when chores are due to be done today</string>
+  <!-- The string belongs to the stock overview (stock items can be expired, overdue or due soon). -->
+  <string name="setting_notifications_stock_description">Checks stock daily and notifies you if there are products that are no longer fresh (expired, overdue or due soon)</string>
+  <string name="setting_notifications_chores_description">Checks chores daily and notifies you when chores are due to be done</string>
   <string name="setting_notification_time">Notification time</string>
-  <!-- the description of the notification time preference.
-  With the "Due soon" check enabled, the user will be notified every day at the selected time how
-  many products in stock are due soon, so check means a check of the products in stock -->
+  <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">When the check is done</string>
   <string name="setting_keep_screen_on_recipes_description">While viewing a recipe</string>
 
-  <string name="notification_due_soon_content">Consume them over the next few days to help reduce food waste.</string>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="notification_stock_not_fresh_title">
+    <item quantity="one">%1$d product in your stock is no longer fresh.</item>
+    <item quantity="other">%1$d products in your stock are no longer fresh.</item>
+  </plurals>
+  <string name="notification_stock_content">Consume them over the next few days to help reduce food waste. Tap to open the list.</string>
+  <!-- %1$s is a number -->
+  <plurals name="notification_chores_due_title">
+    <item quantity="one">%1$d chore is due to be done.</item>
+    <item quantity="other">%1$d chores are due to be done.</item>
+  </plurals>
+  <string name="notification_chores_content">Procrastination is useless. Tap to open the list.</string>
 
   <string name="barcode_format_code128" translatable="false">Code 128</string>
   <string name="barcode_format_code39" translatable="false">Code 39</string>

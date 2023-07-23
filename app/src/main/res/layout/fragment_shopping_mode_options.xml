@@ -113,7 +113,7 @@
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{v -> switchFrontCam.setChecked(!switchFrontCam.isChecked())}">
+            android:onClick="@{v -> switchScreenOn.setChecked(!switchScreenOn.isChecked())}">
 
             <ImageView
               android:id="@+id/image_screen_on"
@@ -134,7 +134,7 @@
             </LinearLayout>
 
             <com.google.android.material.materialswitch.MaterialSwitch
-              android:id="@+id/switch_front_cam"
+              android:id="@+id/switch_screen_on"
               style="@style/Widget.Grocy.Switch"
               android:onCheckedChanged="@{() -> activity.startIconAnimation(imageScreenOn, true)}"
               android:checked="@={viewModel.keepScreenOnEnabled}" />

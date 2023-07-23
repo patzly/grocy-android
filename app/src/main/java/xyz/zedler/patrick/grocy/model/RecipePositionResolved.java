@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
@@ -33,7 +34,9 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
@@ -46,30 +49,39 @@ public class RecipePositionResolved {
 
   @PrimaryKey
   @ColumnInfo(name = "id")
+  @SerializedName("id")
   private int id;
 
   @ColumnInfo(name = "recipe_id")
+  @SerializedName("recipe_id")
   private int recipeId;
 
   @ColumnInfo(name = "recipe_pos_id")
+  @SerializedName("recipe_pos_id")
   private int recipePosId;
 
   @ColumnInfo(name = "product_id")
+  @SerializedName("product_id")
   private int productId;
 
   @ColumnInfo(name = "recipe_amount")
+  @SerializedName("recipe_amount")
   private double recipeAmount;
 
   @ColumnInfo(name = "stock_amount")
+  @SerializedName("stock_amount")
   private double stockAmount;
 
   @ColumnInfo(name = "need_fulfilled")
+  @SerializedName("need_fulfilled")
   private int needFulfilled;
 
   @ColumnInfo(name = "missing_amount")
+  @SerializedName("missing_amount")
   private double missingAmount;
 
   @ColumnInfo(name = "amount_on_shopping_list")
+  @SerializedName("amount_on_shopping_list")
   private double amountOnShoppingList;
 
   @ColumnInfo(name = "need_fulfilled_with_shopping_list")
@@ -77,49 +89,71 @@ public class RecipePositionResolved {
   private int needFulfilledWithShoppingList;
 
   @ColumnInfo(name = "qu_id")
+  @SerializedName("qu_id")
   private int quId;
 
   @ColumnInfo(name = "costs")
+  @SerializedName("costs")
   private double costs;
 
   @ColumnInfo(name = "is_nested_recipe_pos")
+  @SerializedName("is_nested_recipe_pos")
   private int isNestedRecipePos;
 
   @ColumnInfo(name = "ingredient_group")
+  @SerializedName("ingredient_group")
   private String ingredientGroup;
 
   @ColumnInfo(name = "product_group")
+  @SerializedName("product_group")
   private String productGroup;
 
   @ColumnInfo(name = "recipe_type")
+  @SerializedName("recipe_type")
   private String recipeType;
 
   @ColumnInfo(name = "child_recipe_id")
+  @SerializedName("child_recipe_id")
   private int childRecipeId;
 
   @ColumnInfo(name = "note")
+  @SerializedName("note")
   private String note;
 
   @ColumnInfo(name = "recipe_variable_amount")
+  @SerializedName("recipe_variable_amount")
   private String recipeVariableAmount;
 
   @ColumnInfo(name = "only_check_single_unit_in_stock")
+  @SerializedName("only_check_single_unit_in_stock")
   private int onlyCheckSingleUnitInStock;
 
   @ColumnInfo(name = "calories")
-  private int calories;
+  @SerializedName("calories")
+  private double calories;
 
   @ColumnInfo(name = "product_active")
+  @SerializedName("product_active")
   private int productActive;
 
   @ColumnInfo(name = "due_score")
+  @SerializedName("due_score")
   private int dueScore;
 
   @ColumnInfo(name = "product_id_effective")
+  @SerializedName("product_id_effective")
   private int productIdEffective;
 
   @ColumnInfo(name = "product_name")
+  @SerializedName("product_name")
   private String productName;
+
+  // NOT ON SERVER
+  @Ignore
+  private int notCheckStockFulfillment;
+
+  @Ignore
+  private boolean checked;
 
   public RecipePositionResolved() {
   }  // for Room
@@ -176,6 +210,10 @@ public class RecipePositionResolved {
     return needFulfilled;
   }
 
+  public boolean getNeedFulfilledBoolean() {
+    return needFulfilled == 1;
+  }
+
   public void setNeedFulfilled(int needFulfilled) {
     this.needFulfilled = needFulfilled;
   }
@@ -198,6 +236,10 @@ public class RecipePositionResolved {
 
   public int getNeedFulfilledWithShoppingList() {
     return needFulfilledWithShoppingList;
+  }
+
+  public boolean getNeedFulfilledWithShoppingListBoolean() {
+    return needFulfilledWithShoppingList == 1;
   }
 
   public void setNeedFulfilledWithShoppingList(int needFulfilledWithShoppingList) {
@@ -280,15 +322,19 @@ public class RecipePositionResolved {
     return onlyCheckSingleUnitInStock;
   }
 
+  public boolean isOnlyCheckSingleUnitInStock() {
+    return onlyCheckSingleUnitInStock == 1;
+  }
+
   public void setOnlyCheckSingleUnitInStock(int onlyCheckSingleUnitInStock) {
     this.onlyCheckSingleUnitInStock = onlyCheckSingleUnitInStock;
   }
 
-  public int getCalories() {
+  public double getCalories() {
     return calories;
   }
 
-  public void setCalories(int calories) {
+  public void setCalories(double calories) {
     this.calories = calories;
   }
 
@@ -324,10 +370,57 @@ public class RecipePositionResolved {
     this.productName = productName;
   }
 
+  public int getNotCheckStockFulfillment() {
+    return notCheckStockFulfillment;
+  }
+
+  public boolean isNotCheckStockFulfillment() {
+    return notCheckStockFulfillment == 1;
+  }
+
+  public void setNotCheckStockFulfillment(int notCheckStockFulfillment) {
+    this.notCheckStockFulfillment = notCheckStockFulfillment;
+  }
+
+  public void setNotCheckStockFulfillment(boolean notCheckStockFulfillment) {
+    this.notCheckStockFulfillment = notCheckStockFulfillment ? 1 : 0;
+  }
+
+  public boolean isChecked() {
+    return checked;
+  }
+
+  public void setChecked(boolean checked) {
+    this.checked = checked;
+  }
+
+  public void toggleChecked() {
+    checked = !checked;
+  }
+
   @NonNull
   @Override
   public String toString() {
     return "RecipePositionResolved(" + id + ")";
+  }
+
+  public static List<RecipePositionResolved> getRecipePositionsFromRecipeId(
+      List<RecipePositionResolved> recipePositions, int recipeId
+  ) {
+    return recipePositions.stream().filter(pos -> pos.getRecipeId() == recipeId)
+        .collect(Collectors.toList());
+  }
+
+  public static void fillRecipePositionsResolvedWithNotCheckStockFulfillment(
+      List<RecipePositionResolved> recipePositionsResolved,
+      HashMap<Integer, RecipePosition> recipePositionHashMap
+  ) {
+    for (RecipePositionResolved recipePos : recipePositionsResolved) {
+      RecipePosition recipePosition = recipePositionHashMap.get(recipePos.getRecipePosId());
+      if (recipePosition != null) {
+        recipePos.setNotCheckStockFulfillment(recipePosition.getNotCheckStockFulfillment());
+      }
+    }
   }
 
   @SuppressLint("CheckResult")
@@ -363,6 +456,7 @@ public class RecipePositionResolved {
                 // fix crash, amount can be NaN according to a user
                 for (int i = 0; i < recipePositionsResolved.size(); i++) {
                   RecipePositionResolved recipePos = recipePositionsResolved.get(i);
+                  recipePos.setId(i);
                   if (Double.isNaN(recipePos.getRecipeAmount())) {
                     recipePos.setRecipeAmount(0);
                   }
@@ -371,8 +465,8 @@ public class RecipePositionResolved {
                   }
                 }
                 Single.fromCallable(() -> {
-                      dlHelper.appDatabase.recipePositionDao()
-                          .deleteRecipePositions().blockingSubscribe();
+                      dlHelper.appDatabase.recipePositionResolvedDao()
+                          .deleteRecipePositionsResolved().blockingSubscribe();
                       dlHelper.appDatabase.recipePositionResolvedDao()
                           .insertRecipePositionsResolved(recipePositionsResolved)
                           .blockingSubscribe();

@@ -1024,8 +1024,6 @@
   <string name="setting_notifications_enable">启用通知</string>
   <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
   few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_due_soon">即将到期</string>
-  <string name="setting_notifications_due_soon_description">每天检查库存，并在有产品到期时通知您</string>
   <string name="setting_notifications_chores_description">每天检查家务，并在有需要今天完成的家务时通知您</string>
   <string name="setting_notification_time">通知时间</string>
   <!-- the description of the notification time preference.

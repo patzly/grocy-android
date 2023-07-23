@@ -242,7 +242,7 @@
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               tools:ignore="ContentDescription"
-              android:src="@drawable/ic_round_notifications" />
+              android:src="@drawable/ic_round_notifications_anim" />
 
             <TextView
               style="@style/Widget.Grocy.TextView.ListItem.Title"

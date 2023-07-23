@@ -233,6 +233,18 @@
     <item quantity="many">%1$d en retard</item>
     <item quantity="other">%1$d en retard</item>
   </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_short">
+    <item quantity="one">%1$d à faire</item>
+    <item quantity="many">%1$d à faire</item>
+    <item quantity="other">%1$d à faire</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_long">
+    <item quantity="one">%1$d à faire (celle ci-dessous)</item>
+    <item quantity="many">%1$d à faire (celles ci-dessous)</item>
+    <item quantity="other">%1$d à faire (celles ci-dessous)</item>
+  </plurals>
   <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
   <plurals name="msg_assigned_tasks">
     <item quantity="one">%1$d attribué</item>
@@ -276,6 +288,7 @@
   <!-- %1$s is a product name -->
   <string name="msg_no_stock_entries">Aucune entrée de stock pour %1$s</string>
   <string name="msg_not_found">Produit non trouvé</string>
+  <string name="msg_returning_to_overview">Retour à la page d\'accueil dans quelques secondes</string>
   <string name="msg_editor_hint">Écrivez ici</string>
   <string name="msg_coming_soon">Cette fonctionnalité sera bientôt disponible</string>
   <string name="msg_undo_transaction">Annuler la transaction ?</string>
@@ -446,6 +459,7 @@
   <string name="msg_help_recipe_ingredients_wrong">Avec une version du serveur Grocy inférieure à 4.0.0, cette liste peut contenir des informations d\'exécution erronées. Veuillez mettre à jour votre serveur vers la version 4.0.0 ou ultérieure pour voir les valeurs correctement.</string>
   <string name="msg_help_date_chooser">Vous pouvez passer à la saisie au clavier dans les paramètres, cela pourrait augmenter la vitesse de saisie pour vous.</string>
   <string name="msg_help_date_chooser_keyboard">Vous pouvez activer le format de date inversé dans les paramètres si JJMMAA est préféré dans votre pays.\nPour appliquer la saisie et fermer cette page, vous pouvez utiliser la touche Entrée de votre clavier.</string>
+  <string name="msg_help_notifications">Si vous ne recevez pas de notifications, appuyez ici pour ouvrir la page d\'informations sur l\'application Android et vérifiez si les notifications sont autorisées et si les mesures d\'économie d\'énergie peuvent être désactivées. Android envoie parfois des notifications plus tard que l\'heure définie pour réduire la consommation de la batterie, ce qui est un comportement normal.</string>
   <string name="msg_help_quick_mode">Vous pouvez appuyer longuement sur la barre de titre ci-dessus afin d\'activer le mode rapide. Dans ce mode, une opération sera exécutée immédiatement si un produit a été entré ou scanné et que tous les champs ont pu être automatiquement remplis (grâce aux paramètres par défaut du produit ou du code-barres).</string>
   <string name="msg_help_loading_circle_settings">Sur chaque page où quelque chose a été chargé depuis le serveur, l\'application vérifie en premier, avec une petite requête, si la base de donnée du serveur a changé depuis la dernière fois et ne met à jour que les données obsolètes. Activez l\'option ci-dessous pour afficher une animation de chargement durant cette petite requête.</string>
   <string name="msg_help_start">Le mode débutant est actif : les messages d\'aide sont affichés par défaut sur toutes les pages, si disponible. Appuyez pour changer.</string>
@@ -1225,6 +1239,8 @@
   <string name="setting_bottom_menu_button_description">Dans la barre inférieure de l\'application</string>
   <string name="setting_turn_on_quick_mode">Activer le mode rapide par défaut</string>
   <string name="setting_turn_on_quick_mode_description">Lors de l\'utilisation du scanner de code barres sur la page d\'accueil</string>
+  <string name="setting_quick_mode_return">Retour à la page d\'accueil après 20 secondes</string>
+  <string name="setting_quick_mode_return_description">Lors de l\'utilisation du scanner de codes barres sur la page d\'accueil et lorsque le mode rapide n\'est pas utilisé</string>
   <string name="setting_speed_up_start">Réduire le temps de chargement de l\'application</string>
   <string name="setting_speed_up_start_description">N\'a un effet que sur les appareils performants</string>
   <string name="setting_date_keyboard_input">Saisir les dates avec le clavier</string>
@@ -1246,18 +1262,27 @@
   <string name="setting_message_duration">Temps d\'affichage des messages</string>
   <string name="setting_message_duration_description">Concerne seulement les messages de transaction</string>
   <string name="setting_notifications_enable">Activer les notifications</string>
-  <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
-  few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_due_soon">Produits périmant bientôt</string>
-  <string name="setting_notifications_due_soon_description">Vérifie les stocks quotidiennement et vous avertit lorsque des produits sont bientôt périmés</string>
-  <string name="setting_notifications_chores_description">Vérifie les tâches quotidiennement et vous avertit lorsque des tâches doivent être effectuées aujourd\'hui</string>
+  <!-- The string belongs to the stock overview (stock items can be expired, overdue or due soon). -->
+  <string name="setting_notifications_stock_description">Vérifie le stock quotidiennement et vous avertit s\'il y a des produits qui ne sont plus frais (périmés, dépassés ou bientôt dépassés)</string>
+  <string name="setting_notifications_chores_description">Vérifie les tâches quotidiennement et vous avertit lorsque des tâches doivent être effectuées</string>
   <string name="setting_notification_time">Heure de notification</string>
-  <!-- the description of the notification time preference.
-  With the "Due soon" check enabled, the user will be notified every day at the selected time how
-  many products in stock are due soon, so check means a check of the products in stock -->
+  <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">Quand la vérification est faite</string>
   <string name="setting_keep_screen_on_recipes_description">Pendant la consultation d\'une recette</string>
 
-  <string name="notification_due_soon_content">Consommez-les au cours des prochains jours pour aider à réduire le gaspillage alimentaire.</string>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="notification_stock_not_fresh_title">
+    <item quantity="one">%1$d produit de votre stock n\'est plus frais.</item>
+    <item quantity="many">%1$d produits de votre stock ne sont plus frais.</item>
+    <item quantity="other">%1$d produits de votre stock ne sont plus frais.</item>
+  </plurals>
+  <string name="notification_stock_content">Consommez-les au cours des prochains jours pour aider à réduire le gaspillage alimentaire. Appuyez pour ouvrir la liste.</string>
+  <!-- %1$s is a number -->
+  <plurals name="notification_chores_due_title">
+    <item quantity="one">%1$d corvée doit être faite.</item>
+    <item quantity="many">%1$d corvées doivent être faites.</item>
+    <item quantity="other">%1$d corvées doivent être faites.</item>
+  </plurals>
+  <string name="notification_chores_content">La procrastination est inutile. Appuyez pour ouvrir la liste.</string>
 
   </resources>

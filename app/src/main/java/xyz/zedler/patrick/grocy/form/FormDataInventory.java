@@ -133,10 +133,7 @@ public class FormDataInventory {
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_INPUT
     );
     scannerVisibilityLive = new MutableLiveData<>(false);
-    if (args.getStartWithScanner() && !getExternalScannerEnabled() && !args
-        .getCloseWhenFinished()) {
-      scannerVisibilityLive.setValue(true);
-    } else if (getCameraScannerWasVisibleLastTime() && !getExternalScannerEnabled() && !args
+    if (getCameraScannerWasVisibleLastTime() && !getExternalScannerEnabled() && !args
         .getCloseWhenFinished()) {
       scannerVisibilityLive.setValue(true);
     }
@@ -793,7 +790,7 @@ public class FormDataInventory {
     if (isTareWeightEnabled()) {
       amountNew -= productDetailsLive.getValue().getProduct().getTareWeightDouble();
     }
-    QuantityUnit qU = quantityUnitLive.getValue();
+    QuantityUnit qU = quantityUnitStockLive.getValue();
     ProductDetails details = productDetailsLive.getValue();
     String price = getString(R.string.subtitle_feature_disabled);
     if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {

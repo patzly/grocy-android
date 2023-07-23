@@ -38,6 +38,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants.PREF;
@@ -292,14 +293,11 @@ public class RecipePosition implements Parcelable {
     return json;
   }
 
-  public static List<RecipePosition> getRecipePositionsFromRecipeId(List<RecipePosition> recipePositions, int recipeId) {
-    List<RecipePosition> result = new ArrayList<>();
-    for (RecipePosition recipePosition : recipePositions) {
-      if (recipePosition.getRecipeId() == recipeId) {
-        result.add(recipePosition);
-      }
-    }
-    return result;
+  public static List<RecipePosition> getRecipePositionsFromRecipeId(
+      List<RecipePosition> recipePositions, int recipeId
+  ) {
+    return recipePositions.stream().filter(pos -> pos.getRecipeId() == recipeId)
+        .collect(Collectors.toList());
   }
 
   @Override

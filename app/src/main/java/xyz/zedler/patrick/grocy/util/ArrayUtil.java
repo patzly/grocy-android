@@ -33,6 +33,7 @@ import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.Store;
@@ -190,6 +191,16 @@ public class ArrayUtil {
       stockItemHashMap.put(stockItem.getProductId(), stockItem);
     }
     return stockItemHashMap;
+  }
+
+  public static HashMap<Integer, RecipePosition> getRecipePositionHashMap(
+      List<RecipePosition> recipePositions
+  ) {
+    HashMap<Integer, RecipePosition> recipePositionHashMap = new HashMap<>();
+    for (RecipePosition recipePosition : recipePositions) {
+      recipePositionHashMap.put(recipePosition.getId(), recipePosition);
+    }
+    return recipePositionHashMap;
   }
 
   public static boolean contains(String[] array, String value) {

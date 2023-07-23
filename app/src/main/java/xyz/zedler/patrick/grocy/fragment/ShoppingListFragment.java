@@ -228,25 +228,21 @@ public class ShoppingListFragment extends BaseFragment implements
           if (viewHolder.getItemViewType() != GroupedListItem.TYPE_ENTRY) return;
           if (!(binding.recycler.getAdapter() instanceof ShoppingListItemAdapter)) return;
           int position = viewHolder.getAdapterPosition();
-          ArrayList<GroupedListItem> groupedListItems =
-              ((ShoppingListItemAdapter) binding.recycler.getAdapter()).getGroupedListItems();
-          if (groupedListItems == null || position < 0
-              || position >= groupedListItems.size()) {
-            return;
-          }
-          GroupedListItem item = groupedListItems.get(position);
+          GroupedListItem item = ((ShoppingListItemAdapter) binding.recycler.getAdapter())
+              .getGroupedListItemForPos(position);
           if (!(item instanceof ShoppingListItem)) {
             return;
           }
-          ShoppingListItem shoppingListItem = (ShoppingListItem) item;
           underlayButtons.add(new SwipeBehavior.UnderlayButton(
               activity,
               R.drawable.ic_round_done,
               pos -> {
-                if (position >= groupedListItems.size()) {
+                GroupedListItem item1 = ((ShoppingListItemAdapter) binding.recycler.getAdapter())
+                    .getGroupedListItemForPos(position);
+                if (!(item1 instanceof ShoppingListItem)) {
                   return;
                 }
-                viewModel.toggleDoneStatus(shoppingListItem);
+                viewModel.toggleDoneStatus((ShoppingListItem) item1);
               }
           ));
         }
@@ -388,7 +384,7 @@ public class ShoppingListFragment extends BaseFragment implements
 
   public void showShoppingListsBottomSheet() {
     Bundle bundle = new Bundle();
-    bundle.getBoolean(ARGUMENT.DISPLAY_NEW_OPTION, !isFeatureMultipleListsDisabled()
+    bundle.putBoolean(ARGUMENT.DISPLAY_NEW_OPTION, !isFeatureMultipleListsDisabled()
         && !viewModel.isOffline());
     activity.showBottomSheet(new ShoppingListsBottomSheet(), bundle);
   }

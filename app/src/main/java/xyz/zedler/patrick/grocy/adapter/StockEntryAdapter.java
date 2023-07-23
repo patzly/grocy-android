@@ -461,8 +461,12 @@ public class StockEntryAdapter extends
     return groupedListItems.size();
   }
 
-  public ArrayList<GroupedListItem> getGroupedListItems() {
-    return groupedListItems;
+  public GroupedListItem getGroupedListItemForPos(int position) {
+    if (groupedListItems == null || position < 0
+        || position >= groupedListItems.size()) {
+      return null;
+    }
+    return groupedListItems.get(position);
   }
 
   public interface StockEntryAdapterListener {

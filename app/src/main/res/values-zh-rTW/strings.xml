@@ -1014,8 +1014,6 @@
   <string name="setting_notifications_enable">啟用通知</string>
   <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
   few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_due_soon">即將到期物品</string>
-  <string name="setting_notifications_due_soon_description">每天檢查庫存並且在有物品即將到期時通知您</string>
   <string name="setting_notifications_chores_description">每天檢查家務並且在有今天需要完成的家務時通知您</string>
   <string name="setting_notification_time">通知時間</string>
   <!-- the description of the notification time preference.
@@ -1023,8 +1021,6 @@
   many products in stock are due soon, so check means a check of the products in stock -->
   <string name="setting_notification_time_description">在檢查完成時</string>
   <string name="setting_keep_screen_on_recipes_description">查看食譜時</string>
-
-  <string name="notification_due_soon_content">協助減少食物浪費</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->

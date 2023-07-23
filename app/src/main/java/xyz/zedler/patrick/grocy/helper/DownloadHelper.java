@@ -63,6 +63,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
+import xyz.zedler.patrick.grocy.model.RecipePositionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem.ShoppingListItemWithSync;
@@ -558,6 +559,8 @@ public class DownloadHelper {
         queue.append(RecipeFulfillment.updateRecipeFulfillments(this, dbChangedTime, forceUpdate, null));
       } else if (type == RecipePosition.class) {
         queue.append(RecipePosition.updateRecipePositions(this, dbChangedTime, forceUpdate, null));
+      } else if (type == RecipePositionResolved.class) {
+        queue.append(RecipePositionResolved.updateRecipePositionsResolved(this, dbChangedTime, forceUpdate, null));
       }
     }
 

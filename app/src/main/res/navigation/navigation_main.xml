@@ -173,10 +173,6 @@
     <deepLink
       android:id="@+id/deepLink7"
       app:uri="@string/deep_link_inventoryFragment" />
-    <argument
-      android:name="startWithScanner"
-      app:argType="boolean"
-      android:defaultValue="false" />
     <action
       android:id="@+id/action_inventoryFragment_to_chooseProductFragment"
       app:destination="@id/chooseProductFragment"
@@ -1263,6 +1259,11 @@
       app:enterAnim="@anim/slide_in_up"
       app:exitAnim="@anim/slide_no"
       app:popExitAnim="@anim/slide_out_down"/>
+    <argument
+      android:name="statusFilterId"
+      app:argType="string"
+      app:nullable="true"
+      android:defaultValue="@null" />
   </fragment>
   <fragment
     android:id="@+id/stockEntriesFragment"

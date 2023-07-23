@@ -218,6 +218,16 @@
     <item quantity="one">%1$d überfällig</item>
     <item quantity="other">%1$d überfällig</item>
   </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_short">
+    <item quantity="one">%1$d fällig</item>
+    <item quantity="other">%1$d fällig</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_long">
+    <item quantity="one">%1$d fällig (alles folgende)</item>
+    <item quantity="other">%1$d fällig (alles folgende)</item>
+  </plurals>
   <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
   <plurals name="msg_assigned_tasks">
     <item quantity="one">%1$d zugewiesen</item>
@@ -258,6 +268,7 @@
   <!-- %1$s is a product name -->
   <string name="msg_no_stock_entries">Keine Bestandseinträge für %1$s</string>
   <string name="msg_not_found">Produkt nicht gefunden</string>
+  <string name="msg_returning_to_overview">In wenigen Sekunden zurück zur Übersichtsseite</string>
   <string name="msg_editor_hint">Hier Text schreiben</string>
   <string name="msg_coming_soon">Dieses Feature wird bald verfügbar sein</string>
   <string name="msg_undo_transaction">Transaktion rückgängig machen?</string>
@@ -328,6 +339,7 @@
   <string name="msg_logout_demo_short">Öffentlicher Demo-Server. Für Details tippen.</string>
   <string name="msg_restart">Ein Neustart der App ist erforderlich, um die aktuelle Konfiguration anzuwenden.</string>
   <string name="msg_full_description">Hier tippen, um die vollständige Beschreibung anzuzeigen.</string>
+  <string name="msg_copied_clipboard">In die Zwischenablage kopiert</string>
   <string name="msg_shortcuts">Sie können bis zu 4 Verknüpfungen aktivieren:</string>
   <string name="msg_shortcuts_not_supported">Verknüpfungen werden auf dieser Android-Version nicht unterstützt.</string>
   <string name="msg_barcode_formats">Sie können die Geschwindigkeit des Barcode-Scanners verbessern, indem Sie nur die Formate auswählen, die erkannt werden sollen.</string>
@@ -340,10 +352,10 @@
   <string name="msg_recipe_consume_ask">Sicher, dass alle Zutaten, die vom Rezept für \"%1$s\" benötigt werden, aus dem Bestand entfernt werden sollen? (Zutaten markiert mit \"Nur prüfen, ob eine beliebige Menge im Bestand verfügbar ist\" werden ignoriert)</string>
   <string name="msg_recipe_shopping_list_ask">Alle fehlenden Zutaten vom Rezept für \"%1$s\" wirklich auf den Einkaufszettel setzen?\n\nEntfernen Sie den Haken einer Zutat, um diese nicht auf den Einkaufszettel zu übernehmen:</string>
   <string name="msg_welcome">Willkommen bei Grocy Android!</string>
-  <string name="msg_welcome_introduce">Um grocy produktiv nutzen zu können, brauchen Sie Ihren eigenen Server oder das grocy Add-on für Home Assistant.\nWenn Sie diese App nur ausprobieren möchten, können Sie den Demo-Server von Bernd Bestel benutzen, dem Entwickler von grocy.</string>
+  <string name="msg_welcome_introduce">Um Grocy produktiv nutzen zu können, brauchen Sie Ihren eigenen Server oder das Grocy Add-on für Home Assistant.\nWenn Sie diese App nur ausprobieren möchten, können Sie den Demo-Server von Bernd Bestel benutzen, dem Entwickler von Grocy.</string>
   <string name="msg_choose_option_below">Bitte wählen Sie eine der Optionen unten aus.</string>
-  <string name="msg_qr_code_scan">Besuchen Sie Ihren grocy-Server auf einem anderen Gerät und navigieren Sie zu der Seite \'API-Schlüssel\'. Danach auf \'Hinzufügen\' und das kleine QR-Code-Symbol klicken und den QR-Code scannen.</string>
-  <string name="msg_qr_code_scan_token">Sie benutzen das grocy Home Assistant Add-on. Erstellen Sie einen langlebigen Zugangsschlüssel in Ihren Home Assistant Profileinstellungen (letzter Abschnitt). Dann klicken Sie unter dem Feld mit dem Token auf \"Generate QR code\" und scannen den Code hier.</string>
+  <string name="msg_qr_code_scan">Besuchen Sie Ihren Grocy-Server auf einem anderen Gerät und navigieren Sie zu der Seite \'API-Schlüssel\'. Danach auf \'Hinzufügen\' und das kleine QR-Code-Symbol klicken und den QR-Code scannen.</string>
+  <string name="msg_qr_code_scan_token">Sie benutzen das Grocy Home Assistant Add-on. Erstellen Sie einen langlebigen Zugangsschlüssel in Ihren Home Assistant Profileinstellungen (letzter Abschnitt). Dann klicken Sie unter dem Feld mit dem Token auf \"Generate QR code\" und scannen den Code hier.</string>
   <string name="msg_port_connection_info_without_port">Die App wird sich zu Port %1$s verbinden.\nWenn sie sich zu einem anderen Port verbinden soll, können Sie einen in der URL hinzufügen.\nBeispiel: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">Die App wird sich zu Port %1$s verbinden.</string>
   <string name="msg_clear_form_first">Leeren Sie zuerst das Formular, bevor Sie einen anderen bekannten Barcode scannen.</string>
@@ -376,8 +388,13 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_stock">Die Mengeneinheit Bestand kann nach dem ersten Einkauf nicht mehr geändert werden.</string>
   <string name="msg_help_qu_stock_changeable">Die Mengeneinheit für Bestand kann nur geändert werden, wenn Umrechnungen für die aktuelle Mengeneinheit existieren.</string>
+  <string name="msg_help_qu_changeable">Mengeneinheiten können nur geändert werden, wenn Umrechnungen dafür existieren.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_qu_purchase">Dies ist die Standardmengeneinheit, die beim Hinzufügen dieses Produkts zum Einkaufszettel verwendet wird.</string>
+  <string name="msg_help_qu_purchase">Dies ist die Standardmengeneinheit, die beim Einkaufen und Hinzufügen dieses Produkts zum Einkaufszettel verwendet wird.</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_consume">Dies ist die Standardmengeneinheit, die beim Verbrauchen dieses Produkts verwendet wird.</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_price">Wenn Preise für dieses Produkt angezeigt werden, beziehen sie sich auf diese Mengeneinheit.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">Wenn aktiviert, werden die Mindestbestände von untergeordneten Produkten aufsummiert, heißt das untergeordnete Produkt wird nie \"fehlen\", nur dieses.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -406,24 +423,34 @@
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_not_check_shopping_list">Standardmäßig ist die Menge, die dem Einkaufszettel hinzugefügt werden soll, \"benötigte Menge - Lagerbestand - Menge bereits auf dem Einkaufszettel\" - wenn dies aktiviert ist, wird nur gegen den Lagerbestand geprüft, nicht gegen das, was bereits auf dem Einkaufszettel steht.</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_servings">Die hier aufgeführten Zutaten ergeben diese Menge an Portionen.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_produces_product">Wenn ein Produkt ausgewählt ist, wird beim Verbrauch dieses Rezeptes eine Einheit (pro Portion in Bestandsmengeneinheit) dem Bestand hinzugefügt.</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_only_check_any_amount">Eine andere Menge/Einheit kann dann unten verwendet werden, wobei es für die Bestandsprüfung ausreichend ist, wenn eine beliebige Menge des Produkts verfügbar ist.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_variable_amount">Wenn dies nicht leer ist, wird dies anstelle der Menge oben angezeigt, wobei für die Bestandsprüfung trotzdem diese Menge verwendet wird.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_group">Dies wird als Überschrift verwendet, um Zutaten zusammenzufassen.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_price_factor">Der resultierende Preis der Zutat wird mit diesem Faktor multipliziert.</string>
+  <string name="msg_help_recipe_ingredients_wrong">Mit Grocy Server-Version kleiner als 4.0.0 kann diese Liste falsche Informationen über den Bedarf im Bestand enthalten. Bitte aktualisieren Sie Ihren Server zur Version 4.0.0 oder höher, um die korrekten Werte zu sehen.</string>
   <string name="msg_help_date_chooser">Sie können in den Einstellungen zur Tastatureingabe wechseln, womit Sie eventuell eine höhere Eingabegeschwindigkeit erreichen.</string>
   <string name="msg_help_date_chooser_keyboard">Sie können in den Einstellungen ein umgekehrtes Datumsformat aktivieren, falls DDMMYY in Ihrem Land bevorzugt ist.\nUm die Eingabe zu übernehmen und diese Seite zu schließen, drücken Sie die Erledigt-Taste auf Ihrer Tastatur.</string>
+  <string name="msg_help_notifications">Falls Sie keine Benachrichtigungen erhalten, tippen Sie hier, um die Android App-Info Seite zu öffnen und zu prüfen, ob Benachrichtigungen erlaubt sind und ob Energiesparmaßnahmen deaktiviert werden können. Android stellt Benachrichtigungen manchmal später zu als die festgelegte Zeit, um den Batterieverbrauch zu verringern. Das ist normales Verhalten.</string>
   <string name="msg_help_quick_mode">Sie können lange auf die Titelleiste oben tippen, um den Schnellmodus zu aktivieren. In diesem Modus wird eine Transaktion sofort ausgeführt, wenn ein Produkt eingegeben oder gescannt wurde und alle Felder automatisch befüllt werden konnten (mit Produkt- oder Barcode-Standardwerten).</string>
   <string name="msg_help_loading_circle_settings">Auf jeder Seite wo etwas vom Server geladen werden muss, überprüft die App erst mit einer winzigen Anfrage, ob sich die Server-Datenbank seit dem letzten Laden verändert hat und aktualisiert nur veraltete Daten. Aktivieren Sie diese Option, wenn bei dieser Anfrage auch ein Ladekreis angezeigt werden soll.</string>
   <string name="msg_help_start">Anfängermodus ist aktiv: Hilfe-Texte werden standardmäßig auf allen Seiten eingeblendet, wenn verfügbar. Zum Ändern tippen.</string>
   <string name="msg_help_purchased_date_settings">Wenn die nächste Option aktiviert ist, wird auf der Einkauf- und Inventur-Seite ein Feld für das Einkaufsdatum angezeigt. Ansonsten wird heute als Einkaufsdatum verwendet.</string>
-  <string name="msg_help_normal_login">Auf diese Karte tippen, wenn Sie Home Assistant mit dem grocy Add-on benutzen.</string>
-  <string name="msg_help_home_assistant_login">Sie benutzen das grocy Home Assistant Add-on. Deshalb sind ein paar weitere Eingaben erforderlich. Auf diese Karte tippen, um zum normalen Login zu wechseln.</string>
+  <string name="msg_help_normal_login">Auf diese Karte tippen, wenn Sie Home Assistant mit dem Grocy Add-on benutzen.</string>
+  <string name="msg_help_home_assistant_login">Sie benutzen das Grocy Home Assistant Add-on. Deshalb sind ein paar weitere Eingaben erforderlich. Auf diese Karte tippen, um zum normalen Login zu wechseln.</string>
   <string name="msg_help_home_assistant_login_help_show">Hier tippen, um Hinweise anzuzeigen.</string>
   <string name="msg_help_home_assistant_login_help_hide">Hier tippen, um Hinweise zu verstecken.</string>
   <string name="msg_help_home_assistant_login_server">In dem nächsten Feld können Sie auch Ihre Nabu Casa Cloud-URL eingeben, falls Sie diesen Service benutzen. Auf diese Karte tippen, um die Nabu Casa Website zu besuchen.</string>
   <string name="msg_help_home_assistant_login_token">Sie können einen langlebigen Zugangsschlüssel in Ihren Home Assistant Profileinstellungen erstellen (letzter Abschnitt). Hier tippen, um die URL von oben zu öffnen.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Navigieren Sie zurück oder tippen Sie auf  diese Karte, um einen QR-Code zu scannen, wodurch die Felder unten vorausgefüllt werden.</string>
   <string name="msg_help_fab_overview_start">Der Aktionsknopf auf dieser Übersichtsseite hat zwei Aktionen:\n\n- Kurzes Drücken: Verbrauchen mit Barcode-Scanner\n- Langes Drücken: Einkaufen mit Barcode-Scanner\n\nMit diesem Knopf ist der Schnellmodus auf den jeweiligen Seiten standardmäßig aktiviert. Dies können Sie in den Einstellungen für Verhalten ändern.</string>
-  <string name="msg_share">Schau Dir mal diesen Android-Client für grocy an: \nhttps://github.com/patzly/grocy-android</string>
+  <string name="msg_share">Schau Dir mal diesen Android-Client für Grocy an: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">API Schüssel funktioniert nicht</string>
   <string name="error_orbot_not_installed">Orbot ist nicht installiert</string>
@@ -460,7 +487,7 @@
   <string name="error_invalid_price">Ungültiger Preis</string>
   <string name="error_invalid_factor">Ungültiger Faktor</string>
   <string name="error_invalid_date_format">Ungültiges Datumsformat</string>
-  <string name="error_api_qr_code">Kein QR-Code mit grocy API-Zugangsdaten</string>
+  <string name="error_api_qr_code">Kein QR-Code mit Grocy API-Zugangsdaten</string>
   <string name="error_token_qr_code">Kein QR-Code mit einem langlebigen Zugangsschlüssel von Home Assistant</string>
   <string name="error_loading_qus">Mengeneinheiten konnten nicht vom Produkt geladen werden</string>
   <string name="error_clipboard_no_image">Zwischenablage enthält kein Bild oder es konnte nicht gelesen werden</string>
@@ -502,6 +529,7 @@
   <string name="error_wrong_grocycode_type">grocycode enthält falschen Typ</string>
   <string name="error_stock_entry_grocycode">Bestandseintrag vom grocycode nicht gefunden</string>
   <string name="error_permission">Keine Berechtigung für diese Aktion</string>
+  <string name="error_permission_notification">Für die Erinnerungsfunktion wird die Berechtigung für Benachrichtigungen benötigt</string>
   <string name="error_undefined">Ein Fehler ist aufgetreten</string>
   <string name="error_invalid_base_servings">Portionen ungültig</string>
   <string name="error_pictures_size_exceeds_limit">Es gibt eingebettete Bilder in Produkt- oder Rezeptbeschreibungen auf Ihrem Server, welche das Lese-Limit dieser App überschreiten. Bitte entfernen Sie Bilder mit hoher Qualität oder Größe von Ihren Beschreibungen, das wird auch das Laden der Daten beschleunigen.</string>
@@ -820,6 +848,10 @@
   <string name="property_qu_stock">Mengeneinheit Bestand</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Faktor Einkauf zu Bestand Mengeneinheit</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_default_qu_consume">Standard Mengeneinheit Verbrauch</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_prices">Mengeneinheit für Preise</string>
   <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
   <string name="property_quantity_unit_from">Konvertieren von</string>
   <!-- Example: "Convert to cup"; This string is part of a pair, there is also 'Convert from' -->
@@ -982,6 +1014,7 @@
   <string name="property_variable_amount">Variable Menge</string>
   <string name="property_requirements_fulfilled">Bedarf im Bestand</string>
   <string name="property_produces_product">Produziertes Produkt</string>
+  <string name="property_price_factor">Preisfaktor</string>
 
   <string name="date_today">Heute</string>
   <string name="date_unknown">Unbekannt</string>
@@ -1033,7 +1066,7 @@
     <item quantity="other">In %d Jahren</item>
   </plurals>
 
-  <string name="info_acknowledgement">Wir danken dem Entwickler von grocy, Bernd Bestel, ohne dessen Arbeit diese App nie möglich gewesen wäre.</string>
+  <string name="info_acknowledgement">Wir danken dem Entwickler von Grocy, Bernd Bestel, ohne dessen Arbeit diese App nie möglich gewesen wäre.</string>
   <string name="info_intro">Intro erneut abspielen</string>
   <string name="info_intro_description">Features vorführen</string>
   <string name="info_dev_beginning">Beginn der Entwicklung</string>
@@ -1156,6 +1189,8 @@
   <string name="setting_bottom_menu_button_description">In unterer App-Leiste</string>
   <string name="setting_turn_on_quick_mode">Schnellmodus standardmäßig anschalten</string>
   <string name="setting_turn_on_quick_mode_description">Wenn der Scan-Knopf auf der Übersichtsseite verwendet wird</string>
+  <string name="setting_quick_mode_return">Gehe nach 20 Sekunden zurück zur Übersichtsseite</string>
+  <string name="setting_quick_mode_return_description">Wenn der Scan-Knopf auf der Übersichtsseite verwendet wird und der Schnellmodus nicht benutzt wird</string>
   <string name="setting_speed_up_start">App-Start beschleunigen</string>
   <string name="setting_speed_up_start_description">Hat nur auf schnellen Geräten eine Auswirkung</string>
   <string name="setting_date_keyboard_input">Datum mit Tastatur eingeben</string>
@@ -1177,18 +1212,25 @@
   <string name="setting_message_duration">Anzeigedauer von Nachrichten</string>
   <string name="setting_message_duration_description">Betrifft nur Transaktionsnachrichten</string>
   <string name="setting_notifications_enable">Benachrichtigungen aktivieren</string>
-  <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
-  few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_due_soon">\"Bald fällig\"-Einträge</string>
-  <string name="setting_notifications_due_soon_description">Prüft den Bestand täglich und benachrichtigt Sie, falls Produkte bald fällig sind</string>
-  <string name="setting_notifications_chores_description">Prüft Hausarbeiten täglich und benachrichtigt Sie, falls heute welche fällig sind</string>
+  <!-- The string belongs to the stock overview (stock items can be expired, overdue or due soon). -->
+  <string name="setting_notifications_stock_description">Prüft den Bestand täglich und benachrichtigt Sie, wenn es Produkte gibt, die nicht mehr frisch sind (abgelaufen, überfällig oder bald fällig)</string>
+  <string name="setting_notifications_chores_description">Prüft Hausarbeiten täglich und benachrichtigt Sie, falls welche fällig sind</string>
   <string name="setting_notification_time">Benachrichtigungszeit</string>
-  <!-- the description of the notification time preference.
-  With the "Due soon" check enabled, the user will be notified every day at the selected time how
-  many products in stock are due soon, so check means a check of the products in stock -->
+  <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">Wann das Prüfen durchgeführt wird</string>
   <string name="setting_keep_screen_on_recipes_description">Während der Anzeige eines Rezeptes</string>
 
-  <string name="notification_due_soon_content">Verbrauchen Sie sie innerhalb der nächsten Tage, um das Verschwenden von Lebensmitteln zu vermeiden.</string>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="notification_stock_not_fresh_title">
+    <item quantity="one">%1$d Produkt in Ihrem Bestand ist nicht mehr frisch.</item>
+    <item quantity="other">%1$d Produkte in Ihrem Bestand sind nicht mehr frisch.</item>
+  </plurals>
+  <string name="notification_stock_content">Verbrauchen Sie sie innerhalb der nächsten Tage, um das Verschwenden von Lebensmitteln zu vermeiden. Tippen, um die Liste zu öffnen.</string>
+  <!-- %1$s is a number -->
+  <plurals name="notification_chores_due_title">
+    <item quantity="one">%1$d Hausarbeit steht an.</item>
+    <item quantity="other">%1$d Hausarbeiten stehen an.</item>
+  </plurals>
+  <string name="notification_chores_content">Prokrastinieren bringt nichts. Tippen, um die Liste zu öffnen.</string>
 
   </resources>
