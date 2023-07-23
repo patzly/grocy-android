@@ -28,7 +28,7 @@ All other changes:
 - New: Shopping pages now also has checkbox options for fields and picture (#663, #671, #710)
 - New: Shopping mode options are now reachable through shopping mode menu and removed from settings
 - New: Product groups, locations & quantity units now can be created while creating product
-- New: Daily reminder can now be set also for chores (#149)
+- New: Daily reminder can now be set also for chores, new filter for all chores which are due (#149)
 - New: Japanese translation (thanks daigoume!)
 - Improved: Better and unified network behavior across pages
 - Improved: Database exceptions are now caught and displayed (#698)
@@ -53,6 +53,8 @@ All other changes:
   also be prefilled from the barcode (was option before, but server v4 has that behavior now) (#644)
 - Improved: It is now clearer which QR code is to be scanned when using Home Assistant (#627)
 - Improved: Option for quick mode in behavior settings to return to overview after some time (#659)
+- Improved: Stock reminder is now for products which are not fresh anymore (expired, overdue
+  or due soon)
 - Fixed: Amounts with conversions are consistent over all pages now (#612, #626)
 - Fixed: Long click on barcode button on overview page was broken on Android Nougat and lower
 - Fixed: Crash on startup with Android Lollipop (and maybe higher)

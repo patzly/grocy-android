@@ -221,10 +221,10 @@ public final class Constants {
 
     public final static class NOTIFICATIONS {
 
-      public final static String DUE_SOON_ENABLE = "notification_due_soon_enable";
-      public final static String DUE_SOON_TIME = "notification_due_soon_time";
-      public final static String DUE_SOON_CHANNEL = "xyz.zedler.patrick.grocy.due_soon";
-      public final static int DUE_SOON_ID = 1;
+      public final static String STOCK_ENABLE = "notification_stock_enable";
+      public final static String STOCK_TIME = "notification_stock_time";
+      public final static String STOCK_CHANNEL = "xyz.zedler.patrick.grocy.stock";
+      public final static int STOCK_ID = 1;
 
       public final static String CHORES_ENABLE = "notification_chores_enable";
       public final static String CHORES_TIME = "notification_chores_time";
@@ -340,8 +340,8 @@ public final class Constants {
     }
 
     public final static class NOTIFICATIONS {
-      public final static boolean DUE_SOON_ENABLE = false;
-      public final static String DUE_SOON_TIME = "12:00";
+      public final static boolean STOCK_ENABLE = false;
+      public final static String STOCK_TIME = "12:00";
 
       public final static boolean CHORES_ENABLE = false;
       public final static String CHORES_TIME = "12:00";

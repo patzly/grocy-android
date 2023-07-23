@@ -24,6 +24,8 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +35,7 @@ import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.fragment.ChoresFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
@@ -75,9 +78,10 @@ public class ChoresViewModel extends BaseViewModel {
   private int choresDueTodayCount;
   private int choresDueSoonCount;
   private int choresOverdueCount;
+  private int choresDueCount;
   private final boolean debug;
 
-  public ChoresViewModel(@NonNull Application application) {
+  public ChoresViewModel(@NonNull Application application, ChoresFragmentArgs args) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
@@ -97,6 +101,12 @@ public class ChoresViewModel extends BaseViewModel {
         getApplication(),
         this::updateFilteredChoreEntries
     );
+    if (NumUtil.isStringInt(args.getStatusFilterId())) {
+      if (Integer.parseInt(args.getStatusFilterId())
+          == FilterChipLiveDataChoresStatus.STATUS_DUE) {
+        filterChipLiveDataStatus.setStatus(FilterChipLiveDataChoresStatus.STATUS_DUE, null);
+      }
+    }
     filterChipLiveDataAssignment = new FilterChipLiveDataAssignment(
         getApplication(),
         this::updateFilteredChoreEntries
@@ -117,6 +127,7 @@ public class ChoresViewModel extends BaseViewModel {
       choresDueTodayCount = 0;
       choresDueSoonCount = 0;
       choresOverdueCount = 0;
+      choresDueCount = 0;
       for (ChoreEntry choreEntry : data.getChoreEntries()) {
         if (choreEntry.getNextEstimatedExecutionTime() == null
             || choreEntry.getNextEstimatedExecutionTime().isEmpty()) {
@@ -129,6 +140,9 @@ public class ChoresViewModel extends BaseViewModel {
         if (daysFromNow == 0) {
           choresDueTodayCount++;
         }
+        if (daysFromNow <= 0) {
+          choresDueCount++;
+        }
         if (daysFromNow >= 0 && daysFromNow <= 5) {
           choresDueSoonCount++;
         }
@@ -138,6 +152,7 @@ public class ChoresViewModel extends BaseViewModel {
           .setDueTodayCount(choresDueTodayCount)
           .setDueSoonCount(choresDueSoonCount)
           .setOverdueCount(choresOverdueCount)
+          .setDueCount(choresDueCount)
           .emitCounts();
 
       updateFilteredChoreEntries();
@@ -326,5 +341,26 @@ public class ChoresViewModel extends BaseViewModel {
   protected void onCleared() {
     dlHelper.destroy();
     super.onCleared();
+  }
+
+  public static class ChoresViewModelFactory implements ViewModelProvider.Factory {
+
+    private final Application application;
+    private final ChoresFragmentArgs args;
+
+    public ChoresViewModelFactory(
+        Application application,
+        ChoresFragmentArgs args
+    ) {
+      this.application = application;
+      this.args = args;
+    }
+
+    @NonNull
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+      return (T) new ChoresViewModel(application, args);
+    }
   }
 }

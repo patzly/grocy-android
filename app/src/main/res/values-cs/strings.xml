@@ -1301,8 +1301,6 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="setting_notifications_enable">Zapnout upozorňování</string>
   <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
   few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_due_soon">Povinnosti s blížícím se datem splnění</string>
-  <string name="setting_notifications_due_soon_description">Každý den vás informuje o blížící se min. trvanlivosti produktů</string>
   <string name="setting_notifications_chores_description">Každý den vás informuje o povinnostech, které máte vykonat</string>
   <string name="setting_notification_time">Čas upozornění</string>
   <!-- the description of the notification time preference.
@@ -1311,6 +1309,4 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="setting_notification_time_description">Čas, kdy aplikace zobrazí informace o stavu zásob.</string>
   <string name="setting_keep_screen_on_recipes_description">když je zobrazený recept</string>
 
-  <string name="notification_due_soon_content">Spotřebujte je brzy, aby se nezkazily</string>
-
-  </resources>
+</resources>

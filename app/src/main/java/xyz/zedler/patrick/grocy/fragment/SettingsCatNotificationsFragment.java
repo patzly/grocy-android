@@ -99,7 +99,10 @@ public class SettingsCatNotificationsFragment extends BaseFragment {
     });
 
     binding.switchStockEnableNotifications.post(
-        () -> binding.switchStockEnableNotifications.jumpDrawablesToCurrentState()
+        () -> {
+          binding.switchStockEnableNotifications.jumpDrawablesToCurrentState();
+          binding.switchChoresEnableNotifications.jumpDrawablesToCurrentState();
+        }
     );
 
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
@@ -114,8 +117,8 @@ public class SettingsCatNotificationsFragment extends BaseFragment {
 
   public void showDueSoonTimePickerDialog() {
     showTimePickerDialog(
-        () -> viewModel.getDueSoonNotificationsTime(),
-        time -> viewModel.setDueSoonNotificationsTime(time)
+        () -> viewModel.getStockNotificationsTime(),
+        time -> viewModel.setStockNotificationsTime(time)
     );
   }
 

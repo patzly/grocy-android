@@ -99,7 +99,7 @@
 
           <TextView
             style="@style/Widget.Grocy.TextView.Category"
-            android:text="@string/setting_notifications_due_soon" />
+            android:text="@string/category_stock" />
 
           <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
@@ -120,22 +120,22 @@
 
               <TextView
                 style="@style/Widget.Grocy.TextView.ListItem.Description"
-                android:text="@string/setting_notifications_due_soon_description" />
+                android:text="@string/setting_notifications_stock_description" />
 
             </LinearLayout>
 
             <com.google.android.material.materialswitch.MaterialSwitch
               android:id="@+id/switch_stock_enable_notifications"
               style="@style/Widget.Grocy.Switch"
-              android:onCheckedChanged="@{(view, checked) -> viewModel.setDueSoonNotificationsEnabled(checked)}"
-              app:initialChecked="@{viewModel.getDueSoonNotificationsEnabled()}" />
+              android:onCheckedChanged="@{(view, checked) -> viewModel.setStockNotificationsEnabled(checked)}"
+              app:initialChecked="@{viewModel.getStockNotificationsEnabled()}" />
 
           </LinearLayout>
 
           <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
             app:clickUtil="@{clickUtil}"
-            android:visibility="@{viewModel.dueSoonNotificationsEnabledLive ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.stockNotificationsEnabledLive ? View.VISIBLE : View.GONE}"
             android:onClick="@{() -> fragment.showDueSoonTimePickerDialog()}">
 
             <ImageView
@@ -151,7 +151,7 @@
 
               <TextView
                 style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:text="@{viewModel.dueSoonNotificationsTimeTextLive}" />
+                android:text="@{viewModel.stockNotificationsTimeTextLive}" />
 
               <TextView
                 style="@style/Widget.Grocy.TextView.ListItem.Description"

@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+    PrefsUtil.migratePrefs(sharedPrefs);
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     // DARK MODE AND THEME

@@ -129,8 +129,8 @@ public class SettingsViewModel extends BaseViewModel {
         SHOPPING_LIST.AUTO_ADD, SETTINGS_DEFAULT.SHOPPING_LIST.AUTO_ADD
     ));
     autoAddToShoppingListTextLive = new MutableLiveData<>(getString(R.string.setting_loading));
-    dueSoonNotificationsEnabledLive = new MutableLiveData<>(getDueSoonNotificationsEnabled());
-    dueSoonNotificationsTimeTextLive = new MutableLiveData<>(getDueSoonNotificationsTime());
+    dueSoonNotificationsEnabledLive = new MutableLiveData<>(getStockNotificationsEnabled());
+    dueSoonNotificationsTimeTextLive = new MutableLiveData<>(getStockNotificationsTime());
     choresNotificationsEnabledLive = new MutableLiveData<>(getChoresNotificationsEnabled());
     choresNotificationsTimeTextLive = new MutableLiveData<>(getChoresNotificationsTime());
 
@@ -984,37 +984,37 @@ public class SettingsViewModel extends BaseViewModel {
     showBottomSheet(new InputBottomSheet(), bundle);
   }
 
-  public boolean getDueSoonNotificationsEnabled() {
+  public boolean getStockNotificationsEnabled() {
     return sharedPrefs.getBoolean(
-        NOTIFICATIONS.DUE_SOON_ENABLE,
-        SETTINGS_DEFAULT.NOTIFICATIONS.DUE_SOON_ENABLE
+        NOTIFICATIONS.STOCK_ENABLE,
+        SETTINGS_DEFAULT.NOTIFICATIONS.STOCK_ENABLE
     );
   }
 
-  public MutableLiveData<Boolean> getDueSoonNotificationsEnabledLive() {
+  public MutableLiveData<Boolean> getStockNotificationsEnabledLive() {
     return dueSoonNotificationsEnabledLive;
   }
 
-  public void setDueSoonNotificationsEnabled(boolean enabled) {
+  public void setStockNotificationsEnabled(boolean enabled) {
     dueSoonNotificationsEnabledLive.setValue(enabled);
-    reminderUtil.setReminderEnabled(ReminderUtil.DUE_SOON_TYPE, enabled);
+    reminderUtil.setReminderEnabled(ReminderUtil.STOCK_TYPE, enabled);
   }
 
-  public String getDueSoonNotificationsTime() {
+  public String getStockNotificationsTime() {
     return sharedPrefs.getString(
-        NOTIFICATIONS.DUE_SOON_TIME,
-        SETTINGS_DEFAULT.NOTIFICATIONS.DUE_SOON_TIME
+        NOTIFICATIONS.STOCK_TIME,
+        SETTINGS_DEFAULT.NOTIFICATIONS.STOCK_TIME
     );
   }
 
-  public MutableLiveData<String> getDueSoonNotificationsTimeTextLive() {
+  public MutableLiveData<String> getStockNotificationsTimeTextLive() {
     return dueSoonNotificationsTimeTextLive;
   }
 
-  public void setDueSoonNotificationsTime(String text) {
-    sharedPrefs.edit().putString(NOTIFICATIONS.DUE_SOON_TIME, text).apply();
+  public void setStockNotificationsTime(String text) {
+    sharedPrefs.edit().putString(NOTIFICATIONS.STOCK_TIME, text).apply();
     dueSoonNotificationsTimeTextLive.setValue(text);
-    setDueSoonNotificationsEnabled(true);
+    setStockNotificationsEnabled(true);
   }
 
   public boolean getChoresNotificationsEnabled() {

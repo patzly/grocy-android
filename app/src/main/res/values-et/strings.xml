@@ -1190,8 +1190,6 @@
   <string name="setting_notifications_enable">Luba teavitused</string>
   <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
   few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_due_soon">Tähtaeg lähedal asjadel</string>
-  <string name="setting_notifications_due_soon_description">Kontrollib varusid päevaselt ja teavitab sind kui toodetel on tähtaeg lähenemas</string>
   <string name="setting_notifications_chores_description">Kontrollib majapidamistöid päevaselt ja teavitab sind kui on töö tähtaeg on samal päeval</string>
   <string name="setting_notification_time">Teavituse aeg</string>
   <!-- the description of the notification time preference.
@@ -1200,6 +1198,4 @@
   <string name="setting_notification_time_description">Kui kontrollimine on tehtud</string>
   <string name="setting_keep_screen_on_recipes_description">Retsepti vaatamise ajal</string>
 
-  <string name="notification_due_soon_content">Tarbi neid järgmise paari päeva jooksul, et vähendada toidujäätmeid.</string>
-
-  </resources>
+</resources>

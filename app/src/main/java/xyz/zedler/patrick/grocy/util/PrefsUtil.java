@@ -29,6 +29,44 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 
 public class PrefsUtil {
 
+  public static void migratePrefs(SharedPreferences sharedPrefs) {
+    // Due soon notification is now stock notification
+    migratePref(
+        sharedPrefs,
+        "notification_due_soon_enable",
+        "notification_stock_enable"
+    );
+    migratePref(
+        sharedPrefs,
+        "notification_due_soon_time",
+        "notification_stock_time"
+    );
+  }
+
+  private static void migratePref(
+      SharedPreferences sharedPrefs,
+      String oldKey,
+      String newKey
+  ) {
+    if (sharedPrefs.contains(oldKey)) {
+      Object value = sharedPrefs.getAll().get(oldKey);
+      SharedPreferences.Editor editor = sharedPrefs.edit();
+      if (value instanceof Boolean) {
+        editor.putBoolean(newKey, (Boolean) value);
+      } else if (value instanceof Float) {
+        editor.putFloat(newKey, (Float) value);
+      } else if (value instanceof Integer) {
+        editor.putInt(newKey, (Integer) value);
+      } else if (value instanceof Long) {
+        editor.putLong(newKey, (Long) value);
+      } else if (value instanceof String) {
+        editor.putString(newKey, (String) value);
+      }
+      editor.remove(oldKey);
+      editor.apply();
+    }
+  }
+
   public static void clearCachingRelatedSharedPreferences(SharedPreferences sharedPrefs) {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
     editPrefs.remove(PREF.DB_LAST_TIME_STOCK_ITEMS);

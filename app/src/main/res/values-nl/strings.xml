@@ -1053,8 +1053,6 @@ Bezoek ons op GitHub om te leren hoe u kunt helpen Grocy Android beschikbaar te 
   <string name="setting_notifications_enable">Activeer notificaties</string>
   <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
   few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_due_soon">Bijna over datum</string>
-  <string name="setting_notifications_due_soon_description">Controleert dagelijks de voorraad en informeert jou wanneer er producten binnenkort over datum zijn</string>
   <string name="setting_notifications_chores_description">Controleert dagelijks de klussen en informeert jou wanneer er klussen vandaag af moeten zijn. </string>
   <string name="setting_notification_time">Notificatie tijd</string>
   <!-- the description of the notification time preference.
@@ -1062,8 +1060,6 @@ Bezoek ons op GitHub om te leren hoe u kunt helpen Grocy Android beschikbaar te 
   many products in stock are due soon, so check means a check of the products in stock -->
   <string name="setting_notification_time_description">Wanneer een controle is gedaan</string>
   <string name="setting_keep_screen_on_recipes_description">Tijdens het bekijken van een recept</string>
-
-  <string name="notification_due_soon_content">Gebruik ze de komende dagen om voedselverspilling tegen te gaan.</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->

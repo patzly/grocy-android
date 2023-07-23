@@ -67,7 +67,7 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
     return getItemIdChecked();
   }
 
-  public FilterChipLiveDataStockStatus setStatus(int status, @Nullable String text) {
+  public void setStatus(int status, @Nullable String text) {
     if (status == STATUS_ALL) {
       setActive(false);
       setText(application.getString(R.string.property_status));
@@ -80,11 +80,6 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
       setText(text);
     }
     setItemIdChecked(status);
-    return this;
-  }
-
-  public void setStatusNotFresh() {
-    setStatus(STATUS_NOT_FRESH, null);
   }
 
   public FilterChipLiveDataStockStatus setDueSoonCount(int dueSoonCount) {
@@ -174,11 +169,7 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
         new MenuItemGroup(1, true, true),
         new MenuItemGroup(2, true, true)
     );
-    for (MenuItemData menuItemData : menuItemDataList) {
-      if (getItemIdChecked() != STATUS_ALL && getItemIdChecked() == menuItemData.getItemId()) {
-        setText(menuItemData.getText());
-      }
-    }
+    setStatus(getStatus(), null); // for updated text on chip
     emitValue();
   }
 

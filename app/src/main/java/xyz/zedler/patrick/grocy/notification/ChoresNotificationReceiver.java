@@ -34,7 +34,9 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataChoresStatus;
 import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.util.NavUtil;
 import xyz.zedler.patrick.grocy.util.ReminderUtil;
 
 public class ChoresNotificationReceiver extends BroadcastReceiver {
@@ -54,7 +56,7 @@ public class ChoresNotificationReceiver extends BroadcastReceiver {
         ReminderUtil.CHORES_TYPE,
         NOTIFICATIONS.CHORES_ID,
         reminderTime,
-        DueSoonNotificationReceiver.class
+        StockNotificationReceiver.class
     );
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -72,7 +74,7 @@ public class ChoresNotificationReceiver extends BroadcastReceiver {
     ChoreEntry.getChoreEntries(dlHelper, choreEntries -> {
       if (choreEntries.size() == 0) return;
 
-      int choresDueTodayCount = 0;
+      int choresDueCount = 0;
       for (ChoreEntry choreEntry : choreEntries) {
         if (choreEntry.getNextEstimatedExecutionTime() == null
             || choreEntry.getNextEstimatedExecutionTime().isEmpty()) {
@@ -80,18 +82,21 @@ public class ChoresNotificationReceiver extends BroadcastReceiver {
         }
         int daysFromNow = DateUtil
             .getDaysFromNow(choreEntry.getNextEstimatedExecutionTime());
-        if (daysFromNow < 0) {
-          choresDueTodayCount++;
-        } else if (daysFromNow == 0) {
-          choresDueTodayCount++;
+        if (daysFromNow <= 0) {
+          choresDueCount++;
         }
       }
       String titleText = context.getResources().getQuantityString(
-          R.plurals.description_overview_chores_due_today,
-          choresDueTodayCount, choresDueTodayCount
+          R.plurals.notification_chores_due_title,
+          choresDueCount, choresDueCount
       );
 
-      Uri uri = Uri.parse(context.getString(R.string.deep_link_choresFragment));
+      Uri uri = NavUtil.getUriWithArgs(
+          context.getString(R.string.deep_link_choresFragment),
+          new xyz.zedler.patrick.grocy.fragment.ChoresFragmentArgs.Builder()
+              .setStatusFilterId(String.valueOf(FilterChipLiveDataChoresStatus.STATUS_DUE))
+              .build().toBundle()
+      );
       Intent notificationIntent = new Intent(Intent.ACTION_VIEW, uri);
       notificationIntent.setClass(context, MainActivity.class);
       notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -99,12 +104,19 @@ public class ChoresNotificationReceiver extends BroadcastReceiver {
       notificationManager.notify(NOTIFICATIONS.CHORES_ID, ReminderUtil.getNotification(
           context,
           titleText,
-          null,
+          context.getString(R.string.notification_chores_content),
           NOTIFICATIONS.CHORES_ID,
           NOTIFICATIONS.CHORES_CHANNEL,
           notificationIntent
       ));
       dlHelper.destroy();
-    }, error -> dlHelper.destroy());
+    }, error -> {
+      dlHelper.destroy();
+
+      new ReminderUtil(context).scheduleAgainIn10Minutes(
+          NOTIFICATIONS.STOCK_ID,
+          StockNotificationReceiver.class
+      );
+    });
   }
 }

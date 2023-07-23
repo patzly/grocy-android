@@ -1179,8 +1179,6 @@
   <string name="setting_notifications_enable">Benachrichtigungen aktivieren</string>
   <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
   few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_due_soon">\"Bald fällig\"-Einträge</string>
-  <string name="setting_notifications_due_soon_description">Prüft den Bestand täglich und benachrichtigt Sie, falls Produkte bald fällig sind</string>
   <string name="setting_notifications_chores_description">Prüft Hausarbeiten täglich und benachrichtigt Sie, falls heute welche fällig sind</string>
   <string name="setting_notification_time">Benachrichtigungszeit</string>
   <!-- the description of the notification time preference.
@@ -1189,6 +1187,4 @@
   <string name="setting_notification_time_description">Wann das Prüfen durchgeführt wird</string>
   <string name="setting_keep_screen_on_recipes_description">Während der Anzeige eines Rezeptes</string>
 
-  <string name="notification_due_soon_content">Verbrauchen Sie sie innerhalb der nächsten Tage, um das Verschwenden von Lebensmitteln zu vermeiden.</string>
-
-  </resources>
+</resources>

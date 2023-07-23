@@ -225,6 +225,16 @@
     <item quantity="one">%1$d overdue</item>
     <item quantity="other">%1$d overdue</item>
   </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_short">
+    <item quantity="one">%1$d due</item>
+    <item quantity="other">%1$d due</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_long">
+    <item quantity="one">%1$d due (all below)</item>
+    <item quantity="other">%1$d due (all below)</item>
+  </plurals>
   <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
   <plurals name="msg_assigned_tasks">
     <item quantity="one">%1$d assigned</item>
@@ -1215,19 +1225,26 @@
   <string name="setting_message_duration">Display time for messages</string>
   <string name="setting_message_duration_description">Only concerns transaction messages</string>
   <string name="setting_notifications_enable">Enable notifications</string>
-  <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
-  few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_due_soon">Due soon items</string>
-  <string name="setting_notifications_due_soon_description">Checks stock daily and notifies you when products are due soon</string>
-  <string name="setting_notifications_chores_description">Checks chores daily and notifies you when chores are due to be done today</string>
+  <!-- The string belongs to the stock overview (stock items can be expired, overdue or due soon). -->
+  <string name="setting_notifications_stock_description">Checks stock daily and notifies you if there are products that are no longer fresh (expired, overdue or due soon)</string>
+  <string name="setting_notifications_chores_description">Checks chores daily and notifies you when chores are due to be done</string>
   <string name="setting_notification_time">Notification time</string>
-  <!-- the description of the notification time preference.
-  With the "Due soon" check enabled, the user will be notified every day at the selected time how
-  many products in stock are due soon, so check means a check of the products in stock -->
+  <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">When the check is done</string>
   <string name="setting_keep_screen_on_recipes_description">While viewing a recipe</string>
 
-  <string name="notification_due_soon_content">Consume them over the next few days to help reduce food waste.</string>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="notification_stock_not_fresh_title">
+    <item quantity="one">%1$d product in your stock is no longer fresh.</item>
+    <item quantity="other">%1$d products in your stock are no longer fresh.</item>
+  </plurals>
+  <string name="notification_stock_content">Consume them over the next few days to help reduce food waste. Tap to open the list.</string>
+  <!-- %1$s is a number -->
+  <plurals name="notification_chores_due_title">
+    <item quantity="one">%1$d chore is due to be done.</item>
+    <item quantity="other">%1$d chores are due to be done.</item>
+  </plurals>
+  <string name="notification_chores_content">Procrastination is useless. Tap to open the list.</string>
 
   <string name="barcode_format_code128" translatable="false">Code 128</string>
   <string name="barcode_format_code39" translatable="false">Code 39</string>

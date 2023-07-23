@@ -40,20 +40,19 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.NOTIFICATIONS;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.Constants.THEME;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.notification.BootReceiver;
 import xyz.zedler.patrick.grocy.notification.ChoresNotificationReceiver;
-import xyz.zedler.patrick.grocy.notification.DueSoonNotificationReceiver;
+import xyz.zedler.patrick.grocy.notification.StockNotificationReceiver;
 
 public class ReminderUtil {
 
   private static final String TAG = ReminderUtil.class.getSimpleName();
 
-  public final static String DUE_SOON_TYPE = "DUE_SOON";
+  public final static String STOCK_TYPE = "STOCK";
   public final static String CHORES_TYPE = "CHORES";
 
   private final Context context;
@@ -72,13 +71,13 @@ public class ReminderUtil {
   }
 
   public void rescheduleReminders() {
-    List<String> reminderTypes = Arrays.asList(DUE_SOON_TYPE, CHORES_TYPE);
+    List<String> reminderTypes = Arrays.asList(STOCK_TYPE, CHORES_TYPE);
 
     for (String reminderType : reminderTypes) {
       switch (reminderType) {
-        case DUE_SOON_TYPE:
-          setReminderEnabled(reminderType, sharedPrefs.getBoolean(NOTIFICATIONS.DUE_SOON_ENABLE,
-              SETTINGS_DEFAULT.NOTIFICATIONS.DUE_SOON_ENABLE));
+        case STOCK_TYPE:
+          setReminderEnabled(reminderType, sharedPrefs.getBoolean(NOTIFICATIONS.STOCK_ENABLE,
+              SETTINGS_DEFAULT.NOTIFICATIONS.STOCK_ENABLE));
           break;
         case CHORES_TYPE:
           setReminderEnabled(reminderType, sharedPrefs.getBoolean(NOTIFICATIONS.CHORES_ENABLE,
@@ -99,11 +98,11 @@ public class ReminderUtil {
   ) {
     if (time == null) {
       switch (reminderType) {
-        case DUE_SOON_TYPE:
-          time = SETTINGS.NOTIFICATIONS.DUE_SOON_TIME;
+        case STOCK_TYPE:
+          time = NOTIFICATIONS.STOCK_TIME;
           break;
         case CHORES_TYPE:
-          time = SETTINGS.NOTIFICATIONS.CHORES_TIME;
+          time = NOTIFICATIONS.CHORES_TIME;
           break;
         default:
           throw new IllegalArgumentException("Unknown reminder type: " + reminderType);
@@ -140,6 +139,32 @@ public class ReminderUtil {
     }
   }
 
+  public void scheduleAgainIn10Minutes(
+      int reminderId,
+      Class<? extends BroadcastReceiver> receiverClass
+  ) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTimeInMillis(System.currentTimeMillis());
+    calendar.add(Calendar.MINUTE, 10);
+
+    PendingIntent pendingIntent = PendingIntent.getBroadcast(
+        context,
+        reminderId,
+        new Intent(context, receiverClass),
+        VERSION.SDK_INT >= VERSION_CODES.M
+            ? PendingIntent.FLAG_IMMUTABLE
+            : PendingIntent.FLAG_UPDATE_CURRENT
+    );
+
+    if (notificationManager != null) {
+      notificationManager.cancel(reminderId);
+    }
+    if (alarmManager != null) {
+      alarmManager.cancel(pendingIntent);
+      alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+    }
+  }
+
   public void setReminderEnabled(String reminderType, boolean enabled) {
     int reminderId;
     String reminderTime;
@@ -147,17 +172,17 @@ public class ReminderUtil {
     Class<? extends BroadcastReceiver> receiverClass;
 
     switch (reminderType) {
-      case DUE_SOON_TYPE:
-        sharedPrefs.edit().putBoolean(NOTIFICATIONS.DUE_SOON_ENABLE, enabled).apply();
-        reminderId = SETTINGS.NOTIFICATIONS.DUE_SOON_ID;
-        reminderTime = SETTINGS.NOTIFICATIONS.DUE_SOON_TIME;
-        reminderTimeDefault = SETTINGS_DEFAULT.NOTIFICATIONS.DUE_SOON_TIME;
-        receiverClass = DueSoonNotificationReceiver.class;
+      case STOCK_TYPE:
+        sharedPrefs.edit().putBoolean(NOTIFICATIONS.STOCK_ENABLE, enabled).apply();
+        reminderId = NOTIFICATIONS.STOCK_ID;
+        reminderTime = NOTIFICATIONS.STOCK_TIME;
+        reminderTimeDefault = SETTINGS_DEFAULT.NOTIFICATIONS.STOCK_TIME;
+        receiverClass = StockNotificationReceiver.class;
         break;
       case CHORES_TYPE:
         sharedPrefs.edit().putBoolean(NOTIFICATIONS.CHORES_ENABLE, enabled).apply();
-        reminderId = SETTINGS.NOTIFICATIONS.CHORES_ID;
-        reminderTime = SETTINGS.NOTIFICATIONS.CHORES_TIME;
+        reminderId = NOTIFICATIONS.CHORES_ID;
+        reminderTime = NOTIFICATIONS.CHORES_TIME;
         reminderTimeDefault = SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_TIME;
         receiverClass = ChoresNotificationReceiver.class;
         break;

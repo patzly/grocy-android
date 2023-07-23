@@ -94,7 +94,10 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    viewModel = new ViewModelProvider(this).get(ChoresViewModel.class);
+    viewModel = new ViewModelProvider(this, new ChoresViewModel.ChoresViewModelFactory(
+        activity.getApplication(),
+        ChoresFragmentArgs.fromBundle(requireArguments())
+    )).get(ChoresViewModel.class);
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
     binding.setFragment(this);

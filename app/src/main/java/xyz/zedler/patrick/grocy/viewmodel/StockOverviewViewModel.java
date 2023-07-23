@@ -151,7 +151,8 @@ public class StockOverviewViewModel extends BaseViewModel {
     if (NumUtil.isStringInt(args.getStatusFilterId())) {
       if (Integer.parseInt(args.getStatusFilterId())
           == FilterChipLiveDataStockStatus.STATUS_NOT_FRESH) {
-        filterChipLiveDataStatus.setStatusNotFresh();
+        filterChipLiveDataStatus
+            .setStatus(FilterChipLiveDataStockStatus.STATUS_NOT_FRESH, null);
       }
     }
     filterChipLiveDataProductGroup = new FilterChipLiveDataProductGroup(

@@ -1252,8 +1252,6 @@
   <string name="setting_notifications_enable">Activer les notifications</string>
   <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
   few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_due_soon">Produits périmant bientôt</string>
-  <string name="setting_notifications_due_soon_description">Vérifie les stocks quotidiennement et vous avertit lorsque des produits sont bientôt périmés</string>
   <string name="setting_notifications_chores_description">Vérifie les tâches quotidiennement et vous avertit lorsque des tâches doivent être effectuées aujourd\'hui</string>
   <string name="setting_notification_time">Heure de notification</string>
   <!-- the description of the notification time preference.
@@ -1262,6 +1260,4 @@
   <string name="setting_notification_time_description">Quand la vérification est faite</string>
   <string name="setting_keep_screen_on_recipes_description">Pendant la consultation d\'une recette</string>
 
-  <string name="notification_due_soon_content">Consommez-les au cours des prochains jours pour aider à réduire le gaspillage alimentaire.</string>
-
-  </resources>
+</resources>
