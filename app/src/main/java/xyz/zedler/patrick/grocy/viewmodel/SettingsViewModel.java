@@ -1028,6 +1028,9 @@ public class SettingsViewModel extends BaseViewModel {
   }
 
   public void setStockNotificationsEnabled(boolean enabled) {
+    if(dueSoonNotificationsEnabledLive == null) {
+      return;
+    }
     dueSoonNotificationsEnabledLive.setValue(enabled);
     reminderUtil.setReminderEnabled(ReminderUtil.STOCK_TYPE, enabled);
   }
@@ -1064,6 +1067,9 @@ public class SettingsViewModel extends BaseViewModel {
   }
 
   public void setChoresNotificationsEnabled(boolean enabled) {
+    if(choresNotificationsEnabledLive == null) {
+      return;
+    }
     choresNotificationsEnabledLive.setValue(enabled);
     reminderUtil.setReminderEnabled(ReminderUtil.CHORES_TYPE, enabled);
   }
