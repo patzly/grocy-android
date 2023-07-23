@@ -34,6 +34,7 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.TaskEntryEditFragmentArgs;
 
 public class ShortcutUtil {
 
@@ -103,7 +104,7 @@ public class ShortcutUtil {
             context, context.getString(R.string.title_inventory)
         ));
       } else if (shortcutInfo.getId().equals(CHORES)) {
-        newShortcutInfos.add(createShortcutTasks(
+        newShortcutInfos.add(createShortcutChores(
             context, context.getString(R.string.title_chores)
         ));
       } else if (shortcutInfo.getId().equals(TASKS)) {
@@ -111,8 +112,13 @@ public class ShortcutUtil {
             context, context.getString(R.string.title_tasks)
         ));
       } else if (shortcutInfo.getId().equals(ADD_TASK)) {
-        newShortcutInfos.add(createShortcutTasks(
-            context, context.getString(R.string.title_task_new)
+        Uri uriAddToTaskDeepLink = NavUtil.getUriWithArgs(
+            context.getString(R.string.deep_link_taskEntryEditFragment),
+            new TaskEntryEditFragmentArgs.Builder(Constants.ACTION.CREATE)
+                .build().toBundle()
+        );
+        newShortcutInfos.add(createShortcutTaskAdd(
+            context, uriAddToTaskDeepLink, context.getString(R.string.title_task_new)
         ));
       } else if (shortcutInfo.getId().equals(RECIPES)) {
         newShortcutInfos.add(createShortcutRecipes(

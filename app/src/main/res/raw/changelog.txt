@@ -3,8 +3,11 @@
 Grocy server version 4.0.0 has some bigger changes with quantity units and unit conversions.
 Please read the server changelog carefully for longer explanations of the changes before or after
 your server update. We recommend installing the update as our app was mainly tested with it and
-recipe fulfillment information in our app are finally all correct with it, but older supported
-versions still work.
+recipe ingredient fulfillment information in our app are finally all correct and complete with it.
+Older supported versions still work but are not tested with every new change.
+
+We kindly ask you to give our app a good review on Google Play Store if you like it. This helps us
+a lot and will motivate us to implement new features.
 
 Specific changes for Grocy server 4.0.0 (other versions should behave the same way as before):
 
@@ -92,6 +95,7 @@ General:
 - Fixed: Flickering of bottom messages when bottom bar was scrolled down (#719),
   vertical position is now animated smoothly instead of jumping
 - Fixed: Disabled features with Home Assistant add-on were not disabled in app (#713)
+- Fixed: Shortcut for new task was not working anymore after first usage
 
 ## 3.2.1
 

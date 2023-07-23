@@ -129,8 +129,6 @@ public class SettingsCatBehaviorFragment extends BaseFragment {
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(false, R.menu.menu_empty);
 
-    updateShortcuts();
-
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
   }
 

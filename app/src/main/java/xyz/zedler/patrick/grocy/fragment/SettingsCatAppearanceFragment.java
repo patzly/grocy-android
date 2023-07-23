@@ -113,6 +113,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
     });
 
     setUpThemeSelection();
+    updateShortcuts();
 
     int id;
     switch (getSharedPrefs().getInt(
