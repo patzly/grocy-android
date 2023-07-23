@@ -6,7 +6,7 @@ your server update. We recommend installing the update as our app was mainly tes
 recipe ingredient fulfillment information in our app are finally all correct and complete with it.
 Older supported versions still work but are not tested with every new change.
 
-We kindly ask you to give our app a good review on Google Play Store if you like it. This helps us
+We kindly ask you to give our app a good review on Google Play if you like it. This helps us
 a lot and will motivate us to implement new features.
 
 Specific changes for Grocy server 4.0.0 (other versions should behave the same way as before):
@@ -24,7 +24,7 @@ Specific changes for Grocy server 4.0.0 (other versions should behave the same w
 
 All other changes, divided into app sections:
 
-Stock:
+#### Stock
 
 - New: Stock overview page now has checkbox options for all additional fields (#663)
 - New: Product choose page after barcode scan now has really useful copy option for products (#636)
@@ -50,13 +50,13 @@ Stock:
 - Fixed: Product description popup animation doesn't have glitches anymore
 - Fixed: Saving QU conversion failed if conversion existed already in other product (#707, #682)
 
-Shopping list:
+#### Shopping list
 
 - New: Shopping pages now also has checkbox options for fields and picture (#663, #671, #710)
 - New: Shopping mode options are now reachable through shopping mode menu and removed from settings
 - Improved: Shopping mode grouping option now can be set separately from shopping list page
 
-Recipes:
+#### Recipes
 
 - New: Recipes page now has checkbox options for all additional fields (#663)
 - New: Recipe details are now displayed on a separate page, not a bottom sheet anymore
@@ -69,14 +69,14 @@ Recipes:
 - Fixed: Editing of recipe ingredient with broken quantity unit is possible now
 - Fixed: Recipe ingredient price factor is not saved wrong anymore when creating ingredient (#615)
 
-Chores:
+#### Chores
 
 - New: Daily reminder can now be set also for chores (#149)
 - New: Filter for all chores which are due, used by the reminder
 - Improved: Shortcut for chores available now (in settings, go to appearance page then shortcuts)
 - Fixed: Unable to do multiple chores with swipe gestures (#686)
 
-General:
+#### General
 
 - New: Japanese translation (thanks daigoume!)
 - Improved: Better and unified network behavior across pages
@@ -99,6 +99,7 @@ General:
 - Fixed: Disabled features with Home Assistant add-on were not disabled in app (#713)
 - Fixed: Shortcut for new task was not working anymore after first usage
 - Fixed: Swipe gestures accessed wrong item in list after first usage (#686)
+- Fixed: Never requested notification permission so reminders may have not worked on Android 12+
 
 ## 3.2.1
 

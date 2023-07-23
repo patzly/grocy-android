@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.util;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -34,6 +35,7 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.color.DynamicColors;
 import java.util.Arrays;
@@ -224,6 +226,17 @@ public class ReminderUtil {
             : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
         PackageManager.DONT_KILL_APP
     );
+  }
+
+  public boolean hasPermission() {
+    if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
+      int status = ContextCompat.checkSelfPermission(
+          context, Manifest.permission.POST_NOTIFICATIONS
+      );
+      return status == PackageManager.PERMISSION_GRANTED;
+    } else {
+      return true;
+    }
   }
 
   public static Notification getNotification(

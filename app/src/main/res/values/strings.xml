@@ -537,6 +537,7 @@
   <string name="error_wrong_grocycode_type">grocycode contains wrong entity type</string>
   <string name="error_stock_entry_grocycode">Stock entry from grocycode not found</string>
   <string name="error_permission">No permission for this action</string>
+  <string name="error_permission_notification">Notification permission is required for reminders to work</string>
   <string name="error_undefined">An error occurred</string>
   <string name="error_invalid_base_servings">Servings invalid</string>
   <string name="error_pictures_size_exceeds_limit">There are embedded pictures in product or recipe descriptions on your server, which exceed the parsing limit of this app. Please remove high quality and large sized pictures from your descriptions, this will also speed up data loading.</string>

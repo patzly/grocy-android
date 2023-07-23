@@ -984,11 +984,19 @@ public class SettingsViewModel extends BaseViewModel {
     showBottomSheet(new InputBottomSheet(), bundle);
   }
 
+  public ReminderUtil getReminderUtil() {
+    return reminderUtil;
+  }
+
   public boolean getStockNotificationsEnabled() {
-    return sharedPrefs.getBoolean(
-        NOTIFICATIONS.STOCK_ENABLE,
-        SETTINGS_DEFAULT.NOTIFICATIONS.STOCK_ENABLE
+    boolean isActivated = sharedPrefs.getBoolean(
+        NOTIFICATIONS.STOCK_ENABLE, SETTINGS_DEFAULT.NOTIFICATIONS.STOCK_ENABLE
     );
+    if (isActivated && !reminderUtil.hasPermission()) {
+      isActivated = false;
+      setStockNotificationsEnabled(false);
+    }
+    return isActivated;
   }
 
   public MutableLiveData<Boolean> getStockNotificationsEnabledLive() {
@@ -1002,8 +1010,7 @@ public class SettingsViewModel extends BaseViewModel {
 
   public String getStockNotificationsTime() {
     return sharedPrefs.getString(
-        NOTIFICATIONS.STOCK_TIME,
-        SETTINGS_DEFAULT.NOTIFICATIONS.STOCK_TIME
+        NOTIFICATIONS.STOCK_TIME, SETTINGS_DEFAULT.NOTIFICATIONS.STOCK_TIME
     );
   }
 
@@ -1014,14 +1021,18 @@ public class SettingsViewModel extends BaseViewModel {
   public void setStockNotificationsTime(String text) {
     sharedPrefs.edit().putString(NOTIFICATIONS.STOCK_TIME, text).apply();
     dueSoonNotificationsTimeTextLive.setValue(text);
-    setStockNotificationsEnabled(true);
+    setStockNotificationsEnabled(reminderUtil.hasPermission());
   }
 
   public boolean getChoresNotificationsEnabled() {
-    return sharedPrefs.getBoolean(
-        NOTIFICATIONS.CHORES_ENABLE,
-        SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_ENABLE
+    boolean isActivated = sharedPrefs.getBoolean(
+        NOTIFICATIONS.CHORES_ENABLE, SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_ENABLE
     );
+    if (isActivated && !reminderUtil.hasPermission()) {
+      isActivated = false;
+      setChoresNotificationsEnabled(false);
+    }
+    return isActivated;
   }
 
   public MutableLiveData<Boolean> getChoresNotificationsEnabledLive() {
@@ -1035,8 +1046,7 @@ public class SettingsViewModel extends BaseViewModel {
 
   public String getChoresNotificationsTime() {
     return sharedPrefs.getString(
-        NOTIFICATIONS.CHORES_TIME,
-        SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_TIME
+        NOTIFICATIONS.CHORES_TIME, SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_TIME
     );
   }
 
@@ -1047,7 +1057,7 @@ public class SettingsViewModel extends BaseViewModel {
   public void setChoresNotificationsTime(String text) {
     sharedPrefs.edit().putString(NOTIFICATIONS.CHORES_TIME, text).apply();
     choresNotificationsTimeTextLive.setValue(text);
-    setChoresNotificationsEnabled(true);
+    setChoresNotificationsEnabled(reminderUtil.hasPermission());
   }
 
   public ArrayList<String> getSupportedVersions() {

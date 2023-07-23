@@ -105,11 +105,12 @@
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{v -> switchStockEnableNotifications.setChecked(!switchStockEnableNotifications.isChecked())}">
+            android:onClick="@{v -> switchStockEnableNotifications.toggle()}">
 
             <ImageView
+              android:id="@+id/image_stock_enable_notifications"
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              app:srcCompat="@drawable/ic_round_notifications"
+              app:srcCompat="@drawable/ic_round_notifications_anim"
               tools:ignore="ContentDescription" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
@@ -126,9 +127,7 @@
 
             <com.google.android.material.materialswitch.MaterialSwitch
               android:id="@+id/switch_stock_enable_notifications"
-              style="@style/Widget.Grocy.Switch"
-              android:onCheckedChanged="@{(view, checked) -> viewModel.setStockNotificationsEnabled(checked)}"
-              app:initialChecked="@{viewModel.getStockNotificationsEnabled()}" />
+              style="@style/Widget.Grocy.Switch" />
 
           </LinearLayout>
 
@@ -172,8 +171,9 @@
             android:onClick="@{v -> switchChoresEnableNotifications.setChecked(!switchChoresEnableNotifications.isChecked())}">
 
             <ImageView
+              android:id="@+id/image_chores_enable_notifications"
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              app:srcCompat="@drawable/ic_round_notifications"
+              app:srcCompat="@drawable/ic_round_notifications_anim"
               tools:ignore="ContentDescription" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
@@ -190,9 +190,7 @@
 
             <com.google.android.material.materialswitch.MaterialSwitch
               android:id="@+id/switch_chores_enable_notifications"
-              style="@style/Widget.Grocy.Switch"
-              android:onCheckedChanged="@{(view, checked) -> viewModel.setChoresNotificationsEnabled(checked)}"
-              app:initialChecked="@{viewModel.getChoresNotificationsEnabled()}" />
+              style="@style/Widget.Grocy.Switch" />
 
           </LinearLayout>
 
