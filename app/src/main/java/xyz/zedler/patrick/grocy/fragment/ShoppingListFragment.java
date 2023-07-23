@@ -384,7 +384,7 @@ public class ShoppingListFragment extends BaseFragment implements
 
   public void showShoppingListsBottomSheet() {
     Bundle bundle = new Bundle();
-    bundle.getBoolean(ARGUMENT.DISPLAY_NEW_OPTION, !isFeatureMultipleListsDisabled()
+    bundle.putBoolean(ARGUMENT.DISPLAY_NEW_OPTION, !isFeatureMultipleListsDisabled()
         && !viewModel.isOffline());
     activity.showBottomSheet(new ShoppingListsBottomSheet(), bundle);
   }

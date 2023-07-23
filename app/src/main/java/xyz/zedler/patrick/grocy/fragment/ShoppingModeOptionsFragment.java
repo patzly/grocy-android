@@ -94,6 +94,12 @@ public class ShoppingModeOptionsFragment extends BaseFragment {
       }
     });
 
+    binding.switchScreenOn.post(() -> {
+      binding.switchScreenOn.jumpDrawablesToCurrentState();
+      binding.switchShowDone.jumpDrawablesToCurrentState();
+      binding.switchSmallerFont.jumpDrawablesToCurrentState();
+    });
+
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, false
