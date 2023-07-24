@@ -34,6 +34,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetChoreEntryBinding
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.ChoreDetails;
+import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
@@ -46,7 +47,6 @@ public class ChoreEntryBottomSheet extends BaseBottomSheetDialogFragment {
 
   private MainActivity activity;
   private FragmentBottomsheetChoreEntryBinding binding;
-  private Chore chore;
 
   @Override
   public View onCreateView(
@@ -66,8 +66,9 @@ public class ChoreEntryBottomSheet extends BaseBottomSheetDialogFragment {
     assert activity != null;
 
     Bundle bundle = getArguments();
-    chore = bundle != null ? bundle.getParcelable(ARGUMENT.CHORE) : null;
-    if (bundle == null || chore == null) {
+    Chore chore = bundle != null ? bundle.getParcelable(ARGUMENT.CHORE) : null;
+    ChoreEntry choreEntry = bundle != null ? bundle.getParcelable(ARGUMENT.CHORE_ENTRY) : null;
+    if (bundle == null || choreEntry == null) {
       dismiss();
       return;
     }
@@ -90,16 +91,20 @@ public class ChoreEntryBottomSheet extends BaseBottomSheetDialogFragment {
 
     ResUtil.tintMenuItemIcons(activity, binding.toolbar.getMenu());
     binding.toolbar.setOnMenuItemClickListener(item -> {
-      if (item.getItemId() == R.id.action_track_chore_execution) {
-        activity.getCurrentFragment().trackChoreExecution(chore.getId());
+      if (item.getItemId() == R.id.action_track_next_chore_schedule) {
+        activity.getCurrentFragment().trackNextChoreSchedule(choreEntry);
         dismiss();
         return true;
       } else if (item.getItemId() == R.id.action_skip_next_chore_schedule) {
-        activity.getCurrentFragment().skipNextChoreSchedule(chore.getId());
+        activity.getCurrentFragment().skipNextChoreSchedule(choreEntry);
+        dismiss();
+        return true;
+      } else if (item.getItemId() == R.id.action_track_chore_execution) {
+        activity.getCurrentFragment().trackChoreExecutionNow(choreEntry);
         dismiss();
         return true;
       } else if (item.getItemId() == R.id.action_reschedule_next_execution) {
-        activity.getCurrentFragment().rescheduleNextExecution(chore.getId());
+        activity.getCurrentFragment().rescheduleNextExecution(choreEntry);
         dismiss();
         return true;
       }

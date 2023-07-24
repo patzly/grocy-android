@@ -215,7 +215,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
                     .getEntryForPos(position);
                 if (entry1 == null) return;
                 new Handler().postDelayed(
-                    () -> viewModel.executeChore(entry1.getChoreId(), false),
+                    () -> viewModel.executeChore(entry1, entry1.getNextEstimatedExecutionTime(), false),
                     100
                 );
               }
@@ -231,7 +231,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
                       .getEntryForPos(position);
                   if (entry1 == null) return;
                   new Handler().postDelayed(
-                      () -> viewModel.executeChore(entry1.getChoreId(), true),
+                      () -> viewModel.executeChore(entry1, entry1.getNextEstimatedExecutionTime(), true),
                       100
                   );
                 }
@@ -293,18 +293,23 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
   }
 
   @Override
-  public void trackChoreExecution(int choreId) {
-    viewModel.executeChore(choreId, false);
+  public void trackNextChoreSchedule(ChoreEntry choreEntry) {
+    viewModel.executeChore(choreEntry, choreEntry.getNextEstimatedExecutionTime(), false);
   }
 
   @Override
-  public void skipNextChoreSchedule(int choreId) {
-    viewModel.executeChore(choreId, true);
+  public void skipNextChoreSchedule(ChoreEntry choreEntry) {
+    viewModel.executeChore(choreEntry, choreEntry.getNextEstimatedExecutionTime(), true);
   }
 
   @Override
-  public void rescheduleNextExecution(int choreId) {
-    Chore chore = viewModel.getChoreHashMap().get(choreId);
+  public void trackChoreExecutionNow(ChoreEntry choreEntry) {
+    viewModel.executeChore(choreEntry, null, false);
+  }
+
+  @Override
+  public void rescheduleNextExecution(ChoreEntry choreEntry) {
+    Chore chore = viewModel.getChoreHashMap().get(choreEntry.getChoreId());
     if (chore == null) {
       viewModel.showErrorMessage();
       return;

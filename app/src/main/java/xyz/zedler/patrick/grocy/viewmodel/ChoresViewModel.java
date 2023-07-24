@@ -23,6 +23,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -221,21 +222,19 @@ public class ChoresViewModel extends BaseViewModel {
     filteredChoreEntriesLive.setValue(filteredChoreEntries);
   }
 
-  public void executeChore(int choreId, boolean skip) {
-    Chore chore = choreHashMap.get(choreId);
-    if (chore == null) {
-      showErrorMessage();
-      return;
+  public void executeChore(ChoreEntry choreEntry, @Nullable String dateTime, boolean skip) {
+    String trackedTime;
+    if (dateTime == null) {
+      trackedTime = choreEntry.getTrackDateOnlyBoolean()
+          ? dateUtil.getCurrentDateWithoutTimeStr()
+          : dateUtil.getCurrentDateWithTimeStr();
+    } else {
+      trackedTime = dateTime;
     }
-    executeChore(chore, skip);
-  }
-
-  public void executeChore(Chore chore, boolean skip) {
     JSONObject body = new JSONObject();
     try {
       body.put("skipped", skip);
-      body.put("tracked_time", chore.getTrackDateOnlyBoolean()
-          ? dateUtil.getCurrentDateWithoutTimeStr() : dateUtil.getCurrentDateWithTimeStr());
+      body.put("tracked_time", trackedTime);
     } catch (JSONException e) {
       if (debug) {
         Log.i(TAG, "executeChore: " + e);
@@ -244,7 +243,7 @@ public class ChoresViewModel extends BaseViewModel {
       return;
     }
     dlHelper.post(
-        grocyApi.executeChore(chore.getId()),
+        grocyApi.executeChore(choreEntry.getChoreId()),
         body,
         response -> {
           showMessage(getApplication().getString(R.string.msg_chore_executed));

@@ -6,8 +6,9 @@ your server update. We recommend installing the update as our app was mainly tes
 recipe ingredient fulfillment information in our app are finally all correct and complete with it.
 Older supported versions still work but are not tested with every new change.
 
-We kindly ask you to give our app a good review on Google Play if you like it. This helps us
-a lot and will motivate us to implement new features.
+We kindly ask you to give our app a good review on Google Play if you like it or a star for our
+GitHub repository. This helps us to spread the word about the app and will motivate us to
+implement new features.
 
 Specific changes for Grocy server 4.0.0 (other versions should behave the same way as before):
 
@@ -74,6 +75,9 @@ All other changes, divided into app sections:
 - New: Daily reminder can now be set also for chores (#149)
 - New: Filter for all chores which are due, used by the reminder
 - Improved: Shortcut for chores available now (in settings, go to appearance page then shortcuts)
+- Improved: Changed the handling of the tracking buttons on chores overview page (play button
+  now tracks an execution on the next scheduled time, rather than for now/today, new menu
+  action "Track chore execution now" for action with old behavior) (same change on server)
 - Fixed: Unable to do multiple chores with swipe gestures (#686)
 
 #### General
