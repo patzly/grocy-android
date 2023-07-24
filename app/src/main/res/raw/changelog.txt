@@ -99,7 +99,7 @@ All other changes, divided into app sections:
 - Fixed: Disabled features with Home Assistant add-on were not disabled in app (#713)
 - Fixed: Shortcut for new task was not working anymore after first usage
 - Fixed: Swipe gestures accessed wrong item in list after first usage (#686)
-- Fixed: Never requested notification permission so reminders may have not worked on Android 12+
+- Fixed: Never requested notification permission so reminders may have not worked on Android 13+
 
 ## 3.2.1
 
