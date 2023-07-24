@@ -132,8 +132,13 @@
   <string name="action_share_description">Řekněte ostatním o Grocy pro Android</string>
   <string name="action_no_filter">Bez filtru</string>
   <string name="action_show_done_tasks">Zobrazit hotové úkoly</string>
-  <string name="action_track_chore_execution">Splnění povinnosti</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_chore_execution">Splnění povinnosti s dnešním datem</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_next_chore_schedule">Označit následující datum povinnosti jako splněné</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_skip_next_chore_schedule">Přeskočit aktuální datum splnění úkolu</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Změna data příštího plnění povinnosti</string>
   <string name="action_put_missing_products_on_shopping_list">Vložit produkty pod min. stavem zásoby</string>
 
@@ -248,6 +253,20 @@
     <item quantity="many">%1$d po termínu</item>
     <item quantity="other">%1$d po termínu</item>
   </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_short">
+    <item quantity="one">úkol: %1$d</item>
+    <item quantity="few">úkoly: %1$d</item>
+    <item quantity="many">úkolů: %1$d</item>
+    <item quantity="other">úkolů: %1$d</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_long">
+    <item quantity="one">úkol: %1$d (následující)</item>
+    <item quantity="few">úkoly: %1$d (všechny následující)</item>
+    <item quantity="many">úkolů: %1$d (všechny následující)</item>
+    <item quantity="other">úkolů: %1$d (všechny následující)</item>
+  </plurals>
   <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
   <plurals name="msg_assigned_tasks">
     <item quantity="one">%1$d je váš</item>
@@ -294,6 +313,7 @@
   <!-- %1$s is a product name -->
   <string name="msg_no_stock_entries">Produkt %1$s nemá žádnou zásobu</string>
   <string name="msg_not_found">Produkt nenalezen</string>
+  <string name="msg_returning_to_overview">Za pár vteřin se vrátíte na Přehled zásob</string>
   <string name="msg_editor_hint">Zapište text</string>
   <string name="msg_coming_soon">Tato funkce bude v dalších verzích...</string>
   <string name="msg_undo_transaction">Vrátit transakci?</string>
@@ -470,6 +490,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="msg_help_recipe_ingredients_wrong">Pokud ne serveru používáte verzi Grocy nižší, než 4.0.0, mohou se v tomto seznamu objevit chybné informace. Aktualizujte, prosím, serverovou verzi alespoň na 4.0.0.</string>
   <string name="msg_help_date_chooser">Můžete si nastavit i vkládání dat klávesnicí. Urychlí to práci.</string>
   <string name="msg_help_date_chooser_keyboard">Můžete si změnit formát zápisu data na DDMMRR.\nPomocí klávesy Done (Hotovo, Enter...) na klávesnici tuto stránku uložíte a zavřete.</string>
+  <string name="msg_help_notifications">Pokud vám nepřišlo upozornění, zkontrolujte v nastavení pro aplikace, jestli jsou pro Grocy povolena a jestli je nezadržuje režim úspory energie. Ten můžete vypnout jen pro Grocy.</string>
   <string name="msg_help_quick_mode">Podržením prstu na titulku se přepnete do zrychleného režimu. Pokud jsou k produktu nebo k jeho čárovému kódu vyplněny všechny informace, pak stačí naskenovat jeho čárový kód a přidání do zásoby se provede z těchto dat.</string>
   <string name="msg_help_loading_circle_settings">Na každé stránce, kde se něco čte ze serveru, aplikace nejprve zkontroluje, zda se databáze na serveru změnila od poslední aktualizace a pokud ano, načte nová data. Zapněte tuto volbu pokud chcete zobrazit symbol komunikace i pro ověřování aktuálnosti databáze.</string>
   <string name="msg_help_start">Je aktivní režim pro začátečníky. Texty nápovědy jsou automaticky zobrazeny na všech stránkách, kde jsou dostupné. Klepnutím to změníte.</string>
@@ -561,6 +582,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="error_wrong_grocycode_type">Tento grocycode obsahuje chybný druh pole</string>
   <string name="error_stock_entry_grocycode">Podle tohoto grocycode nebyl nalezen žádný produkt v zásobě</string>
   <string name="error_permission">Pro tuto akci nemáte přidělené oprávnění</string>
+  <string name="error_permission_notification">Abyste dostávali z Grocy upozornění, musíte je povolit v nastaveních pro aplikace</string>
   <string name="error_undefined">Došlo k chybě</string>
   <string name="error_invalid_base_servings">Počet porcí je nesprávný</string>
   <string name="error_pictures_size_exceeds_limit">Některé obrázky produktů nebo jídel jsou příliš velké a proto je aplikace nezobrazí. Zmenšete, prosím, velké obrázky. Zrychlí se tím načítání dat.</string>
@@ -1278,6 +1300,8 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="setting_bottom_menu_button_description">Spodní navigační pruh</string>
   <string name="setting_turn_on_quick_mode">Používat zrychlený způsob zadávání</string>
   <string name="setting_turn_on_quick_mode_description">při použití tlačítka skenování ve výchozí stránce</string>
+  <string name="setting_quick_mode_return">Do Přehledu zásob se vrátíte za 20s.</string>
+  <string name="setting_quick_mode_return_description">pokud používáte tlačítko skenování v Přehledu zásob a nepoužíváte zrychlený způsob zadávání.</string>
   <string name="setting_speed_up_start">Zrychlení startu aplikace</string>
   <string name="setting_speed_up_start_description">funguje jen na rychlých zařízeních</string>
   <string name="setting_date_keyboard_input">Zadávat datum klávesnicí</string>
@@ -1299,14 +1323,29 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="setting_message_duration">Na jak dlouho se objeví zprávy</string>
   <string name="setting_message_duration_description">o provedených akcích</string>
   <string name="setting_notifications_enable">Zapnout upozorňování</string>
-  <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
-  few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_chores_description">Každý den vás informuje o povinnostech, které máte vykonat</string>
+  <!-- The string belongs to the stock overview (stock items can be expired, overdue or due soon). -->
+  <string name="setting_notifications_stock_description">Denní upozornění, jestli se neblíží (nebo již nevypršela) doba min. trvanlivosti či použitelnosti produktů</string>
+  <string name="setting_notifications_chores_description">Denní upozornění, jestli se neblíží (nebo již nevypršela) doba splnění povinnosti</string>
   <string name="setting_notification_time">Čas upozornění</string>
-  <!-- the description of the notification time preference.
-  With the "Due soon" check enabled, the user will be notified every day at the selected time how
-  many products in stock are due soon, so check means a check of the products in stock -->
+  <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">Čas, kdy aplikace zobrazí informace o stavu zásob.</string>
   <string name="setting_keep_screen_on_recipes_description">když je zobrazený recept</string>
 
-</resources>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="notification_stock_not_fresh_title">
+    <item quantity="one">%1$d produktu se blíží (nebo již vypršela) doba min. trvanlivosti či použitelnosti</item>
+    <item quantity="few">%1$d produktům se blíží (nebo již vypršela) doba min. trvanlivosti či použitelnosti</item>
+    <item quantity="many">%1$d produktům se blíží (nebo již vypršela) doba min. trvanlivosti či použitelnosti</item>
+    <item quantity="other">%1$d produktům se blíží (nebo již vypršela) doba min. trvanlivosti či použitelnosti</item>
+  </plurals>
+  <string name="notification_stock_content">Spotřebujte je co nejdříve, ať neplýtváte. Klepnutím zobrazíte jejich seznam.</string>
+  <!-- %1$s is a number -->
+  <plurals name="notification_chores_due_title">
+    <item quantity="one">Měli byste splnit %1$d povinnost</item>
+    <item quantity="few">Měli byste splnit %1$d povinnosti</item>
+    <item quantity="many">Měli byste splnit %1$d povinností</item>
+    <item quantity="other">Měli byste splnit %1$d povinností</item>
+  </plurals>
+  <string name="notification_chores_content">Odkládání povinností nikam nevede. Klepněte pro jejich seznam.</string>
+
+  </resources>
