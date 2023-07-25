@@ -132,8 +132,13 @@
   <string name="action_share_description">Parlez à vos amis de Grocy Android</string>
   <string name="action_no_filter">Pas de filtre</string>
   <string name="action_show_done_tasks">Afficher les tâches terminées</string>
-  <string name="action_track_chore_execution">Suivre l\'exécution des corvées</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_chore_execution">Suivre l\'exécution des tâches maintenant</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_next_chore_schedule">Suivre le prochain horaire de corvée</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_skip_next_chore_schedule">Sauter le prochain horaire de corvée</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Reprogrammer la prochaine réalisation</string>
   <string name="action_put_missing_products_on_shopping_list">Mettre les produits manquants sur la liste de courses</string>
 
