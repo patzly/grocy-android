@@ -254,7 +254,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:text="@string/msg_help_quick_consume_amount" />
+                android:text="@{viewModel.quickOpenAmountOptionAvailable ? @string/msg_help_quick_consume_amount_new : @string/msg_help_quick_consume_amount}" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -277,6 +277,50 @@
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Title"
                   android:text="@{formData.quickConsumeAmountLive}" />
+
+              </LinearLayout>
+
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+              style="@style/Widget.Grocy.Card.Text"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="16dp"
+              android:layout_marginEnd="16dp"
+              android:layout_marginTop="8dp"
+              android:layout_marginBottom="8dp"
+              android:visibility="@{formData.displayHelpLive &amp;&amp; viewModel.quickOpenAmountOptionAvailable ? View.VISIBLE : View.GONE}">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.Paragraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:text="@string/msg_help_quick_open_amount" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+              android:visibility="@{viewModel.quickOpenAmountOptionAvailable ? View.VISIBLE : View.GONE}"
+              android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.QUICK_OPEN_AMOUNT)}">
+
+              <ImageView
+                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                android:src="@drawable/ic_round_open"
+                tools:ignore="ContentDescription" />
+
+              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                  android:singleLine="false"
+                  android:text="@{formData.quickOpenAmountTitleLive}" />
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.Title"
+                  android:text="@{formData.quickOpenAmountLive}" />
 
               </LinearLayout>
 

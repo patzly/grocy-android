@@ -35,6 +35,7 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class MasterProductCatAmountViewModel extends BaseViewModel {
 
@@ -131,6 +132,10 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
         Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
         Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
     );
+  }
+
+  public boolean isQuickOpenAmountOptionAvailable() {
+    return VersionUtil.isGrocyServerMin400(sharedPrefs);
   }
 
   @Override
