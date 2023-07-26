@@ -997,7 +997,7 @@
   <!--The same string is also in the web interface (server v4.0.0 or later): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_amount_quick_open">Quantité ouverture rapide</string>
   <!-- %1$s is a quantity unit like "bottles" -->
-  <string name="property_amount_quick_open_in">Quantité ouverture rapide en </string>
+  <string name="property_amount_quick_open_in">Quantité ouverture rapide en %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">Accumuler le stock minimal des sous produits</string>
   <string name="property_picture">Image</string>
