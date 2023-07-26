@@ -426,8 +426,12 @@
   <string name="msg_help_accumulate_min_amount">Si activé, la quantité de stock minimale des sous-produits sera inclue à ce produit. Cela signifie que les sous produits ne seront jamais \"manquant\", seulement ce produit le sera.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_treat_opened_as_out_of_stock">Lorsque activé, les articles ouverts seront comptabilisés comme manquants pour déterminer si ce produit est en dessous de son stock minimum.</string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">Cette quantité est utilisée pour les boutons \"Consommation/Ouverture rapide\" sur la page d\'aperçu du stock (lié au format du stock).</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_consume_amount_new">Cette quantité est utilisée pour le \"bouton de consommation rapide\" sur la page d\'aperçu du stock (lié à l\'unité de quantité du stock).</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_open_amount">Cette quantité est utilisée pour le « bouton d\'ouverture rapide » sur la page d\'aperçu du stock (lié au format du stock).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_tare_weight">La tare est utile pour les récipients que vous utilisez systématiquement dans vos pesées. Lors de l\'utilisation d\'un récipient hermétique, vous pouvez définir ici la \"tare\" ou \"poids à vide\". Le calcul du \"poids net\" s\'effectuera automatiquement à partir du \"poids brut\" que vous aurez constaté.</string>
   <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -990,6 +994,10 @@
   <string name="property_amount_quick_consume">Quantité en consommation rapide</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_quick_consume_in">Quantité en consommation rapide en %1$s</string>
+  <!--The same string is also in the web interface (server v4.0.0 or later): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_amount_quick_open">Quantité ouverture rapide</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_quick_open_in">Quantité ouverture rapide en </string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">Accumuler le stock minimal des sous produits</string>
   <string name="property_picture">Image</string>
