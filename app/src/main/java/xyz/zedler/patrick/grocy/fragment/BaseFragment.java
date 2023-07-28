@@ -137,9 +137,6 @@ public class BaseFragment extends Fragment {
   public void copyProduct(Product product) {
   }
 
-  public void deleteObjectSafely(Object object) {
-  }
-
   public void deleteObject(int objectId) {
   }
 

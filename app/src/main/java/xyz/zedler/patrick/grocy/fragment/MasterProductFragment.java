@@ -21,12 +21,15 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
@@ -39,6 +42,7 @@ import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
+import xyz.zedler.patrick.grocy.util.HapticUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductViewModel;
@@ -46,11 +50,13 @@ import xyz.zedler.patrick.grocy.viewmodel.MasterProductViewModel;
 public class MasterProductFragment extends BaseFragment {
 
   private final static String TAG = MasterProductFragment.class.getSimpleName();
+  private static final String DIALOG_DELETE = "dialog_delete";
 
   private MainActivity activity;
   private FragmentMasterProductBinding binding;
   private MasterProductViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
+  private AlertDialog dialogDelete;
 
   @Override
   public View onCreateView(
@@ -66,6 +72,10 @@ public class MasterProductFragment extends BaseFragment {
 
   @Override
   public void onDestroyView() {
+    if (dialogDelete != null) {
+      // Else it throws an leak exception because the context is somehow from the activity
+      dialogDelete.dismiss();
+    }
     super.onDestroyView();
     binding = null;
   }
@@ -207,7 +217,7 @@ public class MasterProductFragment extends BaseFragment {
             : R.menu.menu_master_product_create,
         menuItem -> {
           if (menuItem.getItemId() == R.id.action_delete) {
-            viewModel.deleteProductSafely();
+            deleteProductSafely();
             return true;
           }
           if (menuItem.getItemId() == R.id.action_save) {
@@ -229,7 +239,7 @@ public class MasterProductFragment extends BaseFragment {
           new Handler().postDelayed(() -> viewModel.saveProduct(false), 500);
           break;
         case ACTION.DELETE:
-          new Handler().postDelayed(() -> viewModel.deleteProductSafely(), 500);
+          new Handler().postDelayed(this::deleteProductSafely, 500);
           break;
       }
     }
@@ -264,6 +274,12 @@ public class MasterProductFragment extends BaseFragment {
       viewModel.loadFromDatabase(true);
     }
 
+    if (savedInstanceState != null && savedInstanceState.getBoolean(DIALOG_DELETE)) {
+      new Handler(Looper.getMainLooper()).postDelayed(
+          this::deleteProductSafely, 1
+      );
+    }
+
     // UPDATE UI
 
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
@@ -279,6 +295,40 @@ public class MasterProductFragment extends BaseFragment {
         savedInstanceState == null,
         () -> viewModel.saveProduct(showSaveWithCloseButton)
     );
+  }
+
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    super.onSaveInstanceState(outState);
+    boolean isShowing = dialogDelete != null && dialogDelete.isShowing();
+    outState.putBoolean(DIALOG_DELETE, isShowing);
+  }
+
+  public void deleteProductSafely() {
+    if (!viewModel.isActionEdit()) {
+      return;
+    }
+    Product product = viewModel.getFormData().getProductLive().getValue();
+    if (product == null) {
+      viewModel.showErrorMessage();
+      return;
+    }
+    dialogDelete = new MaterialAlertDialogBuilder(
+        activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution
+    ).setTitle(R.string.title_confirmation)
+        .setMessage(
+            getString(
+                R.string.msg_master_delete_product,
+                product.getName()
+            )
+        ).setPositiveButton(R.string.action_delete, (dialog, which) -> {
+          (new HapticUtil(requireContext())).click();
+          viewModel.deleteProduct(product.getId());
+          dialog.dismiss();
+        }).setNegativeButton(R.string.action_cancel, (dialog, which) ->
+            (new HapticUtil(requireContext())).click())
+        .create();
+    dialogDelete.show();
   }
 
   public void clearInputFocus() {

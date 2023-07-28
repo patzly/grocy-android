@@ -441,11 +441,6 @@ public class MasterObjectListFragment extends BaseFragment
   }
 
   @Override
-  public void deleteObjectSafely(Object object) {
-    viewModel.deleteObjectSafely(object);
-  }
-
-  @Override
   public void deleteObject(int objectId) {
     viewModel.deleteObject(objectId);
   }

@@ -37,6 +37,8 @@ All other changes, divided into app sections:
   or due soon)
 - Improved: "Create product" page now uses "save and not close" buttons
 - Improved: Misleading error when trying to save duplicated barcode on product barcode edit (#724)
+- Improved: When clicking a product name on the products list in master data, the product info
+  will now be displayed (like on the stock overview page)
 - Improved: Message shown when product or recipe is not on server (#718)
 - Improved: "Factor purchase to stock unit" was moved to quantity units category in master product
 - Improved: When scanning a product barcode and the purchase or inventory page, the note will now

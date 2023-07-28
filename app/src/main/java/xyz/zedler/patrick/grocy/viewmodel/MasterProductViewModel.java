@@ -39,7 +39,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.form.FormDataMasterProduct;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
@@ -333,22 +332,6 @@ public class MasterProductViewModel extends BaseViewModel {
       return;
     }
     queue.start();
-  }
-
-  public void deleteProductSafely() {
-    if (!isActionEdit()) {
-      return;
-    }
-    Product product = formData.getProductLive().getValue();
-    if (product == null) {
-      showErrorMessage();
-      return;
-    }
-    Bundle argsBundle = new Bundle();
-    argsBundle.putString(Constants.ARGUMENT.ENTITY, GrocyApi.ENTITY.PRODUCTS);
-    argsBundle.putInt(Constants.ARGUMENT.OBJECT_ID, product.getId());
-    argsBundle.putString(Constants.ARGUMENT.OBJECT_NAME, product.getName());
-    showBottomSheet(new MasterDeleteBottomSheet(), argsBundle);
   }
 
   public void deleteProduct(int productId) {

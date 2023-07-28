@@ -76,6 +76,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
+      android:paddingTop="8dp"
       android:paddingBottom="8dp">
 
       <HorizontalScrollView
@@ -90,8 +91,6 @@
           android:layout_height="wrap_content"
           android:paddingStart="16dp"
           android:paddingEnd="16dp"
-          android:paddingTop="8dp"
-          android:paddingBottom="8dp"
           android:clipToPadding="false"
           app:singleLine="true"
           app:chipSpacing="8dp">
@@ -130,6 +129,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp" />
 
       <LinearLayout
