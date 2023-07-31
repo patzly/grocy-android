@@ -347,6 +347,10 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
   }
 
   public void dispatchTakePictureIntent() {
+    if (viewModel.isDemoInstance()) {
+      viewModel.showMessage(R.string.error_picture_uploads_forbidden);
+      return;
+    }
     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     // Create the File where the photo should go
     File photoFile = null;

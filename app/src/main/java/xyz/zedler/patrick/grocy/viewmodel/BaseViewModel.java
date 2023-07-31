@@ -45,6 +45,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import org.json.JSONException;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -99,6 +100,11 @@ public class BaseViewModel extends AndroidViewModel {
 
   boolean isDebuggingEnabled() {
     return debug;
+  }
+
+  public boolean isDemoInstance() {
+    String server = sharedPrefs.getString(PREF.SERVER_URL, null);
+    return server != null && server.contains("grocy.info");
   }
 
   public boolean isOpenFoodFactsEnabled() {

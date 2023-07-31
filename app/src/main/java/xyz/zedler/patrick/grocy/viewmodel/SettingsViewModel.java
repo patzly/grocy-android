@@ -141,11 +141,6 @@ public class SettingsViewModel extends BaseViewModel {
     );
   }
 
-  public boolean isDemo() {
-    String server = getServerUrl();
-    return server != null && server.contains("grocy.info");
-  }
-
   public boolean isVersionCompatible() {
     return getSupportedVersions().contains(
         sharedPrefs.getString(
@@ -176,7 +171,7 @@ public class SettingsViewModel extends BaseViewModel {
         Constants.PREF.GROCY_VERSION,
         getString(R.string.date_unknown)
     ));
-    bundle.putBoolean(Constants.ARGUMENT.DEMO_CHOSEN, isDemo());
+    bundle.putBoolean(Constants.ARGUMENT.DEMO_CHOSEN, isDemoInstance());
     bundle.putStringArrayList(
         Constants.ARGUMENT.SUPPORTED_VERSIONS,
         getSupportedVersions()
@@ -1081,11 +1076,6 @@ public class SettingsViewModel extends BaseViewModel {
     return new ArrayList<>(Arrays.asList(
         getApplication().getResources().getStringArray(R.array.compatible_grocy_versions)
     ));
-  }
-
-  public boolean getIsDemoInstance() {
-    String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
-    return server != null && server.contains("grocy.info");
   }
 
   public boolean isFeatureEnabled(String pref) {

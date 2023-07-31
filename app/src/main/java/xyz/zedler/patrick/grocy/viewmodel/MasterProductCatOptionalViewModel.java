@@ -173,6 +173,10 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
   }
 
   public void pasteFromClipboard() {
+    if (isDemoInstance()) {
+      showMessage(R.string.error_picture_uploads_forbidden);
+      return;
+    }
     ClipboardManager clipboard = (ClipboardManager) getApplication()
         .getSystemService(Context.CLIPBOARD_SERVICE);
     if (clipboard == null) {

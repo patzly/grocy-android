@@ -547,6 +547,7 @@
   <string name="error_failed_barcode_upload">Could not upload barcode</string>
   <string name="error_wrong_grocycode_type">grocycode contains wrong entity type</string>
   <string name="error_stock_entry_grocycode">Stock entry from grocycode not found</string>
+  <string name="error_picture_uploads_forbidden">For security reasons, uploading pictures is only allowed on self-hosted servers. You are currently using the demo instance.</string>
   <string name="error_permission">No permission for this action</string>
   <string name="error_permission_notification">Notification permission is required for reminders to work</string>
   <string name="error_undefined">An error occurred</string>
