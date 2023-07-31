@@ -59,6 +59,7 @@ All other changes, divided into app sections:
 - New: Shopping pages now also has checkbox options for fields and picture (#663, #671, #710)
 - New: Shopping mode options are now reachable through shopping mode menu and removed from settings
 - Improved: Shopping mode grouping option now can be set separately from shopping list page
+- Fixed: Adding new item to shopping list reverts to previous shopping list (#731)
 
 #### Recipes
 

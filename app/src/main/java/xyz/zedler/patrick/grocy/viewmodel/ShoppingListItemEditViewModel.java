@@ -123,7 +123,8 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
       this.unitConversions = data.getQuantityUnitConversions();
       formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
-      if (!isActionEdit) {
+      ShoppingList selectedShoppingList = formData.getShoppingListLive().getValue();
+      if (!isActionEdit && selectedShoppingList == null) {
         formData.getShoppingListLive().setValue(getLastShoppingList());
       }
       if (downloadAfterLoading) {
