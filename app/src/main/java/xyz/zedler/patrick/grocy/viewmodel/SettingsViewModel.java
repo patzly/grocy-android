@@ -100,6 +100,7 @@ public class SettingsViewModel extends BaseViewModel {
   private final MutableLiveData<String> dueSoonNotificationsTimeTextLive;
   private final MutableLiveData<Boolean> choresNotificationsEnabledLive;
   private final MutableLiveData<String> choresNotificationsTimeTextLive;
+  private final MutableLiveData<Boolean> displayHelpForNotificationsLive;
 
   private final int allowedDecimalPlacesAmount;
 
@@ -133,6 +134,7 @@ public class SettingsViewModel extends BaseViewModel {
     dueSoonNotificationsTimeTextLive = new MutableLiveData<>(getStockNotificationsTime());
     choresNotificationsEnabledLive = new MutableLiveData<>(getChoresNotificationsEnabled());
     choresNotificationsTimeTextLive = new MutableLiveData<>(getChoresNotificationsTime());
+    displayHelpForNotificationsLive = new MutableLiveData<>(false);
 
     allowedDecimalPlacesAmount = sharedPrefs.getInt(
         STOCK.DECIMAL_PLACES_AMOUNT, SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
@@ -1064,6 +1066,15 @@ public class SettingsViewModel extends BaseViewModel {
     sharedPrefs.edit().putString(NOTIFICATIONS.CHORES_TIME, text).apply();
     choresNotificationsTimeTextLive.setValue(text);
     setChoresNotificationsEnabled(reminderUtil.hasPermission());
+  }
+
+  public MutableLiveData<Boolean> getDisplayHelpForNotificationsLive() {
+    return displayHelpForNotificationsLive;
+  }
+
+  public void toggleDisplayHelpForNotifications() {
+    displayHelpForNotificationsLive.setValue(
+        Boolean.FALSE.equals(displayHelpForNotificationsLive.getValue()));
   }
 
   public ArrayList<String> getSupportedVersions() {
