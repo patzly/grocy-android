@@ -132,8 +132,13 @@
   <string name="action_share_description">Erzählen Sie Ihren Freunden von Grocy Android</string>
   <string name="action_no_filter">Nicht filtern</string>
   <string name="action_show_done_tasks">Erledigte Aufgaben anzeigen</string>
-  <string name="action_track_chore_execution">Ausführung erfassen</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_chore_execution">Ausführung jetzt erfassen</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_next_chore_schedule">Nächste geplante Ausführung erfassen</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_skip_next_chore_schedule">Nächste geplante Ausführung überspringen</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Nächste Ausführung umplanen</string>
   <string name="action_put_missing_products_on_shopping_list">Fehlende Produkte auf den Einkaufszettel setzen</string>
 
@@ -399,8 +404,12 @@
   <string name="msg_help_accumulate_min_amount">Wenn aktiviert, werden die Mindestbestände von untergeordneten Produkten aufsummiert, heißt das untergeordnete Produkt wird nie \"fehlen\", nur dieses.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_treat_opened_as_out_of_stock">Wenn aktiviert, werden geöffnete Bestandseinträge für die Ermittlung des Mindestbestands als bereits verbraucht betrachtet.</string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">Diese Menge wird für die \"Schnell-Verbrauch/Öffnen\"-Buttons auf der Bestandsübersicht benutzt (bezieht sich auf die Bestandsmengeneinheit)</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_consume_amount_new">Diese Menge wird für den \"Schnell-Verbrauch\"-Button auf der Bestandsübersicht benutzt (bezieht sich auf die Bestandsmengeneinheit).</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_open_amount">Diese Menge wird für den \"Schnell-Öffnen\"-Button auf der Bestandsübersicht benutzt (bezieht sich auf die Bestandsmengeneinheit).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_tare_weight">Dies ist z.B. für Mehl im Glas nützlich - beim Buchen eines Kaufs/Verbrauchs oder bei der Inventur müssen Sie dann immer das gesamte Glas wiegen, die zu buchende Menge wird dann automatisch basierend auf dem Bestand und dem unten definierten Eigengewicht berechnet.</string>
   <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -437,7 +446,9 @@
   <string name="msg_help_recipe_ingredients_wrong">Mit Grocy Server-Version kleiner als 4.0.0 kann diese Liste falsche Informationen über den Bedarf im Bestand enthalten. Bitte aktualisieren Sie Ihren Server zur Version 4.0.0 oder höher, um die korrekten Werte zu sehen.</string>
   <string name="msg_help_date_chooser">Sie können in den Einstellungen zur Tastatureingabe wechseln, womit Sie eventuell eine höhere Eingabegeschwindigkeit erreichen.</string>
   <string name="msg_help_date_chooser_keyboard">Sie können in den Einstellungen ein umgekehrtes Datumsformat aktivieren, falls DDMMYY in Ihrem Land bevorzugt ist.\nUm die Eingabe zu übernehmen und diese Seite zu schließen, drücken Sie die Erledigt-Taste auf Ihrer Tastatur.</string>
+  <string name="msg_help_notifications_tap">Tippen Sie hier, wenn Sie keine Benachrichtigungen empfangen oder sie unzuverlässig bekommen.</string>
   <string name="msg_help_notifications">Falls Sie keine Benachrichtigungen erhalten, tippen Sie hier, um die Android App-Info Seite zu öffnen und zu prüfen, ob Benachrichtigungen erlaubt sind und ob Energiesparmaßnahmen deaktiviert werden können. Android stellt Benachrichtigungen manchmal später zu als die festgelegte Zeit, um den Batterieverbrauch zu verringern. Das ist normales Verhalten.</string>
+  <string name="msg_help_notifications_other">Entfernen Sie die App nicht aus der Übersicht mit den aktuell geöffneten App, sonst wird der Prozess für Benachrichtigungen von manchen Herstellern beendet.</string>
   <string name="msg_help_quick_mode">Sie können lange auf die Titelleiste oben tippen, um den Schnellmodus zu aktivieren. In diesem Modus wird eine Transaktion sofort ausgeführt, wenn ein Produkt eingegeben oder gescannt wurde und alle Felder automatisch befüllt werden konnten (mit Produkt- oder Barcode-Standardwerten).</string>
   <string name="msg_help_loading_circle_settings">Auf jeder Seite wo etwas vom Server geladen werden muss, überprüft die App erst mit einer winzigen Anfrage, ob sich die Server-Datenbank seit dem letzten Laden verändert hat und aktualisiert nur veraltete Daten. Aktivieren Sie diese Option, wenn bei dieser Anfrage auch ein Ladekreis angezeigt werden soll.</string>
   <string name="msg_help_start">Anfängermodus ist aktiv: Hilfe-Texte werden standardmäßig auf allen Seiten eingeblendet, wenn verfügbar. Zum Ändern tippen.</string>
@@ -528,6 +539,7 @@
   <string name="error_failed_barcode_upload">Barcode konnte nicht hochgeladen werden</string>
   <string name="error_wrong_grocycode_type">grocycode enthält falschen Typ</string>
   <string name="error_stock_entry_grocycode">Bestandseintrag vom grocycode nicht gefunden</string>
+  <string name="error_picture_uploads_forbidden">Aus Sicherheitsgründen ist das Hochladen von Bildern nur auf selbst gehosteten Servern erlaubt. Sie verwenden gerade die Demo-Instanz.</string>
   <string name="error_permission">Keine Berechtigung für diese Aktion</string>
   <string name="error_permission_notification">Für die Erinnerungsfunktion wird die Berechtigung für Benachrichtigungen benötigt</string>
   <string name="error_undefined">Ein Fehler ist aufgetreten</string>
@@ -943,6 +955,10 @@
   <string name="property_amount_quick_consume">Schnell-Verbrauchs-Menge</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_quick_consume_in">Schnell-Verbrauchs-Menge in %1$s</string>
+  <!--The same string is also in the web interface (server v4.0.0 or later): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_amount_quick_open">Schnell-Öffnen Menge</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_quick_open_in">Schnell-Öffnen Menge in %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">Mindestbestände von untergeordneten Produkten aufsummieren</string>
   <string name="property_picture">Bild</string>
