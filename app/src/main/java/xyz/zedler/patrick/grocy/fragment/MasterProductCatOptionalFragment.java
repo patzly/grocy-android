@@ -358,7 +358,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
     }
     if (photoFile != null) {
       Uri photoURI = FileProvider.getUriForFile(requireContext(),
-          "xyz.zedler.patrick.grocy.fileprovider",
+          requireContext().getPackageName() + ".fileprovider",
           photoFile);
       takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
       mActivityResultLauncherTakePicture.launch(takePictureIntent);

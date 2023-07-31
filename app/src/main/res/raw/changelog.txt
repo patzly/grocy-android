@@ -97,6 +97,8 @@ All other changes, divided into app sections:
 - Improved: It is now clearer which QR code is to be scanned when using Home Assistant (#627)
 - Improved: Horizontal actions layout on overview page for smaller screens
 - Improved: Clear caching related info after app update or database update for data refresh (#726)
+- Improved: Changed debug build variant config to allow installation of debug version alongside
+release variant (thanks @alfonso133)
 - Fixed: Amounts with conversions are consistent over all pages now (#612, #626)
 - Fixed: Long click on barcode button on overview page was broken on Android Nougat and lower
 - Fixed: Crash on startup with Android Lollipop (and maybe higher)
