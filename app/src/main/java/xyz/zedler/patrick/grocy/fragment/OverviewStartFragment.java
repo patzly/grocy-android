@@ -31,7 +31,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import xyz.zedler.patrick.grocy.BuildConfig;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
@@ -183,6 +185,14 @@ public class OverviewStartFragment extends BaseFragment {
         }
       }
     });
+
+    // DEBUG LABEL
+
+    if (BuildConfig.DEBUG) {
+      ColorRoles roles = ResUtil.getHarmonizedRoles(activity, R.color.yellow);
+      binding.imageLabelDebug.setColorFilter(roles.getOnAccent());
+      binding.imageLabelDebugBg.setColorFilter(roles.getAccent());
+    }
 
     // UPDATE UI
 
