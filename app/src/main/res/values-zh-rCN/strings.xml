@@ -34,11 +34,11 @@
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">消耗全部</string>
 
-  <string name="action_consume_spoiled">‎消耗 腐败的</string>
-  <string name="action_consume_one_spoiled">消耗1为腐败的</string>
+  <string name="action_consume_spoiled">‎消耗变质的</string>
+  <string name="action_consume_one_spoiled">消耗1个变质的</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
   <string name="action_consume_one">消耗%2$s中的1%1$s</string>
-  <string name="action_open">标记为已打开</string>
+  <string name="action_open">标记为已开封</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
   <string name="action_open_one">打开%2$s中的1%1$s</string>
   <string name="action_edit_product">编辑产品</string>
@@ -98,9 +98,10 @@
   <string name="action_open_scanner">打开扫描仪</string>
   <string name="action_discard">丢弃</string>
   <string name="action_clear_form">清除表单</string>
-  <!-- Short form for "Link barcode to existing product and clear form", this should fit into a button so keep it short -->
-  <string name="action_link_and_clear">二维码绑定&amp;清除</string>
+  <!-- "Paste" like in "Paste from clipboard" -->
+  <string name="action_paste">粘贴</string>
   <string name="action_toggle_done">切换完成</string>
+  <string name="action_change_layout">更改布局</string>
   <string name="action_edit_notes">编辑注释</string>
   <string name="action_add_missing">添加缺少的产品</string>
   <string name="action_purchase_done_items">购买了物品</string>
@@ -121,13 +122,15 @@
   <string name="action_demo_server">演示服务器</string>
   <string name="action_own_server">私有服务器</string>
   <string name="action_enter_data_manually">手动输入数据</string>
+  <string name="action_details">详细信息</string>
   <string name="action_perform">执行动作</string>
   <string name="action_share">分享</string>
   <string name="action_share_description">向您的朋友分享Grocy Android</string>
   <string name="action_no_filter">未筛选</string>
   <string name="action_show_done_tasks">‎显示已完成的任务‎</string>
-  <string name="action_track_chore_execution">‎跟踪家务执行‎</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_skip_next_chore_schedule">‎跳过下一个家务时间表‎</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">重新安排下一次执行</string>
   <string name="action_put_missing_products_on_shopping_list">将缺少的产品加入购物清单</string>
 
@@ -295,7 +298,6 @@
   <string name="msg_quick_mode_confirm_transfer">将被执行的事务: \n\n 迁移%1$s%2$s的%3$s \n 从位置:%4$s \n 到位置:%5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">将被执行的事务: \n\n 设置%1$s的库存数量为%2$s%3$s \n 申请新增项目:\n 到期日:%4$s \n价格:%5$s \n 商店:%6$s \n 位置:%7$s</string>
-  <string name="msg_compatibility">此应用程序版本与服务器上的grocy版本不兼容。 \n\n当前服务器版本:%1$s\n\n支持的服务器版本:\n%2$s\n如果当前服务器版本的主版本号(第一个数字)高于所支持的版本，而您忽略此警告，则可能发生数据丢失(不太可能)或崩溃(很可能)。 如果只有一个小的差异(例如第三位数字更高)，你可能会忽略这个警告。  </string>
   <string name="msg_logout">您的服务器上的任何内容都不会更改。您将被重定向到登录页面。</string>
   <string name="msg_logout_demo">您正在运行<u>https://grocy.info</u>的常规演示实例。\n\n<b>此处未保存任何更改！\n它们将保持公开状态，直到服务器自动覆盖它们。</b>\n\n在登录屏幕上，您可以输入您的自己的服务器地址。</string>
   <string name="msg_logout_demo_short">公共演示服务器。点按详细信息。</string>
@@ -307,12 +309,11 @@
   <string name="msg_features">再次启动介绍“关于”</string>
   <string name="msg_feedback">您有任何愿望，疑问或错误吗？请与我们联系，让我们为您提供帮助！\n我们会对Play商店中的出色评论感到非常高兴。</string>
   <string name="msg_point_at_barcode">将相机对准条形码</string>
+  <string name="msg_save_product_first">请先保存产品</string>
+  <string name="msg_save_recipe_first">请先保存菜谱</string>
   <string name="msg_press_hold_confirm">长按确认删除</string>
   <string name="msg_welcome">欢迎使用Grocy安卓APP</string>
-  <string name="msg_welcome_introduce">要高效地使用Grocy，需要您的私有服务器或者基于HomeAssistant的Grocy add-on插件。\n 如果您只想试用这个app，您可以使用创建者Bernd Bestel的演示服务器。</string>
   <string name="msg_choose_option_below">请从以下选项中选择一个</string>
-  <string name="msg_qr_code_scan">在另一个设备上，访问您的Groy网站并转到“API键”页面。单击“添加”，然后单击Little QR码符号并扫描QR码。</string>
-  <string name="msg_qr_code_scan_token">‎您正在使用Grocy Home Assistant附加组件。在“家庭助理”配置文件设置中创建长期访问令牌（最后一部分）。在令牌字段下方，单击“生成QR码”并在此处扫描。‎</string>
   <string name="msg_port_connection_info_without_port">应用程序将连接到端口%1$s。\n如果你想让它连接到一个不同的端口，你可以添加一个到URL。 \nExample: http://domain.com:81/ </string>
   <string name="msg_port_connection_info_with_port">应用程序将连接到端口%1$s</string>
   <string name="msg_clear_form_first">在扫描另一个已知条形码之前先清空表单</string>
@@ -345,12 +346,10 @@
   <string name="msg_help_qu_stock">首次购买后，数量单位库存不能更改。</string>
   <string name="msg_help_qu_stock_changeable">库存数量单位只能在目前的数量单位存在对应的单位转换时更改</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_qu_purchase">这是将此产品添加到购物清单时使用的默认数量单位。</string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">如果启用，子产品的最小库存量将累计到该产品中，这意味着子产品将永远不会“丢失”，仅此产品。 </string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_treat_opened_as_out_of_stock">‎启用后，打开的商品将被计为缺失，以计算此商品是否低于其最低库存量。‎</string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">此金额用于库存概述页面上的“快速消耗/打开按钮”（与数量单位库存相关）。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_tare_weight">皮重处理非常有用，例如 对于罐中的面粉-在购买/消费/库存时，您总是称量整个罐，然后根据库存量和以下定义的皮重自动计算要过帐的量。 </string>
@@ -374,22 +373,18 @@
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_not_check_shopping_list">在默认状态下，被加到购物清单中的数量为”所需数量 - 库存数量 -购物清单数量”。 启用此选项后，仅根据库存数量而不检查购物清单中已存在的数量。</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_produces_product">当选择一项物品后，在消耗此食谱时将一单位（一份库存数量单位）加到库存中。</string>
+  <string name="msg_help_produces_product">选择一个物品后，将在食用此食谱时向物品的库存中增加一个单位（每份库存数量单位）</string>
   <string name="msg_help_date_chooser">‎您可以在设置中切换到键盘输入，这可以为您提高输入速度。‎</string>
   <string name="msg_help_date_chooser_keyboard">‎如果您所在的国家/地区首选 DDMMYY，则可以在设置中激活反向日期格式。\n要应用输入并关闭此页面，可以使用键盘上的 Done 键。‎</string>
   <string name="msg_help_quick_mode">您可以长按上方的标题栏激活快速模式。在这种模式下，如果输入或扫描了产品，并且所有字段都可以自动填充（按照产品和/或条码默认值），事务将立即执行。</string>
   <string name="msg_help_loading_circle_settings">在必须从服务器加载的每个页面上，应用程序首先用微小的请求检查服务器数据库是否自上次更改并仅更新过时的数据。即使对于此小型请求，请启用下面的选项以显示加载圆圈。</string>
   <string name="msg_help_start">已激活初学者模式：如果该模式有效，默认情况下会在所有页面显示帮助文本。点击进行更改。</string>
   <string name="msg_help_purchased_date_settings">如果启用了以下选项，则购买和库存页面将显示购买日期的字段。否则购买的日期默认为今天。</string>
-  <string name="msg_help_normal_login">如果您在Home Assistant使用Grocy Add-On，请点击此卡。</string>
-  <string name="msg_help_home_assistant_login">您正在使用Groy Home Assistant加载项。因此，需要更多细节。点击此卡以切换到正常登录。</string>
   <string name="msg_help_home_assistant_login_help_show">点按此处显示帮助文本。</string>
   <string name="msg_help_home_assistant_login_help_hide">点按此处隐藏帮助文本。</string>
   <string name="msg_help_home_assistant_login_server">如果您使用该服务，您还可以输入您的Nabu Casa Cloud URL。点击此卡以访问Nabu Casa网站。</string>
   <string name="msg_help_home_assistant_login_token">‎您可以在“家庭助理”配置文件设置（最后一部分）中创建长期访问令牌。点击此处从上方打开 URL。‎</string>
   <string name="msg_help_home_assistant_login_proxy_id">导航后或点击此卡以扫描填充下面的字段的QR码。</string>
-  <string name="msg_share">‎看看这个Android客户端，看看这个令人敬畏的grocy项目：\nhttps://github.com/patzly/grocy-android‎</string>
-
   <string name="error_api_not_working">API密钥不起作用</string>
   <string name="error_orbot_not_installed">未安装Orbot</string>
   <string name="error_select_product">选择产品</string>
@@ -425,7 +420,6 @@
   <string name="error_invalid_price">价格无效</string>
   <string name="error_invalid_factor">无效因素</string>
   <string name="error_invalid_date_format">无效的日期格式</string>
-  <string name="error_api_qr_code">不是具有Grocy API凭据的QR码</string>
   <string name="error_token_qr_code">‎不是带有家庭助理中长期访问令牌的QR码‎</string>
   <string name="error_loading_qus">无法从产品加载数量单位</string>
   <!-- %1$s is a number like 0, 1, 2 -->
@@ -441,10 +435,10 @@
   <string name="error_offline">离线</string>
   <string name="error_offline_subtitle">检查您的连接，然后重试</string>
   <string name="error_no_done_items">没有标明已完成的项目</string>
+  <string name="error_already_exists">已经存在</string>
   <string name="error_network">网络错误</string>
   <string name="error_network_subtitle">无法完全加载所需的数据</string>
   <string name="error_unknown">哎呀！</string>
-  <string name="error_not_grocy_instance">不是有效的grocy实例</string>
   <string name="error_timeout">超时错误</string>
   <string name="error_no_product_selected">没有选择产品</string>
   <string name="error_failed_to_connect_to">无法连接服务器</string>
@@ -462,7 +456,6 @@
   <string name="error_permission">‎没有此操作的权限‎</string>
   <string name="error_undefined">发生错误</string>
   <string name="error_invalid_base_servings">无效的份数</string>
-
   <string name="title_overview">概述</string>
   <string name="title_stock_overview">库存总览</string>
   <string name="title_purchase">采购</string>
@@ -482,6 +475,7 @@
   <string name="title_shopping_list">购物清单</string>
   <string name="title_feedback">反馈</string>
   <string name="title_settings">设置</string>
+  <string name="title_options">选项</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="title_barcode_scanner">条码扫描器</string>
   <!-- Context: About this app -->
@@ -505,10 +499,16 @@
   <string name="title_chores">家务</string>
   <string name="title_chore">家务</string>
   <string name="title_recipes">食谱</string>
-  <string name="title_recipe_create">新建食谱</string>
-  <string name="title_recipe_edit">编辑食谱</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">编辑</string>
+  <string name="title_task_new">新建任务</string>
+  <string name="title_task_edit">编辑任务</string>
+  <string name="title_entry_new">新建条目</string>
+  <string name="title_entry_edit">编辑条目</string>
+  <string name="title_ingredient_new">新建原料</string>
+  <string name="title_ingredient_edit">编辑原料</string>
+  <string name="title_recipe_create">新建菜单</string>
+  <string name="title_recipe_edit">编辑食谱</string>
 
   <string name="title_spoiled">已变质</string>
   <string name="title_use_specific">使用特定的库存物料</string>
@@ -584,6 +584,7 @@
   <string name="subtitle_product_hidden">产品已隐藏</string>
   <string name="subtitle_product_not_hidden">产品未隐藏</string>
   <string name="subtitle_product_not_on_server">产品不在服务器上</string>
+
   <string name="subtitle_barcodes_will_be_added">‎有存储的条形码，这些条形码通过保存操作添加到产品中。‎</string>
   <string name="subtitle_unknown">未知</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
@@ -605,6 +606,11 @@
   <string name="subtitle_synced_with_server">‎与服务器同步‎</string>
   <string name="subtitle_per_serving">每份</string>
   <string name="subtitle_tap_preparation_mode">点击这里进入准备模式</string>
+  <!-- Context is Label printer -->
+  <string name="subtitle_print_label_no">没有标签</string>
+  <!-- %1$s is a price and %2$s is a currency -->
+  <string name="subtitle_total_price">总价：%1$s%2$s</string>
+
   <string name="description_input_product_part1">产品字段包含：</string>
   <string name="description_input_product_part2">请选择如何继续：</string>
   <string name="description_input_product_option1">创建新产品并使用输入作为名称</string>
@@ -625,7 +631,7 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_overdue">
-    <item quantity="other">%1$d产品过期</item>
+    <item quantity="other">%1$d个物品过期</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_expired">
@@ -649,11 +655,11 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list_multi">
-    <item quantity="other">%1$d物品位于您的购物清单上。</item>
+    <item quantity="other">%1$d个物品位于您的购物清单上。</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list">
-    <item quantity="other">%1$d物品位于您的购物清单上。</item>
+    <item quantity="other">%1$d个物品位于您的购物清单上。</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_recipes">
@@ -695,8 +701,10 @@
   <string name="property_product_name">产品名称</string>
   <string name="property_parent_product">父产品</string>
   <string name="property_description">描述</string>
+  <string name="property_product_description">产品描述</string>
   <string name="property_note">注释</string>
   <string name="property_status">状态</string>
+  <string name="property_status_insert">状态：</string>
   <string name="property_amount">数量</string>
   <string name="property_amount_insert">数量:%1$s</string>
   <string name="property_seconds">秒</string>
@@ -713,6 +721,8 @@
   <string name="property_price_unit">每%1$s价格</string>
   <!-- %1$s is a price and %2$s is a quantity unit-->
   <string name="property_price_unit_insert">%1$s每%2$s</string>
+  <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_with_currency">%1$s%2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">价格单位%1$s</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -842,14 +852,19 @@
   <!-- See context for this string on the web interface on the recipes edit page -->
   <string name="property_servings">份数</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_servings_desired">所需份数</string>
+  <string name="property_servings_desired_insert">所需份数：%1$s</string>
+  <string name="property_not_check_shopping_list">当把缺少的东西添加到购物清单时，不核对清单</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">花费</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
-  <string name="property_due_score">到期份数</string>
+  <string name="property_due_score">到期分数</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_ingredients">食材</string>
   <string name="property_only_check_single_unit_in_stock">仅检查是否有库存</string>
   <!-- See context for this string on the web interface on the recipe ingredients edit page -->
   <string name="property_ingredient_group">分组</string>
+  <string name="property_produces_product">添加食材</string>
   <string name="date_today">今天</string>
   <string name="date_unknown">未知</string>
   <!-- This means the 'time' context -->
@@ -891,7 +906,6 @@
     <item quantity="other">从现在起%d年</item>
   </plurals>
 
-  <string name="info_acknowledgement">我们要感谢Bernd Bestel，没有他的出色工作，这个应用程序将永远不可能实现。</string>
   <string name="info_intro">重播介绍</string>
   <string name="info_intro_description">展示功能</string>
   <string name="info_dev_beginning">开始开发</string>
@@ -1022,16 +1036,9 @@
   <string name="setting_message_duration">‎消息的显示时间‎</string>
   <string name="setting_message_duration_description">‎仅涉及交易消息‎</string>
   <string name="setting_notifications_enable">启用通知</string>
-  <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
-  few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_chores_description">每天检查家务，并在有需要今天完成的家务时通知您</string>
   <string name="setting_notification_time">通知时间</string>
-  <!-- the description of the notification time preference.
-  With the "Due soon" check enabled, the user will be notified every day at the selected time how
-  many products in stock are due soon, so check means a check of the products in stock -->
+  <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">在检查完成时</string>
   <string name="setting_keep_screen_on_recipes_description">查看食谱时</string>
 
-  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
-  Examples: 'de' for German; 'fr' for French -->
-</resources>
+  </resources>
