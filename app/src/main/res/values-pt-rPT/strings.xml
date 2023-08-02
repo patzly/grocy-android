@@ -123,8 +123,9 @@
   <string name="action_share_description">Partilha o Grocy Android com os teus amigos</string>
   <string name="action_no_filter">Sem filtro</string>
   <string name="action_show_done_tasks">Mostrar tarefas concluídas</string>
-  <string name="action_track_chore_execution">Seguir execução da tarefa doméstica</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_skip_next_chore_schedule">Saltar execução da tarefa doméstica para a próxima data</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Reagendar próxima execução</string>
   <string name="action_put_missing_products_on_shopping_list">Colocar produtos em falta na lista de compras</string>
 
@@ -314,7 +315,6 @@
   <string name="msg_quick_mode_confirm_transfer">Transação que será executada:\n\nTransferir %1$s %2$s de %3$s\nDa localização: %4$s\nPara localização: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">Transação que será executada:\n\nDefenir quantidade de stock de %1$s para %2$s %3$s\nA aplicar a produtos adicionados:\nPrazo de validade: %4$s\nPreço: %5$s\nLoja: %6$s\nLocalização: %7$s</string>
-  <string name="msg_compatibility">Esta aplicação não é compatível com a versão do grocy no servidor.\n\nVersão actual no servidor: %1$s\n\nVersões do servidor suportadas:\n%2$s\nSe a versão actual do servidor tem um dígito de versão maior mais alto (primeiro dígito) do que as versões suportadas e ignorar este aviso, podem ocurrer perda de dados (pouco provável) ou erros (muito provável).\nSe apenas houver uma diferença no dígito menor (por exemplo, o terceiro dígito é maior) pode provavelmente ignorar este aviso.</string>
   <string name="msg_logout">Nada será alterado no servidor. Será redireccionado para a página de autenticação</string>
   <string name="msg_logout_demo">Está a usar o servidor publico de demonstração <u>https://grocy.info</u>.\n\n<b>Nenhuma das suas alterações aqui são gravadas!\nElas mantém-se públicas até que o servidor as apague uma vez por dia.</b>\n\nNo ecrã de autenticação pode colocar os detalhes do seu servidor.</string>
   <string name="msg_logout_demo_short">Servidor público de demonstração. Seleccione para ver os detalhes.</string>
@@ -327,8 +327,6 @@
   <string name="msg_feedback">Têm alguns pedidos, questões ou erros? Contacte-nos e deixe-nos ajudar!\nDe qualquer forma, ficariamos muito contentes com uma boa crítica na Play Store.</string>
   <string name="msg_point_at_barcode">Aponte a camara para um código de barras</string>
   <string name="msg_press_hold_confirm">Mantenha premido para confirmar a eliminação</string>
-  <string name="msg_qr_code_scan">Noutro dispositivo, visite o seu website do grocy e navegue até à página \'API keys\'. Seleccione \"Adicionar\", depois seleccione o pequeno símbolo de código QR e digitalize o código QR.</string>
-  <string name="msg_qr_code_scan_token">Está a usar o add-on do grocy par ao Home Assistant. Crie um token de acesso de longa duração nas definições do seu perfil do Home Assistant (última secção). Em baixo do campo do token seleccione \"Gerar código QR\" e leia-o aqui.</string>
   <string name="msg_port_connection_info_without_port">A aplicação vai-se conectar à porta %1$s.\nSe prefere ligar-se a uma porta diferente pode acrescentar a porta no URL.\nExemplo: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">A aplicação vai-se conectar à porta %1$s.</string>
   <string name="msg_clear_form_first">Apague o formulário primeiro antes de registar outro código de barras.</string>
@@ -355,12 +353,10 @@
   <string name="msg_help_qu_stock">O stock da unidade de produto não pode ser alterado depois da primeira compra.</string>
   <string name="msg_help_qu_stock_changeable">A quantidade de unidade de stock apenas pode ser alterada se conversões unitárias existem para a quantidade unitária actual.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_qu_purchase">Esta é a unidade de produto por deito usada ao adicionar o produto a uma lista de compras.</string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">Se activo, a quantidade min. stock será agregada neste produto, isto significa que os sub-produtos nunca estarão \"em falta\", apenas este produto.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_treat_opened_as_out_of_stock">Se estiver activo, itens abertos serão considerados como em falta no cálculo da quantidade mínima em stock deste produto. </string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">Este valor é usado nos botões \"consumo rápido/abrir\" na visão geral do stock (relacionado com o stock da unidade do produto).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_tare_weight">O peso com tara é utíl, por exemplo, para farinha em frasco - ao comprar/consumir/inventariar pesa sempre o total incluíndo o frasco, o valor a ser actualizado é automaticamente calculado tendo em conta o total em stock e o peso da tara definido em baixo.</string>
@@ -389,16 +385,11 @@
   <string name="msg_help_loading_circle_settings">Em cada página em que algo tem que ser carregado do servidor, a aplicação confirma primeiro com um pequeno pedido se a base de dados foi modificada desde a última vez e apenas actualiza os dados desactualizados. Active a opção em baixo para mostrar a animação de carregamento mesmo para este pequeno pedido.</string>
   <string name="msg_help_start">Modo iniciante está activo: Os textos de ajuda são mostrados por defeito em todas as páginas se disponíveis. Pressione para alterar.</string>
   <string name="msg_help_purchased_date_settings">Se a opção em baixo estiver activa, um campo para data de compra será mostrado na página de compra e de inventário. Caso contrário a data de compra por defeito é a de hoje.</string>
-  <string name="msg_help_normal_login">Seleccione esta opção se usa o Home Assistant com o add-on do grocy.</string>
-  <string name="msg_help_home_assistant_login">Você está a usar o add-on grocy do Home Assistant. Por essa razão são necessários alguns detalhes extra. Seleccione esta opção para mudar para o registo normal.</string>
   <string name="msg_help_home_assistant_login_help_show">Toque aqui para mostrar textos de ajuda.</string>
   <string name="msg_help_home_assistant_login_help_hide">Toque aqui para esconder textos de ajuda.</string>
   <string name="msg_help_home_assistant_login_server">No campo abaixo também pode introduzir o URL da sua instância Nabu Casa se estiver a usar esse serviço. Toque neste cartão para visitar o website da Nabu Casa.</string>
   <string name="msg_help_home_assistant_login_token">Pode criar um token de acesso de longa duração nas definições do seu perfil do Home Assistant (última secção). Clique aqui ou abra o URL acima.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Volte atrás ou toque nesta carta para ler um código de barras que preencha os campos abaixo.</string>
-  <string name="msg_share">Veja aqui este cliente Android para o espectacular grocy-project:
-\nhttps://github.com/patzly/grocy-android</string>
-
   <string name="error_api_not_working">API key não está a funcionar</string>
   <string name="error_orbot_not_installed">Orbot não está instalado</string>
   <string name="error_select_product">Seleccione um produto</string>
@@ -434,7 +425,6 @@
   <string name="error_invalid_price">Preço inválido</string>
   <string name="error_invalid_factor">Factor inválido</string>
   <string name="error_invalid_date_format">Formato de data inválido</string>
-  <string name="error_api_qr_code">Não é um código QR com credenciais API do grocy</string>
   <string name="error_token_qr_code">Código QR não é um access token de longa duração do Home Assistant</string>
   <string name="error_loading_qus">Falhou o carregamento das unidades de produto</string>
   <!-- %1$s is a number like 0, 1, 2 -->
@@ -450,10 +440,10 @@
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">Esta página apenas funciona com uma ligação à internet. Verifique a sua conecção.</string>
   <string name="error_no_done_items">Não existem itens marcados como concluídos</string>
+  <string name="error_already_exists">Já existe</string>
   <string name="error_network">Erro de rede</string>
   <string name="error_network_subtitle">Não foi possível carregar completamente os dados necessários</string>
   <string name="error_unknown">Oops!</string>
-  <string name="error_not_grocy_instance">Não é uma instância válida do grocy</string>
   <string name="error_timeout">Erro de conexão</string>
   <string name="error_no_product_selected">Nenhum produto seleccionado</string>
   <string name="error_failed_to_connect_to">Falha na conexão ao servidor</string>
@@ -471,7 +461,6 @@
   <string name="error_permission">Não tem permissão para esta acção</string>
   <string name="error_undefined">Ocorreu um erro</string>
   <string name="error_invalid_base_servings">Porções inválidas</string>
-
   <string name="title_overview">Visão geral</string>
   <string name="title_stock_overview">Visão geral de stock</string>
   <string name="title_purchase">Comprar</string>
@@ -515,8 +504,8 @@
   <string name="title_chores">Tarefas domésticas</string>
   <string name="title_chore">Tarefa doméstica</string>
   <string name="title_recipes">Receitas</string>
-  <string name="title_recipe_create">Criar receita</string>
   <string name="title_recipe_edit">Editar receita</string>
+
   <string name="title_spoiled">Expirado</string>
   <string name="title_use_specific">Usar item de stock específico</string>
   <string name="title_specific">Item de stock específico</string>
@@ -590,6 +579,7 @@
   <string name="subtitle_product_hidden">Produto não está visível</string>
   <string name="subtitle_product_not_hidden">Produto está visível</string>
   <string name="subtitle_product_not_on_server">Produto não existe no servidor</string>
+
   <string name="subtitle_barcodes_will_be_added">Existem códigos de barra, que são adicionados ao produto durante a actualização.</string>
   <string name="subtitle_unknown">Desconhecido</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
@@ -759,6 +749,8 @@
   <string name="property_price_unit">Preço por %1$s</string>
   <!-- %1$s is a price and %2$s is a quantity unit-->
   <string name="property_price_unit_insert">%1$s por %2$s</string>
+  <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_with_currency">%1$s %2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Preço em %1$s</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -913,7 +905,6 @@
   <string name="property_variable_amount">Quantidade variavél</string>
   <string name="property_requirements_fulfilled">Requisitos cumpridos</string>
   <string name="property_produces_product">Produz produto</string>
-
   <string name="date_today">Hoje</string>
   <string name="date_unknown">Desconhecido</string>
   <!-- This means the 'time' context -->
@@ -973,7 +964,6 @@
     <item quantity="other">%d anos a partir de hoje</item>
   </plurals>
 
-  <string name="info_acknowledgement">Gostariamos de agradecer ao criador do grocy, Bernd Bestel, sem o seu fantástico trabalho esta aplicação nunca seria possível.</string>
   <string name="info_intro">Repetir intro</string>
   <string name="info_intro_description">Exibir funcionalidades</string>
   <string name="info_dev_beginning">Início do desenvolvimento</string>
@@ -1101,16 +1091,9 @@
   <string name="setting_message_duration">Mostrar hora nas mensagens</string>
   <string name="setting_message_duration_description">Apenas diz respeito a mensagens de transacções</string>
   <string name="setting_notifications_enable">Activar notificações</string>
-  <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
-  few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_chores_description">Valida as tarefas diariamente e notifica quando existem tarefas domésticas a concluir hoje</string>
   <string name="setting_notification_time">Hora de notificação</string>
-  <!-- the description of the notification time preference.
-  With the "Due soon" check enabled, the user will be notified every day at the selected time how
-  many products in stock are due soon, so check means a check of the products in stock -->
+  <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">Quando a validação é feita</string>
   <string name="setting_keep_screen_on_recipes_description">Enquanto se vê uma receita</string>
 
-  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
-  Examples: 'de' for German; 'fr' for French -->
-</resources>
+  </resources>

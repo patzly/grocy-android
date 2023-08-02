@@ -98,8 +98,6 @@
   <string name="action_open_scanner">Open scanner</string>
   <string name="action_discard">Verwerp</string>
   <string name="action_clear_form">Formulier leegmaken</string>
-  <!-- Short form for "Link barcode to existing product and clear form", this should fit into a button so keep it short -->
-  <string name="action_link_and_clear">Koppel en maak leeg</string>
   <string name="action_toggle_done">Verander status</string>
   <string name="action_change_layout">Layout aanpassen</string>
   <string name="action_edit_notes">Notitie bewerken</string>
@@ -127,8 +125,9 @@
   <string name="action_share_description">Vertel je vrienden over Grocy Android</string>
   <string name="action_no_filter">Geen filter</string>
   <string name="action_show_done_tasks">Laat voltooide taken zien</string>
-  <string name="action_track_chore_execution">Volg de uitvoering van taken</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_skip_next_chore_schedule">Sla het volgende takenschema over</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Herplan de volgende uitvoering</string>
   <string name="action_put_missing_products_on_shopping_list">Zet ontbrekende producten op het boodschappenlijstje</string>
 
@@ -310,11 +309,12 @@
   <string name="msg_quick_mode_confirm_purchase">De volgende transactie wordt uitgevoerd:\n\nVoeg %1$s %2$s %3$s toe aan de voorraad\nVervaldatum: %4$s\nPrijs: %5$s\nWinkel: %6$s\nLocatie: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">De volgende transactie wordt uitgevoerd:\n\nVerwijder %1$s %2$s %3$s uit de voorraad\nLocatie: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_open">De volgende transactie wordt uitgevoerd:\n\nMarkeer %1$s %2$s %3$s als geopend\nLocatie: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">De volgende transactie wordt uitgevoerd:\n\nVerplaats %1$s %2$s %3$s\nVan Locatie: %4$s\nNaar Locatie: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">De volgende transactie wordt uitgevoerd:\n\nZet de voorraad %1$s op %2$s %3$s\nBevestig voor toegevoegde items:\nVervaldatum: %4$s\nPrijs: %5$s\nWinkel: %6$s\nLocatie: %7$s</string>
-  <string name="msg_compatibility">Deze app-versie is niet compatibel met de grocy-versie op de server.\n\nHuidige serverversie: %1$s\n\nOndersteunde serverversies:\n%2$sAls u deze waarschuwing negeert, kan gegevensverlies (onwaarschijnlijk) en crashes (waarschijnlijk) optreden. Je bent gewaarschuwd!</string>
   <string name="msg_logout">Niets op uw server wordt gewijzigd. U wordt doorgestuurd naar de inlogpagina.</string>
   <string name="msg_logout_demo">Je maakt gebruik van de openbare demo server <u>https://grocy.info</u>.\n\n<b>Wijzigingen worden daar niet definitief opgeslagen!\nZe blijven openbaar totdat de server ze automatisch overschrijft.</b> \n\nOp het login-scherm kun je je eigen serveradres invoeren.</string>
   <string name="msg_logout_demo_short">Openbare demo server. Tik voor details.</string>
@@ -328,10 +328,7 @@
   <string name="msg_point_at_barcode">Richt de camera op de streepjescode</string>
   <string name="msg_press_hold_confirm">Houd ingedrukt om het verwijderen te bevestigen</string>
   <string name="msg_welcome">Welkom bij Grocy Android!</string>
-  <string name="msg_welcome_introduce">Om Grocy productief te gebruiken heb je je eigen server nodig of de grocy add-on voor Home Assistant.\nAls je deze app gewoon wilt uitproberen, kun je de demoserver van Bernd Bestel, de maker van Grocy, gebruiken.</string>
   <string name="msg_choose_option_below">Kies hieronder een optie.</string>
-  <string name="msg_qr_code_scan">Bezoek op een ander apparaat jouw grocy en ga naar de \'API sleutels\' pagina. Klik op \'Toevoegen\', klik daarna op het kleine QR-code symbooltje en scan de QR-code.</string>
-  <string name="msg_qr_code_scan_token">Je gebruikt de grocy Home Assistant-add-on. Maak een toegangstoken met een lange levensduur in uw Home Assistant-profielinstellingen (laatste sectie). Klik onder het tokenveld op \"Genereer QR-code\" en scan deze hier.</string>
   <string name="msg_port_connection_info_without_port">De app zal connecteren op poort %1$s.\nAls je wil connecteren op een andere poort, kan je deze aan de URL toevoegen.\nVoorbeeld: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">De app zal connecteren op poort %1$s.</string>
   <string name="msg_clear_form_first">Wis eerst het formulier voordat u een andere bekende streepjescode scant.</string>
@@ -364,10 +361,10 @@
   <string name="msg_help_qu_stock">Voorraadeenheid kan niet gewijzigd worden na eerste aankoop.</string>
   <string name="msg_help_qu_stock_changeable">De eenheid kan alleen worden gewijzigd als er eenheidsconversies voor de huidige hoeveelheidseenheid bestaan.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_qu_purchase">Dit is de standaard hoeveelheid die word gebruikt bij het toevoegen van dit product aan de boodschappenlijst.</string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">Indien ingeschakeld, de min. voorraad van sub producten zal worden verzameld in dit product, wat betekent dat het sub product nooit zal \"ontbreken\", alleen dit product.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_treat_opened_as_out_of_stock">Indien ingeschakeld, worden items gemarkeerd als geopend niet opgenomen in de berekening van de beschikbare voorraad.</string>
+  <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">Deze hoeveelheid wordt gebruikt voor de \"snel consumeer/open knoppen\" op de voorraadoverzicht pagina (relatief aan de voorraadeenheid).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_tare_weight">Dit is nuttig voor b.v. meel in potten - bij aankoop/consumptie/inventaris weeg je altijd de hele pot, de te boeken hoeveelheid wordt dan automatisch berekend op basis van wat op voorraad is en het tarragewicht hieronder gedefinieerd.</string>
@@ -388,8 +385,6 @@
   <string name="msg_help_loading_circle_settings">Op elke pagina waar gegevens van de server geladen moeten worden controleert de app eerst met een klein verzoek of de gegevens op de server veranderd zijn en wisselt alleen de nieuwe gegevens uit. Activeer de optie hieronder om ook een laadcirkel weer te geven voor dit kleine verzoek.</string>
   <string name="msg_help_start">Beginnersmode is actief: Help tekst wordt standaard weergegeven op alle pagina\'s. Tik om dit te veranderen.</string>
   <string name="msg_help_purchased_date_settings">Als deze optie is ingeschakeld wordt een veld voor de aankoopdatum weergegeven op de aankoop en voorraad pagina. Indien uitgeschakeld wordt vandaag gebruikt als aankoopdatum.</string>
-  <string name="msg_help_normal_login">Tik op deze kaart als je Home Assistant gebruikt met de grocy add-on.</string>
-  <string name="msg_help_home_assistant_login">Je gebruikt de Home Assistant-add-on. Daarom zijn er nog enkele details nodig. Tik op deze kaart om over te schakelen naar normaal inloggen.</string>
   <string name="msg_help_home_assistant_login_help_show">Klik hier om hulpteksten weer te geven.</string>
   <string name="msg_help_home_assistant_login_help_hide">Klik hier om hulpteksten te verbergen.</string>
   <string name="msg_help_home_assistant_login_server">In het onderstaande veld kunt u ook uw Nabu Casa-cloud-URL invoeren als u die service gebruikt. Tik op deze kaart om de website van Nabu Casa te bezoeken.</string>
@@ -422,7 +417,6 @@
   <string name="error_invalid_amount">Ongeldige hoeveelheid</string>
   <string name="error_invalid_price">Ongeldige prijs</string>
   <string name="error_invalid_factor">Ongeldige factor</string>
-  <string name="error_api_qr_code">Geen QR code met grocy API inloggegevens</string>
   <string name="error_loading_qus">Kan geen eenheden laden van dit product</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Kan niet gelijk zijn aan %1$s</string>
@@ -437,10 +431,10 @@
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">Deze pagina werk alleen met internet toegang. Controleer je verbinding.</string>
   <string name="error_no_done_items">Er zijn geen items gemarkeerd als voltooid</string>
+  <string name="error_already_exists">Bestaat al</string>
   <string name="error_network">Netwerk fout</string>
   <string name="error_network_subtitle">De benodigde gegevens kunnen niet volledig geladen worden.</string>
   <string name="error_unknown">Oeps!</string>
-  <string name="error_not_grocy_instance">Geen geldige Grocy instance</string>
   <string name="error_timeout">Timeout fout</string>
   <string name="error_no_product_selected">Geen product geselecteerd</string>
   <string name="error_failed_to_connect_to">Verbinding met de server is mislukt</string>
@@ -492,6 +486,7 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="title_confirmation">Bevestiging</string>
   <string name="title_chores">Klussen</string>
   <string name="title_recipe_edit">Recept bewerken</string>
+
   <string name="title_spoiled">Bedorven</string>
   <string name="title_use_specific">Gebruik specifiek voorraadartikel</string>
   <string name="title_specific">Specifiek voorraadartikel</string>
@@ -556,6 +551,7 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="subtitle_product_hidden">Product is verborgen</string>
   <string name="subtitle_product_not_hidden">Product is niet verborgen</string>
   <string name="subtitle_product_not_on_server">Product is niet op de server</string>
+
   <string name="subtitle_unknown">Onbekend</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
   <string name="subtitle_supported">Ondersteund</string>
@@ -594,8 +590,8 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_stock_due_soon">
-    <item quantity="one">%1$d product vervalt binnen de %2$d dagen.</item>
-    <item quantity="other">%1$d producten vervallen binnen de %2$d dagen.</item>
+    <item quantity="one">%1$d product vervalt binnen %2$d dagen.</item>
+    <item quantity="other">%1$d producten vervallen binnen %2$d dagen.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_overdue">
@@ -640,7 +636,7 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <!-- %1$s is a number -->
   <plurals name="description_overview_recipes">
     <item quantity="one">Je hebt %1$d recept.</item>
-    <item quantity="other">je hebt %1$d recepten.</item>
+    <item quantity="other">Je hebt %1$d recepten.</item>
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_chores_due_soon">
@@ -710,6 +706,8 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="property_price_unit">Prijs per %1$s</string>
   <!-- %1$s is a price and %2$s is a quantity unit-->
   <string name="property_price_unit_insert">%1$s per %2$s</string>
+  <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_with_currency">%1$s %2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Prijs in %1$s</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -855,7 +853,6 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="property_preparation">Bereiding</string>
   <string name="property_requirements_fulfilled">Vereisten vervuld</string>
   <string name="property_produces_product">Produceert product</string>
-
   <string name="date_today">Vandaag</string>
   <string name="date_unknown">Onbekend</string>
   <!-- This means the 'time' context -->
@@ -906,7 +903,6 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
     <item quantity="other">In %d jaren</item>
   </plurals>
 
-  <string name="info_acknowledgement">We willen ontwikkelaar van grocy, Bernd Bestel, bedanken. Zonder zijn geweldige werk zou deze app nooit mogelijk zijn geweest.</string>
   <string name="info_intro">Intro opnieuw afspelen</string>
   <string name="info_intro_description">Features demonstreren</string>
   <string name="info_dev_beginning">Begin van ontwikkeling</string>
@@ -1051,16 +1047,9 @@ Bezoek ons op GitHub om te leren hoe u kunt helpen Grocy Android beschikbaar te 
   <string name="setting_message_duration">Weergavetijd voor berichten</string>
   <string name="setting_message_duration_description">Betreft alleen transactiemeldingen</string>
   <string name="setting_notifications_enable">Activeer notificaties</string>
-  <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
-  few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_chores_description">Controleert dagelijks de klussen en informeert jou wanneer er klussen vandaag af moeten zijn. </string>
   <string name="setting_notification_time">Notificatie tijd</string>
-  <!-- the description of the notification time preference.
-  With the "Due soon" check enabled, the user will be notified every day at the selected time how
-  many products in stock are due soon, so check means a check of the products in stock -->
+  <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">Wanneer een controle is gedaan</string>
   <string name="setting_keep_screen_on_recipes_description">Tijdens het bekijken van een recept</string>
 
-  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
-  Examples: 'de' for German; 'fr' for French -->
-</resources>
+  </resources>

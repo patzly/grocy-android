@@ -128,8 +128,9 @@
   <string name="action_share_description">Расскажите своим друзьям о Grocy Android</string>
   <string name="action_no_filter">Без фильтра</string>
   <string name="action_show_done_tasks">Показать выполненные задачи</string>
-  <string name="action_track_chore_execution">Отслеживание выполнения работы по дому</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_skip_next_chore_schedule">Пропустить следующий график работы по дому</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Изменить дату следующего выполнения</string>
   <string name="action_put_missing_products_on_shopping_list">Добавить отсутствующие продукты в список покупок</string>
 
@@ -357,7 +358,6 @@
   <string name="msg_quick_mode_confirm_transfer">Операция, которая будет выполнена:\n\nПереместить %1$s %2$s %3$s\nИз места: %4$s\nВ место: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">Операция, которая будет выполнена:\n\nУстановить количество %1$s в запасах равное %2$s %3$s\nПримерить для добавленных элементов:\nСрок годности: %4$s\nЦена: %5$s\nМагазин: %6$s\nМесто: %7$s</string>
-  <string name="msg_compatibility">Эта версия приложения несовместима с версией Grocy на сервере.\n\nТекущая версия сервера: %1$s\n\nПоддерживаемые версии сервера:\n%2$s\nИспользование неподдерживаемых версий может привести к потере данных (маловероятно) или к сбоям приложения (более вероятно).\nВас предупредили!</string>
   <string name="msg_logout">Ничего на вашем сервере не будет изменено. вас перенаправит на страницу входа.</string>
   <string name="msg_logout_demo">Вы используете демо версию  <u>https://grocy.info</u>.\n\n<b>Никакие изменения здесь не сохраняются!\nОни видны пока сервер их автоматически не перезапишет. </b>\n\nНа странице входа вы можете ввести адрес своего сервера.</string>
   <string name="msg_logout_demo_short">Публичный демо сервер. Нажмите для деталей.</string>
@@ -373,10 +373,7 @@
   <string name="msg_recipe_consume_ask">Вы уверены, что хотите использовать все ингредиенты, необходимые по рецепту для \"%1$s\"? (ингредиенты с отметкой \"проверять, если любое количество в запасах\", будут проигнорированы)</string>
   <string name="msg_recipe_shopping_list_ask">Вы уверены, что хотите включить в список покупок все недостающие ингредиенты, необходимые для рецепта \"%1$s\"?\n\nОтметьте ингредиенты, чтобы не включать их в список покупок:</string>
   <string name="msg_welcome">Добро пожаловать в Grocy Android!</string>
-  <string name="msg_welcome_introduce">Для продуктивного использования Grocy вам понадобится собственный сервер или надстройка Grocy для Home Assistant.\nЕсли вы просто хотите опробовать это приложение, вы можете использовать демонстрационный сервер от Бернда Бестела, создателя Grocy.</string>
   <string name="msg_choose_option_below">Пожалуйста, выберите вариант снизу</string>
-  <string name="msg_qr_code_scan">На другом устройстве посетите свой веб-сайт Grocy и перейдите на страницу «Ключи API». Нажмите «Добавить», затем нажмите на маленький символ QR-кода и отсканируйте QR-код.</string>
-  <string name="msg_qr_code_scan_token">Вы используете надстройку Grocy Home Assistant. Создайте долговечный токен доступа в настройках вашего профиля Home Assistant (последний раздел). Под полем токена нажмите на \"Сгенерировать QR-код\" и отсканируйте его здесь.</string>
   <string name="msg_port_connection_info_without_port">Приложение подключится к порту %1$s.\nЕсли вы хотите подключить его к другому порту, вы можете добавить порт к адресу.\nПример: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">Приложение подключится к порту %1$s.</string>
   <string name="msg_clear_form_first">Очистите форму, прежде чем сканировать другой известный штрихкод.</string>
@@ -409,12 +406,10 @@
   <string name="msg_help_qu_stock">Единица измерения не может быть изменена после первой покупки.</string>
   <string name="msg_help_qu_stock_changeable">Единицу количества запаса можно изменить только в том случае, если существуют преобразования единиц для текущей единицы количества.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_qu_purchase">Настройка единицы измерения по умолчанию, при добавлении данного продукта в список покупок.</string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">Если включено, мин. количество субпродуктов будет накапливаться в этом продукте, это означает, что субпродукт никогда не будет «отсутствовать», в отличии от этого продукта.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_treat_opened_as_out_of_stock">Если этот параметр включен, открытые продукты будут учитываться как отсутствующие для расчета, если этого продукта меньше минимального количества в запасах.</string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">Это количество используется для кнопок \"быстрого использования/вскрытия\" на странице обзора запасов (связано с единицей измерения продукта).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_tare_weight">Это удобно, например, для хранения муки в контейнере - при покупке/использовании/инвентаризации взвесьте весь контейнер, а вес содержимого будет автоматически рассчитан на основе объёма в запасах и веса тары ниже.</string>
@@ -447,16 +442,12 @@
   <string name="msg_help_loading_circle_settings">На каждой странице, где что-то должно быть загружено с сервера, приложение сначала проверяет небольшим запросом, изменилась ли база данных сервера с прошлого раза, и обновляет только устаревшие данные. Включите опцию ниже, чтобы показать анимацию загрузки для этого запроса.</string>
   <string name="msg_help_start">Активен режим для начинающих: подсказки по умолчанию отображаются на всех страницах, если они доступны. Нажмите, чтобы изменить.</string>
   <string name="msg_help_purchased_date_settings">Если опция ниже включена, поле для даты покупки будет отображаться на странице покупки и инвентаря. В противном случае дата покупки по умолчанию - сегодня.</string>
-  <string name="msg_help_normal_login">Нажмите на эту карточку, если вы используете Home Assistant с надстройкой Grocy.</string>
-  <string name="msg_help_home_assistant_login">Вы используете надстройку Grocy для Home Assistant. Поэтому требуется еще несколько деталей. Нажмите на эту карточку, чтобы перейти к обычному входу в систему.</string>
   <string name="msg_help_home_assistant_login_help_show">Нажмите здесь, чтобы показать подсказки.</string>
   <string name="msg_help_home_assistant_login_help_hide">Нажмите здесь, чтобы скрыть подсказки.</string>
   <string name="msg_help_home_assistant_login_server">В поле ниже вы также можете ввести URL-адрес вашего облака Nabu Casa, если вы используете эту службу. Нажмите на эту карточку, чтобы перейти на сайт Nabu Casa.</string>
   <string name="msg_help_home_assistant_login_token">Вы можете создать токен доступа с длительным сроком доступа в настройках вашего профиля Home Assistant (последний раздел). Нажмите здесь, чтобы открыть URL-адрес сверху.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Вернитесь назад или нажмите на эту карточку, чтобы отсканировать QR-код, который заполняет поля ниже.</string>
   <string name="msg_help_fab_overview_start">Кнопка \"Действие\" на этой обзорной странице содержит два действия:\n\n- Короткое нажатие: использовать со сканером штрихкодов\n- Длительное нажатие: покупка со сканером штрихкодов\n\nС помощью этой кнопки по умолчанию включается быстрый режим на соответствующих страницах. Вы можете изменить это в настройках поведения.</string>
-  <string name="msg_share">Привет! Я использую Grocy Android для эффективного управления домашним хозяйством. Присоединяйся!\nhttps://github.com/patzly/grocy-android</string>
-
   <string name="error_api_not_working">Ключ API  не работает</string>
   <string name="error_orbot_not_installed">Orbot не установлен</string>
   <string name="error_select_product">Выберите продукт</string>
@@ -492,7 +483,6 @@
   <string name="error_invalid_price">Неверная цена</string>
   <string name="error_invalid_factor">Неверный фактор</string>
   <string name="error_invalid_date_format">Неверный формат даты</string>
-  <string name="error_api_qr_code">QR-код без учетных данных Grocy API</string>
   <string name="error_token_qr_code">Не QR-код с долговечным токеном доступа от Home Assistant</string>
   <string name="error_loading_qus">Не удалось загрузить единицы количества из продукта</string>
   <string name="error_no_children">У выбранного товара нет дочерних элементов</string>
@@ -509,11 +499,11 @@
   <string name="error_offline">Не в сети - оффлайн</string>
   <string name="error_offline_subtitle">Проверьте соединение и попробуйте еще раз</string>
   <string name="error_no_done_items">Нет выполненных продуктов</string>
+  <string name="error_already_exists">Уже существует</string>
   <string name="error_network">Ошибка сети</string>
   <string name="error_network_subtitle">Требуемые данные не могут быть загружены полностью</string>
   <string name="error_network_exact">Ошибка сети: %1$s</string>
   <string name="error_unknown">Ой!</string>
-  <string name="error_not_grocy_instance">Это не сервер Grocy</string>
   <string name="error_timeout">Превышено время ожидания</string>
   <string name="error_no_product_selected">Продукт не выбран</string>
   <string name="error_failed_to_connect_to">Не удалось подключиться к серверу</string>
@@ -531,7 +521,6 @@
   <string name="error_permission">Нет разрешения на это действие</string>
   <string name="error_undefined">Возникла ошибка</string>
   <string name="error_invalid_base_servings">Порции недействительны</string>
-
   <string name="title_overview">Обзор</string>
   <string name="title_stock_overview">Обзор запасов</string>
   <string name="title_purchase">Купить</string>
@@ -663,6 +652,7 @@
   <string name="subtitle_product_hidden">Продукт скрыт</string>
   <string name="subtitle_product_not_hidden">Продукт не скрыт</string>
   <string name="subtitle_product_not_on_server">Продукта нет на сервере</string>
+
   <string name="subtitle_barcodes_will_be_added">Там хранятся штрихкоды, которые добавляются к продукту с помощью операции сохранения.</string>
   <string name="subtitle_unknown">Неизвестный</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
@@ -868,6 +858,8 @@
   <string name="property_price_unit">Цена за %1$s</string>
   <!-- %1$s is a price and %2$s is a quantity unit-->
   <string name="property_price_unit_insert">%1$s за %2$s</string>
+  <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_with_currency">%1$s %2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Цена в %1$s</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -1031,7 +1023,6 @@
   <string name="property_variable_amount">Переменное количество</string>
   <string name="property_requirements_fulfilled">Требования выполнены</string>
   <string name="property_produces_product">Произвести продукт</string>
-
   <string name="date_today">Сегодня</string>
   <string name="date_unknown">Неизвестно</string>
   <!-- This means the 'time' context -->
@@ -1100,7 +1091,6 @@
     <item quantity="other">Еще %d лет</item>
   </plurals>
 
-  <string name="info_acknowledgement">Мы хотим поблагодарить Бернда Бестеля, без отличной работы которого это приложение было бы невозможно</string>
   <string name="info_intro">Показать введение еще раз</string>
   <string name="info_intro_description">Демонстрация возможностей</string>
   <string name="info_dev_beginning">Начало разработки</string>
@@ -1244,16 +1234,9 @@
   <string name="setting_message_duration">Время отображения сообщений</string>
   <string name="setting_message_duration_description">Касается только сообщений о транзакциях</string>
   <string name="setting_notifications_enable">Включить уведомления</string>
-  <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
-  few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_chores_description">Ежедневно проверяет работу по дому и уведомляет вас, когда работа должна быть выполнена сегодня</string>
   <string name="setting_notification_time">Время уведомлений</string>
-  <!-- the description of the notification time preference.
-  With the "Due soon" check enabled, the user will be notified every day at the selected time how
-  many products in stock are due soon, so check means a check of the products in stock -->
+  <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">Когда проверка завершена</string>
   <string name="setting_keep_screen_on_recipes_description">Во время просмотра рецепта</string>
 
-  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
-  Examples: 'de' for German; 'fr' for French -->
-</resources>
+  </resources>

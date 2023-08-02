@@ -25,6 +25,7 @@
     <import type="android.view.View" />
     <import type="xyz.zedler.patrick.grocy.R" />
     <import type="xyz.zedler.patrick.grocy.Constants" />
+    <import type="xyz.zedler.patrick.grocy.BuildConfig" />
     <variable
       name="viewModel"
       type="xyz.zedler.patrick.grocy.viewmodel.OverviewStartViewModel" />
@@ -66,12 +67,46 @@
           android:src="@drawable/ic_round_grocy_anim"
           tools:ignore="ContentDescription" />
 
-        <TextView
-          style="@style/Widget.Grocy.TextView.Toolbar"
-          android:text="@string/app_name"
+        <LinearLayout
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_gravity="center" />
+          android:layout_gravity="center"
+          android:orientation="horizontal"
+          tools:ignore="UseCompoundDrawables">
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.Toolbar"
+            android:text="@string/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+          <FrameLayout
+            android:id="@+id/frame_label_debug"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="4dp"
+            android:layout_gravity="center_vertical"
+            android:visibility="@{BuildConfig.DEBUG ? View.VISIBLE : View.GONE}">
+
+            <ImageView
+              android:id="@+id/image_label_debug_bg"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:src="@drawable/ic_round_dev_bg"
+              app:tint="?attr/colorSecondary"
+              tools:ignore="ContentDescription" />
+
+            <ImageView
+              android:id="@+id/image_label_debug"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:src="@drawable/ic_round_dev"
+              app:tint="?attr/colorOnSecondary"
+              tools:ignore="ContentDescription" />
+
+          </FrameLayout>
+
+        </LinearLayout>
 
         <androidx.appcompat.widget.Toolbar
           android:id="@+id/toolbar"
