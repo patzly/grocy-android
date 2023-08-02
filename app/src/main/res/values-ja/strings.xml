@@ -132,8 +132,9 @@
   <string name="action_share_description">友人にGrocy Androidを紹介</string>
   <string name="action_no_filter">フィルターなし</string>
   <string name="action_show_done_tasks">完了済みタスクを表示</string>
-  <string name="action_track_chore_execution">家事の実行を登録</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_skip_next_chore_schedule">次の家事実行をスキップ</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">次回実行をリスケジュール</string>
   <string name="action_put_missing_products_on_shopping_list">不足商品を買い物リストに追加</string>
 
@@ -358,12 +359,10 @@
   <string name="msg_help_qu_stock">最初の購入後に数量単位在庫を変更することはできません</string>
   <string name="msg_help_qu_stock_changeable">数量単位在庫は、現在の数量単位の単位換算が存在する場合にのみ変更できます</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_qu_purchase">製品を買い物 リストに追加するときに使用されるデフォルト数量単位です</string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">有効にすると、最小値が表示されます。 サブ製品の在庫量の総和が表示されます。その際にサブ製品が「欠落」する代わりにこの製品が増える、という挙動はしません。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_treat_opened_as_out_of_stock">有効にすると、この製品が最低在庫量を下回っている場合、開封済みアイテムが不足としてカウントされます。</string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">この数量は、在庫概要ページの「クイック消費/買う風ボタン」で使用されます(数量単位在庫に関連しています) 。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_tare_weight">容器による管理は、瓶入りの小麦粉などで便利です。購入/消費/在庫目録に記録される量は、瓶全体の重量を入力すると、在庫にあるものと以下に定義されている風袋重量に基づいて常に自動計算されます。</string>
@@ -1139,14 +1138,9 @@
   <string name="setting_message_duration">メッセージの時刻を表示</string>
   <string name="setting_message_duration_description">トランザクションメッセージのみに関係する</string>
   <string name="setting_notifications_enable">通知を有効化</string>
-  <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
-  few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_chores_description">毎日家事を確認し、期限が近い家事を通知</string>
   <string name="setting_notification_time">通知の時刻</string>
-  <!-- the description of the notification time preference.
-  With the "Due soon" check enabled, the user will be notified every day at the selected time how
-  many products in stock are due soon, so check means a check of the products in stock -->
+  <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">確認完了時</string>
   <string name="setting_keep_screen_on_recipes_description">レシピ閲覧中</string>
 
-</resources>
+  </resources>
