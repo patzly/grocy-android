@@ -116,8 +116,9 @@
   <string name="action_share_description">向您的朋友分享Grocy Android</string>
   <string name="action_no_filter">無篩選器</string>
   <string name="action_show_done_tasks">顯示已完成的任務</string>
-  <string name="action_track_chore_execution">追蹤家務執行</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_skip_next_chore_schedule">跳過下次執行</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">重新安排下次執行的時間</string>
   <string name="action_put_missing_products_on_shopping_list">將缺少的物品加入購物清單</string>
 
@@ -271,7 +272,6 @@
   <string name="msg_quick_mode_confirm_transfer">即將執行:\n\n將%1$s%2$s%3$s\n從%4$s\n移至%5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">即將執行:\n\n將%1$s的庫存設為%2$s%3$s\n套用至物品\n到期日:%4$s\n價格:%5$s\n店家:%6$s\n位置:%7$s</string>
-  <string name="msg_compatibility">此版本的應用程式與伺服器上的grocy版本不相容。 \n\n目前伺服器版本:%1$s\n\n支援的伺服器版本:\n%2$s\n如果目前伺服器器版本的主要版本號碼(第一個數字)高於所支援的版本，而您忽略此警告，則可能發生資料遺失(較少發生)或崩潰(較常發生)。如果版本差異較小(例如第三位數字或更以後)，則您可以忽略這個警告</string>
   <string name="msg_logout">您的伺服器上的所有內容都不會被更改。 您將被重新導向至登入頁面</string>
   <string name="msg_logout_demo">您正在使用公開的測試伺服器<u>https://grocy.info</u>.\n\n<b>在伺服器每天自動重設之前，您所做的任何變更都會維持公開狀態</b>\n\n您可以在登入畫面上輸入自己的伺服器位址</string>
   <string name="msg_logout_demo_short">公開的測試伺服器，點擊查看詳細資訊</string>
@@ -285,10 +285,7 @@
   <string name="msg_point_at_barcode">將相機對準條碼</string>
   <string name="msg_press_hold_confirm">按住以確認</string>
   <string name="msg_welcome">歡迎使用 Grocy Android !</string>
-  <string name="msg_welcome_introduce">如果要使用Grocy，您需要擁有自己的伺服器或是 Home Assistant 的 Grocy add-on 插件。 \n 如果您只是想試用這個應用程式，可以使用 Grocy 作者 Bernd Bestel 的測試伺服器</string>
   <string name="msg_choose_option_below">請從以下選項中選擇一個</string>
-  <string name="msg_qr_code_scan">在其他裝置上開啟Grocy中的\"API 金鑰\"。依序點擊\"新增\"和二維條碼圖示，並且掃描條碼</string>
-  <string name="msg_qr_code_scan_token">您正在使用Home Assistant中的Grocy add-on插件。在Home Assistant側邊欄的個人設定頁面最底部新增一個永久有效存取權杖。創建權杖後，點擊「Generate QR code」並掃描</string>
   <string name="msg_port_connection_info_without_port">此應用程式將連線至連接埠%1$s\n如果想要使用其他連接埠，您可以新增一個到URL\n範例:http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">此應用程式將連線至連接埠%1$s</string>
   <string name="msg_clear_form_first">在掃描其他已知的二維條碼之前清空表單</string>
@@ -319,12 +316,10 @@
   <string name="msg_help_qu_stock">數量單位在首次購買之後無法修改</string>
   <string name="msg_help_qu_stock_changeable">庫存數量單位只能在目前的數量單位存在對應的單位轉換時更改</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_qu_purchase">這是將此物品加入購物清單時的預設數量單位</string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">啟用後，子物品的最小庫存數量將累計到該物品中，這代表子物品將永遠不會「不足」</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_treat_opened_as_out_of_stock">啟用後，已開封的物品將在計算庫存數量時被排除</string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">此數量用於庫存總覽的「快速消耗/開封按鈕」（使用庫存數量單位）</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_tare_weight">皮重處理很有用。例如：罐中的麵粉在購買/消耗/調整庫存時可整罐秤重，該差值將按庫存及空罐重自動算出</string>
@@ -353,15 +348,11 @@
   <string name="msg_help_loading_circle_settings">在需要從伺服器載入資料的頁面中，此應用程式會先發出請求來檢查伺服器的資料庫是否有更新，並且只更新已經過期的資料。啟用此選項以在發出這種請求時顯示載入圖示</string>
   <string name="msg_help_start">教學模式已啟用：在所有頁面上顯示可用的提示。點擊以更改</string>
   <string name="msg_help_purchased_date_settings">以下選項啟用後，將會在購買以及庫存頁面上顯示購買日期欄位。否則購買日期將預設為今天</string>
-  <string name="msg_help_normal_login">如果您使用的是Home Assistant中的Grocy add-on插件，請點擊此卡片</string>
-  <string name="msg_help_home_assistant_login">您正在使用Home Assistant中的Grocy add-on插件，因此需要填寫更多詳細資料。點擊此卡片以切換為一般登入</string>
   <string name="msg_help_home_assistant_login_help_show">點擊以顯示提示</string>
   <string name="msg_help_home_assistant_login_help_hide">點擊以隱藏提示</string>
   <string name="msg_help_home_assistant_login_server">如果您有使用Nabu Casa Cloud，也可以在下方欄位輸入該服務的URL。點擊此卡片以造訪Nabu Casa的網站</string>
   <string name="msg_help_home_assistant_login_token">您可以在Home Assistant的個人設定頁面最底部新增一個永久有效存取權杖。點擊此處以開啟上方的URL</string>
   <string name="msg_help_home_assistant_login_proxy_id">回到上一頁或是點擊此卡片並掃描二維條碼以填入下方欄位</string>
-  <string name="msg_share">來看看這個為了超棒的Grocy專案而設計的Android用戶端：\nhttps://github.com/patzly/grocy-android</string>
-
   <string name="error_api_not_working">無法使用此 API 金鑰</string>
   <string name="error_orbot_not_installed">尚未安裝 Orbot</string>
   <string name="error_select_product">選擇一項物品</string>
@@ -396,7 +387,6 @@
   <string name="error_invalid_price">無效的價格</string>
   <string name="error_invalid_factor">無效的係數</string>
   <string name="error_invalid_date_format">無效的日期格式</string>
-  <string name="error_api_qr_code">不是具有Grocy API憑證的二維條碼</string>
   <string name="error_token_qr_code">不是具有Home Assistant永久有效存取權杖的二維條碼</string>
   <string name="error_loading_qus">物品數量單位存取失敗</string>
   <!-- %1$s is a number like 0, 1, 2 -->
@@ -411,10 +401,10 @@
   <string name="error_bounds_higher">必須大於%1$s</string>
   <string name="error_offline">離線</string>
   <string name="error_no_done_items">沒有被標記為已完成的項目</string>
+  <string name="error_already_exists">已存在</string>
   <string name="error_network">網路錯誤</string>
   <string name="error_network_subtitle">無法完整載入需要的資料</string>
   <string name="error_unknown">唉呀!</string>
-  <string name="error_not_grocy_instance">無效的Grocy執行個體</string>
   <string name="error_timeout">超時錯誤</string>
   <string name="error_no_product_selected">無選擇的物品</string>
   <string name="error_failed_to_connect_to">無法連線至伺服器</string>
@@ -432,7 +422,6 @@
   <string name="error_permission">沒有執行此動作的權限</string>
   <string name="error_undefined">發生錯誤</string>
   <string name="error_invalid_base_servings">無效的份數</string>
-
   <string name="title_overview">總覽</string>
   <string name="title_stock_overview">庫存總覽</string>
   <string name="title_purchase">購買</string>
@@ -474,10 +463,9 @@
   <string name="title_chores">家務</string>
   <string name="title_chore">家務</string>
   <string name="title_recipes">食譜</string>
-  <string name="title_recipe_create">新增食譜</string>
-  <string name="title_recipe_edit">編輯食譜</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">編輯</string>
+  <string name="title_recipe_edit">編輯食譜</string>
 
   <string name="title_spoiled">已過期</string>
   <string name="title_use_specific">使用特定的庫存</string>
@@ -550,6 +538,7 @@
   <string name="subtitle_product_hidden">物品已隱藏</string>
   <string name="subtitle_product_not_hidden">物品未隱藏</string>
   <string name="subtitle_product_not_on_server">物品不在伺服器上</string>
+
   <string name="subtitle_barcodes_will_be_added">條碼在儲存時加入到物品中</string>
   <string name="subtitle_unknown">不明</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
@@ -680,6 +669,8 @@
   <string name="property_price_unit">每%1$s價格</string>
   <!-- %1$s is a price and %2$s is a quantity unit-->
   <string name="property_price_unit_insert">每%2$s%1$s</string>
+  <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_with_currency">%1$s%2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">價格（%1$s）</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -835,7 +826,6 @@
   <string name="property_variable_amount">可變數量</string>
   <string name="property_requirements_fulfilled">符合需求</string>
   <string name="property_produces_product">成品</string>
-
   <string name="date_today">今天</string>
   <string name="date_unknown">不明</string>
   <!-- This means the 'time' context -->
@@ -877,7 +867,6 @@
     <item quantity="other">%d年後</item>
   </plurals>
 
-  <string name="info_acknowledgement">我們要感謝Grocy的作者Bernd Bestel，因為他的貢獻這個應用程式才得以實現</string>
   <string name="info_intro">重新進行介紹</string>
   <string name="info_intro_description">功能展示</string>
   <string name="info_dev_beginning">開發始於</string>
@@ -1012,16 +1001,9 @@
   <string name="setting_message_duration">訊息顯示持續時間</string>
   <string name="setting_message_duration_description">只影響處理狀態通知</string>
   <string name="setting_notifications_enable">啟用通知</string>
-  <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
-  few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_chores_description">每天檢查家務並且在有今天需要完成的家務時通知您</string>
   <string name="setting_notification_time">通知時間</string>
-  <!-- the description of the notification time preference.
-  With the "Due soon" check enabled, the user will be notified every day at the selected time how
-  many products in stock are due soon, so check means a check of the products in stock -->
+  <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">在檢查完成時</string>
   <string name="setting_keep_screen_on_recipes_description">查看食譜時</string>
 
-  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
-  Examples: 'de' for German; 'fr' for French -->
-</resources>
+  </resources>
