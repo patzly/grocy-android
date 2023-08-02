@@ -132,8 +132,9 @@
   <string name="action_share_description">Räägi oma sõpradele Grocy Androidist</string>
   <string name="action_no_filter">Filter puudub</string>
   <string name="action_show_done_tasks">Näita valmis ülesandeid</string>
-  <string name="action_track_chore_execution">Jälgi ülesannete täitmist</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_skip_next_chore_schedule">Jäta järgmine ülesande ajakava vahele</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Kavanda ümber järgmine täitmine</string>
   <string name="action_put_missing_products_on_shopping_list">Pane puuduvad tooted poenimekirja</string>
 
@@ -378,12 +379,10 @@
   <string name="msg_help_qu_stock">Koguseühiku varu ei saa pärast esimest ostu muuta.</string>
   <string name="msg_help_qu_stock_changeable">Koguseühiku varu saab muuta ainult siis, kui praeguse koguseühiku jaoks on olemas ühikute teisendused.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_qu_purchase">See on vaikimisi koguseühik, mida kasutatakse selle toote lisamisel ostunimekirja.</string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">Kui see on lubatud, koguneb alamtoodete minimaalne varude kogus sellesse tootesse, mis tähendab, et alamtoode ei ole kunagi \"puudu\", vaid ainult see toode.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_treat_opened_as_out_of_stock">Kui see on lubatud, loetakse avatud kaubad puuduvateks, kui arvutatakse, kas see toode on alla miinimumvaru.</string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">Seda summat kasutatakse varude ülevaate lehel olevate \"kiire tarbimise/avamise nuppude\" jaoks (mis on seotud koguseühiku varuga).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_tare_weight">Taarakaaluga töötlemine on kasulik näiteks jahu puhul purgis - ostu/kasutamise/varumise korral kaalute alati kogu purgi, seejärel arvutatakse postitatav kogus automaatselt selle põhjal, mis on laos ja allpool määratletud taarakaal.</string>
@@ -1188,14 +1187,9 @@
   <string name="setting_message_duration">Kuva sõnumite aeg</string>
   <string name="setting_message_duration_description">Puudutab ainult tehingute sõnumeid</string>
   <string name="setting_notifications_enable">Luba teavitused</string>
-  <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
-  few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_chores_description">Kontrollib majapidamistöid päevaselt ja teavitab sind kui on töö tähtaeg on samal päeval</string>
   <string name="setting_notification_time">Teavituse aeg</string>
-  <!-- the description of the notification time preference.
-  With the "Due soon" check enabled, the user will be notified every day at the selected time how
-  many products in stock are due soon, so check means a check of the products in stock -->
+  <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">Kui kontrollimine on tehtud</string>
   <string name="setting_keep_screen_on_recipes_description">Retsepti vaatamise ajal</string>
 
-</resources>
+  </resources>
