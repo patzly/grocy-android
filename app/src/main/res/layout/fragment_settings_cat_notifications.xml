@@ -86,7 +86,26 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="8dp"
-            android:onClick="@{v -> fragment.openAppInfoPage()}">
+            android:visibility="@{viewModel.displayHelpForNotificationsLive ? View.GONE : View.VISIBLE}"
+            android:onClick="@{v -> viewModel.toggleDisplayHelpForNotifications()}">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.Paragraph"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:textColor="?attr/colorOnSurfaceVariant"
+              android:text="@string/msg_help_notifications_tap" />
+
+          </com.google.android.material.card.MaterialCardView>
+
+          <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Grocy.Card.Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            android:onClick="@{v -> fragment.openAppInfoPage()}"
+            android:visibility="@{viewModel.displayHelpForNotificationsLive ? View.VISIBLE : View.GONE}">
 
             <TextView
               style="@style/Widget.Grocy.TextView.Paragraph"
@@ -94,6 +113,23 @@
               android:layout_height="wrap_content"
               android:textColor="?attr/colorOnSurfaceVariant"
               android:text="@string/msg_help_notifications" />
+
+          </com.google.android.material.card.MaterialCardView>
+
+          <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Grocy.Card.Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            android:visibility="@{viewModel.displayHelpForNotificationsLive ? View.VISIBLE : View.GONE}">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.Paragraph"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:textColor="?attr/colorOnSurfaceVariant"
+              android:text="@string/msg_help_notifications_other" />
 
           </com.google.android.material.card.MaterialCardView>
 

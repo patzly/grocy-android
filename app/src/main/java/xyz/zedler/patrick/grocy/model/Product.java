@@ -883,6 +883,7 @@ public class Product extends GroupedListItem implements Parcelable {
       if (VersionUtil.isGrocyServerMin400(prefs)) {
         json.put("qu_id_consume", product.quIdConsume);
         json.put("qu_id_price", product.quIdPrice);
+        json.put("quick_open_amount", product.quickOpenAmount);
       }
       if (treatOpened != null && VersionUtil.isGrocyServerMin320(prefs)) {
         json.put("treat_opened_as_out_of_stock", treatOpened);

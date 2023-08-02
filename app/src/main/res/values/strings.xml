@@ -139,8 +139,13 @@
   <string name="action_share_description">Tell your friends about Grocy Android</string>
   <string name="action_no_filter">No filter</string>
   <string name="action_show_done_tasks">Show done tasks</string>
-  <string name="action_track_chore_execution">Track chore execution</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_chore_execution">Track chore execution now</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_next_chore_schedule">Track next chore schedule</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_skip_next_chore_schedule">Skip next chore schedule</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Reschedule next execution</string>
   <string name="action_put_missing_products_on_shopping_list">Put missing products on shopping list</string>
 
@@ -407,8 +412,12 @@
   <string name="msg_help_accumulate_min_amount">If enabled, the min. stock amount of sub products will be accumulated into this product, means the sub product will never be \"missing\", only this product.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_treat_opened_as_out_of_stock">When enabled, opened items will be counted as missing for calculating if this product is below its minimum stock amount.</string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">This amount is used for the \"quick consume/open buttons\" on the stock overview page (related to quantity unit stock).</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_consume_amount_new">This amount is used for the \"quick consume button\" on the stock overview page (related to quantity unit stock).</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_open_amount">This amount is used for the \"quick open button\" on the stock overview page (related to quantity unit stock).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_tare_weight">Tare weight handling is useful e.g. for flour in jars - on purchase/consume/inventory you always weigh the whole jar, the amount to be posted is then automatically calculated based on what is in stock and the tare weight defined below.</string>
   <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -445,7 +454,9 @@
   <string name="msg_help_recipe_ingredients_wrong">With Grocy server version below 4.0.0 this list can contain wrong fulfillment information. Please update your server to version 4.0.0 or later to see correct values.</string>
   <string name="msg_help_date_chooser">You can switch to keyboard input in settings, this could increase input speed for you.</string>
   <string name="msg_help_date_chooser_keyboard">You can activate reverse date format in settings if DDMMYY is preferred in your country.\nTo apply input and close this page you can use the Done key on your keyboard.</string>
+  <string name="msg_help_notifications_tap">Tap here if you do not receive notifications or receive them unreliably.</string>
   <string name="msg_help_notifications">If you do not receive notifications, tap here to open the Android app info page and check if notifications are allowed and if power saving measures can be disabled. Android sometimes delivers notifications later than the set time to reduce battery consumption, which is normal behavior.</string>
+  <string name="msg_help_notifications_other">Do not remove the app from the overview with currently running apps, otherwise some manufacturers will delete the notification process.</string>
   <string name="msg_help_quick_mode">You can long tap on the title bar above to activate the quick mode. In this mode, a transaction will be executed immediately if a product has been entered or scanned and all fields could be automatically populated (by product and/or barcode defaults).</string>
   <string name="msg_help_loading_circle_settings">On each page where something has to be loaded from server, the app first checks with a tiny request whether the server database has changed since last time and only updates outdated data. Enable the option below to show a loading circle even for this tiny request.</string>
   <string name="msg_help_start">Beginner mode is active: Help texts are displayed by default on all pages if available. Tap to change.</string>
@@ -536,6 +547,7 @@
   <string name="error_failed_barcode_upload">Could not upload barcode</string>
   <string name="error_wrong_grocycode_type">grocycode contains wrong entity type</string>
   <string name="error_stock_entry_grocycode">Stock entry from grocycode not found</string>
+  <string name="error_picture_uploads_forbidden">For security reasons, uploading pictures is only allowed on self-hosted servers. You are currently using the demo instance.</string>
   <string name="error_permission">No permission for this action</string>
   <string name="error_permission_notification">Notification permission is required for reminders to work</string>
   <string name="error_undefined">An error occurred</string>
@@ -957,6 +969,10 @@
   <string name="property_amount_quick_consume">Quick consume amount</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_quick_consume_in">Quick consume amount in %1$s</string>
+  <!--The same string is also in the web interface (server v4.0.0 or later): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_amount_quick_open">Quick open amount</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_quick_open_in">Quick open amount in %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">Accumulate sub products min. stock amount</string>
   <string name="property_picture">Picture</string>

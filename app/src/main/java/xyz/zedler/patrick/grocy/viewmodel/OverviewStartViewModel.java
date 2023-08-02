@@ -627,11 +627,6 @@ public class OverviewStartViewModel extends BaseViewModel {
     );
   }
 
-  public boolean getIsDemoInstance() {
-    String server = sharedPrefs.getString(PREF.SERVER_URL, null);
-    return server != null && server.contains("grocy.info");
-  }
-
   public boolean getOverviewFabInfoShown() {
     return sharedPrefs.getBoolean(PREF.OVERVIEW_FAB_INFO_SHOWN, false);
   }

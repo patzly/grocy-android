@@ -6,8 +6,9 @@ your server update. We recommend installing the update as our app was mainly tes
 recipe ingredient fulfillment information in our app are finally all correct and complete with it.
 Older supported versions still work but are not tested with every new change.
 
-We kindly ask you to give our app a good review on Google Play if you like it. This helps us
-a lot and will motivate us to implement new features.
+We kindly ask you to give our app a good review on Google Play if you like it or a star for our
+GitHub repository. This helps us to spread the word about the app and will motivate us to
+implement new features.
 
 Specific changes for Grocy server 4.0.0 (other versions should behave the same way as before):
 
@@ -17,6 +18,7 @@ Specific changes for Grocy server 4.0.0 (other versions should behave the same w
   QU conversions instead, if needed
 - New: Product option "Default quantity unit consume"
 - New: Product option "Quantity unit for prices"
+- New: Product option "Quick open amount" for quick open button on stock page
 - Improved: Load label for energy values from server (was fixed kcal before)
 - Improved: Show calories and prices on recipe ingredients list
 - Fixed: Network error when saving a new product (#642)
@@ -35,6 +37,8 @@ All other changes, divided into app sections:
   or due soon)
 - Improved: "Create product" page now uses "save and not close" buttons
 - Improved: Misleading error when trying to save duplicated barcode on product barcode edit (#724)
+- Improved: When clicking a product name on the products list in master data, the product info
+  will now be displayed (like on the stock overview page)
 - Improved: Message shown when product or recipe is not on server (#718)
 - Improved: "Factor purchase to stock unit" was moved to quantity units category in master product
 - Improved: When scanning a product barcode and the purchase or inventory page, the note will now
@@ -55,6 +59,7 @@ All other changes, divided into app sections:
 - New: Shopping pages now also has checkbox options for fields and picture (#663, #671, #710)
 - New: Shopping mode options are now reachable through shopping mode menu and removed from settings
 - Improved: Shopping mode grouping option now can be set separately from shopping list page
+- Fixed: Adding new item to shopping list reverts to previous shopping list (#731)
 
 #### Recipes
 
@@ -74,6 +79,9 @@ All other changes, divided into app sections:
 - New: Daily reminder can now be set also for chores (#149)
 - New: Filter for all chores which are due, used by the reminder
 - Improved: Shortcut for chores available now (in settings, go to appearance page then shortcuts)
+- Improved: Changed the handling of the tracking buttons on chores overview page (play button
+  now tracks an execution on the next scheduled time, rather than for now/today, new menu
+  action "Track chore execution now" for action with old behavior) (same change on server)
 - Fixed: Unable to do multiple chores with swipe gestures (#686)
 
 #### General
@@ -90,6 +98,8 @@ All other changes, divided into app sections:
 - Improved: It is now clearer which QR code is to be scanned when using Home Assistant (#627)
 - Improved: Horizontal actions layout on overview page for smaller screens
 - Improved: Clear caching related info after app update or database update for data refresh (#726)
+- Improved: Changed debug build variant config to allow installation of debug version alongside
+release variant (thanks @alfonso133)
 - Fixed: Amounts with conversions are consistent over all pages now (#612, #626)
 - Fixed: Long click on barcode button on overview page was broken on Android Nougat and lower
 - Fixed: Crash on startup with Android Lollipop (and maybe higher)

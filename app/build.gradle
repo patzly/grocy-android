@@ -70,6 +70,9 @@ android {
             }
             debuggable false
         }
+        debug {
+            applicationIdSuffix '.debug'
+        }
     }
 
     bundle {
@@ -92,7 +95,7 @@ dependencies {
     }
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.preference:preference:1.2.0'
+    implementation 'androidx.preference:preference:1.2.1'
     implementation 'androidx.browser:browser:1.5.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'

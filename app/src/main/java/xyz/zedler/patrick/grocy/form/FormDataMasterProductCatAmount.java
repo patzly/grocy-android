@@ -42,6 +42,7 @@ public class FormDataMasterProductCatAmount {
   public static final String AMOUNT_ARG = "amount_arg";
   public static final int MIN_AMOUNT = 0;
   public static final int QUICK_CONSUME_AMOUNT = 2;
+  public static final int QUICK_OPEN_AMOUNT = 4;
   public static final int TARE_WEIGHT = 6;
 
   private final Application application;
@@ -52,6 +53,8 @@ public class FormDataMasterProductCatAmount {
   private final MutableLiveData<Boolean> treatOpenedAsOutOfStock;
   private final MutableLiveData<String> quickConsumeAmountLive;
   private final LiveData<String> quickConsumeAmountTitleLive;
+  private final MutableLiveData<String> quickOpenAmountLive;
+  private final LiveData<String> quickOpenAmountTitleLive;
   private final MutableLiveData<Boolean> enableTareWeightHandlingLive;
   private final MutableLiveData<String> tareWeightLive;
   private final LiveData<String> tareWeightTitleLive;
@@ -85,6 +88,16 @@ public class FormDataMasterProductCatAmount {
             getString(R.string.property_amount_quick_consume) :
             this.application.getString(
                 R.string.property_amount_quick_consume_in,
+                quantityUnit.getNamePlural()
+            )
+    );
+    quickOpenAmountLive = new MutableLiveData<>();
+    quickOpenAmountTitleLive = Transformations.map(
+        quantityUnitLive,
+        quantityUnit -> quantityUnit == null ?
+            getString(R.string.property_amount_quick_open) :
+            this.application.getString(
+                R.string.property_amount_quick_open_in,
                 quantityUnit.getNamePlural()
             )
     );
@@ -142,6 +155,14 @@ public class FormDataMasterProductCatAmount {
     return quickConsumeAmountTitleLive;
   }
 
+  public MutableLiveData<String> getQuickOpenAmountLive() {
+    return quickOpenAmountLive;
+  }
+
+  public LiveData<String> getQuickOpenAmountTitleLive() {
+    return quickOpenAmountTitleLive;
+  }
+
   public MutableLiveData<Boolean> getEnableTareWeightHandlingLive() {
     return enableTareWeightHandlingLive;
   }
@@ -177,6 +198,12 @@ public class FormDataMasterProductCatAmount {
       } else {
         quickConsumeAmountLive.setValue(number);
       }
+    } else if (type == QUICK_OPEN_AMOUNT) {
+      if (NumUtil.toDouble(number) <= 0) {
+        quickOpenAmountLive.setValue(String.valueOf(1));
+      } else {
+        quickOpenAmountLive.setValue(number);
+      }
     } else { // TARE_WEIGHT
       if (NumUtil.toDouble(number) < 0) {
         tareWeightLive.setValue(String.valueOf(0));
@@ -192,6 +219,8 @@ public class FormDataMasterProductCatAmount {
       numberString = minAmountLive.getValue();
     } else if (type == QUICK_CONSUME_AMOUNT) {
       numberString = quickConsumeAmountLive.getValue();
+    } else if (type == QUICK_OPEN_AMOUNT) {
+      numberString = quickOpenAmountLive.getValue();
     } else { // TARE_WEIGHT
       numberString = tareWeightLive.getValue();
     }
@@ -234,6 +263,7 @@ public class FormDataMasterProductCatAmount {
       product.setTreatOpenedAsOutOfStock(treatOpened ? "1" : "0");
     }
     product.setQuickConsumeAmount(quickConsumeAmountLive.getValue());
+    product.setQuickOpenAmount(quickOpenAmountLive.getValue());
     product.setEnableTareWeightHandling(enableTareWeightHandlingLive.getValue());
     product.setTareWeight(tareWeightLive.getValue());
     product.setNotCheckStockFulfillmentForRecipes(disableStockCheckLive.getValue());
@@ -246,12 +276,14 @@ public class FormDataMasterProductCatAmount {
     }
 
     String minAmount = NumUtil.trimAmount(product.getMinStockAmountDouble(), maxDecimalPlacesAmount);
-    String quickAmount = NumUtil.trimAmount(product.getQuickConsumeAmountDouble(), maxDecimalPlacesAmount);
+    String quickAmountConsume = NumUtil.trimAmount(product.getQuickConsumeAmountDouble(), maxDecimalPlacesAmount);
+    String quickAmountOpen = NumUtil.trimAmount(product.getQuickOpenAmountDouble(), maxDecimalPlacesAmount);
     String tareWeight = NumUtil.trimAmount(product.getTareWeightDouble(), maxDecimalPlacesAmount);
     minAmountLive.setValue(minAmount);
     accumulateMinAmount.setValue(product.getAccumulateSubProductsMinStockAmountBoolean());
     treatOpenedAsOutOfStock.setValue(product.getTreatOpenedAsOutOfStockBoolean());
-    quickConsumeAmountLive.setValue(quickAmount);
+    quickConsumeAmountLive.setValue(quickAmountConsume);
+    quickOpenAmountLive.setValue(quickAmountOpen);
     enableTareWeightHandlingLive.setValue(product.getEnableTareWeightHandlingBoolean());
     tareWeightLive.setValue(tareWeight);
     disableStockCheckLive.setValue(product.getNotCheckStockFulfillmentForRecipesBoolean());

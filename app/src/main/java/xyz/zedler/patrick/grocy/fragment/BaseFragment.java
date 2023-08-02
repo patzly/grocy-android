@@ -38,6 +38,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.android.volley.VolleyError;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -136,9 +137,6 @@ public class BaseFragment extends Fragment {
   public void copyProduct(Product product) {
   }
 
-  public void deleteObjectSafely(Object object) {
-  }
-
   public void deleteObject(int objectId) {
   }
 
@@ -160,13 +158,16 @@ public class BaseFragment extends Fragment {
   public void editItem(ShoppingListItem shoppingListItem) {
   }
 
-  public void trackChoreExecution(int choreId) {
+  public void trackNextChoreSchedule(ChoreEntry choreEntry) {
   }
 
-  public void skipNextChoreSchedule(int choreId) {
+  public void skipNextChoreSchedule(ChoreEntry choreEntry) {
   }
 
-  public void rescheduleNextExecution(int choreId) {
+  public void trackChoreExecutionNow(ChoreEntry choreEntry) {
+  }
+
+  public void rescheduleNextExecution(ChoreEntry choreEntry) {
   }
 
   public void toggleDoneStatus(Task task) {

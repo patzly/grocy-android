@@ -35,12 +35,11 @@ import java.util.List;
 import java.util.Locale;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import me.xdrop.fuzzywuzzy.model.BoundExtractedResult;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterProductBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
@@ -242,31 +241,14 @@ public class MasterObjectListViewModel extends BaseViewModel {
     if (product == null) {
       return;
     }
-    Bundle bundle = new Bundle();
-    bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
-    bundle.putParcelable(
-        Constants.ARGUMENT.LOCATION,
-        getLocation(product.getLocationIdInt())
-    );
-    bundle.putParcelable(
-        Constants.ARGUMENT.QUANTITY_UNIT_PURCHASE,
-        getQuantityUnit(product.getQuIdPurchaseInt())
-    );
-    bundle.putParcelable(
-        Constants.ARGUMENT.QUANTITY_UNIT_STOCK,
-        getQuantityUnit(product.getQuIdStockInt())
-    );
-    ProductGroup productGroup = NumUtil.isStringInt(product.getProductGroupId())
-        ? getProductGroup(Integer.parseInt(product.getProductGroupId()))
-        : null;
-    bundle.putParcelable(Constants.ARGUMENT.PRODUCT_GROUP, productGroup);
-    showBottomSheet(new MasterProductBottomSheet(), bundle);
-  }
-
-  public void deleteObjectSafely(Object object) {
-    String objectName = ObjectUtil.getObjectName(object, entity);
-    int objectId = ObjectUtil.getObjectId(object, entity);
-    showMasterDeleteBottomSheet(entity, objectName, objectId);
+    Bundle bundle = new ProductOverviewBottomSheetArgs.Builder()
+        .setProduct(product)
+        .setLocation(Location.getFromId(locations, product.getLocationIdInt()))
+        .setQuantityUnitPurchase(QuantityUnit.getFromId(quantityUnits, product.getQuIdPurchaseInt()))
+        .setQuantityUnitStock(QuantityUnit.getFromId(quantityUnits, product.getQuIdStockInt()))
+        .setShowActions(false)
+        .build().toBundle();
+    showBottomSheet(new ProductOverviewBottomSheet(), bundle);
   }
 
   public void deleteObject(int objectId) {
@@ -275,53 +257,6 @@ public class MasterObjectListViewModel extends BaseViewModel {
         response -> downloadData(false),
         error -> showMessage(getString(R.string.error_undefined))
     );
-  }
-
-  private void showMasterDeleteBottomSheet(String entity, String objectName, int objectId) {
-    Bundle argsBundle = new Bundle();
-    argsBundle.putString(Constants.ARGUMENT.ENTITY, entity);
-    argsBundle.putInt(Constants.ARGUMENT.OBJECT_ID, objectId);
-    argsBundle.putString(Constants.ARGUMENT.OBJECT_NAME, objectName);
-    showBottomSheet(new MasterDeleteBottomSheet(), argsBundle);
-  }
-
-  @Nullable
-  private Location getLocation(int id) {
-    if (locations == null) {
-      return null;
-    }
-    for (Location location : locations) {
-      if (location.getId() == id) {
-        return location;
-      }
-    }
-    return null;
-  }
-
-  @Nullable
-  private ProductGroup getProductGroup(int id) {
-    if (productGroups == null) {
-      return null;
-    }
-    for (ProductGroup productGroup : productGroups) {
-      if (productGroup.getId() == id) {
-        return productGroup;
-      }
-    }
-    return null;
-  }
-
-  @Nullable
-  private QuantityUnit getQuantityUnit(int id) {
-    if (quantityUnits == null) {
-      return null;
-    }
-    for (QuantityUnit quantityUnit : quantityUnits) {
-      if (quantityUnit.getId() == id) {
-        return quantityUnit;
-      }
-    }
-    return null;
   }
 
   @Nullable

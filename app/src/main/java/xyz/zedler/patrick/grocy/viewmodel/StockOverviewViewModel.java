@@ -72,6 +72,7 @@ import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class StockOverviewViewModel extends BaseViewModel {
 
@@ -425,7 +426,11 @@ public class StockOverviewViewModel extends BaseViewModel {
         consumeProduct(stockItem, stockItem.getProduct().getQuickConsumeAmountDouble(), false);
         break;
       case Constants.ACTION.OPEN:
-        openProduct(stockItem, stockItem.getProduct().getQuickConsumeAmountDouble());
+        if (VersionUtil.isGrocyServerMin400(sharedPrefs)) {
+          openProduct(stockItem, stockItem.getProduct().getQuickOpenAmountDouble());
+        } else {
+          openProduct(stockItem, stockItem.getProduct().getQuickConsumeAmountDouble());
+        }
         break;
       case Constants.ACTION.CONSUME_ALL:
         consumeProduct(

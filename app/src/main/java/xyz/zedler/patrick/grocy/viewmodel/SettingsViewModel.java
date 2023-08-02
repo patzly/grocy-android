@@ -102,6 +102,7 @@ public class SettingsViewModel extends BaseViewModel {
   private final MutableLiveData<String> dueSoonNotificationsTimeTextLive;
   private final MutableLiveData<Boolean> choresNotificationsEnabledLive;
   private final MutableLiveData<String> choresNotificationsTimeTextLive;
+  private final MutableLiveData<Boolean> displayHelpForNotificationsLive;
 
   private final int allowedDecimalPlacesAmount;
 
@@ -136,15 +137,11 @@ public class SettingsViewModel extends BaseViewModel {
     dueSoonNotificationsTimeTextLive = new MutableLiveData<>(getStockNotificationsTime());
     choresNotificationsEnabledLive = new MutableLiveData<>(getChoresNotificationsEnabled());
     choresNotificationsTimeTextLive = new MutableLiveData<>(getChoresNotificationsTime());
+    displayHelpForNotificationsLive = new MutableLiveData<>(false);
 
     allowedDecimalPlacesAmount = sharedPrefs.getInt(
         STOCK.DECIMAL_PLACES_AMOUNT, SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
     );
-  }
-
-  public boolean isDemo() {
-    String server = getServerUrl();
-    return server != null && server.contains("grocy.info");
   }
 
   public boolean isVersionCompatible() {
@@ -177,7 +174,7 @@ public class SettingsViewModel extends BaseViewModel {
         Constants.PREF.GROCY_VERSION,
         getString(R.string.date_unknown)
     ));
-    bundle.putBoolean(Constants.ARGUMENT.DEMO_CHOSEN, isDemo());
+    bundle.putBoolean(Constants.ARGUMENT.DEMO_CHOSEN, isDemoInstance());
     bundle.putStringArrayList(
         Constants.ARGUMENT.SUPPORTED_VERSIONS,
         getSupportedVersions()
@@ -1090,15 +1087,19 @@ public class SettingsViewModel extends BaseViewModel {
     setChoresNotificationsEnabled(reminderUtil.hasPermission());
   }
 
+  public MutableLiveData<Boolean> getDisplayHelpForNotificationsLive() {
+    return displayHelpForNotificationsLive;
+  }
+
+  public void toggleDisplayHelpForNotifications() {
+    displayHelpForNotificationsLive.setValue(
+        Boolean.FALSE.equals(displayHelpForNotificationsLive.getValue()));
+  }
+
   public ArrayList<String> getSupportedVersions() {
     return new ArrayList<>(Arrays.asList(
         getApplication().getResources().getStringArray(R.array.compatible_grocy_versions)
     ));
-  }
-
-  public boolean getIsDemoInstance() {
-    String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
-    return server != null && server.contains("grocy.info");
   }
 
   public boolean isFeatureEnabled(String pref) {

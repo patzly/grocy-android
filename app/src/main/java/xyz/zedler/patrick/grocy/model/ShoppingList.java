@@ -127,7 +127,7 @@ public class ShoppingList implements Parcelable {
   @NonNull
   @Override
   public String toString() {
-    return "ShoppingListEntity{id=" + id + ", name='" + name + "', notes='" + notes + "'}";
+    return "ShoppingList{id=" + id + ", name='" + name + "', notes='" + notes + "'}";
   }
 
   public static QueueItem getShoppingLists(
