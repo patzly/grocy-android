@@ -494,7 +494,9 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="msg_help_recipe_ingredients_wrong">Pokud ne serveru používáte verzi Grocy nižší, než 4.0.0, mohou se v tomto seznamu objevit chybné informace. Aktualizujte, prosím, serverovou verzi alespoň na 4.0.0.</string>
   <string name="msg_help_date_chooser">Můžete si nastavit i vkládání dat klávesnicí. Urychlí to práci.</string>
   <string name="msg_help_date_chooser_keyboard">Můžete si změnit formát zápisu data na DDMMRR.\nPomocí klávesy Done (Hotovo, Enter...) na klávesnici tuto stránku uložíte a zavřete.</string>
+  <string name="msg_help_notifications_tap">Klepněte sem, pokud dostáváte upozornění z Grocy se zpožděním nebo vůbec ne</string>
   <string name="msg_help_notifications">Pokud vám nepřišlo upozornění, zkontrolujte v nastavení pro aplikace, jestli jsou pro Grocy povolena a jestli je nezadržuje režim úspory energie. Ten můžete vypnout jen pro Grocy.</string>
+  <string name="msg_help_notifications_other">Neodstraňujte Grocy z přehledu otevřených aplikací. U některých modifikací Androidu to znamená zastavit upozorňování.</string>
   <string name="msg_help_quick_mode">Podržením prstu na titulku se přepnete do zrychleného režimu. Pokud jsou k produktu nebo k jeho čárovému kódu vyplněny všechny informace, pak stačí naskenovat jeho čárový kód a přidání do zásoby se provede z těchto dat.</string>
   <string name="msg_help_loading_circle_settings">Na každé stránce, kde se něco čte ze serveru, aplikace nejprve zkontroluje, zda se databáze na serveru změnila od poslední aktualizace a pokud ano, načte nová data. Zapněte tuto volbu pokud chcete zobrazit symbol komunikace i pro ověřování aktuálnosti databáze.</string>
   <string name="msg_help_start">Je aktivní režim pro začátečníky. Texty nápovědy jsou automaticky zobrazeny na všech stránkách, kde jsou dostupné. Klepnutím to změníte.</string>
@@ -585,6 +587,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="error_failed_barcode_upload">Čárový kód se nepodařilo odeslat na server</string>
   <string name="error_wrong_grocycode_type">Tento grocycode obsahuje chybný druh pole</string>
   <string name="error_stock_entry_grocycode">Podle tohoto grocycode nebyl nalezen žádný produkt v zásobě</string>
+  <string name="error_picture_uploads_forbidden">Snímky lze ukládat jen váš server. Na právě používanou demoverzi to možné není.</string>
   <string name="error_permission">Pro tuto akci nemáte přidělené oprávnění</string>
   <string name="error_permission_notification">Abyste dostávali z Grocy upozornění, musíte je povolit v nastaveních pro aplikace</string>
   <string name="error_undefined">Došlo k chybě</string>
