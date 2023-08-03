@@ -354,6 +354,9 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
     formData.getNotCheckStockFulfillmentLive().setValue(entry.isNotCheckStockFulfillment());
     formData.getIngredientGroupLive().setValue(entry.getIngredientGroup());
     formData.getNoteLive().setValue(entry.getNote());
+    if (entry.getPriceFactor() == 0) {
+      entry.setPriceFactor(1);
+    }
     formData.getPriceFactorLive().setValue(NumUtil.trimAmount(entry.getPriceFactor(), maxDecimalPlacesAmount));
 
     formData.setFilledWithRecipePosition(true);
