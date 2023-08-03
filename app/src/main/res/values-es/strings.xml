@@ -874,7 +874,7 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <plurals name="description_overview_tasks_user">
     <item quantity="one">Tienes %1$d tarea asignada.</item>
     <item quantity="many">Tienes %1$d tareas asignadas.</item>
-    <item quantity="other">Tienes %1$dtareas asignadas.</item>
+    <item quantity="other">Tienes %1$d tareas asignadas.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
