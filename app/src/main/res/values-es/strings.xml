@@ -838,7 +838,7 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <plurals name="description_overview_recipes">
     <item quantity="one">Tienes %1$d receta.</item>
     <item quantity="many">Tienes %1$d recetas.</item>
-    <item quantity="other">Tienes %1$drecetas.</item>
+    <item quantity="other">Tienes %1$d recetas.</item>
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_chores_due_soon">
