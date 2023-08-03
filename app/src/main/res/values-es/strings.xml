@@ -1312,7 +1312,7 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <string name="setting_notifications_enable">Habilitar notificaciones</string>
   <!-- The string belongs to the stock overview (stock items can be expired, overdue or due soon). -->
   <string name="setting_notifications_stock_description">Verifica el inventario diariamente y te notifica si hay algún producto que no esté fresco (Expirado, vencido o vence pronto)</string>
-  <string name="setting_notifications_chores_description">Verifica los quehaceres diariamente and notifica cuando tus tareas están por vencerse.</string>
+  <string name="setting_notifications_chores_description">Verifica los quehaceres diariamente y notifica cuando tus tareas están por vencerse.</string>
   <string name="setting_notification_time">Tiempo de notificación</string>
   <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">Cuando la verificación esté completa</string>
