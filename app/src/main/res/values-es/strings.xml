@@ -808,7 +808,7 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <plurals name="description_overview_stock_missing_shopping_list_single">
     <item quantity="one">%1$d de ellos está en tu lista de compras.</item>
     <item quantity="many">%1$dde ellos están en tu lista de compras.</item>
-    <item quantity="other">%1$dde ellos están en tu lista de compras.</item>
+    <item quantity="other">%1$d de ellos están en tu lista de compras.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_multi">
@@ -838,7 +838,7 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <plurals name="description_overview_recipes">
     <item quantity="one">Tienes %1$d receta.</item>
     <item quantity="many">Tienes %1$d recetas.</item>
-    <item quantity="other">Tienes %1$drecetas.</item>
+    <item quantity="other">Tienes %1$d recetas.</item>
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_chores_due_soon">
@@ -874,7 +874,7 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <plurals name="description_overview_tasks_user">
     <item quantity="one">Tienes %1$d tarea asignada.</item>
     <item quantity="many">Tienes %1$d tareas asignadas.</item>
-    <item quantity="other">Tienes %1$dtareas asignadas.</item>
+    <item quantity="other">Tienes %1$d tareas asignadas.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
