@@ -69,7 +69,9 @@ public class LocationsBottomSheet extends BaseBottomSheetDialogFragment
     if (bundle.getBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, false)) {
       locations.add(0, new Location(-1, getString(R.string.subtitle_none_selected)));
     }
+    boolean hasOptions = false;
     if (bundle.getBoolean(ARGUMENT.DISPLAY_NEW_OPTION, false)) {
+      hasOptions = true;
       binding.buttonListSelectionNew.setVisibility(View.VISIBLE);
       binding.buttonListSelectionNew.setOnClickListener(v -> {
         dismiss();
@@ -79,7 +81,9 @@ public class LocationsBottomSheet extends BaseBottomSheetDialogFragment
     int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
     String title = bundle.getString(ARGUMENT.TITLE);
-    ViewUtil.centerText(binding.textListSelectionTitle);
+    if (!hasOptions) {
+      ViewUtil.centerText(binding.textListSelectionTitle);
+    }
     binding.textListSelectionTitle.setText(title != null ? title : activity.getString(R.string.property_locations));
 
     binding.recyclerListSelection.setLayoutManager(

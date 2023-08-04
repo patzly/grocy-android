@@ -1,3 +1,7 @@
+## 3.3.1
+
+- Fixed: wrong title alignment in some list bottom sheets
+
 ## 3.3.0
 
 Grocy server version 4.0.0 has some bigger changes with quantity units and unit conversions.
