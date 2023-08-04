@@ -808,7 +808,7 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <plurals name="description_overview_stock_missing_shopping_list_single">
     <item quantity="one">%1$d de ellos está en tu lista de compras.</item>
     <item quantity="many">%1$dde ellos están en tu lista de compras.</item>
-    <item quantity="other">%1$dde ellos están en tu lista de compras.</item>
+    <item quantity="other">%1$d de ellos están en tu lista de compras.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_multi">
