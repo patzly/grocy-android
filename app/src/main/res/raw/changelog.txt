@@ -1,5 +1,6 @@
 ## 3.3.1
 
+- New: Compatibility for server version 4.0.1
 - Fixed: wrong title alignment in some list bottom sheets
 
 ## 3.3.0
