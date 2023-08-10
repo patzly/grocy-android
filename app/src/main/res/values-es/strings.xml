@@ -254,7 +254,7 @@
   <plurals name="msg_assigned_tasks">
     <item quantity="one">1%1$d asignada</item>
     <item quantity="many">1%1$d asignadas</item>
-    <item quantity="other">1%1$d asignadas</item>
+    <item quantity="other">%1$d asignadas</item>
   </plurals>
   <string name="msg_task_mark">Marcar tarea como completada</string>
   <string name="msg_task_completed">Tarea marcada como completada</string>
