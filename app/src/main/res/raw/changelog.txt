@@ -1,7 +1,9 @@
 ## 3.3.1
 
 - New: Compatibility for server version 4.0.1
+- New: Targeting Android 14
 - Fixed: wrong title alignment in some list bottom sheets
+- Fixed: crash when product overview dialog is called when shopping lists feature is disabled
 
 ## 3.3.0
 
