@@ -832,7 +832,7 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <plurals name="description_overview_shopping_list">
     <item quantity="one">%1$d artículo está en su lista de la compra.</item>
     <item quantity="many">%1$d artículos están en su lista de la compra.</item>
-    <item quantity="other">%1$d artículos están en su lista de la compra.</item>
+    <item quantity="other">%1$d elementos están en su lista de la compra.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_recipes">
