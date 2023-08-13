@@ -253,7 +253,7 @@ public class RecipeEditIngredientListEntryAdapter extends
         return newItem.getId() == oldItem.getId();
       }
 
-      if (newItemProduct == null || oldItemProduct == null || !newItemProduct.equals(oldItemProduct)) {
+      if (newItemProduct == null || !newItemProduct.equals(oldItemProduct)) {
         return false;
       }
 

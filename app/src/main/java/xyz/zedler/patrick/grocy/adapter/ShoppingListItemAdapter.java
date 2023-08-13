@@ -58,6 +58,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.Store;
@@ -81,6 +82,7 @@ public class ShoppingListItemAdapter extends
   private final HashMap<Integer, Product> productHashMap;
   private final HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+  private final List<QuantityUnitConversionResolved> unitConversions;
   private final HashMap<Integer, Double> shoppingListItemAmountsHashMap;
   private final ArrayList<Integer> missingProductIds;
   private final ShoppingListItemAdapterListener listener;
@@ -101,6 +103,7 @@ public class ShoppingListItemAdapter extends
       HashMap<Integer, String> productNamesHashMap,
       HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      List<QuantityUnitConversionResolved> unitConversions,
       HashMap<Integer, ProductGroup> productGroupHashMap,
       HashMap<Integer, Store> storeHashMap,
       HashMap<Integer, Double> shoppingListItemAmountsHashMap,
@@ -125,6 +128,7 @@ public class ShoppingListItemAdapter extends
     this.productHashMap = new HashMap<>(productHashMap);
     this.productLastPurchasedHashMap = new HashMap<>(productLastPurchasedHashMap);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
+    this.unitConversions = new ArrayList<>(unitConversions);
     this.shoppingListItemAmountsHashMap = new HashMap<>(shoppingListItemAmountsHashMap);
     this.missingProductIds = new ArrayList<>(missingProductIds);
     this.listener = listener;
@@ -549,6 +553,19 @@ public class ShoppingListItemAdapter extends
       }
     }
 
+    double conversionFactor = 1.0;
+    if ((activeFields.contains(ShoppingListViewModel.FIELD_PRICE_LAST_TOTAL)
+        || activeFields.contains(ShoppingListViewModel.FIELD_PRICE_LAST_UNIT)) && product != null) {
+      QuantityUnitConversionResolved c = QuantityUnitConversionResolved.findConversion(
+          unitConversions,
+          product.getId(),
+          item.getQuIdInt(),
+          product.getQuIdStockInt()
+      );
+      if (c != null) {
+        conversionFactor = c.getFactor();
+      }
+    }
     if (activeFields.contains(ShoppingListViewModel.FIELD_PRICE_LAST_TOTAL)) {
       ProductLastPurchased p = product != null
           ? productLastPurchasedHashMap.get(product.getId()) : null;
@@ -556,7 +573,8 @@ public class ShoppingListItemAdapter extends
         double amount = amountInQuUnit != null ? amountInQuUnit : item.getAmountDouble();
         String price = NumUtil.isStringDouble(p.getPrice())
             ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice()) * amount,
-            decimalPlacesPriceDisplay) : p.getPrice();
+            decimalPlacesPriceDisplay)
+            : p.getPrice();
         Chip chipValue = createChip(context, context.getString(
             R.string.property_insert_total,
             context.getString(R.string.property_price_with_currency, price, currency)
@@ -569,8 +587,9 @@ public class ShoppingListItemAdapter extends
           ? productLastPurchasedHashMap.get(product.getId()) : null;
       if (p != null && p.getPrice() != null && !p.getPrice().isEmpty()) {
         String price = NumUtil.isStringDouble(p.getPrice())
-            ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice()),
-            decimalPlacesPriceDisplay) : p.getPrice();
+            ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice()) * conversionFactor,
+            decimalPlacesPriceDisplay)
+            : p.getPrice();
         Chip chipValue = createChip(context, context.getString(
             R.string.property_insert_per_unit,
             context.getString(R.string.property_price_with_currency, price, currency)
@@ -768,6 +787,7 @@ public class ShoppingListItemAdapter extends
       HashMap<Integer, String> productNamesHashMap,
       HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      List<QuantityUnitConversionResolved> unitConversions,
       HashMap<Integer, ProductGroup> productGroupHashMap,
       HashMap<Integer, Store> storeHashMap,
       HashMap<Integer, Double> shoppingListItemAmountsHashMap,
@@ -789,6 +809,8 @@ public class ShoppingListItemAdapter extends
         productLastPurchasedHashMap,
         this.quantityUnitHashMap,
         quantityUnitHashMap,
+        this.unitConversions,
+        unitConversions,
         this.shoppingListItemAmountsHashMap,
         shoppingListItemAmountsHashMap,
         this.missingProductIds,
@@ -805,6 +827,8 @@ public class ShoppingListItemAdapter extends
     this.productHashMap.putAll(productHashMap);
     this.quantityUnitHashMap.clear();
     this.quantityUnitHashMap.putAll(quantityUnitHashMap);
+    this.unitConversions.clear();
+    this.unitConversions.addAll(unitConversions);
     this.productLastPurchasedHashMap.clear();
     this.productLastPurchasedHashMap.putAll(productLastPurchasedHashMap);
     this.shoppingListItemAmountsHashMap.clear();
@@ -827,6 +851,8 @@ public class ShoppingListItemAdapter extends
     HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapNew;
     HashMap<Integer, QuantityUnit> quantityUnitHashMapOld;
     HashMap<Integer, QuantityUnit> quantityUnitHashMapNew;
+    List<QuantityUnitConversionResolved> unitConversionsOld;
+    List<QuantityUnitConversionResolved> unitConversionsNew;
     HashMap<Integer, Double> shoppingListItemAmountsHashMapOld;
     HashMap<Integer, Double> shoppingListItemAmountsHashMapNew;
     ArrayList<Integer> missingProductIdsOld;
@@ -845,6 +871,8 @@ public class ShoppingListItemAdapter extends
         HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapNew,
         HashMap<Integer, QuantityUnit> quantityUnitHashMapOld,
         HashMap<Integer, QuantityUnit> quantityUnitHashMapNew,
+        List<QuantityUnitConversionResolved> unitConversionsOld,
+        List<QuantityUnitConversionResolved> unitConversionsNew,
         HashMap<Integer, Double> shoppingListItemAmountsHashMapOld,
         HashMap<Integer, Double> shoppingListItemAmountsHashMapNew,
         ArrayList<Integer> missingProductIdsOld,
@@ -862,6 +890,8 @@ public class ShoppingListItemAdapter extends
       this.productLastPurchasedHashMapNew = productLastPurchasedHashMapNew;
       this.quantityUnitHashMapOld = quantityUnitHashMapOld;
       this.quantityUnitHashMapNew = quantityUnitHashMapNew;
+      this.unitConversionsOld = unitConversionsOld;
+      this.unitConversionsNew = unitConversionsNew;
       this.shoppingListItemAmountsHashMapOld = shoppingListItemAmountsHashMapOld;
       this.shoppingListItemAmountsHashMapNew = shoppingListItemAmountsHashMapNew;
       this.missingProductIdsOld = missingProductIdsOld;
@@ -952,6 +982,24 @@ public class ShoppingListItemAdapter extends
           if (purchasedOld == null && purchasedNew != null
               || purchasedOld != null && purchasedNew != null && !purchasedOld.equals(purchasedNew)) {
             return false;
+          }
+
+          if (productOld != null && productNew != null) {
+            QuantityUnitConversionResolved oldCon = QuantityUnitConversionResolved.findConversion(
+                unitConversionsOld,
+                productOld.getId(),
+                oldItem.getQuIdInt(),
+                productOld.getQuIdStockInt()
+            );
+            QuantityUnitConversionResolved newCon = QuantityUnitConversionResolved.findConversion(
+                unitConversionsNew,
+                productNew.getId(),
+                newItem.getQuIdInt(),
+                productNew.getQuIdStockInt()
+            );
+            if (oldCon == null && newCon != null || newCon != null && !newCon.equals(oldCon)) {
+              return false;
+            }
           }
         }
 
