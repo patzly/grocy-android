@@ -289,6 +289,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
     }
     Bundle bundle = new Bundle();
     bundle.putParcelable(ARGUMENT.CHORE, chore);
+    bundle.putParcelable(ARGUMENT.CHORE_ENTRY, choreEntry);
     activity.showBottomSheet(new ChoreEntryBottomSheet(), bundle);
   }
 
