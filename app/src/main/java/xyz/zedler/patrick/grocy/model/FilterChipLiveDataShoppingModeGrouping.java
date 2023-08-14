@@ -92,7 +92,7 @@ public class FilterChipLiveDataShoppingModeGrouping extends FilterChipLiveData {
       groupingMode = GROUPING_NONE;
     }
     setFilterText();
-    sharedPrefs.edit().putString(PREF.SHOPPING_LIST_GROUPING_MODE, groupingMode).apply();
+    sharedPrefs.edit().putString(PREF.SHOPPING_MODE_GROUPING_MODE, groupingMode).apply();
   }
 
   private void setItems() {
