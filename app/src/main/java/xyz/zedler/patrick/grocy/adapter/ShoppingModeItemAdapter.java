@@ -62,6 +62,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.Store;
@@ -85,6 +86,7 @@ public class ShoppingModeItemAdapter extends
   private final HashMap<Integer, Product> productHashMap;
   private final HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+  private final List<QuantityUnitConversionResolved> unitConversions;
   private final HashMap<Integer, Double> shoppingListItemAmountsHashMap;
   private final ArrayList<Integer> missingProductIds;
   private final ShoppingModeItemClickListener listener;
@@ -108,6 +110,7 @@ public class ShoppingModeItemAdapter extends
       HashMap<Integer, String> productNamesHashMap,
       HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      List<QuantityUnitConversionResolved> unitConversions,
       HashMap<Integer, ProductGroup> productGroupHashMap,
       HashMap<Integer, Store> storeHashMap,
       HashMap<Integer, Double> shoppingListItemAmountsHashMap,
@@ -123,6 +126,7 @@ public class ShoppingModeItemAdapter extends
     this.productHashMap = new HashMap<>(productHashMap);
     this.productLastPurchasedHashMap = new HashMap<>(productLastPurchasedHashMap);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
+    this.unitConversions = new ArrayList<>(unitConversions);
     this.shoppingListItemAmountsHashMap = new HashMap<>(shoppingListItemAmountsHashMap);
     this.missingProductIds = new ArrayList<>(missingProductIds);
     this.listener = listener;
@@ -545,7 +549,20 @@ public class ShoppingModeItemAdapter extends
       binding.picture.setVisibility(View.GONE);
     }
 
-    if (activeFields.contains(ShoppingListViewModel.FIELD_PRICE_LAST_TOTAL)) {
+    double conversionFactor = 1.0;
+    if ((activeFields.contains(ShoppingModeViewModel.FIELD_PRICE_LAST_TOTAL)
+        || activeFields.contains(ShoppingModeViewModel.FIELD_PRICE_LAST_UNIT)) && product != null) {
+      QuantityUnitConversionResolved c = QuantityUnitConversionResolved.findConversion(
+          unitConversions,
+          product.getId(),
+          item.getQuIdInt(),
+          product.getQuIdStockInt()
+      );
+      if (c != null) {
+        conversionFactor = c.getFactor();
+      }
+    }
+    if (activeFields.contains(ShoppingModeViewModel.FIELD_PRICE_LAST_TOTAL)) {
       ProductLastPurchased p = product != null
           ? productLastPurchasedHashMap.get(product.getId()) : null;
       if (p != null && p.getPrice() != null && !p.getPrice().isEmpty()) {
@@ -560,7 +577,7 @@ public class ShoppingModeItemAdapter extends
         binding.flexboxLayout.addView(chipValue);
       }
     }
-    if (activeFields.contains(ShoppingListViewModel.FIELD_PRICE_LAST_UNIT)) {
+    if (activeFields.contains(ShoppingModeViewModel.FIELD_PRICE_LAST_UNIT)) {
       ProductLastPurchased p = product != null
           ? productLastPurchasedHashMap.get(product.getId()) : null;
       if (p != null && p.getPrice() != null && !p.getPrice().isEmpty()) {
@@ -611,6 +628,7 @@ public class ShoppingModeItemAdapter extends
       HashMap<Integer, String> productNamesHashMap,
       HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      List<QuantityUnitConversionResolved> unitConversions,
       HashMap<Integer, ProductGroup> productGroupHashMap,
       HashMap<Integer, Store> storeHashMap,
       HashMap<Integer, Double> shoppingListItemAmountsHashMap,
@@ -634,6 +652,8 @@ public class ShoppingModeItemAdapter extends
         productLastPurchasedHashMap,
         this.quantityUnitHashMap,
         quantityUnitHashMap,
+        this.unitConversions,
+        unitConversions,
         this.shoppingListItemAmountsHashMap,
         shoppingListItemAmountsHashMap,
         this.missingProductIds,
@@ -650,6 +670,8 @@ public class ShoppingModeItemAdapter extends
     this.productHashMap.putAll(productHashMap);
     this.quantityUnitHashMap.clear();
     this.quantityUnitHashMap.putAll(quantityUnitHashMap);
+    this.unitConversions.clear();
+    this.unitConversions.addAll(unitConversions);
     this.productLastPurchasedHashMap.clear();
     this.productLastPurchasedHashMap.putAll(productLastPurchasedHashMap);
     this.shoppingListItemAmountsHashMap.clear();

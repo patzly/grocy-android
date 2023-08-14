@@ -454,6 +454,10 @@ public class ShoppingModeViewModel extends BaseViewModel {
     return quantityUnitHashMap;
   }
 
+  public List<QuantityUnitConversionResolved> getUnitConversions() {
+    return unitConversions;
+  }
+
   @NonNull
   public MutableLiveData<Boolean> getIsLoadingLive() {
     return isLoadingLive;

@@ -682,6 +682,10 @@ public class ShoppingListViewModel extends BaseViewModel {
     return quantityUnitHashMap;
   }
 
+  public List<QuantityUnitConversionResolved> getUnitConversions() {
+    return unitConversions;
+  }
+
   public FilterChipLiveData.Listener getFilterChipLiveDataStatus() {
     return () -> filterChipLiveDataStatus;
   }
