@@ -113,7 +113,7 @@ dependencies {
 
     // Nice material views
     // don't upgrade to 1.11 alpha, only change it to stable 1.10.0 when it has been released
-    implementation 'com.google.android.material:material:1.10.0-alpha05'
+    implementation 'com.google.android.material:material:1.10.0-alpha06'
 
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
