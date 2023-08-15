@@ -46,6 +46,17 @@ public class QuantityUnitConversionUtil {
     HashMap<QuantityUnit, Double> unitFactors = new HashMap<>();
     for (QuantityUnitConversion conversion : unitConversions) {
       if (conversion.getProductIdInt() != product.getId()) continue;
+
+      // We need this check because unitConversions list can contain multiple entry for the same "to" QU.
+      //
+      // Example:
+      // Bottle -> mL | 100.0
+      // mL -> Bottle | 0.01
+      // Bottle -> Bottle | 1.0
+      //
+      // Without this check the output map will contain 0.01 for Bottle key
+      if (conversion.getFromQuId() != product.getQuIdStockInt()) continue;
+
       QuantityUnit unit = quantityUnitHashMap.get(conversion.getToQuId());
       if (unit == null || unitFactors.containsKey(unit)) continue;
       unitFactors.put(unit, conversion.getFactor());
