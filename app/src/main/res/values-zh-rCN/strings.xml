@@ -98,6 +98,7 @@
   <string name="action_open_scanner">打开扫描仪</string>
   <string name="action_discard">丢弃</string>
   <string name="action_clear_form">清除表单</string>
+  <string name="action_take_photo">拍照</string>
   <!-- "Paste" like in "Paste from clipboard" -->
   <string name="action_paste">粘贴</string>
   <string name="action_toggle_done">切换完成</string>
@@ -376,8 +377,9 @@
   <string name="msg_help_produces_product">选择一个物品后，将在食用此食谱时向物品的库存中增加一个单位（每份库存数量单位）</string>
   <string name="msg_help_date_chooser">‎您可以在设置中切换到键盘输入，这可以为您提高输入速度。‎</string>
   <string name="msg_help_date_chooser_keyboard">‎如果您所在的国家/地区首选 DDMMYY，则可以在设置中激活反向日期格式。\n要应用输入并关闭此页面，可以使用键盘上的 Done 键。‎</string>
+  <string name="msg_help_notifications">如果您未收到通知，请点击此处打开Android应用信息页面，检查通知是否被允许，并且是否可以禁用省电措施。Android有时会延迟发送通知，以减少电池消耗，这是正常的行为。</string>
   <string name="msg_help_quick_mode">您可以长按上方的标题栏激活快速模式。在这种模式下，如果输入或扫描了产品，并且所有字段都可以自动填充（按照产品和/或条码默认值），事务将立即执行。</string>
-  <string name="msg_help_loading_circle_settings">在必须从服务器加载的每个页面上，应用程序首先用微小的请求检查服务器数据库是否自上次更改并仅更新过时的数据。即使对于此小型请求，请启用下面的选项以显示加载圆圈。</string>
+  <string name="msg_help_loading_circle_settings">在必须通过服务器加载的每个页面上，应用程序首先发起一个小型的请求检查服务器数据库自上次访问以来是否发生了变化，并仅更新过时的数据。启用下面的选项，即可在发起请求的过程中显示加载图标。</string>
   <string name="msg_help_start">已激活初学者模式：如果该模式有效，默认情况下会在所有页面显示帮助文本。点击进行更改。</string>
   <string name="msg_help_purchased_date_settings">如果启用了以下选项，则购买和库存页面将显示购买日期的字段。否则购买的日期默认为今天。</string>
   <string name="msg_help_home_assistant_login_help_show">点按此处显示帮助文本。</string>
@@ -385,6 +387,8 @@
   <string name="msg_help_home_assistant_login_server">如果您使用该服务，您还可以输入您的Nabu Casa Cloud URL。点击此卡以访问Nabu Casa网站。</string>
   <string name="msg_help_home_assistant_login_token">‎您可以在“家庭助理”配置文件设置（最后一部分）中创建长期访问令牌。点击此处从上方打开 URL。‎</string>
   <string name="msg_help_home_assistant_login_proxy_id">导航后或点击此卡以扫描填充下面的字段的QR码。</string>
+  <string name="msg_help_fab_overview_start">此概览页面上的操作按钮有两个动作：\n\n- 短按：扫码进行消耗
+\n-长按：扫码进行采购\n\n通过此按钮，默认情况下会在相应页面上启用快速模式。您可以在行为设置中更改此设置。</string>
   <string name="error_api_not_working">API密钥不起作用</string>
   <string name="error_orbot_not_installed">未安装Orbot</string>
   <string name="error_select_product">选择产品</string>
@@ -604,6 +608,8 @@
   <string name="subtitle_product_optional_properties">状态，父产品，描述，产品分组、能量、图片</string>
   <string name="subtitle_product_quantity_unit">‎库存，购买默认‎</string>
   <string name="subtitle_synced_with_server">‎与服务器同步‎</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
+  <string name="subtitle_recipe_due_score">到期分数：%1$s</string>
   <string name="subtitle_per_serving">每份</string>
   <string name="subtitle_tap_preparation_mode">点击这里进入准备模式</string>
   <!-- Context is Label printer -->
@@ -835,11 +841,21 @@
   <string name="property_ungrouped">未分组</string>
   <!-- %1$s is a property like "product group" or "due date" -->
   <string name="property_extra_field">‎额外字段‎：%1$s</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields">字段</string>
   <string name="property_task_category">任务分类</string>
   <string name="property_task_categories">任务分类</string>
   <string name="property_calories">卡路里</string>
   <string name="property_calories_unit">卡路里 (每单位)</string>
   <string name="property_calories_total">卡路里 (总共)</string>
+  <!-- %1$s is a value like energy or price, unit means value of items per unit -->
+  <string name="property_insert_per_unit">%1$s(单位)</string>
+  <!-- %1$s is a value like energy or price, total means value of many items in total -->
+  <string name="property_insert_total">%1$s(总计)</string>
+  <!-- %1$s is a value like price, average means average price -->
+  <string name="property_insert_average">%1$s(平均)</string>
+  <!-- %1$s is a value like price, "last" is like for example in "last price" -->
+  <string name="property_insert_last">%1$s(最新)</string>
   <string name="property_category">分类</string>
   <string name="property_assigned_to">‎分配给‎</string>
   <string name="property_users">用户</string>
@@ -937,7 +953,11 @@
   <string name="category_appearance">主题</string>
   <string name="category_network">网络</string>
   <string name="category_network_proxy">代理</string>
-  <string name="category_behavior">行为</string>
+  <string name="category_behavior">特性</string>
+  <string name="category_display_behavior">显示特性</string>
+  <string name="category_input_behavior">输入特性</string>
+  <string name="category_additional_services">附加服务</string>
+  <string name="category_other_behavior">其他特性</string>
   <string name="category_debugging">调试</string>
   <string name="category_new_product">新产品</string>
   <string name="category_existing_products">现有产品</string>
@@ -947,6 +967,7 @@
   <string name="hint_key">有效的API密钥</string>
 
   <string name="setting_theme">主题</string>
+  <string name="setting_theme_description">尝试其他外观</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system (automatic or shorter auto) theme. The button width should be as dense as possible. -->
   <string name="setting_theme_auto">自动</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
@@ -958,8 +979,10 @@
   <string name="setting_language_info">非常感谢Transifex的所有志愿者翻译！\n 请访问我们的GitHub，了解如何帮助Grocy Android支持您的语言。</string>
   <string name="setting_language_system">跟随系统</string>
   <string name="setting_language_not_available">若无对应翻译语言，请使用英语</string>
-  <string name="setting_open_food_facts">使用公开食品事实</string>
-  <string name="setting_open_food_facts_description">从条形码获取信息</string>
+  <string name="setting_transition">在设置页面之间使用平滑效果过渡</string>
+  <string name="setting_transition_description">代替淡出效果</string>
+  <string name="setting_open_food_facts">获取Open Food Facts和Open Beauty Facts数据库数据</string>
+  <string name="setting_open_food_facts_description">通过条形码获取信息</string>
   <string name="setting_choose_barcode_scanner">选择条码扫描器</string>
   <string name="setting_choose_barcode_scanner_description">‎用于相机条形码扫描‎</string>
   <string name="setting_use_front_cam">使用前置摄像头</string>
@@ -1013,16 +1036,22 @@
   <string name="setting_beginner_mode">初学者模式</string>
   <string name="setting_beginner_mode_description">默认显示帮助文本</string>
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
-  <string name="setting_expand_bottom_sheets">展开底板</string>
+  <string name="setting_expand_bottom_sheets">展开底部面板</string>
   <string name="setting_expand_bottom_sheets_description">在横向模式中</string>
-  <string name="setting_speed_up_start">减少应用程序启动时间</string>
-  <string name="setting_speed_up_start_description">只对快速设备有影响</string>
+  <string name="setting_bottom_menu_button">显示主菜单按钮</string>
+  <string name="setting_bottom_menu_button_description">在底部的应用程序栏</string>
+  <string name="setting_turn_on_quick_mode">默认开启快速模式</string>
+  <string name="setting_turn_on_quick_mode_description">在概览页面上使用扫描按钮时</string>
+  <string name="setting_quick_mode_return">20秒后返回概览页面</string>
+  <string name="setting_quick_mode_return_description">在概览页面上使用扫描按钮时，且未使用快速模式时。</string>
+  <string name="setting_speed_up_start">优化应用启动时间</string>
+  <string name="setting_speed_up_start_description">仅对高性能设备有效果</string>
   <string name="setting_date_keyboard_input">‎使用键盘输入日期‎</string>
   <string name="setting_date_keyboard_input_description">‎代替日期拾取器轮‎</string>
   <string name="setting_date_keyboard_reverse">‎使用反向日期格式进行输入‎</string>
   <string name="setting_date_keyboard_reverse_description">‎DDMMYY 而不是 YYMMDD‎</string>
-  <string name="setting_loading_circle">显示所有请求的加载</string>
-  <string name="setting_loading_circle_description">有助于慢速网络</string>
+  <string name="setting_loading_circle">对所有的网络请求显示加载图标</string>
+  <string name="setting_loading_circle_description">网络较慢的情况下有帮助</string>
   <string name="setting_tor">使用Tor</string>
   <string name="setting_tor_description">‎需要 Orbot‎</string>
   <string name="setting_proxy">开启HTTP代理</string>
