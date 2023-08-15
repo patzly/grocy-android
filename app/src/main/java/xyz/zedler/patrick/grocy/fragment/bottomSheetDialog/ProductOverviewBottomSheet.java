@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -164,10 +165,14 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     boolean isInStock = stockItem != null && stockItem.getAmountDouble() > 0;
     MenuCompat.setGroupDividerEnabled(binding.toolbar.getMenu(), true);
     // disable actions if necessary
-    binding.toolbar.getMenu().findItem(R.id.action_consume_all).setEnabled(isInStock);
-    binding.toolbar.getMenu().findItem(R.id.action_consume_spoiled).setEnabled(
-        isInStock && product.getEnableTareWeightHandlingInt() == 0
-    );
+    MenuItem itemConsumeAll = binding.toolbar.getMenu().findItem(R.id.action_consume_all);
+    if (itemConsumeAll != null) {
+      itemConsumeAll.setEnabled(isInStock);
+    }
+    MenuItem itemConsumeSpoiled = binding.toolbar.getMenu().findItem(R.id.action_consume_spoiled);
+    if (itemConsumeSpoiled != null) {
+      itemConsumeSpoiled.setEnabled(isInStock && product.getEnableTareWeightHandlingInt() == 0);
+    }
     BaseFragment fragmentCurrent = activity.getCurrentFragment();
     binding.toolbar.setOnMenuItemClickListener(item -> {
       if (item.getItemId() == R.id.action_add_to_shopping_list) {
@@ -698,7 +703,10 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
 
   private void hideDisabledFeatures() {
     if (!isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)) {
-      binding.toolbar.getMenu().findItem(R.id.action_add_to_shopping_list).setVisible(false);
+      MenuItem item = binding.toolbar.getMenu().findItem(R.id.action_add_to_shopping_list);
+      if (item != null) {
+        item.setVisible(false);
+      }
     }
     if (!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
       binding.itemDueDate.setVisibility(View.GONE);

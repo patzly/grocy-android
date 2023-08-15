@@ -30,10 +30,12 @@ public class FilterChipLiveDataTasksSort extends FilterChipLiveData {
 
   public final static int ID_SORT_NAME = 0;
   public final static int ID_SORT_DUE_DATE = 1;
+  public final static int ID_SORT_CATEGORY = 3;
   public final static int ID_ASCENDING = 2;
 
   public final static String SORT_NAME = "sort_name";
   public final static String SORT_DUE_DATE = "sort_due_date";
+  public final static String SORT_CATEGORY = "sort_category";
 
   private final Application application;
   private final SharedPreferences sharedPrefs;
@@ -69,12 +71,15 @@ public class FilterChipLiveDataTasksSort extends FilterChipLiveData {
   }
 
   private void setFilterText() {
-    setText(application.getString(
-        R.string.property_sort_mode,
-        sortMode.equals(SORT_NAME)
-            ? application.getString(R.string.property_name)
-            : application.getString(R.string.property_due_date_task)
-    ));
+    String text;
+    if (sortMode.equals(SORT_NAME)) {
+      text = application.getString(R.string.property_name);
+    } else if (sortMode.equals(SORT_DUE_DATE)) {
+      text = application.getString(R.string.property_due_date_task);
+    } else {
+      text = application.getString(R.string.property_category);
+    }
+    setText(application.getString(R.string.property_sort_mode, text));
   }
 
   public void setValues(int id) {
@@ -84,6 +89,10 @@ public class FilterChipLiveDataTasksSort extends FilterChipLiveData {
       sharedPrefs.edit().putString(PREF.TASKS_SORT_MODE, sortMode).apply();
     } else if (id == ID_SORT_DUE_DATE) {
       sortMode = SORT_DUE_DATE;
+      setFilterText();
+      sharedPrefs.edit().putString(PREF.TASKS_SORT_MODE, sortMode).apply();
+    } else if (id == ID_SORT_CATEGORY) {
+      sortMode = SORT_CATEGORY;
       setFilterText();
       sharedPrefs.edit().putString(PREF.TASKS_SORT_MODE, sortMode).apply();
     } else if (id == ID_ASCENDING) {
@@ -108,6 +117,12 @@ public class FilterChipLiveDataTasksSort extends FilterChipLiveData {
           sortMode.equals(SORT_DUE_DATE)
       ));
     }
+    menuItemDataList.add(new MenuItemData(
+        ID_SORT_CATEGORY,
+        0,
+        application.getString(R.string.property_category),
+        sortMode.equals(SORT_CATEGORY)
+    ));
     menuItemDataList.add(new MenuItemData(
         ID_ASCENDING,
         1,

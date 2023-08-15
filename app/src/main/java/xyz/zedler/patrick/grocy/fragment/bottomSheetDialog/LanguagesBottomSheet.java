@@ -37,6 +37,7 @@ import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class LanguagesBottomSheet extends BaseBottomSheetDialogFragment
     implements LanguageAdapter.LanguageAdapterListener {
@@ -56,8 +57,7 @@ public class LanguagesBottomSheet extends BaseBottomSheetDialogFragment
     MainActivity activity = (MainActivity) requireActivity();
 
     binding.textListSelectionTitle.setText(getString(R.string.setting_language_description));
-    binding.textListSelectionTitle.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-    binding.textListSelectionTitle.setGravity(Gravity.CENTER_HORIZONTAL);
+    ViewUtil.centerText(binding.textListSelectionTitle);
 
     binding.textListSelectionDescription.setText(getString(R.string.setting_language_info));
     binding.textListSelectionDescription.setVisibility(View.VISIBLE);

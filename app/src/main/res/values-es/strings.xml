@@ -254,7 +254,7 @@
   <plurals name="msg_assigned_tasks">
     <item quantity="one">1%1$d asignada</item>
     <item quantity="many">1%1$d asignadas</item>
-    <item quantity="other">1%1$d asignadas</item>
+    <item quantity="other">%1$d asignadas</item>
   </plurals>
   <string name="msg_task_mark">Marcar tarea como completada</string>
   <string name="msg_task_completed">Tarea marcada como completada</string>
@@ -808,7 +808,7 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <plurals name="description_overview_stock_missing_shopping_list_single">
     <item quantity="one">%1$d de ellos está en tu lista de compras.</item>
     <item quantity="many">%1$dde ellos están en tu lista de compras.</item>
-    <item quantity="other">%1$dde ellos están en tu lista de compras.</item>
+    <item quantity="other">%1$d de ellos están en tu lista de compras.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_multi">
@@ -832,13 +832,13 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <plurals name="description_overview_shopping_list">
     <item quantity="one">%1$d artículo está en su lista de la compra.</item>
     <item quantity="many">%1$d artículos están en su lista de la compra.</item>
-    <item quantity="other">%1$d artículos están en su lista de la compra.</item>
+    <item quantity="other">%1$d elementos están en su lista de la compra.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_recipes">
     <item quantity="one">Tienes %1$d receta.</item>
     <item quantity="many">Tienes %1$d recetas.</item>
-    <item quantity="other">Tienes %1$drecetas.</item>
+    <item quantity="other">Tienes %1$d recetas.</item>
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_chores_due_soon">
@@ -874,7 +874,7 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <plurals name="description_overview_tasks_user">
     <item quantity="one">Tienes %1$d tarea asignada.</item>
     <item quantity="many">Tienes %1$d tareas asignadas.</item>
-    <item quantity="other">Tienes %1$dtareas asignadas.</item>
+    <item quantity="other">Tienes %1$d tareas asignadas.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">

@@ -52,6 +52,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import com.google.android.material.R;
+import com.google.android.material.motion.MaterialBackOrchestrator;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 
@@ -82,6 +83,8 @@ public class CustomBottomSheetDialog extends AppCompatDialog {
   private boolean canceledOnTouchOutside = true;
   private boolean canceledOnTouchOutsideSet;
   private EdgeToEdgeCallback edgeToEdgeCallback;
+  @Nullable
+  private MaterialBackOrchestrator backOrchestrator;
 
   public CustomBottomSheetDialog(@NonNull Context context) {
     this(context, 0);
@@ -143,6 +146,9 @@ public class CustomBottomSheetDialog extends AppCompatDialog {
       if (behavior != null) {
         behavior.setHideable(cancelable);
       }
+      if (getWindow() != null) {
+        updateListeningForBackCallbacks();
+      }
     }
   }
 
@@ -168,6 +174,14 @@ public class CustomBottomSheetDialog extends AppCompatDialog {
         coordinator.setFitsSystemWindows(!drawEdgeToEdge);
       }
       WindowCompat.setDecorFitsSystemWindows(window, !drawEdgeToEdge);
+      updateListeningForBackCallbacks();
+    }
+  }
+
+  @Override
+  public void onDetachedFromWindow() {
+    if (backOrchestrator != null) {
+      backOrchestrator.stopListeningForBackCallbacks();
     }
   }
 
@@ -249,6 +263,7 @@ public class CustomBottomSheetDialog extends AppCompatDialog {
       behavior = BottomSheetBehavior.from(bottomSheet);
       behavior.addBottomSheetCallback(bottomSheetCallback);
       behavior.setHideable(cancelable);
+      backOrchestrator = new MaterialBackOrchestrator(behavior, bottomSheet);
     }
   }
 
@@ -318,6 +333,17 @@ public class CustomBottomSheetDialog extends AppCompatDialog {
       return true;
     });
     return container;
+  }
+
+  private void updateListeningForBackCallbacks() {
+    if (backOrchestrator == null) {
+      return;
+    }
+    if (cancelable) {
+      backOrchestrator.startListeningForBackCallbacks();
+    } else {
+      backOrchestrator.stopListeningForBackCallbacks();
+    }
   }
 
   boolean shouldWindowCloseOnTouchOutside() {

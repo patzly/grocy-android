@@ -71,7 +71,9 @@ public class QuantityUnitsBottomSheet extends BaseBottomSheetDialogFragment
           0,
           new QuantityUnit(-1, getString(R.string.subtitle_none_selected)));
     }
+    boolean hasOptions = false;
     if (bundle.getBoolean(ARGUMENT.DISPLAY_NEW_OPTION, false)) {
+      hasOptions = true;
       binding.buttonListSelectionNew.setVisibility(View.VISIBLE);
       binding.buttonListSelectionNew.setOnClickListener(v -> {
         dismiss();
@@ -81,7 +83,9 @@ public class QuantityUnitsBottomSheet extends BaseBottomSheetDialogFragment
     int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
     binding.textListSelectionTitle.setText(activity.getString(R.string.property_quantity_units));
-    ViewUtil.centerText(binding.textListSelectionTitle);
+    if (!hasOptions) {
+      ViewUtil.centerText(binding.textListSelectionTitle);
+    }
 
     binding.recyclerListSelection.setLayoutManager(
         new LinearLayoutManager(

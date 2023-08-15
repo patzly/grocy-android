@@ -1,3 +1,19 @@
+## 3.3.1
+
+- New: Compatibility for server version 4.0.1
+- New: Targeting Android 14
+- Improved: Changed that prices on the shopping list (extra fields) are now related to the selected
+  quantity unit (instead of to the product's QU stock as before) (change from server version 4.0.1)
+- Improved: Tasks can now be sorted by category (#753)
+- Fixed: Wrong title alignment in some list bottom sheets
+- Fixed: Crash when product overview dialog is called when shopping lists feature is disabled (#750)
+- Fixed: Grouping option in shopping mode was not saved (#754)
+- Fixed: Chore details not opening (#748)
+- Fixed: Quantity unit conversions were wrong in some cases (thanks @jrandiny) (#744, #745).
+  Please report any remaining bugs related to unit conversion as testing this is difficult
+- Fixed: Other conversion bug on shopping list item edit page which occurred when unit from
+  shopping list item was the product's default purchase unit (hopefully fixed)
+
 ## 3.3.0
 
 Grocy server version 4.0.0 has some bigger changes with quantity units and unit conversions.

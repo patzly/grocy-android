@@ -68,7 +68,7 @@ public class ChoreEntryBottomSheet extends BaseBottomSheetDialogFragment {
     Bundle bundle = getArguments();
     Chore chore = bundle != null ? bundle.getParcelable(ARGUMENT.CHORE) : null;
     ChoreEntry choreEntry = bundle != null ? bundle.getParcelable(ARGUMENT.CHORE_ENTRY) : null;
-    if (bundle == null || choreEntry == null) {
+    if (chore == null || choreEntry == null) {
       dismiss();
       return;
     }

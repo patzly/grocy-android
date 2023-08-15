@@ -182,6 +182,9 @@ public class TasksViewModel extends BaseViewModel {
     boolean sortAscending = filterChipLiveDataSort.isSortAscending();
     if (filterChipLiveDataSort.getSortMode().equals(FilterChipLiveDataTasksSort.SORT_DUE_DATE)) {
       SortUtil.sortTasksByDueDate(filteredTasks, sortAscending);
+    } else if (filterChipLiveDataSort.getSortMode()
+        .equals(FilterChipLiveDataTasksSort.SORT_CATEGORY)) {
+      SortUtil.sortTasksByCategory(filteredTasks, taskCategoriesHashMap, sortAscending);
     } else {
       SortUtil.sortTasksByName(filteredTasks, sortAscending);
     }

@@ -79,9 +79,6 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
       return binding.getRoot();
     }
 
-    binding.textListSelectionTitle.setText(activity.getString(R.string.property_shopping_lists));
-    ViewUtil.centerText(binding.textListSelectionTitle);
-
     binding.recyclerListSelection.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
@@ -127,9 +124,11 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
       });
     }
 
+    boolean hasOptions = false;
     if (getArguments() != null
         && getArguments().getBoolean(ARGUMENT.DISPLAY_NEW_OPTION, false)
         && activity.getCurrentFragment() instanceof ShoppingListFragment) {
+      hasOptions = true;
       binding.buttonListSelectionNew.setVisibility(View.VISIBLE);
       binding.buttonListSelectionNew.setOnClickListener(v -> {
         dismiss();
@@ -137,6 +136,11 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
             ShoppingListFragmentDirections.actionShoppingListFragmentToShoppingListEditFragment()
         );
       });
+    }
+
+    binding.textListSelectionTitle.setText(activity.getString(R.string.property_shopping_lists));
+    if (!hasOptions) {
+      ViewUtil.centerText(binding.textListSelectionTitle);
     }
 
     if (savedInstanceState != null && savedInstanceState.getBoolean(DIALOG_DELETE_SHOWING)) {

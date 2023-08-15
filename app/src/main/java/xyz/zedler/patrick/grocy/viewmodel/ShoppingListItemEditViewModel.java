@@ -251,7 +251,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
 
       Double factor = unitFactors.get(quantityUnit);
-      if (factor != null && VersionUtil.isGrocyServerMin400(sharedPrefs) && quantityUnit != null
+      if (factor != null && !VersionUtil.isGrocyServerMin400(sharedPrefs) && quantityUnit != null
           && quantityUnit.getId() == product.getQuIdPurchaseInt()) {
         factor = 1 / factor;
       }

@@ -132,6 +132,8 @@
   <string name="action_share_description">Räägi oma sõpradele Grocy Androidist</string>
   <string name="action_no_filter">Filter puudub</string>
   <string name="action_show_done_tasks">Näita valmis ülesandeid</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_chore_execution">Jälgi ülesannete täitmist nüüd</string>
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_skip_next_chore_schedule">Jäta järgmine ülesande ajakava vahele</string>
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -580,7 +582,7 @@
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_location_to">Asukohta</string>
   <string name="title_recipe">Retsept</string>
-  <string name="title_preparation_mode">Ettevalmistusrežiim</string>
+  <string name="title_preparation_mode">Valmistusrežiim</string>
   <string name="title_total_price">Koguhind</string>
   <string name="title_unit_price">Ühiku hind</string>
   <!-- %1$s is a quantity unit -->
@@ -670,7 +672,7 @@
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">Tähtaja skoor: %1$s</string>
   <string name="subtitle_per_serving">portsjoni kohta</string>
-  <string name="subtitle_tap_preparation_mode">Vajuta siia ettevalmistusrežiimiks</string>
+  <string name="subtitle_tap_preparation_mode">Vajuta siia valmistusrežiimiks</string>
   <!-- Context is Label printer -->
   <string name="subtitle_print_label_no">Silt puudub</string>
   <!-- Short form for "One label per purchase" -->
@@ -977,7 +979,7 @@
   <string name="property_not_check_shopping_list">Mitte kontrollida poenimekirja alusel</string>
   <string name="property_not_check_shopping_list_description">Puuduvate esemete lisamisel sellele</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
-  <string name="property_preparation">Ettevalmistus</string>
+  <string name="property_preparation">Valmistamine</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">Kulud</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
