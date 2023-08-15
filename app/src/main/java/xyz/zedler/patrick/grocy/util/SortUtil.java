@@ -208,6 +208,36 @@ public class SortUtil {
     ));
   }
 
+  public static void sortTasksByCategory(
+      List<Task> tasks,
+      HashMap<Integer, TaskCategory> taskCategoryHashMap,
+      boolean ascending
+  ) {
+    if (tasks == null || tasks.isEmpty()) {
+      return;
+    }
+    Collections.sort(
+        tasks,
+        (item1, item2) -> {
+          String cId1 = (ascending ? item1 : item2).getCategoryId();
+          String cId2 = (ascending ? item2 : item1).getCategoryId();
+          TaskCategory c1 = NumUtil.isStringInt(cId1)
+              ? taskCategoryHashMap.get(Integer.parseInt(cId1)) : null;
+          TaskCategory c2 = NumUtil.isStringInt(cId2)
+              ? taskCategoryHashMap.get(Integer.parseInt(cId2)) : null;
+
+          if (c1 == null && c2 == null) {
+            return 0;
+          } else if (c1 == null) {
+            return -1;
+          } else if (c2 == null) {
+            return 1;
+          }
+          return c1.getName().compareTo(c2.getName());
+        }
+    );
+  }
+
   public static void sortChoreEntriesByNextExecution(
       List<ChoreEntry> choreEntries, boolean ascending
   ) {
