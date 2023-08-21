@@ -1,3 +1,7 @@
+## 3.3.2
+
+- New: Compatibility for server version 4.0.2
+
 ## 3.3.1
 
 - New: Compatibility for server version 4.0.1
