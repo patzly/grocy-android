@@ -298,7 +298,7 @@
   <string name="msg_stored_purchases_product_online">点击此处将此产品储存的采购记录发送至服务器</string>
   <string name="msg_choose_product">‎您扫描的条码尚未关联产品，您可以将其关联到现有产品或为其创建新产品</string>
   <string name="msg_product_name_off">‎条码的产品名称来自Open Food Facts</string>
-  <string name="msg_product_name_obf">‎条形码的产品名称来自Open Beauty Facts。‎</string>
+  <string name="msg_product_name_obf">‎条码的产品名称来自Open Beauty Facts</string>
   <string name="msg_product_name_lookup_error">‎无法在“Open Food Facts”或“Open Food Facts”上查找条形码。‎</string>
   <string name="msg_product_name_lookup_empty">条形码不在“Open Food Facts”或“Open Beauty Facts”数据库中。‎</string>
   <string name="msg_off_option_deactivated">‎要自动建议产品名称，您可以在设置中激活“Open Food Facts”查找。‎</string>
