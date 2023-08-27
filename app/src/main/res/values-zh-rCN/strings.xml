@@ -292,7 +292,7 @@
   <string name="msg_data_copied_from_product">数据复制于以下产品：/n%1$s</string>
   <string name="msg_recipe_added_to_cart">将菜谱中的食材添加至购物车</string>
   <string name="msg_recipe_consumed">从库存中删除“%1$s”菜谱的全部食材</string>
-  <string name="msg_stored_purchases_overview">‎设备上存在未同步到服务器的采购物品，点击此处了解详情‎</string>
+  <string name="msg_stored_purchases_overview">设备上存在未同步至服务器的采购记录，点击此处了解详情‎</string>
   <string name="msg_stored_purchases">‎尚未同步到服务器的采购物品将显示在此处。它们与临时物品一起保存在app中，方便您在快速模式下更快地扫码采购，不需要通过主数据菜单新建物品。‎</string>
   <string name="msg_stored_purchases_product_offline">‎点击产品并填写所需数据。之后，产品将在此处显示为在线，并且存储的购买可以发送到服务器。‎</string>
   <string name="msg_stored_purchases_product_online">‎点击此处将此产品的存储购买发送到服务器。‎</string>
