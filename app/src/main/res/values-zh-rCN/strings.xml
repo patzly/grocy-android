@@ -410,7 +410,7 @@
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_not_check_shopping_list">在默认状态下，被加到购物清单中的数量为”所需数量 - 库存数量 -购物清单数量”。 启用此选项后，仅根据库存数量而不检查购物清单中已存在的数量。</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_recipe_servings">全部配料可以制作的份数</string>
+  <string name="msg_help_recipe_servings">全部食材可制作的份数</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_produces_product">被选中的产品，在消耗此菜谱时向库存中增加一份此产品（每份以库存数量为单位）</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
