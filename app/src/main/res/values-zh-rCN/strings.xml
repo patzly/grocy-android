@@ -421,7 +421,7 @@
   <string name="msg_help_recipe_group">作为食材分组标题和分组依据</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_price_factor">食材单价乘以此系数得出食材的最终价格</string>
-  <string name="msg_help_recipe_ingredients_wrong">对于低于4.0.0版本的Grocy服务器，此列表可能包含错误的执行信息。为了看到正确的价格，请更新至4.0.0或更高版本。</string>
+  <string name="msg_help_recipe_ingredients_wrong">对于低于4.0.0版本的APP，此列表可能包含错误的执行信息。为了看到正确的价格，请更新至4.0.0或更高版本。</string>
   <string name="msg_help_date_chooser">‎您可以在设置中切换到键盘输入，这可以为您提高输入速度。‎</string>
   <string name="msg_help_date_chooser_keyboard">‎如果您所在的国家/地区首选 DDMMYY，则可以在设置中激活反向日期格式。\n要应用输入并关闭此页面，可以使用键盘上的 Done 键。‎</string>
   <string name="msg_help_notifications_tap">如果您没有收到通知或通知经常失效，请点击此处。</string>
