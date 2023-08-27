@@ -327,7 +327,7 @@
   <string name="msg_shortcuts_not_supported">此Android版本不支持快捷方式。</string>
   <string name="msg_barcode_formats">为了提高条码扫描速度，您可以只选择希望进行读取的条码格式。</string>
   <string name="msg_features">再次启动介绍“关于”</string>
-  <string name="msg_feedback">您有任何愿望，疑问或错误吗？请与我们联系，让我们为您提供帮助！\n我们会对Play商店中的出色评论感到非常高兴。</string>
+  <string name="msg_feedback">您有一些想法、疑问或者错误信息吗？请联系我们，我们会帮助你！\n我们会对Play商店中的出色评论感到非常高兴。</string>
   <string name="msg_point_at_barcode">请将摄像头对准条码</string>
   <string name="msg_save_product_first">请先保存产品</string>
   <string name="msg_save_recipe_first">请先保存菜谱</string>
