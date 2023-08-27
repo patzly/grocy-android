@@ -295,7 +295,7 @@
   <string name="msg_stored_purchases_overview">设备上存在未同步至服务器的采购记录，点击此处了解详情‎</string>
   <string name="msg_stored_purchases">‎尚未同步到服务器的采购物品将显示在此处。它们与临时物品一起保存在app中，方便您在快速模式下更快地扫码采购，不需要通过主数据菜单新建物品。‎</string>
   <string name="msg_stored_purchases_product_offline">‎点击进入产品表单并填写必要的数据，之后产品以在线的形式显示在这里，而且储存的采购表单会发送给服务器</string>
-  <string name="msg_stored_purchases_product_online">‎点击此处将此产品的存储购买发送到服务器。‎</string>
+  <string name="msg_stored_purchases_product_online">点击此处将此产品储存的采购记录发送至服务器</string>
   <string name="msg_choose_product">‎您扫描的条码尚未关联产品，您可以将其关联到现有产品或为其创建新产品</string>
   <string name="msg_product_name_off">‎条形码的产品名称来自Open Food Facts。‎</string>
   <string name="msg_product_name_obf">‎条形码的产品名称来自Open Beauty Facts。‎</string>
