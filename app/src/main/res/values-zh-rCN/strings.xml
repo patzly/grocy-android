@@ -301,7 +301,7 @@
   <string name="msg_product_name_obf">‎条码的产品名称来自Open Beauty Facts</string>
   <string name="msg_product_name_lookup_error">‎无法在Open Food Facts或Open Food Facts上查找条码‎</string>
   <string name="msg_product_name_lookup_empty">条码不在Open Food Facts或Open Beauty Facts数据库中‎</string>
-  <string name="msg_off_option_deactivated">‎要自动建议产品名称，您可以在设置中激活“Open Food Facts”查找。‎</string>
+  <string name="msg_off_option_deactivated">‎要自动建议产品名称，您可以在设置中启用Open Food Facts</string>
   <string name="msg_create_new_product_filled">创建新产品“%1$s”</string>
   <string name="msg_create_new_product">创建新产品</string>
   <string name="msg_create_new_pending_product_filled">‎创建新的临时产品\"‎%1$s\"</string>
