@@ -394,7 +394,7 @@
   <string name="msg_help_tare_weight_purchase">已启用去皮功能--请称重整个容器，提交数量后将自动计算净重</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_stock_check">当添加此产品作为菜谱的食材时，这将作为默认设置</string>
-  <string name="msg_help_inventory_fields">以下领域适用于新增产品。</string>
+  <string name="msg_help_inventory_fields">以下字段应用于新增产品</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_choose">‎您可以选择条形码扫描仪进行相机条形码扫描。‎</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
