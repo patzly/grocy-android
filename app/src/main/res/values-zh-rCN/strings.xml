@@ -438,8 +438,7 @@
   <string name="msg_help_home_assistant_login_server">如果您使用该服务，您还可以输入您的Nabu Casa Cloud URL。点击此卡以访问Nabu Casa网站。</string>
   <string name="msg_help_home_assistant_login_token">‎您可以在“家庭助理”配置文件设置（最后一部分）中创建长期访问令牌。点击此处从上方打开 URL。‎</string>
   <string name="msg_help_home_assistant_login_proxy_id">导航后或点击此卡以扫描填充下面的字段的QR码。</string>
-  <string name="msg_help_fab_overview_start">概览页面上的条码按钮可执行两个动作：\n\n- 短按：扫码消耗
-\n-长按：扫码采购\n\n通过此按钮，默认开启相应页面的快速模式。您可以在“特性”中更改设置。</string>
+  <string name="msg_help_fab_overview_start">概览页面上的条码按钮可执行两个动作：\n\n- 短按：扫码消耗\n-长按：扫码采购\n\n通过此按钮，默认开启相应页面的快速模式。您可以在“特性”中更改设置。</string>
   <string name="msg_share">看下这个令人惊叹的Grocy项目的安卓客户端：\nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">API密钥未生效</string>
