@@ -644,7 +644,7 @@
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="subtitle_stock_entry_name">购买：%1$s</string>
   <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened); The same string is also in the web interface: Consume form -->
-  <string name="subtitle_stock_entry">保质期：%1$s；数量：%2$s；%3$s</string>
+  <string name="subtitle_stock_entry">到期：%1$s；数量：%2$s；%3$s</string>
   <!-- %1$s and %2$s are numbers -->
   <string name="subtitle_entry_num_of_num">条目%2$d之%1$d</string>
   <!-- %1$s is an amount, %2$s is a quantity unit -->
