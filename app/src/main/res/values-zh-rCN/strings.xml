@@ -664,7 +664,7 @@
   <!-- Like the words 'not supported' from 'This version is not supported.'-->
   <string name="subtitle_not_supported">未支持</string>
   <!-- %1$s is a number -->
-  <string name="subtitle_barcode_amount">数量:%1$s</string>
+  <string name="subtitle_barcode_amount">数量：%1$s</string>
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">数量单位：%1$s</string>
   <string name="subtitle_barcode">条码：%1$s</string>
