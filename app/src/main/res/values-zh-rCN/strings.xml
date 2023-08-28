@@ -797,7 +797,7 @@
   </plurals>
   <string name="property_amount_min_stock">安全库存</string>
   <!-- %1$s is a quantity unit like "bottles" -->
-  <string name="property_amount_in">量单位%1$s</string>
+  <string name="property_amount_in">数量单位（%1$s）</string>
   <string name="property_price">价格</string>
   <string name="property_price_average">‎平均价格‎</string>
   <!-- %1$s is a quantity unit-->
