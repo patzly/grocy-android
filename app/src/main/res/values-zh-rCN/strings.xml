@@ -626,7 +626,7 @@
   <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
   <string name="subtitle_opened">‎（已开封）‎</string>
   <!-- %1$s is a number like 1, 2, 3 -->
-  <string name="subtitle_amount_opened">(%1$s已打开)</string>
+  <string name="subtitle_amount_opened">（%1$s已开封）</string>
   <!-- %1$s is a product name -->
   <string name="subtitle_stock_locations">%1$s有存货的地方</string>
   <string name="subtitle_none_selected">未选择</string>
