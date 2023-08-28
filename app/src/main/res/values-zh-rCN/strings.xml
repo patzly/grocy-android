@@ -467,7 +467,7 @@
   <string name="error_search">没有搜索结果</string>
   <string name="error_search_sub">请尝试其他关键词</string>
   <string name="error_filter">无内容显示</string>
-  <string name="error_filter_sub">尝试其他过滤器</string>
+  <string name="error_filter_sub">尝试其他筛选</string>
   <string name="error_duplicate">已经存在</string>
   <string name="error_parent">不能成为自己的父类</string>
   <string name="error_invalid_product">产品无效</string>
