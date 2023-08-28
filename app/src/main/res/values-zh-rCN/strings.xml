@@ -484,7 +484,7 @@
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">不能等于%1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
-  <string name="error_bounds_min_max">介于%1$s和%2$s之间</string>
+  <string name="error_bounds_min_max">必须介于%1$s和%2$s之间</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_bounds_min">必须等于或高于%1$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
