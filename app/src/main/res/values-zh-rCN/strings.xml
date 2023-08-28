@@ -615,7 +615,7 @@
   <string name="title_notifications">通知</string>
   <string name="title_product_cat_barcodes">条码</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
-  <string name="title_product_cat_qu_conversions">单位转换</string>
+  <string name="title_product_cat_qu_conversions">数量单位转换</string>
   <string name="title_unknown_input">未知的输入</string>
   <string name="title_presets_new_products">预设新产品</string>
   <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
