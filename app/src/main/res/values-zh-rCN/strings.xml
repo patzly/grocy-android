@@ -319,7 +319,7 @@
   <string name="msg_compatibility">此APP版本与服务器上的Grocy版本不兼容。\n\n当前服务器版本：%1$s\n\n支持的服务器版本：%2$s\n如果当前服务器版本的主版本号（第一位数字）高于支持的版本，而您忽略此警告，则可能会发生数据丢失（不太可能）或崩溃（可能）的情况。\n如果只有细微的差异（例如，第三位数字更高），则可以忽略此警告。</string>
   <string name="msg_logout">您的服务器上的任何内容都不会更改。您将被重定向到登录页面。</string>
   <string name="msg_logout_demo">您正在运行<u>https://grocy.info</u>的常规演示实例。\n\n<b>此处未保存任何更改！\n它们将保持公开状态，直到服务器自动覆盖它们。</b>\n\n在登录屏幕上，您可以输入您的自己的服务器地址。</string>
-  <string name="msg_logout_demo_short">公共演示服务器，点击了解详情</string>
+  <string name="msg_logout_demo_short">公开的演示服务器，点击了解详情</string>
   <string name="msg_restart">应用当前配置需要重启APP，您想要现在重启吗？</string>
   <string name="msg_full_description">点击此处显示完整说明</string>
   <string name="msg_copied_clipboard">复制到剪贴板</string>
