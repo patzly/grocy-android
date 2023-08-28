@@ -274,7 +274,7 @@
   <!-- %1$s is a product name -->
   <string name="msg_master_delete_product">您是否确定删除产品“%1$s”？\n\n 这也会删除此产品的所有库存，日志和所有其他资料 - 如果想要保留并只是隐藏此产品，请考虑禁用它。</string>
   <!-- %1$s is a master data type like "location" or "product" -->
-  <string name="msg_master_delete_usage">这个%1$s还在用</string>
+  <string name="msg_master_delete_usage">%1$s仍在使用</string>
   <!-- %1$s is an amount and %2$s is a quantity unit.  -->
   <plurals name="msg_inventory_transaction_add">
     <item quantity="other">%1$s%2$s将添加到库存</item>
