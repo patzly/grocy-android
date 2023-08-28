@@ -807,7 +807,7 @@
   <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
   <string name="property_price_with_currency">%1$s%2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
-  <string name="property_price_in">价格单位%1$s</string>
+  <string name="property_price_in">价格（%1$s）</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
   <string name="property_price_unit_in">每%1$s价格在%2$s</string>
   <string name="property_quantity_unit">数量单位</string>
