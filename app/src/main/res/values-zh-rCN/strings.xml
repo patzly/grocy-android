@@ -478,7 +478,7 @@
   <string name="error_invalid_date_format">日期格式无效</string>
   <string name="error_api_qr_code">二维码未含有Grocy API 凭据</string>
   <string name="error_token_qr_code">二维码未含有Home Assistant长期访问令牌</string>
-  <string name="error_loading_qus">无法从产品加载数量单位</string>
+  <string name="error_loading_qus">无法加载产品的数量单位</string>
   <string name="error_clipboard_no_image">剪贴板不包含图片或者无法读取</string>
   <string name="error_no_children">所选产品没有子产品</string>
   <!-- %1$s is a number like 0, 1, 2 -->
