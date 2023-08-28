@@ -639,7 +639,7 @@
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="subtitle_never_overdue">永不过期</string>
   <string name="subtitle_selected">已选</string>
-  <string name="subtitle_stock_entry_no_specific">先到期，然后先入先出</string>
+  <string name="subtitle_stock_entry_no_specific">先开封，先到期，然后先入先出</string>
   <!-- %1$s is a purchase date -->
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="subtitle_stock_entry_name">购买：%1$s</string>
