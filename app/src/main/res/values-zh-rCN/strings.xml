@@ -624,7 +624,7 @@
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s%2$s</string>
   <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
-  <string name="subtitle_opened">‎（已打开）‎</string>
+  <string name="subtitle_opened">‎（已开封）‎</string>
   <!-- %1$s is a number like 1, 2, 3 -->
   <string name="subtitle_amount_opened">(%1$s已打开)</string>
   <!-- %1$s is a product name -->
