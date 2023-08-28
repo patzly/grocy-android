@@ -809,7 +809,7 @@
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">价格（%1$s）</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
-  <string name="property_price_unit_in">每%1$s价格在%2$s</string>
+  <string name="property_price_unit_in">每%1$s价格（%2$s）</string>
   <string name="property_quantity_unit">数量单位</string>
   <string name="property_quantity_units">数量单位</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
