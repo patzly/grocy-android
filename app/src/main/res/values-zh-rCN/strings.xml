@@ -464,7 +464,7 @@
   <string name="error_empty_chores_sub">‎转到主数据并创建一些‎</string>
   <string name="error_empty_recipes">没有菜谱</string>
   <string name="error_empty_ingredients">没有食材</string>
-  <string name="error_search"> 没有搜索结果</string>
+  <string name="error_search">没有搜索结果</string>
   <string name="error_search_sub">请尝试其他关键词</string>
   <string name="error_filter">无内容显示</string>
   <string name="error_filter_sub">尝试其他过滤器</string>
