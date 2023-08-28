@@ -249,7 +249,7 @@
   <string name="msg_not_in_stock">%1$s没有库存</string>
   <string name="msg_no_connection">未连接</string>
   <!-- %1$s is a product name -->
-  <string name="msg_no_stock_locations">%1$s无库存位置</string>
+  <string name="msg_no_stock_locations">%1$s没有库存位置</string>
   <!-- %1$s is a product name -->
   <string name="msg_no_stock_entries">%1$s没有库存条目</string>
   <string name="msg_not_found">产品未找到</string>
