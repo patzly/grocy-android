@@ -95,7 +95,7 @@
   <string name="action_create">创建</string>
   <string name="action_link">链接</string>
   <string name="action_try_again">再试一次</string>
-  <string name="action_open_scanner">打开扫描仪</string>
+  <string name="action_open_scanner">打开扫描器</string>
   <string name="action_discard">丢弃</string>
   <string name="action_clear_form">清空表单</string>
   <string name="action_take_photo">拍照</string>
