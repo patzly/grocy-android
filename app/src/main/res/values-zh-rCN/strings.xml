@@ -214,7 +214,7 @@
   </plurals>
   <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
   <plurals name="msg_due_tasks_long">
-    <item quantity="other">%1$d项逾期（下列所有）</item>
+    <item quantity="other">%1$d项到期（下列所有）</item>
   </plurals>
   <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
   <plurals name="msg_assigned_tasks">
