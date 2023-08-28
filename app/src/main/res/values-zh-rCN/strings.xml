@@ -701,7 +701,7 @@
 
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock">
-    <item quantity="other">您有%1$d产品在库存。</item>
+    <item quantity="other">库存中有%1$d款产品</item>
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_stock_due_soon">
