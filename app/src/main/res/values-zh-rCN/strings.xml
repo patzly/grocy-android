@@ -108,7 +108,7 @@
   <string name="action_change_layout">更改布局</string>
   <string name="action_edit_notes">编辑备注</string>
   <string name="action_add_missing">添加缺少的产品</string>
-  <string name="action_purchase_done_items">购买了物品</string>
+  <string name="action_purchase_done_items">物品购买完成</string>
   <string name="action_purchase_all_items">购买所有物品</string>
   <string name="action_skip_entry">跳过输入</string>
   <string name="action_toggle_flash">切换闪光灯</string>
