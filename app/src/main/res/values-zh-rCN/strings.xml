@@ -518,7 +518,7 @@
   <string name="error_wrong_grocycode_type">‎grocycode 包含错误的实体类型‎</string>
   <string name="error_stock_entry_grocycode">‎未找到此grocycode的库存条目‎</string>
   <string name="error_picture_uploads_forbidden">出于安全原因，只有私有服务器才可以上传图片。现在您正在使用演示服务器。</string>
-  <string name="error_permission">‎没有此操作的权限‎</string>
+  <string name="error_permission">‎无操作权限</string>
   <string name="error_permission_notification">工作提醒作需要通知权限</string>
   <string name="error_undefined">发生错误</string>
   <string name="error_invalid_base_servings">无效的份数</string>
