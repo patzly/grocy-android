@@ -609,7 +609,7 @@
   <string name="title_product_cat_optional">可选属性</string>
   <string name="title_product_cat_location">默认位置</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="title_product_cat_due_date">到期日</string>
+  <string name="title_product_cat_due_date">到期日期</string>
   <string name="title_product_cat_amount">数量</string>
   <string name="title_product_cat_quantity_unit">数量单位</string>
   <string name="title_notifications">通知</string>
