@@ -877,7 +877,7 @@
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_last_price">最近价格</string>
   <string name="property_last_price_unit">‎最近价格（单位）‎</string>
-  <string name="property_last_price_total">‎最后价格（总计）‎</string>
+  <string name="property_last_price_total">‎最近价格（总计）‎</string>
   <string name="property_price_insert">价格：%1$s</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">平均保质期</string>
