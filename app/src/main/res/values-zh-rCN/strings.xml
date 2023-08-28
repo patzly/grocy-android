@@ -888,7 +888,7 @@
   <string name="property_assignment">‎分配‎</string>
   <string name="property_value">价值</string>
   <string name="property_stock_value">库存价值</string>
-  <string name="property_opened">打开</string>
+  <string name="property_opened">已开封</string>
   <string name="property_not_opened">没开</string>
   <string name="property_is_freezer">冰箱</string>
   <!-- kcal (kilo calories) is a unit for energy -->
