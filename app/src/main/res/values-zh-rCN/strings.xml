@@ -270,7 +270,7 @@
   <string name="msg_shopping_list_deleted">成功删除购物清单%1$s</string>
   <string name="msg_barcode_duplicate">条码已存在</string>
   <!-- %1$s is a master data type like "Product group" or "Location"; %2$s is the name of it. -->
-  <string name="msg_master_delete">删除%1$s“%2$s”？</string>
+  <string name="msg_master_delete">您确定删除%1$s“%2$s”？</string>
   <!-- %1$s is a product name -->
   <string name="msg_master_delete_product">您是否确定删除产品“%1$s”？\n\n 这也会删除此产品的所有库存，日志和所有其他资料 - 如果想要保留并只是隐藏此产品，请考虑禁用它。</string>
   <!-- %1$s is a master data type like "location" or "product" -->
