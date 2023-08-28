@@ -458,8 +458,8 @@
   <string name="error_empty_qu">没有数量单位</string>
   <string name="error_empty_stores">没有商店</string>
   <string name="error_empty_tasks">没有任务</string>
-  <string name="error_empty_task_categories">‎无任务分类</string>
-  <string name="error_empty_unit_conversions">‎无数量单位转换‎</string>
+  <string name="error_empty_task_categories">‎没有任务分类</string>
+  <string name="error_empty_unit_conversions">‎没有数量单位转换‎</string>
   <string name="error_empty_chores">没有家务</string>
   <string name="error_empty_chores_sub">‎转到主数据并创建一些‎</string>
   <string name="error_empty_recipes">没有菜谱</string>
