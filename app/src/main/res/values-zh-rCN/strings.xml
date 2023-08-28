@@ -222,7 +222,7 @@
   </plurals>
   <string name="msg_task_mark">‎将任务标记为已完成‎</string>
   <string name="msg_task_completed">任务已标记为已完成</string>
-  <string name="msg_task_not_completed">‎将任务标记为未完成‎</string>
+  <string name="msg_task_not_completed">任务已标记为未完成</string>
   <string name="msg_task_undo">撤销任务</string>
   <string name="msg_recipes_enough_in_stock">库存充足</string>
   <string name="msg_recipes_enough_in_stock_filter">(%1$d)库存充足</string>
