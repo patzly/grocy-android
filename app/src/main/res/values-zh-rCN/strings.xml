@@ -677,7 +677,7 @@
   <string name="subtitle_product_quantity_unit">‎库存，采购默认值</string>
   <string name="subtitle_synced_with_server">‎与服务器同步‎</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
-  <string name="subtitle_recipe_due_score">到期分数：%1$s</string>
+  <string name="subtitle_recipe_due_score">到期评分：%1$s</string>
   <string name="subtitle_per_serving">每份</string>
   <string name="subtitle_tap_preparation_mode">点击这里进入准备模式</string>
   <!-- Context is Label printer -->
