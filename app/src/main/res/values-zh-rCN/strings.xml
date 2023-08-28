@@ -287,7 +287,7 @@
   <string name="msg_should_not_be_frozen">此产品不应冷冻，您想继续吗？</string>
   <string name="msg_item_marked_as_done">将项目标记为已完成</string>
   <string name="msg_item_marked_as_undone">将项目标记为撤消</string>
-  <string name="option_synced_success">配置同步成功</string>
+  <string name="option_synced_success">选项同步成功</string>
   <string name="option_synced_error">选项无法同步</string>
   <string name="msg_data_copied_from_product">数据复制于以下产品：/n%1$s</string>
   <string name="msg_recipe_added_to_cart">将菜谱中的食材添加至购物车</string>
