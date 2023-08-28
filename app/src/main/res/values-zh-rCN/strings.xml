@@ -519,7 +519,7 @@
   <string name="error_stock_entry_grocycode">‎未找到此grocycode的库存条目‎</string>
   <string name="error_picture_uploads_forbidden">出于安全原因，只有私有服务器才可以上传图片。现在您正在使用演示服务器。</string>
   <string name="error_permission">‎无操作权限</string>
-  <string name="error_permission_notification">工作提醒作需要通知权限</string>
+  <string name="error_permission_notification">工作提醒需要通知权限</string>
   <string name="error_undefined">发生错误</string>
   <string name="error_invalid_base_servings">无效的份数</string>
   <string name="error_pictures_size_exceeds_limit">您服务器上的产品或菜谱描述中嵌入的图片，超出了此应用程序的解析限制。请删除相关条目描述中的高质量和大尺寸的图片，这也将提高数据加载速度。</string>
