@@ -921,7 +921,7 @@
   <string name="property_accumulate_amount">累计子产品的安全库存</string>
   <string name="property_picture">图片</string>
   <string name="property_note_singleline">单行备注</string>
-  <string name="property_note_multiline">多行注释</string>
+  <string name="property_note_multiline">多行备注</string>
   <!-- like the words 'Single-line' in 'Single-line description'-->
   <string name="property_singleline">单行</string>
   <!-- like the words 'Multi-line' in 'Multi-line description'-->
