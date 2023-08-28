@@ -539,7 +539,7 @@
   <string name="title_task_entry">‎任务条目‎</string>
   <string name="title_master_data">主数据</string>
   <string name="title_stock_entries">库存条目</string>
-  <string name="title_stock_entry">‎库存输入‎</string>
+  <string name="title_stock_entry">‎库存条目</string>
   <string name="title_stock_journal">库存日志</string>
   <string name="title_shopping_list">购物清单</string>
   <string name="title_feedback">反馈</string>
