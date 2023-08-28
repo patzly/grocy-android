@@ -449,7 +449,7 @@
   <string name="error_empty_stock_sub">去购买一些产品</string>
   <string name="error_empty_shopping_list">空的购物清单</string>
   <string name="error_empty_shopping_list_sub">添加您需要的一些产品</string>
-  <string name="error_empty_barcodes_sub">请点击“+”按钮添加条形码</string>
+  <string name="error_empty_barcodes_sub">请点击“+”按钮添加条码</string>
   <string name="error_empty_master_data_sub">请点击“+”按钮新建</string>
   <string name="error_empty_product_barcodes">没有产品条形码</string>
   <string name="error_empty_locations">没有位置</string>
