@@ -265,7 +265,7 @@
   <!-- %1$s is a shopping list name -->
   <string name="msg_added_missing_products">已将缺少的产品加入购物清单%1$s</string>
   <!-- %1$s is a shopping list name -->
-  <string name="msg_shopping_list_cleared">成功清除空%1$s</string>
+  <string name="msg_shopping_list_cleared">成功清空购物清单%1$s</string>
   <!-- %1$s is a shopping list name -->
   <string name="msg_shopping_list_deleted">成功删除%1$s</string>
   <string name="msg_barcode_duplicate">条形码已存在</string>
