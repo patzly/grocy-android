@@ -104,7 +104,7 @@
   <!-- Short form for "Only link barcode to existing product", this should fit into a
   button so keep it short. -->
   <string name="action_link_and_clear">仅链接</string>
-  <string name="action_toggle_done">切换完成</string>
+  <string name="action_toggle_done">标记完成</string>
   <string name="action_change_layout">更改布局</string>
   <string name="action_edit_notes">编辑备注</string>
   <string name="action_add_missing">添加缺少的产品</string>
