@@ -37,10 +37,10 @@
   <string name="action_consume_spoiled">‎消耗变质的</string>
   <string name="action_consume_one_spoiled">消耗1件变质的</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
-  <string name="action_consume_one">消耗%1$s%2$s</string>
+  <string name="action_consume_one">消耗1%1$s%2$s</string>
   <string name="action_open">标记为已开封</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
-  <string name="action_open_one">开封%1$s%2$s</string>
+  <string name="action_open_one">打开1%1$s%2$s</string>
   <string name="action_edit_product">编辑产品</string>
   <string name="action_shopping_list_add">加入购物清单</string>
   <string name="action_consume_recipe">消耗此菜谱需要的全部配料</string>
