@@ -978,7 +978,7 @@
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">费用</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
-  <string name="property_due_score">到期分数</string>
+  <string name="property_due_score">到期评分</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_ingredients">食材</string>
   <string name="property_only_check_single_unit_in_stock">仅检查是否有库存</string>
