@@ -829,7 +829,7 @@
   <string name="property_factor">系数</string>
   <string name="property_barcode">条码</string>
   <string name="property_barcodes">条码</string>
-  <string name="property_barcodes_insert">‎条形码‎：%1$s</string>
+  <string name="property_barcodes_insert">‎条码‎：%1$s</string>
   <string name="property_days">天</string>
   <string name="property_purchased_date">购买日期</string>
   <string name="property_purchased_date_fill">‎购买日期‎：%1$s</string>
