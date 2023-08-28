@@ -343,7 +343,7 @@
   <string name="msg_port_connection_info_with_port">应用程序将连接到端口%1$s</string>
   <string name="msg_clear_form_first">在扫描另一个已知条形码之前先清空表单</string>
   <string name="msg_not_implemented_yet">本功能即将实现，请暂时使用Web客户端。</string>
-  <string name="msg_help_picture_changes">对图像的更改会立即与服务器同步，并不是在保存的时候才同步。</string>
+  <string name="msg_help_picture_changes">对图片的更改会立即与服务器同步，并不是在保存的时候才同步。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_stock_label_type">这是在购买时会填入的预设值</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
