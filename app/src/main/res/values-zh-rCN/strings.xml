@@ -488,7 +488,7 @@
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_bounds_min">必须等于或大于%1$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
-  <string name="error_bounds_max">必须低于或等于%1$s</string>
+  <string name="error_bounds_max">必须小于或等于%1$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_bounds_higher">必须大于%1$s</string>
   <string name="error_offline">离线</string>
