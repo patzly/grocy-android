@@ -451,7 +451,7 @@
   <string name="error_empty_shopping_list_sub">添加您需要的一些产品</string>
   <string name="error_empty_barcodes_sub">请点击“+”按钮添加条码</string>
   <string name="error_empty_master_data_sub">请点击“+”按钮新建</string>
-  <string name="error_empty_product_barcodes">没有产品条形码</string>
+  <string name="error_empty_product_barcodes">没有产品条码</string>
   <string name="error_empty_locations">没有位置</string>
   <string name="error_empty_product_groups">没有产品组</string>
   <string name="error_empty_products">没有产品</string>
