@@ -789,7 +789,7 @@
   <string name="property_status">状态</string>
   <string name="property_status_insert">状态：</string>
   <string name="property_amount">数量</string>
-  <string name="property_amount_insert">数量:%1$s</string>
+  <string name="property_amount_insert">数量：%1$s</string>
   <string name="property_seconds">秒</string>
   <!-- %1$s is a number (amount of seconds) -->
   <plurals name="property_seconds_num">
