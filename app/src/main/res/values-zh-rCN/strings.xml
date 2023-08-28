@@ -1059,7 +1059,7 @@
   <string name="category_user_settings">用户设置</string>
   <string name="category_scanner">扫描</string>
   <string name="category_scanner_camera">‎摄像头扫描器</string>
-  <string name="category_scanner_external">外部扫描仪</string>
+  <string name="category_scanner_external">外部扫描器</string>
   <string name="category_appearance">主题</string>
   <string name="category_network">网络</string>
   <string name="category_network_proxy">代理</string>
