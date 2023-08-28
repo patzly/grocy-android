@@ -852,7 +852,7 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_opened">默认开封后到期天数</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_days_default_freezing">冻结后的默认到期日</string>
+  <string name="property_due_days_default_freezing">冻结后的默认到期天数</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">解冻后的默认到期日</string>
   <string name="property_location">位置</string>
