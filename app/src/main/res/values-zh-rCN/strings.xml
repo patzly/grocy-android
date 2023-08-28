@@ -443,7 +443,7 @@
 
   <string name="error_api_not_working">API密钥未生效</string>
   <string name="error_orbot_not_installed">未安装Orbot</string>
-  <string name="error_select_product">选择产品</string>
+  <string name="error_select_product">选择一款产品</string>
   <string name="error_empty">必填项</string>
   <string name="error_empty_stock">无货</string>
   <string name="error_empty_stock_sub">去购买一些产品</string>
