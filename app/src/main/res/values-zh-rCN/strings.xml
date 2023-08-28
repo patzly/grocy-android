@@ -490,7 +490,7 @@
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_bounds_max">必须低于或等于%1$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
-  <string name="error_bounds_higher">必须高于%1$s</string>
+  <string name="error_bounds_higher">必须大于%1$s</string>
   <string name="error_offline">离线</string>
   <string name="error_offline_subtitle">检查您的连接，然后重试</string>
   <string name="error_no_done_items">没有标明已完成的项目</string>
