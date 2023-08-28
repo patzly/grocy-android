@@ -259,7 +259,7 @@
   <string name="msg_undo_transaction">撤销交易？</string>
   <string name="msg_undone_transaction">已撤消交易</string>
   <!-- %1$s is a date -->
-  <string name="msg_undone_transaction_description">未完成%1$s</string>
+  <string name="msg_undone_transaction_description">撤销于%1$s</string>
   <string name="msg_failed_to_sync">同步条目失败</string>
   <string name="msg_synced">同步条目成功</string>
   <!-- %1$s is a shopping list name -->
