@@ -920,7 +920,7 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">累计子产品的安全库存</string>
   <string name="property_picture">图片</string>
-  <string name="property_note_singleline">单行的注释</string>
+  <string name="property_note_singleline">单行注释</string>
   <string name="property_note_multiline">多行注释</string>
   <!-- like the words 'Single-line' in 'Single-line description'-->
   <string name="property_singleline">单行</string>
