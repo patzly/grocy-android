@@ -602,7 +602,7 @@
   <string name="title_edit_qu_conversion">‎编辑数量单位转换‎</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
   <string name="title_create_qu_conversion">‎新建数量单位转换‎</string>
-  <string name="title_shopping_list_edit">修改购物清单</string>
+  <string name="title_shopping_list_edit">编辑购物清单</string>
   <string name="title_shopping_list_new">新购物清单</string>
   <string name="title_shopping_mode">购物模式</string>
   <string name="title_batch_mode_shopping_list">购物清单批处理模式</string>
