@@ -512,7 +512,7 @@
   <string name="error_unexpected_response_code">意外的响应代码</string>
   <string name="error_unexpected_response">意外的服务器响应</string>
   <string name="error_no_browser">安装网络浏览器以显示帮助页面</string>
-  <string name="error_barcode_not_linked">条形码与产品无关</string>
+  <string name="error_barcode_not_linked">条码无法关联产品</string>
   <string name="error_no_product_details">无法获得产品详细信息</string>
   <string name="error_failed_barcode_upload">无法上传条形码</string>
   <string name="error_wrong_grocycode_type">‎grocycode 包含错误的实体类型‎</string>
