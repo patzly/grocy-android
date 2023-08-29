@@ -765,7 +765,7 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks_user">
-    <item quantity="other">你被分配了%1$d项任务。</item>
+    <item quantity="other">您被分配了%1$d项任务</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
