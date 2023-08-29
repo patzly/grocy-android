@@ -761,7 +761,7 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks">
-    <item quantity="other">%1$d项任务要完成。</item>
+    <item quantity="other">%1$d项任务需要完成</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks_user">
