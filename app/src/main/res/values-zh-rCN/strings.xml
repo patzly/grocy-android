@@ -560,7 +560,7 @@
   <string name="title_edit_description">编辑描述</string>
   <!-- This is the header of a bottom sheet which is used to get numbers or text from the user. -->
   <string name="title_input">输入数字</string>
-  <string name="title_external_barcode_input">外部扫描仪</string>
+  <string name="title_external_barcode_input">外部扫描器</string>
   <string name="title_confirmation">确认</string>
   <string name="title_choose_product">选择产品</string>
   <string name="title_pending_products">‎待定产品‎</string>
