@@ -773,7 +773,7 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="error_max_decimal_places">
-    <item quantity="other">最多%1$s个小数位</item>
+    <item quantity="other">最多%1$s位小数</item>
   </plurals>
 
   <string name="property_name">名称</string>
