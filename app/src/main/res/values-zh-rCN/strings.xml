@@ -1172,7 +1172,7 @@
   <string name="setting_proxy_host_description">代理主机名称</string>
   <string name="setting_proxy_port">代理端口</string>
   <string name="setting_proxy_port_description">‎代理的端口号‎</string>
-  <string name="setting_synchronized">以下选项与服务器同步</string>
+  <string name="setting_synchronized">以下选项与服务器同步更新</string>
   <string name="settings_synchronized">这些设置与您的服务器同步。</string>
   <string name="setting_message_duration">‎信息显示时间‎</string>
   <string name="setting_message_duration_description">‎仅涉及交易信息</string>
