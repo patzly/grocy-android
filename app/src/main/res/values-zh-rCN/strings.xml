@@ -1089,7 +1089,7 @@
   <string name="setting_language_info">非常感谢Transifex的所有翻译志愿者！\n请访问我们的GitHub，了解如何帮助Grocy Android支持您的语言。</string>
   <string name="setting_language_system">跟随系统</string>
   <string name="setting_language_not_available">若无对应翻译语言，请使用英语</string>
-  <string name="setting_transition">设置页面之间使用平滑效果过渡</string>
+  <string name="setting_transition">使用平滑效果切换页面</string>
   <string name="setting_transition_description">代替淡出效果</string>
   <string name="setting_open_food_facts">获取Open Food Facts和Open Beauty Facts数据库数据</string>
   <string name="setting_open_food_facts_description">通过条形码获取信息</string>
