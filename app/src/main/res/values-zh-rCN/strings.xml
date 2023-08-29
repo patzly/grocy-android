@@ -690,7 +690,7 @@
   <string name="subtitle_total_price">总价：%1$s%2$s</string>
 
   <string name="description_input_product_part1">产品字段包含：</string>
-  <string name="description_input_product_part2">请选择如何继续：</string>
+  <string name="description_input_product_part2">请选择下一步操作：</string>
   <string name="description_input_product_option1">创建新产品并使用输入作为名称</string>
   <string name="description_input_product_option2">创建新产品并使用输入为条形码</string>
   <string name="description_input_product_option3">添加条形码到现有产品</string>
