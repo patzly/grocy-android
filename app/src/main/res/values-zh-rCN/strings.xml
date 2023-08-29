@@ -777,7 +777,7 @@
   </plurals>
 
   <string name="property_name">名称</string>
-  <string name="property_name_singular">名称（单行）</string>
+  <string name="property_name_singular">名称</string>
   <string name="property_name_plural">名称</string>
   <string name="property_product">产品</string>
   <string name="property_products">产品</string>
