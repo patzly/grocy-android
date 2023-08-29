@@ -581,7 +581,7 @@
 
   <string name="title_spoiled">已变质</string>
   <string name="title_use_specific">使用指定的库存条目</string>
-  <string name="title_specific">具体库存项目</string>
+  <string name="title_specific">指定的库存条目</string>
   <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_exact_amount">消耗确切金额</string>
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
