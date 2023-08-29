@@ -574,7 +574,7 @@
   <string name="title_task_edit">编辑任务</string>
   <string name="title_entry_new">新建条目</string>
   <string name="title_entry_edit">编辑条目</string>
-  <string name="title_ingredient_new">新建原料</string>
+  <string name="title_ingredient_new">新建食材</string>
   <string name="title_ingredient_edit">编辑食材</string>
   <string name="title_recipe_create">新建菜单</string>
   <string name="title_recipe_edit">编辑菜谱</string>
