@@ -594,7 +594,7 @@
   <string name="title_unit_price">单价</string>
   <!-- %1$s is a quantity unit -->
   <string name="title_unit_price_specific">%1$s价格</string>
-  <string name="title_stock_entry_no_specific">没有特定条目</string>
+  <string name="title_stock_entry_no_specific">没有指定条目</string>
   <string name="title_list_entry">列表条目</string>
   <string name="title_edit_barcode">编辑条码</string>
   <string name="title_create_barcode">新建条码</string>
