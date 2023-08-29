@@ -695,7 +695,7 @@
   <string name="description_input_product_option2">新建产品并使用输入内容作为条码</string>
   <string name="description_input_product_option3">添加条形码到现有产品</string>
   <!-- Context: Clear shopping list -->
-  <string name="description_clear_shopping_list_option1">只删除完成项目</string>
+  <string name="description_clear_shopping_list_option1">仅删除完成项目</string>
   <!-- Context: Clear shopping list -->
   <string name="description_clear_shopping_list_option2">删除所有项目</string>
 
