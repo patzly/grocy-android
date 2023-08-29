@@ -1133,7 +1133,7 @@
   <string name="setting_auto_add_shopping_list_description">低于安全库存的</string>
   <string name="setting_empty_value">空</string>
   <string name="setting_sync_off">同步关闭</string>
-  <string name="setting_loading">负荷值</string>
+  <string name="setting_loading">正在加载数值</string>
   <string name="setting_not_loaded">无法加载</string>
   <string name="setting_debug">启用日志</string>
   <string name="setting_debug_description">用于调试</string>
