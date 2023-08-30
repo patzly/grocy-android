@@ -36,3 +36,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Grocy Android"
 include ':app'
+include ':InteractiveKeyManager'
+include ':MemorizingTrustManager'

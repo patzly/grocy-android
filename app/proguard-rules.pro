@@ -61,3 +61,6 @@
 # Only has effected these pre-KitKat two compatibility classes
 -dontwarn com.android.org.conscrypt.SSLParametersImpl
 -dontwarn org.apache.harmony.xnet.provider.jsse.SSLParametersImpl
+
+# This is generated automatically by the Android Gradle plugin.
+-dontwarn lombok.NonNull

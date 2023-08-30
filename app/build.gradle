@@ -97,6 +97,11 @@ dependencies {
     implementation libs.lifecycle.viewmodel.savedstate
     implementation libs.lifecycle.viewmodel.ktx
     implementation libs.paging
+
+    // Certificate and trust management
+    implementation project(':InteractiveKeyManager')
+    implementation project(':MemorizingTrustManager')
+
     // Navigation framework for easy navigation control using XML
     implementation libs.navigation.fragment
     implementation libs.navigation.ui

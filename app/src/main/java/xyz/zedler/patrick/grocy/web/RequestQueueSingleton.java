@@ -28,14 +28,22 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
+
+import de.duenndns.ssl.MemorizingTrustManager;
+import de.ritscher.ssl.InteractiveKeyManager;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+
+import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.NETWORK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 
@@ -78,7 +86,7 @@ public class RequestQueueSingleton {
       stack = new ProxyHurlStack(sharedPrefs, useTor);
     } else {
       try {
-        stack = new HurlStack(null, new TLSSocketFactory());
+        stack = new HurlStack(null, new TLSSocketFactory(ctx));
       } catch (NoSuchAlgorithmException | KeyManagementException e) {
         stack = new HurlStack();
       }
@@ -92,9 +100,11 @@ public class RequestQueueSingleton {
 
     private final SSLSocketFactory internalSSLSocketFactory;
 
-    public TLSSocketFactory() throws KeyManagementException, NoSuchAlgorithmException {
+    public TLSSocketFactory(Context ctx) throws KeyManagementException, NoSuchAlgorithmException {
       SSLContext context = SSLContext.getInstance("TLS");
-      context.init(null, null, null);
+      KeyManager keyManager = new InteractiveKeyManager(ctx.getApplicationContext());
+      TrustManager mtm = new MemorizingTrustManager(ctx);
+      context.init(new KeyManager[]{keyManager}, new TrustManager[]{mtm}, new SecureRandom());
       internalSSLSocketFactory = context.getSocketFactory();
     }
 

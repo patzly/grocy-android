@@ -81,6 +81,14 @@
 
     </activity>
 
+    <!-- InteractiveKeyManager -->
+    <activity
+      android:name="de.ritscher.ssl.SelectKeyStoreActivity"
+      android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar"/>
+    <!-- MemorizingTrustManager -->
+    <activity android:name="de.duenndns.ssl.MemorizingActivity"
+      android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar"/>
+
     <service
       android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
       android:enabled="false"
