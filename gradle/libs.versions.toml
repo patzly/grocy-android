@@ -1,0 +1,68 @@
+[versions]
+agp = "8.1.1"
+appcompat = "1.6.1"
+fragment = "1.6.1"
+preference = "1.2.1"
+browser = "1.6.0"
+webkit = "1.7.0"
+lifecycle-viewmodel = "2.6.1"
+navigation = "2.7.1"
+room = "2.5.2"
+rxandroid = "3.0.2"
+material = "1.10.0-alpha06" # change to stable 1.10.0 when it has been released
+flexbox = "3.0.0"
+volley = "1.2.1"
+glide = "4.16.0"
+netcipher = "2.1.0"
+conscrypt = "2.5.2"
+websocket-client = "2.0.2"
+gson = "2.10.1"
+fuzzywuzzy = "1.4.0"
+work = "2.8.1"
+#noinspection GradleDependency
+zxing-core = "3.3.0"
+zxing-android-embedded = "4.3.0"
+desugar = "2.0.3"
+
+[libraries]
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+fragment = { group = "androidx.fragment", name = "fragment", version.ref = "fragment" }
+preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
+browser = { module = "androidx.browser:browser", version.ref = "browser" }
+webkit = { module = "androidx.webkit:webkit", version.ref = "webkit" }
+lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle-viewmodel" }
+lifecycle-viewmodel-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "lifecycle-viewmodel" }
+# Navigation framework for easy navigation control using XML
+navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigation" }
+navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigation" }
+# Android Room for database and RxJava for Async access of database
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-rxjava3 = { module = "androidx.room:room-rxjava3", version.ref = "room" }
+rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
+# Material views
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
+# Volley for all general network requests and Glide for image loading
+volley = { module = "com.android.volley:volley", version.ref = "volley" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+# Netcipher for Tor support and Conscrypt for new TLS support on old Android devices
+netcipher = { module = "info.guardianproject.netcipher:netcipher", version.ref = "netcipher" }
+conscrypt = { module = "org.conscrypt:conscrypt-android", version.ref = "conscrypt" }
+websocket-client = { module = "dev.gustavoavila:java-android-websocket-client", version.ref = "websocket-client" }
+# GSON for converting JSON responses to Java objects
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+# FuzzyWuzzy for fuzzy search in product names and autocompletion
+fuzzywuzzy = { module = "me.xdrop:fuzzywuzzy", version.ref = "fuzzywuzzy" }
+# Work for daily notifications
+work-runtime = { module = "androidx.work:work-runtime", version.ref = "work" }
+# ZXing for barcode scanning
+zxing-core = { module = "com.google.zxing:core", version.ref = "zxing-core" }
+zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxing-android-embedded" }
+# https://github.com/journeyapps/zxing-android-embedded#option-2-desugaring-advanced
+# prevents bug https://github.com/patzly/grocy-android/issues/425
+desugar = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref = "navigation" }
