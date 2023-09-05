@@ -1,6 +1,12 @@
 ## 3.3.2
 
-- New: Compatibility for server version 4.0.2
+- New: Compatibility for server version 4.0.2 and 4.0.3 (#772)
+- Fixed: Network error when consuming or purchasing (and other actions), due to new rule for API
+  requests which Grocy server 4.0.3 introduced (#772)
+
+Sorry for any inconvenience caused by the bugs above.
+Other bug fixes and new features will come soon, once the main developer of this app
+finishes his computer science studies in a few weeks.
 
 ## 3.3.1
 
