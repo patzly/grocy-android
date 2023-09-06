@@ -6,7 +6,7 @@
 - Fixed: Product information not saved when going back (#765)
 - Fixed: Missing delete confirmation in recipe edit mode (#764)
 
-Sorry for any inconvenience caused by the bugs above.
+? Sorry for any inconvenience caused by the bugs above.
 Other bug fixes and new features will come soon, once the main developer of this app
 finishes his computer science studies in a few weeks.
 
