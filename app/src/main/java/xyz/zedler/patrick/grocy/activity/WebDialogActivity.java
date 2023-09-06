@@ -22,7 +22,10 @@ package xyz.zedler.patrick.grocy.activity;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import xyz.zedler.patrick.grocy.R;
@@ -34,16 +37,21 @@ public class WebDialogActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_web_dialog);
 
-    RelativeLayout container = findViewById(R.id.container);
+    FrameLayout container = findViewById(R.id.container);
     WebView webView = findViewById(R.id.webview);
     CardView cardView = findViewById(R.id.card_view);
+    TextView textView = findViewById(R.id.description);
 
     container.setOnClickListener(v -> finish());
 
-    int backgroundColor = getIntent().getIntExtra("background", -1);
+    int backgroundColor = getIntent().getIntExtra("colorBg", -1);
     if (backgroundColor != -1) {
-      webView.setBackgroundColor(backgroundColor);
       cardView.setCardBackgroundColor(backgroundColor);
+      webView.setBackgroundColor(backgroundColor);
+    }
+    int textColor = getIntent().getIntExtra("colorText", -1);
+    if (textColor != -1) {
+      textView.setTextColor(textColor);
     }
 
     webView.getSettings().setJavaScriptEnabled(false);

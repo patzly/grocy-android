@@ -18,7 +18,7 @@
   ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
   <style name="Base.Grocy" parent="Theme.Material3.DayNight.NoActionBar">
     <item name="android:colorPrimaryDark">?android:attr/colorBackground</item>
@@ -52,13 +52,12 @@
     <item name="android:navigationBarColor">@color/transparent</item>
   </style>
 
-  <style name="Theme.Grocy.WebDialog" parent="Theme.AppCompat.Light.Dialog">
-    <item name="android:windowAnimationStyle">@null</item>
+  <style name="Theme.Grocy.WebDialog" parent="Theme.AppCompat.Light.Dialog" tools:ignore="PrivateResource">
     <item name="android:windowBackground">@android:color/transparent</item>
+    <item name="android:windowElevation">@dimen/m3_alert_dialog_elevation</item>
+    <item name="android:backgroundDimAmount">0.7</item>
     <item name="windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
-    <item name="colorPrimary">?attr/colorPrimary</item>
-    <item name="colorPrimaryDark">?attr/colorPrimaryDark</item>
   </style>
 
   <style name="Theme.Grocy.Red" parent="Theme.Grocy">

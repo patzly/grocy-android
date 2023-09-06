@@ -31,12 +31,17 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.elevation.SurfaceColors;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.WebDialogActivity;
 import xyz.zedler.patrick.grocy.databinding.ViewHtmlCardBinding;
@@ -141,10 +146,48 @@ public class HtmlCardView extends LinearLayout {
   public void showHtmlDialog(Activity activity) {
     Intent intent = new Intent(context, WebDialogActivity.class);
     intent.putExtra("html", getFormattedHtml(html, false));
-    intent.putExtra("background", ResUtil.getColorAttr(context, R.attr.colorSurface));
+    intent.putExtra("colorBg", SurfaceColors.SURFACE_3.getColor(activity));
+    intent.putExtra("colorText", ResUtil.getColorAttr(activity, R.attr.colorOnSurface));
     context.startActivity(intent);
     activity.overridePendingTransition(R.anim.fade_in, 0);
     this.activity = activity;
+
+
+    /*FrameLayout frameLayout = new FrameLayout(context);
+    frameLayout.setLayoutParams(
+        new FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+    );
+    WebView webView = new WebView(context);
+    webView.getSettings().setJavaScriptEnabled(false);
+    webView.getSettings().setDomStorageEnabled(false);
+    webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+    webView.getSettings().setAllowFileAccess(false);
+    webView.loadDataWithBaseURL(
+        "file:///android_asset/", getFormattedHtml(html, false),
+        "text/html; charset=utf-8", "utf8", null
+    );
+    webView.setBackgroundColor(Color.TRANSPARENT);
+    webView.setVerticalScrollBarEnabled(false);
+    FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+        FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
+    );
+    layoutParams.setMargins(
+        UiUtil.dpToPx(context, 17),
+        UiUtil.dpToPx(context, 10),
+        UiUtil.dpToPx(context, 17),
+        0
+    );
+    webView.setLayoutParams(layoutParams);
+    frameLayout.addView(webView);
+
+    dialog = new MaterialAlertDialogBuilder(context)
+        .setTitle(title)
+        .setView(frameLayout)
+        .setPositiveButton(R.string.action_close, (dialog, which) -> {})
+        .create();
+    dialog.show();*/
   }
 
   private String getFormattedHtml(String html, boolean useOnSurfaceVariant) {

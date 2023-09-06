@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
       field.setAccessible(true);
       field.set(null, 10 * 1024 * 1024); // 10MB is the new size
     } catch (Exception e) {
-      e.printStackTrace();
+      Log.e(TAG, "onCreate: " + e);
     }
 
     // WEB
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
       public void onReceive(Context context, Intent intent) {
         Fragment navHostFragment = fragmentManager.findFragmentById(R.id.fragment_main_nav_host);
         assert navHostFragment != null;
-        if (navHostFragment.getChildFragmentManager().getFragments().size() == 0) {
+        if (navHostFragment.getChildFragmentManager().getFragments().isEmpty()) {
           return;
         }
         getCurrentFragment().updateConnectivity(netUtil.isOnline());
