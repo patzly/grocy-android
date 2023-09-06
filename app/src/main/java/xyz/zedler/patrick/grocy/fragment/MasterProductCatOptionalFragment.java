@@ -201,7 +201,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
                 Constants.ARGUMENT.ACTION,
                 Constants.ACTION.DELETE
             );
-            activity.onBackPressed();
+            activity.performOnBackPressed();
             return true;
           }
           if (menuItem.getItemId() == R.id.action_save) {
@@ -210,7 +210,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
                 Constants.ARGUMENT.ACTION,
                 ACTION.SAVE_CLOSE
             );
-            activity.onBackPressed();
+            activity.performOnBackPressed();
             return true;
           }
           return false;
@@ -228,7 +228,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
               Constants.ARGUMENT.ACTION,
               showSaveWithCloseButton ? ACTION.SAVE_CLOSE : ACTION.SAVE_NOT_CLOSE
           );
-          activity.onBackPressed();
+          activity.performOnBackPressed();
         }
     );
   }

@@ -212,7 +212,7 @@ public class MasterObjectListFragment extends BaseFragment
 
     // INITIALIZE VIEWS
 
-    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.onBackPressed());
+    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.performOnBackPressed());
     binding.searchClose.setOnClickListener(v -> dismissSearch());
     binding.editTextSearch.addTextChangedListener(new TextWatcher() {
       public void beforeTextChanged(CharSequence s, int start, int count, int after) {

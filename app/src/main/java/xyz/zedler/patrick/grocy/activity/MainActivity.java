@@ -46,6 +46,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
@@ -110,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
   private BottomScrollBehavior scrollBehavior;
   private SystemBarBehavior systemBarBehavior;
   public HapticUtil hapticUtil;
+  private OnBackPressedDispatcher dispatcher;
   private boolean runAsSuperClass;
   private boolean debug;
 
@@ -209,6 +212,29 @@ public class MainActivity extends AppCompatActivity {
       }
     }, sharedPrefs, TAG);
     navUtil.updateStartDestination();
+
+    dispatcher = getOnBackPressedDispatcher();
+    OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+      @Override
+      public void handleOnBackPressed() {
+        BaseFragment currentFragment = getCurrentFragment();
+        if (currentFragment.isSearchVisible()) {
+          currentFragment.dismissSearch();
+        } else {
+          boolean handled = currentFragment.onBackPressed();
+          if (!handled) {
+            setEnabled(false);
+            dispatcher.onBackPressed();
+            setEnabled(true);
+          }
+          if (!PrefsUtil.isServerUrlEmpty(sharedPrefs)) {
+            binding.bottomAppBar.performShow();
+          }
+        }
+        hideKeyboard();
+      }
+    };
+    dispatcher.addCallback(this, onBackPressedCallback);
 
     // BOTTOM APP BAR
 
@@ -399,21 +425,11 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
-  @Override
-  public void onBackPressed() {
-    BaseFragment currentFragment = getCurrentFragment();
-    if (currentFragment.isSearchVisible()) {
-      currentFragment.dismissSearch();
-    } else {
-      boolean handled = currentFragment.onBackPressed();
-      if (!handled) {
-        super.onBackPressed();
-      }
-      if (!PrefsUtil.isServerUrlEmpty(sharedPrefs)) {
-        binding.bottomAppBar.performShow();
-      }
+  public void performOnBackPressed() {
+    if (dispatcher == null) {
+      dispatcher = getOnBackPressedDispatcher();
     }
-    hideKeyboard();
+    dispatcher.onBackPressed();
   }
 
   @Override

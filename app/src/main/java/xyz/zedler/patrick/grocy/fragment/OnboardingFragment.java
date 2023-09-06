@@ -54,6 +54,7 @@ public class OnboardingFragment extends BaseFragment {
   private SharedPreferences sharedPrefs;
   private final ClickUtil clickUtil = new ClickUtil();
   private final HashMap<Integer, OnboardingPageFragment> fragments = new HashMap<>();
+  private boolean shownAgain;
 
   @Override
   public View onCreateView(
@@ -83,6 +84,9 @@ public class OnboardingFragment extends BaseFragment {
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
+    OnboardingFragmentArgs args = OnboardingFragmentArgs.fromBundle(getArguments());
+    shownAgain = args.getShowAgain();
+
     binding.buttonOnboardingPrevious.setOnClickListener(v -> {
       if (binding.pagerOnboarding.getCurrentItem() == 0) {
         return;
@@ -103,7 +107,11 @@ public class OnboardingFragment extends BaseFragment {
       if (clickUtil.isDisabled()) {
         return;
       }
-      activity.onBackPressed();
+      if (!sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false)) {
+        activity.showSnackbar(R.string.msg_features, true);
+        sharedPrefs.edit().putBoolean(Constants.PREF.INTRO_SHOWN, true).apply();
+      }
+      activity.performOnBackPressed();
     });
 
     binding.pagerOnboarding.setAdapter(new OnboardingPagerAdapter(this));
@@ -173,19 +181,20 @@ public class OnboardingFragment extends BaseFragment {
     activity.getScrollBehavior().setBottomBarVisibility(false, true);
   }
 
-  @SuppressLint("RestrictedApi")
   @Override
   public boolean onBackPressed() {
-    if (!sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false)) {
-      activity.showSnackbar(R.string.msg_features, true);
-      sharedPrefs.edit().putBoolean(Constants.PREF.INTRO_SHOWN, true).apply();
-    }
-    if (findNavController().getCurrentBackStack().getValue().size() == 2) { // TODO: Better condition
-      activity.navUtil.navigate(OnboardingFragmentDirections.actionOnboardingFragmentToNavigationLogin());
+    boolean introShown = sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false);
+    if (introShown) {
+      if (shownAgain) {
+        activity.navUtil.navigateUp();
+      } else {
+        activity.navUtil.navigate(
+            OnboardingFragmentDirections.actionOnboardingFragmentToNavigationLogin()
+        );
+      }
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   private void setArrows(int position, boolean animated) {

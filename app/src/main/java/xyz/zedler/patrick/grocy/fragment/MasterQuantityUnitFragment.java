@@ -136,7 +136,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.performOnBackPressed());
 
     // swipe refresh
     binding.swipeMasterQuantityUnit.setOnRefreshListener(this::refresh);
