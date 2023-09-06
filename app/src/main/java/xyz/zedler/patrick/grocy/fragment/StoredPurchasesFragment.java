@@ -133,7 +133,7 @@ public class StoredPurchasesFragment extends BaseFragment
 
     // INITIALIZE VIEWS
 
-    binding.back.setOnClickListener(v -> activity.onBackPressed());
+    binding.back.setOnClickListener(v -> activity.performOnBackPressed());
 
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)

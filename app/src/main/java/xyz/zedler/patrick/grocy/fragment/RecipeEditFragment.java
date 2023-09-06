@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -29,7 +30,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
@@ -42,6 +45,7 @@ import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
@@ -53,11 +57,14 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
 
   private final static String TAG = RecipeEditFragment.class.getSimpleName();
 
+  private static final String DIALOG_DELETE_SHOWING = "dialog_delete_showing";
+
   private MainActivity activity;
   private FragmentRecipeEditBinding binding;
   private RecipeEditViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
+  private AlertDialog dialogDelete;
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup group, Bundle state) {
@@ -216,6 +223,12 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
 
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
+    } else {
+      if (savedInstanceState.getBoolean(DIALOG_DELETE_SHOWING)) {
+        new Handler(Looper.getMainLooper()).postDelayed(
+            this::showDeleteConfirmationDialog, 1
+        );
+      }
     }
 
     // UPDATE UI
@@ -240,6 +253,12 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
           }
         }
     );
+  }
+
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putBoolean(DIALOG_DELETE_SHOWING, dialogDelete != null && dialogDelete.isShowing());
   }
 
   public void clearInputFocus() {
@@ -279,7 +298,7 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
   private boolean onMenuItemClick(MenuItem item) {
     if (item.getItemId() == R.id.action_delete) {
       ViewUtil.startIcon(item);
-      viewModel.deleteEntry();
+      showDeleteConfirmationDialog();
       return true;
     } else if (item.getItemId() == R.id.action_clear_form) {
       clearInputFocus();
@@ -322,6 +341,27 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     clearInputFocus();
     viewModel.getFormData().toggleScannerVisibility();
     viewModel.onBarcodeRecognized(rawValue);
+  }
+
+  private void showDeleteConfirmationDialog() {
+    Recipe recipe = viewModel.getRecipe();
+    if (recipe == null) {
+      activity.showSnackbar(R.string.error_undefined, false);
+      return;
+    }
+    dialogDelete = new MaterialAlertDialogBuilder(
+        activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution
+    ).setTitle(R.string.title_confirmation)
+        .setMessage(getString(R.string.msg_master_delete, getString(R.string.title_recipe), recipe.getName()))
+        .setPositiveButton(R.string.action_delete, (dialog, which) -> {
+          performHapticClick();
+          viewModel.deleteEntry();
+          activity.navUtil.navigateUp();
+          activity.navUtil.navigateUp();
+        }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
+        .setOnCancelListener(dialog -> performHapticClick())
+        .create();
+    dialogDelete.show();
   }
 
   public void toggleTorch() {

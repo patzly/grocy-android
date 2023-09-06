@@ -29,7 +29,6 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import java.io.UnsupportedEncodingException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -114,6 +113,7 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
     if (homeAssistantIngressSessionKey != null) {
       params.put("Cookie", "ingress_session=" + homeAssistantIngressSessionKey);
     }
-    return params.isEmpty() ? Collections.emptyMap() : params;
+    params.put("Content-Type", "application/json");
+    return params;
   }
 }

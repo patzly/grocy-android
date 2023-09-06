@@ -85,7 +85,6 @@ public class RecipeFragment extends BaseFragment implements
 
   private MainActivity activity;
   private RecipeViewModel viewModel;
-  private ClickUtil clickUtil;
   private FragmentRecipeBinding binding;
   private AlertDialog dialogConsume, dialogShoppingList, dialogDelete;
   private final HashMap<String, Boolean> dialogShoppingListMultiChoiceItems = new HashMap<>();
@@ -122,8 +121,6 @@ public class RecipeFragment extends BaseFragment implements
     binding.setActivity(activity);
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
-
-    clickUtil = new ClickUtil();
 
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
@@ -541,11 +538,8 @@ public class RecipeFragment extends BaseFragment implements
     dialogDelete = new MaterialAlertDialogBuilder(
         activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution
     ).setTitle(R.string.title_confirmation)
-        .setMessage(
-            getString(
-                R.string.msg_master_delete, getString(R.string.title_recipe), recipe.getName()
-            )
-        ).setPositiveButton(R.string.action_delete, (dialog, which) -> {
+        .setMessage(getString(R.string.msg_master_delete, getString(R.string.title_recipe), recipe.getName()))
+        .setPositiveButton(R.string.action_delete, (dialog, which) -> {
           performHapticClick();
           viewModel.deleteRecipe(recipe.getId());
           activity.navUtil.navigateUp();

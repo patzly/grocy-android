@@ -124,7 +124,7 @@ public class ShoppingListFragment extends BaseFragment implements
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.performOnBackPressed());
     binding.toolbar.setOnClickListener(v -> showShoppingListsBottomSheet());
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);

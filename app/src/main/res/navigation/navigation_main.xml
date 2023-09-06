@@ -306,6 +306,11 @@
     android:name="xyz.zedler.patrick.grocy.fragment.OnboardingFragment"
     android:label="OnboardingFragment"
     tools:layout="@layout/fragment_onboarding">
+    <argument
+      android:name="showAgain"
+      app:argType="boolean"
+      app:nullable="false"
+      android:defaultValue="false" />
     <action
       android:id="@+id/action_onboardingFragment_to_navigation_login"
       app:destination="@id/navigation_login"

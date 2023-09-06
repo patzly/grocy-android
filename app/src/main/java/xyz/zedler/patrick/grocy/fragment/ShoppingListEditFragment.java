@@ -87,7 +87,7 @@ public class ShoppingListEditFragment extends BaseFragment {
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.performOnBackPressed());
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {

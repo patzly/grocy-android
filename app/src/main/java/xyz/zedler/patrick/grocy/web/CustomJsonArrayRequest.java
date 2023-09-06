@@ -109,6 +109,7 @@ public class CustomJsonArrayRequest extends JsonRequest<JSONArray> {
     if (homeAssistantIngressSessionKey != null) {
       params.put("Cookie", "ingress_session=" + homeAssistantIngressSessionKey);
     }
+    params.put("Content-Type", "application/json");
     return params.isEmpty() ? Collections.emptyMap() : params;
   }
 }

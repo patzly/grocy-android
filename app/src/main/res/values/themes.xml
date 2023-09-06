@@ -18,7 +18,7 @@
   ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
   <style name="Base.Grocy" parent="Theme.Material3.DayNight.NoActionBar">
     <item name="android:colorPrimaryDark">?android:attr/colorBackground</item>
@@ -50,15 +50,6 @@
   <style name="Theme.Grocy.BottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
     <item name="enableEdgeToEdge">true</item>
     <item name="android:navigationBarColor">@color/transparent</item>
-  </style>
-
-  <style name="Theme.Grocy.WebDialog" parent="Theme.AppCompat.Light.Dialog">
-    <item name="android:windowAnimationStyle">@null</item>
-    <item name="android:windowBackground">@android:color/transparent</item>
-    <item name="windowNoTitle">true</item>
-    <item name="windowActionBar">false</item>
-    <item name="colorPrimary">?attr/colorPrimary</item>
-    <item name="colorPrimaryDark">?attr/colorPrimaryDark</item>
   </style>
 
   <style name="Theme.Grocy.Red" parent="Theme.Grocy">

@@ -183,7 +183,7 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
                 Constants.ARGUMENT.ACTION,
                 ACTION.SAVE_CLOSE
             );
-            activity.onBackPressed();
+            activity.performOnBackPressed();
             return true;
           }
           return false;

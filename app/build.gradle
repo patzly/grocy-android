@@ -18,8 +18,8 @@
  */
 
 plugins {
-    id 'com.android.application'
-    id 'androidx.navigation.safeargs'
+    alias libs.plugins.android.application
+    alias libs.plugins.navigation.safeargs
 }
 
 android {
@@ -41,8 +41,8 @@ android {
         minSdk 21
         targetSdk 34
         compileSdk 34
-        versionCode 49
-        versionName "3.3.1"
+        versionCode 50
+        versionName "3.3.2"
         resourceConfigurations += ['ca', 'cs', 'de', 'en', 'es', 'et', 'fr', 'hu', 'it', 'iw', 'ja', 'nb', 'nl', 'pl', 'pt-rBR', 'pt-rPT', 'ru', 'sk', 'sv', 'uk', 'zh-rCN', 'zh-rTW']
 
         javaCompileOptions {
@@ -89,57 +89,40 @@ android {
 }
 
 dependencies {
-    // Fix for Kotlin build error from some AndroidX dependencies
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0") {
-        because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
-    }
-
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.fragment:fragment:1.6.1'
-    implementation 'androidx.preference:preference:1.2.1'
-    implementation 'androidx.browser:browser:1.6.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
-
+    implementation libs.appcompat
+    implementation libs.fragment
+    implementation libs.preference
+    implementation libs.browser
+    implementation libs.webkit
+    implementation libs.lifecycle.viewmodel.savedstate
+    implementation libs.lifecycle.viewmodel.ktx
     // Navigation framework for easy navigation control using XML
-    implementation 'androidx.navigation:navigation-fragment:2.7.0'
-    implementation 'androidx.navigation:navigation-ui:2.7.0'
-
+    implementation libs.navigation.fragment
+    implementation libs.navigation.ui
     // Android Room for database and RxJava for Async access of database
-    implementation 'androidx.room:room-runtime:2.5.2'
-    implementation 'androidx.room:room-rxjava3:2.5.2'
-    annotationProcessor 'androidx.room:room-compiler:2.5.2'
-    implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
-
-    // Nice material views
-    // don't upgrade to 1.11 alpha, only change it to stable 1.10.0 when it has been released
-    implementation 'com.google.android.material:material:1.10.0-alpha06'
-
-    implementation 'com.google.android.flexbox:flexbox:3.0.0'
-
+    implementation libs.room.runtime
+    implementation libs.room.rxjava3
+    annotationProcessor libs.room.compiler
+    implementation libs.rxandroid
+    // Material views
+    implementation libs.material
+    implementation libs.flexbox
     // Volley for all general network requests and Glide for image loading
     // Netcipher for Tor support and Conscrypt for new TLS support on old Android devices
-    implementation 'com.android.volley:volley:1.2.1'
-    implementation 'com.github.bumptech.glide:glide:4.15.1'
-    implementation 'info.guardianproject.netcipher:netcipher:2.1.0'
-    implementation 'org.conscrypt:conscrypt-android:2.5.2'
-    implementation 'dev.gustavoavila:java-android-websocket-client:2.0.2'
-
+    implementation libs.volley
+    implementation libs.glide
+    implementation libs.netcipher
+    implementation libs.conscrypt
+    implementation libs.websocket.client
     // GSON for converting JSON responses to Java objects
-    implementation 'com.google.code.gson:gson:2.10.1'
-
+    implementation libs.gson
     // FuzzyWuzzy for fuzzy search in product names and autocompletion
-    implementation 'me.xdrop:fuzzywuzzy:1.4.0'
-
+    implementation libs.fuzzywuzzy
     // Work for daily notifications
-    implementation 'androidx.work:work-runtime:2.8.1'
-
-    implementation 'androidx.webkit:webkit:1.7.0'
-
+    implementation libs.work.runtime
     // ZXing for barcode scanning
-    //noinspection GradleDependency
-    implementation 'com.google.zxing:core:3.3.0'
-    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+    implementation libs.zxing.core
+    implementation libs.zxing.android.embedded
     // https://github.com/journeyapps/zxing-android-embedded#option-2-desugaring-advanced
     // prevents bug https://github.com/patzly/grocy-android/issues/425
     //noinspection GradleDependency

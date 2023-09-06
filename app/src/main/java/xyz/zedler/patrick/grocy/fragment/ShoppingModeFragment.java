@@ -119,7 +119,7 @@ public class ShoppingModeFragment extends BaseFragment implements
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.performOnBackPressed());
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();

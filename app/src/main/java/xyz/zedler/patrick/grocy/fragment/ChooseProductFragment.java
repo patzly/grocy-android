@@ -144,7 +144,7 @@ public class ChooseProductFragment extends BaseFragment
 
     // INITIALIZE VIEWS
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.performOnBackPressed());
 
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)

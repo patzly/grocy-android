@@ -302,7 +302,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       binding.description.setVisibility(View.GONE);
     } else {
       binding.description.setDialogTitle(R.string.property_description);
-      binding.description.setHtml(description, activity);
+      binding.description.setHtml(description);
     }
 
     refreshButtonStates();
