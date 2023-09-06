@@ -24,24 +24,34 @@
   <string name="action_purchase">Kjøp</string>
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in consume screen for example. -->
-  <string name="action_consume">Forbruke</string>
+  <string name="action_consume">Forbruk</string>
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in transfer screen for example. -->
-  <string name="action_transfer">Overføre</string>
+  <string name="action_transfer">Overfør</string>
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in inventory screen for example. -->
   <string name="action_inventory">Oppdater mengde</string>
   <!-- This is an action – in English, it contains a verb. -->
-  <string name="action_consume_all">Forbruke alle</string>
+  <string name="action_consume_all">Forbruk alle</string>
 
+  <string name="action_consume_spoiled">Forbruk som ødelagt</string>
   <string name="action_consume_one_spoiled">Forbruk 1 som ødelagt</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
-  <string name="action_consume_one">Bruk 1 %1$s av %2$s</string>
+  <string name="action_consume_one">Forbruk 1 %1$s %2$s</string>
   <string name="action_open">Merk som åpnet</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
-  <string name="action_open_one">Åpne 1 %1$s av %2$s</string>
+  <string name="action_open_one">Åpne 1 %1$s %2$s</string>
   <string name="action_edit_product">Rediger produkt</string>
-  <string name="action_shopping_list_add">Legg til i handleliste</string>
+  <string name="action_shopping_list_add">Legg til på handleliste</string>
+  <string name="action_consume_recipe">Forbruk alle ingrediensene som trengs for denne oppskriften</string>
+  <string name="action_copy_recipe">Kopier oppskrift</string>
+  <string name="action_apply_desired_servings">Sett antall porsjoner for denne resepten og oppdater data</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_product_opened">Produkt åpnet</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_from">Overfør Fra</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_to">Overfør Til</string>
 
   <string name="action_back">Tilbake</string>
   <string name="action_search">Søk</string>
@@ -61,16 +71,16 @@
   <string name="action_add">Legg til</string>
   <string name="action_clear">Tøm</string>
   <string name="action_clear_shopping_list">Tøm handleliste</string>
-  <string name="action_rate">Vurdere på Google Play</string>
+  <string name="action_rate">Vurder på Google Play</string>
   <string name="action_rate_description">Støtt utviklingen</string>
   <string name="action_email">Send epost</string>
-  <string name="action_email_description">Kontakt utviklerene</string>
-  <string name="action_new_issue">Lag nytt problem på Github</string>
-  <string name="action_new_issue_description">Rapporter problemer eller foreslå forbedringer</string>
+  <string name="action_email_description">Kontakt utviklerne</string>
+  <string name="action_new_issue">Opprett nytt problem på Github</string>
+  <string name="action_new_issue_description">Rapporter feil eller foreslå forbedringer</string>
   <string name="action_get_started">Kom i gang</string>
-  <string name="action_ascending">Synkende</string>
+  <string name="action_ascending">Stigende</string>
   <string name="action_filter">Filter </string>
-  <string name="action_sort">Sortere</string>
+  <string name="action_sort">Sorter</string>
   <string name="action_undo">Angre</string>
   <string name="action_retry">Prøv på nytt</string>
   <string name="action_edit">Rediger</string>
@@ -78,42 +88,64 @@
   <string name="action_proceed">Fortsett</string>
   <string name="action_delete">Slett</string>
   <string name="action_save">Lagre</string>
+  <string name="action_save_close">Lagre og lukk</string>
+  <string name="action_save_not_close">Lagre uten å lukke</string>
   <string name="action_logout">Logg ut</string>
   <string name="action_restart">Start på nytt</string>
   <string name="action_create">Opprett</string>
   <string name="action_link">Link</string>
   <string name="action_try_again">Prøv igjen</string>
   <string name="action_open_scanner">Åpne skanner</string>
-  <string name="action_discard">Kast</string>
+  <string name="action_discard">Forkast</string>
   <string name="action_clear_form">Tøm skjema</string>
-  <string name="action_toggle_done">Veksle ferdig</string>
+  <string name="action_take_photo">Ta bilde</string>
+  <!-- "Paste" like in "Paste from clipboard" -->
+  <string name="action_paste">Lim inn</string>
+  <!-- Short form for "Only link barcode to existing product", this should fit into a
+  button so keep it short. -->
+  <string name="action_link_and_clear">Bare link</string>
+  <string name="action_toggle_done">Endre ferdigstatus</string>
+  <string name="action_change_layout">Endre layout</string>
   <string name="action_edit_notes">Rediger notater</string>
   <string name="action_add_missing">Legg til manglende produkter</string>
-  <string name="action_purchase_done_items">Kjøp ferdige elementer</string>
+  <string name="action_purchase_done_items">Kjøp ferdige varer</string>
   <string name="action_purchase_all_items">Kjøp alle varer</string>
   <string name="action_skip_entry">Hopp over oppføring</string>
-  <string name="action_toggle_flash">Veksle blitz</string>
+  <string name="action_toggle_flash">Endre blitzstatus</string>
+  <string name="action_edit_recipe">Rediger oppskrift</string>
+  <string name="action_delete_recipe">Slett oppskrift</string>
   <string name="action_delete_shopping_list">Slett handleliste</string>
   <string name="action_create_key">Opprett nøkkel</string>
   <string name="action_login">Logg inn</string>
-  <string name="action_ignore">Ignorere</string>
+  <string name="action_ignore">Ignorer</string>
   <!-- This string should follow the equality between "all" and "Clear all items" -->
   <string name="action_clear_all">Alle</string>
   <!-- This string should follow the equality between "done" and "Clear done items" -->
-  <string name="action_clear_done">Fullført</string>
+  <string name="action_clear_done">Ferdig</string>
   <string name="action_display_help">Vis hjelpetekster</string>
   <string name="action_demo_server">Demoserver</string>
   <string name="action_own_server">Egen server</string>
   <string name="action_enter_data_manually">Skriv inn data manuelt</string>
+  <string name="action_details">Detaljer</string>
   <string name="action_perform">Utfør handling</string>
-  <string name="action_share">Dele</string>
+  <string name="action_share">Del</string>
   <string name="action_share_description">Fortell vennene dine om Grocy Android</string>
   <string name="action_no_filter">Ingen filter</string>
+  <string name="action_show_done_tasks">Vis ferdige oppgaver</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_chore_execution">Følg husarbeidsutførelse</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_next_chore_schedule">Følg neste planlagte husarbeidsplan</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_skip_next_chore_schedule">Hopp over neste husarbeidsoppgave</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_reschedule_next_execution">Endre dato for neste utførelse</string>
+  <string name="action_put_missing_products_on_shopping_list">Legg manglende produkter på handlelisten</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d utløper snart</item>
-    <item quantity="other">%1$d utløper snart</item>
+    <item quantity="other">%1$d forfaller snart</item>
   </plurals>
   <!-- %1$s is the number of products which are overdue. This string is the short form of e.g. "3 products are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_products">
@@ -125,6 +157,16 @@
     <item quantity="one">%1$d utløpt</item>
     <item quantity="other">%1$d utløpt</item>
   </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_short">
+    <item quantity="one">%1$d ikke fersk</item>
+    <item quantity="other">%1$d ikke ferske</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_long">
+    <item quantity="one">%1$d ikke fersk (alle under)</item>
+    <item quantity="other">%1$d ikke ferske (alle under)</item>
+  </plurals>
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
   <plurals name="msg_missing_products">
     <item quantity="one">%1$d under min. beholdning</item>
@@ -134,6 +176,11 @@
   <plurals name="msg_in_stock_products">
     <item quantity="one">%1$d på lager</item>
     <item quantity="other">%1$d på lager</item>
+  </plurals>
+  <!-- %1$s is the number of products which are opened. This string is the short form of e.g. "3 products are opened" -> "3 opened" -->
+  <plurals name="msg_opened_products">
+    <item quantity="one">%1$d åpnet</item>
+    <item quantity="other">%1$d åpnet</item>
   </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Forbrukt %1$s %2$s av %3$s</string>
@@ -148,78 +195,274 @@
   </plurals>
   <!-- %1$s is the number of done items in shopping list. This string is the short form of e.g. "3 done items are in shopping list" -> "3 done" -->
   <plurals name="msg_done_items">
-    <item quantity="one">utført</item>
-    <item quantity="other">utført</item>
+    <item quantity="one">%1$d ferdig</item>
+    <item quantity="other">%1$d ferdige</item>
   </plurals>
+  <!-- %1$s is the number of tasks which are done. This string is the short form of e.g. "3 tasks are done" -> "3 done" -->
+  <plurals name="msg_done_tasks">
+    <item quantity="one">%1$d ferdig</item>
+    <item quantity="other">%1$d ferdige</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are not done. This string is the short form of e.g. "3 tasks are not done" -> "3 not done" -->
+  <plurals name="msg_not_done_tasks">
+    <item quantity="one">%1$d ikke ferdig</item>
+    <item quantity="other">%1$d ikke ferdige</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are due soon. This string is the short form of e.g. "3 tasks are due soon" -> "3 due soon" -->
+  <plurals name="msg_due_tasks">
+    <item quantity="one">%1$d utløper snart</item>
+    <item quantity="other">%1$d utløper snart</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are due today. This string is the short form of e.g. "3 tasks are due today" -> "3 due today" -->
+  <plurals name="msg_due_today_tasks">
+    <item quantity="one">%1$d utløper i dag</item>
+    <item quantity="other">%1$d utløper i dag</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
+  <plurals name="msg_overdue_tasks">
+    <item quantity="one">%1$d forfalt</item>
+    <item quantity="other">%1$d forfalte</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_short">
+    <item quantity="one">%1$d forfaller</item>
+    <item quantity="other">%1$d forfaller</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_long">
+    <item quantity="one">%1$d forfaller (alle under)</item>
+    <item quantity="other">%1$d forfaller (alle under)</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
+  <plurals name="msg_assigned_tasks">
+    <item quantity="one">%1$d tildelt</item>
+    <item quantity="other">%1$d tildelt</item>
+  </plurals>
+  <string name="msg_task_mark">Merk oppgaven som fullført</string>
+  <string name="msg_task_completed">Oppgave merket som fullført</string>
+  <string name="msg_task_not_completed">Oppgave merket som ikke utført</string>
+  <string name="msg_task_undo">Angre oppgave</string>
+  <string name="msg_recipes_enough_in_stock">Tilstrekkelig i beholdningen</string>
+  <string name="msg_recipes_enough_in_stock_filter">(%1$d) Tilstrekkelig i beholdningen</string>
+  <!-- %1$s is an amount with quantity unit (e.g. 3 bottles) -->
+  <string name="msg_recipes_enough_in_stock_amount">Tilstrekkelig i beholdningen (%1$s)</string>
+  <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) Ikke nok i beholdningen, men er på handlelisten</string>
+  <string name="msg_recipes_not_enough_filter">(%1$d) Ikke nok i beholdningen</string>
+  <string name="msg_recipes_not_enough">Ikke nok i beholdningen</string>
+  <plurals name="msg_recipes_ingredients_missing_but_on_shopping_list">
+    <item quantity="one">%1$d ingrediens mangler, men er allerede på handlelisten</item>
+    <item quantity="other">%1$d ingredienser mangler, men er allerede på handlelisten</item>
+  </plurals>
+  <plurals name="msg_recipes_ingredients_missing">
+    <item quantity="one">%1$d ingrediens mangler</item>
+    <item quantity="other">%1$d ingredienser mangler</item>
+  </plurals>
+  <string name="msg_recipes_ingredient_fulfillment_info_list">Mangler: %1$s | Allerede på handlelisten: %2$s</string>
+  <string name="msg_chore_executed">Sporet utførelse av husarbeid</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
-  <string name="msg_purchased">Kjøpt %1$s %2$s av %3$s</string>
+  <string name="msg_purchased">Innkjøpt %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
-  <string name="msg_transferred">Overført %1$s %2$s av %3$s</string>
+  <string name="msg_transferred">Overført %1$s %2$s %3$s</string>
   <!-- %1$s is a product name, %2$s a number, %3$s is a quantity unit and %4$s a number (e.g. -3) -->
-  <string name="msg_inventoried">Lageroppføring  av %1$s er nå %2$s %3$s (%4$s)</string>
+  <string name="msg_inventoried">Beholdningen for %1$s er nå %2$s %3$s (%4$s)</string>
   <!-- %1$s is a product name -->
-  <string name="msg_not_in_stock">%1$s ikke på lager</string>
+  <string name="msg_not_in_stock">%1$s er ikke i beholdningen</string>
   <string name="msg_no_connection">Ingen tilkobling</string>
   <!-- %1$s is a product name -->
-  <string name="msg_no_stock_locations">Ingen lagerlokasjoner for %1$s</string>
+  <string name="msg_no_stock_locations">Ingen lokasjoner for %1$s</string>
   <!-- %1$s is a product name -->
-  <string name="msg_no_stock_entries">Ingen lageroppføringer for %1$s</string>
+  <string name="msg_no_stock_entries">Ingen oppføringer for %1$s</string>
   <string name="msg_not_found">Produkt ikke funnet</string>
-  <string name="msg_undone_transaction">Uferdig transaksjon</string>
+  <string name="msg_returning_to_overview">Går tilbake til oversikten om få sekunder</string>
+  <string name="msg_editor_hint">Skriv tekst her</string>
+  <string name="msg_coming_soon">Denne funksjonen blir tilgjengelig snart</string>
+  <string name="msg_undo_transaction">Angre transaksjon</string>
+  <string name="msg_undone_transaction">Transaksjon angret</string>
+  <!-- %1$s is a date -->
+  <string name="msg_undone_transaction_description">Transaksjon angret den %1$s</string>
   <string name="msg_failed_to_sync">Synkronisering av oppføringer feilet</string>
   <string name="msg_synced">Vellykket synkronisering av oppføringer</string>
   <!-- %1$s is a shopping list name -->
-  <string name="msg_added_missing_products">Lagt til manglende produkter til %1$s</string>
+  <string name="msg_added_missing_products">Lagt manglende produkter til %1$s</string>
   <!-- %1$s is a shopping list name -->
   <string name="msg_shopping_list_cleared">Vellykket tømming av %1$s</string>
   <!-- %1$s is a shopping list name -->
   <string name="msg_shopping_list_deleted">Vellykket sletting av %1$s</string>
-  <string name="msg_barcode_duplicate">Strekkode eksisterer allerede</string>
+  <string name="msg_barcode_duplicate">Strekkode eksisterer fra før</string>
   <!-- %1$s is a master data type like "Product group" or "Location"; %2$s is the name of it. -->
-  <string name="msg_master_delete">Slette %1$s \"%2$s\"?</string>
+  <string name="msg_master_delete">Er du sikker på du vil slette %1$s \"%2$s\"?</string>
   <!-- %1$s is a product name -->
-  <string name="msg_master_delete_product">Er du sikker på at du vil slette produktet \"%1$s\"?\n\n Dette sletter også ethvert lagerantall, journalen og alle referanser til dette produktet - vurder å deaktivere det istedenfor hvis du vil beholde det og kun skjule produktet.</string>
+  <string name="msg_master_delete_product">Er du sikker på at du vil slette produktet \"%1$s\"?\n\n Dette sletter også lagerantall, journalen og alle referanser til dette produktet - vurder å deaktivere det istedenfor hvis du vil beholde det og kun skjule produktet.</string>
   <!-- %1$s is a master data type like "location" or "product" -->
-  <string name="msg_master_delete_usage">%1$s er ennå i bruk</string>
+  <string name="msg_master_delete_usage">%1$s er fortsatt i bruk</string>
   <!-- %1$s is an amount and %2$s is a quantity unit.  -->
   <plurals name="msg_inventory_transaction_add">
-    <item quantity="one">%1$s %2$s vil bli lagt til på lager.</item>
-    <item quantity="other">%1$s %2$s vil bli lagt til på lager.</item>
+    <item quantity="one">%1$s %2$s vil bli lagt til beholdningen.</item>
+    <item quantity="other">%1$s %2$s vil bli lagt til beholdningen.</item>
   </plurals>
   <!-- %1$s is an amount and %2$s is a quantity unit.  -->
   <plurals name="msg_inventory_transaction_remove">
-    <item quantity="one">%1$s %2$s vil bli fjernet fra lager.</item>
-    <item quantity="other">%1$s %2$s vil bli fjernet fra lager.</item>
+    <item quantity="one">%1$s %2$s vil bli fjernet fra beholdningen.</item>
+    <item quantity="other">%1$s %2$s vil bli fjernet fra beholdningen.</item>
   </plurals>
   <string name="msg_transfer_tare_weight">Produkter med taravekt aktivert er for øyeblikket ikke støttet for overføring.</string>
-  <string name="msg_item_marked_as_done">Merk elementer som ferdig</string>
-  <string name="msg_item_marked_as_undone">Merk element som uferdig</string>
+  <string name="msg_should_not_be_frozen">Dette produktet bør ikke fryses. Vil du fortsette?</string>
+  <string name="msg_item_marked_as_done">Vare merket som ferdig</string>
+  <string name="msg_item_marked_as_undone">Vare merket som uferdig</string>
   <string name="option_synced_success">Alternativet er synkronisert</string>
   <string name="option_synced_error">Alternativet kunne ikke synkroniseres</string>
+  <string name="msg_data_copied_from_product">Data ble kopiert fra \"%1$s\".</string>
+  <string name="msg_recipe_added_to_cart">Ingrediensene i oppskriften ble lagt i handlekurven</string>
+  <string name="msg_recipe_consumed">Fjernet alle ingredienser i resepten \"%1$s\" fra beholdningen</string>
+  <string name="msg_stored_purchases_overview">Det finnes innkjøp på enheten som ikke er flyttet til serveren enda. Trykk her for detaljer.</string>
+  <string name="msg_stored_purchases">Innkjøp som enda ikke er flyttet til serveren vises her. De ble lagret sammen med midlertidige produkter i denne appen for at du skal kunne skanne innkjøp raskere i hurtig modus, og slippe å opprette ny produkter i grunndata direkte.</string>
+  <string name="msg_stored_purchases_product_offline">Trykk på produktet og fyll ut påkrevd data. Deretter vil produktet vise her som online og de lagrede innkjøpene kan sendes til serveren.</string>
+  <string name="msg_stored_purchases_product_online">Trykk her for å sende lagrede innkjøp til serveren.</string>
+  <string name="msg_choose_product">Strekkoden du skannet er ikke koblet til et produkt enda. Du kan koble til et eksisterende produkt, eller opprette et nytt produkt for strekkoden.</string>
+  <string name="msg_product_name_off">Produktnavnet for strekkoden er hentet fra Open Food Facts.</string>
+  <string name="msg_product_name_obf">Produktnavnet for strekkoden er hentet fra Open Beauty Facts.</string>
+  <string name="msg_product_name_lookup_error">Kunne ikke søke etter strekkoden i Open Food Facts eller Open Beauty Facts</string>
+  <string name="msg_product_name_lookup_empty">Strekkoden finnes ikke i databasene til Open Food Facts eller Open Beauty Facts.</string>
+  <string name="msg_off_option_deactivated">For automatiske forslag til produktnavn, kan du aktivere Open Food Facts oppslag i innstillingene.</string>
   <string name="msg_create_new_product_filled">Opprett produkt \"%1$s\"</string>
   <string name="msg_create_new_product">Opprett produkt</string>
+  <string name="msg_create_new_pending_product_filled">Opprett nytt midlertidig produkt \"%1$s\"</string>
+  <string name="msg_create_new_pending_product">Opprette nytt midlertidig produkt</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_purchase">Transaksjon som blir utført:\n\nLegg %1$s %2$s %3$s i beholdningen\nForfallsdato: %4$s\nPris: %5$s\nButikk: %6$s\nLokasjon: %7$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_consume">Transaksjon som blir utført:\n\nFjern %1$s %2$s %3$s fra beholdningen\nLokasjon: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_open">Transaksjon som blir utført:\n\nMerk %1$s %2$s %3$s som åpnet\n\nLokasjon: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
+  <string name="msg_quick_mode_confirm_transfer">Transaksjon som blir utført:\n\nFlytt %1$s %2$s %3$s\nFra lokasjon: %4$s\nTil lokasjon: %5$s</string>
+  <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_inventory">Transaksjon som blir utført:\n\nSett beholdningen for %1$s til %2$s %3$s\nVerdier for nye produkter:\nUtløpsdato: %4$s\nPris: %5$s\nButikk: %6$s\nLokasjon: %7$s</string>
+  <string name="msg_compatibility">Denne versjonen av appen er ikke kompatibel med Grocy versjonen på serveren.\n\nServer versjon: %1$s\n\nStøttede server versjoner:\n%2$s\nDersom serverversjon har høyere hovedversjon (første tallet) enn støttede versjoner og du ignorerer denne advarselen, kan det forekomme datatap (usansynlig) eller krasj (sansynlig). \nDersom det bare er mindre forskjeller (tredje siffer er høyere) kan du sansynligvis ignorere denne advarselen.</string>
   <string name="msg_logout">Ingenting på serveren din vil bli endret. Du vil bli omdirigert til innloggingssiden.</string>
   <string name="msg_logout_demo">Du kjører demo versjonen av grocy <u>https://grocy.info</u>.\n\n<b>Ingen av dine endringer her blir lagret!\nDe blir offentlige til serveren automatisk overskriver dem.</b>\n\nPå innlogginsskjermen kan du skrive din egen serveradresse.</string>
   <string name="msg_logout_demo_short">Offentlig demoserver. Trykk for detaljer.</string>
+  <string name="msg_restart">Appen må startes på nytt for å bruke de nye innstillingene. Vil du starte på nytt nå?</string>
+  <string name="msg_full_description">Trykk her for å vise hele beskrivelsen.</string>
+  <string name="msg_copied_clipboard">Kopiert til utklippstavlen</string>
   <string name="msg_shortcuts">Du kan aktivere opp til 4 snarveier:</string>
   <string name="msg_shortcuts_not_supported">Snarveier er ikke støttet på denne Android-versjonen.</string>
   <string name="msg_barcode_formats">Du kan forbedre hastigheten til strekkodedetektoren ved å konfigurere den til å bare oppdage de formatene du forventer å lese.</string>
   <string name="msg_features">Start intro på nytt i \"Om\"</string>
   <string name="msg_feedback">Har du ønsker, spørsmål eller feil? Kontakt oss og la oss hjelpe!\nEllers vil vi bli veldig glade for god anmeldelse på Play Butikken.</string>
   <string name="msg_point_at_barcode">Rett kameraet mot en strekkode</string>
-  <string name="msg_press_hold_confirm">Trykk og hold for å bekrefte</string>
-  <string name="msg_choose_option_below">Vennligst velg ett alternativ under her.</string>
-  <string name="msg_qr_code_scan">Gå til grocy-nettstedet ditt på en annen enhet og gå til siden \"API -nøkler\". Klikk \"Legg til\", klikk deretter på det lille QR-kodesymbolet og skann QR-koden.</string>
-  <string name="msg_port_connection_info_without_port">Appen kobles til porten %1$s. \nHvis du vil at den skal koble til en annen port, kan du legge til en i URL-en. \nEksempel: http://domene.no:81/</string>
+  <string name="msg_save_product_first">Venligst lagre produktet først</string>
+  <string name="msg_save_recipe_first">Venligst lagre oppskriften først</string>
+  <string name="msg_press_hold_confirm">Trykk og hold for å bekrefte sletting.</string>
+  <string name="msg_recipe_consume_ask">Er du sikker på du vil forbruke alle ingrediensene i oppskriften for \"%1$s\"? (Ingredienser merket med \"Bare sjekk om noen mengde er i beholdningen\" blir ignorert)</string>
+  <string name="msg_recipe_shopping_list_ask">Er du sikker på du vil legge alle manglende ingreienser i oppskriften for \"%1$s\" på handlelisten?\n\nFjern avkryssing for ingredienser du ikke vil legge på handlelisten:</string>
+  <string name="msg_welcome">Velkommen til Grocy Android!</string>
+  <string name="msg_welcome_introduce">For å bruke Grocy produktivt, trenger du din egen server eller Grocy Addonen til Home Assistant.\nDersom du bare vil prøve appen, kan du bruke en av demoserverne gjort tilgjengelig av Grocy utvikleren, Bernd Bestel.</string>
+  <string name="msg_choose_option_below">Velg ett alternativ under.</string>
+  <string name="msg_qr_code_scan">På en annen enhet, gå til web-versjonen av Grocy og gå til \'API-nøkler\'. Trykk på \'Legg til\', deretter trykker du på QR-kode symbolet og scanner den i appen.</string>
+  <string name="msg_qr_code_scan_token">Du bruker Grocy Addonen i Home Assistant. Opprett en langvarig tilgangstoken i Home Assistant profilen din (nederst til venstre). Under token-feltet, trykk på \"Generer QR-kode\" og scan den her.</string>
+  <string name="msg_port_connection_info_without_port">Appen kobles til port %1$s. \nHvis du vil at den skal koble til en annen port, kan du legge til en i URL-en. \nEksempel: http://domene.no:81/</string>
   <string name="msg_port_connection_info_with_port">Appen vil koble til port %1$s.</string>
+  <string name="msg_clear_form_first">Tøm alle felt før du skanner en annen kjent strekkode.</string>
   <string name="msg_not_implemented_yet">Dette vil bli implementert snart. Vennligst bruk servergrensesnittet ditt imens.</string>
+  <string name="msg_help_picture_changes">Endringer i bildet synkroniseres med serveren umiddelbart, ikke bare ved lagring!</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_stock_label_type">Dette er standard forpakningsstørrelse som brukes når du legger dette produktet til handlelisten.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_hide_on_stock">Beholdningsoversikten viser alle produkter som er tilgjengelige, eller som er under definert minimums mengde. Aktiver dette for å alltid skjule dette produktet.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_parent_product_deactivated">Dette produktet kan ikke ha et hovedprodukt fordi det allerede er hovedprodukt for et annet produkt.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_consume_location">Beholdningsoppføringer på lokasjonen under blir forbrukt først</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_move_on_open">Når aktivert, ved merking av et produkt som åpnet, blir tilsvarende mengde flyttet til standard forbrukslokasjon</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_disable_own_stock">Når aktivert, kan ikke det tilsvarende produktet ha egen beholdning. Det betyr at det ikke kan velges for innkjøp (nyttig for hovedprodukter, som bare brukes som sammendrag/total for underprodukter).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_should_not_be_frozen">Når aktivert, når dette produktet flyttes til en fryser (produktet fryses), blir det vist en advarsel.</string>
+  <string name="msg_help_due_date_type">Basert på valgt forfallsdato, vil fremhevingen på beholdningsoversikten variere. \"Best før dato\" betyr at produktet kan være trygt å bruke etter forfallsdato. \"Utløpsdato\" betyr at produktet ikke er trygt å bruke etter forfallsdato.</string>
+  <string name="msg_help_default_due_days_format">Du kan trykke og holde på en vare under for å legge inn en dato istedenfor ett tall</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days">For innkjøp blir dette antallet dager lagt til dagens dato som forslag til forfallsdato (-1 betyr at dette produktet aldri går ut på dato).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days_opened">Når dette produktet blir merket som åpnet, vil utløpsdato bli erstattet med dagens dato + dette antall dager (sett verdien til 0 for å deaktivere dette)</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days_freezing">Når dette produktet blir flyttet til en fryser (produktet fryses), vil utløpsdato bli erstattet med dagens dato + dette antall dager (-1 betyr at dette produktet aldri forfaller)</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days_thawing">Når dette produktet flyttes fra en fryser (produktet tines), vil utløpsdato erstattes med dagens dato + dette antallet dager.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_stock">Beholdningsenhet kan ikke endres etter første innkjøp</string>
+  <string name="msg_help_qu_stock_changeable">Beholdningsenhet kan bare endres dersom det finnes en enhetskonvertering finnes.</string>
+  <string name="msg_help_qu_changeable">Beholdningsenheter kan bare endres dersom det finnes enhetskonverteringer for dem</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_purchase">Dette er standard mengdeenhet brukt ved innkjøp og når produktet legges på handlelisten.</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_consume">Dette er standard enhet når produktet forbrukes</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_price">Når priser for dette produktet vises, vil de være relatert til denne enheten.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_accumulate_min_amount">Når aktivert vil minimumsbeholdningen til underprodukter bli akkumulert til dette produktet. Dette betyr at underprodukter aldri vil mangle, bare dette produktet.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_treat_opened_as_out_of_stock">Når aktivert, vil åpnede varer regnet som mangler ved beregning av om dette produktet er under minimumsbeholdningen.</string>
+  <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_consume_amount">Dette antallet brukes for \"Hurtig forbruk/åpne\" knappene i beholdningsoversikten (relatert til beholdningsenhet)</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_consume_amount_new">Dette antallet brukes for \"Hurtig forbruk\" knappen i beholdningsoversikten (relatert til beholdningsenhet)</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_open_amount">Dette antallet brukes for \"Hurtigåpne\" knappen i beholdningsoversikten (relatert til beholdningsenheten)</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_tare_weight">Taravekt håndtering er nyttig for eksempel for melkrukker - ved innkjøp/forbruk/opptelling veier du alltid hele krukka. Mengden som føres blir da automatisk beregnet, basert på beholdning og taravekten satt nedenfor.</string>
+  <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_tare_weight_purchase">Taravekt aktivert - vei hele beholderen, vekten som registreres vil bli beregnet automatisk.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_disable_stock_check">Dette vil bli brukt som standard når dette produktet legges til som ingrediens i en oppskrift.</string>
+  <string name="msg_help_inventory_fields">Følgende felt legges til på nylig tillagte produkter.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_choose">Du kan velge en strekkode-scanner for kamera-strekkode-scanning.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_zxing">ZXing(\"zebra crossing\") bruker kontrastdata fra kameraet til å detektere en strekkode. Det kalkuleres så en relativ bredde av alle linjene.\n\n- Av og til feil resultat\n- Strekkoden må være horisontal\n- Avhengig av god kontrast og skarphet\n- Utføres lokalt på din enhet\n- Rammeverket er åpen kildekode</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit bruker maskinlæring med nyeste teknologier for strekkode-scanning.\n\n- Bortimot ingen feil resultat\n- Orientering av strekkoden er uvesentlig\n- Virker også på uklare eller strekkoder med lav kontrast\n- Utføres lokalt på din enhet\n- Rammeverket er ikke åpen kildekode</string>
   <string name="msg_help_external_scanner_ready">Du kan bruke en ekstern skanner for feltet under når det er i fokus og tomt.</string>
+  <string name="msg_help_external_scanner_settings">Denne appen støtter eksterne scannere som opptrer som tastatur og kan kobles til med USB eller blåtann. Disse parametere må konfigureres i din eksterne scanner:\n\nPrefiks: Ingen\nSuffiks: TAB eller ENTER</string>
+  <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_specific_item">Det første produktet i denne listen blir valgt av standard regelen, som er \"Åpnet først, deretter første forfaller først, deretter først inn-først ut\"</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Dette er kun for statistiske årsaker.</string>
-  <string name="msg_help_normal_login">Trykk på dette kortet om du bruker Home Assistant med grocy-tillegget.</string>
-  <string name="msg_help_home_assistant_login">Du bruker grocy-tillegget for Home Assistant. Derfor er noen flere detaljer nødvendige. Trykk på dette kortet for å bytte tilbake til normal innlogging.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_not_check_shopping_list">Som standard er antallet som legges til på handlelisten \"behov - antall i beholdning - antall på handleliste\". Når denne er aktivert, blir det bare sjekket mot beholdningen, ikke mot det som allerede er på handlelisten.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_servings">Ingrediensene i denne oppskriften gir dette antallet porsjoner.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_produces_product">Når et produkt er valgt, vil en enhet (per porsjon i beholdningsenhet) bli lagt til i beholdningen når oppskriften forbrukes.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_only_check_any_amount">En annen mengde/enhet kan deretter brukes nedenfor, mens det er tilstrekkelig når en hvilken som helst mengde av produktet er i beholdningen ved beholdningssjekk.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_variable_amount">Når denne ikke er tom, vil dette bli vist istedenfor mengden ovenfor. Mengden over blir likevel brukt ved beholdningssjekk.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_group">Dette brukes som overskrift for å gruppere ingredienser.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_price_factor">Totalprisen for denne oppskriften multipliseres med denne faktoren.</string>
+  <string name="msg_help_recipe_ingredients_wrong">Med Grocy serverversjon lavere enn 4.0.0, kan denne listen inneholde feil informasjon. Oppdater til versjon 4.0.0 eller senere for å få korrekt resultat.</string>
+  <string name="msg_help_date_chooser">Du kan bytte til tastatur i innstillinger. Dette kan gjøre innlegging av data raskere for deg.</string>
+  <string name="msg_help_date_chooser_keyboard">Du kan opprette omvendt dataformat i innstillingene dersom DDMMÅÅ er foretrukket i ditt land.\nFor å legge inn verdier og lukke denne dialogen, kan du bruke \"Ferdig\" på tastauret.</string>
+  <string name="msg_help_notifications_tap">Trykk her dersom du ikke mottar påminnelser eller mottar dem upålitelig.</string>
+  <string name="msg_help_notifications">Dersom du ikke mottar varsler, trykk her for å åpne informasjonssiden til Android appen og sjekk om varsler er tillatt og om strømsparing kan deaktiveres. Android leverer av og til varsler forsinket for å spare batteriforbruket, som er normal oppførsel.</string>
+  <string name="msg_help_notifications_other">Ikke fjern appen fra oversikten over kjørende apper, noen produsenter vil slette varslingsprosessen dersom dette gjøres.</string>
+  <string name="msg_help_quick_mode">Do kan holde på tittellinjen over for å aktivere hurtigmodus. I hurtigmodus blir overføringer utført umiddelbart dersom ett produkt er scannet og alle felt kan automatisk fylles ut (etter produkt og/eller strekkodestandarder).</string>
+  <string name="msg_help_loading_circle_settings">På hver side der noe må lastes fra server, sjekker appen først, med en liten forespørsel, om noe er endret på server og oppdaterer bare det som er endret. Aktiver dette alternativet for å vise \"lastesirkel\" også for disse små forespørslene.</string>
+  <string name="msg_help_start">Nybegynnermodus aktivert: Hjelpetekster vises på hver side dersom de er tilgjengelige. Trykk for å endre.</string>
+  <string name="msg_help_purchased_date_settings">Dersom alternativet under er aktivert, vil et felt for innkjøpsdato vise på innkjøp- og beholdningssidene. Dersom det ikke er aktivert, vil innkjøpsdato bli satt til dagens dato.</string>
+  <string name="msg_help_normal_login">Trykk på dette kortet dersom du bruker Home Assistant med Grocy add-on.</string>
+  <string name="msg_help_home_assistant_login">Du bruker Grocy Home Assistant add-on, derfor trenger vi mer informasjon. Trykk på dette kortet for å bytte til vanlig innlogging.</string>
   <string name="msg_help_home_assistant_login_help_show">Trykk her for å vise hjelpetekster.</string>
   <string name="msg_help_home_assistant_login_help_hide">Trykk her for å skjule hjelpetekster.</string>
+  <string name="msg_help_home_assistant_login_server">I feltet under kan du også legge inn din Nabu Casa URL dersom du bruker den tjenesten. Trykk på dette kortet for å gå til Nabu Casa hjemmesiden.</string>
+  <string name="msg_help_home_assistant_login_token">Du kan opprette en langvarig tilgangstoken i Home Assistant profilen din (nederst  til venstre). Trykk her for å åpne URL\'en over.</string>
+  <string name="msg_help_home_assistant_login_proxy_id">Naviger tilbake eller trykk dette kortet for å scanne en QR-kode som fylller ut feltene under.</string>
+  <string name="msg_help_fab_overview_start">Handlingsknappen på denne siden har to handlinger:\n\n- Kort trykk: forbruk med strekkode-scanner\n\n- Trykk og hold: innkjøp med strekkode-scanner\n\n Med denne knappen vil de respektive funksjonene åpnes i hutig modus som standard. Du kan endre dette i innstillingene.</string>
+  <string name="msg_share">Sjekk denne Android klienten for det fantastiske Grocy prosjektet: \nhttps://github.com/patzly/grozy-android</string>
+
   <string name="error_api_not_working">API-nøkkel virker ikke</string>
   <string name="error_orbot_not_installed">Orbot er ikke installert</string>
   <string name="error_select_product">Velg et produkt</string>
@@ -236,6 +479,13 @@
   <string name="error_empty_products">Ingen produkter</string>
   <string name="error_empty_qu">Ingen antall-enheter</string>
   <string name="error_empty_stores">Ingen butikker</string>
+  <string name="error_empty_tasks">Ingen oppgaver</string>
+  <string name="error_empty_task_categories">Ingen oppgavekategorier</string>
+  <string name="error_empty_unit_conversions">Ingen enhetsomregninger</string>
+  <string name="error_empty_chores">Ingen plikter</string>
+  <string name="error_empty_chores_sub">Gå til grunndata og opprett oppgaver</string>
+  <string name="error_empty_recipes">Ingen oppskrifter</string>
+  <string name="error_empty_ingredients">Ingen ingredienser</string>
   <string name="error_search">Ingen søkeresultater </string>
   <string name="error_search_sub">Prøv andre termer</string>
   <string name="error_filter">Ingenting å vise</string>
@@ -247,8 +497,12 @@
   <string name="error_invalid_amount">Ugyldig beløp</string>
   <string name="error_invalid_price">Ugyldig pris</string>
   <string name="error_invalid_factor">Ugyldig faktor</string>
-  <string name="error_api_qr_code">Ikke en QR-kode med grocy API-legitimasjoner</string>
+  <string name="error_invalid_date_format">Ugyldig datoformat</string>
+  <string name="error_api_qr_code">Ikke en QR-kode med Grocy API sikkerhetsinformasjon</string>
+  <string name="error_token_qr_code">Ikke en QR-kode med en langvarig tilgangstoken fra Home Assistant</string>
   <string name="error_loading_qus">Feilet innlasting av enheter fra dette produktet</string>
+  <string name="error_clipboard_no_image">Utklippstavlen inneholder ikke et bilde, eller det kunne ikke leses</string>
+  <string name="error_no_children">Det valgte produktet har ingen underprodukt</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Kan ikke være lik som %1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
@@ -262,15 +516,21 @@
   <string name="error_offline">Frakoblet</string>
   <string name="error_offline_subtitle">Sjekk tilkoblingen din og prøv igjen</string>
   <string name="error_no_done_items">Det finnes ingen elementer merket som ferdig</string>
+  <string name="error_already_exists">Eksisterer allerede</string>
   <string name="error_network">Nettverksfeil</string>
   <string name="error_network_subtitle">Den påkrevde informasjonen kunne ikke lastes fullstendig</string>
+  <string name="error_network_exact">Nettverksfeil: %1$s</string>
+  <string name="error_database">Databasefeil</string>
+  <string name="error_insert">Feil: %1$s</string>
+  <string name="error_details">Feildetaljer</string>
   <string name="error_unknown">Oops!</string>
-  <string name="error_not_grocy_instance">Ikke en gyldig grocy-forekomst</string>
+  <string name="error_not_grocy_instance">Ikke en gyldig Grocy instans</string>
   <string name="error_timeout">Tidsavbrudd</string>
   <string name="error_no_product_selected">Ingen produkt valgt</string>
   <string name="error_failed_to_connect_to">Tilkobling til server feilet</string>
   <string name="error_missing_information">Ikke alle påkrevde felt er fylt ut</string>
   <string name="error_handshake">Ugyldig sertifikat</string>
+  <string name="error_handshake_description">Denne serveren krever et sertifikat som er ukjent eller som Android ikke storer på.\nServersertifikatet må enten være signert av en pålitelig sertifikatutsteder (letsencrypt.org) eller være lagret i enhetens sertifikatlager.</string>
   <string name="error_unexpected_response_code">Uventet responskode</string>
   <string name="error_unexpected_response">Uventet respons fra server</string>
   <string name="error_no_browser">Installér en nettleser for å vise hjelp-nettsiden</string>
@@ -279,12 +539,17 @@
   <string name="error_failed_barcode_upload">Kunne ikke laste opp strekkode</string>
   <string name="error_wrong_grocycode_type">grocykode inneholder feil enhetstype</string>
   <string name="error_stock_entry_grocycode">Lageroppføring fra grocykode ikke funnet</string>
+  <string name="error_picture_uploads_forbidden">Av sikkerhetshensyn, er opplasting av bilder bare tillat på lokalt driftede servere. Du er koblet til en demoserver.</string>
+  <string name="error_permission">Ingen tillatelser for denne handlingen</string>
+  <string name="error_permission_notification">Varslingstillatelse er nødvendig for at påminnelser skal fungere</string>
   <string name="error_undefined">En feil oppstod</string>
+  <string name="error_invalid_base_servings">Ugyldige porsjoner</string>
+  <string name="error_pictures_size_exceeds_limit">Der er bilder i produkter eller oppskrifter på serveren som er større enn det denne appen kan tolke. Fjern høyoppløste og store bilder, dette vil også øke hastigheten i appen.</string>
 
   <string name="title_overview">Oversikt</string>
   <string name="title_stock_overview">Lageroversikt</string>
   <string name="title_purchase">Kjøp</string>
-  <string name="title_consume">Forbruke</string>
+  <string name="title_consume">Forbruk</string>
   <string name="title_transfer">Overfør</string>
   <string name="title_inventory">Inventar</string>
   <string name="title_barcode_input">Strekkode</string>
@@ -292,11 +557,16 @@
   <string name="title_product">Produkt</string>
   <string name="title_product_create">Opprett produkt</string>
   <string name="title_product_edit">Redigere produkt</string>
+  <string name="title_tasks">Oppgaver</string>
+  <string name="title_task_entry">Oppgaveoppføring</string>
   <string name="title_master_data">Stamdata</string>
   <string name="title_stock_entries">Lageroppføringer</string>
+  <string name="title_stock_entry">Lageroppføring</string>
+  <string name="title_stock_journal">Beholdningsjournal</string>
   <string name="title_shopping_list">Handleliste</string>
   <string name="title_feedback">Tilbakemelding</string>
   <string name="title_settings">Innstillinger</string>
+  <string name="title_options">Alternativer</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="title_barcode_scanner">Strekkodeskanner</string>
   <!-- Context: About this app -->
@@ -309,30 +579,52 @@
   <string name="title_restart">Starte Grocy på nytt? </string>
   <string name="title_logout_demo">Logge ut av demomodus? </string>
   <string name="title_manage_master_data">Administrere stamdata</string>
-  <string name="title_edit_description">Endre beskrivelse</string>
+  <string name="title_edit_description">Rediger beskrivelse</string>
   <!-- This is the header of a bottom sheet which is used to get numbers or text from the user. -->
   <string name="title_input">Inndata</string>
   <string name="title_external_barcode_input">Ekstern skanner</string>
   <string name="title_confirmation">Bekreftelse</string>
   <string name="title_choose_product">Velg produkt</string>
+  <string name="title_pending_products">Ventende produkter</string>
+  <string name="title_stored_purchases">Lagrede kjøp</string>
+  <string name="title_chores">Plikter</string>
+  <string name="title_chore">Plikt</string>
+  <string name="title_recipes">Oppskrifter</string>
+  <!-- Editor for editing product description or recipe preparation-->
+  <string name="title_editor">Tekstbehandler</string>
+  <string name="title_task_new">Ny oppgave</string>
+  <string name="title_task_edit">Rediger oppgave</string>
+  <string name="title_entry_new">Ny oppføring</string>
+  <string name="title_entry_edit">Rediger oppføring</string>
+  <string name="title_ingredient_new">Ny ingrediens</string>
+  <string name="title_ingredient_edit">Rediger ingrediens</string>
+  <string name="title_recipe_create">Ny oppskrift</string>
+  <string name="title_recipe_edit">Rediger oppskrift</string>
 
   <string name="title_spoiled">Ødelagt</string>
   <string name="title_use_specific">Bruk spesifikk lagervare</string>
   <string name="title_specific">Spesifikt element på lager</string>
   <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="title_exact_amount">Bruk nøyaktig mengde</string>
+  <string name="title_exact_amount">Forbruk nøyaktig mengde</string>
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_location_from">Fra lokasjon</string>
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_location_to">Til lokasjon</string>
   <string name="title_recipe">Oppskrift</string>
+  <string name="title_preparation_mode">Forberedelsesfase</string>
   <string name="title_total_price">Totalpris</string>
   <string name="title_unit_price">Enhetspris</string>
   <!-- %1$s is a quantity unit -->
   <string name="title_unit_price_specific">%1$s pris</string>
   <string name="title_stock_entry_no_specific">Ingen spesiell oppføring</string>
   <string name="title_list_entry">Listeoppføring</string>
-  <string name="title_shopping_list_edit">Endre handleliste</string>
+  <string name="title_edit_barcode">Rediger strekkode</string>
+  <string name="title_create_barcode">Opprett strekkode</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_edit_qu_conversion">Rediger enhetskonvertering</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_create_qu_conversion">Opprett enhetsomregning</string>
+  <string name="title_shopping_list_edit">Rediger handleliste</string>
   <string name="title_shopping_list_new">Ny handleliste</string>
   <string name="title_shopping_mode">Handlemodus</string>
   <string name="title_batch_mode_shopping_list">Handleliste partimodus</string>
@@ -342,24 +634,30 @@
   <string name="title_product_cat_due_date">Tidsfrist</string>
   <string name="title_product_cat_amount">Mengde</string>
   <string name="title_product_cat_quantity_unit">Mengdeenhet</string>
+  <string name="title_notifications">Varslinger</string>
   <string name="title_product_cat_barcodes">Strekkoder</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
   <string name="title_product_cat_qu_conversions">ME--konverteringer</string>
   <string name="title_unknown_input">Ukjent inndata</string>
   <string name="title_presets_new_products">Forhåndsinnstillinger for nye produkter</string>
-  <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
-   Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
+  <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
+  <string name="title_ingredient_with_amount">%1$s %2$s %3$s</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
+  <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
+  <string name="subtitle_opened">(åpnet)</string>
   <!-- %1$s is a number like 1, 2, 3 -->
   <string name="subtitle_amount_opened">(%1$s åpnet)</string>
   <!-- %1$s is a product name -->
   <string name="subtitle_stock_locations">Hvor %1$s har lager</string>
   <string name="subtitle_none_selected">Ingen valgt</string>
+  <!-- Should follow the equality between 'None' and 'None selected' -->
+  <string name="subtitle_none">Ingen</string>
   <string name="subtitle_empty">Tom</string>
-  <string name="subtitle_done">Utført</string>
-  <string name="subtitle_undone">Uferdig</string>
+  <string name="subtitle_done">Ferdig</string>
+  <string name="subtitle_undone">Ikke ferdig</string>
+  <string name="subtitle_uncategorized">Ukategorisert</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="subtitle_never_overdue">Går aldri ut på dato</string>
   <string name="subtitle_selected">Valgt</string>
@@ -375,9 +673,13 @@
   <string name="subtitle_amount_compare">Dette tilsvarer %1$s %2$s.</string>
   <!-- %1$s is a price, %2$s is a quantity unit -->
   <string name="subtitle_price_means">Dette betyr %1$s per %2$s.</string>
+  <!-- %1$s and %2$s are amounts -->
+  <string name="subtitle_factor_means">Dette betyr at %1$s er det samme som %2$s</string>
   <string name="subtitle_product_hidden">Produktet er skjult</string>
   <string name="subtitle_product_not_hidden">Produktet er ikke skjult</string>
   <string name="subtitle_product_not_on_server">Produktet er ikke på server</string>
+
+  <string name="subtitle_barcodes_will_be_added">Det finnes lagrede strekkoder som blir lagt på produktet ved lagring.</string>
   <string name="subtitle_unknown">Ukjent</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
   <string name="subtitle_supported">Støttet</string>
@@ -385,8 +687,21 @@
   <string name="subtitle_not_supported">Ikke støttet</string>
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Mengde: %1$s</string>
+  <!-- %1$s is a unit -->
+  <string name="subtitle_barcode_unit">Enhet: %1$s</string>
   <string name="subtitle_barcode">Strekkoder: %1$s </string>
   <string name="subtitle_feature_disabled">Funksjon er slått av</string>
+  <string name="subtitle_date_from_input">Dato fra oppføring:\n%1$s</string>
+  <string name="subtitle_product_amount">Minimumsbeholdning, Hurtigforbruk, Faktor, Taravekt</string>
+  <string name="subtitle_product_default_location">Plassering, Butikk</string>
+  <string name="subtitle_product_due_date">Type, Standard dager (etter åpning, frysing, tining)</string>
+  <string name="subtitle_product_optional_properties">Status,Hovedprodukt, Beskrivelse, Produktgruppe, Energi, Bilde</string>
+  <string name="subtitle_product_quantity_unit">Beholdning, Innkjøp standarder</string>
+  <string name="subtitle_synced_with_server">Synkronisert med server</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
+  <string name="subtitle_recipe_due_score">Forfallskarakter: %1$s</string>
+  <string name="subtitle_per_serving">per porsjon</string>
+  <string name="subtitle_tap_preparation_mode">Trykk her for forberedelsesmodus</string>
   <string name="description_input_product_part1">Produktfelt inneholder:</string>
   <string name="description_input_product_part2">Vennligst velg hvordan du vil fortsette:</string>
   <string name="description_input_product_option1">Lag nytt produkt og bruk inndata som navn</string>
@@ -429,15 +744,39 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_multi">
-    <item quantity="one">%1$d av de er på handlelistene din.</item>
+    <item quantity="one">%1$d av de er på handlelistene dine.</item>
     <item quantity="other">%1$d av de er på handlelistene dine.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_shopping_list_multi">
+    <item quantity="one">%1$d vare er på handlelistene dine.</item>
+    <item quantity="other">%1$d varer er på handlelistene dine</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_shopping_list">
+    <item quantity="one">%1$d vare er på handlelistene dine.</item>
+    <item quantity="other">%1$d varer er på handlelistene dine.</item>
+  </plurals>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="description_overview_chores_due_soon">
+    <item quantity="one">%1$d husarbeidsoppgave skal utføres innen de neste %2$d dagene</item>
+    <item quantity="other">%1$d husarbeidsoppgaver skal utføres innen de neste %2$d dagene</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_overdue">
+    <item quantity="one">%1$d husarbeidsoppgave har gått over fristen for utførelse.</item>
+    <item quantity="other">%1$d husarbeidsoppgaver har gått over fristen for utførelse.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_due_today">
+    <item quantity="one">%1$d husarbeidsoppgave må gjøres i dag.</item>
+    <item quantity="other">%1$d husarbeidsoppgaver må gjøres i dag.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
     <item quantity="one">Databasen din inneholder %1$d produkt.</item>
     <item quantity="other">Databasen din inneholder %1$d produkter.</item>
   </plurals>
-
   <string name="property_name">Navn</string>
   <string name="property_name_singular">Navn (entall)</string>
   <string name="property_name_plural">Navn (flertall)</string>
@@ -449,6 +788,7 @@
   <string name="property_note">Notat</string>
   <string name="property_status">Status</string>
   <string name="property_amount">Beløp</string>
+  <string name="property_amount_insert">Mengde: %1$s</string>
   <string name="property_seconds">Sekunder</string>
   <!-- %1$s is a number (amount of seconds) -->
   <plurals name="property_seconds_num">
@@ -459,8 +799,11 @@
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Mengde i %1$s</string>
   <string name="property_price">Pris</string>
+  <string name="property_price_average">Gjennomsnittpris</string>
   <!-- %1$s is a quantity unit-->
   <string name="property_price_unit">Pris per %1$s</string>
+  <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_with_currency">%1$s %2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Pris i %1$s</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -473,10 +816,15 @@
   <string name="property_qu_stock">Mengdeenhet lager</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Faktor kjøp til lager</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_default_qu_consume">Standard forbruksenhet</string>
+  <string name="property_factor">Faktor</string>
   <string name="property_barcode">Strekkode</string>
   <string name="property_barcodes">Strekkoder</string>
+  <string name="property_barcodes_insert">Strekkoder: %1$s</string>
   <string name="property_days">Dager</string>
   <string name="property_purchased_date">Kjøpt dato</string>
+  <string name="property_purchased_date_fill">Kjøpt dato: %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_type">Type utløpsdato</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -485,6 +833,10 @@
   <string name="property_due_type_expiration">Siste forbruksdag</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date">Best før dato</string>
+  <!-- This string is for due date of task -->
+  <string name="property_due_date_task">Tidsfrist</string>
+  <!-- %1$s is a due date-->
+  <string name="property_due_date_fill">Utløpsdato: %1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_next">Neste best før dato</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -496,10 +848,14 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">Standard utløpsdato etter tining</string>
   <string name="property_location">Lokasjon</string>
+  <string name="property_location_insert">Lokasjon: %1$s</string>
   <string name="property_location_default">Standard lokasjon</string>
+  <string name="property_location_default_insert">Standard lokasjon: %1$s</string>
+  <string name="property_location_consume_default">Standard forbrukslokasjon</string>
   <string name="property_notes">Notater</string>
   <string name="property_locations">Lokasjoner</string>
   <string name="property_store">Butikk</string>
+  <string name="property_store_insert">Butikk: %1$s</string>
   <string name="property_store_unknown">Ukjent butikk</string>
   <string name="property_store_default">Standard butikk</string>
   <string name="property_stores">Butikker</string>
@@ -511,17 +867,21 @@
   <string name="property_last_used">Sist brukt</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_last_price">Siste pris</string>
+  <string name="property_last_price_unit">Siste pris (enhet)</string>
+  <string name="property_last_price_total">Sist pris (totalt)</string>
+  <string name="property_price_insert">Pris: %1$s</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Gjennomsnittlig holdbarhet</string>
   <string name="property_spoil_rate">Ødelagt rate</string>
   <string name="property_price_history">Prishistorikk</string>
   <string name="property_product_group">Produktgruppe</string>
   <string name="property_product_groups">Produktgrupper</string>
+  <string name="property_assignment">Oppdrag</string>
+  <string name="property_value">Verdi</string>
+  <string name="property_stock_value">Lagerverdi</string>
   <string name="property_opened">åpnet</string>
   <string name="property_not_opened">ikke åpnet</string>
   <string name="property_is_freezer">Er fryser</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">Energi (kcal)</string>
   <string name="property_active">Aktiv</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Aldri vis på lageroversikt</string>
@@ -532,11 +892,46 @@
   <string name="property_tare_weight">Taravekt</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_tare_weight_in">Taravekt i %1$s</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_amount_quick_consume">Hurtigforbruksantall</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_quick_consume_in">Hurtigforbruksantall i %1$s</string>
   <string name="property_picture">Bilde</string>
   <string name="property_note_singleline">En-linjers notat</string>
   <string name="property_note_multiline">Flerlinje-notat</string>
+  <!-- like the words 'Single-line' in 'Single-line description'-->
+  <string name="property_singleline">Enkeltlinje</string>
+  <!-- like the words 'Multi-line' in 'Multi-line description'-->
+  <string name="property_multiline">Multilinje</string>
   <!-- %1$s is an amount together with quantity unit -->
   <string name="property_in_stock">På lager: %1$s</string>
+  <!-- %1$s is a sort mode like "name" or "due date" -->
+  <string name="property_sort_mode">Sortere: %1$s</string>
+  <string name="property_ungrouped">Ugruppert</string>
+  <!-- %1$s is a property like "product group" or "due date" -->
+  <string name="property_extra_field">Ekstra felt: %1$s</string>
+  <string name="property_task_category">Oppgavekategori</string>
+  <string name="property_task_categories">Oppgavekategorier</string>
+  <string name="property_calories">Kalorier</string>
+  <string name="property_calories_unit">Kalorier (enhet)</string>
+  <string name="property_calories_total">Kalorier (totalt)</string>
+  <string name="property_category">Kategori</string>
+  <string name="property_assigned_to">Tildelt til</string>
+  <string name="property_users">Brukere</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
+  <string name="property_last_done_by">Sist utført av</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
+  <string name="property_last_tracked">Sist sporet</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
+  <string name="property_tracked_count">Antall sporinger</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
+  <string name="property_average_execution_frequency">Gjennomsnittlig utføringsfrekvens</string>
+  <!-- See context for this string on the web interface on the chores page, the table has this column -->
+  <string name="property_next_estimated_tracking">Neste estimerte sporing</string>
+  <string name="property_not_check_shopping_list">Ikke sjekk mot handlelisten</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
+  <string name="property_due_score">Forfallskarakter</string>
+  <string name="property_only_check_single_unit_in_stock">Bare sjekk om beholdning finnes</string>
   <string name="date_today">I dag</string>
   <string name="date_unknown">Ukjent</string>
   <!-- This means the 'time' context -->
@@ -576,7 +971,6 @@
     <item quantity="one">%d dag fra nå</item>
     <item quantity="other">%d dager fra nå</item>
   </plurals>
-  <string name="info_acknowledgement">Vi vil takke Bernd Bestel som med sitt flotte arbeid har gjort denne appen mulig.</string>
   <string name="info_intro">Spill av intro igjen</string>
   <string name="info_intro_description">Fremvisende funksjoner</string>
   <string name="info_dev_beginning">Begynnelsen av utviklingen</string>
@@ -593,7 +987,7 @@
   <string name="feature_1_title">Grocy for Android</string>
   <string name="feature_1_description">Selvstyrt dagligvarebehandling for ditt hjem</string>
   <string name="feature_2_title">Intuitiv design</string>
-  <string name="feature_2_description">Åpne og forbruk med ett swipe</string>
+  <string name="feature_2_description">Åpne og forbruk med ett sveip</string>
   <string name="feature_3_title">Kraftfull parti-behandling</string>
   <string name="feature_3_description">Skann hele din handel på sekunder</string>
 
@@ -618,13 +1012,12 @@
 
   <string name="setting_theme">Tema</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
-  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">Mørk</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_light">Lys</string>
   <string name="setting_language">Språk</string>
   <string name="setting_language_description">Velg språk</string>
-  <string name="setting_language_not_available">Ikke tilgjengelig</string>
+  <string name="setting_language_system">Følgesystem</string>
   <string name="setting_open_food_facts">Bruk Open Food Facts</string>
   <string name="setting_open_food_facts_description">Hent informasjon fra strekkoder</string>
   <string name="setting_choose_barcode_scanner">Velg strekkode-skanner</string>
@@ -656,6 +1049,8 @@
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">Standard menge for forbruk</string>
   <string name="setting_purchased_date">Spør etter innkjøpsdato</string>
+  <string name="setting_use_quick_consume_amount">Bruk produktets \"Hurtigforbruksantall\"</string>
+  <string name="setting_auto_add_shopping_list">Legg produkter på handlelisten automatisk</string>
   <string name="setting_empty_value">Tom</string>
   <string name="setting_sync_off">Synk av</string>
   <string name="setting_loading">Laster verdi</string>
@@ -669,13 +1064,26 @@
   <string name="setting_beginner_mode">Begynnermodus</string>
   <string name="setting_beginner_mode_description">Vis hjelpetekster som standard</string>
   <string name="setting_expand_bottom_sheets_description">I landskapsmodus</string>
+  <string name="setting_date_keyboard_reverse_description">DDMMYY istedenfor YYMMDD</string>
   <string name="setting_loading_circle">Vis lastingssirkel for alle forespørsler</string>
   <string name="setting_loading_circle_description">Nyttig for treige nettverk</string>
   <string name="setting_tor">Bruk Tor</string>
   <string name="setting_tor_description">Krever Orbot</string>
   <string name="setting_proxy">Aktiver HTTP proxy</string>
+  <string name="setting_proxy_description">Konfigurer HTTP-proxy for alle nettverksforespørsler</string>
   <string name="setting_proxy_host">Proxy host</string>
   <string name="setting_proxy_port">Proxy port</string>
-  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
-  Examples: 'de' for German; 'fr' for French -->
-</resources>
+  <string name="setting_synchronized">Valgene nedenfor er synkronisert med serveren.</string>
+  <string name="settings_synchronized">Disse innstillingene er synkronisert med serveren.</string>
+  <string name="setting_message_duration">Vis tid for meldinger</string>
+  <string name="setting_notifications_enable">Aktiver notifikasjoner</string>
+  <string name="setting_notifications_chores_description">Sjekker husarbeidsoppgaver daglig og informerer deg når oppgaver må gjøres</string>
+  <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
+  <string name="setting_notification_time_description">Når sjekken utføres</string>
+  <string name="notification_stock_content">Forbruk de i løpet av de neste dagene for å redusere matsvinn. Trykk for å åpne listen.</string>
+  <!-- %1$s is a number -->
+  <plurals name="notification_chores_due_title">
+    <item quantity="one">%1$d husarbeidsoppgave må gjøres.</item>
+    <item quantity="other">%1$d husarbeidsoppgaver må gjøres.</item>
+  </plurals>
+  </resources>

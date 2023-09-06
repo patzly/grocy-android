@@ -98,7 +98,14 @@
   <string name="action_open_scanner">Apri lo scanner</string>
   <string name="action_discard">Scarta</string>
   <string name="action_clear_form">Pulisci campi</string>
+  <string name="action_take_photo">Scatta foto</string>
+  <!-- "Paste" like in "Paste from clipboard" -->
+  <string name="action_paste">Incolla</string>
+  <!-- Short form for "Only link barcode to existing product", this should fit into a
+  button so keep it short. -->
+  <string name="action_link_and_clear">Collega solamente</string>
   <string name="action_toggle_done">Segna come fatto</string>
+  <string name="action_change_layout">Cambia layout</string>
   <string name="action_edit_notes">Modifica note</string>
   <string name="action_add_missing">Aggiungi prodotto mancante</string>
   <string name="action_purchase_done_items">Acquisto completato</string>
@@ -119,6 +126,7 @@
   <string name="action_demo_server">Server demo</string>
   <string name="action_own_server">Server personale</string>
   <string name="action_enter_data_manually">Inserisci dati manualmente</string>
+  <string name="action_details">Dettagli</string>
   <string name="action_perform">Esegui azione</string>
   <string name="action_share">Condividi</string>
   <string name="action_share_description">Condividi Grocy Android con un amico</string>
