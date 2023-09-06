@@ -20,9 +20,7 @@
 package xyz.zedler.patrick.grocy.view;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
@@ -41,9 +39,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.elevation.SurfaceColors;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.activity.WebDialogActivity;
 import xyz.zedler.patrick.grocy.databinding.ViewHtmlCardBinding;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
@@ -57,7 +53,6 @@ public class HtmlCardView extends LinearLayout {
   private String html;
   private AlertDialog dialog;
   private String title;
-  private Activity activity;
 
   public HtmlCardView(Context context) {
     super(context);
@@ -90,7 +85,7 @@ public class HtmlCardView extends LinearLayout {
   }
 
   @SuppressLint("ClickableViewAccessibility")
-  public void setHtml(String html, Activity activity) {
+  public void setHtml(String html) {
     if (html != null) {
       html = html.replaceAll("</?font[^>]*>", ""); // remove font
       html = html.replaceAll(
@@ -137,23 +132,14 @@ public class HtmlCardView extends LinearLayout {
           }
         }
       });
-      binding.card.setOnClickListener(v -> showHtmlDialog(activity));
+      binding.card.setOnClickListener(v -> showHtmlDialog());
     } else {
       setVisibility(View.GONE);
     }
   }
 
-  public void showHtmlDialog(Activity activity) {
-    Intent intent = new Intent(context, WebDialogActivity.class);
-    intent.putExtra("html", getFormattedHtml(html, false));
-    intent.putExtra("colorBg", SurfaceColors.SURFACE_3.getColor(activity));
-    intent.putExtra("colorText", ResUtil.getColorAttr(activity, R.attr.colorOnSurface));
-    context.startActivity(intent);
-    activity.overridePendingTransition(R.anim.fade_in, 0);
-    this.activity = activity;
-
-
-    /*FrameLayout frameLayout = new FrameLayout(context);
+  public void showHtmlDialog() {
+    FrameLayout frameLayout = new FrameLayout(context);
     frameLayout.setLayoutParams(
         new FrameLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
@@ -187,7 +173,7 @@ public class HtmlCardView extends LinearLayout {
         .setView(frameLayout)
         .setPositiveButton(R.string.action_close, (dialog, which) -> {})
         .create();
-    dialog.show();*/
+    dialog.show();
   }
 
   private String getFormattedHtml(String html, boolean useOnSurfaceVariant) {
@@ -215,7 +201,7 @@ public class HtmlCardView extends LinearLayout {
     SavedState savedState = (SavedState) state;
     super.onRestoreInstanceState(savedState.getSuperState());
     if (savedState.isDialogShown) {
-      new Handler(Looper.getMainLooper()).postDelayed(() -> showHtmlDialog(activity), 1);
+      new Handler(Looper.getMainLooper()).postDelayed(this::showHtmlDialog, 1);
     }
   }
 
