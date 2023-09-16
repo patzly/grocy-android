@@ -152,7 +152,7 @@
   </plurals>
   <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
   <plurals name="msg_expired_products">
-    <item quantity="other">%1$d件过期</item>
+    <item quantity="other">%1$d款过期</item>
   </plurals>
   <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
   <plurals name="msg_not_fresh_products_short">
