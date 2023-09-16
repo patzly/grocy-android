@@ -172,7 +172,7 @@
   </plurals>
   <!-- %1$s is the number of products which are opened. This string is the short form of e.g. "3 products are opened" -> "3 opened" -->
   <plurals name="msg_opened_products">
-    <item quantity="other">%1$d件已开封</item>
+    <item quantity="other">%1$d款已开封</item>
   </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">消耗%1$s%2$s%3$s</string>
