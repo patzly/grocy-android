@@ -713,7 +713,7 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_expired">
-    <item quantity="other">%1$d件产品过期</item>
+    <item quantity="other">%1$d款产品过期</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing">
