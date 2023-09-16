@@ -729,7 +729,7 @@
   </plurals>
   <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
   <plurals name="description_overview_stock_value">
-    <item quantity="other">%1$d件库存产品，总价值%2$s%3$s</item>
+    <item quantity="other">%1$d款库存产品，总价值%2$s%3$s</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list_multi">
