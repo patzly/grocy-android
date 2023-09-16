@@ -49,7 +49,7 @@
   <!-- This is displayed as transaction type on the stock journal page -->
   <string name="action_product_opened">产品已开封</string>
   <!-- This is displayed as transaction type on the stock journal page -->
-  <string name="action_transfer_from">转移来自</string>
+  <string name="action_transfer_from">转移自</string>
   <!-- This is displayed as transaction type on the stock journal page -->
   <string name="action_transfer_to">转移到</string>
 
