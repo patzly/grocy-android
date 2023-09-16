@@ -721,7 +721,7 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_single">
-    <item quantity="other">其中%1$d件产品在购物清单上</item>
+    <item quantity="other">其中%1$d款产品在购物清单上</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_multi">
