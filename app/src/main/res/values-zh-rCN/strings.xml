@@ -164,7 +164,7 @@
   </plurals>
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
   <plurals name="msg_missing_products">
-    <item quantity="other">%1$d件低于安全库存</item>
+    <item quantity="other">%1$d款低于安全库存</item>
   </plurals>
   <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
   <plurals name="msg_in_stock_products">
