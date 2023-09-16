@@ -160,7 +160,7 @@
   </plurals>
   <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
   <plurals name="msg_not_fresh_products_long">
-    <item quantity="other">%1$d件不新鲜（下列所有）</item>
+    <item quantity="other">%1$d款不新鲜（下列所有）</item>
   </plurals>
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
   <plurals name="msg_missing_products">
