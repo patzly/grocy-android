@@ -1187,7 +1187,7 @@
 
   <!-- %1$s and %2$s are numbers -->
   <plurals name="notification_stock_not_fresh_title">
-    <item quantity="other">%1$d件库存商品不再新鲜</item>
+    <item quantity="other">%1$d款库存产品不再新鲜</item>
   </plurals>
   <string name="notification_stock_content">为了减少食物浪费，在接下来的几天里消耗一些吧，点击打开列表</string>
   <!-- %1$s is a number -->
