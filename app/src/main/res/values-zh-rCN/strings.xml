@@ -43,7 +43,7 @@
   <string name="action_open_one">打开1%1$s%2$s</string>
   <string name="action_edit_product">编辑产品</string>
   <string name="action_shopping_list_add">加入购物清单</string>
-  <string name="action_consume_recipe">消耗此菜谱需要的全部配料</string>
+  <string name="action_consume_recipe">消耗此菜谱需要的全部食材</string>
   <string name="action_copy_recipe">复制菜谱</string>
   <string name="action_apply_desired_servings">为此菜谱应用所需的份数并更新数据</string>
   <!-- This is displayed as transaction type on the stock journal page -->
