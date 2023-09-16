@@ -717,7 +717,7 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing">
-    <item quantity="other">%1$d件产品低于安全库存</item>
+    <item quantity="other">%1$d款产品低于安全库存</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_single">
