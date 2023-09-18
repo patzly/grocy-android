@@ -24,7 +24,7 @@
   <string name="action_purchase">Kjøp</string>
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in consume screen for example. -->
-  <string name="action_consume">Forbruk</string>
+  <string name="action_consume">Bruk</string>
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in transfer screen for example. -->
   <string name="action_transfer">Overfør</string>
