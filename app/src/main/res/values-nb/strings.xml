@@ -235,8 +235,8 @@
   </plurals>
   <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
   <plurals name="msg_assigned_tasks">
-    <item quantity="one">%1$d tildelt</item>
-    <item quantity="other">%1$d tildelt</item>
+    <item quantity="one">%1$d tildelt deg</item>
+    <item quantity="other">%1$d tildelt deg</item>
   </plurals>
   <string name="msg_task_mark">Merk oppgaven som fullført</string>
   <string name="msg_task_completed">Oppgave merket som fullført</string>
