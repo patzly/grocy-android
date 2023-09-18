@@ -183,7 +183,7 @@
     <item quantity="other">%1$d åpnet</item>
   </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
-  <string name="msg_consumed">Forbrukt %1$s %2$s av %3$s</string>
+  <string name="msg_consumed">Brukt %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">Forbrukt %1$s %2$s av %3$s som ødelagt</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
