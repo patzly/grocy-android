@@ -63,7 +63,7 @@
   <string name="action_feedback">Send tilbakemelding</string>
   <string name="action_reset">Tilbakestill</string>
   <string name="action_reload">Oppfrisk</string>
-  <string name="action_top_scroll">Bla til toppen</string>
+  <string name="action_top_scroll">Gå til toppen</string>
   <string name="action_send">Send</string>
   <string name="action_close">Lukk</string>
   <string name="action_scan">Skann</string>
