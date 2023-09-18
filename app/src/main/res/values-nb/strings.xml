@@ -43,7 +43,7 @@
   <string name="action_open_one">Åpne 1 %1$s %2$s</string>
   <string name="action_edit_product">Rediger produkt</string>
   <string name="action_shopping_list_add">Legg til på handleliste</string>
-  <string name="action_consume_recipe">Forbruk alle ingrediensene som trengs for denne oppskriften</string>
+  <string name="action_consume_recipe">Bruk alle ingrediensene som trengs for denne oppskriften</string>
   <string name="action_copy_recipe">Kopier oppskrift</string>
   <string name="action_apply_desired_servings">Sett antall porsjoner for denne resepten og oppdater data</string>
   <!-- This is displayed as transaction type on the stock journal page -->
