@@ -34,7 +34,7 @@
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">Bruk alle</string>
 
-  <string name="action_consume_spoiled">Forbruk som ødelagt</string>
+  <string name="action_consume_spoiled">Bruk som ødelagt</string>
   <string name="action_consume_one_spoiled">Forbruk 1 som ødelagt</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
   <string name="action_consume_one">Forbruk 1 %1$s %2$s</string>
