@@ -144,7 +144,7 @@
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
-    <item quantity="one">%1$d utløper snart</item>
+    <item quantity="one">%1$d går ut snart</item>
     <item quantity="other">%1$d går ut snart</item>
   </plurals>
   <!-- %1$s is the number of products which are overdue. This string is the short form of e.g. "3 products are overdue" -> "3 overdue" -->
