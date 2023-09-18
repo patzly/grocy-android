@@ -225,8 +225,8 @@
   </plurals>
   <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
   <plurals name="msg_due_tasks_short">
-    <item quantity="one">%1$d forfaller</item>
-    <item quantity="other">%1$d forfaller</item>
+    <item quantity="one">%1$d skal gjøres</item>
+    <item quantity="other">%1$d skal gjøres</item>
   </plurals>
   <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
   <plurals name="msg_due_tasks_long">
