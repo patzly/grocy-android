@@ -105,7 +105,7 @@
   button so keep it short. -->
   <string name="action_link_and_clear">Bare link</string>
   <string name="action_toggle_done">Endre ferdigstatus</string>
-  <string name="action_change_layout">Endre layout</string>
+  <string name="action_change_layout">Endre oppsett</string>
   <string name="action_edit_notes">Rediger notater</string>
   <string name="action_add_missing">Legg til manglende produkter</string>
   <string name="action_purchase_done_items">Kjøp ferdige varer</string>
