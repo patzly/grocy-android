@@ -133,7 +133,7 @@
   <string name="action_no_filter">Uten filter</string>
   <string name="action_show_done_tasks">Vis ferdige oppgaver</string>
   <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="action_track_chore_execution">Følg husarbeidsutførelse</string>
+  <string name="action_track_chore_execution">Registrer husarbeid nå</string>
   <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_track_next_chore_schedule">Følg neste planlagte husarbeidsplan</string>
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
