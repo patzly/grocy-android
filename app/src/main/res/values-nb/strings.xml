@@ -135,7 +135,7 @@
   <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_track_chore_execution">Registrer husarbeid nå</string>
   <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="action_track_next_chore_schedule">Følg neste planlagte husarbeidsplan</string>
+  <string name="action_track_next_chore_schedule">Registrer neste planlagte utførelse</string>
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_skip_next_chore_schedule">Hopp over neste husarbeidsoppgave</string>
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
