@@ -79,7 +79,7 @@
   <string name="action_new_issue_description">Rapporter feil eller foreslå forbedringer</string>
   <string name="action_get_started">Kom i gang</string>
   <string name="action_ascending">Stigende</string>
-  <string name="action_filter">Filter </string>
+  <string name="action_filter">Filtrer</string>
   <string name="action_sort">Sorter</string>
   <string name="action_undo">Angre</string>
   <string name="action_retry">Prøv på nytt</string>
