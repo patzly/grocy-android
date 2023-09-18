@@ -37,7 +37,7 @@
   <string name="action_consume_spoiled">Bruk som ødelagt</string>
   <string name="action_consume_one_spoiled">Bruk 1 som ødelagt</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
-  <string name="action_consume_one">Forbruk 1 %1$s %2$s</string>
+  <string name="action_consume_one">Bruk 1 %1$s %2$s</string>
   <string name="action_open">Merk som åpnet</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
   <string name="action_open_one">Åpne 1 %1$s %2$s</string>
