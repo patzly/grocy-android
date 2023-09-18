@@ -702,6 +702,15 @@
   <string name="subtitle_recipe_due_score">Forfallskarakter: %1$s</string>
   <string name="subtitle_per_serving">per porsjon</string>
   <string name="subtitle_tap_preparation_mode">Trykk her for forberedelsesmodus</string>
+  <!-- Context is Label printer -->
+  <string name="subtitle_print_label_no">Ingen etikett</string>
+  <!-- Short form for "One label per purchase" -->
+  <string name="subtitle_print_label_per_purchase">Per innkjøp</string>
+  <!-- Short form for "One label per unit" -->
+  <string name="subtitle_print_label_per_unit">Per vare</string>
+  <!-- %1$s is a price and %2$s is a currency -->
+  <string name="subtitle_total_price">Totalpris: %1$s%2$s</string>
+
   <string name="description_input_product_part1">Produktfelt inneholder:</string>
   <string name="description_input_product_part2">Vennligst velg hvordan du vil fortsette:</string>
   <string name="description_input_product_option1">Lag nytt produkt og bruk inndata som navn</string>
@@ -747,6 +756,11 @@
     <item quantity="one">%1$d av de er på handlelistene dine.</item>
     <item quantity="other">%1$d av de er på handlelistene dine.</item>
   </plurals>
+  <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
+  <plurals name="description_overview_stock_value">
+    <item quantity="one">Du har %1$d produkt, med verdi %2$s %3$s, i beholdningen.</item>
+    <item quantity="other">Du har %1$d produkter, med verdi %2$s %3$s, i beholdningen.</item>
+  </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list_multi">
     <item quantity="one">%1$d vare er på handlelistene dine.</item>
@@ -756,6 +770,11 @@
   <plurals name="description_overview_shopping_list">
     <item quantity="one">%1$d vare er på handlelistene dine.</item>
     <item quantity="other">%1$d varer er på handlelistene dine.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_recipes">
+    <item quantity="one">Du har %1$d resept.</item>
+    <item quantity="other">Du har %1$d resepter.</item>
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_chores_due_soon">
@@ -773,10 +792,31 @@
     <item quantity="other">%1$d husarbeidsoppgaver må gjøres i dag.</item>
   </plurals>
   <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_assigned">
+    <item quantity="one">%1$d husarbeidsoppgave tilordnet deg.</item>
+    <item quantity="other">%1$d husarbeidsoppgaver tildelt deg.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_tasks">
+    <item quantity="one">%1$d oppgave må gjøres.</item>
+    <item quantity="other">%1$d oppgaver må gjøres.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_tasks_user">
+    <item quantity="one">%1$d oppgave tilordnet deg.</item>
+    <item quantity="other">%1$d oppgaver tilordnet deg.</item>
+  </plurals>
+  <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
     <item quantity="one">Databasen din inneholder %1$d produkt.</item>
     <item quantity="other">Databasen din inneholder %1$d produkter.</item>
   </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="error_max_decimal_places">
+    <item quantity="one">Maksimalt %1$s desimal</item>
+    <item quantity="other">Maksimalt %1$s desimaler</item>
+  </plurals>
+
   <string name="property_name">Navn</string>
   <string name="property_name_singular">Navn (entall)</string>
   <string name="property_name_plural">Navn (flertall)</string>
@@ -785,8 +825,10 @@
   <string name="property_product_name">Produktnavn</string>
   <string name="property_parent_product">Forelderprodukt</string>
   <string name="property_description">Beskrivelse</string>
+  <string name="property_product_description">Produktbeskrivelse</string>
   <string name="property_note">Notat</string>
   <string name="property_status">Status</string>
+  <string name="property_status_insert">Status:</string>
   <string name="property_amount">Beløp</string>
   <string name="property_amount_insert">Mengde: %1$s</string>
   <string name="property_seconds">Sekunder</string>
@@ -802,6 +844,8 @@
   <string name="property_price_average">Gjennomsnittpris</string>
   <!-- %1$s is a quantity unit-->
   <string name="property_price_unit">Pris per %1$s</string>
+  <!-- %1$s is a price and %2$s is a quantity unit-->
+  <string name="property_price_unit_insert">%1$s per %2$s</string>
   <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
   <string name="property_price_with_currency">%1$s %2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
@@ -818,6 +862,12 @@
   <string name="property_qu_factor">Faktor kjøp til lager</string>
   <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_default_qu_consume">Standard forbruksenhet</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_prices">Mengdeenhet for priser</string>
+  <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
+  <string name="property_quantity_unit_from">Konverter fra</string>
+  <!-- Example: "Convert to cup"; This string is part of a pair, there is also 'Convert from' -->
+  <string name="property_quantity_unit_to">Konverter til</string>
   <string name="property_factor">Faktor</string>
   <string name="property_barcode">Strekkode</string>
   <string name="property_barcodes">Strekkoder</string>
@@ -852,6 +902,7 @@
   <string name="property_location_default">Standard lokasjon</string>
   <string name="property_location_default_insert">Standard lokasjon: %1$s</string>
   <string name="property_location_consume_default">Standard forbrukslokasjon</string>
+  <string name="property_move_on_open">Flytt ved åpning</string>
   <string name="property_notes">Notater</string>
   <string name="property_locations">Lokasjoner</string>
   <string name="property_store">Butikk</string>
@@ -882,9 +933,15 @@
   <string name="property_opened">åpnet</string>
   <string name="property_not_opened">ikke åpnet</string>
   <string name="property_is_freezer">Er fryser</string>
+  <!-- kcal (kilo calories) is a unit for energy -->
+  <string name="property_energy">Energi (kcal) per beholdningsenhet</string>
   <string name="property_active">Aktiv</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Aldri vis på lageroversikt</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_disable_own_stock">Deaktiver egen beholdning</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_should_not_be_frozen">Bør ikke fryses</string>
   <string name="property_number">Tall</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_enable_tare_weight">Aktivere behandling av taravekt</string>
@@ -893,9 +950,17 @@
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_tare_weight_in">Taravekt i %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_disable_stock_check">Ikke bruk beholdningsjekk for denne ingrediensen</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_amount_quick_consume">Hurtigforbruksantall</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_quick_consume_in">Hurtigforbruksantall i %1$s</string>
+  <!--The same string is also in the web interface (server v4.0.0 or later): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_amount_quick_open">Hurtigåpningsmengde</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_quick_open_in">Hurtigåpningsmengde i %1$s</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_accumulate_amount">Akkumuler underprodukter i minimum beholdningsnivå </string>
   <string name="property_picture">Bilde</string>
   <string name="property_note_singleline">En-linjers notat</string>
   <string name="property_note_multiline">Flerlinje-notat</string>
@@ -907,14 +972,26 @@
   <string name="property_in_stock">På lager: %1$s</string>
   <!-- %1$s is a sort mode like "name" or "due date" -->
   <string name="property_sort_mode">Sortere: %1$s</string>
+  <!-- %1$s is a grouping mode like "product group" or "due date" -->
+  <string name="property_group_by">Grupper på: %1$s</string>
   <string name="property_ungrouped">Ugruppert</string>
   <!-- %1$s is a property like "product group" or "due date" -->
   <string name="property_extra_field">Ekstra felt: %1$s</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields">Felt</string>
   <string name="property_task_category">Oppgavekategori</string>
   <string name="property_task_categories">Oppgavekategorier</string>
   <string name="property_calories">Kalorier</string>
   <string name="property_calories_unit">Kalorier (enhet)</string>
   <string name="property_calories_total">Kalorier (totalt)</string>
+  <!-- %1$s is a value like energy or price, unit means value of items per unit -->
+  <string name="property_insert_per_unit">%1$s (enhet)</string>
+  <!-- %1$s is a value like energy or price, total means value of many items in total -->
+  <string name="property_insert_total">%1$s (totalt)</string>
+  <!-- %1$s is a value like price, average means average price -->
+  <string name="property_insert_average">%1$s (gjennomsnitt)</string>
+  <!-- %1$s is a value like price, "last" is like for example in "last price" -->
+  <string name="property_insert_last">%1$s (sist)</string>
   <string name="property_category">Kategori</string>
   <string name="property_assigned_to">Tildelt til</string>
   <string name="property_users">Brukere</string>
@@ -928,10 +1005,33 @@
   <string name="property_average_execution_frequency">Gjennomsnittlig utføringsfrekvens</string>
   <!-- See context for this string on the web interface on the chores page, the table has this column -->
   <string name="property_next_estimated_tracking">Neste estimerte sporing</string>
+  <string name="property_next_estimated_tracking_time">Neste estimerte sporing</string>
+  <!-- See context for this string on the web interface on the recipes edit page -->
+  <string name="property_servings">Porsjoner</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it (hover over help icon) -->
+  <string name="property_servings_base_insert">Oppskrift: %1$s porsjon(er)</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_servings_desired">Ønskede porsjoner</string>
+  <string name="property_servings_desired_insert">Ønskede porsjoner: %1$s</string>
   <string name="property_not_check_shopping_list">Ikke sjekk mot handlelisten</string>
+  <string name="property_not_check_shopping_list_description">Når manglende varer legges til</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_preparation">Forberedelse</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_costs">Kostnad</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="property_due_score">Forfallskarakter</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_ingredients">Ingredienser</string>
   <string name="property_only_check_single_unit_in_stock">Bare sjekk om beholdning finnes</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
+  <string name="property_ingredient_group">Gruppe</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
+  <string name="property_variable_amount">Variabel mengde</string>
+  <string name="property_requirements_fulfilled">Nok i beholdningen</string>
+  <string name="property_produces_product">Produserer produkt</string>
+  <string name="property_price_factor">Prisfaktor</string>
+
   <string name="date_today">I dag</string>
   <string name="date_unknown">Ukjent</string>
   <!-- This means the 'time' context -->
@@ -971,6 +1071,18 @@
     <item quantity="one">%d dag fra nå</item>
     <item quantity="other">%d dager fra nå</item>
   </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_months_from_now">
+    <item quantity="one">%d måned fra nå</item>
+    <item quantity="other">%d måneder fra nå</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_years_from_now">
+    <item quantity="one">%d år fra nå</item>
+    <item quantity="other">%d år fra nå</item>
+  </plurals>
+
+  <string name="info_acknowledgement">Vi vil takke utvikleren av Grocy, Bernd Bestel. Uten hans fantastiske arbeid ville denne appen aldri eksistert.</string>
   <string name="info_intro">Spill av intro igjen</string>
   <string name="info_intro_description">Fremvisende funksjoner</string>
   <string name="info_dev_beginning">Begynnelsen av utviklingen</string>
@@ -995,6 +1107,7 @@
   <string name="category_general">Generelt</string>
   <string name="category_stock">Lager</string>
   <string name="category_server">Server</string>
+  <string name="category_user_settings">Brukerinnstillinger</string>
   <string name="category_scanner">Scanner</string>
   <string name="category_scanner_camera">Kameraskanner</string>
   <string name="category_scanner_external">Ekstern skanner</string>
@@ -1002,6 +1115,10 @@
   <string name="category_network">Nettverk</string>
   <string name="category_network_proxy">Mellomtjener</string>
   <string name="category_behavior">Oppførsel</string>
+  <string name="category_display_behavior">Visning</string>
+  <string name="category_input_behavior">Inndata</string>
+  <string name="category_additional_services">Tilleggstjenester</string>
+  <string name="category_other_behavior">Annet</string>
   <string name="category_debugging">Feilsøking</string>
   <string name="category_new_product">Nytt produkt</string>
   <string name="category_existing_products">Eksisterende produkter</string>
@@ -1011,19 +1128,28 @@
   <string name="hint_key">Gyldig API-nøkkel</string>
 
   <string name="setting_theme">Tema</string>
+  <string name="setting_theme_description">Prøv et annet utseende</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system (automatic or shorter auto) theme. The button width should be as dense as possible. -->
+  <string name="setting_theme_auto">Auto</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">Mørk</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_light">Lys</string>
   <string name="setting_language">Språk</string>
   <string name="setting_language_description">Velg språk</string>
+  <string name="setting_language_info">Tusen takk til alle frivillige oversetterne på Transifex!\nBesøk oss på GitHub for å finne ut hvordan du kan hjelpe med å gjøre Grocy Android tilgjengelig for ditt språk.</string>
   <string name="setting_language_system">Følgesystem</string>
+  <string name="setting_language_not_available">Engelsk dersom oversettelse ikke er tilgjengelig</string>
+  <string name="setting_transition">Bruk glidende overganger mellom innstillingssider</string>
+  <string name="setting_transition_description">Istedenfor nedtoning</string>
   <string name="setting_open_food_facts">Bruk Open Food Facts</string>
   <string name="setting_open_food_facts_description">Hent informasjon fra strekkoder</string>
   <string name="setting_choose_barcode_scanner">Velg strekkode-skanner</string>
   <string name="setting_choose_barcode_scanner_description">For strekkodeskanning med kamera</string>
   <string name="setting_use_front_cam">Bruk frontkamera</string>
   <string name="setting_use_front_cam_description">For strekkode skanning</string>
+  <string name="setting_use_2d_scanner_format">Bruk 2D strekkode scanneformat</string>
+  <string name="setting_use_2d_scanner_format_description">Kvadratiske QR-koder</string>
   <string name="setting_barcode_formats">Strekkodeformater</string>
   <!-- %1$s are barcode formats -->
   <string name="setting_barcode_formats_description">Begrense til: %1$s</string>
@@ -1042,15 +1168,20 @@
   <string name="setting_keep_screen_on_description">Mens i handlemodus</string>
   <string name="setting_show_done_items">Vis ferdige elementer</string>
   <string name="setting_show_done_items_description">På bunnen</string>
+  <string name="setting_smaller_font">Bruk mindre font</string>
+  <string name="setting_smaller_font_description">For å se flere elementer på samme tid</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Utløper snart dager</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_purchase">Standard mengde for kjøp</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">Standard menge for forbruk</string>
+  <string name="setting_treat_opened_as_out_of_stock">Behandle åpnet som ikke i beholdningen</string>
   <string name="setting_purchased_date">Spør etter innkjøpsdato</string>
+  <string name="setting_purchased_date_description">På innkjøps- og beholdningssider</string>
   <string name="setting_use_quick_consume_amount">Bruk produktets \"Hurtigforbruksantall\"</string>
   <string name="setting_auto_add_shopping_list">Legg produkter på handlelisten automatisk</string>
+  <string name="setting_auto_add_shopping_list_description">Som er under satt minimumsbeholdning</string>
   <string name="setting_empty_value">Tom</string>
   <string name="setting_sync_off">Synk av</string>
   <string name="setting_loading">Laster verdi</string>
@@ -1058,12 +1189,29 @@
   <string name="setting_debug">Aktiver logging</string>
   <string name="setting_debug_description">Vise feil i loggene</string>
   <string name="setting_log_level">Logg-nivå</string>
+  <string name="setting_error_logs">Vis bare feillogger</string>
   <string name="setting_info_logs">Vis informasjonslogger</string>
   <string name="setting_logs_description">Vis logcat for denne prosessen</string>
   <string name="setting_timeout">Lasting tidsavbrudd</string>
+  <string name="setting_timeout_descriptions">Deretter avbrytes lastingen</string>
   <string name="setting_beginner_mode">Begynnermodus</string>
   <string name="setting_beginner_mode_description">Vis hjelpetekster som standard</string>
+  <string name="setting_haptic">Haptisk tilbakemelding</string>
+  <string name="setting_haptic_description">En oppslukende opplevelse</string>
+  <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
+  <string name="setting_expand_bottom_sheets">Utvid bottom sheets</string>
   <string name="setting_expand_bottom_sheets_description">I landskapsmodus</string>
+  <string name="setting_bottom_menu_button">Vis knapp for hovedmeny</string>
+  <string name="setting_bottom_menu_button_description">I nedre verktøylinje</string>
+  <string name="setting_turn_on_quick_mode">Aktiver hutigmodus som standard</string>
+  <string name="setting_turn_on_quick_mode_description">Når det brukes scannemodus på hovedsiden</string>
+  <string name="setting_quick_mode_return">Gå tilbake til oversikten etter 20 sekunder</string>
+  <string name="setting_quick_mode_return_description">Når du bruker skann-knappen i oversikten og hurtigmodus ikke er i bruk</string>
+  <string name="setting_speed_up_start">Reduser oppstartstiden</string>
+  <string name="setting_speed_up_start_description">Har effekt bare på raske enheter</string>
+  <string name="setting_date_keyboard_input">Skriv inn datoer med tastatur</string>
+  <string name="setting_date_keyboard_input_description">Istedenfor datovelger-hjul</string>
+  <string name="setting_date_keyboard_reverse">Bruk omvendt datoformat</string>
   <string name="setting_date_keyboard_reverse_description">DDMMYY istedenfor YYMMDD</string>
   <string name="setting_loading_circle">Vis lastingssirkel for alle forespørsler</string>
   <string name="setting_loading_circle_description">Nyttig for treige nettverk</string>
@@ -1072,18 +1220,33 @@
   <string name="setting_proxy">Aktiver HTTP proxy</string>
   <string name="setting_proxy_description">Konfigurer HTTP-proxy for alle nettverksforespørsler</string>
   <string name="setting_proxy_host">Proxy host</string>
+  <string name="setting_proxy_host_description">Proxy vertsnavn/IP adresse</string>
   <string name="setting_proxy_port">Proxy port</string>
+  <string name="setting_proxy_port_description">Proxy portnummer</string>
   <string name="setting_synchronized">Valgene nedenfor er synkronisert med serveren.</string>
   <string name="settings_synchronized">Disse innstillingene er synkronisert med serveren.</string>
   <string name="setting_message_duration">Vis tid for meldinger</string>
+  <string name="setting_message_duration_description">Berører bare transaksjonsmeldinger</string>
   <string name="setting_notifications_enable">Aktiver notifikasjoner</string>
+  <!-- The string belongs to the stock overview (stock items can be expired, overdue or due soon). -->
+  <string name="setting_notifications_stock_description">Sjekker beholdningen daglig og varsler om der er produkter som ikke lenger er ferske (utgått, går ut snart)</string>
   <string name="setting_notifications_chores_description">Sjekker husarbeidsoppgaver daglig og informerer deg når oppgaver må gjøres</string>
+  <string name="setting_notification_time">Varslingstidspunkt</string>
   <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">Når sjekken utføres</string>
+  <string name="setting_keep_screen_on_recipes_description">Når en oppskrift vises</string>
+
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="notification_stock_not_fresh_title">
+    <item quantity="one">%1$d vare i beholdningen er ikke lenger ferske</item>
+    <item quantity="other">%1$d varer i beholdningen er ikke lenger ferske</item>
+  </plurals>
   <string name="notification_stock_content">Forbruk de i løpet av de neste dagene for å redusere matsvinn. Trykk for å åpne listen.</string>
   <!-- %1$s is a number -->
   <plurals name="notification_chores_due_title">
     <item quantity="one">%1$d husarbeidsoppgave må gjøres.</item>
     <item quantity="other">%1$d husarbeidsoppgaver må gjøres.</item>
   </plurals>
+  <string name="notification_chores_content">Prokrastinering er nytteløst. Trykk for å åpne listen.</string>
+
   </resources>
