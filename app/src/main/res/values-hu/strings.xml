@@ -34,6 +34,7 @@
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">Összes elfogyasztása</string>
 
+  <string name="action_consume_spoiled">Felhasználás romlottként</string>
   <string name="action_consume_one_spoiled">1 felhasználása romlottként</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
   <string name="action_consume_one">1 %1$s %2$s felhasználása</string>
@@ -42,6 +43,15 @@
   <string name="action_open_one">1 %1$s %2$s felbontása</string>
   <string name="action_edit_product">Termék szerkesztése</string>
   <string name="action_shopping_list_add">Bevásárlólistához adás</string>
+  <string name="action_consume_recipe">Ehhez a recepthez szükséges összes hozzávaló felhasználása</string>
+  <string name="action_copy_recipe">Recept másolása</string>
+  <string name="action_apply_desired_servings">Kívánt adagok alkalmazása ehhez a recepthez, és az adatok frissítése</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_product_opened">Termék felbontott</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_from">Áthelyezés Innen</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_to">Áthelyezés Ide</string>
 
   <string name="action_back">Vissza</string>
   <string name="action_search">Keresés</string>
@@ -78,6 +88,8 @@
   <string name="action_proceed">Folytatás</string>
   <string name="action_delete">Törlés</string>
   <string name="action_save">Mentés</string>
+  <string name="action_save_close">Mentés és bezárás</string>
+  <string name="action_save_not_close">Mentés bezárás nélkül</string>
   <string name="action_logout">Kijelentkezés</string>
   <string name="action_restart">Újraindítás</string>
   <string name="action_create">Létrehozás</string>
@@ -86,13 +98,22 @@
   <string name="action_open_scanner">Vonalkód olvasás</string>
   <string name="action_discard">Elvetés</string>
   <string name="action_clear_form">Űrlap visszaállítása</string>
+  <string name="action_take_photo">Fénykép készítése</string>
+  <!-- "Paste" like in "Paste from clipboard" -->
+  <string name="action_paste">Beillesztés</string>
+  <!-- Short form for "Only link barcode to existing product", this should fit into a
+  button so keep it short. -->
+  <string name="action_link_and_clear">Csak kapcsolja</string>
   <string name="action_toggle_done">Elvégzett státusz váltása</string>
+  <string name="action_change_layout">Elrendezés módosítása</string>
   <string name="action_edit_notes">Megjegyzések szerkesztése</string>
   <string name="action_add_missing">Hiányzó termékek hozzáadása</string>
   <string name="action_purchase_done_items">Elvégzett tételek megvásárlása</string>
   <string name="action_purchase_all_items">Összes tétel megvásárlása</string>
   <string name="action_skip_entry">Bejegyzés kihagyása</string>
   <string name="action_toggle_flash">Vaku ki/be kapcsolása</string>
+  <string name="action_edit_recipe">Recept szerkesztése</string>
+  <string name="action_delete_recipe">Recept törlése</string>
   <string name="action_delete_shopping_list">Bevásárlólista törlése</string>
   <string name="action_create_key">Kulcs létrehozása</string>
   <string name="action_login">Bejelentkezés</string>
@@ -105,10 +126,22 @@
   <string name="action_demo_server">Demó szerver</string>
   <string name="action_own_server">Saját szerver</string>
   <string name="action_enter_data_manually">Adatok bevitele manuálisan</string>
+  <string name="action_details">Részletek</string>
   <string name="action_perform">Művelet végrehajtása</string>
   <string name="action_share">Megosztás</string>
   <string name="action_share_description">Mesélj a barátaidnak a Grocy Androidról</string>
   <string name="action_no_filter">Nincs szűrő</string>
+  <string name="action_show_done_tasks">Elvégzett feladatok mutatása</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_chore_execution">Házimunka végrehajtásának követése most</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_next_chore_schedule">A következő ütemezett házimunka végrehajtásának követése</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_skip_next_chore_schedule">A következő ütemezett házimunka kihagyása</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_reschedule_next_execution">Következő végrehajtás átütemezése</string>
+  <string name="action_put_missing_products_on_shopping_list">Hiányzó termékek hozzáadása a bevásárlólistához</string>
+
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d hamarosan lejár</item>
@@ -124,6 +157,16 @@
     <item quantity="one">%1$d megromlott</item>
     <item quantity="other">%1$d megromlott</item>
   </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_short">
+    <item quantity="one">%1$d nem friss</item>
+    <item quantity="other">%1$d nem friss</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_long">
+    <item quantity="one">%1$d nem friss (mind alul)</item>
+    <item quantity="other">%1$d nem friss (mind alul)</item>
+  </plurals>
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
   <plurals name="msg_missing_products">
     <item quantity="one">%1$d min. készlet mennyiség alatt</item>
@@ -133,6 +176,11 @@
   <plurals name="msg_in_stock_products">
     <item quantity="one">%1$d készleten</item>
     <item quantity="other">%1$d készleten</item>
+  </plurals>
+  <!-- %1$s is the number of products which are opened. This string is the short form of e.g. "3 products are opened" -> "3 opened" -->
+  <plurals name="msg_opened_products">
+    <item quantity="one">%1$d felbontva</item>
+    <item quantity="other">%1$d felbontva</item>
   </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">%1$s %2$s %3$s felhasználva</string>
@@ -165,11 +213,52 @@
     <item quantity="one">%1$d hamarosan esedékes</item>
     <item quantity="other">%1$d hamarosan esedékes</item>
   </plurals>
+  <!-- %1$s is the number of tasks which are due today. This string is the short form of e.g. "3 tasks are due today" -> "3 due today" -->
+  <plurals name="msg_due_today_tasks">
+    <item quantity="one">%1$d ma lejár</item>
+    <item quantity="other">%1$d ma lejár</item>
+  </plurals>
   <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_tasks">
     <item quantity="one">%1$d késésben</item>
     <item quantity="other">%1$d késésben</item>
   </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_short">
+    <item quantity="one">%1$d lejár</item>
+    <item quantity="other">%1$d lejár</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_long">
+    <item quantity="one">%1$d esedékes (mind alul)</item>
+    <item quantity="other">%1$d esedékes (mind alul)</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
+  <plurals name="msg_assigned_tasks">
+    <item quantity="one">%1$d hozzád rendelve</item>
+    <item quantity="other">%1$d hozzád rendelve</item>
+  </plurals>
+  <string name="msg_task_mark">Feladat megjelölése befejezettként</string>
+  <string name="msg_task_completed">Feladat megjelölve befejezettként</string>
+  <string name="msg_task_not_completed">Feladat megjelölve nem befejezettként</string>
+  <string name="msg_task_undo">Feladat visszavonása</string>
+  <string name="msg_recipes_enough_in_stock">Elég készleten</string>
+  <string name="msg_recipes_enough_in_stock_filter">(%1$d) Elég készleten</string>
+  <!-- %1$s is an amount with quantity unit (e.g. 3 bottles) -->
+  <string name="msg_recipes_enough_in_stock_amount">Elég készleten (%1$s)</string>
+  <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) Nincs elég készleten, de bevásárlólistán van</string>
+  <string name="msg_recipes_not_enough_filter">(%1$d) Nincs elég készleten</string>
+  <string name="msg_recipes_not_enough">Nincs elég készleten</string>
+  <plurals name="msg_recipes_ingredients_missing_but_on_shopping_list">
+    <item quantity="one">%1$d hozzávaló hiányzik, de már a bevásárló listán van</item>
+    <item quantity="other">%1$d hozzávaló hiányzik, de már a bevásárló listán vannak</item>
+  </plurals>
+  <plurals name="msg_recipes_ingredients_missing">
+    <item quantity="one">%1$d hozzávaló hiányzik</item>
+    <item quantity="other">%1$d hozzávaló hiányzik</item>
+  </plurals>
+  <string name="msg_recipes_ingredient_fulfillment_info_list">Hiányzik: %1$s | Már a bevásárló listán: %2$s</string>
+  <string name="msg_chore_executed">Az elvégzett házimunka naplózásra került</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">%1$s %2$s %3$s megvásárolva</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -184,7 +273,13 @@
   <!-- %1$s is a product name -->
   <string name="msg_no_stock_entries">Nincs készlet bejegyzés %1$s termékhez</string>
   <string name="msg_not_found">A termék nem található</string>
+  <string name="msg_returning_to_overview">Visszatérés az áttekintő oldalra néhány másodperc múlva</string>
+  <string name="msg_editor_hint">Írj szöveget ide</string>
+  <string name="msg_coming_soon">Ez a funkció hamarosan elérhető lesz</string>
+  <string name="msg_undo_transaction">Visszavonod a tranzakciót?</string>
   <string name="msg_undone_transaction">Tranzakció visszavonása</string>
+  <!-- %1$s is a date -->
+  <string name="msg_undone_transaction_description">Visszavonva %1$s</string>
   <string name="msg_failed_to_sync">Sikertelen szinkronizálás</string>
   <string name="msg_synced">Sikeres szinkronizálás</string>
   <!-- %1$s is a shopping list name -->
@@ -211,46 +306,80 @@
     <item quantity="other">%1$s %2$s készletről eltávolítva.</item>
   </plurals>
   <string name="msg_transfer_tare_weight">Beállított tára súllyal rendelkező termékek mozgatása jelenleg nem támogatott</string>
+  <string name="msg_should_not_be_frozen">Ezt a terméket nem szabad lefagyasztani. Szeretnéd folytatni?</string>
   <string name="msg_item_marked_as_done">Tétel elvégzettre jelölve</string>
   <string name="msg_item_marked_as_undone">Tétel elvégzetlenre jelölve</string>
   <string name="option_synced_success">Beállítás szinkronizálva</string>
   <string name="option_synced_error">Nem sikerült szinkronizálni a beállítást</string>
+  <string name="msg_data_copied_from_product">Az adatok át lettek másolva a(z) \"%1$s\" termékről.</string>
+  <string name="msg_recipe_added_to_cart">A recept hozzávalói hozzá lettek adva a kosárhoz </string>
+  <string name="msg_recipe_consumed">A \"%1$s\" recept összes hozzávalója eltávolításra került a készletből.</string>
+  <string name="msg_stored_purchases_overview">A készüléken vannak olyan vásárlások, amelyek még nem kerültek át a szerverre. A részletekért koppints ide.</string>
+  <string name="msg_stored_purchases">Itt jelennek meg azok a vásárlások, amelyek még nem kerültek át a szerverre. Ezeket ideiglenes termékekkel együtt mentettük el ebben az alkalmazásban, hogy gyorsított módban gyorsabban beolvashasd a vásárlást, és ne kelljen közvetlenül új termékeket létrehozni a törzsadatokhoz.</string>
+  <string name="msg_stored_purchases_product_offline">Koppints a termékre, és töltsd ki a szükséges adatokat. Ezt követően a termék itt online-ként jelenik meg, és a tárolt vásárlások elküldhetők a szerverre.</string>
+  <string name="msg_stored_purchases_product_online">Koppints ide a termék tárolt vásárlásainak a szerverre történő elküldéséhez.</string>
   <string name="msg_choose_product">A beolvasott vonalkód még nem tartozik termékhez. Hozzárendelheted létező termékhez vagy létrehozhatsz újat is hozzá.</string>
-  <string name="msg_product_name_off">A vonalkoódhoz tartozó termék neve az Open Food Facts adatbázisából származik.</string>
+  <string name="msg_product_name_off">A vonalkódhoz tartozó termék neve az Open Food Facts-től származik.</string>
+  <string name="msg_product_name_obf">A vonalkódhoz tartozó termék neve az Open Beauty Facts-tól származik.</string>
   <string name="msg_product_name_lookup_error">Nem sikerült lekérdezni a vonalkódot az Open Food Facts adatbázisából.</string>
   <string name="msg_product_name_lookup_empty">A vonalkód nem szerepel az Open Food Facts adatbázisában.</string>
   <string name="msg_off_option_deactivated">Automatikus terméknév javaslatért bekapcsolhatod a beállításokban az Open Food Facts adatbázis keresést.</string>
   <string name="msg_create_new_product_filled">Új termék létrehozása \"%1$s\"</string>
   <string name="msg_create_new_product">Új termék létrehozása</string>
+  <string name="msg_create_new_pending_product_filled">Új ideiglenes termék létrehozása \"%1$s\"</string>
+  <string name="msg_create_new_pending_product">Új ideiglenes termék létrehozása</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">A végrehajtandó művelet:\n\n%1$s %2$s %3$s készletre vétele\nLejárati idő: %4$s\nÁr: %5$s\nÁruház: %6$s\nHely: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">A végrehajtandó művelet:\n\n%1$s %2$s %3$s eltávolítása készletről\nHely: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_open">A végrehajtásra kerülő tranzakció:\n\n%1$s %2$s %3$s megjelölése felbontottként\nHely: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">A végrehajtandó művelet:\n\n%1$s %2$s %3$s áthelyezése\nForrás hely: %4$s\nCél hely: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">A végrehajtandó művelet:\n\n%1$s készlet beállítása: %2$s %3$s\nA hozzáadott termékek tulajdonságai:\nLejárati dátum: %4$s\nÁr: %5$s\nÁruház: %6$s\nHely: %7$s</string>
-  <string name="msg_compatibility">Az applikáció verziója nem kompatibilis a szerveren futó Grocy verziójával.\n\nJelenlegi szerver verzió: %1$s\n\nTámogatott szerver verziók:\n%2$s\nHa figyelmen kívül hagyod ezt a figyelmeztetést, adatvesztés (nem valószínű) vagy összeomlás (valószínű) következhet be.\nFigyelmeztettelek!</string>
+  <string name="msg_compatibility">Az applikáció verziója nem kompatibilis a szerveren futó Grocy verziójával.\n\nJelenlegi szerver verzió:%1$s\n\nTámogatott szerver verziók:\n%2$s\nHa a jelenlegi szerver verziónak magasabb a fő verziószáma (első számjegy), mint a támogatott verziók és  figyelmen kívül hagyod ezt a figyelmeztetést, adatvesztés (nem valószínű) vagy összeomlás (valószínű) következhet be.\nHa csak kisebb különbség van (pl. a harmadik számjegy magasabb), akkor valószínüleg figyelmen kívül hagyhatod ezt a figyelmeztetést.</string>
   <string name="msg_logout">A szerveren semmi sem fog változni. Átirányítunk a bejelentkezés oldalára.</string>
   <string name="msg_logout_demo">A nyilvános demó szervert használod <u>https://grocy.info</u>. \n\n<b>A változtatások nem maradnak meg örökké!\nNyilvánosak maradnak, amíg a szerver naponta egyszer felül nem írja őket.</b>\n\nA bejelentkezési oldalon beírhatod a saját szervered címét.</string>
   <string name="msg_logout_demo_short">Publikus demó szerver. Érintsd meg a további részletekért</string>
   <string name="msg_restart">Az applikációt újra kell indítani a konfiguráció érvényesítéséhez. Szeretnéd most újraindítani?</string>
+  <string name="msg_full_description">Koppints ide a teljes leírás megjelenítéséhez.</string>
+  <string name="msg_copied_clipboard">Vágólapra másolva</string>
   <string name="msg_shortcuts">Akár 4 parancsikont is létrehozhatsz:</string>
   <string name="msg_shortcuts_not_supported">A parancsikonok ezen az Android verzión nem támogatottak.</string>
   <string name="msg_barcode_formats">Javíthatod a vonalkódolvasó sebességét, ha csak azokat a formátumokat állítod be, amelyeket valószínűleg használni fogsz.</string>
   <string name="msg_features">Újra megjelenítheted a bevezetőt \"Az alkalmazásról\" menüpontban</string>
   <string name="msg_feedback">Kérésed, kérdésed van, esetleg hibákat találtál? Lépj velünk kapcsolatba, hadd segíthessünk!\nEgyéb esetekben nagyon örülnénk egy kedves véleménynek a Play Áruházban.</string>
   <string name="msg_point_at_barcode">Irányítsd a kamerát egy vonalkódra</string>
-  <string name="msg_press_hold_confirm">Tartsd lenyomva a megerősítéshez</string>
-  <string name="msg_choose_option_below">Válassz egyet a lenti lehetőségek közül.</string>
-  <string name="msg_qr_code_scan">Nyisd meg a Grocy weboldalt egy másik eszközön és menj az \"Api kulcsok kezelése\" oldalra. Kattints a \"Hozzáadás\" gombra, majd a kis QR kód szimbólumra, végül olvasd be a QR kódot.</string>
+  <string name="msg_save_product_first">Először a terméket mentsd el</string>
+  <string name="msg_save_recipe_first">Először a receptet menstd el</string>
+  <string name="msg_press_hold_confirm">Nyomd meg és tartsd lenyomva a törlés megerősítéséhez</string>
+  <string name="msg_recipe_consume_ask">Biztos, hogy a \"%1$s\" recepthez szükséges összes hozzávalót fel akarod használni? (a \"Csak azt ellenőrizze, hogy készleten van\" jelöléssel ellátott hozzávalók figyelmen kívül lesznek hagyva.)</string>
+  <string name="msg_recipe_shopping_list_ask">Biztos, hogy a \"%1$s\" recepthez szükséges összes hiányzó hozzávalót fel szeretnéd venni a bevásárlólistára?\n\n\nSzüntesd meg a hozzávalók kiválasztását, hogy ne kerüljenek fel a bevásárlólistára:</string>
+  <string name="msg_welcome">Üdv a Grocy Androidban!</string>
+  <string name="msg_welcome_introduce">A Grocy produktív használatához saját szerverre vagy Home Assistant használatánál a Grocy addon-ra van szükséged.\nHa csak ki szeretnéd próbálni ezt az alkalmazást, használhatod Bernd Bestel, a grocy alkotójának demó szerverét.</string>
+  <string name="msg_choose_option_below">Válassz a lenti lehetőségek közül.</string>
+  <string name="msg_qr_code_scan">Egy másik eszközön látogass el a Grocy weboldalára, és lépj az \"API kulcsok kezelése\" oldalra. Kattints a \'Hozzáadás\' gombra, majd kattints a kis QR-kód szimbólumra, és olvasd be a QR-kódot.</string>
+  <string name="msg_qr_code_scan_token">A Grocy Home Assistant add-onját használod. Hozz létre egy hosszú élettartamú hozzáférési tokent a Home Assistant profil beállításaiban (utolsó szakasz). A token mező alatt kattints a \"QR-kód generálása\" gombra, és olvasd be ide.</string>
   <string name="msg_port_connection_info_without_port">Az alkalmazás a(z) %1$s porthoz fog kapcsolódni.\nHa másik portot használnál, megadhatod az URL-ben.\nPéldául: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">Az alkalmazás a(z) %1$s porthoz fog kapcsolódni.</string>
+  <string name="msg_clear_form_first">Egy másik ismert vonalkód beolvasása előtt töröld ki az űrlapot.</string>
   <string name="msg_not_implemented_yet">Ez még fejlesztés alatt áll. Addig is használd a szervered weboldalát.</string>
+  <string name="msg_help_picture_changes">A kép módosításai azonnal szinkronizálódnak a szerverrel, nem csak a mentéskor!</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_stock_label_type">Ez az alapértelmezett készletbeviteli címketípus, amely a vásárláskor előre kitöltésre kerül.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">A készlet áttekintés oldal az összes készleten vagy min. készlet mennyiség alatt lévő terméket mutatja - kapcsold ezt be, hogy a termék soha ne jelenjen meg ott</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_parent_product_deactivated">Ennek a terméknek nem lehet szülő terméket beállítani, mert már egy másik termék szülő termékeként szerepel.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_consume_location">Az alábbi a helyen elérhető termékek kerülnek először felhasználásra</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_move_on_open">Bekapcsolva áthelyezi az épp felbontott készletet az alapértelmezett felhasználási helyre</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_disable_own_stock">Bekapcsolva a terméknek nem lehet saját készlete, így vásárláskor sem lehet kiválasztani (akkor hasznos, ha az adott terméket csak az al-termékek összesítésére használjuk)</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_should_not_be_frozen">Megjelenít egy figyelmeztetést, amikor ez a termék fagyasztóba (fagyasztóként megjelölt helyre) kerül</string>
   <string name="msg_help_due_date_type">A választástól függő kiemelést kap a készlet áttekintő képernyőn. A \"Minőségmegőrzési dátum\" azt jelenti, hogy a termék még talán biztonságosan fogyasztható a lejárati dátum után. A \"Fogyaszthatósági dátum\" azt jelenti, hogy a termék már nem fogyasztható biztonságosan a lejárati dátum után.</string>
   <string name="msg_help_default_due_days_format">Ha hosszan nyomva tartod a lenti elemek egyikét, megadhatsz dátumot szám helyett.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -263,12 +392,24 @@
   <string name="msg_help_default_due_days_thawing">A termék fagyasztóból való kivétele után (azaz kiolvasztás után) a lejárati időt a mai nap + az itt beállított napok összegére cseréljük</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_stock">A készletegység az első vásárlás után nem állítható át</string>
+  <string name="msg_help_qu_stock_changeable">A mennyiségi egységkészlet csak akkor módosítható, ha az aktuális mennyiségi egységre vonatkozó átváltások léteznek.</string>
+  <string name="msg_help_qu_changeable">A mennyiségi egységek csak akkor módosíthatók, ha létezik hozzájuk átváltás.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_qu_purchase">Ez az alapértelmezett mennyiségi egység, amivel a termék a bevásárlólistára kerül</string>
+  <string name="msg_help_qu_purchase">Ez a vásárláskor és a termék bevásárlólistára való felvételekor használt alapértelmezett mennyiségi egység</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_consume">Ez az alapértelmezett mennyiségi egység, amivel a terméket felhasználjuk</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_price">A termék árainak megjelenítésekor ehhez a mennyiségi egységhez kapcsolódnak</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">Összeszámolja az altermékeket, így ebből a szülőtermékből keletkezik hiány az egyes altermékek helyett</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_treat_opened_as_out_of_stock">Bekapcsolva a felbontott termékek nem számítanak bele az elérhető készlet mennyiségbe a minimum készlet meghatározásánál</string>
+  <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">A készlet áttekintésnél lévő \"felhasználás/felbontottként jelölés\" gombok ennyi mennyiséget használnak el (készletegységben)</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_consume_amount_new">A készlet áttekintésnél lévő \"gyors felhasználás\" gomb ennyi mennyiséget használ el (készletegységben)</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_open_amount">A készlet áttekintésnél lévő \"gyors nyitás\" gomb ennyi mennyiséget használ el (készletegységben)</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_tare_weight">A tára súly kezelés akkor hasznos pl. lisztnél - ha vásárláskor/fogyasztáskor/leltárazáskor mindig az egész tárolót méred meg. Ilyenkor a helyes mennyiség automatán számolódik a leltár és a lentebb definiált tára mennyiség alapján.</string>
   <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -279,27 +420,47 @@
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_choose">Kiválaszthatod a vonalkódolvasót a kamerával történő beolvasáshoz.</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra\") a kamera képének kontrasztját használja a vonalkód felismeréséhez. A vonalak relatív szélességét számolja ki.\n- Esetenként hibás kód\n- A vonalkd horizontálisan kell elhelyezkedjen\n- Jó kontrasztot és élessséget igényel\n- Teljesen offline módon, az eszközön működik\n- A keretrendszer nyílt forráskódú</string>
+  <string name="msg_help_barcode_scanner_info_zxing">A ZXing (\"zebrakeresztezés\") a kamera adatfolyamának kontrasztadatait használja a vonalkód felismerésére. Ezután kiszámítja az összes vonal relatív szélességét.\n\n- Néha helytelen eredmények\n- A vonalkódot vízszintesen kell igazítani\n- Jó kontrasztot és élességet igényel\n- Teljesen offline történik a készüléken\n- A keretrendszer nyílt forráskódú.</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_mlkit">Az ML Kit a legfrissebb technológiájú gépi tanulásos módszert használja a vonalkódok beolvasására.\n- Szinte sosem téved\n- A vonalkód iránya nem számít\n- Elmosódott vagy alacsony kontrasztú vonalkódokat is felismer\n- Teljesen offline módon, az eszközön működik\- A keretrendszer nem nyílt forráskódú</string>
+  <string name="msg_help_barcode_scanner_info_mlkit">Az ML Kit gépi tanulást használ a legújabb technológiákkal a vonalkód-leolvasáshoz.\n\n- Szinte nincs hibás eredmény\n- A tájolás nem számít\n- Még a homályos vagy alacsony kontrasztú vonalkódok esetén is működik\n- Teljesen offline módban működik a készüléken. \n- A keretrendszer nem nyílt forráskódú</string>
   <string name="msg_help_external_scanner_ready">A lenti mezőhöz külső vonalkódolvasót is használhtasz, ha a mező fókuszban van és üres.</string>
   <string name="msg_help_external_scanner_settings">Az applikáció külső vonalkódolvasókkal is kompatibilis, amennyiben billentyűzetként működnek USB-n vagy Bluetooth-on keresztül. Az alábbi beállításokat kell elvégezned a vonalkódolvasódon:\n\nPrefix: Nincs\nSuffix: TAB vagy ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_specific_item">Az első elem lenne kiválasztva ebből a listából az alapértelmezett szabály szerint, ami \"nyitott tétel, majd legkorábban lejáró, majd legkorábban leltározott/FIFO\"</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Csak statisztikai céllal</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_not_check_shopping_list">Alapértelmezetten a bevásárlólistára \"szükséges mennyiség - készleten lévő mennyiség - bevásárlólistán lévő mennyiség\" adódik hozzá. Ha ezt engedélyezed, akkor a bevásárlólistán szereplő tételeket nem ellenőrizzük.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_servings">A megadott alapanyagokból ennyi adag jön ki</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_produces_product">Ha kiválasztasz itt egy terméket, akkor a recept elkészítése után ebből a termékből egy egységet (adagonként) hozzáadunk a készlethez.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_only_check_any_amount">Bekapcsolva lazítja a leltár ellenőrzést: elegendő ha az adott termék készleten van, nem kell a lentebbi mennyiségnek is leltáron lennie.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_variable_amount">Ha nem üres, akkor az ide írt mennyiség fog megjelenni a fentebb lévő mező helyett, ugyanakkor leltár ellenőrzéshez a fentebbi mező lesz használva.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_group">Címsorként lesz használva a hozzávalók csoportosításához.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_price_factor">Ennyivel lesz megszorozva a hozzávaló végső ára.</string>
+  <string name="msg_help_recipe_ingredients_wrong">A Grocy szerver 4.0.0 alatti verziója esetén ez a lista téves leltár ellenőrzési információkat tartalmazhat. Frissítsd a szervert a 4.0.0 vagy újabb verzióra, hogy a helyes értékeket láthasd.</string>
   <string name="msg_help_date_chooser">Átválthatsz billentyűzetes módra a beállítások között, ez gyorsíthatja számodra a bevitelt.</string>
   <string name="msg_help_date_chooser_keyboard">A beállításokban válthatsz fordított dátumkijelzési módra - DDMMYY -, ha az országodban ez a megszokott.\nA bevitel véglegesítéséhez használhatod a Kész gombot a billentyűzeten.</string>
+  <string name="msg_help_notifications_tap">Koppints ide, ha nem vagy megbízhatatlanul kapod az értesítéseket.</string>
+  <string name="msg_help_notifications">Ha nem kapsz értesítéseket, koppints ide az Android-alkalmazás információs oldalának megnyitásához, és ellenőrizd, hogy az értesítések engedélyezettek-e, és hogy az energiatakarékossági intézkedések kikapcsolhatók-e. Az Android néha a beállított időnél később kézbesíti az értesítéseket az akkumulátor fogyasztásának csökkentése érdekében, ami normális viselkedés.</string>
+  <string name="msg_help_notifications_other">Ne távolítsd el az alkalmazást a jelenleg futó alkalmazásokat tartalmazó áttekintésből, különben egyes gyártók törlik az értesítési folyamatot.</string>
   <string name="msg_help_quick_mode">Gyors módba léphetsz, ha hosszan nyomod a címsort. Ebben a módban a művelet azonnal végrehajtódik, amennyiben a termék bevitele után minden mező automatikusan kitölthető (a termék és/vagy vonalkód beállításai alapján)</string>
   <string name="msg_help_loading_circle_settings">Minden olyan oldalon, ahol adatokra van szükség a szervertől, az applikáció egy apró ellenőrzést végez, amelyben megállapítja, hogy változott-e valami a legutóbbi frissítés óta és csak azon adatokat tölti le újra, amelyek megváltoztak. Ennek megjelenítését kapcsolhatod be a lenti kapcsolóval.</string>
   <string name="msg_help_start">Kezdő mód bekapcsolva: Minden elérhető súgó szöveg megjelenik. Koppints a változtatáshoz.</string>
   <string name="msg_help_purchased_date_settings">Ha bekapcsolod a lenti kapcsolót, akkor a vásárlás és leltár képernyőkön megadhatsz vásárlási dátumot. Kikapcsolva a mai napra áll be ez az érték.</string>
-  <string name="msg_help_normal_login">Koppints erre a kártyára ha a Home Assistant beépülő moduljaként használod a Grocy-t.</string>
-  <string name="msg_help_home_assistant_login">A Home Assitant beépülő moduljaként használod a Grocy-t. Ehhez további adatokra van szükség. Koppints erre a kártyára a normál bejelentkezésre váltáshoz.</string>
+  <string name="msg_help_normal_login">Koppints erre a kártyára, ha a Home Assistant-ot a Grocy addon-nal használod.</string>
+  <string name="msg_help_home_assistant_login">A Grocy Home Assistant add-onját használod. Ezért néhány további adatra van szükség. Koppints erre a kártyára a normál bejelentkezéshez.</string>
   <string name="msg_help_home_assistant_login_help_show">Koppints ide a súgó szövegek megjelenítéséhez.</string>
   <string name="msg_help_home_assistant_login_help_hide">Koppints ide a súgó szövegek elrejtéséhez.</string>
   <string name="msg_help_home_assistant_login_server">A lenti mezőbe bírhatod a Nabu Casa URL címedet, amennyiben használod. Koppints a kártyára a Nabu Casa weboldal megtekintéséhez.</string>
+  <string name="msg_help_home_assistant_login_token">Hosszú élettartamú hozzáférési tokent a Home Assistant profilbeállításaiban hozhatsz létre (utolsó szakasz). Koppints ide a fenti URL megnyitásához.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Lépj vissza vagy koppints erre a kártyára QR kód beolvasásához, amely kitölti ezeket a mezőket.</string>
+  <string name="msg_help_fab_overview_start">Az áttekintő oldalon található művelet gomb két műveletre képes:\n\n- Rövid koppintás: felhasználás vonalkódolvasóval\n- Hosszú koppintás: vásárlás vonalkódolvasóval\n\n\nEzzel a gombbal alapértelmezés szerint bekapcsolódik a gyors üzemmód az adott oldalakon. Ezt a viselkedési beállításokban módosíthatod.</string>
   <string name="msg_share">Nézd meg ezt az Android klienst a fantasztikus Grocy projekthez: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">Nem működik az API kulcs</string>
@@ -320,6 +481,11 @@
   <string name="error_empty_stores">Nincsenek áruházak</string>
   <string name="error_empty_tasks">Nincsenek feladatok</string>
   <string name="error_empty_task_categories">Nincsenek feladat kategóriák</string>
+  <string name="error_empty_unit_conversions">Nincsenek mennyiségi egység átváltások</string>
+  <string name="error_empty_chores">Nincsenek házimunkák</string>
+  <string name="error_empty_chores_sub">Menj a törzsadatokhoz, és hozz létre néhányat</string>
+  <string name="error_empty_recipes">Nincsenek receptek</string>
+  <string name="error_empty_ingredients">Nincsenek hozzávalók</string>
   <string name="error_search">Nincs találat</string>
   <string name="error_search_sub">Próbálj más kifejezéseket</string>
   <string name="error_filter">Nincs mit megjeleníteni</string>
@@ -332,8 +498,11 @@
   <string name="error_invalid_price">Érvénytelen ár</string>
   <string name="error_invalid_factor">Érvénytelen szorzó</string>
   <string name="error_invalid_date_format">Érvénytelen dátum formátum</string>
-  <string name="error_api_qr_code">A QR kód nem Grocy API adatokat tartalmaz</string>
+  <string name="error_api_qr_code">Nem egy Grocy API hitelesítő adattal rendelkező QR-kód</string>
+  <string name="error_token_qr_code">Nem a Home Assistant hosszú élettartamú hozzáférési tokenjével rendelkező QR-kód</string>
   <string name="error_loading_qus">Nem sikerült a termék mennyiségi egységeinek betöltése</string>
+  <string name="error_clipboard_no_image">A vágólap nem tartalmaz képet, vagy nem lehetett beolvasni.</string>
+  <string name="error_no_children">A kiválasztott terméknek nincsenek gyermekei</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Nem lehet %1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
@@ -347,10 +516,15 @@
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">Ez az oldal csak internetkapcsolattal működik. Ellenőrizd a kapcsolatod.</string>
   <string name="error_no_done_items">Nincsenek elvégzettként megjelölt tételek</string>
+  <string name="error_already_exists">Már létezik</string>
   <string name="error_network">Hálózati hiba</string>
   <string name="error_network_subtitle">A szükséges adatokat nem sikerült teljesen betölteni</string>
+  <string name="error_network_exact">Hálózati hiba: %1$s</string>
+  <string name="error_database">Adatbázis hiba</string>
+  <string name="error_insert">Hiba: %1$s</string>
+  <string name="error_details">Hiba részletei</string>
   <string name="error_unknown">Hoppá!</string>
-  <string name="error_not_grocy_instance">Nem létező Grocy példány</string>
+  <string name="error_not_grocy_instance">Nem érvényes Grocy példány</string>
   <string name="error_timeout">Időtúllépési hiba</string>
   <string name="error_no_product_selected">Nincs kiválasztott termék</string>
   <string name="error_failed_to_connect_to">Szerver csatlakozási hiba</string>
@@ -365,7 +539,12 @@
   <string name="error_failed_barcode_upload">Nem sikerült a vonalkód feltöltése</string>
   <string name="error_wrong_grocycode_type">A Grocy kód rossz entitás típust tartalmaz</string>
   <string name="error_stock_entry_grocycode">A Grocy kód készletbejegyzése nem található</string>
+  <string name="error_picture_uploads_forbidden">Biztonsági okokból a képek feltöltése csak saját szerverekre engedélyezett. Jelenleg a demó példányt használod.</string>
+  <string name="error_permission">Nincs engedély erre a műveletre</string>
+  <string name="error_permission_notification">Az emlékeztetők működéséhez értesítési engedély szükséges</string>
   <string name="error_undefined">Hiba történt</string>
+  <string name="error_invalid_base_servings">Érvénytelen adagok</string>
+  <string name="error_pictures_size_exceeds_limit">A szerveren található termék- vagy receptleírásokban olyan beágyazott képek vannak, amelyek meghaladják az alkalmazás elemzési határértékét. Kérjük, távolítsd el a jó minőségű és nagy méretű képeket a leírásokból, ez az adatok betöltését is felgyorsítja.</string>
 
   <string name="title_overview">Áttekintés</string>
   <string name="title_stock_overview">Készlet áttekintés</string>
@@ -379,11 +558,15 @@
   <string name="title_product_create">Termék létrehozás</string>
   <string name="title_product_edit">Termék módosítás</string>
   <string name="title_tasks">Feladatok</string>
+  <string name="title_task_entry">Feladat bejegyzése</string>
   <string name="title_master_data">Törzsadatok</string>
   <string name="title_stock_entries">Készlet bejegyzések</string>
+  <string name="title_stock_entry">Készletbejegyzés</string>
+  <string name="title_stock_journal">Készlet napló</string>
   <string name="title_shopping_list">Bevásárlólista</string>
   <string name="title_feedback">Visszajelzés</string>
   <string name="title_settings">Beállítások</string>
+  <string name="title_options">Opciók</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="title_barcode_scanner">Vonalkód olvasó</string>
   <!-- Context: About this app -->
@@ -402,6 +585,22 @@
   <string name="title_external_barcode_input">Külső vonalkódolvasó</string>
   <string name="title_confirmation">Megerősítés</string>
   <string name="title_choose_product">Termék kiválasztás</string>
+  <string name="title_pending_products">Függőben lévő termékek</string>
+  <string name="title_stored_purchases">Tárolt vásárlások</string>
+  <string name="title_chores">Házimunkák</string>
+  <string name="title_chore">Házimunka</string>
+  <string name="title_recipes">Receptek</string>
+  <!-- Editor for editing product description or recipe preparation-->
+  <string name="title_editor">Szerkesztő</string>
+  <string name="title_task_new">Új feladat</string>
+  <string name="title_task_edit">Feladat szerkesztése</string>
+  <string name="title_entry_new">Új bejegyzés</string>
+  <string name="title_entry_edit">Bejegyzés szerkesztése</string>
+  <string name="title_ingredient_new">Új hozzávaló</string>
+  <string name="title_ingredient_edit">Hozzávaló szerkesztése</string>
+  <string name="title_recipe_create">Új recept</string>
+  <string name="title_recipe_edit">Recept szerkesztése</string>
+
   <string name="title_spoiled">Megromlott</string>
   <string name="title_use_specific">Megadott készletelem használata</string>
   <string name="title_specific">Megadott készletelem</string>
@@ -412,6 +611,7 @@
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_location_to">Célhely</string>
   <string name="title_recipe">Recept</string>
+  <string name="title_preparation_mode">Elkészítési mód</string>
   <string name="title_total_price">Teljes ár</string>
   <string name="title_unit_price">Egységár</string>
   <!-- %1$s is a quantity unit -->
@@ -420,6 +620,10 @@
   <string name="title_list_entry">Lista bejegyzés</string>
   <string name="title_edit_barcode">Vonalkód módosítása</string>
   <string name="title_create_barcode">Vonalkód létrehozása</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_edit_qu_conversion">Mennyiségi egység átváltás szerkesztése</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_create_qu_conversion">Mennyiségi egység átváltás létrehozása</string>
   <string name="title_shopping_list_edit">Bevásárlólista módosítás</string>
   <string name="title_shopping_list_new">Új bevásárlólista</string>
   <string name="title_shopping_mode">Vásárlás mód</string>
@@ -430,24 +634,30 @@
   <string name="title_product_cat_due_date">Lejárati idő</string>
   <string name="title_product_cat_amount">Mennyiség</string>
   <string name="title_product_cat_quantity_unit">Mennyiségi egység</string>
+  <string name="title_notifications">Értesítések</string>
   <string name="title_product_cat_barcodes">Vonalkódok</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
   <string name="title_product_cat_qu_conversions">Mennyiségi egység átváltások</string>
   <string name="title_unknown_input">Ismeretlen bemenet</string>
   <string name="title_presets_new_products">Új termék alapértelmezett tulajdonságok</string>
-  <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
-   Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
+  <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
+  <string name="title_ingredient_with_amount">%1$s %2$s %3$s</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s%2$s</string>
+  <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
+  <string name="subtitle_opened">(felbontva)</string>
   <!-- %1$s is a number like 1, 2, 3 -->
   <string name="subtitle_amount_opened">(%1$s felbontva)</string>
   <!-- %1$s is a product name -->
   <string name="subtitle_stock_locations">Ahol %1$s készleten van</string>
   <string name="subtitle_none_selected">Semmi sincs kiválasztva</string>
+  <!-- Should follow the equality between 'None' and 'None selected' -->
+  <string name="subtitle_none">Nincs</string>
   <string name="subtitle_empty">Üres</string>
   <string name="subtitle_done">Kész</string>
   <string name="subtitle_undone">Nincs kész</string>
+  <string name="subtitle_uncategorized">Kategorizálatlan</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="subtitle_never_overdue">Soha nem jár le</string>
   <string name="subtitle_selected">Kiválasztva</string>
@@ -463,9 +673,13 @@
   <string name="subtitle_amount_compare">Egyenlő ezzel: %1$s %2$s.</string>
   <!-- %1$s is a price, %2$s is a quantity unit -->
   <string name="subtitle_price_means">Azaz %1$s / %2$s.</string>
+  <!-- %1$s and %2$s are amounts -->
+  <string name="subtitle_factor_means">Ez azt jelenti, hogy %1$s ugyanaz, mint %2$s.</string>
   <string name="subtitle_product_hidden">A termék el van rejtve</string>
   <string name="subtitle_product_not_hidden">A termék nincs elrejtve</string>
   <string name="subtitle_product_not_on_server">A termék nem található a szerveren</string>
+
+  <string name="subtitle_barcodes_will_be_added">Vannak tárolt vonalkódok, amelyek a mentési művelettel kerülnek hozzá a termékhez.</string>
   <string name="subtitle_unknown">ismeretlen</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
   <string name="subtitle_supported">Támogatott</string>
@@ -478,6 +692,25 @@
   <string name="subtitle_barcode">Vonalkód: %1$s</string>
   <string name="subtitle_feature_disabled">Funkció letiltva</string>
   <string name="subtitle_date_from_input">Beviteli mező dátuma:\n%1$s</string>
+  <string name="subtitle_product_amount">Minimális készlet, Gyors felhasználás, Szorzó, Tára súly kezelés</string>
+  <string name="subtitle_product_default_location">Hely, Áruház</string>
+  <string name="subtitle_product_due_date">Típus, Alapértelmezett napok (felbontás után, fagyasztás után, kiolvasztás után)</string>
+  <string name="subtitle_product_optional_properties">Állapot, Szülő termék, Leírás, Termék csoport, Energia, Kép</string>
+  <string name="subtitle_product_quantity_unit">Készlet, Vásárlás alapértelmezések</string>
+  <string name="subtitle_synced_with_server">Szinkronizálva a szerverrel</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
+  <string name="subtitle_recipe_due_score">Lejárat pontszám: %1$s</string>
+  <string name="subtitle_per_serving">adagonként</string>
+  <string name="subtitle_tap_preparation_mode">Koppints ide az elkészítés módhoz</string>
+  <!-- Context is Label printer -->
+  <string name="subtitle_print_label_no">Nincs címke</string>
+  <!-- Short form for "One label per purchase" -->
+  <string name="subtitle_print_label_per_purchase">Vásárlásonként</string>
+  <!-- Short form for "One label per unit" -->
+  <string name="subtitle_print_label_per_unit">Egységenként</string>
+  <!-- %1$s is a price and %2$s is a currency -->
+  <string name="subtitle_total_price">Teljes ár: %1$s %2$s</string>
+
   <string name="description_input_product_part1">A termék mező ezt tartalmazza:</string>
   <string name="description_input_product_part2">Válaszd ki, hogyan tovább:</string>
   <string name="description_input_product_option1">Új termék létrehozása és a mező tartalma legyen a név</string>
@@ -539,9 +772,49 @@
     <item quantity="other">%1$d tétel szerepel a bevásárlólistádon.</item>
   </plurals>
   <!-- %1$s is a number -->
+  <plurals name="description_overview_recipes">
+    <item quantity="one">%1$d recepted van.</item>
+    <item quantity="other">%1$d recepted van.</item>
+  </plurals>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="description_overview_chores_due_soon">
+    <item quantity="one">A következő %2$d napon belül %1$d házimunkát kell elvégezni.</item>
+    <item quantity="other">A következő %2$d napon belül %1$d házimunkát kell elvégezni.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_overdue">
+    <item quantity="one">%1$d házimunka megkésett.</item>
+    <item quantity="other">%1$d házimunka megkésett.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_due_today">
+    <item quantity="one">%1$d házimunkát kell elvégezni ma.</item>
+    <item quantity="other">%1$d házimunkát kell elvégezni ma.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_assigned">
+    <item quantity="one">%1$d házimunka van kijelölve számodra.</item>
+    <item quantity="other">%1$d házimunka van kijelölve számodra.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_tasks">
+    <item quantity="one">%1$d feladatot kell elvégezni.</item>
+    <item quantity="other">%1$d feladatot kell elvégezni.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_tasks_user">
+    <item quantity="one">%1$d feladatot kaptál.</item>
+    <item quantity="other">%1$d feladatot kaptál.</item>
+  </plurals>
+  <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
     <item quantity="one">Az adatbázisban %1$d termék szerepel.</item>
     <item quantity="other">Az adatbázisban %1$d termék szerepel.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="error_max_decimal_places">
+    <item quantity="one">Max. %1$s tizedes jegy</item>
+    <item quantity="other">Max. %1$s tizedes jegy</item>
   </plurals>
 
   <string name="property_name">Név</string>
@@ -552,8 +825,10 @@
   <string name="property_product_name">Termék neve</string>
   <string name="property_parent_product">Szülő termék</string>
   <string name="property_description">Leírás</string>
+  <string name="property_product_description">Termék leírás</string>
   <string name="property_note">Jegyzet</string>
   <string name="property_status">Állapot</string>
+  <string name="property_status_insert">Állapot:</string>
   <string name="property_amount">Mennyiség</string>
   <string name="property_amount_insert">Mennyiség: %1$s</string>
   <string name="property_seconds">Másodperc</string>
@@ -566,8 +841,13 @@
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Mennyiség %1$s mértékegységben</string>
   <string name="property_price">Ár</string>
+  <string name="property_price_average">Átlag ár</string>
   <!-- %1$s is a quantity unit-->
   <string name="property_price_unit">Egységár (%1$s)</string>
+  <!-- %1$s is a price and %2$s is a quantity unit-->
+  <string name="property_price_unit_insert">%1$s per %2$s</string>
+  <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_with_currency">%1$s%2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Ár (%1$s)</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -580,10 +860,21 @@
   <string name="property_qu_stock">Készletegység</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Vásárlás beszámítása a készlet mennyiségi egységbe</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_default_qu_consume">Alapértelmezett felhasználási mennyiségi egység</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_prices">Mennyiségi egység az árakhoz</string>
+  <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
+  <string name="property_quantity_unit_from">Átváltás ebből</string>
+  <!-- Example: "Convert to cup"; This string is part of a pair, there is also 'Convert from' -->
+  <string name="property_quantity_unit_to">Átváltás ebbe</string>
+  <string name="property_factor">Szorzó</string>
   <string name="property_barcode">Vonalkód</string>
   <string name="property_barcodes">Vonalkódok</string>
+  <string name="property_barcodes_insert">Vonalkódok: %1$s</string>
   <string name="property_days">Napok</string>
   <string name="property_purchased_date">Vásárlás dátuma</string>
+  <string name="property_purchased_date_fill">Vásárlás dátuma: %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_type">Lejárati idő típusa</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -592,6 +883,10 @@
   <string name="property_due_type_expiration">Fogyaszthatósági dátum</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date">Lejárati idő</string>
+  <!-- This string is for due date of task -->
+  <string name="property_due_date_task">Lejárati idő</string>
+  <!-- %1$s is a due date-->
+  <string name="property_due_date_fill">Lejárati idő: %1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_next">Következő lejárati dátum</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -603,10 +898,15 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">Alapértelmezett lejárati idő kiolvasztás után</string>
   <string name="property_location">Hely</string>
+  <string name="property_location_insert">Hely: %1$s</string>
   <string name="property_location_default">Alapértelmezett hely</string>
+  <string name="property_location_default_insert">Alapértelmezett hely: %1$s</string>
+  <string name="property_location_consume_default">Alapértelmezett felhasználási hely</string>
+  <string name="property_move_on_open">Felbontáskor áthelyezés</string>
   <string name="property_notes">Jegyzetek</string>
   <string name="property_locations">Helyek</string>
   <string name="property_store">Áruház</string>
+  <string name="property_store_insert">Áruház: %1$s</string>
   <string name="property_store_unknown">Ismeretlen áruház</string>
   <string name="property_store_default">Alapértelmezett áruház</string>
   <string name="property_stores">Áruházak</string>
@@ -618,20 +918,30 @@
   <string name="property_last_used">Utoljára használva</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_last_price">Legutóbbi ár</string>
+  <string name="property_last_price_unit">Utolsó ár (egység)</string>
+  <string name="property_last_price_total">Utolsó ár (teljes)</string>
+  <string name="property_price_insert">Ár: %1$s</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Átlagos tárolási idő</string>
   <string name="property_spoil_rate">Megromlási arány</string>
   <string name="property_price_history">Ár előzmények</string>
   <string name="property_product_group">Termékcsoport</string>
   <string name="property_product_groups">Termékcsoportok</string>
+  <string name="property_assignment">Hozzárendelés</string>
+  <string name="property_value">Érték</string>
+  <string name="property_stock_value">Készlet érték</string>
   <string name="property_opened">felbontott</string>
   <string name="property_not_opened">felbontatlan</string>
   <string name="property_is_freezer">Fagyasztószekrény</string>
   <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">Energia (kcal)</string>
+  <string name="property_energy">Energia (kcal) készletegységenként</string>
   <string name="property_active">Aktív</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Ne mutassa a készlet áttekintésnél</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_disable_own_stock">Saját készlet kikapcsolása</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_should_not_be_frozen">Nem szabad lefagyasztani</string>
   <string name="property_number">Szám</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_enable_tare_weight">Tára súly kezelés engedélyezése</string>
@@ -645,17 +955,83 @@
   <string name="property_amount_quick_consume">Gyors felhasználási mennyiség</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_quick_consume_in">Gyors felhasználási mennyiség (%1$s)</string>
+  <!--The same string is also in the web interface (server v4.0.0 or later): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_amount_quick_open">Gyors nyitási mennyiség</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_quick_open_in">Gyors felbontási mennyiség ebben: %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">Al-termékek minimális készlet mennyiségének halmozása</string>
   <string name="property_picture">Kép</string>
   <string name="property_note_singleline">Egysoros megjegyzés</string>
   <string name="property_note_multiline">Többsoros megjegyzés</string>
+  <!-- like the words 'Single-line' in 'Single-line description'-->
+  <string name="property_singleline">Egysoros</string>
+  <!-- like the words 'Multi-line' in 'Multi-line description'-->
+  <string name="property_multiline">Többsoros</string>
   <!-- %1$s is an amount together with quantity unit -->
   <string name="property_in_stock">Készleten: %1$s</string>
   <!-- %1$s is a sort mode like "name" or "due date" -->
   <string name="property_sort_mode">Rendezés: %1$s</string>
+  <!-- %1$s is a grouping mode like "product group" or "due date" -->
+  <string name="property_group_by">Csoportosítás: %1$s</string>
   <string name="property_ungrouped">Nem csoportosított</string>
+  <!-- %1$s is a property like "product group" or "due date" -->
+  <string name="property_extra_field">Extra mező: %1$s</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields">Mezők</string>
+  <string name="property_task_category">Feladat kategória</string>
   <string name="property_task_categories">Feladat kategóriák</string>
+  <string name="property_calories">Kalória</string>
+  <string name="property_calories_unit">Kalória (egység)</string>
+  <string name="property_calories_total">Kalória (teljes)</string>
+  <!-- %1$s is a value like energy or price, unit means value of items per unit -->
+  <string name="property_insert_per_unit">%1$s (egység)</string>
+  <!-- %1$s is a value like energy or price, total means value of many items in total -->
+  <string name="property_insert_total">%1$s (teljes)</string>
+  <!-- %1$s is a value like price, average means average price -->
+  <string name="property_insert_average">%1$s (átlag)</string>
+  <!-- %1$s is a value like price, "last" is like for example in "last price" -->
+  <string name="property_insert_last">%1$s (legutóbbi)</string>
+  <string name="property_category">Kategória</string>
+  <string name="property_assigned_to">Hozzárendelve</string>
+  <string name="property_users">Felhasználók</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
+  <string name="property_last_done_by">Legutóbb elvégezte</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
+  <string name="property_last_tracked">Legutóbb követve</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
+  <string name="property_tracked_count">Nyomonkövetések száma</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
+  <string name="property_average_execution_frequency">Általános végrehajtási gyakoriság</string>
+  <!-- See context for this string on the web interface on the chores page, the table has this column -->
+  <string name="property_next_estimated_tracking">Legközelebbi becsült követés</string>
+  <string name="property_next_estimated_tracking_time">Legközelebbi becsült követés ideje</string>
+  <!-- See context for this string on the web interface on the recipes edit page -->
+  <string name="property_servings">Adagok</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it (hover over help icon) -->
+  <string name="property_servings_base_insert">Alap adagok: %1$s</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_servings_desired">Kívánt adagok</string>
+  <string name="property_servings_desired_insert">Kívánt adagok: %1$s</string>
+  <string name="property_not_check_shopping_list">Ne ellenőrizze a bevásárlólistát</string>
+  <string name="property_not_check_shopping_list_description">Amikor hiányzó termékeket ad hozzá</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_preparation">Elkészítés</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_costs">Költségek</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
+  <string name="property_due_score">Lejárat pontszám</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_ingredients">Hozzávalók</string>
+  <string name="property_only_check_single_unit_in_stock">Csak azt ellenőrizze, hogy készleten van</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
+  <string name="property_ingredient_group">Csoport</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
+  <string name="property_variable_amount">Változó mennyiség</string>
+  <string name="property_requirements_fulfilled">Követelmények teljesülve</string>
+  <string name="property_produces_product">Terméket állít elő</string>
+  <string name="property_price_factor">Ár szorzó</string>
+
   <string name="date_today">Ma</string>
   <string name="date_unknown">Ismeretlen</string>
   <!-- This means the 'time' context -->
@@ -706,7 +1082,7 @@
     <item quantity="other">%d év múlva</item>
   </plurals>
 
-  <string name="info_acknowledgement">Szeretnénk megköszönni a Grocy fejlesztőjének, Bernd Bestelnek nagyszerű munkáját, nélküle ez az alkalmazás nem lett volna lehetséges.</string>
+  <string name="info_acknowledgement">Szeretnénk köszönetet mondani a Grocy fejlesztőjének, Bernd Bestelnek, akinek nagyszerű munkája nélkül ez az alkalmazás nem jöhetett volna létre.</string>
   <string name="info_intro">Bevezető újraindítása</string>
   <string name="info_intro_description">Funkciók bemutatása</string>
   <string name="info_dev_beginning">Fejlesztés kezdete</string>
@@ -731,6 +1107,7 @@
   <string name="category_general">Általános</string>
   <string name="category_stock">Készlet</string>
   <string name="category_server">Szerver</string>
+  <string name="category_user_settings">Felhasználói beállítások</string>
   <string name="category_scanner">Vonalkódolvasó</string>
   <string name="category_scanner_camera">Beépített kamera leolvasó</string>
   <string name="category_scanner_external">Külső vonalkódolvasó</string>
@@ -738,6 +1115,10 @@
   <string name="category_network">Hálózat</string>
   <string name="category_network_proxy">Proxy</string>
   <string name="category_behavior">Viselkedés</string>
+  <string name="category_display_behavior">Kijelző viselkedése</string>
+  <string name="category_input_behavior">Bemeneti viselkedés</string>
+  <string name="category_additional_services">További szolgáltatások</string>
+  <string name="category_other_behavior">Egyéb viselkedés</string>
   <string name="category_debugging">Hibakeresés</string>
   <string name="category_new_product">Új termék</string>
   <string name="category_existing_products">Létező termékek</string>
@@ -747,7 +1128,9 @@
   <string name="hint_key">Érvényes API kulcs</string>
 
   <string name="setting_theme">Téma</string>
-  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_description">Próbálj ki egy másik nézetet</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system (automatic or shorter auto) theme. The button width should be as dense as possible. -->
+  <string name="setting_theme_auto">Autom.</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">Sötét</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
@@ -755,14 +1138,14 @@
   <string name="setting_language">Nyelv</string>
   <string name="setting_language_description">Nyelv kiválasztása</string>
   <string name="setting_language_info">Köszönet az önkéntes fordítóknak a Transifexen!\nKeress fel minket a Githubon, ahol megtudhatod, hogyan segíthetsz elérhetővé tenni az alkalmazást a saját nyelveden.</string>
-  <string name="setting_language_system">Rendszer alapértelmezése: %1$s</string>
-  <string name="setting_language_not_available">Nem elérhető</string>
+  <string name="setting_language_system">Rendszerbeállítás</string>
+  <string name="setting_language_not_available">Angol, ha a fordítás nem áll rendelkezésre</string>
+  <string name="setting_transition">Használjon csúszó átmenetet a beállítási oldalak között</string>
+  <string name="setting_transition_description">Ahelyett, hogy elhalványodna</string>
   <string name="setting_open_food_facts">Open Food Facts használata</string>
   <string name="setting_open_food_facts_description">Információ a vonalkódok alapján</string>
   <string name="setting_choose_barcode_scanner">Vonalkódolvasó kiválasztása</string>
   <string name="setting_choose_barcode_scanner_description">Beépített kamera használatával</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="setting_use_front_cam">Előlapi kamera használata</string>
   <string name="setting_use_front_cam_description">Vonalkód olvasáshoz</string>
   <string name="setting_use_2d_scanner_format">2D vonalkód formátum</string>
@@ -793,9 +1176,12 @@
   <string name="setting_default_amount_purchase">Alapértelmezett vásárlási mennyiség</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">Alapértelmezett felhasználási mennyiség</string>
+  <string name="setting_treat_opened_as_out_of_stock">Kezelje a felbontott termékeket hiányzóként</string>
   <string name="setting_purchased_date">Rákérdezés vásárlási dátumra</string>
   <string name="setting_purchased_date_description">A vásárlás és leltár oldalakon</string>
   <string name="setting_use_quick_consume_amount">A termék gyors felhasználási mennyiségének használata</string>
+  <string name="setting_auto_add_shopping_list">Termékek automatikus hozzáadása a bevásárlólistához</string>
+  <string name="setting_auto_add_shopping_list_description">Amelyek a meghatározott minimális készletmennyiségük alatt vannak</string>
   <string name="setting_empty_value">Üres</string>
   <string name="setting_sync_off">Szinronizálás kikapcsolva</string>
   <string name="setting_loading">Érték betöltése</string>
@@ -810,9 +1196,17 @@
   <string name="setting_timeout_descriptions">Ennyi idő után lesz sikertelen</string>
   <string name="setting_beginner_mode">Kezdő mód</string>
   <string name="setting_beginner_mode_description">Súgó szövegek megjelenítése</string>
+  <string name="setting_haptic">Haptikus hatások</string>
+  <string name="setting_haptic_description">Magával ragadó élmény</string>
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">Az alsó lapok kibontása</string>
   <string name="setting_expand_bottom_sheets_description">Fekvő módban</string>
+  <string name="setting_bottom_menu_button">Főmenü gomb megjelenítése</string>
+  <string name="setting_bottom_menu_button_description">Az alkalmazás alsó sávjában</string>
+  <string name="setting_turn_on_quick_mode">Alapértelmezés szerint kapcsolja be a gyors módot</string>
+  <string name="setting_turn_on_quick_mode_description">Az áttekintő oldal beolvasás gombjának használata során</string>
+  <string name="setting_quick_mode_return">Visszatérés az áttekintő oldalra 20 másodperc után</string>
+  <string name="setting_quick_mode_return_description">Ha a beolvasás gombot használod az áttekintő oldalon, és ha a gyors üzemmód nincs használatban.</string>
   <string name="setting_speed_up_start">Alkalmazásindítás felgyorsítása</string>
   <string name="setting_speed_up_start_description">Csak gyors eszközökön van hatása</string>
   <string name="setting_date_keyboard_input">Dátumok billentyűzetes bevitele</string>
@@ -833,7 +1227,26 @@
   <string name="settings_synchronized">Ezek a beálíltások szinkronizálódnak a szerverrel.</string>
   <string name="setting_message_duration">Idő mutatása az üzenetekhez</string>
   <string name="setting_message_duration_description">Csak a műveleti üzenetekre vonatkozik</string>
+  <string name="setting_notifications_enable">Értesítések engedélyezése</string>
+  <!-- The string belongs to the stock overview (stock items can be expired, overdue or due soon). -->
+  <string name="setting_notifications_stock_description">Naponta ellenőrzi a készletet, és értesít, ha vannak olyan termékek, amelyek már nem frissek (lejártak, vagy hamarosan lejárnak).</string>
+  <string name="setting_notifications_chores_description">Naponta ellenőrzi a házimunkákat, és értesít, ha a házimunkák elvégzése esedékes.</string>
+  <string name="setting_notification_time">Értesítési idő</string>
+  <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
+  <string name="setting_notification_time_description">Amikor az ellenőrzés megtörtént</string>
+  <string name="setting_keep_screen_on_recipes_description">Egy recept megtekintésekor</string>
 
-  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
-  Examples: 'de' for German; 'fr' for French -->
-</resources>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="notification_stock_not_fresh_title">
+    <item quantity="one">%1$d termék nem friss a készletből.</item>
+    <item quantity="other">%1$d termék nem friss a készletből.</item>
+  </plurals>
+  <string name="notification_stock_content">Fogyaszd el őket a következő napokban, hogy csökkentsd az élelmiszerpazarlást. A lista megnyitásához koppints a gombra.</string>
+  <!-- %1$s is a number -->
+  <plurals name="notification_chores_due_title">
+    <item quantity="one">%1$d házimunka elvégzése esedékes.</item>
+    <item quantity="other">%1$d házimunka elvégzése esedékes.</item>
+  </plurals>
+  <string name="notification_chores_content">A halogatás haszontalan. A lista megnyitásához koppints a gombra.</string>
+
+  </resources>
