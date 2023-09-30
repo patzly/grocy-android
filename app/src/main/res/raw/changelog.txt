@@ -5,6 +5,7 @@
   conversion instead of decimal places for input (#778)
 - Fixed: Form validation bug on inventory page when using quantity unit conversion
 - Fixed: Chores filter for due entries was not working (#760)
+- Fixed: Take chores 'due soon days' option into account when filtering (was always 5)
 
 ## 3.3.2
 

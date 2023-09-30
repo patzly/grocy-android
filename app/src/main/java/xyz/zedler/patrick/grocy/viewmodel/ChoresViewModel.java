@@ -34,6 +34,8 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.CHORES;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.ChoresFragmentArgs;
@@ -80,6 +82,7 @@ public class ChoresViewModel extends BaseViewModel {
   private int choresDueSoonCount;
   private int choresOverdueCount;
   private int choresDueCount;
+  private int dueSoonDays;
   private final boolean debug;
 
   public ChoresViewModel(@NonNull Application application, ChoresFragmentArgs args) {
@@ -97,6 +100,7 @@ public class ChoresViewModel extends BaseViewModel {
     infoFullscreenLive = new MutableLiveData<>();
     filteredChoreEntriesLive = new MutableLiveData<>();
     currentUserIdLive = new MutableLiveData<>(sharedPrefs.getInt(PREF.CURRENT_USER_ID, 1));
+    dueSoonDays = sharedPrefs.getInt(CHORES.DUE_SOON_DAYS, SETTINGS_DEFAULT.CHORES.DUE_SOON_DAYS);
 
     filterChipLiveDataStatus = new FilterChipLiveDataChoresStatus(
         getApplication(),
@@ -144,7 +148,7 @@ public class ChoresViewModel extends BaseViewModel {
         if (daysFromNow <= 0) {
           choresDueCount++;
         }
-        if (daysFromNow >= 0 && daysFromNow <= 5) {
+        if (daysFromNow >= 0 && daysFromNow <= dueSoonDays) {
           choresDueSoonCount++;
         }
       }
@@ -197,7 +201,7 @@ public class ChoresViewModel extends BaseViewModel {
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataChoresStatus.STATUS_DUE_TODAY
           && daysFromNow != 0
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataChoresStatus.STATUS_DUE_SOON
-          && !(daysFromNow >= 0 && daysFromNow <= 5)) {
+          && !(daysFromNow >= 0 && daysFromNow <= dueSoonDays)) {
         if (choreEntry.getNextEstimatedExecutionTime() != null
             && !choreEntry.getNextEstimatedExecutionTime().isEmpty()) {
           continue;
