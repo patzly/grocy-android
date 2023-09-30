@@ -1,6 +1,8 @@
 ## 3.4.0
 
 - New: Initial support for viewing userfields (custom values) on stock overview page (#601)
+- Fixed: On purchase page, decimal places for displaying prices were used for quantity unit
+  conversion instead of decimal places for input (#778)
 
 ## 3.3.2
 

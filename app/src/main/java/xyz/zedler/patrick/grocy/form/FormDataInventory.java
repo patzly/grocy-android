@@ -312,7 +312,7 @@ public class FormDataInventory {
   }
 
   public boolean isTareWeightEnabled() {
-    assert isTareWeightEnabledLive.getValue() != null;
+    if (isTareWeightEnabledLive.getValue() == null) return false;
     return isTareWeightEnabledLive.getValue();
   }
 
@@ -521,35 +521,15 @@ public class FormDataInventory {
   }
 
   private String getPriceStock() {
-    ProductDetails productDetails = productDetailsLive.getValue();
-    QuantityUnit stock = quantityUnitStockLive.getValue();
-    QuantityUnit current = quantityUnitLive.getValue();
-    HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-    String priceString = priceLive.getValue();
-
-    if (!NumUtil.isStringDouble(priceString)) {
-      return null;
-    }
-    if (stock == null || current == null || productDetails == null || hashMap == null) {
-      return null;
-    }
-
-    double price = NumUtil.toDouble(priceString);
-    Object currentFactor = hashMap.get(current);
-    if (currentFactor == null) {
-      return null;
-    }
-
-    double priceMultiplied;
-    if (isTareWeightEnabled() || (double) currentFactor == -1) {
-      priceMultiplied = price;
-    } else if (current.getId() == productDetails.getProduct()
-        .getQuIdPurchaseInt()) {
-      priceMultiplied = price / (double) currentFactor;
-    } else {
-      priceMultiplied = price * (double) currentFactor;
-    }
-    return NumUtil.trimPrice(priceMultiplied, decimalPlacesPriceInput);
+    return QuantityUnitConversionUtil.getPriceStock(
+        quantityUnitLive.getValue(),
+        amountLive.getValue(),
+        priceLive.getValue(),
+        quantityUnitsFactorsLive.getValue(),
+        isTareWeightEnabled(),
+        false,
+        decimalPlacesPriceInput
+    );
   }
 
   public MutableLiveData<String> getPriceErrorLive() {
