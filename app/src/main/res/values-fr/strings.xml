@@ -567,6 +567,7 @@
   <string name="error_undefined">Une erreur est survenue</string>
   <string name="error_invalid_base_servings">Portions invalides</string>
   <string name="error_pictures_size_exceeds_limit">Il y a des images intégrées dans les descriptions de produits ou de recettes sur votre serveur, qui dépassent la limite d\'analyse de cette application. Veuillez supprimer les images de haute qualité et de grande taille de vos descriptions, cela accélérera également le chargement des données.</string>
+  <string name="error_userfield_type_not_supported">Type de champ utilisateur actuellement non pris en charge</string>
 
   <string name="title_overview">Aperçu</string>
   <string name="title_stock_overview">Aperçu des stocks</string>
@@ -1021,6 +1022,10 @@
   <string name="property_extra_field">Champ supplémentaire : %1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">Champs</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value">%1$s: %2$s</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value_without_space">%1$s:%2$s</string>
   <string name="property_task_category">Catégorie de tâche</string>
   <string name="property_task_categories">Catégories de tâches</string>
   <string name="property_calories">Calories</string>
