@@ -30,6 +30,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -92,6 +93,47 @@ public class SortUtil {
           return DateUtil.getDate(bbd1).compareTo(DateUtil.getDate(bbd2));
         }
     );
+  }
+
+  public static void sortStockItemsByUserfieldValue(
+      List<StockItem> stockItems,
+      String userfield,
+      String type,
+      boolean ascending
+  ) {
+    if (stockItems == null) {
+      return;
+    }
+    Collections.sort(
+        stockItems,
+        (item1, item2) -> {
+          Product product1 = (ascending ? item1 : item2).getProduct();
+          Product product2 = (ascending ? item2 : item1).getProduct();
+          Map<String, String> userfieldMap1 = product1.getUserfields();
+          Map<String, String> userfieldMap2 = product2.getUserfields();
+          String value1 = userfieldMap1 != null ? userfieldMap1.get(userfield) : null;
+          String value2 = userfieldMap2 != null ? userfieldMap2.get(userfield) : null;
+          return compareUserfieldValues(value1, value2, type);
+        }
+    );
+  }
+
+  private static int compareUserfieldValues(String value1, String value2, String userfieldType) {
+    if (value1 == null && value2 == null) {
+      return 0;
+    } else if (value1 == null) {
+      return -1;
+    } else if (value2 == null) {
+      return 1;
+    }
+    /*if (userfieldType.equals(Userfield.TYPE_NUMBER)) {
+      return Double.compare(NumUtil.toDouble(value1), NumUtil.toDouble(value2));
+    } else if (userfieldType.equals(Userfield.TYPE_DATE)) {
+      return DateUtil.getDate(value1).compareTo(DateUtil.getDate(value2));
+    } else {
+      return Collator.getInstance(LocaleUtil.getLocale()).compare(value1, value2);
+    }*/
+    return Collator.getInstance(LocaleUtil.getLocale()).compare(value1, value2);
   }
 
   public static void sortStockEntriesByDueDate(List<StockEntry> stockEntries, boolean ascending) {

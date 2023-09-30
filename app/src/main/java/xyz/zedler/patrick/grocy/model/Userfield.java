@@ -30,6 +30,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
@@ -55,6 +56,8 @@ import xyz.zedler.patrick.grocy.web.NetworkQueue.QueueItem;
 
 @Entity(tableName = "userfield_table")
 public class Userfield implements Parcelable {
+
+  public final static String NAME_PREFIX = "userfield_";
 
   public static final String TYPE_CHECKBOX = "checkbox";
   public static final String TYPE_TEXT_SINGLE_LINE = "text-single-line";
@@ -99,6 +102,19 @@ public class Userfield implements Parcelable {
 
   public Userfield() {
 
+  }
+
+  @Ignore
+  public Userfield(Userfield userfield) {
+    id = userfield.id;
+    entity = userfield.entity;
+    name = userfield.name;
+    caption = userfield.caption;
+    type = userfield.type;
+    showAsColumnInTables = userfield.showAsColumnInTables;
+    sortNumber = userfield.sortNumber;
+    inputRequired = userfield.inputRequired;
+    defaultValue = userfield.defaultValue;
   }
 
   public Userfield(Parcel parcel) {

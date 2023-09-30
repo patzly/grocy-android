@@ -23,6 +23,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
@@ -32,12 +33,14 @@ public class FilterChipLiveDataStockSort extends FilterChipLiveData {
   public final static int ID_SORT_NAME = 0;
   public final static int ID_SORT_DUE_DATE = 1;
   public final static int ID_ASCENDING = 2;
+  public final static int ID_START_USERFIELDS = 3; // after the other IDs
 
   public final static String SORT_NAME = "sort_name";
   public final static String SORT_DUE_DATE = "sort_due_date";
 
   private final Application application;
   private final SharedPreferences sharedPrefs;
+  private List<Userfield> userfields;
   private String sortMode;
   private boolean sortAscending;
 
@@ -70,12 +73,50 @@ public class FilterChipLiveDataStockSort extends FilterChipLiveData {
   }
 
   private void setFilterText() {
-    setText(application.getString(
-        R.string.property_sort_mode,
-        sortMode.equals(SORT_NAME)
-            ? application.getString(R.string.property_name)
-            : application.getString(R.string.property_due_date_next)
-    ));
+    String sortBy;
+    switch (sortMode) {
+      case SORT_DUE_DATE:
+        sortBy = application.getString(R.string.property_due_date_next);
+        break;
+      case SORT_NAME:
+      default:
+        sortBy = application.getString(R.string.property_name);
+    }
+    if (sortMode.startsWith(Userfield.NAME_PREFIX) && userfields != null) {
+      for (Userfield userfield : userfields) {
+        if (userfield == null) continue;
+        if (sortMode.equals(Userfield.NAME_PREFIX + userfield.getName())) {
+          sortBy = userfield.getCaption();
+          break;
+        }
+      }
+    }
+    setText(application.getString(R.string.property_sort_mode, sortBy));
+  }
+
+  public void setUserfields(List<Userfield> userfields, String... displayedEntities) {
+    this.userfields = new ArrayList<>();
+    int userfieldId = ID_START_USERFIELDS;
+    for (Userfield userfield : userfields) {
+      if (userfield == null) continue;
+      if (displayedEntities.length > 0) {
+        boolean isDisplayed = false;
+        for (String displayedEntity : displayedEntities) {
+          if (displayedEntity.equals(userfield.getEntity())
+              && userfield.getShowAsColumnInTablesBoolean()) {
+            isDisplayed = true;
+            break;
+          }
+        }
+        if (!isDisplayed) continue;
+      }
+      Userfield clonedField = new Userfield(userfield);
+      clonedField.setId(userfieldId);
+      this.userfields.add(clonedField);
+      userfieldId++;
+    }
+    setFilterText();
+    setItems();
   }
 
   public void setValues(int id) {
@@ -90,6 +131,10 @@ public class FilterChipLiveDataStockSort extends FilterChipLiveData {
     } else if (id == ID_ASCENDING) {
       sortAscending = !sortAscending;
       sharedPrefs.edit().putBoolean(Constants.PREF.STOCK_SORT_ASCENDING, sortAscending).apply();
+    } else if (id >= ID_START_USERFIELDS) {
+      sortMode = Userfield.NAME_PREFIX + userfields.get(id-ID_START_USERFIELDS).getName();
+      setFilterText();
+      sharedPrefs.edit().putString(Constants.PREF.STOCK_SORT_MODE, sortMode).apply();
     }
   }
 
@@ -109,16 +154,28 @@ public class FilterChipLiveDataStockSort extends FilterChipLiveData {
           sortMode.equals(SORT_DUE_DATE)
       ));
     }
+    if (userfields != null) {
+      for (Userfield userfield : userfields) {
+        if (userfield == null) continue;
+        menuItemDataList.add(new MenuItemData(
+            userfield.getId(),
+            1,
+            userfield.getCaption(),
+            sortMode.equals(Userfield.NAME_PREFIX + userfield.getName())
+        ));
+      }
+    }
     menuItemDataList.add(new MenuItemData(
         ID_ASCENDING,
-        1,
+        2,
         application.getString(R.string.action_ascending),
         sortAscending
     ));
     setMenuItemDataList(menuItemDataList);
     setMenuItemGroups(
         new MenuItemGroup(0, true, true),
-        new MenuItemGroup(1, true, false)
+        new MenuItemGroup(1, true, true),
+        new MenuItemGroup(2, true, false)
     );
     emitValue();
   }

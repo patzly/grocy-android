@@ -46,7 +46,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowStockItemBinding;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockGrouping;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockSort;
 import xyz.zedler.patrick.grocy.model.GroupHeader;
@@ -151,8 +150,8 @@ public class StockOverviewItemAdapter extends
     this.groupingMode = groupingMode;
     this.activeFields = activeFields;
     this.groupedListItems = getGroupedListItems(context, stockItems,
-        productGroupHashMap, productHashMap, locationHashMap, currency, dateUtil, sortMode,
-        sortAscending, groupingMode, maxDecimalPlacesAmount, decimalPlacesPriceDisplay);
+        productGroupHashMap, productHashMap, locationHashMap, userfieldHashMap, currency, dateUtil,
+        sortMode, sortAscending, groupingMode, maxDecimalPlacesAmount, decimalPlacesPriceDisplay);
 
     containsPictures = false;
     for (StockItem stockItem : stockItems) {
@@ -171,6 +170,7 @@ public class StockOverviewItemAdapter extends
       HashMap<Integer, ProductGroup> productGroupHashMap,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, Location> locationHashMap,
+      HashMap<String, Userfield> userfieldHashMap,
       String currency,
       DateUtil dateUtil,
       String sortMode,
@@ -180,7 +180,7 @@ public class StockOverviewItemAdapter extends
       int decimalPlacesPriceDisplay
   ) {
     if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_NONE)) {
-      sortStockItems(context, stockItems, sortMode, sortAscending);
+      sortStockItems(stockItems, userfieldHashMap, sortMode, sortAscending);
       return new ArrayList<>(stockItems);
     }
     HashMap<String, ArrayList<StockItem>> stockItemsGroupedHashMap = new HashMap<>();
@@ -219,6 +219,14 @@ public class StockOverviewItemAdapter extends
         int locationId = Integer.parseInt(stockItem.getProduct().getLocationId());
         Location location = locationHashMap.get(locationId);
         groupName = location != null ? location.getName() : null;
+      } else if (groupingMode.startsWith(Userfield.NAME_PREFIX)) {
+        String userfieldName = groupingMode.substring(
+            Userfield.NAME_PREFIX.length()
+        );
+        Userfield userfield = userfieldHashMap.get(userfieldName);
+        if (userfield != null) {
+          groupName = stockItem.getProduct().getUserfields().get(userfieldName);
+        }
       }
       if (groupName != null && !groupName.isEmpty()) {
         ArrayList<StockItem> itemsFromGroup = stockItemsGroupedHashMap.get(groupName);
@@ -242,7 +250,7 @@ public class StockOverviewItemAdapter extends
     }
     if (!ungroupedItems.isEmpty()) {
       groupedListItems.add(new GroupHeader(context.getString(R.string.property_ungrouped)));
-      sortStockItems(context, ungroupedItems, sortMode, sortAscending);
+      sortStockItems(ungroupedItems, userfieldHashMap, sortMode, sortAscending);
       groupedListItems.addAll(ungroupedItems);
     }
     for (String group : groupsSorted) {
@@ -259,20 +267,33 @@ public class StockOverviewItemAdapter extends
           !ungroupedItems.isEmpty() || !groupsSorted.get(0).equals(group)
       );
       groupedListItems.add(groupHeader);
-      sortStockItems(context, itemsFromGroup, sortMode, sortAscending);
+      sortStockItems(itemsFromGroup, userfieldHashMap, sortMode, sortAscending);
       groupedListItems.addAll(itemsFromGroup);
     }
     return groupedListItems;
   }
 
   static void sortStockItems(
-      Context context,
       ArrayList<StockItem> stockItems,
+      HashMap<String, Userfield> userfieldHashMap,
       String sortMode,
       boolean sortAscending
   ) {
     if (sortMode.equals(FilterChipLiveDataStockSort.SORT_DUE_DATE)) {
       SortUtil.sortStockItemsByBBD(stockItems, sortAscending);
+    } if (sortMode.startsWith(Userfield.NAME_PREFIX)) {
+      String userfieldName = sortMode.substring(Userfield.NAME_PREFIX.length());
+      Userfield userfield = userfieldHashMap.get(userfieldName);
+      if (userfield != null) {
+        SortUtil.sortStockItemsByUserfieldValue(
+            stockItems,
+            userfieldName,
+            userfield.getType(),
+            sortAscending
+        );
+      } else {
+        SortUtil.sortStockItemsByName(stockItems, sortAscending);
+      }
     } else {
       SortUtil.sortStockItemsByName(stockItems, sortAscending);
     }
@@ -494,9 +515,9 @@ public class StockOverviewItemAdapter extends
       }
     }
     for (String activeField : activeFields) {
-      if (activeField.startsWith(FilterChipLiveDataFields.USERFIELD_PREFIX)) {
+      if (activeField.startsWith(Userfield.NAME_PREFIX)) {
         String userfieldName = activeField.substring(
-            FilterChipLiveDataFields.USERFIELD_PREFIX.length()
+            Userfield.NAME_PREFIX.length()
         );
         Userfield userfield = userfieldHashMap.get(userfieldName);
         if (userfield == null) continue;
@@ -590,8 +611,9 @@ public class StockOverviewItemAdapter extends
       List<String> activeFields
   ) {
     ArrayList<GroupedListItem> newGroupedListItems = getGroupedListItems(context, newList,
-        productGroupHashMap, productHashMap, locationHashMap, this.currency, this.dateUtil,
-        sortMode, sortAscending, groupingMode, maxDecimalPlacesAmount, decimalPlacesPriceDisplay);
+        productGroupHashMap, productHashMap, locationHashMap, userfieldHashMap, this.currency,
+        this.dateUtil, sortMode, sortAscending, groupingMode, maxDecimalPlacesAmount,
+        decimalPlacesPriceDisplay);
     StockOverviewItemAdapter.DiffCallback diffCallback = new StockOverviewItemAdapter.DiffCallback(
         this.groupedListItems,
         newGroupedListItems,

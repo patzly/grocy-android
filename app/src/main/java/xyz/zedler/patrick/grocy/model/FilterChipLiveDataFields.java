@@ -33,7 +33,6 @@ public class FilterChipLiveDataFields extends FilterChipLiveData {
 
   public final static String MULTI_SEPARATOR = "%0";
   public final static String VALUE_SEPARATOR = "%=";
-  public final static String USERFIELD_PREFIX = "userfield_";
 
   private final String prefKey;
   private final List<Field> fields;
@@ -185,7 +184,7 @@ public class FilterChipLiveDataFields extends FilterChipLiveData {
     }
 
     public Field(String name, String caption, boolean defaultValue, boolean isUserfield) {
-      this(isUserfield ? USERFIELD_PREFIX + name : name, caption, defaultValue);
+      this(isUserfield ? Userfield.NAME_PREFIX + name : name, caption, defaultValue);
       this.isUserfield = isUserfield;
     }
   }

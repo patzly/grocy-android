@@ -80,6 +80,7 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   private final static String TAG = ShoppingListViewModel.class.getSimpleName();
 
+  public final static String[] DISPLAYED_USERFIELD_ENTITIES = { ENTITY.PRODUCTS };
   public final static String FIELD_AMOUNT = "field_amount";
   public final static String FIELD_DUE_DATE = "field_due_date";
   public final static String FIELD_VALUE = "field_value";
@@ -271,7 +272,9 @@ public class StockOverviewViewModel extends BaseViewModel {
         locationsForProductId.put(stockLocation.getLocationId(), stockLocation);
       }
 
-      filterChipLiveDataFields.setUserfields(data.getUserfields(), ENTITY.PRODUCTS);
+      filterChipLiveDataSort.setUserfields(data.getUserfields(), DISPLAYED_USERFIELD_ENTITIES);
+      filterChipLiveDataGrouping.setUserfields(data.getUserfields(), DISPLAYED_USERFIELD_ENTITIES);
+      filterChipLiveDataFields.setUserfields(data.getUserfields(), DISPLAYED_USERFIELD_ENTITIES);
       userfieldHashMap = ArrayUtil.getUserfieldHashMap(data.getUserfields());
 
       filterChipLiveDataStatus
