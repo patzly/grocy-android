@@ -23,6 +23,7 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -56,6 +57,7 @@ import xyz.zedler.patrick.grocy.dao.StoredPurchaseDao;
 import xyz.zedler.patrick.grocy.dao.TaskCategoryDao;
 import xyz.zedler.patrick.grocy.dao.TaskDao;
 import xyz.zedler.patrick.grocy.dao.UserDao;
+import xyz.zedler.patrick.grocy.dao.UserfieldDao;
 import xyz.zedler.patrick.grocy.dao.VolatileItemDao;
 import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
@@ -88,6 +90,7 @@ import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
+import xyz.zedler.patrick.grocy.model.Userfield;
 import xyz.zedler.patrick.grocy.model.VolatileItem;
 import xyz.zedler.patrick.grocy.repository.MainRepository.OnVersionListener;
 
@@ -123,13 +126,15 @@ import xyz.zedler.patrick.grocy.repository.MainRepository.OnVersionListener;
         RecipeFulfillment.class,
         RecipePosition.class,
         RecipePositionResolved.class,
-        RecipeNesting.class
+        RecipeNesting.class,
+        Userfield.class
     },
     views = {
         RecipeNestingResolved.class
     },
-    version = 47
+    version = 49
 )
+@TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
 
   private static AppDatabase INSTANCE;
@@ -193,6 +198,8 @@ public abstract class AppDatabase extends RoomDatabase {
   public abstract RecipeNestingDao recipeNestingDao();
 
   public abstract StockEntryDao stockEntryDao();
+
+  public abstract UserfieldDao userfieldDao();
 
   public abstract ServerDao serverDao();
 

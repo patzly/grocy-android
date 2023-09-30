@@ -40,6 +40,7 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
+import xyz.zedler.patrick.grocy.model.Userfield;
 
 public class ArrayUtil {
 
@@ -212,6 +213,14 @@ public class ArrayUtil {
       }
     }
     return false;
+  }
+
+  public static HashMap<String, Userfield> getUserfieldHashMap(List<Userfield> userfields) {
+    HashMap<String, Userfield> hashMap = new HashMap<>();
+    for (Userfield u : userfields) {
+      hashMap.put(u.getName(), u);
+    }
+    return hashMap;
   }
 
   public static boolean areListsEqualIgnoreOrder(List<String> list1, List<String> list2) {

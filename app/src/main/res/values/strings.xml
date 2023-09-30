@@ -553,6 +553,7 @@
   <string name="error_undefined">An error occurred</string>
   <string name="error_invalid_base_servings">Servings invalid</string>
   <string name="error_pictures_size_exceeds_limit">There are embedded pictures in product or recipe descriptions on your server, which exceed the parsing limit of this app. Please remove high quality and large sized pictures from your descriptions, this will also speed up data loading.</string>
+  <string name="error_userfield_type_not_supported">Userfield type currently not supported</string>
 
   <string name="title_overview">Overview</string>
   <string name="title_stock_overview">Stock overview</string>
@@ -993,6 +994,10 @@
   <string name="property_extra_field">Extra field: %1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">Fields</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value">%1$s: %2$s</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value_without_space">%1$s:%2$s</string>
   <string name="property_task_category">Task category</string>
   <string name="property_task_categories">Task categories</string>
   <string name="property_calories">Calories</string>

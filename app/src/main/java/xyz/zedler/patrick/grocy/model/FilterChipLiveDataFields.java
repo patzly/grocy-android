@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy.model;
 import android.app.Application;
 import android.content.SharedPreferences;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,8 +33,8 @@ public class FilterChipLiveDataFields extends FilterChipLiveData {
 
   public final static String MULTI_SEPARATOR = "%0";
   public final static String VALUE_SEPARATOR = "%=";
+  public final static String USERFIELD_PREFIX = "userfield_";
 
-  private final Application application;
   private final String prefKey;
   private final List<Field> fields;
   private final SharedPreferences sharedPrefs;
@@ -46,7 +45,6 @@ public class FilterChipLiveDataFields extends FilterChipLiveData {
       Runnable clickListener,
       Field... fields
   ) {
-    this.application = application;
     this.prefKey = prefKey;
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
     this.fields = getFieldsFromFieldsWithDefault(
@@ -67,6 +65,40 @@ public class FilterChipLiveDataFields extends FilterChipLiveData {
     }
   }
 
+  public void setUserfields(List<Userfield> userfields, String... displayedEntities) {
+    List<Field> fieldsWithoutUserfields = this.fields.stream()
+        .filter(field -> !field.isUserfield).collect(Collectors.toList());
+    this.fields.clear();
+    this.fields.addAll(fieldsWithoutUserfields);
+
+    List<Field> fieldsFromUser = new ArrayList<>();
+    for (Userfield userfield : userfields) {
+      if (userfield == null) continue;
+      if (displayedEntities.length > 0) {
+        boolean isDisplayed = false;
+        for (String displayedEntity : displayedEntities) {
+          if (displayedEntity.equals(userfield.getEntity())
+              && userfield.getShowAsColumnInTablesBoolean()) {
+            isDisplayed = true;
+            break;
+          }
+        }
+        if (!isDisplayed) continue;
+      }
+      fieldsFromUser.add(new Field(
+          userfield.getName(),
+          userfield.getCaption(),
+          false,
+          true
+      ));
+    }
+    this.fields.addAll(getFieldsFromFieldsWithDefault(
+        sharedPrefs.getString(prefKey, null),
+        fieldsFromUser.toArray(new Field[0])
+    ));
+    setItems();
+  }
+
   public void setValues(int id) {
     if (id > fields.size()-1) return;
     Field field = fields.get(id);
@@ -80,13 +112,16 @@ public class FilterChipLiveDataFields extends FilterChipLiveData {
       Field field = fields.get(id);
       menuItemDataList.add(new MenuItemData(
           id,
-          0,
-          application.getString(field.textResId),
+          field.isUserfield ? 1 : 0,
+          field.caption,
           field.currentValue
       ));
     }
     setMenuItemDataList(menuItemDataList);
-    setMenuItemGroups(new MenuItemGroup(0, true, false));
+    setMenuItemGroups(
+        new MenuItemGroup(0, true, false),
+        new MenuItemGroup(1, true, false)
+    );
     emitValue();
   }
 
@@ -139,13 +174,19 @@ public class FilterChipLiveDataFields extends FilterChipLiveData {
 
   public static class Field {
     public final String name;
-    @StringRes public final int textResId;
+    public final String caption;
     public final boolean defaultValue;
     public boolean currentValue;
-    public Field(String name, @StringRes int textResId, boolean defaultValue) {
+    public boolean isUserfield = false;
+    public Field(String name, String caption, boolean defaultValue) {
       this.name = name;
-      this.textResId = textResId;
+      this.caption = caption;
       this.defaultValue = defaultValue;
+    }
+
+    public Field(String name, String caption, boolean defaultValue, boolean isUserfield) {
+      this(isUserfield ? USERFIELD_PREFIX + name : name, caption, defaultValue);
+      this.isUserfield = isUserfield;
     }
   }
 }

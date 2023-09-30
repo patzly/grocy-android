@@ -105,11 +105,11 @@ public class RecipesViewModel extends BaseViewModel {
         getApplication(),
         PREF.RECIPES_FIELDS,
         this::updateFilteredRecipes,
-        new Field(FIELD_DUE_SCORE, R.string.property_due_score, true),
-        new Field(FIELD_FULFILLMENT, R.string.property_requirements_fulfilled, true),
-        new Field(FIELD_CALORIES, R.string.property_calories, false),
-        new Field(FIELD_DESIRED_SERVINGS, R.string.property_servings_desired, false),
-        new Field(FIELD_PICTURE, R.string.property_picture, true)
+        new Field(FIELD_DUE_SCORE, getString(R.string.property_due_score), true),
+        new Field(FIELD_FULFILLMENT, getString(R.string.property_requirements_fulfilled), true),
+        new Field(FIELD_CALORIES, getString(R.string.property_calories), false),
+        new Field(FIELD_DESIRED_SERVINGS, getString(R.string.property_servings_desired), false),
+        new Field(FIELD_PICTURE, getString(R.string.property_picture), true)
     );
   }
 

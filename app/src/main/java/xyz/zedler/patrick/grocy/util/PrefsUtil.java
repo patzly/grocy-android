@@ -96,6 +96,7 @@ public class PrefsUtil {
     editPrefs.remove(PREF.DB_LAST_TIME_RECIPE_POSITIONS);
     editPrefs.remove(PREF.DB_LAST_TIME_RECIPE_POSITIONS_RESOLVED);
     editPrefs.remove(PREF.DB_LAST_TIME_RECIPE_NESTINGS);
+    editPrefs.remove(PREF.DB_LAST_TIME_USERFIELDS);
     editPrefs.apply();
   }
 

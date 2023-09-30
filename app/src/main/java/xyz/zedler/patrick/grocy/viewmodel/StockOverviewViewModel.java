@@ -41,6 +41,7 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.fragment.StockOverviewFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
@@ -64,6 +65,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
+import xyz.zedler.patrick.grocy.model.Userfield;
 import xyz.zedler.patrick.grocy.model.VolatileItem;
 import xyz.zedler.patrick.grocy.repository.StockOverviewRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
@@ -117,6 +119,7 @@ public class StockOverviewViewModel extends BaseViewModel {
   private HashMap<Integer, MissingItem> productIdsMissingItems;
   private HashMap<Integer, Location> locationHashMap;
   private HashMap<Integer, HashMap<Integer, StockLocation>> stockLocationsHashMap;
+  private HashMap<String, Userfield> userfieldHashMap;
 
   private String searchInput;
   private ArrayList<String> searchResultsFuzzy;
@@ -176,14 +179,14 @@ public class StockOverviewViewModel extends BaseViewModel {
         getApplication(),
         PREF.STOCK_FIELDS,
         this::updateFilteredStockItems,
-        new Field(FIELD_AMOUNT, R.string.property_amount, true),
-        new Field(FIELD_DUE_DATE, R.string.property_due_date_next, true),
-        new Field(FIELD_VALUE, R.string.property_value, false),
-        new Field(FIELD_CALORIES_UNIT, R.string.property_calories_unit, false),
-        new Field(FIELD_CALORIES_TOTAL, R.string.property_calories_total, false),
-        new Field(FIELD_AVERAGE_PRICE, R.string.property_price_average, false),
-        new Field(FIELD_LAST_PRICE, R.string.property_last_price, false),
-        new Field(FIELD_PICTURE, R.string.property_picture, true)
+        new Field(FIELD_AMOUNT, getString(R.string.property_amount), true),
+        new Field(FIELD_DUE_DATE, getString(R.string.property_due_date_next), true),
+        new Field(FIELD_VALUE, getString(R.string.property_value), false),
+        new Field(FIELD_CALORIES_UNIT, getString(R.string.property_calories_unit), false),
+        new Field(FIELD_CALORIES_TOTAL, getString(R.string.property_calories_total), false),
+        new Field(FIELD_AVERAGE_PRICE, getString(R.string.property_price_average), false),
+        new Field(FIELD_LAST_PRICE, getString(R.string.property_last_price), false),
+        new Field(FIELD_PICTURE, getString(R.string.property_picture), true)
     );
   }
 
@@ -268,6 +271,9 @@ public class StockOverviewViewModel extends BaseViewModel {
         locationsForProductId.put(stockLocation.getLocationId(), stockLocation);
       }
 
+      filterChipLiveDataFields.setUserfields(data.getUserfields(), ENTITY.PRODUCTS);
+      userfieldHashMap = ArrayUtil.getUserfieldHashMap(data.getUserfields());
+
       filterChipLiveDataStatus
           .setNotFreshCount(itemsDueCount+itemsOverdueCount+itemsExpiredCount)
           .setDueSoonCount(itemsDueCount)
@@ -303,7 +309,8 @@ public class StockOverviewViewModel extends BaseViewModel {
         Location.class,
         ProductAveragePrice.class,
         ProductLastPurchased.class,
-        StockLocation.class
+        StockLocation.class,
+        Userfield.class
     );
   }
 
@@ -661,6 +668,10 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   public QuantityUnit getQuantityUnitFromId(int id) {
     return quantityUnitHashMap.get(id);
+  }
+
+  public HashMap<String, Userfield> getUserfieldHashMap() {
+    return userfieldHashMap;
   }
 
   public FilterChipLiveData.Listener getFilterChipLiveDataStatus() {

@@ -102,6 +102,7 @@ public final class Constants {
     public final static String DB_LAST_TIME_RECIPE_POSITIONS = "db_last_time_recipe_positions";
     public final static String DB_LAST_TIME_RECIPE_POSITIONS_RESOLVED = "db_last_time_recipe_positions_resolved";
     public final static String DB_LAST_TIME_RECIPE_NESTINGS = "db_last_time_recipe_nestings";
+    public final static String DB_LAST_TIME_USERFIELDS = "db_last_time_userfields";
     // when adding new constant for DB, also add it to clearCachingRelatedSharedPreferences()
     // in PrefsUtil
 

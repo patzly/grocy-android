@@ -74,6 +74,7 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
+import xyz.zedler.patrick.grocy.model.Userfield;
 import xyz.zedler.patrick.grocy.model.VolatileItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -561,6 +562,8 @@ public class DownloadHelper {
         queue.append(RecipePosition.updateRecipePositions(this, dbChangedTime, forceUpdate, null));
       } else if (type == RecipePositionResolved.class) {
         queue.append(RecipePositionResolved.updateRecipePositionsResolved(this, dbChangedTime, forceUpdate, null));
+      } else if (type == Userfield.class) {
+        queue.append(Userfield.updateUserfields(this, dbChangedTime, forceUpdate, null));
       }
     }
 

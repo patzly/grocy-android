@@ -137,13 +137,13 @@ public class ShoppingListViewModel extends BaseViewModel {
         getApplication(),
         PREF.SHOPPING_LIST_FIELDS,
         this::updateFilteredShoppingListItems,
-        new Field(FIELD_AMOUNT, R.string.property_amount, true),
+        new Field(FIELD_AMOUNT, getString(R.string.property_amount), true),
         featurePriceEnabled
-            ? new Field(FIELD_PRICE_LAST_TOTAL, R.string.property_last_price_total, false) : null,
+            ? new Field(FIELD_PRICE_LAST_TOTAL, getString(R.string.property_last_price_total), false) : null,
         featurePriceEnabled
-            ? new Field(FIELD_PRICE_LAST_UNIT, R.string.property_last_price_unit, false) : null,
-        new Field(FIELD_NOTES, R.string.property_notes, true),
-        new Field(FIELD_PICTURE, R.string.property_picture, false)
+            ? new Field(FIELD_PRICE_LAST_UNIT, getString(R.string.property_last_price_unit), false) : null,
+        new Field(FIELD_NOTES, getString(R.string.property_notes), true),
+        new Field(FIELD_PICTURE, getString(R.string.property_picture), false)
     );
 
     int lastId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1);

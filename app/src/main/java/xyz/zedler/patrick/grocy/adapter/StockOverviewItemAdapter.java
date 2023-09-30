@@ -46,6 +46,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowStockItemBinding;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockGrouping;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockSort;
 import xyz.zedler.patrick.grocy.model.GroupHeader;
@@ -56,6 +57,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.Userfield;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.DateUtil;
@@ -79,6 +81,7 @@ public class StockOverviewItemAdapter extends
   private final HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap;
   private final PluralUtil pluralUtil;
   private final ArrayList<Integer> missingItemsProductIds;
+  private final HashMap<String, Userfield> userfieldHashMap;
   private final StockOverviewItemAdapterListener listener;
   private final GrocyApi grocyApi;
   private final LazyHeaders grocyAuthHeaders;
@@ -107,6 +110,7 @@ public class StockOverviewItemAdapter extends
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, Location> locationHashMap,
       ArrayList<Integer> missingItemsProductIds,
+      HashMap<String, Userfield> userfieldHashMap,
       StockOverviewItemAdapterListener listener,
       boolean showDateTracking,
       boolean shoppingListFeatureEnabled,
@@ -123,6 +127,7 @@ public class StockOverviewItemAdapter extends
     this.productLastPurchasedHashMap = new HashMap<>(productLastPurchasedHashMap);
     this.pluralUtil = new PluralUtil(context);
     this.missingItemsProductIds = new ArrayList<>(missingItemsProductIds);
+    this.userfieldHashMap = new HashMap<>(userfieldHashMap);
     this.listener = listener;
     this.grocyApi = new GrocyApi((Application) context.getApplicationContext());
     this.grocyAuthHeaders = RequestHeaders.getGlideGrocyAuthHeaders(context);
@@ -488,6 +493,22 @@ public class StockOverviewItemAdapter extends
         holder.binding.flexboxLayout.addView(chipValue);
       }
     }
+    for (String activeField : activeFields) {
+      if (activeField.startsWith(FilterChipLiveDataFields.USERFIELD_PREFIX)) {
+        String userfieldName = activeField.substring(
+            FilterChipLiveDataFields.USERFIELD_PREFIX.length()
+        );
+        Userfield userfield = userfieldHashMap.get(userfieldName);
+        if (userfield == null) continue;
+        Chip chipUserfield = createChip(context, null);
+        Chip chipFilled = Userfield.fillChipWithUserfield(
+            chipUserfield,
+            userfield,
+            stockItem.getProduct().getUserfields().get(userfieldName)
+        );
+        if (chipFilled != null) holder.binding.flexboxLayout.addView(chipFilled);
+      }
+    }
 
     holder.binding.flexboxLayout.setVisibility(
         holder.binding.flexboxLayout.getChildCount() > 0 ? View.VISIBLE : View.GONE
@@ -562,6 +583,7 @@ public class StockOverviewItemAdapter extends
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, Location> locationHashMap,
       ArrayList<Integer> missingItemsProductIds,
+      HashMap<String, Userfield> userfieldHashMap,
       String sortMode,
       boolean sortAscending,
       String groupingMode,
@@ -583,6 +605,8 @@ public class StockOverviewItemAdapter extends
         productLastPurchasedHashMap,
         this.missingItemsProductIds,
         missingItemsProductIds,
+        this.userfieldHashMap,
+        userfieldHashMap,
         this.sortMode,
         sortMode,
         this.sortAscending,
@@ -605,6 +629,8 @@ public class StockOverviewItemAdapter extends
     this.productLastPurchasedHashMap.putAll(productLastPurchasedHashMap);
     this.missingItemsProductIds.clear();
     this.missingItemsProductIds.addAll(missingItemsProductIds);
+    this.userfieldHashMap.clear();
+    this.userfieldHashMap.putAll(userfieldHashMap);
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
     this.groupingMode = groupingMode;
@@ -627,6 +653,8 @@ public class StockOverviewItemAdapter extends
     HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapNew;
     ArrayList<Integer> missingProductIdsOld;
     ArrayList<Integer> missingProductIdsNew;
+    HashMap<String, Userfield> userfieldHashMapOld;
+    HashMap<String, Userfield> userfieldHashMapNew;
     String sortModeOld;
     String sortModeNew;
     boolean sortAscendingOld;
@@ -649,6 +677,8 @@ public class StockOverviewItemAdapter extends
         HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapNew,
         ArrayList<Integer> missingProductIdsOld,
         ArrayList<Integer> missingProductIdsNew,
+        HashMap<String, Userfield> userfieldHashMapOld,
+        HashMap<String, Userfield> userfieldHashMapNew,
         String sortModeOld,
         String sortModeNew,
         boolean sortAscendingOld,
@@ -670,6 +700,8 @@ public class StockOverviewItemAdapter extends
       this.productLastPurchasedHashMapNew = productLastPurchasedHashMapNew;
       this.missingProductIdsOld = missingProductIdsOld;
       this.missingProductIdsNew = missingProductIdsNew;
+      this.userfieldHashMapOld = userfieldHashMapOld;
+      this.userfieldHashMapNew = userfieldHashMapNew;
       this.sortModeOld = sortModeOld;
       this.sortModeNew = sortModeNew;
       this.sortAscendingOld = sortAscendingOld;
@@ -722,6 +754,9 @@ public class StockOverviewItemAdapter extends
         return false;
       }
       if (oldItemType == GroupedListItem.TYPE_ENTRY) {
+        if (!userfieldHashMapNew.equals(userfieldHashMapOld)) {
+          return false;
+        }
         StockItem newItem = (StockItem) newItems.get(newItemPos);
         StockItem oldItem = (StockItem) oldItems.get(oldItemPos);
         if (!compareContent) {
