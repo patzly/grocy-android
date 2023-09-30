@@ -190,7 +190,9 @@ public class ChoresViewModel extends BaseViewModel {
       }
 
       int daysFromNow = DateUtil.getDaysFromNow(choreEntry.getNextEstimatedExecutionTime());
-      if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataChoresStatus.STATUS_OVERDUE
+      if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataChoresStatus.STATUS_DUE
+          && daysFromNow > 0
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataChoresStatus.STATUS_OVERDUE
           && daysFromNow >= 0
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataChoresStatus.STATUS_DUE_TODAY
           && daysFromNow != 0
