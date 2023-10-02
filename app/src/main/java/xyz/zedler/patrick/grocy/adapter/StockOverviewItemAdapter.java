@@ -281,14 +281,15 @@ public class StockOverviewItemAdapter extends
   ) {
     if (sortMode.equals(FilterChipLiveDataStockSort.SORT_DUE_DATE)) {
       SortUtil.sortStockItemsByBBD(stockItems, sortAscending);
-    } if (sortMode.startsWith(Userfield.NAME_PREFIX)) {
+    } else if (sortMode.equals(FilterChipLiveDataStockSort.SORT_CREATED_TIMESTAMP)) {
+      SortUtil.sortStockItemsByCreatedTimestamp(stockItems, sortAscending);
+    } else if (sortMode.startsWith(Userfield.NAME_PREFIX)) {
       String userfieldName = sortMode.substring(Userfield.NAME_PREFIX.length());
       Userfield userfield = userfieldHashMap.get(userfieldName);
       if (userfield != null) {
         SortUtil.sortStockItemsByUserfieldValue(
             stockItems,
-            userfieldName,
-            userfield.getType(),
+            userfield,
             sortAscending
         );
       } else {

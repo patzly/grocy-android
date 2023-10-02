@@ -205,6 +205,10 @@ public class Product extends GroupedListItem implements Parcelable {
   @SerializedName("userfields")
   private Map<String, String> userfields;
 
+  @ColumnInfo(name = "row_created_timestamp")
+  @SerializedName("row_created_timestamp")
+  private String rowCreatedTimestamp;
+
   @Ignore
   private Integer pendingProductId;
 
@@ -315,6 +319,7 @@ public class Product extends GroupedListItem implements Parcelable {
     defaultConsumeLocationId = parcel.readString();
     moveOnOpen = parcel.readString();
     userfields = Converters.stringToMap(parcel.readString());
+    rowCreatedTimestamp = parcel.readString();
   }
 
   @Override
@@ -355,6 +360,7 @@ public class Product extends GroupedListItem implements Parcelable {
     dest.writeString(defaultConsumeLocationId);
     dest.writeString(moveOnOpen);
     dest.writeString(Converters.mapToString(userfields));
+    dest.writeString(rowCreatedTimestamp);
   }
 
   public static final Creator<Product> CREATOR = new Creator<>() {
@@ -815,6 +821,14 @@ public class Product extends GroupedListItem implements Parcelable {
 
   public void setUserfields(Map<String, String> userfields) {
     this.userfields = userfields;
+  }
+
+  public String getRowCreatedTimestamp() {
+    return rowCreatedTimestamp;
+  }
+
+  public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
+    this.rowCreatedTimestamp = rowCreatedTimestamp;
   }
 
   public Integer getPendingProductId() {

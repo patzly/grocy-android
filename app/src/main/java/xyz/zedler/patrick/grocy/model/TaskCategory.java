@@ -37,10 +37,12 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
+import xyz.zedler.patrick.grocy.database.Converters;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
@@ -61,6 +63,14 @@ public class TaskCategory extends GroupedListItem implements Parcelable {
   @ColumnInfo(name = "description")
   @SerializedName("description")
   private String description;
+
+  @ColumnInfo(name = "userfields")
+  @SerializedName("userfields")
+  private Map<String, String> userfields;
+
+  @ColumnInfo(name = "row_created_timestamp")
+  @SerializedName("row_created_timestamp")
+  private String rowCreatedTimestamp;
 
   @Ignore
   @SerializedName("display_divider")
@@ -91,6 +101,8 @@ public class TaskCategory extends GroupedListItem implements Parcelable {
     name = parcel.readString();
     description = parcel.readString();
     displayDivider = parcel.readInt();
+    userfields = Converters.stringToMap(parcel.readString());
+    rowCreatedTimestamp = parcel.readString();
   }
 
   @Override
@@ -99,6 +111,8 @@ public class TaskCategory extends GroupedListItem implements Parcelable {
     dest.writeString(name);
     dest.writeString(description);
     dest.writeInt(displayDivider);
+    dest.writeString(Converters.mapToString(userfields));
+    dest.writeString(rowCreatedTimestamp);
   }
 
   public static final Creator<TaskCategory> CREATOR = new Creator<>() {
@@ -136,6 +150,22 @@ public class TaskCategory extends GroupedListItem implements Parcelable {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public Map<String, String> getUserfields() {
+    return userfields;
+  }
+
+  public void setUserfields(Map<String, String> userfields) {
+    this.userfields = userfields;
+  }
+
+  public String getRowCreatedTimestamp() {
+    return rowCreatedTimestamp;
+  }
+
+  public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
+    this.rowCreatedTimestamp = rowCreatedTimestamp;
   }
 
   public int getDisplayDivider() {

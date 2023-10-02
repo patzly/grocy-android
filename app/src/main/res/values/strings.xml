@@ -949,6 +949,7 @@
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Average shelf life</string>
   <string name="property_spoil_rate">Spoil rate</string>
+  <string name="property_created_timestamp">Creation time</string>
   <string name="property_price_history">Price history</string>
   <string name="property_product_group">Product group</string>
   <string name="property_product_groups">Product groups</string>

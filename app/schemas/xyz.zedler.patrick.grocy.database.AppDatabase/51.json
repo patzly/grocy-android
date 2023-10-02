@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 49,
-    "identityHash": "6e61f19cbd2f566076cd80e26611a614",
+    "version": 51,
+    "identityHash": "4a7dfdf216fcca3d1ecb920bd193b1c1",
     "entities": [
       {
         "tableName": "shopping_list_table",
@@ -342,7 +342,7 @@
       },
       {
         "tableName": "product_group_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `userfields` TEXT, `row_created_timestamp` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -361,6 +361,18 @@
             "columnName": "description",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "userfields",
+            "columnName": "userfields",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "rowCreatedTimestamp",
+            "columnName": "row_created_timestamp",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -374,7 +386,7 @@
       },
       {
         "tableName": "quantity_unit_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `name_plural` TEXT, `plural_forms` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `name_plural` TEXT, `plural_forms` TEXT, `userfields` TEXT, `row_created_timestamp` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -405,6 +417,18 @@
             "columnName": "plural_forms",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "userfields",
+            "columnName": "userfields",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "rowCreatedTimestamp",
+            "columnName": "row_created_timestamp",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -418,7 +442,7 @@
       },
       {
         "tableName": "store_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `row_created_timestamp` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `userfields` TEXT, `row_created_timestamp` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -435,6 +459,12 @@
           {
             "fieldPath": "description",
             "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "userfields",
+            "columnName": "userfields",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -456,7 +486,7 @@
       },
       {
         "tableName": "location_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `row_created_timestamp` TEXT, `is_freezer` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `userfields` TEXT, `row_created_timestamp` TEXT, `is_freezer` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -473,6 +503,12 @@
           {
             "fieldPath": "description",
             "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "userfields",
+            "columnName": "userfields",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -948,7 +984,7 @@
       },
       {
         "tableName": "task_category_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `userfields` TEXT, `row_created_timestamp` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -965,6 +1001,18 @@
           {
             "fieldPath": "description",
             "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "userfields",
+            "columnName": "userfields",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "rowCreatedTimestamp",
+            "columnName": "row_created_timestamp",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -2315,7 +2363,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6e61f19cbd2f566076cd80e26611a614')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4a7dfdf216fcca3d1ecb920bd193b1c1')"
     ]
   }
 }

@@ -28,11 +28,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import me.xdrop.fuzzywuzzy.model.BoundExtractedResult;
 import xyz.zedler.patrick.grocy.R;
@@ -41,7 +39,10 @@ import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
+import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataMasterObjectsSort;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataProductGroup;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -49,11 +50,12 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
+import xyz.zedler.patrick.grocy.model.Userfield;
 import xyz.zedler.patrick.grocy.repository.MasterObjectListRepository;
-import xyz.zedler.patrick.grocy.util.LocaleUtil;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ObjectUtil;
-import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class MasterObjectListViewModel extends BaseViewModel {
 
@@ -67,16 +69,15 @@ public class MasterObjectListViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<ArrayList<Object>> displayedItemsLive;
+  private final FilterChipLiveDataProductGroup filterChipLiveDataProductGroup;
+  private final FilterChipLiveDataMasterObjectsSort filterChipLiveDataSort;
 
   private List<?> objects;
-  private List<ProductGroup> productGroups;
   private List<QuantityUnit> quantityUnits;
   private List<Location> locations;
+  private HashMap<String, Userfield> userfieldHashMap = new HashMap<>();
 
-  private final HorizontalFilterBarMulti horizontalFilterBarMulti;
-  private boolean sortAscending;
   private String search;
-  private final boolean debug;
   private final String entity;
 
   public MasterObjectListViewModel(@NonNull Application application, String entity) {
@@ -84,7 +85,6 @@ public class MasterObjectListViewModel extends BaseViewModel {
 
     this.entity = entity;
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
@@ -93,11 +93,16 @@ public class MasterObjectListViewModel extends BaseViewModel {
 
     infoFullscreenLive = new MutableLiveData<>();
     displayedItemsLive = new MutableLiveData<>();
+    filterChipLiveDataProductGroup = new FilterChipLiveDataProductGroup(
+        getApplication(),
+        this::updateItemsWithTopScroll
+    );
+    filterChipLiveDataSort = new FilterChipLiveDataMasterObjectsSort(
+        getApplication(),
+        this::updateItemsWithTopScroll
+    );
 
     objects = new ArrayList<>();
-
-    horizontalFilterBarMulti = new HorizontalFilterBarMulti(this::displayItems);
-    sortAscending = true;
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
@@ -105,7 +110,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
       switch (entity) {
         case ENTITY.PRODUCTS:
           this.objects = data.getProducts();
-          this.productGroups = data.getProductGroups();
+          filterChipLiveDataProductGroup.setProductGroups(data.getProductGroups());
           this.quantityUnits = data.getQuantityUnits();
           this.locations = data.getLocations();
           break;
@@ -125,6 +130,8 @@ public class MasterObjectListViewModel extends BaseViewModel {
           this.objects = data.getStores();
           break;
       }
+      userfieldHashMap = ArrayUtil.getUserfieldHashMap(data.getUserfields());
+      filterChipLiveDataSort.setUserfields(data.getUserfields(), entity);
 
       displayItems();
       if (downloadAfterLoading) {
@@ -148,7 +155,8 @@ public class MasterObjectListViewModel extends BaseViewModel {
         (entity.equals(GrocyApi.ENTITY.QUANTITY_UNITS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))
             ? QuantityUnit.class : null,
         entity.equals(ENTITY.TASK_CATEGORIES) ? TaskCategory.class : null,
-        entity.equals(GrocyApi.ENTITY.PRODUCTS) ? Product.class : null
+        entity.equals(GrocyApi.ENTITY.PRODUCTS) ? Product.class : null,
+        Userfield.class
     );
   }
 
@@ -182,7 +190,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
         }
       }
 
-      sortObjectsByName(searchedItems);
+      sortObjects(searchedItems);
 
       for (Object object : searchResultsFuzzy) {
         if (objectIdsInList.contains(ObjectUtil.getObjectId(object, entity))) {
@@ -192,21 +200,19 @@ public class MasterObjectListViewModel extends BaseViewModel {
       }
     } else {
       searchedItems = new ArrayList<>(objects);
-      sortObjectsByName(searchedItems);
+      sortObjects(searchedItems);
     }
 
     // filter items
     ArrayList<Object> filteredItems;
-    if (entity.equals(GrocyApi.ENTITY.PRODUCTS) && horizontalFilterBarMulti.areFiltersActive()) {
+    if (entity.equals(GrocyApi.ENTITY.PRODUCTS) && filterChipLiveDataProductGroup.isActive()) {
       filteredItems = new ArrayList<>();
-      HorizontalFilterBarMulti.Filter filter = horizontalFilterBarMulti
-          .getFilter(HorizontalFilterBarMulti.PRODUCT_GROUP);
       for (Object object : searchedItems) {
         if (!NumUtil.isStringInt(((Product) object).getProductGroupId())) {
           continue;
         }
         int productGroupId = Integer.parseInt(((Product) object).getProductGroupId());
-        if (productGroupId == filter.getObjectId()) {
+        if (productGroupId == filterChipLiveDataProductGroup.getSelectedId()) {
           filteredItems.add(object);
         }
       }
@@ -217,24 +223,23 @@ public class MasterObjectListViewModel extends BaseViewModel {
     displayedItemsLive.setValue(filteredItems);
   }
 
-  public void sortObjectsByName(ArrayList<Object> objects) {
-    if (objects == null) {
-      return;
+  private void updateItemsWithTopScroll() {
+    displayItems();
+    sendEvent(Event.SCROLL_UP);
+  }
+
+  private void sortObjects(ArrayList<Object> objects) {
+    String sortMode = filterChipLiveDataSort.getSortMode();
+    boolean isAscending = filterChipLiveDataSort.isSortAscending();
+    if (sortMode.equals(FilterChipLiveDataMasterObjectsSort.SORT_NAME)) {
+      SortUtil.sortObjectsByName(objects, entity, isAscending);
+    } else if (sortMode.equals(FilterChipLiveDataMasterObjectsSort.SORT_CREATED_TIMESTAMP)) {
+      SortUtil.sortObjectsByCreatedTimestamp(objects, entity, isAscending);
+    } else if (sortMode.startsWith(Userfield.NAME_PREFIX)) {
+      String userfieldName = sortMode.substring(Userfield.NAME_PREFIX.length());
+      Userfield userfield = userfieldHashMap.get(userfieldName);
+      SortUtil.sortObjectsByUserfieldValue(objects, entity, userfield, isAscending);
     }
-
-    Locale locale = LocaleUtil.getLocale();
-
-    Collections.sort(objects, (item1, item2) -> {
-      String name1 = ObjectUtil.getObjectName(sortAscending ? item1 : item2, entity);
-      String name2 = ObjectUtil.getObjectName(sortAscending ? item2 : item1, entity);
-      if (name1 == null || name2 == null) {
-        return 0;
-      }
-
-      return Collator.getInstance(locale).compare(
-              name1.toLowerCase(locale),
-              name2.toLowerCase(locale));
-    });
   }
 
   public void showProductBottomSheet(Product product) {
@@ -259,20 +264,6 @@ public class MasterObjectListViewModel extends BaseViewModel {
     );
   }
 
-  @Nullable
-  public List<ProductGroup> getProductGroups() {
-    return productGroups;
-  }
-
-  public void setSortAscending(boolean ascending) {
-    this.sortAscending = ascending;
-    displayItems();
-  }
-
-  public boolean isSortAscending() {
-    return sortAscending;
-  }
-
   public boolean isSearchActive() {
     return search != null;
   }
@@ -286,8 +277,12 @@ public class MasterObjectListViewModel extends BaseViewModel {
     search = null;
   }
 
-  public HorizontalFilterBarMulti getHorizontalFilterBarMulti() {
-    return horizontalFilterBarMulti;
+  public FilterChipLiveData.Listener getFilterChipLiveDataProductGroup() {
+    return () -> filterChipLiveDataProductGroup;
+  }
+
+  public FilterChipLiveData.Listener getFilterChipLiveDataSort() {
+    return () -> filterChipLiveDataSort;
   }
 
   @NonNull

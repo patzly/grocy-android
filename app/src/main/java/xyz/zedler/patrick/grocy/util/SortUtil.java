@@ -47,6 +47,7 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
+import xyz.zedler.patrick.grocy.model.Userfield;
 
 public class SortUtil {
 
@@ -95,10 +96,32 @@ public class SortUtil {
     );
   }
 
+  public static void sortStockItemsByCreatedTimestamp(List<StockItem> stockItems, boolean ascending) {
+    if (stockItems == null) {
+      return;
+    }
+    Collections.sort(
+        stockItems,
+        (item1, item2) -> {
+          Product product1 = (ascending ? item1 : item2).getProduct();
+          Product product2 = (ascending ? item2 : item1).getProduct();
+          String ts1 = product1.getRowCreatedTimestamp();
+          String ts2 = product2.getRowCreatedTimestamp();
+          if (ts1 == null && ts2 == null) {
+            return 0;
+          } else if (ts1 == null) {
+            return -1;
+          } else if (ts2 == null) {
+            return 1;
+          }
+          return DateUtil.getDate(ts1).compareTo(DateUtil.getDate(ts2));
+        }
+    );
+  }
+
   public static void sortStockItemsByUserfieldValue(
       List<StockItem> stockItems,
-      String userfield,
-      String type,
+      Userfield userfield,
       boolean ascending
   ) {
     if (stockItems == null) {
@@ -111,9 +134,9 @@ public class SortUtil {
           Product product2 = (ascending ? item2 : item1).getProduct();
           Map<String, String> userfieldMap1 = product1.getUserfields();
           Map<String, String> userfieldMap2 = product2.getUserfields();
-          String value1 = userfieldMap1 != null ? userfieldMap1.get(userfield) : null;
-          String value2 = userfieldMap2 != null ? userfieldMap2.get(userfield) : null;
-          return compareUserfieldValues(value1, value2, type);
+          String value1 = userfieldMap1 != null ? userfieldMap1.get(userfield.getName()) : null;
+          String value2 = userfieldMap2 != null ? userfieldMap2.get(userfield.getName()) : null;
+          return compareUserfieldValues(value1, value2, userfield.getType());
         }
     );
   }
@@ -533,6 +556,64 @@ public class SortUtil {
       int recipe2DueScore = recipeFulfillment2 != null ? recipeFulfillment2.getDueScore() : 0;
 
       return (ascending ? recipe1DueScore : recipe2DueScore) - (ascending ? recipe2DueScore : recipe1DueScore);
+    });
+  }
+
+  public static void sortObjectsByName(ArrayList<Object> objects, String entity, boolean isAscending) {
+    if (objects == null) {
+      return;
+    }
+    Locale locale = LocaleUtil.getLocale();
+    Collections.sort(objects, (item1, item2) -> {
+      String name1 = ObjectUtil.getObjectName(isAscending ? item1 : item2, entity);
+      String name2 = ObjectUtil.getObjectName(isAscending ? item2 : item1, entity);
+      if (name1 == null || name2 == null) {
+        return 0;
+      }
+      return Collator.getInstance(locale).compare(
+          name1.toLowerCase(locale),
+          name2.toLowerCase(locale)
+      );
+    });
+  }
+
+  public static void sortObjectsByCreatedTimestamp(
+      ArrayList<Object> objects,
+      String entity,
+      boolean isAscending
+  ) {
+    if (objects == null) {
+      return;
+    }
+    Collections.sort(objects, (item1, item2) -> {
+      String ts1 = ObjectUtil.getObjectCreatedTimestamp(isAscending ? item1 : item2, entity);
+      String ts2 = ObjectUtil.getObjectCreatedTimestamp(isAscending ? item2 : item1, entity);
+      if (ts1 == null && ts2 == null) {
+        return 0;
+      } else if (ts1 == null) {
+        return -1;
+      } else if (ts2 == null) {
+        return 1;
+      }
+      return DateUtil.getDate(ts1).compareTo(DateUtil.getDate(ts2));
+    });
+  }
+
+  public static void sortObjectsByUserfieldValue(
+      ArrayList<Object> objects,
+      String entity,
+      Userfield userfield,
+      boolean isAscending
+  ) {
+    if (objects == null || userfield == null) {
+      return;
+    }
+    Collections.sort(objects, (item1, item2) -> {
+      Map<String, String> uf1 = ObjectUtil.getObjectUserfields(isAscending ? item1 : item2, entity);
+      Map<String, String> uf2 = ObjectUtil.getObjectUserfields(isAscending ? item2 : item1, entity);
+      String value1 = uf1 != null ? uf1.get(userfield.getName()) : null;
+      String value2 = uf2 != null ? uf2.get(userfield.getName()) : null;
+      return compareUserfieldValues(value1, value2, userfield.getType());
     });
   }
 }

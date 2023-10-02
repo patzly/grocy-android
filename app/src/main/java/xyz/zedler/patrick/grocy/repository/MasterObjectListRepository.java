@@ -32,6 +32,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
+import xyz.zedler.patrick.grocy.model.Userfield;
 
 public class MasterObjectListRepository {
 
@@ -53,6 +54,7 @@ public class MasterObjectListRepository {
     private final List<Location> locations;
     private final List<QuantityUnit> quantityUnits;
     private final List<TaskCategory> taskCategories;
+    private final List<Userfield> userfields;
 
     public MasterObjectData(
         List<Product> products,
@@ -60,7 +62,8 @@ public class MasterObjectListRepository {
         List<Store> stores,
         List<Location> locations,
         List<QuantityUnit> quantityUnits,
-        List<TaskCategory> taskCategories
+        List<TaskCategory> taskCategories,
+        List<Userfield> userfields
     ) {
       this.products = products;
       this.productGroups = productGroups;
@@ -68,6 +71,7 @@ public class MasterObjectListRepository {
       this.locations = locations;
       this.quantityUnits = quantityUnits;
       this.taskCategories = taskCategories;
+      this.userfields = userfields;
     }
 
     public List<Product> getProducts() {
@@ -93,6 +97,10 @@ public class MasterObjectListRepository {
     public List<TaskCategory> getTaskCategories() {
       return taskCategories;
     }
+
+    public List<Userfield> getUserfields() {
+      return userfields;
+    }
   }
 
   public void loadFromDatabase(DataListener onSuccess, Consumer<Throwable> onError) {
@@ -104,6 +112,7 @@ public class MasterObjectListRepository {
             appDatabase.locationDao().getLocations(),
             appDatabase.quantityUnitDao().getQuantityUnits(),
             appDatabase.taskCategoryDao().getTaskCategories(),
+            appDatabase.userfieldDao().getUserfields(),
             MasterObjectData::new
         )
         .subscribeOn(Schedulers.io())

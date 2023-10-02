@@ -24,20 +24,17 @@ import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.List;
-import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.R;
 
-public class FilterChipLiveDataStockSort extends FilterChipLiveData {
+public class FilterChipLiveDataMasterObjectsSort extends FilterChipLiveData {
 
   public final static int ID_SORT_NAME = 0;
-  public final static int ID_SORT_DUE_DATE = 1;
-  public final static int ID_SORT_CREATED_TIMESTAMP = 2;
-  public final static int ID_ASCENDING = 3;
-  public final static int ID_START_USERFIELDS = 4; // after the other IDs
+  public final static int ID_SORT_CREATED_TIMESTAMP = 1;
+  public final static int ID_ASCENDING = 2;
+  public final static int ID_START_USERFIELDS = 3; // after the other IDs
 
   public final static String SORT_NAME = "sort_name";
-  public final static String SORT_DUE_DATE = "sort_due_date";
   public final static String SORT_CREATED_TIMESTAMP = "sort_created_timestamp";
 
   private final Application application;
@@ -46,13 +43,13 @@ public class FilterChipLiveDataStockSort extends FilterChipLiveData {
   private String sortMode;
   private boolean sortAscending;
 
-  public FilterChipLiveDataStockSort(Application application, Runnable clickListener) {
+  public FilterChipLiveDataMasterObjectsSort(Application application, Runnable clickListener) {
     this.application = application;
     setItemIdChecked(-1);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
-    sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, SORT_NAME);
-    sortAscending = sharedPrefs.getBoolean(Constants.PREF.STOCK_SORT_ASCENDING, true);
+    sortMode = sharedPrefs.getString(PREF.MASTER_OBJECTS_SORT_MODE, SORT_NAME);
+    sortAscending = sharedPrefs.getBoolean(PREF.MASTER_OBJECTS_SORT_ASCENDING, true);
     setFilterText();
     setItems();
     if (clickListener != null) {
@@ -77,9 +74,6 @@ public class FilterChipLiveDataStockSort extends FilterChipLiveData {
   private void setFilterText() {
     String sortBy;
     switch (sortMode) {
-      case SORT_DUE_DATE:
-        sortBy = application.getString(R.string.property_due_date_next);
-        break;
       case SORT_CREATED_TIMESTAMP:
         sortBy = application.getString(R.string.property_created_timestamp);
         break;
@@ -128,22 +122,18 @@ public class FilterChipLiveDataStockSort extends FilterChipLiveData {
     if (id == ID_SORT_NAME) {
       sortMode = SORT_NAME;
       setFilterText();
-      sharedPrefs.edit().putString(Constants.PREF.STOCK_SORT_MODE, sortMode).apply();
-    } else if (id == ID_SORT_DUE_DATE) {
-      sortMode = SORT_DUE_DATE;
-      setFilterText();
-      sharedPrefs.edit().putString(Constants.PREF.STOCK_SORT_MODE, sortMode).apply();
+      sharedPrefs.edit().putString(PREF.STOCK_SORT_MODE, sortMode).apply();
     } else if (id == ID_SORT_CREATED_TIMESTAMP) {
       sortMode = SORT_CREATED_TIMESTAMP;
       setFilterText();
-      sharedPrefs.edit().putString(Constants.PREF.STOCK_SORT_MODE, sortMode).apply();
+      sharedPrefs.edit().putString(PREF.STOCK_SORT_MODE, sortMode).apply();
     } else if (id == ID_ASCENDING) {
       sortAscending = !sortAscending;
-      sharedPrefs.edit().putBoolean(Constants.PREF.STOCK_SORT_ASCENDING, sortAscending).apply();
+      sharedPrefs.edit().putBoolean(PREF.STOCK_SORT_ASCENDING, sortAscending).apply();
     } else if (id >= ID_START_USERFIELDS) {
       sortMode = Userfield.NAME_PREFIX + userfields.get(id-ID_START_USERFIELDS).getName();
       setFilterText();
-      sharedPrefs.edit().putString(Constants.PREF.STOCK_SORT_MODE, sortMode).apply();
+      sharedPrefs.edit().putString(PREF.STOCK_SORT_MODE, sortMode).apply();
     }
   }
 
@@ -155,14 +145,6 @@ public class FilterChipLiveDataStockSort extends FilterChipLiveData {
         application.getString(R.string.property_name),
         sortMode.equals(SORT_NAME)
     ));
-    if (sharedPrefs.getBoolean(PREF.FEATURE_STOCK_BBD_TRACKING, true)) {
-      menuItemDataList.add(new MenuItemData(
-          ID_SORT_DUE_DATE,
-          0,
-          application.getString(R.string.property_due_date_next),
-          sortMode.equals(SORT_DUE_DATE)
-      ));
-    }
     menuItemDataList.add(new MenuItemData(
         ID_SORT_CREATED_TIMESTAMP,
         0,

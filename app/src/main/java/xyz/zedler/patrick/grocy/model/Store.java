@@ -36,9 +36,11 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.database.Converters;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
@@ -61,6 +63,10 @@ public class Store implements Parcelable {
   @SerializedName("description")
   private String description;
 
+  @ColumnInfo(name = "userfields")
+  @SerializedName("userfields")
+  private Map<String, String> userfields;
+
   @ColumnInfo(name = "row_created_timestamp")
   @SerializedName("row_created_timestamp")
   private String rowCreatedTimestamp;
@@ -77,6 +83,7 @@ public class Store implements Parcelable {
     id = parcel.readInt();
     name = parcel.readString();
     description = parcel.readString();
+    userfields = Converters.stringToMap(parcel.readString());
     rowCreatedTimestamp = parcel.readString();
   }
 
@@ -85,6 +92,7 @@ public class Store implements Parcelable {
     dest.writeInt(id);
     dest.writeString(name);
     dest.writeString(description);
+    dest.writeString(Converters.mapToString(userfields));
     dest.writeString(rowCreatedTimestamp);
   }
 
@@ -115,6 +123,14 @@ public class Store implements Parcelable {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public Map<String, String> getUserfields() {
+    return userfields;
+  }
+
+  public void setUserfields(Map<String, String> userfields) {
+    this.userfields = userfields;
   }
 
   public String getRowCreatedTimestamp() {

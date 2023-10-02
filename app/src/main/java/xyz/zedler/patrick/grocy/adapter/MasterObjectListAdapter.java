@@ -27,20 +27,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.load.model.LazyHeaders;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.databinding.RowFilterChipsBinding;
 import xyz.zedler.patrick.grocy.databinding.RowMasterItemBinding;
-import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.util.ObjectUtil;
 import xyz.zedler.patrick.grocy.util.PictureUtil;
-import xyz.zedler.patrick.grocy.view.InputChip;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class MasterObjectListAdapter extends
@@ -48,11 +42,9 @@ public class MasterObjectListAdapter extends
 
   private final static String TAG = MasterObjectListAdapter.class.getSimpleName();
 
-  private Context context;
   private final ArrayList<Object> objects;
   private final MasterObjectListAdapterListener listener;
   private final String entity;
-  private final HorizontalFilterBarMulti horizontalFilterBarMulti;
   private final GrocyApi grocyApi;
   private final LazyHeaders grocyAuthHeaders;
   private boolean containsPictures;
@@ -61,14 +53,11 @@ public class MasterObjectListAdapter extends
       Context context,
       String entity,
       ArrayList<Object> objects,
-      MasterObjectListAdapterListener listener,
-      HorizontalFilterBarMulti horizontalFilterBarMulti
+      MasterObjectListAdapterListener listener
   ) {
-    this.context = context;
     this.objects = new ArrayList<>(objects);
     this.listener = listener;
     this.entity = entity;
-    this.horizontalFilterBarMulti = horizontalFilterBarMulti;
     this.grocyApi = new GrocyApi((Application) context.getApplicationContext());
     this.grocyAuthHeaders = RequestHeaders.getGlideGrocyAuthHeaders(context);
 
@@ -83,115 +72,30 @@ public class MasterObjectListAdapter extends
     }
   }
 
-  @Override
-  public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
-    super.onDetachedFromRecyclerView(recyclerView);
-    this.context = null;
-  }
-
   public static class ViewHolder extends RecyclerView.ViewHolder {
-
-    public ViewHolder(View view) {
-      super(view);
-    }
-  }
-
-  public static class ItemViewHolder extends ViewHolder {
 
     private final RowMasterItemBinding binding;
 
-    public ItemViewHolder(RowMasterItemBinding binding) {
+    public ViewHolder(RowMasterItemBinding binding) {
       super(binding.getRoot());
       this.binding = binding;
     }
-  }
-
-  public static class FilterRowViewHolder extends ViewHolder {
-
-    private final WeakReference<Context> weakContext;
-    private final RowFilterChipsBinding binding;
-    private InputChip chipProductGroup;
-    private final HorizontalFilterBarMulti horizontalFilterBarMulti;
-
-    public FilterRowViewHolder(
-        RowFilterChipsBinding binding,
-        Context context,
-        HorizontalFilterBarMulti horizontalFilterBarMulti
-    ) {
-      super(binding.getRoot());
-      this.binding = binding;
-      this.horizontalFilterBarMulti = horizontalFilterBarMulti;
-      weakContext = new WeakReference<>(context);
-    }
-
-    public void bind() {
-      HorizontalFilterBarMulti.Filter filter = horizontalFilterBarMulti
-          .getFilter(HorizontalFilterBarMulti.PRODUCT_GROUP);
-      if (filter != null && chipProductGroup == null) {
-        chipProductGroup = new InputChip(
-            weakContext.get(),
-            filter.getObjectName(),
-            R.drawable.ic_round_category,
-            true,
-            () -> {
-              horizontalFilterBarMulti.removeFilter(HorizontalFilterBarMulti.PRODUCT_GROUP);
-              chipProductGroup = null;
-            }
-        );
-        binding.container.addView(chipProductGroup);
-      } else if (filter != null) {
-        chipProductGroup.setText(filter.getObjectName());
-      }
-    }
-  }
-
-  @Override
-  public int getItemViewType(int position) {
-    if (entity.equals(GrocyApi.ENTITY.PRODUCTS) && position == 0) {
-      return -1; // filter row
-    }
-    return 0;
   }
 
   @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    if (viewType == -1) { // filter row
-      RowFilterChipsBinding binding = RowFilterChipsBinding.inflate(
-          LayoutInflater.from(parent.getContext()),
-          parent,
-          false
-      );
-      return new FilterRowViewHolder(
-          binding,
-          context,
-          horizontalFilterBarMulti
-      );
-    } else {
-      return new ItemViewHolder(RowMasterItemBinding.inflate(
-          LayoutInflater.from(parent.getContext()),
-          parent,
-          false
-      ));
-    }
+    return new ViewHolder(RowMasterItemBinding.inflate(
+        LayoutInflater.from(parent.getContext()),
+        parent,
+        false
+    ));
   }
 
   @SuppressLint("ClickableViewAccessibility")
   @Override
-  public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int position) {
-    if (entity.equals(GrocyApi.ENTITY.PRODUCTS) && position == 0) { // Filter row
-      ((FilterRowViewHolder) viewHolder).bind();
-      return;
-    }
-
-    ItemViewHolder holder = (ItemViewHolder) viewHolder;
-    int movedPosition;
-    if (entity.equals(GrocyApi.ENTITY.PRODUCTS)) {
-      movedPosition = holder.getAdapterPosition() - 1;
-    } else {
-      movedPosition = holder.getAdapterPosition();
-    }
-    Object object = objects.get(movedPosition);
+  public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    Object object = objects.get(holder.getAdapterPosition());
 
     // NAME
     holder.binding.textMasterItemName.setText(ObjectUtil.getObjectName(object, entity));
@@ -234,7 +138,7 @@ public class MasterObjectListAdapter extends
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.objects.clear();
     this.objects.addAll(newObjects);
-    diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this, entity));
+    diffResult.dispatchUpdatesTo(this);
   }
 
   static class DiffCallback extends DiffUtil.Callback {
@@ -282,45 +186,9 @@ public class MasterObjectListAdapter extends
     }
   }
 
-  /**
-   * Custom ListUpdateCallback that dispatches update events to the given adapter with offset of 1,
-   * because the first item is the filter row.
-   */
-  public static final class AdapterListUpdateCallback implements ListUpdateCallback {
-
-    @NonNull
-    private final MasterObjectListAdapter mAdapter;
-    private final int offset;
-
-    public AdapterListUpdateCallback(@NonNull MasterObjectListAdapter adapter, String entity) {
-      mAdapter = adapter;
-      offset = entity.equals(GrocyApi.ENTITY.PRODUCTS) ? 1 : 0;
-    }
-
-    @Override
-    public void onInserted(int position, int count) {
-      mAdapter.notifyItemRangeInserted(position + offset, count);
-    }
-
-    @Override
-    public void onRemoved(int position, int count) {
-      mAdapter.notifyItemRangeRemoved(position + offset, count);
-    }
-
-    @Override
-    public void onMoved(int fromPosition, int toPosition) {
-      mAdapter.notifyItemMoved(fromPosition + offset, toPosition + offset);
-    }
-
-    @Override
-    public void onChanged(int position, int count, Object payload) {
-      mAdapter.notifyItemRangeChanged(position + offset, count, payload);
-    }
-  }
-
   @Override
   public int getItemCount() {
-    return entity.equals(GrocyApi.ENTITY.PRODUCTS) ? objects.size() + 1 : objects.size();
+    return objects.size();
   }
 
   public interface MasterObjectListAdapterListener {
