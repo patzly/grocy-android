@@ -126,6 +126,7 @@
   <string name="action_demo_server">Serveur de démo</string>
   <string name="action_own_server">Votre serveur</string>
   <string name="action_enter_data_manually">Entrer les données manuellement</string>
+  <string name="action_settings_backup_restore">Sauvegarder ou restaurer les paramètres</string>
   <string name="action_details">Détails</string>
   <string name="action_perform">Effectuer l\'action</string>
   <string name="action_share">Partager</string>
@@ -141,6 +142,10 @@
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Reprogrammer la prochaine réalisation</string>
   <string name="action_put_missing_products_on_shopping_list">Mettre les produits manquants sur la liste de courses</string>
+  <!-- This is the action part of "Backup to file" or "Backup data" -->
+  <string name="action_backup">Sauvegarder</string>
+  <!-- This is the action part of "Restore from file" or "Restore data" -->
+  <string name="action_restore">Restaurer</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -378,6 +383,9 @@
   <string name="msg_press_hold_confirm">Appuyez longuement pour confirmer la suppression</string>
   <string name="msg_recipe_consume_ask">Êtes-vous sûr de vouloir consommer tous les ingrédients nécessaires à la recette \"%1$s\" ? (les ingrédients marqués avec \"uniquement vérifier si une quantité est en stock\" seront ignorés)</string>
   <string name="msg_recipe_shopping_list_ask">Êtes-vous sûr de vouloir mettre tous les ingrédients manquants nécessaires à la recette \"%1$s\" sur la liste de courses ?\n\nDécochez les ingrédients pour ne pas les mettre sur la liste de courses :</string>
+  <string name="msg_settings_backup_restore">Ici, vous pouvez créer ou restaurer une sauvegarde des paramètres de l\'application, par ex. pour la partager avec d\'autres membres de la famille (le fichier contient des informations d\'identification telles que la clé API).\n\nAprès la restauration, les notifications peuvent ne pas fonctionner comme prévu et doivent être redémarrées en arrière-plan depuis cette application en désactivant puis en réactivant leurs commutateurs.\ n\nSi le fichier restauré contient des données incorrectes, l\'application risque de ne plus fonctionner après cela et les données de l\'application devront être supprimées.</string>
+  <string name="msg_settings_backup_success">Sauvegarde des paramètres créée avec succès</string>
+  <string name="msg_settings_restore_success">Paramètres restaurés avec succès, redémarrage de l\'application dans 2 secondes</string>
   <string name="msg_welcome">Bienvenue sur Grocy Android !</string>
   <string name="msg_welcome_introduce">Pour utiliser Grocy de manière productive, vous avez besoin de votre propre serveur ou du module complémentaire Grocy pour Home Assistant.\nSi vous souhaitez simplement essayer cette application, vous pouvez utiliser le serveur de démonstration de Bernd Bestel, le créateur de grocy.</string>
   <string name="msg_choose_option_below">Veuillez choisir une option ci-dessous.</string>
@@ -568,6 +576,8 @@
   <string name="error_invalid_base_servings">Portions invalides</string>
   <string name="error_pictures_size_exceeds_limit">Il y a des images intégrées dans les descriptions de produits ou de recettes sur votre serveur, qui dépassent la limite d\'analyse de cette application. Veuillez supprimer les images de haute qualité et de grande taille de vos descriptions, cela accélérera également le chargement des données.</string>
   <string name="error_userfield_type_not_supported">Type de champ utilisateur actuellement non pris en charge</string>
+  <string name="error_settings_backup">La sauvegarde a échoué</string>
+  <string name="error_settings_restore">La restauration a échoué</string>
 
   <string name="title_overview">Aperçu</string>
   <string name="title_stock_overview">Aperçu des stocks</string>
