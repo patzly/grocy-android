@@ -20,14 +20,160 @@
 package xyz.zedler.patrick.grocy.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Handler;
+import android.util.Log;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 
 public class PrefsUtil {
+  private final SharedPreferences sharedPreferences;
+  private final Fragment fragment;
+  private final ActivityResultLauncher<Intent> exportLauncher;
+  private final ActivityResultLauncher<Intent> importLauncher;
+
+  public PrefsUtil(MainActivity activity, Fragment fragment) {
+    this.fragment = fragment;
+    this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(fragment.requireContext());
+    this.exportLauncher = fragment.registerForActivityResult(
+        new ActivityResultContracts.StartActivityForResult(),
+        result -> {
+          if (result.getData() != null) {
+            Uri uri = result.getData().getData();
+            if (uri != null) {
+              exportToFile(
+                  uri,
+                  () -> activity.showSnackbar(R.string.msg_settings_backup_success, false),
+                  () -> activity.showSnackbar(R.string.error_settings_backup, false)
+              );
+            }
+          }
+        }
+    );
+    this.importLauncher = fragment.registerForActivityResult(
+        new ActivityResultContracts.StartActivityForResult(),
+        result -> {
+          if (result.getData() != null) {
+            Uri uri = result.getData().getData();
+            if (uri != null) {
+              importFromFile(
+                  uri,
+                  () -> {
+                    activity.showSnackbar(R.string.msg_settings_restore_success, false);
+                    new Handler().postDelayed(
+                        () -> RestartUtil.restartApp(fragment.requireContext()), 2000
+                    );
+                  },
+                  () -> activity.showSnackbar(R.string.error_settings_restore, false)
+              );
+            }
+          }
+        }
+    );
+  }
+
+  public void exportPrefs() {
+    Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+    intent.addCategory(Intent.CATEGORY_OPENABLE);
+    intent.setType("text/plain");
+    intent.putExtra(Intent.EXTRA_TITLE, "prefs.txt");
+    exportLauncher.launch(intent);
+  }
+
+  public void importPrefs() {
+    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+    intent.addCategory(Intent.CATEGORY_OPENABLE);
+    intent.setType("text/*");
+    importLauncher.launch(intent);
+  }
+
+  private void exportToFile(Uri uri, Runnable onSuccess, Runnable onError) {
+    try (OutputStream stream = fragment.requireActivity().getContentResolver().openOutputStream(uri);
+        OutputStreamWriter writer = new OutputStreamWriter(stream, StandardCharsets.UTF_8)) {
+      Map<String, ?> allPrefs = sharedPreferences.getAll();
+      for (String key : allPrefs.keySet()) {
+        Object value = allPrefs.get(key);
+        if (value == null) continue;
+        String valueType = value.getClass().getSimpleName();
+        writer.write(key + "=" + value + ";" + valueType + "\n");
+      }
+      onSuccess.run();
+    } catch (IOException e) {
+      Log.e("PrefsUtil", "Error exporting prefs", e);
+      onError.run();
+    }
+  }
+
+  private void importFromFile(Uri uri, Runnable onSuccess, Runnable onError) {
+    try (InputStream inputStream = fragment.requireActivity().getContentResolver().openInputStream(uri);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+
+      // Clear all existing preferences
+      SharedPreferences.Editor editor = sharedPreferences.edit();
+      editor.clear();
+      editor.apply();
+
+      editor = sharedPreferences.edit();
+      String line;
+      while ((line = reader.readLine()) != null) {
+        String[] keyValue = line.split("=", 2);
+        if (keyValue.length == 2) {
+          String[] valueAndType = keyValue[1].split(";", 2);
+          if (valueAndType.length == 2) {
+            String value = valueAndType[0];
+            String type = valueAndType[1];
+            switch (type) {
+              case "Integer":
+                editor.putInt(keyValue[0], Integer.parseInt(value));
+                break;
+              case "Long":
+                editor.putLong(keyValue[0], Long.parseLong(value));
+                break;
+              case "Float":
+                editor.putFloat(keyValue[0], Float.parseFloat(value));
+                break;
+              case "Boolean":
+                editor.putBoolean(keyValue[0], Boolean.parseBoolean(value));
+                break;
+              case "String":
+                editor.putString(keyValue[0], value);
+                break;
+              case "HashSet":
+                Set<String> stringSet = new HashSet<>(Arrays.asList(value.split(",")));
+                editor.putStringSet(keyValue[0], stringSet);
+                break;
+            }
+          }
+        }
+      }
+      editor.apply();
+      onSuccess.run();
+    } catch (IOException e) {
+      Log.e("PrefsUtil", "Error importing prefs", e);
+      onError.run();
+    }
+  }
 
   public static void migratePrefs(SharedPreferences sharedPrefs) {
     // Due soon notification is now stock notification
