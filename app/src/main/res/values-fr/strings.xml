@@ -977,6 +977,7 @@
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Durée de conservation moyenne</string>
   <string name="property_spoil_rate">Taux de péremption</string>
+  <string name="property_created_timestamp">Date de création</string>
   <string name="property_price_history">Historique des prix</string>
   <string name="property_product_group">Groupe de produits</string>
   <string name="property_product_groups">Groupes de produits</string>
