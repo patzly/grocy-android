@@ -20,7 +20,10 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -61,13 +64,13 @@ import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.RecipePositionResolved;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PictureUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeViewModel;
+import xyz.zedler.patrick.grocy.viewmodel.RecipeViewModel.RecipeViewModelFactory;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class RecipeFragment extends BaseFragment implements
@@ -113,8 +116,7 @@ public class RecipeFragment extends BaseFragment implements
     activity = (MainActivity) requireActivity();
     RecipeFragmentArgs args = RecipeFragmentArgs
         .fromBundle(requireArguments());
-    viewModel = new ViewModelProvider(this, new RecipeViewModel
-        .RecipeViewModelFactory(activity.getApplication(), args)
+    viewModel = new ViewModelProvider(this, new RecipeViewModelFactory(activity.getApplication(), args)
     ).get(RecipeViewModel.class);
     viewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
     binding.setViewModel(viewModel);
@@ -123,14 +125,33 @@ public class RecipeFragment extends BaseFragment implements
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
-    systemBarBehavior.setAppBar(binding.appBar);
-    systemBarBehavior.setToolbar(binding.toolbar);
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setScroll(binding.scroll, binding.linearContainer);
     systemBarBehavior.applyAppBarInsetOnContainer(false);
     systemBarBehavior.applyStatusBarInsetOnContainer(false);
+    systemBarBehavior.applyStatusBarInsetOnAppBar(false);
+    systemBarBehavior.applyStatusBarInsetOnToolBar(false);
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
+
+    Drawable navIcon = binding.toolbar.getNavigationIcon();
+    assert navIcon != null;
+    int colorBlack = ResUtil.getColorAttr(activity, R.attr.colorOnBackground);
+    binding.appBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+      if (binding.collapsingToolbarLayout.getHeight() + verticalOffset
+          < binding.collapsingToolbarLayout.getScrimVisibleHeightTrigger()) {
+        navIcon.setColorFilter(colorBlack, Mode.SRC_ATOP);
+        binding.toolbar.setNavigationIcon(navIcon);
+        UiUtil.setLightStatusBar(
+            activity.getWindow().getDecorView(),
+            !UiUtil.isDarkModeActive(requireContext())
+        );
+      } else {
+        navIcon.setColorFilter(Color.WHITE, Mode.SRC_ATOP);
+        binding.toolbar.setNavigationIcon(navIcon);
+        UiUtil.setLightStatusBar(activity.getWindow().getDecorView(), false);
+      }
+    });
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
@@ -193,7 +214,7 @@ public class RecipeFragment extends BaseFragment implements
 
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(
-        binding.appBar, false, binding.scroll, false, false
+        binding.appBar, false, binding.scroll, true, false
     );
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(true, R.menu.menu_recipe, this::onMenuItemClick);
@@ -229,12 +250,12 @@ public class RecipeFragment extends BaseFragment implements
       GrocyApi grocyApi = new GrocyApi(activity.getApplication());
 
       PictureUtil.loadPicture(
-          binding.photoView,
-          binding.photoViewCard,
+          binding.imageView,
+          null,
           null,
           grocyApi.getRecipePictureServeLarge(recipe.getPictureFileName()),
           RequestHeaders.getGlideGrocyAuthHeaders(requireContext()),
-          true
+          false
       );
     }
   }

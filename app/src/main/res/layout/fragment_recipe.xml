@@ -36,41 +36,61 @@
       type="xyz.zedler.patrick.grocy.fragment.RecipeFragment" />
   </data>
 
-  <RelativeLayout
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/colorBackground"
-    android:animateLayoutChanges="true"
-    app:transitionTypeChanging="@{true}">
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="wrap_content"
+      android:fitsSystemWindows="true">
 
-      <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        style="@style/Widget.Grocy.Toolbar.Back"
-        app:title="@string/title_recipe" />
-
-      <FrameLayout
+      <com.google.android.material.appbar.CollapsingToolbarLayout
+        style="?attr/collapsingToolbarLayoutLargeStyle"
+        android:id="@+id/collapsing_toolbar_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorError">
+        android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
+        android:fitsSystemWindows="true"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed"
+        app:collapsedTitleTextAppearance="@style/TextAppearance.Grocy.TitleLarge"
+        app:expandedTitleTextAppearance="@style/TextAppearance.Grocy.HeadlineMedium"
+        app:expandedTitleTextColor="@color/white">
 
-        <TextView
-          style="@style/Widget.Grocy.TextView.LabelLarge"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="4dp"
-          android:layout_marginBottom="4dp"
-          android:layout_gravity="center"
-          android:visibility="@{viewModel.offlineLive ? View.VISIBLE : View.GONE}"
-          android:textColor="?attr/colorOnError"
-          android:text="@string/error_offline" />
+        <ImageView
+          android:id="@+id/image_view"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:scaleType="centerCrop"
+          android:fitsSystemWindows="true"
+          android:importantForAccessibility="no" />
 
-      </FrameLayout>
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="50dp"
+          android:background="@drawable/bg_scrim_top"
+          android:fitsSystemWindows="true"
+          app:layout_collapseMode="pin"/>
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="60dp"
+          android:layout_gravity="bottom"
+          android:layout_alignBottom="@+id/image_view"
+          android:background="@drawable/bg_scrim_bottom"/>
+
+        <com.google.android.material.appbar.MaterialToolbar
+          android:id="@+id/toolbar"
+          style="@style/Widget.Grocy.Toolbar.Back"
+          app:layout_collapseMode="pin"
+          app:title="@{viewModel.recipeLive.name}">
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+      </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -78,16 +98,15 @@
       android:id="@+id/swipe"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_below="@+id/app_bar"
       android:overScrollMode="never"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior"
       app:setRefreshing="@{viewModel.isLoadingLive}"
       app:onRefreshListener="@{() -> viewModel.downloadData(true)}">
 
       <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="match_parent">
 
         <LinearLayout
           android:id="@+id/linear_container"
@@ -98,40 +117,11 @@
           android:animateLayoutChanges="true"
           app:transitionTypeChanging="@{true}">
 
-          <androidx.cardview.widget.CardView
-            android:id="@+id/photo_view_card"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginHorizontal="16dp"
-            android:visibility="gone"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp">
-
-            <xyz.zedler.patrick.grocy.view.photoview.PhotoView
-              android:id="@+id/photo_view"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:maxHeight="120dp"
-              android:adjustViewBounds="true"
-              android:scaleType="centerCrop"
-              android:visibility="gone"
-              tools:ignore="ContentDescription"/>
-
-          </androidx.cardview.widget.CardView>
-
-          <TextView
-            style="@style/TextAppearance.Grocy.HeadlineMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
-            android:text="@{viewModel.recipeLive.name}"/>
-
           <HorizontalScrollView
             android:id="@+id/container_chips"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="8dp"
             android:layout_marginBottom="8dp"
             android:scrollbars="none"
             android:overScrollMode="ifContentScrolls">
@@ -373,7 +363,7 @@
 
     </xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout>
 
-  </RelativeLayout>
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
 </layout>
