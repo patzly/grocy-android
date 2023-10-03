@@ -155,7 +155,6 @@ public class RecipeFragment extends BaseFragment implements
     });
 
     grocyApi = new GrocyApi(activity.getApplication());
-
     binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
     binding.imageView.setOnClickListener(v -> {
       Recipe recipe = viewModel.getRecipeLive().getValue();
@@ -180,6 +179,17 @@ public class RecipeFragment extends BaseFragment implements
 
     viewModel.getRecipeLive().observe(getViewLifecycleOwner(), recipe -> {
       if (recipe == null) return;
+      binding.collapsingToolbarLayout.setTitle(recipe.getName());
+      if (recipe.getName().length() > 30) {
+        binding.collapsingToolbarLayout.setExpandedTitleTextAppearance(
+            R.style.TextAppearance_Grocy_HeadlineSmall
+        );
+      } else {
+        binding.collapsingToolbarLayout.setExpandedTitleTextAppearance(
+            R.style.TextAppearance_Grocy_HeadlineLarge
+        );
+      }
+      binding.collapsingToolbarLayout.setExpandedTitleColor(Color.WHITE);
       loadRecipePicture(recipe);
       setupMenuButtons();
       updateDataWithServings();

@@ -57,8 +57,7 @@
         android:fitsSystemWindows="true"
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
         app:collapsedTitleTextAppearance="@style/TextAppearance.Grocy.TitleLarge"
-        app:expandedTitleTextAppearance="@style/TextAppearance.Grocy.HeadlineMedium"
-        app:expandedTitleTextColor="@color/white">
+        app:maxLines="3">
 
         <ImageView
           android:id="@+id/image_view"
