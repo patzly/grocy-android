@@ -89,6 +89,7 @@ public class RecipeFragment extends BaseFragment implements
   private MainActivity activity;
   private RecipeViewModel viewModel;
   private FragmentRecipeBinding binding;
+  private GrocyApi grocyApi;
   private AlertDialog dialogConsume, dialogShoppingList, dialogDelete;
   private final HashMap<String, Boolean> dialogShoppingListMultiChoiceItems = new HashMap<>();
 
@@ -153,7 +154,21 @@ public class RecipeFragment extends BaseFragment implements
       }
     });
 
+    grocyApi = new GrocyApi(activity.getApplication());
+
     binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
+    binding.imageView.setOnClickListener(v -> {
+      Recipe recipe = viewModel.getRecipeLive().getValue();
+      if (recipe == null) {
+        activity.showSnackbar(R.string.error_undefined, false);
+        return;
+      }
+      Bundle argsPhotoViewer = new PhotoViewerFragmentArgs.Builder(
+          grocyApi.getRecipePictureServeLarge(recipe.getPictureFileName()),
+          true
+      ).build().toBundle();
+      activity.navUtil.navigateFragment(R.id.photoViewerFragment, argsPhotoViewer);
+    });
 
     ColorRoles colorYellow = ResUtil.getHarmonizedRoles(requireContext(), R.color.yellow);
     binding.buttonFulfillmentInfo.setIconTint(ColorStateList.valueOf(colorYellow.getAccent()));
@@ -247,8 +262,6 @@ public class RecipeFragment extends BaseFragment implements
 
   private void loadRecipePicture(Recipe recipe) {
     if (recipe.getPictureFileName() != null) {
-      GrocyApi grocyApi = new GrocyApi(activity.getApplication());
-
       PictureUtil.loadPicture(
           binding.imageView,
           null,

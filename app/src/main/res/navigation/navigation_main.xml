@@ -1452,4 +1452,16 @@
       app:exitAnim="@anim/slide_no"
       app:popExitAnim="@anim/slide_out_down"/>
   </fragment>
+  <fragment
+    android:id="@+id/photoViewerFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.PhotoViewerFragment"
+    android:label="PhotoViewerFragment"
+    tools:layout="@layout/fragment_photo_viewer">
+    <argument
+      android:name="url"
+      app:argType="string" />
+    <argument
+      android:name="addGrocyRequestHeaders"
+      app:argType="boolean" />
+  </fragment>
 </navigation>
