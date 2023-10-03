@@ -1,15 +1,15 @@
 [versions]
-agp = "8.1.1"
+agp = "8.1.2"
 appcompat = "1.6.1"
 fragment = "1.6.1"
 preference = "1.2.1"
 browser = "1.6.0"
-webkit = "1.7.0"
-lifecycle-viewmodel = "2.6.1"
-navigation = "2.7.1"
+webkit = "1.8.0"
+lifecycle-viewmodel = "2.6.2"
+navigation = "2.7.3"
 room = "2.5.2"
 rxandroid = "3.0.2"
-material = "1.10.0-alpha06" # Change to stable 1.10.0 when it has been released
+material = "1.10.0-rc01" # Change to stable 1.10.0 when it has been released
 flexbox = "3.0.0"
 volley = "1.2.1"
 glide = "4.16.0"
