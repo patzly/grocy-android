@@ -45,6 +45,7 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.StockEntriesFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntryBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataLocation;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataProductGroup;
@@ -118,15 +119,15 @@ public class StockEntriesViewModel extends BaseViewModel {
 
     filterChipLiveDataLocation = new FilterChipLiveDataLocation(
         getApplication(),
-        this::updateFilteredStockEntries
+        this::updateFilteredStockEntriesWithTopScroll
     );
     filterChipLiveDataSort = new FilterChipLiveDataStockEntriesSort(
         getApplication(),
-        this::updateFilteredStockEntries
+        this::updateFilteredStockEntriesWithTopScroll
     );
     filterChipLiveDataGrouping = new FilterChipLiveDataStockEntriesGrouping(
         getApplication(),
-        this::updateFilteredStockEntries
+        this::updateFilteredStockEntriesWithTopScroll
     );
   }
 
@@ -220,6 +221,11 @@ public class StockEntriesViewModel extends BaseViewModel {
     }
 
     filteredStockEntriesLive.setValue(filteredStockEntries);
+  }
+
+  public void updateFilteredStockEntriesWithTopScroll() {
+    updateFilteredStockEntries();
+    sendEvent(Event.SCROLL_UP);
   }
 
   public void showStockEntryBottomSheet(StockEntry stockEntry) {

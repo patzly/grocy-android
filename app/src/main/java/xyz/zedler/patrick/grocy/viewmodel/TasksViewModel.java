@@ -34,6 +34,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksSort;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksStatus;
@@ -95,11 +96,11 @@ public class TasksViewModel extends BaseViewModel {
 
     filterChipLiveDataStatus = new FilterChipLiveDataTasksStatus(
         getApplication(),
-        this::updateFilteredTasks
+        this::updateFilteredTasksWithTopScroll
     );
     filterChipLiveDataSort = new FilterChipLiveDataTasksSort(
         getApplication(),
-        this::updateFilteredTasks
+        this::updateFilteredTasksWithTopScroll
     );
   }
 
@@ -190,6 +191,11 @@ public class TasksViewModel extends BaseViewModel {
     }
 
     filteredTasksLive.setValue(filteredTasks);
+  }
+
+  public void updateFilteredTasksWithTopScroll() {
+    updateFilteredTasks();
+    sendEvent(Event.SCROLL_UP);
   }
 
   public void changeTaskDoneStatus(int taskId) {

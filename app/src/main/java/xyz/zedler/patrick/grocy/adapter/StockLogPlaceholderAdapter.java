@@ -26,8 +26,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import xyz.zedler.patrick.grocy.R;
 
-public class StockPlaceholderAdapter
-    extends RecyclerView.Adapter<StockPlaceholderAdapter.ViewHolder> {
+public class StockLogPlaceholderAdapter
+    extends RecyclerView.Adapter<StockLogPlaceholderAdapter.ViewHolder> {
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
 

@@ -32,14 +32,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterObjectListAdapter;
-import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
@@ -144,6 +142,16 @@ public class MasterObjectListFragment extends BaseFragment
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
+    binding.recycler.setLayoutManager(
+        new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+    );
+    MasterObjectListAdapter adapter = new MasterObjectListAdapter(
+        requireContext(),
+        entity,
+        this
+    );
+    binding.recycler.setAdapter(adapter);
+
     viewModel.getDisplayedItemsLive().observe(getViewLifecycleOwner(), objects -> {
       if (objects == null) {
         return;
@@ -179,17 +187,7 @@ public class MasterObjectListFragment extends BaseFragment
       } else {
         viewModel.getInfoFullscreenLive().setValue(null);
       }
-      if (binding.recycler.getAdapter() instanceof MasterObjectListAdapter) {
-        ((MasterObjectListAdapter) binding.recycler.getAdapter()).updateData(objects);
-      } else {
-        binding.recycler.setAdapter(new MasterObjectListAdapter(
-            requireContext(),
-            entity,
-            objects,
-            this
-        ));
-        binding.recycler.scheduleLayoutAnimation();
-      }
+      adapter.updateData(objects, () -> binding.recycler.scheduleLayoutAnimation());
     });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
@@ -253,12 +251,6 @@ public class MasterObjectListFragment extends BaseFragment
     if (viewModel.isSearchActive()) {
       appBarBehavior.switchToSecondary();
     }
-
-    binding.recycler.setLayoutManager(
-        new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-    );
-    binding.recycler.setItemAnimator(new DefaultItemAnimator());
-    binding.recycler.setAdapter(new MasterPlaceholderAdapter());
 
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);

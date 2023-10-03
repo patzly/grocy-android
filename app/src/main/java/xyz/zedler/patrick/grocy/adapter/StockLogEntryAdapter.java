@@ -63,7 +63,6 @@ public class StockLogEntryAdapter extends
   private final String currency;
   private final int dueSoonDays;
 
-
   public StockLogEntryAdapter(
       Context context,
       ArrayList<StockLogEntry> stockLogEntries,

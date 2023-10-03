@@ -50,14 +50,12 @@ public class QuantityUnitConversionAdapter extends RecyclerView.Adapter<Quantity
 
   public QuantityUnitConversionAdapter(
       Context context,
-      ArrayList<QuantityUnitConversion> quantityUnitConversions,
-      QuantityUnitConversionAdapterListener listener,
-      HashMap<Integer, QuantityUnit> quantityUnitHashMap
+      QuantityUnitConversionAdapterListener listener
   ) {
     this.pluralUtil = new PluralUtil(context);
-    this.quantityUnitConversions = new ArrayList<>(quantityUnitConversions);
+    this.quantityUnitConversions = new ArrayList<>();
     this.listener = listener;
-    this.quantityUnitHashMap = quantityUnitHashMap;
+    this.quantityUnitHashMap = new HashMap<>();
     maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(context).getInt(
         STOCK.DECIMAL_PLACES_AMOUNT,
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
@@ -117,7 +115,8 @@ public class QuantityUnitConversionAdapter extends RecyclerView.Adapter<Quantity
 
   public void updateData(
       ArrayList<QuantityUnitConversion> quantityUnitConversionsNew,
-      HashMap<Integer, QuantityUnit> quantityUnitHashMap
+      HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      Runnable onListFilled
   ) {
     DiffCallback diffCallback = new DiffCallback(
         this.quantityUnitConversions,
@@ -125,6 +124,12 @@ public class QuantityUnitConversionAdapter extends RecyclerView.Adapter<Quantity
         this.quantityUnitHashMap,
         quantityUnitHashMap
     );
+
+    if (onListFilled != null && !quantityUnitConversionsNew.isEmpty()
+        && quantityUnitConversions.isEmpty()) {
+      onListFilled.run();
+    }
+
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.quantityUnitConversions.clear();
     this.quantityUnitConversions.addAll(quantityUnitConversionsNew);

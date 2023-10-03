@@ -65,18 +65,14 @@ public class RecipeEditIngredientListEntryAdapter extends
   public RecipeEditIngredientListEntryAdapter(
       Context context,
       LinearLayoutManager linearLayoutManager,
-      ArrayList<RecipePosition> recipePositions,
-      ArrayList<Product> products,
-      HashMap<Integer, QuantityUnit> quantityUnitHashMap,
-      List<QuantityUnitConversionResolved> unitConversions,
       RecipeEditIngredientListEntryAdapterListener listener
   ) {
     this.context = context;
     this.linearLayoutManager = linearLayoutManager;
-    this.recipePositions = new ArrayList<>(recipePositions);
-    this.products = new ArrayList<>(products);
-    this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
-    this.unitConversions = unitConversions;
+    this.recipePositions = new ArrayList<>();
+    this.products = new ArrayList<>();
+    this.quantityUnitHashMap = new HashMap<>();
+    this.unitConversions = new ArrayList<>();
     this.listener = listener;
     this.pluralUtil = new PluralUtil(context);
     maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(context).getInt(
@@ -187,20 +183,35 @@ public class RecipeEditIngredientListEntryAdapter extends
 
   public void updateData(
       ArrayList<RecipePosition> newList,
-      ArrayList<Product> newProducts
+      ArrayList<Product> newProducts,
+      HashMap<Integer, QuantityUnit> newQuantityUnitHashMap,
+      List<QuantityUnitConversionResolved> newUnitConversions,
+      Runnable onListFilled
   ) {
-
     RecipeEditIngredientListEntryAdapter.DiffCallback diffCallback = new RecipeEditIngredientListEntryAdapter.DiffCallback(
         this.recipePositions,
         newList,
         this.products,
-        newProducts
+        newProducts,
+        this.quantityUnitHashMap,
+        newQuantityUnitHashMap,
+        this.unitConversions,
+        newUnitConversions
     );
+
+    if (onListFilled != null && !newList.isEmpty() && recipePositions.isEmpty()) {
+      onListFilled.run();
+    }
+
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.recipePositions.clear();
     this.recipePositions.addAll(newList);
     this.products.clear();
     this.products.addAll(newProducts);
+    this.quantityUnitHashMap.clear();
+    this.quantityUnitHashMap.putAll(newQuantityUnitHashMap);
+    this.unitConversions.clear();
+    this.unitConversions.addAll(newUnitConversions);
     diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this, linearLayoutManager));
   }
 
@@ -210,17 +221,29 @@ public class RecipeEditIngredientListEntryAdapter extends
     ArrayList<RecipePosition> newItems;
     ArrayList<Product> oldProducts;
     ArrayList<Product> newProducts;
+    HashMap<Integer, QuantityUnit> oldQuantityUnitHashMap;
+    HashMap<Integer, QuantityUnit> newQuantityUnitHashMap;
+    List<QuantityUnitConversionResolved> oldUnitConversions;
+    List<QuantityUnitConversionResolved> newUnitConversions;
 
     public DiffCallback(
         ArrayList<RecipePosition> oldItems,
         ArrayList<RecipePosition> newItems,
         ArrayList<Product> oldProducts,
-        ArrayList<Product> newProducts
+        ArrayList<Product> newProducts,
+        HashMap<Integer, QuantityUnit> oldQuantityUnitHashMap,
+        HashMap<Integer, QuantityUnit> newQuantityUnitHashMap,
+        List<QuantityUnitConversionResolved> oldUnitConversions,
+        List<QuantityUnitConversionResolved> newUnitConversions
     ) {
       this.oldItems = oldItems;
       this.newItems = newItems;
       this.oldProducts = oldProducts;
       this.newProducts = newProducts;
+      this.oldQuantityUnitHashMap = oldQuantityUnitHashMap;
+      this.newQuantityUnitHashMap = newQuantityUnitHashMap;
+      this.oldUnitConversions = oldUnitConversions;
+      this.newUnitConversions = newUnitConversions;
     }
 
     @Override
@@ -252,8 +275,14 @@ public class RecipeEditIngredientListEntryAdapter extends
       if (!compareContent) {
         return newItem.getId() == oldItem.getId();
       }
-
       if (newItemProduct == null || !newItemProduct.equals(oldItemProduct)) {
+        return false;
+      }
+      if (newItem.getQuantityUnitId() != oldItem.getQuantityUnitId()) {
+        return false;
+      }
+      if (!newQuantityUnitHashMap.equals(oldQuantityUnitHashMap)
+          || !newUnitConversions.equals(oldUnitConversions)) {
         return false;
       }
 

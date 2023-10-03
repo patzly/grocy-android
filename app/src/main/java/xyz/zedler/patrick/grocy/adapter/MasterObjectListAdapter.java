@@ -52,24 +52,13 @@ public class MasterObjectListAdapter extends
   public MasterObjectListAdapter(
       Context context,
       String entity,
-      ArrayList<Object> objects,
       MasterObjectListAdapterListener listener
   ) {
-    this.objects = new ArrayList<>(objects);
+    this.objects = new ArrayList<>();
     this.listener = listener;
     this.entity = entity;
     this.grocyApi = new GrocyApi((Application) context.getApplicationContext());
     this.grocyAuthHeaders = RequestHeaders.getGlideGrocyAuthHeaders(context);
-
-    containsPictures = false;
-    for (Object object : objects) {
-      if (!(object instanceof Product)) continue;
-      String pictureFileName = ((Product) object).getPictureFileName();
-      if (pictureFileName != null && !pictureFileName.isEmpty()) {
-        containsPictures = true;
-        break;
-      }
-    }
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -129,12 +118,27 @@ public class MasterObjectListAdapter extends
     );
   }
 
-  public void updateData(ArrayList<Object> newObjects) {
+  public void updateData(ArrayList<Object> newObjects, Runnable onListFilled) {
     DiffCallback diffCallback = new DiffCallback(
         newObjects,
         this.objects,
         entity
     );
+
+    containsPictures = false;
+    for (Object object : newObjects) {
+      if (!(object instanceof Product)) continue;
+      String pictureFileName = ((Product) object).getPictureFileName();
+      if (pictureFileName != null && !pictureFileName.isEmpty()) {
+        containsPictures = true;
+        break;
+      }
+    }
+
+    if (onListFilled != null && !newObjects.isEmpty() && objects.isEmpty()) {
+      onListFilled.run();
+    }
+
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.objects.clear();
     this.objects.addAll(newObjects);

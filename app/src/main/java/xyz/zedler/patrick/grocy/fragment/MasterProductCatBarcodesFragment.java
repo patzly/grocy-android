@@ -26,13 +26,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.ProductBarcodeAdapter;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatBarcodesBinding;
@@ -130,8 +128,8 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
-    binding.recycler.setItemAnimator(new DefaultItemAnimator());
-    binding.recycler.setAdapter(new MasterPlaceholderAdapter());
+    ProductBarcodeAdapter adapter = new ProductBarcodeAdapter(requireContext(), this);
+    binding.recycler.setAdapter(adapter);
 
     viewModel.getProductBarcodesLive().observe(getViewLifecycleOwner(), barcodes -> {
       if (barcodes == null) {
@@ -143,17 +141,12 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
       } else {
         viewModel.getInfoFullscreenLive().setValue(null);
       }
-      if (binding.recycler.getAdapter() instanceof ProductBarcodeAdapter) {
-        ((ProductBarcodeAdapter) binding.recycler.getAdapter()).updateData(barcodes);
-      } else {
-        binding.recycler.setAdapter(new ProductBarcodeAdapter(
-            requireContext(),
-            barcodes,
-            this,
-            viewModel.getQuantityUnits(),
-            viewModel.getStores()
-        ));
-      }
+      adapter.updateData(
+          barcodes,
+          viewModel.getQuantityUnits(),
+          viewModel.getStores(),
+          () -> binding.recycler.scheduleLayoutAnimation()
+      );
     });
 
     if (savedInstanceState == null) {

@@ -82,15 +82,7 @@ public class StockEntryAdapter extends
 
   public StockEntryAdapter(
       Context context,
-      ArrayList<StockEntry> stockEntries,
-      HashMap<Integer, QuantityUnit> quantityUnitHashMap,
-      HashMap<Integer, Product> productHashMap,
-      HashMap<Integer, Location> locationHashMap,
-      HashMap<Integer, Store> storeHashMap,
-      StockEntryAdapterListener listener,
-      String sortMode,
-      boolean sortAscending,
-      String groupingMode
+      StockEntryAdapterListener listener
   ) {
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     this.showDateTracking = sharedPrefs.getBoolean(PREF.FEATURE_STOCK_BBD_TRACKING, true);
@@ -109,19 +101,14 @@ public class StockEntryAdapter extends
     } else {
       this.dueSoonDays = Integer.parseInt(SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS);
     }
-    this.productHashMap = new HashMap<>(productHashMap);
-    this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
-    this.locationHashMap = new HashMap<>(locationHashMap);
-    this.storeHashMap = new HashMap<>(storeHashMap);
+    this.productHashMap = new HashMap<>();
+    this.quantityUnitHashMap = new HashMap<>();
+    this.locationHashMap = new HashMap<>();
+    this.storeHashMap = new HashMap<>();
     this.pluralUtil = new PluralUtil(context);
     this.listener = listener;
     this.dateUtil = new DateUtil(context);
-    this.sortMode = sortMode;
-    this.sortAscending = sortAscending;
-    this.groupingMode = groupingMode;
-    this.groupedListItems = getGroupedListItems(context, stockEntries, productHashMap,
-        locationHashMap, storeHashMap, currency, dateUtil, sortMode,
-        sortAscending, groupingMode);
+    this.groupedListItems = new ArrayList<>();
   }
 
   static ArrayList<GroupedListItem> getGroupedListItems(
@@ -483,7 +470,8 @@ public class StockEntryAdapter extends
       HashMap<Integer, Store> storeHashMap,
       String sortMode,
       boolean sortAscending,
-      String groupingMode
+      String groupingMode,
+      Runnable onListFilled
   ) {
     ArrayList<GroupedListItem> newGroupedListItems = getGroupedListItems(context, newList,
         productHashMap, locationHashMap, storeHashMap, this.currency, this.dateUtil,
@@ -506,6 +494,11 @@ public class StockEntryAdapter extends
         this.groupingMode,
         groupingMode
     );
+
+    if (onListFilled != null && !newGroupedListItems.isEmpty() && groupedListItems.isEmpty()) {
+      onListFilled.run();
+    }
+
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.groupedListItems.clear();
     this.groupedListItems.addAll(newGroupedListItems);
@@ -608,15 +601,6 @@ public class StockEntryAdapter extends
           GroupedListItem.CONTEXT_STOCK_ENTRIES
       );
       if (oldItemType != newItemType) {
-        return false;
-      }
-      if (!sortModeOld.equals(sortModeNew)) {
-        return false;
-      }
-      if (sortAscendingOld != sortAscendingNew) {
-        return false;
-      }
-      if (!groupingModeOld.equals(groupingModeNew)) {
         return false;
       }
       if (oldItemType == GroupedListItem.TYPE_ENTRY) {

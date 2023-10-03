@@ -44,6 +44,7 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.fragment.StockOverviewFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields.Field;
@@ -151,7 +152,7 @@ public class StockOverviewViewModel extends BaseViewModel {
 
     filterChipLiveDataStatus = new FilterChipLiveDataStockStatus(
         getApplication(),
-        this::updateFilteredStockItems
+        this::updateFilteredStockItemsWithTopScroll
     );
     if (NumUtil.isStringInt(args.getStatusFilterId())) {
       if (Integer.parseInt(args.getStatusFilterId())
@@ -162,19 +163,19 @@ public class StockOverviewViewModel extends BaseViewModel {
     }
     filterChipLiveDataProductGroup = new FilterChipLiveDataProductGroup(
         getApplication(),
-        this::updateFilteredStockItems
+        this::updateFilteredStockItemsWithTopScroll
     );
     filterChipLiveDataLocation = new FilterChipLiveDataLocation(
         getApplication(),
-        this::updateFilteredStockItems
+        this::updateFilteredStockItemsWithTopScroll
     );
     filterChipLiveDataSort = new FilterChipLiveDataStockSort(
         getApplication(),
-        this::updateFilteredStockItems
+        this::updateFilteredStockItemsWithTopScroll
     );
     filterChipLiveDataGrouping = new FilterChipLiveDataStockGrouping(
         getApplication(),
-        this::updateFilteredStockItems
+        this::updateFilteredStockItemsWithTopScroll
     );
     filterChipLiveDataFields = new FilterChipLiveDataFields(
         getApplication(),
@@ -428,6 +429,11 @@ public class StockOverviewViewModel extends BaseViewModel {
     }
 
     filteredStockItemsLive.setValue(filteredStockItems);
+  }
+
+  public void updateFilteredStockItemsWithTopScroll() {
+    updateFilteredStockItems();
+    sendEvent(Event.SCROLL_UP);
   }
 
   public void performAction(String action, StockItem stockItem) {

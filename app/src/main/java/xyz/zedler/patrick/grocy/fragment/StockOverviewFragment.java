@@ -35,7 +35,6 @@ import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.StockOverviewItemAdapter;
-import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -135,7 +134,16 @@ public class StockOverviewFragment extends BaseFragment implements
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
-    binding.recycler.setAdapter(new StockPlaceholderAdapter());
+
+    StockOverviewItemAdapter adapter = new StockOverviewItemAdapter(
+        requireContext(),
+        this,
+        viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_BBD_TRACKING),
+        viewModel.isFeatureEnabled(PREF.FEATURE_SHOPPING_LIST),
+        viewModel.getDaysExpriringSoon(),
+        viewModel.getCurrency()
+    );
+    binding.recycler.setAdapter(adapter);
 
     if (savedInstanceState == null) {
       binding.recycler.scrollToPosition(0);
@@ -149,51 +157,24 @@ public class StockOverviewFragment extends BaseFragment implements
 
     viewModel.getFilteredStockItemsLive().observe(getViewLifecycleOwner(), items -> {
       if (items == null) return;
-      if (binding.recycler.getAdapter() instanceof StockOverviewItemAdapter) {
-        ((StockOverviewItemAdapter) binding.recycler.getAdapter()).updateData(
-            requireContext(),
-            items,
-            viewModel.getShoppingListItemsProductIds(),
-            viewModel.getQuantityUnitHashMap(),
-            viewModel.getProductAveragePriceHashMap(),
-            viewModel.getProductLastPurchasedHashMap(),
-            viewModel.getProductGroupHashMap(),
-            viewModel.getProductHashMap(),
-            viewModel.getLocationHashMap(),
-            viewModel.getProductIdsMissingItems(),
-            viewModel.getUserfieldHashMap(),
-            viewModel.getSortMode(),
-            viewModel.isSortAscending(),
-            viewModel.getGroupingMode(),
-            viewModel.getActiveFields()
-        );
-      } else {
-        binding.recycler.setAdapter(
-            new StockOverviewItemAdapter(
-                requireContext(),
-                items,
-                viewModel.getShoppingListItemsProductIds(),
-                viewModel.getQuantityUnitHashMap(),
-                viewModel.getProductAveragePriceHashMap(),
-                viewModel.getProductLastPurchasedHashMap(),
-                viewModel.getProductGroupHashMap(),
-                viewModel.getProductHashMap(),
-                viewModel.getLocationHashMap(),
-                viewModel.getProductIdsMissingItems(),
-                viewModel.getUserfieldHashMap(),
-                this,
-                viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_BBD_TRACKING),
-                viewModel.isFeatureEnabled(PREF.FEATURE_SHOPPING_LIST),
-                viewModel.getDaysExpriringSoon(),
-                viewModel.getCurrency(),
-                viewModel.getSortMode(),
-                viewModel.isSortAscending(),
-                viewModel.getGroupingMode(),
-                viewModel.getActiveFields()
-            )
-        );
-        binding.recycler.scheduleLayoutAnimation();
-      }
+      adapter.updateData(
+          requireContext(),
+          items,
+          viewModel.getShoppingListItemsProductIds(),
+          viewModel.getQuantityUnitHashMap(),
+          viewModel.getProductAveragePriceHashMap(),
+          viewModel.getProductLastPurchasedHashMap(),
+          viewModel.getProductGroupHashMap(),
+          viewModel.getProductHashMap(),
+          viewModel.getLocationHashMap(),
+          viewModel.getProductIdsMissingItems(),
+          viewModel.getUserfieldHashMap(),
+          viewModel.getSortMode(),
+          viewModel.isSortAscending(),
+          viewModel.getGroupingMode(),
+          viewModel.getActiveFields(),
+          () -> binding.recycler.scheduleLayoutAnimation()
+      );
     });
 
     embeddedFragmentScanner.setScannerVisibilityLive(viewModel.getScannerVisibilityLive());
@@ -203,6 +184,8 @@ public class StockOverviewFragment extends BaseFragment implements
         activity.showSnackbar(
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
+      } else if (event.getType() == Event.SCROLL_UP) {
+        binding.recycler.scrollToPosition(0);
       }
     });
 

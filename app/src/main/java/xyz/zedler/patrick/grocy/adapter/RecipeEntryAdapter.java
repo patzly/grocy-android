@@ -86,23 +86,16 @@ public class RecipeEntryAdapter extends
   public RecipeEntryAdapter(
       Context context,
       LayoutManager layoutManager,
-      ArrayList<Recipe> recipes,
-      ArrayList<RecipeFulfillment> recipeFulfillments,
-      RecipesItemAdapterListener listener,
-      String sortMode,
-      boolean sortAscending,
-      List<String> activeFields
+      RecipesItemAdapterListener listener
   ) {
     this.context = context;
     this.layoutManager = layoutManager;
-    this.recipes = new ArrayList<>(recipes);
-    this.recipeFulfillments = new ArrayList<>(recipeFulfillments);
+    this.recipes = new ArrayList<>();
+    this.recipeFulfillments = new ArrayList<>();
     this.listener = listener;
     this.grocyApi = new GrocyApi((Application) context.getApplicationContext());
     this.grocyAuthHeaders = RequestHeaders.getGlideGrocyAuthHeaders(context);
-    this.sortMode = sortMode;
-    this.sortAscending = sortAscending;
-    this.activeFields = new ArrayList<>(activeFields);
+    this.activeFields = new ArrayList<>();
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     maxDecimalPlacesAmount = sharedPrefs.getInt(
         STOCK.DECIMAL_PLACES_AMOUNT,
@@ -372,7 +365,8 @@ public class RecipeEntryAdapter extends
       ArrayList<RecipeFulfillment> newRecipeFulfillments,
       String sortMode,
       boolean sortAscending,
-      List<String> activeFields
+      List<String> activeFields,
+      Runnable onListFilled
   ) {
 
     RecipeEntryAdapter.DiffCallback diffCallback = new RecipeEntryAdapter.DiffCallback(
@@ -387,6 +381,11 @@ public class RecipeEntryAdapter extends
         this.activeFields,
         activeFields
     );
+
+    if (onListFilled != null && !newList.isEmpty() && recipes.isEmpty()) {
+      onListFilled.run();
+    }
+
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.recipes.clear();
     this.recipes.addAll(newList);
@@ -460,12 +459,6 @@ public class RecipeEntryAdapter extends
       Recipe newItem = newItems.get(newItemPos);
       Recipe oldItem = oldItems.get(oldItemPos);
 
-      if (!sortModeOld.equals(sortModeNew)) {
-        return false;
-      }
-      if (sortAscendingOld != sortAscendingNew) {
-        return false;
-      }
       if (!compareContent) {
         return newItem.getId() == oldItem.getId();
       }

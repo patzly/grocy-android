@@ -100,33 +100,19 @@ public class StockOverviewItemAdapter extends
 
   public StockOverviewItemAdapter(
       Context context,
-      ArrayList<StockItem> stockItems,
-      ArrayList<String> shoppingListItemsProductIds,
-      HashMap<Integer, QuantityUnit> quantityUnitHashMap,
-      HashMap<Integer, String> productAveragePriceHashMap,
-      HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap,
-      HashMap<Integer, ProductGroup> productGroupHashMap,
-      HashMap<Integer, Product> productHashMap,
-      HashMap<Integer, Location> locationHashMap,
-      ArrayList<Integer> missingItemsProductIds,
-      HashMap<String, Userfield> userfieldHashMap,
       StockOverviewItemAdapterListener listener,
       boolean showDateTracking,
       boolean shoppingListFeatureEnabled,
       int daysExpiringSoon,
-      String currency,
-      String sortMode,
-      boolean sortAscending,
-      String groupingMode,
-      List<String> activeFields
+      String currency
   ) {
-    this.shoppingListItemsProductIds = new ArrayList<>(shoppingListItemsProductIds);
-    this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
-    this.productAveragePriceHashMap = new HashMap<>(productAveragePriceHashMap);
-    this.productLastPurchasedHashMap = new HashMap<>(productLastPurchasedHashMap);
+    this.shoppingListItemsProductIds = new ArrayList<>();
+    this.quantityUnitHashMap = new HashMap<>();
+    this.productAveragePriceHashMap = new HashMap<>();
+    this.productLastPurchasedHashMap = new HashMap<>();
     this.pluralUtil = new PluralUtil(context);
-    this.missingItemsProductIds = new ArrayList<>(missingItemsProductIds);
-    this.userfieldHashMap = new HashMap<>(userfieldHashMap);
+    this.missingItemsProductIds = new ArrayList<>();
+    this.userfieldHashMap = new HashMap<>();
     this.listener = listener;
     this.grocyApi = new GrocyApi((Application) context.getApplicationContext());
     this.grocyAuthHeaders = RequestHeaders.getGlideGrocyAuthHeaders(context);
@@ -145,23 +131,8 @@ public class StockOverviewItemAdapter extends
     );
     energyUnit = sharedPrefs.getString(PREF.ENERGY_UNIT, PREF.ENERGY_UNIT_DEFAULT);
     this.dateUtil = new DateUtil(context);
-    this.sortMode = sortMode;
-    this.sortAscending = sortAscending;
-    this.groupingMode = groupingMode;
-    this.activeFields = activeFields;
-    this.groupedListItems = getGroupedListItems(context, stockItems,
-        productGroupHashMap, productHashMap, locationHashMap, userfieldHashMap, currency, dateUtil,
-        sortMode, sortAscending, groupingMode, maxDecimalPlacesAmount, decimalPlacesPriceDisplay);
-
-    containsPictures = false;
-    for (StockItem stockItem : stockItems) {
-      if (stockItem.getProduct() == null) continue;
-      String pictureFileName = stockItem.getProduct().getPictureFileName();
-      if (pictureFileName != null && !pictureFileName.isEmpty()) {
-        containsPictures = true;
-        break;
-      }
-    }
+    this.activeFields = new ArrayList<>();
+    this.groupedListItems = new ArrayList<>();
   }
 
   static ArrayList<GroupedListItem> getGroupedListItems(
@@ -609,7 +580,8 @@ public class StockOverviewItemAdapter extends
       String sortMode,
       boolean sortAscending,
       String groupingMode,
-      List<String> activeFields
+      List<String> activeFields,
+      Runnable onListFilled
   ) {
     ArrayList<GroupedListItem> newGroupedListItems = getGroupedListItems(context, newList,
         productGroupHashMap, productHashMap, locationHashMap, userfieldHashMap, this.currency,
@@ -639,6 +611,21 @@ public class StockOverviewItemAdapter extends
         this.activeFields,
         activeFields
     );
+
+    containsPictures = false;
+    for (StockItem stockItem : newList) {
+      if (stockItem.getProduct() == null) continue;
+      String pictureFileName = stockItem.getProduct().getPictureFileName();
+      if (pictureFileName != null && !pictureFileName.isEmpty()) {
+        containsPictures = true;
+        break;
+      }
+    }
+
+    if (onListFilled != null && !newGroupedListItems.isEmpty() && groupedListItems.isEmpty()) {
+      onListFilled.run();
+    }
+
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.groupedListItems.clear();
     this.groupedListItems.addAll(newGroupedListItems);
@@ -765,15 +752,6 @@ public class StockOverviewItemAdapter extends
           GroupedListItem.CONTEXT_STOCK_OVERVIEW
       );
       if (oldItemType != newItemType) {
-        return false;
-      }
-      if (!sortModeOld.equals(sortModeNew)) {
-        return false;
-      }
-      if (sortAscendingOld != sortAscendingNew) {
-        return false;
-      }
-      if (!groupingModeOld.equals(groupingModeNew)) {
         return false;
       }
       if (oldItemType == GroupedListItem.TYPE_ENTRY) {

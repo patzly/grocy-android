@@ -30,6 +30,7 @@ import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields.Field;
@@ -95,11 +96,11 @@ public class RecipesViewModel extends BaseViewModel {
 
     filterChipLiveDataStatus = new FilterChipLiveDataRecipesStatus(
         getApplication(),
-        this::updateFilteredRecipes
+        this::updateFilteredRecipesWithTopScroll
     );
     filterChipLiveDataSort = new FilterChipLiveDataRecipesSort(
         getApplication(),
-        this::updateFilteredRecipes
+        this::updateFilteredRecipesWithTopScroll
     );
     filterChipLiveDataFields = new FilterChipLiveDataFields(
         getApplication(),
@@ -217,6 +218,11 @@ public class RecipesViewModel extends BaseViewModel {
             .emitCounts();
 
     filteredRecipesLive.setValue(filteredRecipes);
+  }
+
+  public void updateFilteredRecipesWithTopScroll() {
+    updateFilteredRecipes();
+    sendEvent(Event.SCROLL_UP);
   }
 
   public ArrayList<RecipeFulfillment> getRecipeFulfillments() {

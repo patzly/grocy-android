@@ -51,15 +51,12 @@ public class ProductBarcodeAdapter extends RecyclerView.Adapter<ProductBarcodeAd
 
   public ProductBarcodeAdapter(
       Context context,
-      ArrayList<ProductBarcode> productBarcodes,
-      ProductBarcodeAdapterListener listener,
-      List<QuantityUnit> quantityUnits,
-      List<Store> stores
+      ProductBarcodeAdapterListener listener
   ) {
-    this.productBarcodes = new ArrayList<>(productBarcodes);
+    this.productBarcodes = new ArrayList<>();
     this.listener = listener;
-    this.quantityUnits = quantityUnits;
-    this.stores = stores;
+    this.quantityUnits = new ArrayList<>();
+    this.stores = new ArrayList<>();
     maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(context).getInt(
         STOCK.DECIMAL_PLACES_AMOUNT,
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
@@ -153,28 +150,58 @@ public class ProductBarcodeAdapter extends RecyclerView.Adapter<ProductBarcodeAd
     return productBarcodes.size();
   }
 
-  public void updateData(ArrayList<ProductBarcode> productBarcodesNew) {
+  public void updateData(
+      List<ProductBarcode> productBarcodesNew,
+      List<QuantityUnit> quantityUnits,
+      List<Store> stores,
+      Runnable onListFilled
+  ) {
     DiffCallback diffCallback = new DiffCallback(
         this.productBarcodes,
-        productBarcodesNew
+        productBarcodesNew,
+        this.quantityUnits,
+        quantityUnits,
+        this.stores,
+        stores
     );
+
+    if (onListFilled != null && !productBarcodesNew.isEmpty() && productBarcodes.isEmpty()) {
+      onListFilled.run();
+    }
+
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.productBarcodes.clear();
     this.productBarcodes.addAll(productBarcodesNew);
+    this.quantityUnits.clear();
+    this.quantityUnits.addAll(quantityUnits);
+    this.stores.clear();
+    this.stores.addAll(stores);
     diffResult.dispatchUpdatesTo(this);
   }
 
   static class DiffCallback extends DiffUtil.Callback {
 
-    ArrayList<ProductBarcode> oldItems;
-    ArrayList<ProductBarcode> newItems;
+    List<ProductBarcode> oldItems;
+    List<ProductBarcode> newItems;
+    List<QuantityUnit> oldQuantityUnits;
+    List<QuantityUnit> newQuantityUnits;
+    List<Store> oldStores;
+    List<Store> newStores;
 
     public DiffCallback(
-        ArrayList<ProductBarcode> oldItems,
-        ArrayList<ProductBarcode> newItems
+        List<ProductBarcode> oldItems,
+        List<ProductBarcode> newItems,
+        List<QuantityUnit> oldQuantityUnits,
+        List<QuantityUnit> newQuantityUnits,
+        List<Store> oldStores,
+        List<Store> newStores
     ) {
       this.newItems = newItems;
       this.oldItems = oldItems;
+      this.newQuantityUnits = newQuantityUnits;
+      this.oldQuantityUnits = oldQuantityUnits;
+      this.newStores = newStores;
+      this.oldStores = oldStores;
     }
 
     @Override
@@ -202,6 +229,9 @@ public class ProductBarcodeAdapter extends RecyclerView.Adapter<ProductBarcodeAd
       ProductBarcode oldItem = oldItems.get(oldItemPos);
       if (!compareContent) {
         return newItem.getId() == oldItem.getId();
+      }
+      if (!newQuantityUnits.equals(oldQuantityUnits) || !newStores.equals(oldStores)) {
+        return false;
       }
 
       return newItem.equals(oldItem);

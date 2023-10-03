@@ -105,30 +105,18 @@ public class ShoppingModeItemAdapter extends
   public ShoppingModeItemAdapter(
       Context context,
       LinearLayoutManager linearLayoutManager,
-      ArrayList<ShoppingListItem> shoppingListItems,
-      HashMap<Integer, Product> productHashMap,
-      HashMap<Integer, String> productNamesHashMap,
-      HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap,
-      HashMap<Integer, QuantityUnit> quantityUnitHashMap,
-      List<QuantityUnitConversionResolved> unitConversions,
-      HashMap<Integer, ProductGroup> productGroupHashMap,
-      HashMap<Integer, Store> storeHashMap,
-      HashMap<Integer, Double> shoppingListItemAmountsHashMap,
-      ArrayList<Integer> missingProductIds,
-      ShoppingModeItemClickListener listener,
-      String shoppingListNotes,
-      String groupingMode,
-      List<String> activeFields
+      ShoppingModeItemClickListener listener
   ) {
     this.context = context;
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     this.linearLayoutManager = linearLayoutManager;
-    this.productHashMap = new HashMap<>(productHashMap);
-    this.productLastPurchasedHashMap = new HashMap<>(productLastPurchasedHashMap);
-    this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
-    this.unitConversions = new ArrayList<>(unitConversions);
-    this.shoppingListItemAmountsHashMap = new HashMap<>(shoppingListItemAmountsHashMap);
-    this.missingProductIds = new ArrayList<>(missingProductIds);
+    this.productHashMap = new HashMap<>();
+    this.productLastPurchasedHashMap = new HashMap<>();
+    this.quantityUnitHashMap = new HashMap<>();
+    this.unitConversions = new ArrayList<>();
+    this.shoppingListItemAmountsHashMap = new HashMap<>();
+    this.missingProductIds = new ArrayList<>();
+    this.activeFields = new ArrayList<>();
     this.listener = listener;
     this.grocyApi = new GrocyApi((Application) context.getApplicationContext());
     this.grocyAuthHeaders = RequestHeaders.getGlideGrocyAuthHeaders(context);
@@ -151,14 +139,8 @@ public class ShoppingModeItemAdapter extends
     this.currency = sharedPrefs.getString(PREF.CURRENCY, "");
     this.priceTrackingEnabled = sharedPrefs
         .getBoolean(PREF.FEATURE_STOCK_PRICE_TRACKING, true);
-    this.groupingMode = groupingMode;
-    this.activeFields = activeFields;
     this.pluralUtil = new PluralUtil(context);
-    this.groupedListItems = getGroupedListItems(context, shoppingListItems,
-        productGroupHashMap, productHashMap, productNamesHashMap, storeHashMap,
-        productLastPurchasedHashMap, shoppingListItemAmountsHashMap,
-        shoppingListNotes, groupingMode, priceTrackingEnabled,
-        decimalPlacesPriceDisplay, currency, showDoneItems);
+    this.groupedListItems = new ArrayList<>();
   }
 
   static ArrayList<GroupedListItem> getGroupedListItems(
@@ -635,7 +617,8 @@ public class ShoppingModeItemAdapter extends
       ArrayList<Integer> missingProductIds,
       String shoppingListNotes,
       String groupingMode,
-      List<String> activeFields
+      List<String> activeFields,
+      Runnable onListFilled
   ) {
     ArrayList<GroupedListItem> newGroupedListItems = getGroupedListItems(
         context, shoppingListItems,
@@ -663,6 +646,11 @@ public class ShoppingModeItemAdapter extends
         this.activeFields,
         activeFields
     );
+
+    if (onListFilled != null && !newGroupedListItems.isEmpty() && groupedListItems.isEmpty()) {
+      onListFilled.run();
+    }
+
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.groupedListItems.clear();
     this.groupedListItems.addAll(newGroupedListItems);

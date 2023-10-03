@@ -42,6 +42,7 @@ import xyz.zedler.patrick.grocy.fragment.ChoresFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataAssignment;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataChoresStatus;
@@ -82,7 +83,7 @@ public class ChoresViewModel extends BaseViewModel {
   private int choresDueSoonCount;
   private int choresOverdueCount;
   private int choresDueCount;
-  private int dueSoonDays;
+  private final int dueSoonDays;
   private final boolean debug;
 
   public ChoresViewModel(@NonNull Application application, ChoresFragmentArgs args) {
@@ -104,7 +105,7 @@ public class ChoresViewModel extends BaseViewModel {
 
     filterChipLiveDataStatus = new FilterChipLiveDataChoresStatus(
         getApplication(),
-        this::updateFilteredChoreEntries
+        this::updateFilteredChoreEntriesWithTopScroll
     );
     if (NumUtil.isStringInt(args.getStatusFilterId())) {
       if (Integer.parseInt(args.getStatusFilterId())
@@ -114,11 +115,11 @@ public class ChoresViewModel extends BaseViewModel {
     }
     filterChipLiveDataAssignment = new FilterChipLiveDataAssignment(
         getApplication(),
-        this::updateFilteredChoreEntries
+        this::updateFilteredChoreEntriesWithTopScroll
     );
     filterChipLiveDataSort = new FilterChipLiveDataTasksSort(
         getApplication(),
-        this::updateFilteredChoreEntries
+        this::updateFilteredChoreEntriesWithTopScroll
     );
   }
 
@@ -226,6 +227,11 @@ public class ChoresViewModel extends BaseViewModel {
     }
 
     filteredChoreEntriesLive.setValue(filteredChoreEntries);
+  }
+
+  public void updateFilteredChoreEntriesWithTopScroll() {
+    updateFilteredChoreEntries();
+    sendEvent(Event.SCROLL_UP);
   }
 
   public void executeChore(ChoreEntry choreEntry, @Nullable String dateTime, boolean skip) {

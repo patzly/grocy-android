@@ -39,6 +39,7 @@ import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields.Field;
@@ -115,7 +116,7 @@ public class ShoppingModeViewModel extends BaseViewModel {
     filteredShoppingListItemsLive = new MutableLiveData<>();
     filterChipLiveDataGrouping = new FilterChipLiveDataShoppingModeGrouping(
         getApplication(),
-        this::updateFilteredShoppingListItems
+        this::updateFilteredShoppingListItemsWithTopScroll
     );
     boolean featurePriceEnabled = isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING);
     filterChipLiveDataFields = new FilterChipLiveDataFields(
@@ -185,6 +186,11 @@ public class ShoppingModeViewModel extends BaseViewModel {
     } else {
       infoFullscreenLive.setValue(null);
     }
+  }
+
+  public void updateFilteredShoppingListItemsWithTopScroll() {
+    updateFilteredShoppingListItems();
+    sendEvent(Event.SCROLL_UP);
   }
 
   public MutableLiveData<ArrayList<ShoppingListItem>> getFilteredShoppingListItemsLive() {

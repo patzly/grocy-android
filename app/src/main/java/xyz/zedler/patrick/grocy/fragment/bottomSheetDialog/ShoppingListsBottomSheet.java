@@ -29,14 +29,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.MutableLiveData;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListAdapter;
-import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetListSelectionBinding;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragmentDirections;
@@ -82,8 +80,12 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
     binding.recyclerListSelection.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
-    binding.recyclerListSelection.setItemAnimator(new DefaultItemAnimator());
-    binding.recyclerListSelection.setAdapter(new ShoppingPlaceholderAdapter());
+    ShoppingListAdapter adapter = new ShoppingListAdapter(
+        this,
+        activity.getCurrentFragment() instanceof ShoppingListFragment
+            && activity.isOnline()
+    );
+    binding.recyclerListSelection.setAdapter(adapter);
     ViewUtil.setOnlyOverScrollStretchEnabled(binding.recyclerListSelection);
 
     ShoppingListRepository repository = new ShoppingListRepository(activity.getApplication());
@@ -91,24 +93,11 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
       if (shoppingLists == null) {
         return;
       }
-      if (binding.recyclerListSelection.getAdapter() == null
-          || !(binding.recyclerListSelection.getAdapter() instanceof ShoppingListAdapter)
-      ) {
-        binding.recyclerListSelection.setAdapter(new ShoppingListAdapter(
-            shoppingLists,
-            selectedIdLive != null && selectedIdLive.getValue() != null
-                ? selectedIdLive.getValue() : selectedId,
-            this,
-            activity.getCurrentFragment() instanceof ShoppingListFragment
-                && activity.isOnline()
-        ));
-      } else {
-        ((ShoppingListAdapter) binding.recyclerListSelection.getAdapter()).updateData(
-            shoppingLists,
-            selectedIdLive != null && selectedIdLive.getValue() != null
-                ? selectedIdLive.getValue() : selectedId
-        );
-      }
+      adapter.updateData(
+          shoppingLists,
+          selectedIdLive != null && selectedIdLive.getValue() != null
+              ? selectedIdLive.getValue() : selectedId
+      );
     });
 
     if (selectedIdLive != null) {

@@ -42,7 +42,6 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingModeItemAdapter;
-import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingModeBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
@@ -134,7 +133,12 @@ public class ShoppingModeFragment extends BaseFragment implements
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
-    binding.recycler.setAdapter(new ShoppingPlaceholderAdapter());
+    ShoppingModeItemAdapter adapter = new ShoppingModeItemAdapter(
+        requireContext(),
+        (LinearLayoutManager) binding.recycler.getLayoutManager(),
+        this
+    );
+    binding.recycler.setAdapter(adapter);
 
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
@@ -155,46 +159,23 @@ public class ShoppingModeFragment extends BaseFragment implements
       } else {
         viewModel.getInfoFullscreenLive().setValue(null);
       }
-      if (binding.recycler.getAdapter() instanceof ShoppingModeItemAdapter) {
-        ((ShoppingModeItemAdapter) binding.recycler.getAdapter()).updateData(
-            requireContext(),
-            items,
-            viewModel.getProductHashMap(),
-            viewModel.getProductNamesHashMap(),
-            viewModel.getProductLastPurchasedHashMap(),
-            viewModel.getQuantityUnitHashMap(),
-            viewModel.getUnitConversions(),
-            viewModel.getProductGroupHashMap(),
-            viewModel.getStoreHashMap(),
-            viewModel.getShoppingListItemAmountsHashMap(),
-            viewModel.getMissingProductIds(),
-            viewModel.getShoppingListNotes(),
-            viewModel.getGroupingMode(),
-            viewModel.getActiveFields()
-        );
-      } else {
-        binding.recycler.setAdapter(
-            new ShoppingModeItemAdapter(
-                requireContext(),
-                (LinearLayoutManager) binding.recycler.getLayoutManager(),
-                items,
-                viewModel.getProductHashMap(),
-                viewModel.getProductNamesHashMap(),
-                viewModel.getProductLastPurchasedHashMap(),
-                viewModel.getQuantityUnitHashMap(),
-                viewModel.getUnitConversions(),
-                viewModel.getProductGroupHashMap(),
-                viewModel.getStoreHashMap(),
-                viewModel.getShoppingListItemAmountsHashMap(),
-                viewModel.getMissingProductIds(),
-                this,
-                viewModel.getShoppingListNotes(),
-                viewModel.getGroupingMode(),
-                viewModel.getActiveFields()
-            )
-        );
-        binding.recycler.scheduleLayoutAnimation();
-      }
+      adapter.updateData(
+          requireContext(),
+          items,
+          viewModel.getProductHashMap(),
+          viewModel.getProductNamesHashMap(),
+          viewModel.getProductLastPurchasedHashMap(),
+          viewModel.getQuantityUnitHashMap(),
+          viewModel.getUnitConversions(),
+          viewModel.getProductGroupHashMap(),
+          viewModel.getStoreHashMap(),
+          viewModel.getShoppingListItemAmountsHashMap(),
+          viewModel.getMissingProductIds(),
+          viewModel.getShoppingListNotes(),
+          viewModel.getGroupingMode(),
+          viewModel.getActiveFields(),
+          () -> binding.recycler.scheduleLayoutAnimation()
+      );
     });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
@@ -202,6 +183,8 @@ public class ShoppingModeFragment extends BaseFragment implements
         activity.showSnackbar(
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
+      } else if (event.getType() == Event.SCROLL_UP) {
+        binding.recycler.scrollToPosition(0);
       }
     });
 
