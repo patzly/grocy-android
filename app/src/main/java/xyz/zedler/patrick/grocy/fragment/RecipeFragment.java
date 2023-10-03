@@ -126,7 +126,7 @@ public class RecipeFragment extends BaseFragment implements
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
-    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setContainer(binding.linearContainer);
     systemBarBehavior.setScroll(binding.scroll, binding.linearContainer);
     systemBarBehavior.applyAppBarInsetOnContainer(false);
     systemBarBehavior.applyStatusBarInsetOnContainer(false);
@@ -372,7 +372,7 @@ public class RecipeFragment extends BaseFragment implements
       return false;
     });
     binding.calories.setText(
-        getString(R.string.property_energy),
+        viewModel.getEnergyUnit(),
         NumUtil.trimAmount(recipeFulfillment.getCalories(), viewModel.getMaxDecimalPlacesAmount()),
         getString(R.string.subtitle_per_serving)
     );

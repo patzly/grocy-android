@@ -359,6 +359,10 @@ public class RecipeViewModel extends BaseViewModel {
     return sharedPrefs.getString(PREF.CURRENCY, "");
   }
 
+  public String getEnergyUnit() {
+    return sharedPrefs.getString(PREF.ENERGY_UNIT, PREF.ENERGY_UNIT_DEFAULT);
+  }
+
   public boolean isFeatureEnabled(String pref) {
     if (pref == null) {
       return true;

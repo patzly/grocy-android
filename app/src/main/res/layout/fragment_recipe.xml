@@ -98,9 +98,9 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:overScrollMode="never"
+      app:enabled="@{false}"
       app:layout_behavior="@string/appbar_scrolling_view_behavior"
-      app:setRefreshing="@{viewModel.isLoadingLive}"
-      app:onRefreshListener="@{() -> viewModel.downloadData(true)}">
+      app:setRefreshing="@{viewModel.isLoadingLive}">
 
       <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll"
@@ -282,6 +282,9 @@
               android:layout_weight="1" />
 
           </LinearLayout>
+
+          <com.google.android.material.divider.MaterialDivider
+            style="@style/Widget.Grocy.Divider.Small" />
 
           <LinearLayout
             android:id="@+id/ingredient_container"
