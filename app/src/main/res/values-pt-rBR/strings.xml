@@ -138,7 +138,7 @@
   <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_track_next_chore_schedule">Acompanhe o cronograma da próxima tarefa doméstica</string>
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="action_skip_next_chore_schedule">Ignorar a programação da próxima atividade doméstica</string>
+  <string name="action_skip_next_chore_schedule">Ignorar a programação da próxima tarefa doméstica</string>
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Reprogramar a próxima execução</string>
   <string name="action_put_missing_products_on_shopping_list">Colocar produtos em falta na lista de compras</string>
