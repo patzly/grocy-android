@@ -621,7 +621,7 @@
   <string name="title_pending_products">Produtos pendentes</string>
   <string name="title_stored_purchases">Compras armazenadas</string>
   <string name="title_chores">Tarefas domésticas</string>
-  <string name="title_chore">Atividade doméstica</string>
+  <string name="title_chore">Tarefa doméstica</string>
   <string name="title_recipes">Receitas</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Editor</string>
