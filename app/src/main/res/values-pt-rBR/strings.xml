@@ -1297,7 +1297,7 @@
   <string name="setting_notifications_enable">Ativar notificações</string>
   <!-- The string belongs to the stock overview (stock items can be expired, overdue or due soon). -->
   <string name="setting_notifications_stock_description">Verifica o estoque diariamente e avisa se há produtos que não estão mais frescos (estragados, vencidos ou prestes a vencer)</string>
-  <string name="setting_notifications_chores_description">Verifica as tarefas diariamente e avisa quando as tarefas devem ser feitas</string>
+  <string name="setting_notifications_chores_description">Verifica as tarefas diariamente e avisa quando elas devem ser feitas</string>
   <string name="setting_notification_time">Tempo de notificação</string>
   <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">Quando a marcação estiver feita</string>
