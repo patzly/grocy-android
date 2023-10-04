@@ -283,7 +283,7 @@
     <item quantity="other">%1$d ingredientes faltando</item>
   </plurals>
   <string name="msg_recipes_ingredient_fulfillment_info_list">Faltando: %1$s | Já na lista de compras: %2$s</string>
-  <string name="msg_chore_executed">Acompanhamento de execução de atividades domésticas</string>
+  <string name="msg_chore_executed">Acompanhamento de execução de tarefa doméstica</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Comprado(s) %1$s %2$s de %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
