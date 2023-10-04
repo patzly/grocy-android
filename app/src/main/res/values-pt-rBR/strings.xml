@@ -134,7 +134,7 @@
   <string name="action_no_filter">Todos</string>
   <string name="action_show_done_tasks">Mostrar tarefas concluídas</string>
   <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="action_track_chore_execution">Acompanhe a execução da atividade agora</string>
+  <string name="action_track_chore_execution">Acompanhe a execução da tarefa doméstica agora</string>
   <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_track_next_chore_schedule">Acompanhe o cronograma da próxima atividade</string>
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
