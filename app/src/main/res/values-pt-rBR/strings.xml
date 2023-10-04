@@ -842,7 +842,7 @@
   <plurals name="description_overview_chores_assigned">
     <item quantity="one">%1$d tarefa doméstica está atribuída a você.</item>
     <item quantity="many">%1$d tarefas domésticas estão atribuídas a você.</item>
-    <item quantity="other">%1$d atividades domésticas estão atribuídas a você.</item>
+    <item quantity="other">%1$d tarefas domésticas estão atribuídas a você.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks">
