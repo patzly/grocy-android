@@ -73,6 +73,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:imeOptions="actionDone"
+              android:selectAllOnFocus="true"
               android:text="@={bottomsheet.inputLive}"
               app:onDoneClickInSoftKeyboard="@{() -> bottomsheet.dismiss()}" />
 

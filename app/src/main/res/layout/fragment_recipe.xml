@@ -214,69 +214,39 @@
           <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:textColor="?attr/colorSecondary"
-              android:text="@string/property_requirements_fulfilled" />
-
-            <LinearLayout
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal">
-
-              <TextView
-                android:id="@+id/fulfilled"
-                style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:singleLine="false"
-                android:maxLines="2"
-                android:layout_weight="1" />
-
-              <ImageView
-                android:id="@+id/image_fulfillment"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="5dp"
-                android:visibility="visible"
-                tools:ignore="ContentDescription" />
-
-            </LinearLayout>
-
-            <TextView
-              android:id="@+id/missing"
-              style="@style/Widget.Grocy.TextView.ListItem.Description"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:singleLine="false"
-              android:maxLines="5" />
-
-          </LinearLayout>
-
-          <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <xyz.zedler.patrick.grocy.view.ListItem
-              android:id="@+id/calories"
+            <TextView
+              android:id="@+id/info_title"
+              style="@style/TextAppearance.Grocy.HeadlineSmall"
               android:layout_width="0dp"
               android:layout_height="wrap_content"
-              android:layout_weight="1" />
+              android:layout_weight="1"
+              android:layout_marginStart="16dp"
+              android:layout_marginTop="8dp"
+              android:layout_marginBottom="8dp"
+              android:text="@string/title_info"/>
 
-            <xyz.zedler.patrick.grocy.view.ListItem
-              android:id="@+id/costs"
-              android:layout_width="0dp"
-              android:layout_height="wrap_content"
-              android:layout_weight="1" />
+            <com.google.android.material.button.MaterialButton
+              style="@style/Widget.Grocy.Button.IconButton"
+              android:layout_marginStart="12dp"
+              android:layout_gravity="end|center_vertical"
+              app:icon="@drawable/ic_round_more_vert" />
 
           </LinearLayout>
+
+          <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/info_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            app:flexWrap="wrap"
+            app:alignItems="stretch"
+            app:alignContent="stretch"
+            app:showDivider="middle"
+            app:dividerDrawable="@drawable/shape_flex_layout_divider"/>
 
           <com.google.android.material.divider.MaterialDivider
             style="@style/Widget.Grocy.Divider.Small" />

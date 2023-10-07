@@ -64,6 +64,7 @@ import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.RecipePositionResolved;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
+import xyz.zedler.patrick.grocy.util.ChipUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PictureUtil;
@@ -313,83 +314,23 @@ public class RecipeFragment extends BaseFragment implements
       return;
     }
 
-    ColorRoles colorBlue = ResUtil.getHarmonizedRoles(activity, R.color.blue);
-    ColorRoles colorGreen = ResUtil.getHarmonizedRoles(activity, R.color.green);
-    ColorRoles colorYellow = ResUtil.getHarmonizedRoles(activity, R.color.yellow);
-    ColorRoles colorRed = ResUtil.getHarmonizedRoles(activity, R.color.red);
-
-    // REQUIREMENTS FULFILLED
-    if (recipeFulfillment.isNeedFulfilled()) {
-      setMenuButtonState(binding.chipConsume, true);
-      setMenuButtonState(binding.chipShoppingList, false);
-      binding.fulfilled.setText(R.string.msg_recipes_enough_in_stock);
-      binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
-          getResources(),
-          R.drawable.ic_round_check_circle_outline,
-          null
-      ));
-      binding.imageFulfillment.setImageTintList(
-          ColorStateList.valueOf(colorGreen.getAccent())
-      );
-      binding.missing.setVisibility(View.GONE);
-    } else if (recipeFulfillment.isNeedFulfilledWithShoppingList()) {
-      setMenuButtonState(binding.chipConsume, false);
-      setMenuButtonState(binding.chipShoppingList, false);
-      binding.fulfilled.setText(R.string.msg_recipes_not_enough);
-      binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
-          getResources(),
-          R.drawable.ic_round_error_outline,
-          null
-      ));
-      binding.imageFulfillment.setImageTintList(
-          ColorStateList.valueOf(colorYellow.getAccent())
-      );
-      binding.missing.setText(
-          getResources()
-              .getQuantityString(R.plurals.msg_recipes_ingredients_missing_but_on_shopping_list,
-                  recipeFulfillment.getMissingProductsCount(),
-                  recipeFulfillment.getMissingProductsCount())
-      );
-      binding.missing.setVisibility(View.VISIBLE);
-    } else {
-      setMenuButtonState(binding.chipConsume, false);
-      setMenuButtonState(binding.chipShoppingList, true);
-      binding.fulfilled.setText(R.string.msg_recipes_not_enough);
-      binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
-          getResources(),
-          R.drawable.ic_round_highlight_off,
-          null
-      ));
-      binding.imageFulfillment.setImageTintList(
-          ColorStateList.valueOf(colorRed.getAccent())
-      );
-      binding.missing.setText(
-          getResources().getQuantityString(R.plurals.msg_recipes_ingredients_missing,
-              recipeFulfillment.getMissingProductsCount(),
-              recipeFulfillment.getMissingProductsCount())
-      );
-      binding.missing.setVisibility(View.VISIBLE);
-    }
-
     binding.titleServingsBase.setText(
         getString(
             R.string.property_servings_base_insert,
             NumUtil.trimAmount(recipe.getBaseServings(), viewModel.getMaxDecimalPlacesAmount())
         )
     );
-    binding.calories.setText(
-        viewModel.getEnergyUnit(),
-        NumUtil.trimAmount(recipeFulfillment.getCalories(), viewModel.getMaxDecimalPlacesAmount()),
-        getString(R.string.subtitle_per_serving)
-    );
+
+    ChipUtil chipUtil = new ChipUtil(requireContext());
+    binding.infoContainer.removeAllViews();
+    binding.infoContainer.addView(chipUtil.createRecipeFulfillmentChip(recipeFulfillment));
+    binding.infoContainer.addView(chipUtil.createTextChip(NumUtil.trimAmount(
+        recipeFulfillment.getCalories(), viewModel.getMaxDecimalPlacesAmount()
+    ) + " " + viewModel.getEnergyUnit()));
     if (viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
-      binding.costs.setText(
-          getString(R.string.property_costs),
-          NumUtil.trimPrice(recipeFulfillment.getCosts(), viewModel.getDecimalPlacesPriceDisplay()) + " "
-              + viewModel.getCurrency()
-      );
-    } else {
-      binding.costs.setVisibility(View.GONE);
+      binding.infoContainer.addView(chipUtil.createTextChip(NumUtil.trimPrice(
+          recipeFulfillment.getCosts(), viewModel.getDecimalPlacesPriceDisplay()
+      ) + " " + viewModel.getCurrency()));
     }
 
     if (!recipePositionsResolved.isEmpty()) {

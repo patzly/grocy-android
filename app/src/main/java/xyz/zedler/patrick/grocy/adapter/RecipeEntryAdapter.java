@@ -30,7 +30,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -42,7 +41,6 @@ import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.elevation.SurfaceColors;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,10 +54,10 @@ import xyz.zedler.patrick.grocy.databinding.RowRecipeEntryGridBinding;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
+import xyz.zedler.patrick.grocy.util.ChipUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PictureUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
-import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipesViewModel;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
@@ -242,51 +240,8 @@ public class RecipeEntryAdapter extends
         && recipeFulfillment != null) {
 
       // REQUIREMENTS FULFILLED
-      Chip chipFulfillment;
-      if (recipeFulfillment.isNeedFulfilled()) {
-        textFulfillment = context.getString(R.string.msg_recipes_enough_in_stock);
-        chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorGreen.getOnAccentContainer());
-        chipFulfillment.setCloseIcon(
-            ContextCompat.getDrawable(context, R.drawable.ic_round_check_circle_outline)
-        );
-        chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorGreen.getOnAccentContainer()));
-        chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorGreen.getAccentContainer()));
-      } else if (recipeFulfillment.isNeedFulfilledWithShoppingList()) {
-        textFulfillment = context.getString(R.string.msg_recipes_not_enough) + "\n"
-            + context.getResources()
-            .getQuantityString(R.plurals.msg_recipes_ingredients_missing_but_on_shopping_list,
-                recipeFulfillment.getMissingProductsCount(),
-                recipeFulfillment.getMissingProductsCount());
-        chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorYellow.getOnAccentContainer());
-        chipFulfillment.setCloseIcon(
-            ContextCompat.getDrawable(context, R.drawable.ic_round_error_outline)
-        );
-        chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorYellow.getOnAccentContainer()));
-        chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorYellow.getAccentContainer()));
-      } else {
-        textFulfillment = context.getString(R.string.msg_recipes_not_enough) + "\n"
-            + context.getResources()
-            .getQuantityString(R.plurals.msg_recipes_ingredients_missing,
-                recipeFulfillment.getMissingProductsCount(),
-                recipeFulfillment.getMissingProductsCount());
-        chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorRed.getOnAccentContainer());
-        chipFulfillment.setCloseIcon(
-            ContextCompat.getDrawable(context, R.drawable.ic_round_highlight_off)
-        );
-        chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorRed.getOnAccentContainer()));
-        chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getAccentContainer()));
-      }
-      chipFulfillment.setCloseIconStartPadding(UiUtil.dpToPx(context, 4));
-      chipFulfillment.setCloseIconVisible(true);
-      chips.addView(chipFulfillment);
-      String finalTextFulfillment = textFulfillment;
-      chipFulfillment.setOnClickListener(v -> {
-        new MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_Grocy_AlertDialog)
-            .setTitle(R.string.property_requirements_fulfilled)
-            .setMessage(finalTextFulfillment)
-            .setPositiveButton(R.string.action_close, (dialog, which) -> dialog.dismiss())
-            .create().show();
-      });
+      ChipUtil chipUtil = new ChipUtil(context);
+      chips.addView(chipUtil.createRecipeFulfillmentChip(recipeFulfillment));
     }
 
     if (activeFields.contains(RecipesViewModel.FIELD_CALORIES)
