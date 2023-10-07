@@ -31,7 +31,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -57,6 +56,7 @@ import xyz.zedler.patrick.grocy.adapter.RecipePositionResolvedAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentRecipeBinding;
+import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.Recipe;
@@ -64,6 +64,7 @@ import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.RecipePositionResolved;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
+import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PictureUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
@@ -123,6 +124,7 @@ public class RecipeFragment extends BaseFragment implements
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
     binding.setFragment(this);
+    binding.setClickUtil(new ClickUtil());
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
@@ -184,9 +186,15 @@ public class RecipeFragment extends BaseFragment implements
         binding.collapsingToolbarLayout.setExpandedTitleTextAppearance(
             R.style.TextAppearance_Grocy_HeadlineSmall
         );
+        binding.collapsingToolbarLayout.setCollapsedTitleTextAppearance(
+            R.style.TextAppearance_Grocy_TitleMedium
+        );
       } else {
         binding.collapsingToolbarLayout.setExpandedTitleTextAppearance(
             R.style.TextAppearance_Grocy_HeadlineLarge
+        );
+        binding.collapsingToolbarLayout.setCollapsedTitleTextAppearance(
+            R.style.TextAppearance_Grocy_TitleLarge
         );
       }
       binding.collapsingToolbarLayout.setExpandedTitleColor(Color.WHITE);
@@ -196,7 +204,10 @@ public class RecipeFragment extends BaseFragment implements
     });
     viewModel.getServingsDesiredLive().observe(
         getViewLifecycleOwner(),
-        servings -> viewModel.updateSaveDesiredServingsVisibility()
+        servings -> binding.titleServings.setText(getString(
+            R.string.property_servings_desired_insert,
+            servings
+        ))
     );
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
@@ -204,6 +215,9 @@ public class RecipeFragment extends BaseFragment implements
         activity.showSnackbar(
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
+      } else if (event.getType() == Event.BOTTOM_SHEET) {
+        BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
+        activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
       }
     });
 
@@ -268,6 +282,12 @@ public class RecipeFragment extends BaseFragment implements
         toPrimitiveBooleanArray(dialogShoppingListMultiChoiceItems.values().toArray(new Boolean[0]))
     );
     outState.putBoolean(DIALOG_DELETE_SHOWING, dialogDelete != null && dialogDelete.isShowing());
+  }
+
+  @Override
+  public void saveInput(String text, Bundle argsBundle) {
+    viewModel.getServingsDesiredLive().setValue(text);
+    viewModel.saveDesiredServings();
   }
 
   private void loadRecipePicture(Recipe recipe) {
@@ -351,26 +371,12 @@ public class RecipeFragment extends BaseFragment implements
       binding.missing.setVisibility(View.VISIBLE);
     }
 
-    binding.textInputServings.setEndIconOnClickListener(v -> viewModel.saveDesiredServings());
-    binding.textInputServings.setEndIconOnLongClickListener(v -> {
-      activity.showToast(R.string.action_apply_desired_servings, true);
-      return true;
-    });
-    binding.textInputServings.setHelperText(
+    binding.titleServingsBase.setText(
         getString(
             R.string.property_servings_base_insert,
             NumUtil.trimAmount(recipe.getBaseServings(), viewModel.getMaxDecimalPlacesAmount())
         )
     );
-    binding.textInputServings.setHelperTextColor(ColorStateList.valueOf(colorBlue.getAccent()));
-    assert binding.textInputServings.getEditText() != null;
-    binding.textInputServings.getEditText().setOnEditorActionListener((v, actionId, event) -> {
-      if (actionId == EditorInfo.IME_ACTION_DONE) {
-        viewModel.saveDesiredServings();
-        binding.editTextServings.clearFocus();
-      }
-      return false;
-    });
     binding.calories.setText(
         viewModel.getEnergyUnit(),
         NumUtil.trimAmount(recipeFulfillment.getCalories(), viewModel.getMaxDecimalPlacesAmount()),
@@ -619,10 +625,6 @@ public class RecipeFragment extends BaseFragment implements
       return;
     }
     viewModel.downloadData(false);
-  }
-
-  public void clearInputFocus() {
-    binding.editTextServings.clearFocus();
   }
 
   private int[] getExcludedProductIds() {

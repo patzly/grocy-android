@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -28,15 +29,20 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.fragment.RecipeFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -68,7 +74,6 @@ public class RecipeViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Recipe> recipeLive;
   private final MutableLiveData<String> servingsDesiredLive;
-  private final MutableLiveData<Boolean> servingsDesiredSaveEnabledLive;
   private final MutableLiveData<Boolean> displayFulfillmentWrongInfo;
 
   private List<Recipe> recipes;
@@ -81,6 +86,7 @@ public class RecipeViewModel extends BaseViewModel {
   private List<ShoppingListItem> shoppingListItems;
   private RecipeFulfillment recipeFulfillment;
 
+  private Timer timerUpdateData;
   private final int maxDecimalPlacesAmount;
   private final int decimalPlacesPriceDisplay;
   private final boolean debug;
@@ -100,9 +106,9 @@ public class RecipeViewModel extends BaseViewModel {
     infoFullscreenLive = new MutableLiveData<>();
     recipeLive = new MutableLiveData<>();
     servingsDesiredLive = new MutableLiveData<>();
-    servingsDesiredSaveEnabledLive = new MutableLiveData<>(false);
     displayFulfillmentWrongInfo = new MutableLiveData<>(false);
 
+    timerUpdateData = new Timer();
     maxDecimalPlacesAmount = sharedPrefs.getInt(
         STOCK.DECIMAL_PLACES_AMOUNT,
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
@@ -165,6 +171,17 @@ public class RecipeViewModel extends BaseViewModel {
     );
   }
 
+  public void showAmountBottomSheet() {
+    Bundle bundle = new Bundle();
+    if (NumUtil.isStringDouble(servingsDesiredLive.getValue())) {
+      bundle.putDouble(ARGUMENT.NUMBER, NumUtil.toDouble(servingsDesiredLive.getValue()));
+    } else {
+      bundle.putDouble(ARGUMENT.NUMBER, 1);
+    }
+    bundle.putString(ARGUMENT.HINT, getString(R.string.property_servings_desired));
+    showBottomSheet(new InputBottomSheet(), bundle);
+  }
+
   public void changeAmount(boolean more) {
     if (!NumUtil.isStringDouble(servingsDesiredLive.getValue())) {
       servingsDesiredLive.setValue(String.valueOf(1));
@@ -174,17 +191,17 @@ public class RecipeViewModel extends BaseViewModel {
       if (servingsNew <= 0) servingsNew = 1;
       servingsDesiredLive.setValue(NumUtil.trimAmount(servingsNew, maxDecimalPlacesAmount));
     }
-  }
-
-  public void updateSaveDesiredServingsVisibility() {
-    Recipe recipe = recipeLive.getValue();
-    if (recipe == null) return;
-    if (NumUtil.isStringDouble(servingsDesiredLive.getValue())) {
-      double servings = NumUtil.toDouble(servingsDesiredLive.getValue());
-      servingsDesiredSaveEnabledLive.setValue(servings != recipe.getDesiredServings());
-    } else {
-      servingsDesiredSaveEnabledLive.setValue(1 != recipe.getDesiredServings());
-    }
+    timerUpdateData.cancel();
+    timerUpdateData = new Timer();
+    timerUpdateData.schedule(
+        new TimerTask() {
+          @Override
+          public void run() {
+            saveDesiredServings();
+          }
+        },
+        500
+    );
   }
 
   public void saveDesiredServings() {
@@ -195,7 +212,6 @@ public class RecipeViewModel extends BaseViewModel {
       servingsDesired = 1;
       servingsDesiredLive.setValue(NumUtil.trimAmount(servingsDesired, maxDecimalPlacesAmount));
     }
-    servingsDesiredSaveEnabledLive.setValue(false);
 
     JSONObject body = new JSONObject();
     try {
@@ -204,7 +220,6 @@ public class RecipeViewModel extends BaseViewModel {
       );
     } catch (JSONException e) {
       showErrorMessage();
-      servingsDesiredSaveEnabledLive.setValue(true);
       return;
     }
 
@@ -213,24 +228,15 @@ public class RecipeViewModel extends BaseViewModel {
         args.getRecipeId(),
         body,
         response -> dlHelper.updateData(
-            updated -> {
-              servingsDesiredSaveEnabledLive.setValue(false);
-              loadFromDatabase(false);
-            },
-            error -> {
-              onError(error, TAG);
-              servingsDesiredSaveEnabledLive.setValue(true);
-            },
+            updated -> loadFromDatabase(false),
+            error -> onError(error, TAG),
             false,
             false,
             Recipe.class,
             RecipeFulfillment.class,
             RecipePosition.class
         ),
-        error -> {
-          onError(error, TAG);
-          servingsDesiredSaveEnabledLive.setValue(true);
-        }
+        error -> onError(error, TAG)
     ).perform(dlHelper.getUuid());
   }
 
@@ -313,10 +319,6 @@ public class RecipeViewModel extends BaseViewModel {
 
   public MutableLiveData<String> getServingsDesiredLive() {
     return servingsDesiredLive;
-  }
-
-  public MutableLiveData<Boolean> getServingsDesiredSaveEnabledLive() {
-    return servingsDesiredSaveEnabledLive;
   }
 
   public MutableLiveData<Boolean> getDisplayFulfillmentWrongInfo() {

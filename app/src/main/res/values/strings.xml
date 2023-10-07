@@ -200,6 +200,11 @@
   <string name="msg_consumed_spoiled">Consumed %1$s %2$s of %3$s as spoiled</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Mark %1$s %2$s of %3$s as opened</string>
+  <!-- %1$s is the number of servings of a recipe. -->
+  <plurals name="msg_servings">
+    <item quantity="one">%1$s serving</item>
+    <item quantity="other">%1$s servings</item>
+  </plurals>
   <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
   <plurals name="msg_undone_items">
     <item quantity="one">%1$d undone</item>
@@ -366,6 +371,7 @@
   <string name="msg_point_at_barcode">Point your camera at a barcode</string>
   <string name="msg_save_product_first">Please save the product first</string>
   <string name="msg_save_recipe_first">Please save the recipe first</string>
+  <string name="msg_recipe_contains_nested_recipes">This recipe contains nested recipes.</string>
   <string name="msg_press_hold_confirm">Press and hold to confirm deletion</string>
   <string name="msg_recipe_consume_ask">Are you sure you want to consume all ingredients needed by the recipe for \"%1$s\"? (ingredients marked with \"only check if any amount is in stock\" will be ignored)</string>
   <string name="msg_recipe_shopping_list_ask">Are you sure you want to put all missing ingredients needed by the recipe for \"%1$s\" on the shopping list?\n\nUncheck ingredients to not put them on the shopping list:</string>

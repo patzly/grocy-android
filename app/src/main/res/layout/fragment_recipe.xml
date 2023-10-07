@@ -34,6 +34,9 @@
     <variable
       name="fragment"
       type="xyz.zedler.patrick.grocy.fragment.RecipeFragment" />
+    <variable
+      name="clickUtil"
+      type="xyz.zedler.patrick.grocy.util.ClickUtil" />
   </data>
 
   <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -56,7 +59,6 @@
         android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
         android:fitsSystemWindows="true"
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
-        app:collapsedTitleTextAppearance="@style/TextAppearance.Grocy.TitleLarge"
         app:maxLines="3">
 
         <ImageView
@@ -159,68 +161,61 @@
             android:focusable="true"
             android:focusableInTouchMode="true" />
 
-          <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+          <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Grocy.Card.Text"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="0dp"
+            android:onClick="@{v -> viewModel.showAmountBottomSheet()}"
+            app:clickUtil="@{clickUtil}">
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
-              android:layout_width="0dp"
-              android:layout_weight="1"
-              android:paddingTop="0dp"
-              android:paddingBottom="0dp"
-              android:paddingStart="16dp"
-              android:paddingEnd="0dp">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal">
 
-              <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_servings"
-                style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                android:hint="@string/property_servings_desired"
-                app:helperTextEnabled="true"
-                app:helperText="Base servings: 1"
-                app:endIconMode="custom"
-                app:endIconDrawable="@drawable/ic_round_check_circle"
-                app:endIconVisible="@{viewModel.servingsDesiredSaveEnabledLive}">
+              <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-                <com.google.android.material.textfield.TextInputEditText
-                  android:id="@+id/edit_text_servings"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:inputType="number|numberDecimal"
-                  android:imeOptions="actionDone"
-                  android:maxLength="10"
-                  android:text="@={viewModel.servingsDesiredLive}"/>
+                <TextView
+                  android:id="@+id/title_servings"
+                  style="@style/Widget.Grocy.TextView.ListItem.Title"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" />
 
-              </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                  android:id="@+id/title_servings_base"
+                  style="@style/Widget.Grocy.TextView.ListItem.Description"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" />
+
+              </LinearLayout>
+
+              <com.google.android.material.button.MaterialButton
+                android:id="@+id/amount_more"
+                style="@style/Widget.Grocy.Button.IconButton"
+                android:onClick="@{v -> viewModel.changeAmount(true)}"
+                app:icon="@drawable/ic_round_expand_less" />
+
+              <com.google.android.material.button.MaterialButton
+                android:id="@+id/amount_less"
+                style="@style/Widget.Grocy.Button.IconButton"
+                android:onClick="@{v -> viewModel.changeAmount(false)}"
+                app:icon="@drawable/ic_round_expand_more" />
 
             </LinearLayout>
 
-            <com.google.android.material.button.MaterialButton
-              android:id="@+id/amount_more"
-              style="@style/Widget.Grocy.Button.IconButton"
-              android:layout_marginStart="8dp"
-              android:layout_marginBottom="8dp"
-              android:onClick="@{v -> viewModel.changeAmount(true)}"
-              app:icon="@drawable/ic_round_expand_less" />
-
-            <com.google.android.material.button.MaterialButton
-              android:id="@+id/amount_less"
-              style="@style/Widget.Grocy.Button.IconButton"
-              android:layout_marginBottom="8dp"
-              android:layout_marginEnd="8dp"
-              android:onClick="@{v -> viewModel.changeAmount(false)}"
-              app:icon="@drawable/ic_round_expand_more" />
-
-          </LinearLayout>
+          </com.google.android.material.card.MaterialCardView>
 
           <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"
-            android:layout_marginTop="8dp">
+            android:padding="16dp">
 
             <TextView
               style="@style/Widget.Grocy.TextView.ListItem.OverLine"
@@ -332,6 +327,20 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <com.google.android.material.card.MaterialCardView
+              style="@style/Widget.Grocy.Card.Text"
+              android:layout_marginStart="16dp"
+              android:layout_marginEnd="16dp"
+              android:layout_marginBottom="8dp"
+              android:layout_marginTop="0dp"
+              android:visibility="@{viewModel.displayFulfillmentWrongInfo ? View.VISIBLE : View.GONE}">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.Paragraph.Card"
+                android:text="@string/msg_recipe_contains_nested_recipes" />
+
+            </com.google.android.material.card.MaterialCardView>
+
             <androidx.recyclerview.widget.RecyclerView
               android:id="@+id/recycler"
               android:layout_width="match_parent"
@@ -343,6 +352,9 @@
               android:scrollbarStyle="outsideOverlay" />
 
           </LinearLayout>
+
+          <com.google.android.material.divider.MaterialDivider
+            style="@style/Widget.Grocy.Divider.Small" />
 
           <TextView
             android:id="@+id/preparation_title"
