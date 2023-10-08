@@ -9,6 +9,7 @@
 - Improved: Consistent item animation (initial loading) for all list pages
 - Improved: Better picture mode on recipe page
 - Improved: Fullscreen viewer for recipe picture
+- Improved: Added grouping for recipe ingredients on recipe page
 - Fixed: On purchase page, decimal places for displaying prices were used for quantity unit
   conversion instead of decimal places for input (#778)
 - Fixed: Form validation bug on inventory page when using quantity unit conversion
