@@ -115,8 +115,7 @@
           android:layout_height="wrap_content"
           android:orientation="vertical"
           android:paddingBottom="80dp"
-          android:animateLayoutChanges="true"
-          app:transitionTypeChanging="@{true}">
+          android:animateLayoutChanges="true">
 
           <HorizontalScrollView
             android:id="@+id/container_chips"
@@ -211,6 +210,9 @@
 
           </com.google.android.material.card.MaterialCardView>
 
+          <com.google.android.material.divider.MaterialDivider
+            style="@style/Widget.Grocy.Divider.Small"/>
+
           <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -249,7 +251,8 @@
             app:dividerDrawable="@drawable/shape_flex_layout_divider"/>
 
           <com.google.android.material.divider.MaterialDivider
-            style="@style/Widget.Grocy.Divider.Small" />
+            style="@style/Widget.Grocy.Divider.Small"
+            android:id="@+id/ingredient_divider"/>
 
           <LinearLayout
             android:id="@+id/ingredient_container"
@@ -257,8 +260,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="8dp"
-            android:animateLayoutChanges="true"
-            app:transitionTypeChanging="@{true}">
+            android:animateLayoutChanges="true">
 
             <LinearLayout
               android:layout_width="wrap_content"
@@ -324,7 +326,8 @@
           </LinearLayout>
 
           <com.google.android.material.divider.MaterialDivider
-            style="@style/Widget.Grocy.Divider.Small" />
+            style="@style/Widget.Grocy.Divider.Small"
+            android:id="@+id/preparation_divider"/>
 
           <TextView
             android:id="@+id/preparation_title"

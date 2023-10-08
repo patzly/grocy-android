@@ -37,6 +37,7 @@ public class NetworkQueue {
   private int requestsNotFinishedCount;
   private boolean isRunning; // state of queue
   private boolean isLoading; // state of "loading" circle
+  private boolean realRequestsMade; // true if any real requests were made (not only QueueItemWithoutLoading in queue)
 
   public NetworkQueue(
       RequestQueue requestQueue,
@@ -53,6 +54,7 @@ public class NetworkQueue {
     requestsNotFinishedCount = 0;
     isRunning = false;
     isLoading = false;
+    realRequestsMade = false;
   }
 
   public NetworkQueue append(QueueItem... queueItems) {
@@ -60,6 +62,9 @@ public class NetworkQueue {
       if (queueItem == null) continue;
       this.queueItems.add(queueItem);
       requestsNotFinishedCount++;
+      if (!(queueItem instanceof QueueItemWithoutLoading) && !realRequestsMade) {
+        realRequestsMade = true;
+      }
     }
     return this;
   }
@@ -68,6 +73,9 @@ public class NetworkQueue {
     if (queueItem == null) return;
     this.queueItems.add(queueItem);
     requestsNotFinishedCount++;
+    if (!(queueItem instanceof QueueItemWithoutLoading) && !realRequestsMade) {
+      realRequestsMade = true;
+    }
     executeQueueItems();
   }
 
@@ -117,7 +125,7 @@ public class NetworkQueue {
           onLoadingListener.onLoadingChanged(false);
         }
         if (onQueueEmptyListener != null) {
-          onQueueEmptyListener.onQueueEmpty(true); // TODO: Test it
+          onQueueEmptyListener.onQueueEmpty(realRequestsMade); // TODO: Test it
         }
         reset(false);
       }, error -> {
@@ -149,6 +157,7 @@ public class NetworkQueue {
     }
     queueItems.clear();
     requestsNotFinishedCount = 0;
+    realRequestsMade = false;
   }
 
   public abstract static class QueueItem {

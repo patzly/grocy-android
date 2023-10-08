@@ -76,7 +76,7 @@ public class QuantityUnitConversionResolved extends QuantityUnitConversion {
       DownloadHelper dlHelper,
       String dbChangedTime,
       boolean forceUpdate,
-      List<Product> products,
+      boolean ignore, // for replacement of products list to differentiate from other update methods
       OnObjectsResponseListener<QuantityUnitConversionResolved> onResponseListener
   ) {
     String lastTime = !forceUpdate ? dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
