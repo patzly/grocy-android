@@ -39,10 +39,11 @@ import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields.Field;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingModeGrouping;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataGroupingShoppingMode;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -83,7 +84,7 @@ public class ShoppingModeViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Integer> selectedShoppingListIdLive;
   private final MutableLiveData<ArrayList<ShoppingListItem>> filteredShoppingListItemsLive;
-  private final FilterChipLiveDataShoppingModeGrouping filterChipLiveDataGrouping;
+  private final FilterChipLiveDataGroupingShoppingMode filterChipLiveDataGrouping;
   private final FilterChipLiveDataFields filterChipLiveDataFields;
 
   private List<ShoppingListItem> shoppingListItems;
@@ -113,23 +114,23 @@ public class ShoppingModeViewModel extends BaseViewModel {
     infoFullscreenLive = new MutableLiveData<>();
     selectedShoppingListIdLive = new MutableLiveData<>(1);
     filteredShoppingListItemsLive = new MutableLiveData<>();
-    filterChipLiveDataGrouping = new FilterChipLiveDataShoppingModeGrouping(
+    filterChipLiveDataGrouping = new FilterChipLiveDataGroupingShoppingMode(
         getApplication(),
-        this::updateFilteredShoppingListItems
+        this::updateFilteredShoppingListItemsWithTopScroll
     );
     boolean featurePriceEnabled = isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING);
     filterChipLiveDataFields = new FilterChipLiveDataFields(
         getApplication(),
         PREF.SHOPPING_MODE_FIELDS,
         this::updateFilteredShoppingListItems,
-        new Field(FIELD_AMOUNT, R.string.property_amount, true),
+        new Field(FIELD_AMOUNT, getString(R.string.property_amount), true),
         featurePriceEnabled
-            ? new Field(FIELD_PRICE_LAST_TOTAL, R.string.property_last_price_total, false) : null,
+            ? new Field(FIELD_PRICE_LAST_TOTAL, getString(R.string.property_last_price_total), false) : null,
         featurePriceEnabled
-            ? new Field(FIELD_PRICE_LAST_UNIT, R.string.property_last_price_unit, false) : null,
-        new Field(FIELD_NOTES, R.string.property_notes, true),
-        new Field(FIELD_PRODUCT_DESCRIPTION, R.string.property_product_description, false),
-        new Field(FIELD_PICTURE, R.string.property_picture, false)
+            ? new Field(FIELD_PRICE_LAST_UNIT, getString(R.string.property_last_price_unit), false) : null,
+        new Field(FIELD_NOTES, getString(R.string.property_notes), true),
+        new Field(FIELD_PRODUCT_DESCRIPTION, getString(R.string.property_product_description), false),
+        new Field(FIELD_PICTURE, getString(R.string.property_picture), false)
     );
 
     int lastId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1);
@@ -185,6 +186,11 @@ public class ShoppingModeViewModel extends BaseViewModel {
     } else {
       infoFullscreenLive.setValue(null);
     }
+  }
+
+  public void updateFilteredShoppingListItemsWithTopScroll() {
+    updateFilteredShoppingListItems();
+    sendEvent(Event.SCROLL_UP);
   }
 
   public MutableLiveData<ArrayList<ShoppingListItem>> getFilteredShoppingListItemsLive() {

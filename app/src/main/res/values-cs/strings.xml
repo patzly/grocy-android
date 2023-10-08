@@ -1022,7 +1022,6 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_not_opened">neotevřeno</string>
   <string name="property_is_freezer">Místo je mrazící box</string>
   <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">Energie (kcal) jedné jednotky produktu</string>
   <string name="property_active">Aktivní</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Nezobrazovat v Přehledu zásob</string>

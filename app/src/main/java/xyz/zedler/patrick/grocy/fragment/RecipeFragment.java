@@ -20,7 +20,10 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -28,22 +31,22 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.Constants.FAB;
 import xyz.zedler.patrick.grocy.R;
@@ -54,6 +57,7 @@ import xyz.zedler.patrick.grocy.adapter.RecipePositionResolvedAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentRecipeBinding;
+import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.Recipe;
@@ -61,13 +65,17 @@ import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.RecipePositionResolved;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
+import xyz.zedler.patrick.grocy.model.Userfield;
+import xyz.zedler.patrick.grocy.util.ChipUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PictureUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeViewModel;
+import xyz.zedler.patrick.grocy.viewmodel.RecipeViewModel.RecipeViewModelFactory;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class RecipeFragment extends BaseFragment implements
@@ -86,6 +94,7 @@ public class RecipeFragment extends BaseFragment implements
   private MainActivity activity;
   private RecipeViewModel viewModel;
   private FragmentRecipeBinding binding;
+  private GrocyApi grocyApi;
   private AlertDialog dialogConsume, dialogShoppingList, dialogDelete;
   private final HashMap<String, Boolean> dialogShoppingListMultiChoiceItems = new HashMap<>();
 
@@ -113,26 +122,61 @@ public class RecipeFragment extends BaseFragment implements
     activity = (MainActivity) requireActivity();
     RecipeFragmentArgs args = RecipeFragmentArgs
         .fromBundle(requireArguments());
-    viewModel = new ViewModelProvider(this, new RecipeViewModel
-        .RecipeViewModelFactory(activity.getApplication(), args)
+    viewModel = new ViewModelProvider(this, new RecipeViewModelFactory(activity.getApplication(), args)
     ).get(RecipeViewModel.class);
     viewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
     binding.setFragment(this);
+    binding.setClickUtil(new ClickUtil());
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
-    systemBarBehavior.setAppBar(binding.appBar);
-    systemBarBehavior.setToolbar(binding.toolbar);
-    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setContainer(binding.linearContainer);
     systemBarBehavior.setScroll(binding.scroll, binding.linearContainer);
     systemBarBehavior.applyAppBarInsetOnContainer(false);
     systemBarBehavior.applyStatusBarInsetOnContainer(false);
+    systemBarBehavior.applyStatusBarInsetOnAppBar(false);
+    systemBarBehavior.applyStatusBarInsetOnToolBar(false);
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
+    Drawable navIcon = binding.toolbar.getNavigationIcon();
+    assert navIcon != null;
+    int colorBlack = ResUtil.getColorAttr(activity, R.attr.colorOnBackground);
+    binding.appBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+      if (binding.collapsingToolbarLayout.getHeight() + verticalOffset
+          < binding.collapsingToolbarLayout.getScrimVisibleHeightTrigger()) {
+        navIcon.setColorFilter(colorBlack, Mode.SRC_ATOP);
+        binding.toolbar.setNavigationIcon(navIcon);
+        UiUtil.setLightStatusBar(
+            activity.getWindow().getDecorView(),
+            !UiUtil.isDarkModeActive(requireContext())
+        );
+      } else {
+        navIcon.setColorFilter(Color.WHITE, Mode.SRC_ATOP);
+        binding.toolbar.setNavigationIcon(navIcon);
+        UiUtil.setLightStatusBar(activity.getWindow().getDecorView(), false);
+      }
+    });
+
+    grocyApi = new GrocyApi(activity.getApplication());
     binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
+    binding.imageView.setOnClickListener(v -> {
+      Recipe recipe = viewModel.getRecipeLive().getValue();
+      if (recipe == null) {
+        activity.showSnackbar(R.string.error_undefined, false);
+        return;
+      }
+      if (recipe.getPictureFileName() == null || recipe.getPictureFileName().isEmpty()) {
+        return;
+      }
+      Bundle argsPhotoViewer = new PhotoViewerFragmentArgs.Builder(
+          grocyApi.getRecipePictureServeLarge(recipe.getPictureFileName()),
+          true
+      ).build().toBundle();
+      activity.navUtil.navigateFragment(R.id.photoViewerFragment, argsPhotoViewer);
+    });
 
     ColorRoles colorYellow = ResUtil.getHarmonizedRoles(requireContext(), R.color.yellow);
     binding.buttonFulfillmentInfo.setIconTint(ColorStateList.valueOf(colorYellow.getAccent()));
@@ -144,20 +188,64 @@ public class RecipeFragment extends BaseFragment implements
 
     viewModel.getRecipeLive().observe(getViewLifecycleOwner(), recipe -> {
       if (recipe == null) return;
+      binding.collapsingToolbarLayout.setTitle(recipe.getName());
+      if (recipe.getName().length() > 30) {
+        binding.collapsingToolbarLayout.setExpandedTitleTextAppearance(
+            R.style.TextAppearance_Grocy_HeadlineSmall
+        );
+        binding.collapsingToolbarLayout.setCollapsedTitleTextAppearance(
+            R.style.TextAppearance_Grocy_TitleMedium
+        );
+      } else {
+        binding.collapsingToolbarLayout.setExpandedTitleTextAppearance(
+            R.style.TextAppearance_Grocy_HeadlineLarge
+        );
+        binding.collapsingToolbarLayout.setCollapsedTitleTextAppearance(
+            R.style.TextAppearance_Grocy_TitleLarge
+        );
+      }
+      binding.collapsingToolbarLayout.setExpandedTitleColor(Color.WHITE);
       loadRecipePicture(recipe);
       setupMenuButtons();
       updateDataWithServings();
     });
     viewModel.getServingsDesiredLive().observe(
         getViewLifecycleOwner(),
-        servings -> viewModel.updateSaveDesiredServingsVisibility()
+        servings -> binding.titleServings.setText(getString(
+            R.string.property_servings_desired_insert,
+            servings
+        ))
     );
+
+    viewModel.getFilterChipLiveDataRecipeInfoFields().observe(
+        getViewLifecycleOwner(),
+        data -> binding.recipeInfoMenuButton.setOnClickListener(v -> {
+          PopupMenu popupMenu = new PopupMenu(requireContext(), binding.recipeInfoMenuButton);
+          data.populateMenu(popupMenu.getMenu());
+          popupMenu.show();
+        })
+    );
+    viewModel.getFilterChipLiveDataIngredientFields().observe(getViewLifecycleOwner(), data -> {
+      if (!VersionUtil.isGrocyServerMin400(viewModel.getSharedPrefs())) {
+        viewModel.showMessageLongDuration("Please update your Grocy server to version 4.0.0 or"
+            + " newer to display extra fields on ingredients in this app");
+        return;
+      }
+      binding.ingredientsMenuButton.setOnClickListener(v -> {
+        PopupMenu popupMenu = new PopupMenu(requireContext(), binding.ingredientsMenuButton);
+        data.populateMenu(popupMenu.getMenu());
+        popupMenu.show();
+      });
+    });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
+      } else if (event.getType() == Event.BOTTOM_SHEET) {
+        BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
+        activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
       }
     });
 
@@ -193,7 +281,7 @@ public class RecipeFragment extends BaseFragment implements
 
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(
-        binding.appBar, false, binding.scroll, false, false
+        binding.appBar, false, binding.scroll, true, false
     );
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(true, R.menu.menu_recipe, this::onMenuItemClick);
@@ -224,17 +312,21 @@ public class RecipeFragment extends BaseFragment implements
     outState.putBoolean(DIALOG_DELETE_SHOWING, dialogDelete != null && dialogDelete.isShowing());
   }
 
+  @Override
+  public void saveInput(String text, Bundle argsBundle) {
+    viewModel.getServingsDesiredLive().setValue(text);
+    viewModel.saveDesiredServings();
+  }
+
   private void loadRecipePicture(Recipe recipe) {
     if (recipe.getPictureFileName() != null) {
-      GrocyApi grocyApi = new GrocyApi(activity.getApplication());
-
       PictureUtil.loadPicture(
-          binding.photoView,
-          binding.photoViewCard,
+          binding.imageView,
+          null,
           null,
           grocyApi.getRecipePictureServeLarge(recipe.getPictureFileName()),
           RequestHeaders.getGlideGrocyAuthHeaders(requireContext()),
-          true
+          false
       );
     }
   }
@@ -249,98 +341,48 @@ public class RecipeFragment extends BaseFragment implements
       return;
     }
 
-    ColorRoles colorBlue = ResUtil.getHarmonizedRoles(activity, R.color.blue);
-    ColorRoles colorGreen = ResUtil.getHarmonizedRoles(activity, R.color.green);
-    ColorRoles colorYellow = ResUtil.getHarmonizedRoles(activity, R.color.yellow);
-    ColorRoles colorRed = ResUtil.getHarmonizedRoles(activity, R.color.red);
-
-    // REQUIREMENTS FULFILLED
-    if (recipeFulfillment.isNeedFulfilled()) {
-      setMenuButtonState(binding.chipConsume, true);
-      setMenuButtonState(binding.chipShoppingList, false);
-      binding.fulfilled.setText(R.string.msg_recipes_enough_in_stock);
-      binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
-          getResources(),
-          R.drawable.ic_round_check_circle_outline,
-          null
-      ));
-      binding.imageFulfillment.setImageTintList(
-          ColorStateList.valueOf(colorGreen.getAccent())
-      );
-      binding.missing.setVisibility(View.GONE);
-    } else if (recipeFulfillment.isNeedFulfilledWithShoppingList()) {
-      setMenuButtonState(binding.chipConsume, false);
-      setMenuButtonState(binding.chipShoppingList, false);
-      binding.fulfilled.setText(R.string.msg_recipes_not_enough);
-      binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
-          getResources(),
-          R.drawable.ic_round_error_outline,
-          null
-      ));
-      binding.imageFulfillment.setImageTintList(
-          ColorStateList.valueOf(colorYellow.getAccent())
-      );
-      binding.missing.setText(
-          getResources()
-              .getQuantityString(R.plurals.msg_recipes_ingredients_missing_but_on_shopping_list,
-                  recipeFulfillment.getMissingProductsCount(),
-                  recipeFulfillment.getMissingProductsCount())
-      );
-      binding.missing.setVisibility(View.VISIBLE);
-    } else {
-      setMenuButtonState(binding.chipConsume, false);
-      setMenuButtonState(binding.chipShoppingList, true);
-      binding.fulfilled.setText(R.string.msg_recipes_not_enough);
-      binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
-          getResources(),
-          R.drawable.ic_round_highlight_off,
-          null
-      ));
-      binding.imageFulfillment.setImageTintList(
-          ColorStateList.valueOf(colorRed.getAccent())
-      );
-      binding.missing.setText(
-          getResources().getQuantityString(R.plurals.msg_recipes_ingredients_missing,
-              recipeFulfillment.getMissingProductsCount(),
-              recipeFulfillment.getMissingProductsCount())
-      );
-      binding.missing.setVisibility(View.VISIBLE);
-    }
-
-    binding.textInputServings.setEndIconOnClickListener(v -> viewModel.saveDesiredServings());
-    binding.textInputServings.setEndIconOnLongClickListener(v -> {
-      activity.showToast(R.string.action_apply_desired_servings, true);
-      return true;
-    });
-    binding.textInputServings.setHelperText(
+    binding.titleServingsBase.setText(
         getString(
             R.string.property_servings_base_insert,
             NumUtil.trimAmount(recipe.getBaseServings(), viewModel.getMaxDecimalPlacesAmount())
         )
     );
-    binding.textInputServings.setHelperTextColor(ColorStateList.valueOf(colorBlue.getAccent()));
-    assert binding.textInputServings.getEditText() != null;
-    binding.textInputServings.getEditText().setOnEditorActionListener((v, actionId, event) -> {
-      if (actionId == EditorInfo.IME_ACTION_DONE) {
-        viewModel.saveDesiredServings();
-        binding.editTextServings.clearFocus();
-      }
-      return false;
-    });
-    binding.calories.setText(
-        getString(R.string.property_energy),
-        NumUtil.trimAmount(recipeFulfillment.getCalories(), viewModel.getMaxDecimalPlacesAmount()),
-        getString(R.string.subtitle_per_serving)
-    );
-    if (viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
-      binding.costs.setText(
-          getString(R.string.property_costs),
-          NumUtil.trimPrice(recipeFulfillment.getCosts(), viewModel.getDecimalPlacesPriceDisplay()) + " "
-              + viewModel.getCurrency()
-      );
-    } else {
-      binding.costs.setVisibility(View.GONE);
+
+    ChipUtil chipUtil = new ChipUtil(requireContext());
+    List<String> activeFields = viewModel.getFilterChipLiveDataRecipeInfoFields().getActiveFields();
+    binding.infoContainer.removeAllViews();
+    if (activeFields.contains(RecipeViewModel.FIELD_FULFILLMENT)) {
+      binding.infoContainer.addView(chipUtil.createRecipeFulfillmentChip(recipeFulfillment));
     }
+    if (activeFields.contains(RecipeViewModel.FIELD_ENERGY)) {
+      binding.infoContainer.addView(chipUtil.createTextChip(NumUtil.trimAmount(
+          recipeFulfillment.getCalories(), viewModel.getMaxDecimalPlacesAmount()
+      ) + " " + viewModel.getEnergyUnit()));
+    }
+    if (activeFields.contains(RecipeViewModel.FIELD_PRICE)) {
+      binding.infoContainer.addView(chipUtil.createTextChip(NumUtil.trimPrice(
+          recipeFulfillment.getCosts(), viewModel.getDecimalPlacesPriceDisplay()
+      ) + " " + viewModel.getCurrency()));
+    }
+    for (String activeField : activeFields) {
+      if (activeField.startsWith(Userfield.NAME_PREFIX)) {
+        String userfieldName = activeField.substring(
+            Userfield.NAME_PREFIX.length()
+        );
+        Userfield userfield = viewModel.getUserfieldHashMap().get(userfieldName);
+        if (userfield == null) continue;
+        Chip chipUserfield = chipUtil.createTextChip("");
+        Chip chipFilled = Userfield.fillChipWithUserfield(
+            chipUserfield,
+            userfield,
+            recipe.getUserfields().get(userfieldName)
+        );
+        if (chipFilled != null) binding.infoContainer.addView(chipFilled);
+      }
+    }
+    binding.infoContainer.setVisibility(
+        binding.infoContainer.getChildCount() > 0 ? View.VISIBLE : View.GONE
+    );
 
     if (!recipePositionsResolved.isEmpty()) {
       if (binding.recycler.getAdapter() instanceof RecipePositionResolvedAdapter) {
@@ -349,7 +391,8 @@ public class RecipeFragment extends BaseFragment implements
             recipePositionsResolved,
             viewModel.getProducts(),
             viewModel.getQuantityUnits(),
-            viewModel.getQuantityUnitConversions()
+            viewModel.getQuantityUnitConversions(),
+            viewModel.getFilterChipLiveDataIngredientFields().getActiveFields()
         );
       } else {
         binding.recycler.setAdapter(
@@ -361,10 +404,13 @@ public class RecipeFragment extends BaseFragment implements
                 viewModel.getProducts(),
                 viewModel.getQuantityUnits(),
                 viewModel.getQuantityUnitConversions(),
+                viewModel.getFilterChipLiveDataIngredientFields().getActiveFields(),
                 this
             )
         );
       }
+      binding.ingredientDivider.setVisibility(View.VISIBLE);
+      binding.ingredientContainer.setVisibility(View.VISIBLE);
     } else if (!recipePositions.isEmpty()) {
       if (binding.recycler.getAdapter() instanceof RecipePositionAdapter) {
         ((RecipePositionAdapter) binding.recycler.getAdapter()).updateData(
@@ -392,16 +438,21 @@ public class RecipeFragment extends BaseFragment implements
             )
         );
       }
+      binding.ingredientDivider.setVisibility(View.VISIBLE);
+      binding.ingredientContainer.setVisibility(View.VISIBLE);
     } else {
+      binding.ingredientDivider.setVisibility(View.GONE);
       binding.ingredientContainer.setVisibility(View.GONE);
     }
 
     CharSequence trimmedDescription = TextUtil.trimCharSequence(recipe.getDescription());
     String description = trimmedDescription != null ? trimmedDescription.toString() : null;
     if (description == null || description.isEmpty()) {
+      binding.preparationDivider.setVisibility(View.GONE);
       binding.preparationTitle.setVisibility(View.GONE);
       binding.preparation.setVisibility(View.GONE);
     } else {
+      binding.preparationDivider.setVisibility(View.VISIBLE);
       binding.preparationTitle.setVisibility(View.VISIBLE);
       binding.preparation.setHtml(description);
     }
@@ -575,10 +626,6 @@ public class RecipeFragment extends BaseFragment implements
       return;
     }
     viewModel.downloadData(false);
-  }
-
-  public void clearInputFocus() {
-    binding.editTextServings.clearFocus();
   }
 
   private int[] getExcludedProductIds() {

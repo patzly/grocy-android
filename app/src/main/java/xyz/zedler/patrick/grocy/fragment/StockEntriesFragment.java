@@ -36,7 +36,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.StockEntryAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockEntryAdapter.StockEntryAdapterListener;
-import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -137,7 +136,8 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
-    binding.recycler.setAdapter(new StockPlaceholderAdapter());
+    StockEntryAdapter adapter = new StockEntryAdapter(requireContext(), this);
+    binding.recycler.setAdapter(adapter);
 
     if (savedInstanceState == null) {
       binding.recycler.scrollToPosition(0);
@@ -151,35 +151,18 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
 
     viewModel.getFilteredStockEntriesLive().observe(getViewLifecycleOwner(), items -> {
       if (items == null) return;
-      if (binding.recycler.getAdapter() instanceof StockEntryAdapter) {
-        ((StockEntryAdapter) binding.recycler.getAdapter()).updateData(
-            requireContext(),
-            items,
-            viewModel.getQuantityUnitHashMap(),
-            viewModel.getProductHashMap(),
-            viewModel.getLocationHashMap(),
-            viewModel.getStoreHashMap(),
-            viewModel.getSortMode(),
-            viewModel.isSortAscending(),
-            viewModel.getGroupingMode()
-        );
-      } else {
-        binding.recycler.setAdapter(
-            new StockEntryAdapter(
-                requireContext(),
-                items,
-                viewModel.getQuantityUnitHashMap(),
-                viewModel.getProductHashMap(),
-                viewModel.getLocationHashMap(),
-                viewModel.getStoreHashMap(),
-                this,
-                viewModel.getSortMode(),
-                viewModel.isSortAscending(),
-                viewModel.getGroupingMode()
-            )
-        );
-        binding.recycler.scheduleLayoutAnimation();
-      }
+      adapter.updateData(
+          requireContext(),
+          items,
+          viewModel.getQuantityUnitHashMap(),
+          viewModel.getProductHashMap(),
+          viewModel.getLocationHashMap(),
+          viewModel.getStoreHashMap(),
+          viewModel.getSortMode(),
+          viewModel.isSortAscending(),
+          viewModel.getGroupingMode(),
+          () -> binding.recycler.scheduleLayoutAnimation()
+      );
     });
 
     embeddedFragmentScanner.setScannerVisibilityLive(viewModel.getScannerVisibilityLive());
@@ -192,6 +175,8 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
+      } else if (event.getType() == Event.SCROLL_UP) {
+        binding.recycler.scrollToPosition(0);
       }
     });
 

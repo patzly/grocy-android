@@ -1,3 +1,26 @@
+## 3.4.0
+
+- New: Initial support for viewing userfields (custom values) on stock overview, recipes overview
+  and recipe page; grouping and sorting by userfield is also possible (#601)
+- New: Added option to backup and restore settings with file (#437)
+- New: Edit and delete recipe pictures (upload new from camera or clipboard) (#741)
+- Improved: Added sort option "creation time" on stock overview and master data lists (#769)
+- Improved: Filter bar with product group and sort on master data pages (instead of old menu)
+- Improved: Scroll to top on all list pages after changing sort or filter
+- Improved: Consistent item animation (initial loading) for all list pages
+- Improved: Better picture mode on recipe page
+- Improved: Fullscreen viewer for recipe picture
+- Improved: Added grouping for recipe ingredients on recipe page
+- Improved: Keyboard directly shown when opening input bottom sheet for numbers
+- Fixed: On purchase page, decimal places for displaying prices were used for quantity unit
+  conversion instead of decimal places for input (#778)
+- Fixed: Form validation bug on inventory page when using quantity unit conversion
+- Fixed: Chores filter for due entries was not working (#760)
+- Fixed: Take chores 'due soon days' option into account when filtering (was always 5)
+- Fixed: Sort option of chores was saved to sort option of tasks
+- Fixed: Sort option 'due date' was not available for tasks and chores page if stock date tracking
+  feature was disabled
+
 ## 3.3.2
 
 - New: Compatibility for server version 4.0.2 and 4.0.3 (#772)

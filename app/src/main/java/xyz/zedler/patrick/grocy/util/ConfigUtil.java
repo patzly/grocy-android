@@ -26,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.CHORES;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.SHOPPING_LIST;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
@@ -237,6 +238,12 @@ public class ConfigUtil {
             STOCK.AUTO_DECIMAL_SEPARATOR_PRICES,
             getBoolean(jsonObject, STOCK.AUTO_DECIMAL_SEPARATOR_PRICES,
                 SETTINGS_DEFAULT.STOCK.AUTO_DECIMAL_SEPARATOR_PRICES, prefs)
+        );
+      }
+      if (jsonObject.has(CHORES.DUE_SOON_DAYS)) {
+        editor.putInt(
+            CHORES.DUE_SOON_DAYS,
+            jsonObject.getInt(CHORES.DUE_SOON_DAYS)
         );
       }
       editor.apply();

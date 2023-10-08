@@ -786,7 +786,6 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="property_not_opened">niet geopend</string>
   <string name="property_is_freezer">Is een vriezer</string>
   <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">Energie (kcal) per voorraadeenheid</string>
   <string name="property_active">Actief</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Niet weergeven op voorraadoverzicht</string>

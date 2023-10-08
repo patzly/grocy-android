@@ -45,11 +45,13 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.StockEntriesFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntryBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataLocation;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataProductGroup;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockEntriesGrouping;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockEntriesSort;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataSort;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataSort.SortOption;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataGroupingStockEntries;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -68,6 +70,9 @@ public class StockEntriesViewModel extends BaseViewModel {
 
   private final static String TAG = ShoppingListViewModel.class.getSimpleName();
 
+  public final static String SORT_NAME = "sort_name";
+  public final static String SORT_DUE_DATE = "sort_due_date";
+
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
@@ -79,8 +84,8 @@ public class StockEntriesViewModel extends BaseViewModel {
   private final MutableLiveData<ArrayList<StockEntry>> filteredStockEntriesLive;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
   private final FilterChipLiveDataLocation filterChipLiveDataLocation;
-  private final FilterChipLiveDataStockEntriesSort filterChipLiveDataSort;
-  private final FilterChipLiveDataStockEntriesGrouping filterChipLiveDataGrouping;
+  private final FilterChipLiveDataSort filterChipLiveDataSort;
+  private final FilterChipLiveDataGroupingStockEntries filterChipLiveDataGrouping;
 
   private List<StockEntry> stockEntries;
   private HashMap<String, ProductBarcode> productBarcodeHashMap;
@@ -118,15 +123,21 @@ public class StockEntriesViewModel extends BaseViewModel {
 
     filterChipLiveDataLocation = new FilterChipLiveDataLocation(
         getApplication(),
-        this::updateFilteredStockEntries
+        this::updateFilteredStockEntriesWithTopScroll
     );
-    filterChipLiveDataSort = new FilterChipLiveDataStockEntriesSort(
+    filterChipLiveDataSort = new FilterChipLiveDataSort(
         getApplication(),
-        this::updateFilteredStockEntries
+        PREF.STOCK_ENTRIES_SORT_MODE,
+        PREF.STOCK_ENTRIES_SORT_ASCENDING,
+        this::updateFilteredStockEntriesWithTopScroll,
+        SORT_NAME,
+        new SortOption(SORT_NAME, getString(R.string.property_name)),
+        sharedPrefs.getBoolean(PREF.FEATURE_STOCK_BBD_TRACKING, true) ?
+            new SortOption(SORT_DUE_DATE, getString(R.string.property_due_date)) : null
     );
-    filterChipLiveDataGrouping = new FilterChipLiveDataStockEntriesGrouping(
+    filterChipLiveDataGrouping = new FilterChipLiveDataGroupingStockEntries(
         getApplication(),
-        this::updateFilteredStockEntries
+        this::updateFilteredStockEntriesWithTopScroll
     );
   }
 
@@ -220,6 +231,11 @@ public class StockEntriesViewModel extends BaseViewModel {
     }
 
     filteredStockEntriesLive.setValue(filteredStockEntries);
+  }
+
+  public void updateFilteredStockEntriesWithTopScroll() {
+    updateFilteredStockEntries();
+    sendEvent(Event.SCROLL_UP);
   }
 
   public void showStockEntryBottomSheet(StockEntry stockEntry) {

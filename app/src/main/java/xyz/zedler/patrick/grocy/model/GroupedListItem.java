@@ -30,6 +30,7 @@ public abstract class GroupedListItem {
   public static final String CONTEXT_STOCK_OVERVIEW = "stock_overview";
   public static final String CONTEXT_STOCK_ENTRIES = "stock_entries";
   public static final String CONTEXT_STORED_PURCHASES = "stored_purchases";
+  public static final String CONTEXT_RECIPE_POSITIONS = "recipe_positions";
 
   public static int getType(GroupedListItem groupedListItem, String context) {
     switch (context) {
@@ -59,6 +60,12 @@ public abstract class GroupedListItem {
           return GroupedListItem.TYPE_ENTRY;
         } else if (groupedListItem instanceof PendingProductInfo) {
           return GroupedListItem.TYPE_INFO;
+        } else {
+          return GroupedListItem.TYPE_HEADER;
+        }
+      case CONTEXT_RECIPE_POSITIONS:
+        if (groupedListItem instanceof RecipePositionResolved) {
+          return GroupedListItem.TYPE_ENTRY;
         } else {
           return GroupedListItem.TYPE_HEADER;
         }

@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 
-public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
+public class FilterChipLiveDataStatusStock extends FilterChipLiveData {
 
   public final static int STATUS_ALL = 0;
   public final static int STATUS_DUE_SOON = 1;
@@ -49,7 +49,7 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
   private int inStockCount = 0;
   private int openedCount = 0;
 
-  public FilterChipLiveDataStockStatus(Application application, Runnable clickListener) {
+  public FilterChipLiveDataStatusStock(Application application, Runnable clickListener) {
     this.application = application;
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
     setStatus(STATUS_ALL, null);
@@ -82,37 +82,37 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
     setItemIdChecked(status);
   }
 
-  public FilterChipLiveDataStockStatus setDueSoonCount(int dueSoonCount) {
+  public FilterChipLiveDataStatusStock setDueSoonCount(int dueSoonCount) {
     this.dueSoonCount = dueSoonCount;
     return this;
   }
 
-  public FilterChipLiveDataStockStatus setOverdueCount(int overdueCount) {
+  public FilterChipLiveDataStatusStock setOverdueCount(int overdueCount) {
     this.overdueCount = overdueCount;
     return this;
   }
 
-  public FilterChipLiveDataStockStatus setExpiredCount(int expiredCount) {
+  public FilterChipLiveDataStatusStock setExpiredCount(int expiredCount) {
     this.expiredCount = expiredCount;
     return this;
   }
 
-  public FilterChipLiveDataStockStatus setNotFreshCount(int notFreshCount) {
+  public FilterChipLiveDataStatusStock setNotFreshCount(int notFreshCount) {
     this.notFreshCount = notFreshCount;
     return this;
   }
 
-  public FilterChipLiveDataStockStatus setBelowStockCount(int belowStockCount) {
+  public FilterChipLiveDataStatusStock setBelowStockCount(int belowStockCount) {
     this.belowStockCount = belowStockCount;
     return this;
   }
 
-  public FilterChipLiveDataStockStatus setInStockCount(int inStockCount) {
+  public FilterChipLiveDataStatusStock setInStockCount(int inStockCount) {
     this.inStockCount = inStockCount;
     return this;
   }
 
-  public FilterChipLiveDataStockStatus setOpenedCount(int openedCount) {
+  public FilterChipLiveDataStatusStock setOpenedCount(int openedCount) {
     this.openedCount = openedCount;
     return this;
   }

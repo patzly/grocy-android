@@ -39,7 +39,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import org.json.JSONArray;
@@ -74,6 +73,7 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
+import xyz.zedler.patrick.grocy.model.Userfield;
 import xyz.zedler.patrick.grocy.model.VolatileItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -497,24 +497,17 @@ public class DownloadHelper {
       errorListener.onError(error);
     });
 
-    boolean hasUnitConversionType = Arrays.stream(types)
-        .anyMatch(type -> type == QuantityUnitConversionResolved.class);
-    if (Arrays.stream(types).anyMatch(type -> type == Product.class) || hasUnitConversionType) {
-      queue.append(Product.updateProducts(this, dbChangedTime, forceUpdate, products -> {
-        if (hasUnitConversionType) {
-          queue.appendWhileRunning(QuantityUnitConversionResolved.updateQuantityUnitConversions(
-              DownloadHelper.this, dbChangedTime, forceUpdate, products, null
-          ));
-        }
-      }, hasUnitConversionType));
-    }
     for (Class<?> type : types) {
-      if (type == ProductGroup.class) {
+      if (type == Product.class) {
+        queue.append(Product.updateProducts(this, dbChangedTime, forceUpdate, null, false));
+      } else if (type == ProductGroup.class) {
         queue.append(ProductGroup.updateProductGroups(this, dbChangedTime, forceUpdate, null));
       } else if (type == QuantityUnit.class) {
         queue.append(QuantityUnit.updateQuantityUnits(this, dbChangedTime, forceUpdate, null));
       } else if (type == QuantityUnitConversion.class) {
         queue.append(QuantityUnitConversion.updateQuantityUnitConversions(this, dbChangedTime, forceUpdate, null));
+      } else if (type == QuantityUnitConversionResolved.class) {
+        queue.append(QuantityUnitConversionResolved.updateQuantityUnitConversions(this, dbChangedTime, forceUpdate, false, null));
       } else if (type == Location.class) {
         queue.append(Location.updateLocations(this, dbChangedTime, forceUpdate, null));
       } else if (type == StockLocation.class) {
@@ -561,6 +554,8 @@ public class DownloadHelper {
         queue.append(RecipePosition.updateRecipePositions(this, dbChangedTime, forceUpdate, null));
       } else if (type == RecipePositionResolved.class) {
         queue.append(RecipePositionResolved.updateRecipePositionsResolved(this, dbChangedTime, forceUpdate, null));
+      } else if (type == Userfield.class) {
+        queue.append(Userfield.updateUserfields(this, dbChangedTime, forceUpdate, null));
       }
     }
 

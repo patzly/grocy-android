@@ -63,6 +63,7 @@ public class RecipesFragment extends BaseFragment implements
   private ClickUtil clickUtil;
   private FragmentRecipesBinding binding;
   private InfoFullscreenHelper infoFullscreenHelper;
+  private RecipeEntryAdapter adapter;
 
   @Override
   public View onCreateView(
@@ -132,6 +133,12 @@ public class RecipesFragment extends BaseFragment implements
           new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
       );
     }
+    adapter = new RecipeEntryAdapter(
+        requireContext(),
+        binding.recycler.getLayoutManager(),
+        this
+    );
+    binding.recycler.setAdapter(adapter);
 
     if (savedInstanceState == null) {
       viewModel.resetSearch();
@@ -159,29 +166,15 @@ public class RecipesFragment extends BaseFragment implements
       } else {
         viewModel.getInfoFullscreenLive().setValue(null);
       }
-      if (binding.recycler.getAdapter() instanceof RecipeEntryAdapter) {
-        ((RecipeEntryAdapter) binding.recycler.getAdapter()).updateData(
-            items,
-            viewModel.getRecipeFulfillments(),
-            viewModel.getSortMode(),
-            viewModel.isSortAscending(),
-            viewModel.getActiveFields()
-        );
-      } else {
-        binding.recycler.setAdapter(
-            new RecipeEntryAdapter(
-                requireContext(),
-                binding.recycler.getLayoutManager(),
-                items,
-                viewModel.getRecipeFulfillments(),
-                this,
-                viewModel.getSortMode(),
-                viewModel.isSortAscending(),
-                viewModel.getActiveFields()
-            )
-        );
-        binding.recycler.scheduleLayoutAnimation();
-      }
+      adapter.updateData(
+          items,
+          viewModel.getRecipeFulfillments(),
+          viewModel.getUserfieldHashMap(),
+          viewModel.getSortMode(),
+          viewModel.isSortAscending(),
+          viewModel.getActiveFields(),
+          () -> binding.recycler.scheduleLayoutAnimation()
+      );
     });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
@@ -189,6 +182,8 @@ public class RecipesFragment extends BaseFragment implements
         activity.showSnackbar(
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
+      } else if (event.getType() == Event.SCROLL_UP) {
+        binding.recycler.scrollToPosition(0);
       }
     });
 
@@ -227,19 +222,13 @@ public class RecipesFragment extends BaseFragment implements
         binding.recycler.setLayoutManager(staggeredGridLayoutManager);
         viewModel.getSharedPrefs().edit().putString(PREF.RECIPES_LIST_LAYOUT, LAYOUT_GRID).apply();
       }
-      binding.recycler.setAdapter(
-          new RecipeEntryAdapter(
-              requireContext(),
-              binding.recycler.getLayoutManager(),
-              viewModel.getFilteredRecipesLive().getValue(),
-              viewModel.getRecipeFulfillments(),
-              this,
-              viewModel.getSortMode(),
-              viewModel.isSortAscending(),
-              viewModel.getActiveFields()
-          )
+      adapter = new RecipeEntryAdapter(
+          requireContext(),
+          binding.recycler.getLayoutManager(),
+          this
       );
-      binding.recycler.scheduleLayoutAnimation();
+      binding.recycler.setAdapter(adapter);
+      viewModel.updateFilteredRecipes();
       fadeInRecyclerView();
     });
   }

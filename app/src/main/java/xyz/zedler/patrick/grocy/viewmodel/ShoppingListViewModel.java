@@ -41,11 +41,12 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields.Field;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListGrouping;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListStatus;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataGroupingShoppingList;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStatusShoppingList;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -85,8 +86,8 @@ public class ShoppingListViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Integer> selectedShoppingListIdLive;
   private final MutableLiveData<ArrayList<ShoppingListItem>> filteredShoppingListItemsLive;
-  private final FilterChipLiveDataShoppingListStatus filterChipLiveDataStatus;
-  private final FilterChipLiveDataShoppingListGrouping filterChipLiveDataGrouping;
+  private final FilterChipLiveDataStatusShoppingList filterChipLiveDataStatus;
+  private final FilterChipLiveDataGroupingShoppingList filterChipLiveDataGrouping;
   private final FilterChipLiveDataFields filterChipLiveDataFields;
 
   private List<ShoppingListItem> shoppingListItems;
@@ -124,26 +125,26 @@ public class ShoppingListViewModel extends BaseViewModel {
     infoFullscreenLive = new MutableLiveData<>();
     selectedShoppingListIdLive = new MutableLiveData<>(1);
     filteredShoppingListItemsLive = new MutableLiveData<>();
-    filterChipLiveDataStatus = new FilterChipLiveDataShoppingListStatus(
+    filterChipLiveDataStatus = new FilterChipLiveDataStatusShoppingList(
         getApplication(),
-        this::updateFilteredShoppingListItems
+        this::updateFilteredShoppingListItemsWithTopScroll
     );
-    filterChipLiveDataGrouping = new FilterChipLiveDataShoppingListGrouping(
+    filterChipLiveDataGrouping = new FilterChipLiveDataGroupingShoppingList(
         getApplication(),
-        this::updateFilteredShoppingListItems
+        this::updateFilteredShoppingListItemsWithTopScroll
     );
     boolean featurePriceEnabled = isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING);
     filterChipLiveDataFields = new FilterChipLiveDataFields(
         getApplication(),
         PREF.SHOPPING_LIST_FIELDS,
         this::updateFilteredShoppingListItems,
-        new Field(FIELD_AMOUNT, R.string.property_amount, true),
+        new Field(FIELD_AMOUNT, getString(R.string.property_amount), true),
         featurePriceEnabled
-            ? new Field(FIELD_PRICE_LAST_TOTAL, R.string.property_last_price_total, false) : null,
+            ? new Field(FIELD_PRICE_LAST_TOTAL, getString(R.string.property_last_price_total), false) : null,
         featurePriceEnabled
-            ? new Field(FIELD_PRICE_LAST_UNIT, R.string.property_last_price_unit, false) : null,
-        new Field(FIELD_NOTES, R.string.property_notes, true),
-        new Field(FIELD_PICTURE, R.string.property_picture, false)
+            ? new Field(FIELD_PRICE_LAST_UNIT, getString(R.string.property_last_price_unit), false) : null,
+        new Field(FIELD_NOTES, getString(R.string.property_notes), true),
+        new Field(FIELD_PICTURE, getString(R.string.property_picture), false)
     );
 
     int lastId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1);
@@ -219,14 +220,14 @@ public class ShoppingListViewModel extends BaseViewModel {
         continue;
       }
 
-      if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataShoppingListStatus.STATUS_ALL
+      if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusShoppingList.STATUS_ALL
           || filterChipLiveDataStatus.getStatus()
-          == FilterChipLiveDataShoppingListStatus.STATUS_BELOW_MIN
+          == FilterChipLiveDataStatusShoppingList.STATUS_BELOW_MIN
           && item.hasProduct() && missingProductIds.contains(item.getProductIdInt())
           || filterChipLiveDataStatus.getStatus()
-          == FilterChipLiveDataShoppingListStatus.STATUS_UNDONE && item.isUndone()
+          == FilterChipLiveDataStatusShoppingList.STATUS_UNDONE && item.isUndone()
           || filterChipLiveDataStatus.getStatus()
-          == FilterChipLiveDataShoppingListStatus.STATUS_DONE && !item.isUndone()
+          == FilterChipLiveDataStatusShoppingList.STATUS_DONE && !item.isUndone()
       ) {
         filteredShoppingListItems.add(item);
       }
@@ -245,7 +246,7 @@ public class ShoppingListViewModel extends BaseViewModel {
       if (searchInput != null && !searchInput.isEmpty()) {
         info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
       } else if (filterChipLiveDataStatus.getStatus()
-          != FilterChipLiveDataShoppingListStatus.STATUS_ALL) {
+          != FilterChipLiveDataStatusShoppingList.STATUS_ALL) {
         info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
       } else {
         info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_SHOPPING_LIST);
@@ -254,6 +255,11 @@ public class ShoppingListViewModel extends BaseViewModel {
     } else {
       infoFullscreenLive.setValue(null);
     }
+  }
+
+  public void updateFilteredShoppingListItemsWithTopScroll() {
+    updateFilteredShoppingListItems();
+    sendEvent(Event.SCROLL_UP);
   }
 
   public void resetSearch() {

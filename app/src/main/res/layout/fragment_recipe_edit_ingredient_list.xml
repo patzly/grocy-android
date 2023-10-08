@@ -79,7 +79,8 @@
           android:layout_height="wrap_content"
           android:paddingTop="8dp"
           android:paddingBottom="@dimen/global_scroll_bottom_padding"
-          android:clipToPadding="false" />
+          android:clipToPadding="false"
+          android:layoutAnimation="@anim/recycler_layout" />
 
       </LinearLayout>
 

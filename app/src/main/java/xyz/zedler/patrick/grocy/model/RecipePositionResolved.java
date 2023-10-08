@@ -45,7 +45,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
 import xyz.zedler.patrick.grocy.web.NetworkQueue.QueueItem;
 
 @Entity(tableName = "recipe_pos_resolved_table")
-public class RecipePositionResolved {
+public class RecipePositionResolved extends GroupedListItem {
 
   @PrimaryKey
   @ColumnInfo(name = "id")
@@ -505,5 +505,10 @@ public class RecipePositionResolved {
       }
       return null;
     }
+  }
+
+  @Override
+  public int getType(String context) {
+    return GroupedListItem.TYPE_ENTRY;
   }
 }

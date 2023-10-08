@@ -448,6 +448,94 @@
 
               </LinearLayout>
 
+              <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Category"
+                  android:text="@string/property_picture"
+                  android:paddingBottom="0dp"
+                  android:paddingTop="1dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                  style="@style/Widget.Grocy.Button.IconButton"
+                  android:onClick="@{v -> formData.toggleDisplayPictureWarningLive()}"
+                  android:visibility="@{formData.displayHelpLive ? View.GONE : View.VISIBLE}"
+                  app:icon="@drawable/ic_round_error_outline"
+                  app:iconTint="?attr/colorSecondary" />
+
+              </LinearLayout>
+
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card.Text"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="@{formData.displayHelpLive || formData.displayPictureWarningLive ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="?attr/colorOnSurfaceVariant"
+                  android:text="@string/msg_help_picture_changes" />
+
+              </com.google.android.material.card.MaterialCardView>
+
+              <xyz.zedler.patrick.grocy.view.RoundedCornerImageView
+                android:id="@+id/picture"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="300dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:layout_marginStart="56dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"
+                tools:ignore="ContentDescription" />
+
+              <com.google.android.material.button.MaterialButton
+                style="@style/Widget.Grocy.Button.UnelevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="56dp"
+                android:layout_marginEnd="16dp"
+                android:layout_gravity="start"
+                android:visibility="@{formData.pictureFilenameLive == null || formData.pictureFilenameLive.blank ? View.GONE : View.VISIBLE}"
+                android:onClick="@{v -> viewModel.deleteCurrentPicture(``)}"
+                android:text="@string/action_delete" />
+
+              <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="56dp"
+                android:layout_marginTop="8dp"
+                android:visibility="@{formData.pictureFilenameLive == null || formData.pictureFilenameLive.blank ? View.VISIBLE : View.GONE}">
+
+                <com.google.android.material.button.MaterialButton
+                  style="@style/Widget.Grocy.Button.UnelevatedButton"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginEnd="8dp"
+                  android:onClick="@{v -> fragment.dispatchTakePictureIntent()}"
+                  android:text="@string/action_take_photo"/>
+
+                <com.google.android.material.button.MaterialButton
+                  style="@style/Widget.Grocy.Button.UnelevatedButton"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginEnd="8dp"
+                  android:onClick="@{v -> viewModel.pasteFromClipboard()}"
+                  android:text="@string/action_paste"/>
+
+              </LinearLayout>
+
             </LinearLayout>
 
           </androidx.constraintlayout.widget.ConstraintLayout>

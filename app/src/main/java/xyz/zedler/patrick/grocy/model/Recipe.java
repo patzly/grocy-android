@@ -37,11 +37,13 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
+import xyz.zedler.patrick.grocy.database.Converters;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnJSONResponseListener;
@@ -90,6 +92,10 @@ public class Recipe implements Parcelable {
   @SerializedName("not_check_shoppinglist")
   private int notCheckShoppingList;
 
+  @ColumnInfo(name = "userfields")
+  @SerializedName("userfields")
+  private Map<String, String> userfields;
+
   public Recipe() {
   }  // for Room
 
@@ -104,6 +110,7 @@ public class Recipe implements Parcelable {
     baseServings = parcel.readDouble();
     desiredServings = parcel.readDouble();
     notCheckShoppingList = parcel.readInt();
+    userfields = Converters.stringToMap(parcel.readString());
   }
 
   @Override
@@ -117,6 +124,7 @@ public class Recipe implements Parcelable {
     dest.writeDouble(baseServings);
     dest.writeDouble(desiredServings);
     dest.writeInt(notCheckShoppingList);
+    dest.writeString(Converters.mapToString(userfields));
   }
 
   public static final Creator<Recipe> CREATOR = new Creator<>() {
@@ -220,6 +228,14 @@ public class Recipe implements Parcelable {
     this.notCheckShoppingList = notCheckShoppingList ? 1 : 0;
   }
 
+  public Map<String, String> getUserfields() {
+    return userfields;
+  }
+
+  public void setUserfields(Map<String, String> userfields) {
+    this.userfields = userfields;
+  }
+
   public static JSONObject getJsonFromRecipe(Recipe recipe, boolean debug, String TAG) {
     JSONObject json = new JSONObject();
     try {
@@ -279,7 +295,8 @@ public class Recipe implements Parcelable {
         Objects.equals(pictureFileName, recipe.pictureFileName) &&
         Objects.equals(baseServings, recipe.baseServings) &&
         Objects.equals(desiredServings, recipe.desiredServings) &&
-        Objects.equals(notCheckShoppingList, recipe.notCheckShoppingList);
+        Objects.equals(notCheckShoppingList, recipe.notCheckShoppingList) &&
+        Objects.equals(userfields, recipe.userfields);
   }
 
   public boolean equalsForListDiff(Object o) {
@@ -297,7 +314,8 @@ public class Recipe implements Parcelable {
         Objects.equals(pictureFileName, recipe.pictureFileName) &&
         Objects.equals(baseServings, recipe.baseServings) &&
         Objects.equals(desiredServings, recipe.desiredServings) &&
-        Objects.equals(notCheckShoppingList, recipe.notCheckShoppingList);
+        Objects.equals(notCheckShoppingList, recipe.notCheckShoppingList) &&
+        Objects.equals(userfields, recipe.userfields);
   }
 
   @Override

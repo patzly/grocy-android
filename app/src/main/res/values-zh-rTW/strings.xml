@@ -749,7 +749,6 @@
   <string name="property_not_opened">未開封</string>
   <string name="property_is_freezer">是否冷凍</string>
   <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">每庫存單位的熱量（大卡）</string>
   <string name="property_active">有效</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">永不顯示在庫存總覽</string>

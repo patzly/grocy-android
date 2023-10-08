@@ -30,13 +30,16 @@ import java.util.HashMap;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksSort;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksStatus;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataSort;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataSort.SortOption;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStatusTasks;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
@@ -51,7 +54,10 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 public class TasksViewModel extends BaseViewModel {
 
   private final static String TAG = TasksViewModel.class.getSimpleName();
+
   public final static String SORT_NAME = "sort_name";
+  public final static String SORT_DUE_DATE = "sort_due_date";
+  public final static String SORT_CATEGORY = "sort_category";
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
@@ -63,8 +69,8 @@ public class TasksViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<ArrayList<Task>> filteredTasksLive;
-  private final FilterChipLiveDataTasksStatus filterChipLiveDataStatus;
-  private final FilterChipLiveDataTasksSort filterChipLiveDataSort;
+  private final FilterChipLiveDataStatusTasks filterChipLiveDataStatus;
+  private final FilterChipLiveDataSort filterChipLiveDataSort;
 
   private List<Task> tasks;
   private List<TaskCategory> taskCategories;
@@ -93,13 +99,19 @@ public class TasksViewModel extends BaseViewModel {
     infoFullscreenLive = new MutableLiveData<>();
     filteredTasksLive = new MutableLiveData<>();
 
-    filterChipLiveDataStatus = new FilterChipLiveDataTasksStatus(
+    filterChipLiveDataStatus = new FilterChipLiveDataStatusTasks(
         getApplication(),
-        this::updateFilteredTasks
+        this::updateFilteredTasksWithTopScroll
     );
-    filterChipLiveDataSort = new FilterChipLiveDataTasksSort(
+    filterChipLiveDataSort = new FilterChipLiveDataSort(
         getApplication(),
-        this::updateFilteredTasks
+        PREF.TASKS_SORT_MODE,
+        PREF.TASKS_SORT_ASCENDING,
+        this::updateFilteredTasksWithTopScroll,
+        SORT_DUE_DATE,
+        new SortOption(SORT_NAME, getString(R.string.property_name)),
+        new SortOption(SORT_DUE_DATE, getString(R.string.property_due_date)),
+        new SortOption(SORT_CATEGORY, getString(R.string.property_category))
     );
   }
 
@@ -168,11 +180,11 @@ public class TasksViewModel extends BaseViewModel {
         continue;
       }
       int daysFromNow = DateUtil.getDaysFromNow(task.getDueDate());
-      if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataTasksStatus.STATUS_OVERDUE
+      if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusTasks.STATUS_OVERDUE
           && daysFromNow >= 0
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataTasksStatus.STATUS_DUE_TODAY
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusTasks.STATUS_DUE_TODAY
           && daysFromNow != 0
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataTasksStatus.STATUS_DUE_SOON
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusTasks.STATUS_DUE_SOON
           && !(daysFromNow >= 0 && daysFromNow <= 5)) {
         continue;
       }
@@ -180,16 +192,21 @@ public class TasksViewModel extends BaseViewModel {
     }
 
     boolean sortAscending = filterChipLiveDataSort.isSortAscending();
-    if (filterChipLiveDataSort.getSortMode().equals(FilterChipLiveDataTasksSort.SORT_DUE_DATE)) {
+    if (filterChipLiveDataSort.getSortMode().equals(SORT_DUE_DATE)) {
       SortUtil.sortTasksByDueDate(filteredTasks, sortAscending);
     } else if (filterChipLiveDataSort.getSortMode()
-        .equals(FilterChipLiveDataTasksSort.SORT_CATEGORY)) {
+        .equals(SORT_CATEGORY)) {
       SortUtil.sortTasksByCategory(filteredTasks, taskCategoriesHashMap, sortAscending);
     } else {
       SortUtil.sortTasksByName(filteredTasks, sortAscending);
     }
 
     filteredTasksLive.setValue(filteredTasks);
+  }
+
+  public void updateFilteredTasksWithTopScroll() {
+    updateFilteredTasks();
+    sendEvent(Event.SCROLL_UP);
   }
 
   public void changeTaskDoneStatus(int taskId) {

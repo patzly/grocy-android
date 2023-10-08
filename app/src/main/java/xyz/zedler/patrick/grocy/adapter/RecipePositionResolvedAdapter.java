@@ -38,6 +38,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
 import com.google.android.material.elevation.SurfaceColors;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import xyz.zedler.patrick.grocy.Constants.PREF;
@@ -45,6 +46,9 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowRecipePositionEntryBinding;
+import xyz.zedler.patrick.grocy.databinding.RowRecipePositionGroupBinding;
+import xyz.zedler.patrick.grocy.model.GroupHeader;
+import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
@@ -54,7 +58,9 @@ import xyz.zedler.patrick.grocy.model.RecipePositionResolved;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
+import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
+import xyz.zedler.patrick.grocy.viewmodel.RecipeViewModel;
 
 public class RecipePositionResolvedAdapter extends
     RecyclerView.Adapter<RecipePositionResolvedAdapter.ViewHolder> {
@@ -65,10 +71,11 @@ public class RecipePositionResolvedAdapter extends
   private Context context;
   private final LinearLayoutManager linearLayoutManager;
   private Recipe recipe;
-  private final List<RecipePositionResolved> recipePositions;
+  private final List<GroupedListItem> groupedListItems;
   private final List<Product> products;
   private final List<QuantityUnit> quantityUnits;
   private final List<QuantityUnitConversionResolved> quantityUnitConversions;
+  private final List<String> activeFields;
   private final RecipePositionsItemAdapterListener listener;
 
   private final PluralUtil pluralUtil;
@@ -88,6 +95,7 @@ public class RecipePositionResolvedAdapter extends
       List<Product> products,
       List<QuantityUnit> quantityUnits,
       List<QuantityUnitConversionResolved> quantityUnitConversions,
+      List<String> activeFields,
       RecipePositionsItemAdapterListener listener
   ) {
     this.context = context;
@@ -104,10 +112,11 @@ public class RecipePositionResolvedAdapter extends
     currency = sharedPrefs.getString(PREF.CURRENCY, "");
     this.linearLayoutManager = linearLayoutManager;
     this.recipe = recipe;
-    this.recipePositions = new ArrayList<>(recipePositions);
+    this.groupedListItems = getGroupedListItems(context, recipePositions);
     this.products = new ArrayList<>(products);
     this.quantityUnits = new ArrayList<>(quantityUnits);
     this.quantityUnitConversions = new ArrayList<>(quantityUnitConversions);
+    this.activeFields = new ArrayList<>(activeFields);
     this.listener = listener;
     this.pluralUtil = new PluralUtil(context);
 
@@ -120,6 +129,63 @@ public class RecipePositionResolvedAdapter extends
   public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
     super.onDetachedFromRecyclerView(recyclerView);
     this.context = null;
+  }
+
+  static ArrayList<GroupedListItem> getGroupedListItems(
+      Context context,
+      List<RecipePositionResolved> recipePositions
+  ) {
+    HashMap<String, ArrayList<RecipePositionResolved>> recipePositionsGroupedHashMap
+        = new HashMap<>();
+    ArrayList<RecipePositionResolved> ungroupedItems = new ArrayList<>();
+    for (RecipePositionResolved recipePosition : recipePositions) {
+      String groupName = recipePosition.getIngredientGroup();
+      if (groupName != null && !groupName.isEmpty()) {
+        ArrayList<RecipePositionResolved> itemsFromGroup
+            = recipePositionsGroupedHashMap.get(groupName);
+        if (itemsFromGroup == null) {
+          itemsFromGroup = new ArrayList<>();
+          recipePositionsGroupedHashMap.put(groupName, itemsFromGroup);
+        }
+        itemsFromGroup.add(recipePosition);
+      } else {
+        ungroupedItems.add(recipePosition);
+      }
+    }
+    ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
+    ArrayList<String> groupsSorted = new ArrayList<>(recipePositionsGroupedHashMap.keySet());
+    SortUtil.sortStringsByName(groupsSorted, true);
+    for (String group : groupsSorted) {
+      ArrayList<RecipePositionResolved> itemsFromGroup = recipePositionsGroupedHashMap.get(group);
+      if (itemsFromGroup == null) continue;
+      GroupHeader groupHeader = new GroupHeader(group);
+      groupHeader.setDisplayDivider(!ungroupedItems.isEmpty() || !groupsSorted.get(0).equals(group));
+      groupedListItems.add(groupHeader);
+      groupedListItems.addAll(itemsFromGroup);
+    }
+    if (!ungroupedItems.isEmpty()) {
+      if (!groupsSorted.isEmpty()) {
+        GroupHeader groupHeader = new GroupHeader(context.getString(R.string.property_ungrouped));
+        groupHeader.setDisplayDivider(true);
+        groupedListItems.add(groupHeader);
+      }
+      groupedListItems.addAll(ungroupedItems);
+    }
+    return groupedListItems;
+  }
+
+  public List<Product> getMissingProducts() {
+    ArrayList<Product> missingProducts = new ArrayList<>();
+    for (GroupedListItem groupedListItem : groupedListItems) {
+      if (!(groupedListItem instanceof RecipePositionResolved)) continue;
+      RecipePositionResolved recipePosition = (RecipePositionResolved) groupedListItem;
+      Product product = Product.getProductFromId(products, recipePosition.getProductId());
+      if (!recipePosition.getNeedFulfilledBoolean()
+          && !recipePosition.getNeedFulfilledWithShoppingListBoolean()) {
+        missingProducts.add(product);
+      }
+    }
+    return missingProducts;
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -139,36 +205,71 @@ public class RecipePositionResolvedAdapter extends
     }
   }
 
+  public static class IngredientGroupViewHolder extends ViewHolder {
+
+    private final RowRecipePositionGroupBinding binding;
+
+    public IngredientGroupViewHolder(RowRecipePositionGroupBinding binding) {
+      super(binding.getRoot());
+      this.binding = binding;
+    }
+  }
+
+  @Override
+  public int getItemViewType(int position) {
+    return GroupedListItem.getType(
+        groupedListItems.get(position),
+        GroupedListItem.CONTEXT_RECIPE_POSITIONS
+    );
+  }
+
   @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    return new RecipePositionViewHolder(RowRecipePositionEntryBinding.inflate(
-        LayoutInflater.from(parent.getContext()),
-        parent,
-        false
-    ));
-  }
-
-  public List<Product> getMissingProducts() {
-    ArrayList<Product> missingProducts = new ArrayList<>();
-    for (RecipePositionResolved recipePosition : recipePositions) {
-      Product product = Product.getProductFromId(products, recipePosition.getProductId());
-      if (!recipePosition.getNeedFulfilledBoolean()
-          && !recipePosition.getNeedFulfilledWithShoppingListBoolean()) {
-        missingProducts.add(product);
-      }
+    if (viewType == GroupedListItem.TYPE_HEADER) {
+      return new IngredientGroupViewHolder(
+          RowRecipePositionGroupBinding.inflate(
+              LayoutInflater.from(parent.getContext()),
+              parent,
+              false
+          )
+      );
+    } else {
+      return new RecipePositionViewHolder(RowRecipePositionEntryBinding.inflate(
+          LayoutInflater.from(parent.getContext()),
+          parent,
+          false
+      ));
     }
-    return missingProducts;
   }
 
   @SuppressLint("ClickableViewAccessibility")
   @Override
   public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int positionDoNotUse) {
 
+    GroupedListItem groupedListItem = groupedListItems.get(viewHolder.getAdapterPosition());
+
+    int type = getItemViewType(viewHolder.getAdapterPosition());
+    if (type == GroupedListItem.TYPE_HEADER) {
+      IngredientGroupViewHolder holder = (IngredientGroupViewHolder) viewHolder;
+      if (((GroupHeader) groupedListItem).getDisplayDivider() == 1) {
+        holder.binding.divider.setVisibility(View.VISIBLE);
+      } else {
+        holder.binding.divider.setVisibility(View.GONE);
+      }
+      if (((GroupHeader) groupedListItem).getGroupName() != null) {
+        holder.binding.name.setText(((GroupHeader) groupedListItem).getGroupName());
+        holder.binding.name.setVisibility(View.VISIBLE);
+      } else {
+        holder.binding.name.setVisibility(View.GONE);
+      }
+      return;
+    }
+
     int position = viewHolder.getAdapterPosition();
     RecipePositionViewHolder holder = (RecipePositionViewHolder) viewHolder;
 
-    RecipePositionResolved recipePosition = recipePositions.get(position);
+    RecipePositionResolved recipePosition = (RecipePositionResolved) groupedListItem;
     Product product = Product.getProductFromId(products, recipePosition.getProductId());
     QuantityUnit quantityUnit = QuantityUnit.getFromId(
         quantityUnits, recipePosition.getQuId()
@@ -209,7 +310,8 @@ public class RecipePositionResolvedAdapter extends
     }
 
     // FULFILLMENT
-    if (recipePosition.isNotCheckStockFulfillment()) {
+    if (recipePosition.isNotCheckStockFulfillment() || !activeFields.contains(
+        RecipeViewModel.FIELD_FULFILLMENT)) {
       holder.binding.fulfillment.setVisibility(View.GONE);
     } else {
       holder.binding.fulfillment.setVisibility(View.VISIBLE);
@@ -271,7 +373,8 @@ public class RecipePositionResolvedAdapter extends
     }
 
     // NOTE
-    if (recipePosition.getNote() == null || recipePosition.getNote().trim().isEmpty()) {
+    if (recipePosition.getNote() == null || recipePosition.getNote().trim().isEmpty()
+        || !activeFields.contains(RecipeViewModel.FIELD_NOTE)) {
       holder.binding.note.setVisibility(View.GONE);
     } else {
       holder.binding.note.setText(recipePosition.getNote());
@@ -283,13 +386,17 @@ public class RecipePositionResolvedAdapter extends
     Chip chipCalories = createChip(context,
         NumUtil.trimAmount(recipePosition.getCalories(), maxDecimalPlacesAmount)
             + " " + energyUnit, -1);
-    holder.binding.flexboxLayout.addView(chipCalories);
+    if (activeFields.contains(RecipeViewModel.FIELD_ENERGY)) {
+      holder.binding.flexboxLayout.addView(chipCalories);
+    }
     Chip chipPrice = createChip(context, context.getString(
         R.string.property_price_with_currency,
         NumUtil.trimPrice(recipePosition.getCosts(), maxDecimalPlacesPrice),
         currency
     ), -1);
-    holder.binding.flexboxLayout.addView(chipPrice);
+    if (activeFields.contains(RecipeViewModel.FIELD_PRICE)) {
+      holder.binding.flexboxLayout.addView(chipPrice);
+    }
     holder.binding.flexboxLayout.setVisibility(
         holder.binding.flexboxLayout.getChildCount() > 0 ? View.VISIBLE : View.GONE
     );
@@ -329,7 +436,7 @@ public class RecipePositionResolvedAdapter extends
 
   @Override
   public int getItemCount() {
-    return recipePositions.size();
+    return groupedListItems.size();
   }
 
   public interface RecipePositionsItemAdapterListener {
@@ -342,31 +449,38 @@ public class RecipePositionResolvedAdapter extends
       List<RecipePositionResolved> newList,
       List<Product> newProducts,
       List<QuantityUnit> newQuantityUnits,
-      List<QuantityUnitConversionResolved> newQuantityUnitConversions
+      List<QuantityUnitConversionResolved> newQuantityUnitConversions,
+      List<String> newActiveFields
   ) {
-
+    List<GroupedListItem> groupedListItemsNew = getGroupedListItems(
+        context, (ArrayList<RecipePositionResolved>) newList
+    );
     RecipePositionResolvedAdapter.DiffCallback diffCallback = new RecipePositionResolvedAdapter.DiffCallback(
         this.recipe,
         recipe,
-        this.recipePositions,
-        newList,
+        this.groupedListItems,
+        groupedListItemsNew,
         this.products,
         newProducts,
         this.quantityUnits,
         newQuantityUnits,
         this.quantityUnitConversions,
-        newQuantityUnitConversions
+        newQuantityUnitConversions,
+        this.activeFields,
+        newActiveFields
     );
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.recipe = recipe;
-    this.recipePositions.clear();
-    this.recipePositions.addAll(newList);
+    this.groupedListItems.clear();
+    this.groupedListItems.addAll(groupedListItemsNew);
     this.products.clear();
     this.products.addAll(newProducts);
     this.quantityUnits.clear();
     this.quantityUnits.addAll(newQuantityUnits);
     this.quantityUnitConversions.clear();
     this.quantityUnitConversions.addAll(newQuantityUnitConversions);
+    this.activeFields.clear();
+    this.activeFields.addAll(newActiveFields);
     diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this, linearLayoutManager));
   }
 
@@ -374,26 +488,30 @@ public class RecipePositionResolvedAdapter extends
 
     Recipe oldRecipe;
     Recipe newRecipe;
-    List<RecipePositionResolved> oldItems;
-    List<RecipePositionResolved> newItems;
+    List<GroupedListItem> oldItems;
+    List<GroupedListItem> newItems;
     List<Product> oldProducts;
     List<Product> newProducts;
     List<QuantityUnit> oldQuantityUnits;
     List<QuantityUnit> newQuantityUnits;
     List<QuantityUnitConversionResolved> oldQuantityUnitConversions;
     List<QuantityUnitConversionResolved> newQuantityUnitConversions;
+    List<String> oldActiveFields;
+    List<String> newActiveFields;
 
     public DiffCallback(
         Recipe oldRecipe,
         Recipe newRecipe,
-        List<RecipePositionResolved> oldItems,
-        List<RecipePositionResolved> newItems,
+        List<GroupedListItem> oldItems,
+        List<GroupedListItem> newItems,
         List<Product> oldProducts,
         List<Product> newProducts,
         List<QuantityUnit> oldQuantityUnits,
         List<QuantityUnit> newQuantityUnits,
         List<QuantityUnitConversionResolved> oldQuantityUnitConversions,
-        List<QuantityUnitConversionResolved> newQuantityUnitConversions
+        List<QuantityUnitConversionResolved> newQuantityUnitConversions,
+        List<String> oldActiveFields,
+        List<String> newActiveFields
     ) {
       this.oldRecipe = oldRecipe;
       this.newRecipe = newRecipe;
@@ -405,6 +523,8 @@ public class RecipePositionResolvedAdapter extends
       this.newQuantityUnits = newQuantityUnits;
       this.oldQuantityUnitConversions = oldQuantityUnitConversions;
       this.newQuantityUnitConversions = newQuantityUnitConversions;
+      this.oldActiveFields = oldActiveFields;
+      this.newActiveFields = newActiveFields;
     }
 
     @Override
@@ -431,49 +551,64 @@ public class RecipePositionResolvedAdapter extends
       if (!Objects.equals(newRecipe.getDesiredServings(), oldRecipe.getDesiredServings())) {
         return false;
       }
-      RecipePositionResolved newItem = newItems.get(newItemPos);
-      RecipePositionResolved oldItem = oldItems.get(oldItemPos);
-      Product newItemProduct = Product.getProductFromId(newProducts, newItem.getProductId());
-      Product oldItemProduct = Product.getProductFromId(oldProducts, oldItem.getProductId());
-      QuantityUnit newQuantityUnit = QuantityUnit.getFromId(
-          newQuantityUnits, newItem.getQuId()
+      int oldItemType = GroupedListItem.getType(
+          oldItems.get(oldItemPos),
+          GroupedListItem.CONTEXT_RECIPE_POSITIONS
       );
-      QuantityUnit oldQuantityUnit = QuantityUnit.getFromId(
-          oldQuantityUnits, oldItem.getQuId()
+      int newItemType = GroupedListItem.getType(
+          newItems.get(newItemPos),
+          GroupedListItem.CONTEXT_RECIPE_POSITIONS
       );
-      QuantityUnitConversion newQuantityUnitConversion = newItemProduct != null
-          ? QuantityUnitConversionResolved.findConversion(
-              newQuantityUnitConversions,
-              newItemProduct.getId(),
-              newItemProduct.getQuIdStockInt(),
-              newItem.getQuId()
-          ) : null;
-      QuantityUnitConversion oldQuantityUnitConversion = oldItemProduct != null
-          ? QuantityUnitConversionResolved.findConversion(
-              oldQuantityUnitConversions,
-              oldItemProduct.getId(),
-              oldItemProduct.getQuIdStockInt(),
-              oldItem.getQuId()
-          ) : null;
-
-      if (!compareContent) {
-        return newItem.getId() == oldItem.getId();
-      }
-
-      if (newItemProduct == null || !newItemProduct.equals(oldItemProduct)) {
+      if (oldItemType != newItemType) {
         return false;
       }
-
-      if (newQuantityUnit == null || !newQuantityUnit.equals(oldQuantityUnit)) {
-        return false;
+      if (oldItemType == GroupedListItem.TYPE_ENTRY) {
+        RecipePositionResolved newItem = (RecipePositionResolved) newItems.get(newItemPos);
+        RecipePositionResolved oldItem = (RecipePositionResolved) oldItems.get(oldItemPos);
+        Product newItemProduct = Product.getProductFromId(newProducts, newItem.getProductId());
+        Product oldItemProduct = Product.getProductFromId(oldProducts, oldItem.getProductId());
+        QuantityUnit newQuantityUnit = QuantityUnit.getFromId(
+            newQuantityUnits, newItem.getQuId()
+        );
+        QuantityUnit oldQuantityUnit = QuantityUnit.getFromId(
+            oldQuantityUnits, oldItem.getQuId()
+        );
+        QuantityUnitConversion newQuantityUnitConversion = newItemProduct != null
+            ? QuantityUnitConversionResolved.findConversion(
+            newQuantityUnitConversions,
+            newItemProduct.getId(),
+            newItemProduct.getQuIdStockInt(),
+            newItem.getQuId()
+        ) : null;
+        QuantityUnitConversion oldQuantityUnitConversion = oldItemProduct != null
+            ? QuantityUnitConversionResolved.findConversion(
+            oldQuantityUnitConversions,
+            oldItemProduct.getId(),
+            oldItemProduct.getQuIdStockInt(),
+            oldItem.getQuId()
+        ) : null;
+        if (!compareContent) {
+          return newItem.getId() == oldItem.getId();
+        }
+        if (!oldActiveFields.equals(newActiveFields)) {
+          return false;
+        }
+        if (newItemProduct == null || !newItemProduct.equals(oldItemProduct)) {
+          return false;
+        }
+        if (newQuantityUnit == null || !newQuantityUnit.equals(oldQuantityUnit)) {
+          return false;
+        }
+        if (newQuantityUnitConversion == null
+            || !newQuantityUnitConversion.equals(oldQuantityUnitConversion)) {
+          return false;
+        }
+        return newItem.equals(oldItem);
+      } else { // Type: header
+        GroupHeader newGroup = (GroupHeader) newItems.get(newItemPos);
+        GroupHeader oldGroup = (GroupHeader) oldItems.get(oldItemPos);
+        return newGroup.equals(oldGroup);
       }
-
-      if (newQuantityUnitConversion == null
-          || !newQuantityUnitConversion.equals(oldQuantityUnitConversion)) {
-        return false;
-      }
-
-      return newItem.equals(oldItem);
     }
   }
 

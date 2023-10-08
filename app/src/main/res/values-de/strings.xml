@@ -934,7 +934,6 @@
   <string name="property_not_opened">nicht geöffnet</string>
   <string name="property_is_freezer">Ist ein Gefrier-Standort</string>
   <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">Energie (kcal) pro Bestandsmengeneinheit</string>
   <string name="property_active">Aktiv</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Nie auf der Bestand-Seite anzeigen</string>

@@ -43,6 +43,7 @@ public class FormDataRecipeEdit {
   private final Application application;
   private final SharedPreferences sharedPrefs;
   private final MutableLiveData<Boolean> displayHelpLive;
+  private final MutableLiveData<Boolean> displayPictureWarningLive;
   private final MutableLiveData<String> nameLive;
   private final MutableLiveData<Integer> nameErrorLive;
   private final MutableLiveData<String> baseServingsLive;
@@ -56,6 +57,7 @@ public class FormDataRecipeEdit {
   private final MutableLiveData<String> preparationLive;
   private final MutableLiveData<Spanned> preparationSpannedLive;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
+  private final MutableLiveData<String> pictureFilenameLive;
   private final PluralUtil pluralUtil;
   private boolean filledWithRecipe;
   private final int maxDecimalPlacesAmount;
@@ -74,6 +76,7 @@ public class FormDataRecipeEdit {
         Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
         Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
     ));
+    displayPictureWarningLive = new MutableLiveData<>(false);
     nameLive = new MutableLiveData<>();
     nameErrorLive = new MutableLiveData<>();
     baseServingsLive = new MutableLiveData<>(String.valueOf(1));
@@ -94,6 +97,7 @@ public class FormDataRecipeEdit {
             .getCloseWhenFinished()) {
       scannerVisibilityLive.setValue(true);
     }
+    pictureFilenameLive = new MutableLiveData<>("");
 
     filledWithRecipe = false;
   }
@@ -105,6 +109,15 @@ public class FormDataRecipeEdit {
   public void toggleDisplayHelpLive() {
     assert displayHelpLive.getValue() != null;
     displayHelpLive.setValue(!displayHelpLive.getValue());
+  }
+
+  public MutableLiveData<Boolean> getDisplayPictureWarningLive() {
+    return displayPictureWarningLive;
+  }
+
+  public void toggleDisplayPictureWarningLive() {
+    assert displayPictureWarningLive.getValue() != null;
+    displayPictureWarningLive.setValue(!displayPictureWarningLive.getValue());
   }
 
   public MutableLiveData<String> getNameLive() {
@@ -153,6 +166,10 @@ public class FormDataRecipeEdit {
 
   public MutableLiveData<Spanned> getPreparationSpannedLive() {
     return preparationSpannedLive;
+  }
+
+  public MutableLiveData<String> getPictureFilenameLive() {
+    return pictureFilenameLive;
   }
 
   public boolean isFilledWithRecipe() {
@@ -259,6 +276,7 @@ public class FormDataRecipeEdit {
     Product productProduced = productProducedLive.getValue();
     recipe.setProductId(productProduced == null ? null : productProduced.getId());
     recipe.setDescription(preparationLive.getValue());
+    recipe.setPictureFileName(pictureFilenameLive.getValue());
     return recipe;
   }
 

@@ -62,6 +62,7 @@ public class GrocyApi {
     public final static String TASKS = "tasks";
     public final static String TASK_CATEGORIES = "task_categories";
     public final static String CHORES = "chores";
+    public final static String USERFIELDS = "userfields";
   }
 
   public final static class COMPARISON_OPERATOR {

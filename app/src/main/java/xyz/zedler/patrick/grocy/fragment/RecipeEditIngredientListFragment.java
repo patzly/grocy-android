@@ -34,10 +34,8 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.RecipeEditIngredientListEntryAdapter;
 import xyz.zedler.patrick.grocy.adapter.RecipeEditIngredientListEntryAdapter.RecipeEditIngredientListEntryAdapterListener;
-import xyz.zedler.patrick.grocy.adapter.RecipeEntryAdapter;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentRecipeEditIngredientListBinding;
@@ -111,7 +109,12 @@ public class RecipeEditIngredientListFragment extends BaseFragment
     binding.recycler.setLayoutManager(
             new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
-    binding.recycler.setAdapter(new MasterPlaceholderAdapter());
+    RecipeEditIngredientListEntryAdapter adapter = new RecipeEditIngredientListEntryAdapter(
+        requireContext(),
+        (LinearLayoutManager) binding.recycler.getLayoutManager(),
+        this
+    );
+    binding.recycler.setAdapter(adapter);
 
     if (savedInstanceState == null) {
       binding.recycler.scrollToPosition(0);
@@ -132,24 +135,13 @@ public class RecipeEditIngredientListFragment extends BaseFragment
       } else {
         viewModel.getInfoFullscreenLive().setValue(null);
       }
-      if (binding.recycler.getAdapter() instanceof RecipeEntryAdapter) {
-        ((RecipeEditIngredientListEntryAdapter) binding.recycler.getAdapter()).updateData(
-                items,
-                viewModel.getProducts()
-        );
-      } else {
-        binding.recycler.setAdapter(
-                new RecipeEditIngredientListEntryAdapter(
-                        requireContext(),
-                        (LinearLayoutManager) binding.recycler.getLayoutManager(),
-                        items,
-                        viewModel.getProducts(),
-                        viewModel.getQuantityUnitHashMap(),
-                        viewModel.getUnitConversions(),
-                        this
-                )
-        );
-      }
+      adapter.updateData(
+          items,
+          viewModel.getProducts(),
+          viewModel.getQuantityUnitHashMap(),
+          viewModel.getUnitConversions(),
+          () -> binding.recycler.scheduleLayoutAnimation()
+      );
     });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {

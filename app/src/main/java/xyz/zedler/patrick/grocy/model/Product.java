@@ -38,6 +38,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,6 +47,7 @@ import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.database.Converters;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
@@ -199,6 +201,14 @@ public class Product extends GroupedListItem implements Parcelable {
   @SerializedName("move_on_open")
   private String moveOnOpen;
 
+  @ColumnInfo(name = "userfields")
+  @SerializedName("userfields")
+  private Map<String, String> userfields;
+
+  @ColumnInfo(name = "row_created_timestamp")
+  @SerializedName("row_created_timestamp")
+  private String rowCreatedTimestamp;
+
   @Ignore
   private Integer pendingProductId;
 
@@ -268,6 +278,7 @@ public class Product extends GroupedListItem implements Parcelable {
     noOwnStock = "0";
     defaultConsumeLocationId = null;
     moveOnOpen = "0";
+    userfields = null;
   }
 
   @Ignore
@@ -307,6 +318,8 @@ public class Product extends GroupedListItem implements Parcelable {
     noOwnStock = parcel.readString();
     defaultConsumeLocationId = parcel.readString();
     moveOnOpen = parcel.readString();
+    userfields = Converters.stringToMap(parcel.readString());
+    rowCreatedTimestamp = parcel.readString();
   }
 
   @Override
@@ -346,6 +359,8 @@ public class Product extends GroupedListItem implements Parcelable {
     dest.writeString(noOwnStock);
     dest.writeString(defaultConsumeLocationId);
     dest.writeString(moveOnOpen);
+    dest.writeString(Converters.mapToString(userfields));
+    dest.writeString(rowCreatedTimestamp);
   }
 
   public static final Creator<Product> CREATOR = new Creator<>() {
@@ -800,6 +815,22 @@ public class Product extends GroupedListItem implements Parcelable {
     this.moveOnOpen = moveOnOpen ? "1" : "0";
   }
 
+  public Map<String, String> getUserfields() {
+    return userfields;
+  }
+
+  public void setUserfields(Map<String, String> userfields) {
+    this.userfields = userfields;
+  }
+
+  public String getRowCreatedTimestamp() {
+    return rowCreatedTimestamp;
+  }
+
+  public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
+    this.rowCreatedTimestamp = rowCreatedTimestamp;
+  }
+
   public Integer getPendingProductId() {
     return pendingProductId;
   }
@@ -1026,7 +1057,8 @@ public class Product extends GroupedListItem implements Parcelable {
         product.treatOpenedAsOutOfStock) && Objects.equals(noOwnStock, product.noOwnStock)
         && Objects.equals(defaultConsumeLocationId, product.defaultConsumeLocationId)
         && Objects.equals(moveOnOpen, product.moveOnOpen) && Objects.equals(
-        pendingProductId, product.pendingProductId);
+        userfields, product.userfields) && Objects.equals(pendingProductId,
+        product.pendingProductId);
   }
 
   @Override
@@ -1038,8 +1070,8 @@ public class Product extends GroupedListItem implements Parcelable {
         notCheckStockFulfillmentForRecipes, parentProductId, calories,
         accumulateSubProductsMinStockAmount, dueDateType, quickConsumeAmount, quickOpenAmount,
         hideOnStockOverview, defaultStockLabelType, autoReprintStockLabel, shouldNotBeFrozen,
-        treatOpenedAsOutOfStock, noOwnStock, defaultConsumeLocationId, moveOnOpen, pendingProductId,
-        displayDivider);
+        treatOpenedAsOutOfStock, noOwnStock, defaultConsumeLocationId, moveOnOpen, userfields,
+        pendingProductId, displayDivider);
   }
 
   @NonNull

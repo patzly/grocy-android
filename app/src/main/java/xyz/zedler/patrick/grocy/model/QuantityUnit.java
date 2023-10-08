@@ -37,10 +37,12 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.database.Converters;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
@@ -72,6 +74,14 @@ public class QuantityUnit implements Parcelable {
   @SerializedName("plural_forms")
   private String pluralForms;
 
+  @ColumnInfo(name = "userfields")
+  @SerializedName("userfields")
+  private Map<String, String> userfields;
+
+  @ColumnInfo(name = "row_created_timestamp")
+  @SerializedName("row_created_timestamp")
+  private String rowCreatedTimestamp;
+
   public QuantityUnit() {
   }
 
@@ -88,6 +98,8 @@ public class QuantityUnit implements Parcelable {
     description = parcel.readString();
     namePlural = parcel.readString();
     pluralForms = parcel.readString();
+    userfields = Converters.stringToMap(parcel.readString());
+    rowCreatedTimestamp = parcel.readString();
   }
 
   @Override
@@ -97,6 +109,8 @@ public class QuantityUnit implements Parcelable {
     dest.writeString(description);
     dest.writeString(namePlural);
     dest.writeString(pluralForms);
+    dest.writeString(Converters.mapToString(userfields));
+    dest.writeString(rowCreatedTimestamp);
   }
 
   public static final Creator<QuantityUnit> CREATOR = new Creator<>() {
@@ -154,6 +168,22 @@ public class QuantityUnit implements Parcelable {
 
   public void setPluralForms(String pluralForms) {
     this.pluralForms = pluralForms;
+  }
+
+  public Map<String, String> getUserfields() {
+    return userfields;
+  }
+
+  public void setUserfields(Map<String, String> userfields) {
+    this.userfields = userfields;
+  }
+
+  public String getRowCreatedTimestamp() {
+    return rowCreatedTimestamp;
+  }
+
+  public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
+    this.rowCreatedTimestamp = rowCreatedTimestamp;
   }
 
   public static QuantityUnit getFromId(List<QuantityUnit> quantityUnits, int quantityUnitId) {

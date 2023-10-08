@@ -43,13 +43,13 @@
   <string name="action_open_one">打开1%1$s%2$s</string>
   <string name="action_edit_product">编辑产品</string>
   <string name="action_shopping_list_add">加入购物清单</string>
-  <string name="action_consume_recipe">消耗此菜谱需要的全部配料</string>
+  <string name="action_consume_recipe">消耗此菜谱需要的全部食材</string>
   <string name="action_copy_recipe">复制菜谱</string>
   <string name="action_apply_desired_servings">为此菜谱应用所需的份数并更新数据</string>
   <!-- This is displayed as transaction type on the stock journal page -->
   <string name="action_product_opened">产品已开封</string>
   <!-- This is displayed as transaction type on the stock journal page -->
-  <string name="action_transfer_from">转移来自</string>
+  <string name="action_transfer_from">转移自</string>
   <!-- This is displayed as transaction type on the stock journal page -->
   <string name="action_transfer_to">转移到</string>
 
@@ -144,35 +144,35 @@
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
-    <item quantity="other">%1$d件临期</item>
+    <item quantity="other">%1$d款临期</item>
   </plurals>
   <!-- %1$s is the number of products which are overdue. This string is the short form of e.g. "3 products are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_products">
-    <item quantity="other">%1$d件逾期</item>
+    <item quantity="other">%1$d款逾期</item>
   </plurals>
   <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
   <plurals name="msg_expired_products">
-    <item quantity="other">%1$d件过期</item>
+    <item quantity="other">%1$d款过期</item>
   </plurals>
   <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
   <plurals name="msg_not_fresh_products_short">
-    <item quantity="other">%1$d件不新鲜</item>
+    <item quantity="other">%1$d款不新鲜</item>
   </plurals>
   <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
   <plurals name="msg_not_fresh_products_long">
-    <item quantity="other">%1$d件不新鲜（下列所有）</item>
+    <item quantity="other">%1$d款不新鲜（下列所有）</item>
   </plurals>
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
   <plurals name="msg_missing_products">
-    <item quantity="other">%1$d件低于安全库存</item>
+    <item quantity="other">%1$d款低于安全库存</item>
   </plurals>
   <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
   <plurals name="msg_in_stock_products">
-    <item quantity="other">%1$d件现货</item>
+    <item quantity="other">%1$d款现货</item>
   </plurals>
   <!-- %1$s is the number of products which are opened. This string is the short form of e.g. "3 products are opened" -> "3 opened" -->
   <plurals name="msg_opened_products">
-    <item quantity="other">%1$d件已开封</item>
+    <item quantity="other">%1$d款已开封</item>
   </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">消耗%1$s%2$s%3$s</string>
@@ -436,7 +436,7 @@
   <string name="msg_help_home_assistant_login_help_show">点按此处显示帮助文本。</string>
   <string name="msg_help_home_assistant_login_help_hide">点按此处隐藏帮助文本。</string>
   <string name="msg_help_home_assistant_login_server">如果您使用该服务，您还可以输入您的Nabu Casa Cloud URL。点击此卡以访问Nabu Casa网站。</string>
-  <string name="msg_help_home_assistant_login_token">‎您可以在“家庭助理”配置文件设置（最后一部分）中创建长期访问令牌。点击此处从上方打开 URL。‎</string>
+  <string name="msg_help_home_assistant_login_token">‎您可以在Home Assistant中创建长期访问令牌。点击此处打开链接。‎</string>
   <string name="msg_help_home_assistant_login_proxy_id">导航后或点击此卡以扫描填充下面的字段的QR码。</string>
   <string name="msg_help_fab_overview_start">概览页面上的条码按钮可执行两个动作：\n\n- 短按：扫码消耗\n-长按：扫码采购\n\n通过此按钮，默认开启相应页面的快速模式。您可以在“特性”中更改设置。</string>
   <string name="msg_share">看下这个令人惊叹的Grocy项目的安卓客户端：\nhttps://github.com/patzly/grocy-android</string>
@@ -517,7 +517,7 @@
   <string name="error_failed_barcode_upload">无法上传条码</string>
   <string name="error_wrong_grocycode_type">‎grocycode 包含错误的实体类型‎</string>
   <string name="error_stock_entry_grocycode">‎未找到此grocycode的库存条目‎</string>
-  <string name="error_picture_uploads_forbidden">出于安全原因，只有私有服务器才可以上传图片。现在您正在使用演示服务器。</string>
+  <string name="error_picture_uploads_forbidden">出于安全原因，只有私有服务器才可以上传图片。您正在使用演示服务器。</string>
   <string name="error_permission">‎无操作权限</string>
   <string name="error_permission_notification">工作提醒需要通知权限</string>
   <string name="error_undefined">发生错误</string>
@@ -709,35 +709,35 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_overdue">
-    <item quantity="other">%1$d件产品逾期</item>
+    <item quantity="other">%1$d款产品逾期</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_expired">
-    <item quantity="other">%1$d件产品过期</item>
+    <item quantity="other">%1$d款产品过期</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing">
-    <item quantity="other">%1$d件产品低于安全库存</item>
+    <item quantity="other">%1$d款产品低于安全库存</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_single">
-    <item quantity="other">其中%1$d件产品在购物清单上</item>
+    <item quantity="other">其中%1$d款产品在购物清单上</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_multi">
-    <item quantity="other">其中%1$d件产品在购物清单上</item>
+    <item quantity="other">其中%1$d款产品在购物清单上</item>
   </plurals>
   <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
   <plurals name="description_overview_stock_value">
-    <item quantity="other">%1$d件库存产品，总价值%2$s%3$s</item>
+    <item quantity="other">%1$d款库存产品，总价值%2$s%3$s</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list_multi">
-    <item quantity="other">%1$d件产品在购物清单上</item>
+    <item quantity="other">%1$d款产品在购物清单上</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list">
-    <item quantity="other">%1$d件产品在购物清单上</item>
+    <item quantity="other">%1$d款产品在购物清单上</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_recipes">
@@ -892,7 +892,6 @@
   <string name="property_not_opened">未开封</string>
   <string name="property_is_freezer">冰箱</string>
   <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">每库存数量单位的能量（千卡）</string>
   <string name="property_active">启用</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">从不显示库存概述</string>
@@ -1187,7 +1186,7 @@
 
   <!-- %1$s and %2$s are numbers -->
   <plurals name="notification_stock_not_fresh_title">
-    <item quantity="other">%1$d件库存商品不再新鲜</item>
+    <item quantity="other">%1$d款库存产品不再新鲜</item>
   </plurals>
   <string name="notification_stock_content">为了减少食物浪费，在接下来的几天里消耗一些吧，点击打开列表</string>
   <!-- %1$s is a number -->

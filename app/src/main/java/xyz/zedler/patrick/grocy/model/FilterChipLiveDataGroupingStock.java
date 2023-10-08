@@ -21,13 +21,13 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import androidx.annotation.StringRes;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
-import xyz.zedler.patrick.grocy.R;
+import java.util.List;
 import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.R;
 
-public class FilterChipLiveDataStockGrouping extends FilterChipLiveData {
+public class FilterChipLiveDataGroupingStock extends FilterChipLiveData {
 
   public final static int ID_GROUPING_NONE = 0;
   public final static int ID_GROUPING_PRODUCT_GROUP = 1;
@@ -38,6 +38,7 @@ public class FilterChipLiveDataStockGrouping extends FilterChipLiveData {
   public final static int ID_GROUPING_MIN_STOCK_AMOUNT = 6;
   public final static int ID_GROUPING_PARENT_PRODUCT = 7;
   public final static int ID_GROUPING_DEFAULT_LOCATION = 8;
+  public final static int ID_START_USERFIELDS = 9; // after the other IDs
 
   public final static String GROUPING_NONE = "grouping_none";
   public final static String GROUPING_PRODUCT_GROUP = "grouping_product_group";
@@ -51,9 +52,10 @@ public class FilterChipLiveDataStockGrouping extends FilterChipLiveData {
 
   private final Application application;
   private final SharedPreferences sharedPrefs;
+  private List<Userfield> userfields;
   private String groupingMode;
 
-  public FilterChipLiveDataStockGrouping(Application application, Runnable clickListener) {
+  public FilterChipLiveDataGroupingStock(Application application, Runnable clickListener) {
     this.application = application;
     setItemIdChecked(-1);
 
@@ -77,40 +79,70 @@ public class FilterChipLiveDataStockGrouping extends FilterChipLiveData {
   }
 
   private void setFilterText() {
-    @StringRes int groupBy;
+    String groupBy;
     switch (groupingMode) {
       case GROUPING_PRODUCT_GROUP:
-        groupBy = R.string.property_product_group;
+        groupBy = application.getString(R.string.property_product_group);
         break;
       case GROUPING_VALUE:
-        groupBy = R.string.property_value;
+        groupBy = application.getString(R.string.property_value);
         break;
       case GROUPING_DUE_DATE:
-        groupBy = R.string.property_due_date_next;
+        groupBy = application.getString(R.string.property_due_date_next);
         break;
       case GROUPING_CALORIES_PER_STOCK:
-        groupBy = R.string.property_calories_unit;
+        groupBy = application.getString(R.string.property_calories_unit);
         break;
       case GROUPING_CALORIES:
-        groupBy = R.string.property_calories_total;
+        groupBy = application.getString(R.string.property_calories_total);
         break;
       case GROUPING_MIN_STOCK_AMOUNT:
-        groupBy = R.string.property_amount_min_stock;
+        groupBy = application.getString(R.string.property_amount_min_stock);
         break;
       case GROUPING_PARENT_PRODUCT:
-        groupBy = R.string.property_parent_product;
+        groupBy = application.getString(R.string.property_parent_product);
         break;
       case GROUPING_DEFAULT_LOCATION:
-        groupBy = R.string.property_location_default;
+        groupBy = application.getString(R.string.property_location_default);
         break;
       default:
-        groupBy = R.string.subtitle_none;
+        groupBy = application.getString(R.string.subtitle_none);
         break;
     }
-    setText(application.getString(
-        R.string.property_group_by,
-        application.getString(groupBy)
-    ));
+    if (groupingMode.startsWith(Userfield.NAME_PREFIX) && userfields != null) {
+      for (Userfield userfield : userfields) {
+        if (userfield == null) continue;
+        if (groupingMode.equals(Userfield.NAME_PREFIX + userfield.getName())) {
+          groupBy = userfield.getCaption();
+          break;
+        }
+      }
+    }
+    setText(application.getString(R.string.property_group_by, groupBy));
+  }
+
+  public void setUserfields(List<Userfield> userfields, String... displayedEntities) {
+    this.userfields = new ArrayList<>();
+    int userfieldId = ID_START_USERFIELDS;
+    for (Userfield userfield : userfields) {
+      if (userfield == null) continue;
+      if (displayedEntities.length > 0) {
+        boolean isDisplayed = false;
+        for (String displayedEntity : displayedEntities) {
+          if (displayedEntity.equals(userfield.getEntity())
+              && userfield.getShowAsColumnInTablesBoolean()) {
+            isDisplayed = true;
+            break;
+          }
+        }
+        if (!isDisplayed) continue;
+      }
+      userfield.setId(userfieldId);
+      this.userfields.add(userfield);
+      userfieldId++;
+    }
+    setFilterText();
+    setItems();
   }
 
   public void setValues(int id) {
@@ -130,8 +162,10 @@ public class FilterChipLiveDataStockGrouping extends FilterChipLiveData {
       groupingMode = GROUPING_PARENT_PRODUCT;
     } else if (id == ID_GROUPING_DEFAULT_LOCATION) {
       groupingMode = GROUPING_DEFAULT_LOCATION;
-    } else {
+    } else if (id == ID_GROUPING_NONE) {
       groupingMode = GROUPING_NONE;
+    } else {
+      groupingMode = Userfield.NAME_PREFIX + userfields.get(id-ID_START_USERFIELDS).getName();
     }
     setFilterText();
     sharedPrefs.edit().putString(PREF.STOCK_GROUPING_MODE, groupingMode).apply();
@@ -193,8 +227,22 @@ public class FilterChipLiveDataStockGrouping extends FilterChipLiveData {
         application.getString(R.string.property_location_default),
         groupingMode.equals(GROUPING_DEFAULT_LOCATION)
     ));
+    if (userfields != null) {
+      for (Userfield userfield : userfields) {
+        if (userfield == null) continue;
+        menuItemDataList.add(new MenuItemData(
+            userfield.getId(),
+            1,
+            userfield.getCaption(),
+            groupingMode.equals(Userfield.NAME_PREFIX + userfield.getName())
+        ));
+      }
+    }
     setMenuItemDataList(menuItemDataList);
-    setMenuItemGroups(new MenuItemGroup(0, true, true));
+    setMenuItemGroups(
+        new MenuItemGroup(0, true, true),
+        new MenuItemGroup(1, true, true)
+    );
     emitValue();
   }
 }

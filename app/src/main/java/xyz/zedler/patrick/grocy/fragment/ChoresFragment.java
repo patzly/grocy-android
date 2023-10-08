@@ -36,7 +36,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ChoreEntryAdapter;
 import xyz.zedler.patrick.grocy.adapter.ChoreEntryAdapter.ChoreEntryAdapterListener;
-import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -128,7 +127,12 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
-    binding.recycler.setAdapter(new MasterPlaceholderAdapter());
+    ChoreEntryAdapter adapter = new ChoreEntryAdapter(
+        requireContext(),
+        (LinearLayoutManager) binding.recycler.getLayoutManager(),
+        this
+    );
+    binding.recycler.setAdapter(adapter);
 
     if (savedInstanceState == null) {
       binding.recycler.scrollToPosition(0);
@@ -157,28 +161,14 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
       } else {
         viewModel.getInfoFullscreenLive().setValue(null);
       }
-      if (binding.recycler.getAdapter() instanceof ChoreEntryAdapter) {
-        ((ChoreEntryAdapter) binding.recycler.getAdapter()).updateData(
-            items,
-            viewModel.getChoreHashMap(),
-            viewModel.getUsersHashMap(),
-            viewModel.getSortMode(),
-            viewModel.isSortAscending()
-        );
-      } else {
-        binding.recycler.setAdapter(
-            new ChoreEntryAdapter(
-                requireContext(),
-                (LinearLayoutManager) binding.recycler.getLayoutManager(),
-                items,
-                viewModel.getChoreHashMap(),
-                viewModel.getUsersHashMap(),
-                this,
-                viewModel.getSortMode(),
-                viewModel.isSortAscending()
-            )
-        );
-      }
+      adapter.updateData(
+          items,
+          viewModel.getChoreHashMap(),
+          viewModel.getUsersHashMap(),
+          viewModel.getSortMode(),
+          viewModel.isSortAscending(),
+          () -> binding.recycler.scheduleLayoutAnimation()
+      );
     });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
@@ -186,6 +176,8 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
         activity.showSnackbar(
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
+      } else if (event.getType() == Event.SCROLL_UP) {
+        binding.recycler.scrollToPosition(0);
       }
     });
 

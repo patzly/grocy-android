@@ -34,16 +34,20 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.CHORES;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.ChoresFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataAssignment;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataChoresStatus;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksSort;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStatusChores;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataSort;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataSort.SortOption;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.repository.ChoresRepository;
@@ -57,6 +61,10 @@ public class ChoresViewModel extends BaseViewModel {
 
   private final static String TAG = ChoresViewModel.class.getSimpleName();
 
+  public final static String SORT_NAME = "sort_name";
+  public final static String SORT_DUE_DATE = "sort_due_date";
+  public final static String SORT_CATEGORY = "sort_category";
+
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
@@ -67,9 +75,9 @@ public class ChoresViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<ArrayList<ChoreEntry>> filteredChoreEntriesLive;
   private final MutableLiveData<Integer> currentUserIdLive;
-  private final FilterChipLiveDataChoresStatus filterChipLiveDataStatus;
+  private final FilterChipLiveDataStatusChores filterChipLiveDataStatus;
   private final FilterChipLiveDataAssignment filterChipLiveDataAssignment;
-  private final FilterChipLiveDataTasksSort filterChipLiveDataSort;
+  private final FilterChipLiveDataSort filterChipLiveDataSort;
 
   private List<ChoreEntry> choreEntries;
   private HashMap<Integer, Chore> choreHashMap;
@@ -80,6 +88,7 @@ public class ChoresViewModel extends BaseViewModel {
   private int choresDueSoonCount;
   private int choresOverdueCount;
   private int choresDueCount;
+  private final int dueSoonDays;
   private final boolean debug;
 
   public ChoresViewModel(@NonNull Application application, ChoresFragmentArgs args) {
@@ -97,24 +106,30 @@ public class ChoresViewModel extends BaseViewModel {
     infoFullscreenLive = new MutableLiveData<>();
     filteredChoreEntriesLive = new MutableLiveData<>();
     currentUserIdLive = new MutableLiveData<>(sharedPrefs.getInt(PREF.CURRENT_USER_ID, 1));
+    dueSoonDays = sharedPrefs.getInt(CHORES.DUE_SOON_DAYS, SETTINGS_DEFAULT.CHORES.DUE_SOON_DAYS);
 
-    filterChipLiveDataStatus = new FilterChipLiveDataChoresStatus(
+    filterChipLiveDataStatus = new FilterChipLiveDataStatusChores(
         getApplication(),
-        this::updateFilteredChoreEntries
+        this::updateFilteredChoreEntriesWithTopScroll
     );
     if (NumUtil.isStringInt(args.getStatusFilterId())) {
       if (Integer.parseInt(args.getStatusFilterId())
-          == FilterChipLiveDataChoresStatus.STATUS_DUE) {
-        filterChipLiveDataStatus.setStatus(FilterChipLiveDataChoresStatus.STATUS_DUE, null);
+          == FilterChipLiveDataStatusChores.STATUS_DUE) {
+        filterChipLiveDataStatus.setStatus(FilterChipLiveDataStatusChores.STATUS_DUE, null);
       }
     }
     filterChipLiveDataAssignment = new FilterChipLiveDataAssignment(
         getApplication(),
-        this::updateFilteredChoreEntries
+        this::updateFilteredChoreEntriesWithTopScroll
     );
-    filterChipLiveDataSort = new FilterChipLiveDataTasksSort(
+    filterChipLiveDataSort = new FilterChipLiveDataSort(
         getApplication(),
-        this::updateFilteredChoreEntries
+        PREF.CHORES_SORT_MODE,
+        PREF.CHORES_SORT_ASCENDING,
+        this::updateFilteredChoreEntriesWithTopScroll,
+        SORT_DUE_DATE,
+        new SortOption(SORT_NAME, getString(R.string.property_name)),
+        new SortOption(SORT_DUE_DATE, getString(R.string.property_due_date))
     );
   }
 
@@ -144,7 +159,7 @@ public class ChoresViewModel extends BaseViewModel {
         if (daysFromNow <= 0) {
           choresDueCount++;
         }
-        if (daysFromNow >= 0 && daysFromNow <= 5) {
+        if (daysFromNow >= 0 && daysFromNow <= dueSoonDays) {
           choresDueSoonCount++;
         }
       }
@@ -190,12 +205,14 @@ public class ChoresViewModel extends BaseViewModel {
       }
 
       int daysFromNow = DateUtil.getDaysFromNow(choreEntry.getNextEstimatedExecutionTime());
-      if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataChoresStatus.STATUS_OVERDUE
+      if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusChores.STATUS_DUE
+          && daysFromNow > 0
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusChores.STATUS_OVERDUE
           && daysFromNow >= 0
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataChoresStatus.STATUS_DUE_TODAY
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusChores.STATUS_DUE_TODAY
           && daysFromNow != 0
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataChoresStatus.STATUS_DUE_SOON
-          && !(daysFromNow >= 0 && daysFromNow <= 5)) {
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusChores.STATUS_DUE_SOON
+          && !(daysFromNow >= 0 && daysFromNow <= dueSoonDays)) {
         if (choreEntry.getNextEstimatedExecutionTime() != null
             && !choreEntry.getNextEstimatedExecutionTime().isEmpty()) {
           continue;
@@ -213,13 +230,18 @@ public class ChoresViewModel extends BaseViewModel {
     }
 
     boolean sortAscending = filterChipLiveDataSort.isSortAscending();
-    if (filterChipLiveDataSort.getSortMode().equals(FilterChipLiveDataTasksSort.SORT_DUE_DATE)) {
+    if (filterChipLiveDataSort.getSortMode().equals(SORT_DUE_DATE)) {
       SortUtil.sortChoreEntriesByNextExecution(filteredChoreEntries, sortAscending);
     } else {
       SortUtil.sortChoreEntriesByName(filteredChoreEntries, sortAscending);
     }
 
     filteredChoreEntriesLive.setValue(filteredChoreEntries);
+  }
+
+  public void updateFilteredChoreEntriesWithTopScroll() {
+    updateFilteredChoreEntries();
+    sendEvent(Event.SCROLL_UP);
   }
 
   public void executeChore(ChoreEntry choreEntry, @Nullable String dateTime, boolean skip) {

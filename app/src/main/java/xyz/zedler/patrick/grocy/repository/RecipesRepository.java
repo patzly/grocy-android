@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
@@ -35,6 +34,8 @@ import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.RecipePositionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.Userfield;
+import xyz.zedler.patrick.grocy.util.RxJavaUtil;
 
 public class RecipesRepository {
 
@@ -60,6 +61,7 @@ public class RecipesRepository {
     private final List<QuantityUnitConversionResolved> quantityUnitConversions;
     private final List<StockItem> stockItems;
     private final List<ShoppingListItem> shoppingListItems;
+    private final List<Userfield> userfields;
 
     public RecipesData(
         List<Recipe> recipes,
@@ -70,7 +72,9 @@ public class RecipesRepository {
         List<QuantityUnit> quantityUnits,
         List<QuantityUnitConversionResolved> quantityUnitConversions,
         List<StockItem> stockItems,
-        List<ShoppingListItem> shoppingListItems) {
+        List<ShoppingListItem> shoppingListItems,
+        List<Userfield> userfields
+    ) {
       this.recipes = recipes;
       this.recipeFulfillments = recipeFulfillments;
       this.recipePositions = recipePositions;
@@ -80,6 +84,7 @@ public class RecipesRepository {
       this.quantityUnitConversions = quantityUnitConversions;
       this.stockItems = stockItems;
       this.shoppingListItems = shoppingListItems;
+      this.userfields = userfields;
     }
 
     public List<Recipe> getRecipes() {
@@ -117,10 +122,14 @@ public class RecipesRepository {
     public List<ShoppingListItem> getShoppingListItems() {
       return shoppingListItems;
     }
+
+    public List<Userfield> getUserfields() {
+      return userfields;
+    }
   }
 
   public void loadFromDatabase(RecipesDataListener onSuccess, Consumer<Throwable> onError) {
-    Single
+    RxJavaUtil
         .zip(
             appDatabase.recipeDao().getRecipes(),
             appDatabase.recipeFulfillmentDao().getRecipeFulfillments(),
@@ -131,6 +140,7 @@ public class RecipesRepository {
             appDatabase.quantityUnitConversionResolvedDao().getConversionsResolved(),
             appDatabase.stockItemDao().getStockItems(),
             appDatabase.shoppingListItemDao().getShoppingListItems(),
+            appDatabase.userfieldDao().getUserfields(),
             RecipesData::new
         )
         .subscribeOn(Schedulers.io())

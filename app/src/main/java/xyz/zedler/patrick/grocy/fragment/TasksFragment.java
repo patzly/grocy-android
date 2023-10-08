@@ -36,7 +36,6 @@ import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.TaskEntryAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
@@ -128,7 +127,12 @@ public class TasksFragment extends BaseFragment implements
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
-    binding.recycler.setAdapter(new MasterPlaceholderAdapter());
+    TaskEntryAdapter adapter = new TaskEntryAdapter(
+        requireContext(),
+        (LinearLayoutManager) binding.recycler.getLayoutManager(),
+        this
+    );
+    binding.recycler.setAdapter(adapter);
 
     if (savedInstanceState == null) {
       binding.recycler.scrollToPosition(0);
@@ -157,28 +161,14 @@ public class TasksFragment extends BaseFragment implements
       } else {
         viewModel.getInfoFullscreenLive().setValue(null);
       }
-      if (binding.recycler.getAdapter() instanceof TaskEntryAdapter) {
-        ((TaskEntryAdapter) binding.recycler.getAdapter()).updateData(
-            items,
-            viewModel.getTaskCategoriesHashMap(),
-            viewModel.getUsersHashMap(),
-            viewModel.getSortMode(),
-            viewModel.isSortAscending()
-        );
-      } else {
-        binding.recycler.setAdapter(
-            new TaskEntryAdapter(
-                requireContext(),
-                (LinearLayoutManager) binding.recycler.getLayoutManager(),
-                items,
-                viewModel.getTaskCategoriesHashMap(),
-                viewModel.getUsersHashMap(),
-                this,
-                viewModel.getSortMode(),
-                viewModel.isSortAscending()
-            )
-        );
-      }
+      adapter.updateData(
+          items,
+          viewModel.getTaskCategoriesHashMap(),
+          viewModel.getUsersHashMap(),
+          viewModel.getSortMode(),
+          viewModel.isSortAscending(),
+          () -> binding.recycler.scheduleLayoutAnimation()
+      );
     });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
@@ -186,6 +176,8 @@ public class TasksFragment extends BaseFragment implements
         activity.showSnackbar(
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
+      } else if (event.getType() == Event.SCROLL_UP) {
+        binding.recycler.scrollToPosition(0);
       }
     });
 

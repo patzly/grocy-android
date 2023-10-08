@@ -42,7 +42,6 @@ import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
-import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -144,7 +143,8 @@ public class ShoppingListFragment extends BaseFragment implements
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
-    binding.recycler.setAdapter(new ShoppingPlaceholderAdapter());
+    ShoppingListItemAdapter adapter = new ShoppingListItemAdapter(requireContext(), this);
+    binding.recycler.setAdapter(adapter);
 
     if (savedInstanceState == null) {
       binding.recycler.scrollToPosition(0);
@@ -168,45 +168,23 @@ public class ShoppingListFragment extends BaseFragment implements
 
     viewModel.getFilteredShoppingListItemsLive().observe(getViewLifecycleOwner(), items -> {
       if (items == null) return;
-      if (binding.recycler.getAdapter() instanceof ShoppingListItemAdapter) {
-        ((ShoppingListItemAdapter) binding.recycler.getAdapter()).updateData(
-            requireContext(),
-            items,
-            viewModel.getProductHashMap(),
-            viewModel.getProductNamesHashMap(),
-            viewModel.getProductLastPurchasedHashMap(),
-            viewModel.getQuantityUnitHashMap(),
-            viewModel.getUnitConversions(),
-            viewModel.getProductGroupHashMap(),
-            viewModel.getStoreHashMap(),
-            viewModel.getShoppingListItemAmountsHashMap(),
-            viewModel.getMissingProductIds(),
-            viewModel.getShoppingListNotes(),
-            viewModel.getGroupingMode(),
-            viewModel.getActiveFields()
-        );
-      } else {
-        binding.recycler.setAdapter(
-            new ShoppingListItemAdapter(
-                requireContext(),
-                items,
-                viewModel.getProductHashMap(),
-                viewModel.getProductNamesHashMap(),
-                viewModel.getProductLastPurchasedHashMap(),
-                viewModel.getQuantityUnitHashMap(),
-                viewModel.getUnitConversions(),
-                viewModel.getProductGroupHashMap(),
-                viewModel.getStoreHashMap(),
-                viewModel.getShoppingListItemAmountsHashMap(),
-                viewModel.getMissingProductIds(),
-                this,
-                viewModel.getShoppingListNotes(),
-                viewModel.getGroupingMode(),
-                viewModel.getActiveFields()
-            )
-        );
-        binding.recycler.scheduleLayoutAnimation();
-      }
+      adapter.updateData(
+          requireContext(),
+          items,
+          viewModel.getProductHashMap(),
+          viewModel.getProductNamesHashMap(),
+          viewModel.getProductLastPurchasedHashMap(),
+          viewModel.getQuantityUnitHashMap(),
+          viewModel.getUnitConversions(),
+          viewModel.getProductGroupHashMap(),
+          viewModel.getStoreHashMap(),
+          viewModel.getShoppingListItemAmountsHashMap(),
+          viewModel.getMissingProductIds(),
+          viewModel.getShoppingListNotes(),
+          viewModel.getGroupingMode(),
+          viewModel.getActiveFields(),
+          () -> binding.recycler.scheduleLayoutAnimation()
+      );
     });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
@@ -214,6 +192,8 @@ public class ShoppingListFragment extends BaseFragment implements
         activity.showSnackbar(
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
+      } else if (event.getType() == Event.SCROLL_UP) {
+        binding.recycler.scrollToPosition(0);
       }
     });
 

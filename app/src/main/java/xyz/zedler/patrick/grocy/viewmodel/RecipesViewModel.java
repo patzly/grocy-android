@@ -25,16 +25,21 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields.Field;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesSort;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesStatus;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStatusRecipes;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataSort;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataSort.SortOption;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -44,14 +49,18 @@ import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.Userfield;
 import xyz.zedler.patrick.grocy.repository.RecipesRepository;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class RecipesViewModel extends BaseViewModel {
 
   private final static String TAG = RecipesViewModel.class.getSimpleName();
+  public final static String[] DISPLAYED_USERFIELD_ENTITIES = { ENTITY.RECIPES };
+
   public final static String SORT_NAME = "sort_name";
-  public final static String SORT_CALORIES = "sort_calories";
+  public final static String SORT_ENERGY = "sort_calories";
   public final static String SORT_DUE_SCORE = "sort_due_score";
 
   public final static String FIELD_DUE_SCORE = "field_due_score";
@@ -68,8 +77,8 @@ public class RecipesViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<ArrayList<Recipe>> filteredRecipesLive;
-  private final FilterChipLiveDataRecipesStatus filterChipLiveDataStatus;
-  private final FilterChipLiveDataRecipesSort filterChipLiveDataSort;
+  private final FilterChipLiveDataStatusRecipes filterChipLiveDataStatus;
+  private final FilterChipLiveDataSort filterChipLiveDataSort;
   private final FilterChipLiveDataFields filterChipLiveDataFields;
 
   private List<Recipe> recipes;
@@ -78,6 +87,7 @@ public class RecipesViewModel extends BaseViewModel {
   private List<Product> products;
   private List<QuantityUnit> quantityUnits;
   private List<QuantityUnitConversionResolved> quantityUnitConversions;
+  private HashMap<String, Userfield> userfieldHashMap;
 
   private String searchInput;
 
@@ -93,23 +103,30 @@ public class RecipesViewModel extends BaseViewModel {
     infoFullscreenLive = new MutableLiveData<>();
     filteredRecipesLive = new MutableLiveData<>();
 
-    filterChipLiveDataStatus = new FilterChipLiveDataRecipesStatus(
+    filterChipLiveDataStatus = new FilterChipLiveDataStatusRecipes(
         getApplication(),
-        this::updateFilteredRecipes
+        this::updateFilteredRecipesWithTopScroll
     );
-    filterChipLiveDataSort = new FilterChipLiveDataRecipesSort(
+    filterChipLiveDataSort = new FilterChipLiveDataSort(
         getApplication(),
-        this::updateFilteredRecipes
+        Constants.PREF.RECIPES_SORT_MODE,
+        Constants.PREF.RECIPES_SORT_ASCENDING,
+        this::updateFilteredRecipesWithTopScroll,
+        SORT_NAME,
+        new SortOption(SORT_NAME, getString(R.string.property_name)),
+        new SortOption(SORT_ENERGY, getString(R.string.property_energy_only)),
+        sharedPrefs.getBoolean(PREF.FEATURE_STOCK_BBD_TRACKING, true) ?
+            new SortOption(SORT_DUE_SCORE, getString(R.string.property_due_score)) : null
     );
     filterChipLiveDataFields = new FilterChipLiveDataFields(
         getApplication(),
         PREF.RECIPES_FIELDS,
         this::updateFilteredRecipes,
-        new Field(FIELD_DUE_SCORE, R.string.property_due_score, true),
-        new Field(FIELD_FULFILLMENT, R.string.property_requirements_fulfilled, true),
-        new Field(FIELD_CALORIES, R.string.property_calories, false),
-        new Field(FIELD_DESIRED_SERVINGS, R.string.property_servings_desired, false),
-        new Field(FIELD_PICTURE, R.string.property_picture, true)
+        new Field(FIELD_DUE_SCORE, getString(R.string.property_due_score), true),
+        new Field(FIELD_FULFILLMENT, getString(R.string.property_requirements_fulfilled), true),
+        new Field(FIELD_CALORIES, getString(R.string.property_calories), false),
+        new Field(FIELD_DESIRED_SERVINGS, getString(R.string.property_servings_desired), false),
+        new Field(FIELD_PICTURE, getString(R.string.property_picture), true)
     );
   }
 
@@ -121,6 +138,9 @@ public class RecipesViewModel extends BaseViewModel {
       products = data.getProducts();
       quantityUnits = data.getQuantityUnits();
       quantityUnitConversions = data.getQuantityUnitConversionsResolved();
+      userfieldHashMap = ArrayUtil.getUserfieldHashMap(data.getUserfields());
+      filterChipLiveDataSort.setUserfields(data.getUserfields(), DISPLAYED_USERFIELD_ENTITIES);
+      filterChipLiveDataFields.setUserfields(data.getUserfields(), DISPLAYED_USERFIELD_ENTITIES);
 
       updateFilteredRecipes();
       if (downloadAfterLoading) {
@@ -144,7 +164,8 @@ public class RecipesViewModel extends BaseViewModel {
         QuantityUnit.class,
         QuantityUnitConversionResolved.class,
         StockItem.class,
-        ShoppingListItem.class
+        ShoppingListItem.class,
+        Userfield.class
     );
   }
 
@@ -167,12 +188,12 @@ public class RecipesViewModel extends BaseViewModel {
           notEnoughInStockCount++;
         }
 
-        if (filterChipLiveDataStatus.getStatus() != FilterChipLiveDataRecipesStatus.STATUS_ALL) {
-          if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataRecipesStatus.STATUS_ENOUGH_IN_STOCK
+        if (filterChipLiveDataStatus.getStatus() != FilterChipLiveDataStatusRecipes.STATUS_ALL) {
+          if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusRecipes.STATUS_ENOUGH_IN_STOCK
               && !recipeFulfillment.isNeedFulfilled()
-              || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataRecipesStatus.STATUS_NOT_ENOUGH_BUT_IN_SHOPPING_LIST
+              || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusRecipes.STATUS_NOT_ENOUGH_BUT_IN_SHOPPING_LIST
               && (recipeFulfillment.isNeedFulfilled() || !recipeFulfillment.isNeedFulfilledWithShoppingList())
-              || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataRecipesStatus.STATUS_NOT_ENOUGH
+              || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusRecipes.STATUS_NOT_ENOUGH
               && (recipeFulfillment.isNeedFulfilled() || recipeFulfillment.isNeedFulfilledWithShoppingList())) {
             continue;
           }
@@ -197,17 +218,27 @@ public class RecipesViewModel extends BaseViewModel {
       filteredRecipes.add(recipe);
     }
 
+    String sortMode = filterChipLiveDataSort.getSortMode();
     boolean sortAscending = filterChipLiveDataSort.isSortAscending();
-    switch (filterChipLiveDataSort.getSortMode()) {
-      case SORT_NAME:
+
+    if (sortMode.equals(SORT_ENERGY)) {
+      SortUtil.sortRecipesByCalories(filteredRecipes, recipeFulfillments, sortAscending);
+    } else if (sortMode.equals(SORT_DUE_SCORE)) {
+      SortUtil.sortRecipesByDueScore(filteredRecipes, recipeFulfillments, sortAscending);
+    } else if (sortMode.startsWith(Userfield.NAME_PREFIX)) {
+      String userfieldName = sortMode.substring(Userfield.NAME_PREFIX.length());
+      Userfield userfield = userfieldHashMap.get(userfieldName);
+      if (userfield != null) {
+        SortUtil.sortRecipesByUserfieldValue(
+            filteredRecipes,
+            userfield,
+            sortAscending
+        );
+      } else {
         SortUtil.sortRecipesByName(filteredRecipes, sortAscending);
-        break;
-      case SORT_CALORIES:
-        SortUtil.sortRecipesByCalories(filteredRecipes, recipeFulfillments, sortAscending);
-        break;
-      case SORT_DUE_SCORE:
-        SortUtil.sortRecipesByDueScore(filteredRecipes, recipeFulfillments, sortAscending);
-        break;
+      }
+    } else {
+      SortUtil.sortRecipesByName(filteredRecipes, sortAscending);
     }
 
     filterChipLiveDataStatus
@@ -217,6 +248,11 @@ public class RecipesViewModel extends BaseViewModel {
             .emitCounts();
 
     filteredRecipesLive.setValue(filteredRecipes);
+  }
+
+  public void updateFilteredRecipesWithTopScroll() {
+    updateFilteredRecipes();
+    sendEvent(Event.SCROLL_UP);
   }
 
   public ArrayList<RecipeFulfillment> getRecipeFulfillments() {
@@ -237,6 +273,10 @@ public class RecipesViewModel extends BaseViewModel {
 
   public List<QuantityUnitConversionResolved> getQuantityUnitConversions() {
     return quantityUnitConversions;
+  }
+
+  public HashMap<String, Userfield> getUserfieldHashMap() {
+    return userfieldHashMap;
   }
 
   public boolean isSearchActive() {

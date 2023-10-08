@@ -39,7 +39,7 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.StockLogEntryAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockLogEntryAdapter.PaginationScrollListener;
 import xyz.zedler.patrick.grocy.adapter.StockLogEntryAdapter.StockLogEntryAdapterListener;
-import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
+import xyz.zedler.patrick.grocy.adapter.StockLogPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -130,13 +130,13 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
-    binding.recycler.setAdapter(new StockPlaceholderAdapter());
+    binding.recycler.setAdapter(new StockLogPlaceholderAdapter());
 
     binding.recycler.addOnScrollListener(new PaginationScrollListener(
         (LinearLayoutManager) binding.recycler.getLayoutManager()) {
       @Override
       protected void loadMoreItems() {
-        if (binding.recycler.getAdapter() instanceof StockPlaceholderAdapter) return;
+        if (binding.recycler.getAdapter() instanceof StockLogPlaceholderAdapter) return;
         viewModel.setCurrentPage(viewModel.getCurrentPage() + 1);
         viewModel.loadNextPage(stockLogEntries -> {
           if (stockLogEntries.size() == 0) {

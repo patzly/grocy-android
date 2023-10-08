@@ -513,7 +513,7 @@ public class FormDataPurchase {
         quantityUnitsFactorsLive.getValue(),
         isTareWeightEnabled(),
         isTotalPriceLive.getValue() != null && isTotalPriceLive.getValue(),
-        decimalPlacesPriceDisplay
+        decimalPlacesPriceInput
     );
   }
 

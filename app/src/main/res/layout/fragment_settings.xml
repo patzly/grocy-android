@@ -46,10 +46,41 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
 
-      <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        style="@style/Widget.Grocy.Toolbar.Back"
-        app:title="@string/title_settings" />
+      <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+          android:id="@+id/toolbar"
+          style="@style/Widget.Grocy.Toolbar.Back"
+          app:title="@string/title_settings"
+          app:titleCentered="true" />
+
+        <FrameLayout
+          android:id="@+id/frame_help"
+          android:layout_width="48dp"
+          android:layout_height="48dp"
+          android:layout_marginStart="4dp"
+          android:layout_marginEnd="4dp"
+          android:layout_gravity="center_vertical|end"
+          android:background="?attr/actionBarItemBackground"
+          android:clickable="true"
+          android:gravity="center"
+          android:contentDescription="@string/action_settings_backup_restore"
+          android:tooltipText="@string/action_settings_backup_restore"
+          android:focusable="true"
+          android:onClick="@{v -> fragment.openBackupDialog()}"
+          tools:targetApi="o">
+
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.Icon"
+            android:layout_gravity="center"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_round_settings_backup_restore" />
+
+        </FrameLayout>
+
+      </FrameLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -129,6 +129,7 @@
   <string name="action_demo_server">Demo server</string>
   <string name="action_own_server">Own server</string>
   <string name="action_enter_data_manually">Enter data manually</string>
+  <string name="action_settings_backup_restore">Backup or restore settings</string>
   <string name="action_details">Details</string>
   <string name="action_perform">Perform action</string>
   <!-- Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
@@ -148,6 +149,10 @@
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Reschedule next execution</string>
   <string name="action_put_missing_products_on_shopping_list">Put missing products on shopping list</string>
+  <!-- This is the action part of "Backup to file" or "Backup data" -->
+  <string name="action_backup">Backup</string>
+  <!-- This is the action part of "Restore from file" or "Restore data" -->
+  <string name="action_restore">Restore</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -195,6 +200,11 @@
   <string name="msg_consumed_spoiled">Consumed %1$s %2$s of %3$s as spoiled</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Mark %1$s %2$s of %3$s as opened</string>
+  <!-- %1$s is the number of servings of a recipe. -->
+  <plurals name="msg_servings">
+    <item quantity="one">%1$s serving</item>
+    <item quantity="other">%1$s servings</item>
+  </plurals>
   <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
   <plurals name="msg_undone_items">
     <item quantity="one">%1$d undone</item>
@@ -361,9 +371,13 @@
   <string name="msg_point_at_barcode">Point your camera at a barcode</string>
   <string name="msg_save_product_first">Please save the product first</string>
   <string name="msg_save_recipe_first">Please save the recipe first</string>
+  <string name="msg_recipe_contains_nested_recipes">This recipe contains nested recipes.</string>
   <string name="msg_press_hold_confirm">Press and hold to confirm deletion</string>
   <string name="msg_recipe_consume_ask">Are you sure you want to consume all ingredients needed by the recipe for \"%1$s\"? (ingredients marked with \"only check if any amount is in stock\" will be ignored)</string>
   <string name="msg_recipe_shopping_list_ask">Are you sure you want to put all missing ingredients needed by the recipe for \"%1$s\" on the shopping list?\n\nUncheck ingredients to not put them on the shopping list:</string>
+  <string name="msg_settings_backup_restore">Here you can create or restore a backup of the app settings, e.g. to share it with other family members (file contains credentials like API-Key).\n\nAfter restoring, notifications might not work as desired and have to be restarted in the background in this app by turning the switches off and on again.\n\nIf there is incorrect data in the file being restored, the app might not work after that and the app data will have to be cleared.</string>
+  <string name="msg_settings_backup_success">Settings backup created successfully</string>
+  <string name="msg_settings_restore_success">Settings restored successfully, restarting app in 2 seconds</string>
   <string name="msg_welcome">Welcome to Grocy Android!</string>
   <string name="msg_welcome_introduce">To use Grocy productively you need your own server or the Grocy add-on for Home Assistant.\nIf you just want to try out this app you can use the demo server from Bernd Bestel, the creator of grocy.</string>
   <string name="msg_choose_option_below">Please choose an option below.</string>
@@ -553,6 +567,9 @@
   <string name="error_undefined">An error occurred</string>
   <string name="error_invalid_base_servings">Servings invalid</string>
   <string name="error_pictures_size_exceeds_limit">There are embedded pictures in product or recipe descriptions on your server, which exceed the parsing limit of this app. Please remove high quality and large sized pictures from your descriptions, this will also speed up data loading.</string>
+  <string name="error_userfield_type_not_supported">Userfield type currently not supported</string>
+  <string name="error_settings_backup">Backup failed</string>
+  <string name="error_settings_restore">Restore failed</string>
 
   <string name="title_overview">Overview</string>
   <string name="title_stock_overview">Stock overview</string>
@@ -938,6 +955,7 @@
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Average shelf life</string>
   <string name="property_spoil_rate">Spoil rate</string>
+  <string name="property_created_timestamp">Creation time</string>
   <string name="property_price_history">Price history</string>
   <string name="property_product_group">Product group</string>
   <string name="property_product_groups">Product groups</string>
@@ -947,8 +965,10 @@
   <string name="property_opened">opened</string>
   <string name="property_not_opened">not opened</string>
   <string name="property_is_freezer">Is freezer</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">Energy (kcal) per stock quantity unit</string>
+  <!-- Means energy of an ingredient or product -->
+  <string name="property_energy_only">Energy</string>
+  <!-- %1$s is a unit for energy, like kcal (kilo calories) -->
+  <string name="property_energy_insert">Energy (%1$s) per stock quantity unit</string>
   <string name="property_active">Active</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Never show on stock overview</string>
@@ -993,6 +1013,10 @@
   <string name="property_extra_field">Extra field: %1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">Fields</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value">%1$s: %2$s</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value_without_space">%1$s:%2$s</string>
   <string name="property_task_category">Task category</string>
   <string name="property_task_categories">Task categories</string>
   <string name="property_calories">Calories</string>

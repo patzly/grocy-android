@@ -821,7 +821,6 @@
   <string name="property_not_opened">sense obrir</string>
   <string name="property_is_freezer">És congelador</string>
   <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">Energia (kcal) per unitat de quantitat a l\'inventari</string>
   <string name="property_active">Actiu</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">No mostrar mai al resum d\'existències</string>

@@ -70,10 +70,16 @@ public final class Constants {
     public final static String TASKS_SORT_MODE = "tasks_sort_mode";
     public final static String TASKS_SORT_ASCENDING = "tasks_sort_ascending";
     public final static String TASKS_SHOW_DONE = "tasks_show_done";
+    public final static String CHORES_SORT_MODE = "chores_sort_mode";
+    public final static String CHORES_SORT_ASCENDING = "chores_sort_ascending";
     public final static String RECIPES_SORT_MODE = "recipes_sort_mode";
     public final static String RECIPES_SORT_ASCENDING = "recipes_sort_ascending";
     public final static String RECIPES_FIELDS = "recipes_fields";
     public final static String RECIPES_LIST_LAYOUT = "recipes_list_layout";
+    public final static String RECIPE_INFO_FIELDS = "recipe_info_fields";
+    public final static String RECIPE_INGREDIENT_FIELDS = "recipe_ingredient_fields";
+    public final static String MASTER_OBJECTS_SORT_MODE = "master_objects_sort_mode";
+    public final static String MASTER_OBJECTS_SORT_ASCENDING = "master_objects_sort_ascending";
 
     public final static String DB_LAST_TIME_STOCK_ITEMS = "db_last_time_stock_items";
     public final static String DB_LAST_TIME_STOCK_ENTRIES = "db_last_time_stock_entries";
@@ -102,6 +108,7 @@ public final class Constants {
     public final static String DB_LAST_TIME_RECIPE_POSITIONS = "db_last_time_recipe_positions";
     public final static String DB_LAST_TIME_RECIPE_POSITIONS_RESOLVED = "db_last_time_recipe_positions_resolved";
     public final static String DB_LAST_TIME_RECIPE_NESTINGS = "db_last_time_recipe_nestings";
+    public final static String DB_LAST_TIME_USERFIELDS = "db_last_time_userfields";
     // when adding new constant for DB, also add it to clearCachingRelatedSharedPreferences()
     // in PrefsUtil
 

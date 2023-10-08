@@ -34,7 +34,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataChoresStatus;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStatusChores;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NavUtil;
 import xyz.zedler.patrick.grocy.util.ReminderUtil;
@@ -94,7 +94,7 @@ public class ChoresNotificationReceiver extends BroadcastReceiver {
       Uri uri = NavUtil.getUriWithArgs(
           context.getString(R.string.deep_link_choresFragment),
           new xyz.zedler.patrick.grocy.fragment.ChoresFragmentArgs.Builder()
-              .setStatusFilterId(String.valueOf(FilterChipLiveDataChoresStatus.STATUS_DUE))
+              .setStatusFilterId(String.valueOf(FilterChipLiveDataStatusChores.STATUS_DUE))
               .build().toBundle()
       );
       Intent notificationIntent = new Intent(Intent.ACTION_VIEW, uri);
