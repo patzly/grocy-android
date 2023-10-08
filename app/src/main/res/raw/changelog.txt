@@ -3,6 +3,7 @@
 - New: Initial support for viewing userfields (custom values) on stock overview, recipes overview
   and recipe page; grouping and sorting by userfield is also possible (#601)
 - New: Added option to backup and restore settings with file (#437)
+- New: Edit and delete recipe pictures (upload new from camera or clipboard) (#741)
 - Improved: Added sort option "creation time" on stock overview and master data lists (#769)
 - Improved: Filter bar with product group and sort on master data pages (instead of old menu)
 - Improved: Scroll to top on all list pages after changing sort or filter
