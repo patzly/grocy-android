@@ -252,11 +252,6 @@ public class RecipePositionResolvedAdapter extends
     int type = getItemViewType(viewHolder.getAdapterPosition());
     if (type == GroupedListItem.TYPE_HEADER) {
       IngredientGroupViewHolder holder = (IngredientGroupViewHolder) viewHolder;
-      if (((GroupHeader) groupedListItem).getDisplayDivider() == 1) {
-        holder.binding.divider.setVisibility(View.VISIBLE);
-      } else {
-        holder.binding.divider.setVisibility(View.GONE);
-      }
       if (((GroupHeader) groupedListItem).getGroupName() != null) {
         holder.binding.name.setText(((GroupHeader) groupedListItem).getGroupName());
         holder.binding.name.setVisibility(View.VISIBLE);

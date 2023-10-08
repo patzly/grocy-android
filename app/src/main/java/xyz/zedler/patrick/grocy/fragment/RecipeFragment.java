@@ -409,7 +409,6 @@ public class RecipeFragment extends BaseFragment implements
             )
         );
       }
-      binding.ingredientDivider.setVisibility(View.VISIBLE);
       binding.ingredientContainer.setVisibility(View.VISIBLE);
     } else if (!recipePositions.isEmpty()) {
       if (binding.recycler.getAdapter() instanceof RecipePositionAdapter) {
@@ -438,21 +437,17 @@ public class RecipeFragment extends BaseFragment implements
             )
         );
       }
-      binding.ingredientDivider.setVisibility(View.VISIBLE);
       binding.ingredientContainer.setVisibility(View.VISIBLE);
     } else {
-      binding.ingredientDivider.setVisibility(View.GONE);
       binding.ingredientContainer.setVisibility(View.GONE);
     }
 
     CharSequence trimmedDescription = TextUtil.trimCharSequence(recipe.getDescription());
     String description = trimmedDescription != null ? trimmedDescription.toString() : null;
     if (description == null || description.isEmpty()) {
-      binding.preparationDivider.setVisibility(View.GONE);
       binding.preparationTitle.setVisibility(View.GONE);
       binding.preparation.setVisibility(View.GONE);
     } else {
-      binding.preparationDivider.setVisibility(View.VISIBLE);
       binding.preparationTitle.setVisibility(View.VISIBLE);
       binding.preparation.setHtml(description);
     }
