@@ -994,7 +994,10 @@
   <string name="property_opened">ouvert</string>
   <string name="property_not_opened">pas ouvert</string>
   <string name="property_is_freezer">Est un congélateur</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
+  <!-- Means energy of an ingredient or product -->
+  <string name="property_energy_only">Énergie</string>
+  <!-- %1$s is a unit for energy, like kcal (kilo calories) -->
+  <string name="property_energy_insert">Énergie (%1$s) par unité de quantité en stock</string>
   <string name="property_active">Actif</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Ne jamais afficher sur l\'aperçu du stock</string>
