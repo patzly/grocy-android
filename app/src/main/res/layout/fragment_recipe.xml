@@ -230,6 +230,7 @@
               android:text="@string/title_info"/>
 
             <com.google.android.material.button.MaterialButton
+              android:id="@+id/recipe_info_menu_button"
               style="@style/Widget.Grocy.Button.IconButton"
               android:layout_marginStart="12dp"
               android:layout_gravity="end|center_vertical"
@@ -263,25 +264,40 @@
             android:animateLayoutChanges="true">
 
             <LinearLayout
-              android:layout_width="wrap_content"
+              android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="horizontal"
               android:gravity="center_vertical">
 
-              <TextView
-                style="@style/TextAppearance.Grocy.HeadlineSmall"
-                android:layout_width="wrap_content"
+              <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="@string/property_ingredients"/>
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                  style="@style/TextAppearance.Grocy.HeadlineSmall"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginStart="16dp"
+                  android:text="@string/property_ingredients"/>
+
+                <com.google.android.material.button.MaterialButton
+                  android:id="@+id/button_fulfillment_info"
+                  style="@style/Widget.Grocy.Button.IconButton"
+                  android:onClick="@{v -> viewModel.toggleDisplayFulfillmentWrongInfo()}"
+                  android:visibility="@{viewModel.grocyVersionMin400 ? View.GONE : View.VISIBLE}"
+                  app:icon="@drawable/ic_round_warning"
+                  app:iconTint="?attr/colorSecondary" />
+
+              </LinearLayout>
 
               <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_fulfillment_info"
+                android:id="@+id/ingredients_menu_button"
                 style="@style/Widget.Grocy.Button.IconButton"
-                android:onClick="@{v -> viewModel.toggleDisplayFulfillmentWrongInfo()}"
-                android:visibility="@{viewModel.grocyVersionMin400 ? View.GONE : View.VISIBLE}"
-                app:icon="@drawable/ic_round_warning"
-                app:iconTint="?attr/colorSecondary" />
+                android:layout_marginStart="12dp"
+                android:layout_gravity="end|center_vertical"
+                app:icon="@drawable/ic_round_more_vert" />
 
             </LinearLayout>
 

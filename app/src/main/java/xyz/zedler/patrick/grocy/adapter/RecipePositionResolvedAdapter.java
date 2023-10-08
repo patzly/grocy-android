@@ -60,6 +60,7 @@ import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
+import xyz.zedler.patrick.grocy.viewmodel.RecipeViewModel;
 
 public class RecipePositionResolvedAdapter extends
     RecyclerView.Adapter<RecipePositionResolvedAdapter.ViewHolder> {
@@ -74,6 +75,7 @@ public class RecipePositionResolvedAdapter extends
   private final List<Product> products;
   private final List<QuantityUnit> quantityUnits;
   private final List<QuantityUnitConversionResolved> quantityUnitConversions;
+  private final List<String> activeFields;
   private final RecipePositionsItemAdapterListener listener;
 
   private final PluralUtil pluralUtil;
@@ -93,6 +95,7 @@ public class RecipePositionResolvedAdapter extends
       List<Product> products,
       List<QuantityUnit> quantityUnits,
       List<QuantityUnitConversionResolved> quantityUnitConversions,
+      List<String> activeFields,
       RecipePositionsItemAdapterListener listener
   ) {
     this.context = context;
@@ -113,6 +116,7 @@ public class RecipePositionResolvedAdapter extends
     this.products = new ArrayList<>(products);
     this.quantityUnits = new ArrayList<>(quantityUnits);
     this.quantityUnitConversions = new ArrayList<>(quantityUnitConversions);
+    this.activeFields = new ArrayList<>(activeFields);
     this.listener = listener;
     this.pluralUtil = new PluralUtil(context);
 
@@ -306,7 +310,8 @@ public class RecipePositionResolvedAdapter extends
     }
 
     // FULFILLMENT
-    if (recipePosition.isNotCheckStockFulfillment()) {
+    if (recipePosition.isNotCheckStockFulfillment() || !activeFields.contains(
+        RecipeViewModel.FIELD_FULFILLMENT)) {
       holder.binding.fulfillment.setVisibility(View.GONE);
     } else {
       holder.binding.fulfillment.setVisibility(View.VISIBLE);
@@ -368,7 +373,8 @@ public class RecipePositionResolvedAdapter extends
     }
 
     // NOTE
-    if (recipePosition.getNote() == null || recipePosition.getNote().trim().isEmpty()) {
+    if (recipePosition.getNote() == null || recipePosition.getNote().trim().isEmpty()
+        || !activeFields.contains(RecipeViewModel.FIELD_NOTE)) {
       holder.binding.note.setVisibility(View.GONE);
     } else {
       holder.binding.note.setText(recipePosition.getNote());
@@ -380,13 +386,17 @@ public class RecipePositionResolvedAdapter extends
     Chip chipCalories = createChip(context,
         NumUtil.trimAmount(recipePosition.getCalories(), maxDecimalPlacesAmount)
             + " " + energyUnit, -1);
-    holder.binding.flexboxLayout.addView(chipCalories);
+    if (activeFields.contains(RecipeViewModel.FIELD_ENERGY)) {
+      holder.binding.flexboxLayout.addView(chipCalories);
+    }
     Chip chipPrice = createChip(context, context.getString(
         R.string.property_price_with_currency,
         NumUtil.trimPrice(recipePosition.getCosts(), maxDecimalPlacesPrice),
         currency
     ), -1);
-    holder.binding.flexboxLayout.addView(chipPrice);
+    if (activeFields.contains(RecipeViewModel.FIELD_PRICE)) {
+      holder.binding.flexboxLayout.addView(chipPrice);
+    }
     holder.binding.flexboxLayout.setVisibility(
         holder.binding.flexboxLayout.getChildCount() > 0 ? View.VISIBLE : View.GONE
     );
@@ -439,7 +449,8 @@ public class RecipePositionResolvedAdapter extends
       List<RecipePositionResolved> newList,
       List<Product> newProducts,
       List<QuantityUnit> newQuantityUnits,
-      List<QuantityUnitConversionResolved> newQuantityUnitConversions
+      List<QuantityUnitConversionResolved> newQuantityUnitConversions,
+      List<String> newActiveFields
   ) {
     List<GroupedListItem> groupedListItemsNew = getGroupedListItems(
         context, (ArrayList<RecipePositionResolved>) newList
@@ -454,7 +465,9 @@ public class RecipePositionResolvedAdapter extends
         this.quantityUnits,
         newQuantityUnits,
         this.quantityUnitConversions,
-        newQuantityUnitConversions
+        newQuantityUnitConversions,
+        this.activeFields,
+        newActiveFields
     );
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.recipe = recipe;
@@ -466,6 +479,8 @@ public class RecipePositionResolvedAdapter extends
     this.quantityUnits.addAll(newQuantityUnits);
     this.quantityUnitConversions.clear();
     this.quantityUnitConversions.addAll(newQuantityUnitConversions);
+    this.activeFields.clear();
+    this.activeFields.addAll(newActiveFields);
     diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this, linearLayoutManager));
   }
 
@@ -481,6 +496,8 @@ public class RecipePositionResolvedAdapter extends
     List<QuantityUnit> newQuantityUnits;
     List<QuantityUnitConversionResolved> oldQuantityUnitConversions;
     List<QuantityUnitConversionResolved> newQuantityUnitConversions;
+    List<String> oldActiveFields;
+    List<String> newActiveFields;
 
     public DiffCallback(
         Recipe oldRecipe,
@@ -492,7 +509,9 @@ public class RecipePositionResolvedAdapter extends
         List<QuantityUnit> oldQuantityUnits,
         List<QuantityUnit> newQuantityUnits,
         List<QuantityUnitConversionResolved> oldQuantityUnitConversions,
-        List<QuantityUnitConversionResolved> newQuantityUnitConversions
+        List<QuantityUnitConversionResolved> newQuantityUnitConversions,
+        List<String> oldActiveFields,
+        List<String> newActiveFields
     ) {
       this.oldRecipe = oldRecipe;
       this.newRecipe = newRecipe;
@@ -504,6 +523,8 @@ public class RecipePositionResolvedAdapter extends
       this.newQuantityUnits = newQuantityUnits;
       this.oldQuantityUnitConversions = oldQuantityUnitConversions;
       this.newQuantityUnitConversions = newQuantityUnitConversions;
+      this.oldActiveFields = oldActiveFields;
+      this.newActiveFields = newActiveFields;
     }
 
     @Override
@@ -568,6 +589,9 @@ public class RecipePositionResolvedAdapter extends
         ) : null;
         if (!compareContent) {
           return newItem.getId() == oldItem.getId();
+        }
+        if (!oldActiveFields.equals(newActiveFields)) {
+          return false;
         }
         if (newItemProduct == null || !newItemProduct.equals(oldItemProduct)) {
           return false;

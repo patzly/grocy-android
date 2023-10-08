@@ -37,15 +37,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.Constants.FAB;
 import xyz.zedler.patrick.grocy.R;
@@ -64,6 +65,7 @@ import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.RecipePositionResolved;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
+import xyz.zedler.patrick.grocy.model.Userfield;
 import xyz.zedler.patrick.grocy.util.ChipUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -71,6 +73,7 @@ import xyz.zedler.patrick.grocy.util.PictureUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeViewModel;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeViewModel.RecipeViewModelFactory;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
@@ -214,6 +217,27 @@ public class RecipeFragment extends BaseFragment implements
         ))
     );
 
+    viewModel.getFilterChipLiveDataRecipeInfoFields().observe(
+        getViewLifecycleOwner(),
+        data -> binding.recipeInfoMenuButton.setOnClickListener(v -> {
+          PopupMenu popupMenu = new PopupMenu(requireContext(), binding.recipeInfoMenuButton);
+          data.populateMenu(popupMenu.getMenu());
+          popupMenu.show();
+        })
+    );
+    viewModel.getFilterChipLiveDataIngredientFields().observe(getViewLifecycleOwner(), data -> {
+      if (!VersionUtil.isGrocyServerMin400(viewModel.getSharedPrefs())) {
+        viewModel.showMessageLongDuration("Please update your Grocy server to version 4.0.0 or"
+            + " newer to display extra fields on ingredients in this app");
+        return;
+      }
+      binding.ingredientsMenuButton.setOnClickListener(v -> {
+        PopupMenu popupMenu = new PopupMenu(requireContext(), binding.ingredientsMenuButton);
+        data.populateMenu(popupMenu.getMenu());
+        popupMenu.show();
+      });
+    });
+
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(
@@ -325,16 +349,45 @@ public class RecipeFragment extends BaseFragment implements
     );
 
     ChipUtil chipUtil = new ChipUtil(requireContext());
+    List<String> activeFields = viewModel.getFilterChipLiveDataRecipeInfoFields().getActiveFields();
     binding.infoContainer.removeAllViews();
-    binding.infoContainer.addView(chipUtil.createRecipeFulfillmentChip(recipeFulfillment));
-    binding.infoContainer.addView(chipUtil.createTextChip(NumUtil.trimAmount(
-        recipeFulfillment.getCalories(), viewModel.getMaxDecimalPlacesAmount()
-    ) + " " + viewModel.getEnergyUnit()));
-    if (viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+    if (activeFields.contains(RecipeViewModel.FIELD_FULFILLMENT)) {
+      binding.infoContainer.addView(chipUtil.createRecipeFulfillmentChip(recipeFulfillment));
+    }
+    if (activeFields.contains(RecipeViewModel.FIELD_ENERGY)) {
+      binding.infoContainer.addView(chipUtil.createTextChip(NumUtil.trimAmount(
+          recipeFulfillment.getCalories(), viewModel.getMaxDecimalPlacesAmount()
+      ) + " " + viewModel.getEnergyUnit()));
+    }
+    if (activeFields.contains(RecipeViewModel.FIELD_PRICE)) {
       binding.infoContainer.addView(chipUtil.createTextChip(NumUtil.trimPrice(
           recipeFulfillment.getCosts(), viewModel.getDecimalPlacesPriceDisplay()
       ) + " " + viewModel.getCurrency()));
     }
+    boolean separatorNotInserted = true;
+    for (String activeField : activeFields) {
+      if (activeField.startsWith(Userfield.NAME_PREFIX)) {
+        String userfieldName = activeField.substring(
+            Userfield.NAME_PREFIX.length()
+        );
+        Userfield userfield = viewModel.getUserfieldHashMap().get(userfieldName);
+        if (userfield == null) continue;
+        Chip chipUserfield = chipUtil.createTextChip("");
+        Chip chipFilled = Userfield.fillChipWithUserfield(
+            chipUserfield,
+            userfield,
+            recipe.getUserfields().get(userfieldName)
+        );
+        if (chipFilled != null && separatorNotInserted) {
+          binding.infoContainer.addView(chipUtil.createSeparator());
+          separatorNotInserted = false;
+        }
+        if (chipFilled != null) binding.infoContainer.addView(chipFilled);
+      }
+    }
+    binding.infoContainer.setVisibility(
+        binding.infoContainer.getChildCount() > 0 ? View.VISIBLE : View.GONE
+    );
 
     if (!recipePositionsResolved.isEmpty()) {
       if (binding.recycler.getAdapter() instanceof RecipePositionResolvedAdapter) {
@@ -343,7 +396,8 @@ public class RecipeFragment extends BaseFragment implements
             recipePositionsResolved,
             viewModel.getProducts(),
             viewModel.getQuantityUnits(),
-            viewModel.getQuantityUnitConversions()
+            viewModel.getQuantityUnitConversions(),
+            viewModel.getFilterChipLiveDataIngredientFields().getActiveFields()
         );
       } else {
         binding.recycler.setAdapter(
@@ -355,6 +409,7 @@ public class RecipeFragment extends BaseFragment implements
                 viewModel.getProducts(),
                 viewModel.getQuantityUnits(),
                 viewModel.getQuantityUnitConversions(),
+                viewModel.getFilterChipLiveDataIngredientFields().getActiveFields(),
                 this
             )
         );

@@ -45,6 +45,7 @@ import java.util.concurrent.Executors;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
@@ -67,6 +68,7 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
   private final MasterProductRepository repository;
+  private final SharedPreferences sharedPrefs;
   private final FormDataMasterProductCatOptional formData;
   private final MasterProductCatOptionalFragmentArgs args;
 
@@ -91,8 +93,12 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(application);
     repository = new MasterProductRepository(application);
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-    formData = new FormDataMasterProductCatOptional(application, prefs, getBeginnerModeEnabled());
+    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
+    formData = new FormDataMasterProductCatOptional(
+        application,
+        sharedPrefs,
+        getBeginnerModeEnabled()
+    );
     args = startupArgs;
     isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
     infoFullscreenLive = new MutableLiveData<>();
@@ -290,6 +296,10 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
 
   public void setCurrentFilePath(String currentFilePath) {
     this.currentFilePath = currentFilePath;
+  }
+
+  public String getEnergyUnit() {
+    return sharedPrefs.getString(PREF.ENERGY_UNIT, "kcal");
   }
 
   @NonNull

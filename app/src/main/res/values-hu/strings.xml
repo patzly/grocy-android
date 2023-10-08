@@ -934,7 +934,6 @@
   <string name="property_not_opened">felbontatlan</string>
   <string name="property_is_freezer">Fagyasztószekrény</string>
   <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">Energia (kcal) készletegységenként</string>
   <string name="property_active">Aktív</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Ne mutassa a készlet áttekintésnél</string>

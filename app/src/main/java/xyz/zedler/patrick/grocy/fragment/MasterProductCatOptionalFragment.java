@@ -163,6 +163,8 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
 
+    binding.energy.setHint(getString(R.string.property_energy_insert, viewModel.getEnergyUnit()));
+
     embeddedFragmentScanner.setScannerVisibilityLive(
         viewModel.getFormData().getScannerVisibilityLive()
     );

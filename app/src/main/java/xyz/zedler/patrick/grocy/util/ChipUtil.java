@@ -23,6 +23,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
 import androidx.core.content.ContextCompat;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
@@ -110,5 +112,17 @@ public class ChipUtil {
           .create().show();
     });
     return chipFulfillment;
+  }
+
+  public View createSeparator() {
+    LinearLayout separator = new LinearLayout(context);
+    int dp1 = UiUtil.dpToPx(context, 1);
+    int dp18 = UiUtil.dpToPx(context, 18);
+    int dp4 = UiUtil.dpToPx(context, 4);
+    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(dp1, dp18);
+    lp.setMargins(0, dp4, 0, dp4);
+    separator.setLayoutParams(lp);
+    separator.setBackgroundColor(ResUtil.getColorAttr(context, R.attr.colorOutlineVariant));
+    return separator;
   }
 }

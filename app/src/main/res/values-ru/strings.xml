@@ -942,7 +942,6 @@
   <string name="property_not_opened">не вскрыто</string>
   <string name="property_is_freezer">Морозильник</string>
   <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">Ккал на единицу запаса</string>
   <string name="property_active">Активный</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Никогда не показывать в обзоре запасов</string>

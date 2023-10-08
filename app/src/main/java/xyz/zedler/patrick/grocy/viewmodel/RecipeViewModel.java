@@ -44,6 +44,8 @@ import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.fragment.RecipeFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields.Field;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -54,6 +56,7 @@ import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.RecipePositionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.Userfield;
 import xyz.zedler.patrick.grocy.repository.RecipesRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -63,6 +66,11 @@ import xyz.zedler.patrick.grocy.util.VersionUtil;
 public class RecipeViewModel extends BaseViewModel {
 
   private final static String TAG = RecipeViewModel.class.getSimpleName();
+
+  public final static String FIELD_FULFILLMENT = "field_fulfillment";
+  public final static String FIELD_NOTE = "field_note";
+  public final static String FIELD_ENERGY = "field_energy";
+  public final static String FIELD_PRICE = "field_price";
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
@@ -84,7 +92,10 @@ public class RecipeViewModel extends BaseViewModel {
   private List<QuantityUnitConversionResolved> quantityUnitConversions;
   private HashMap<Integer, StockItem> stockItemHashMap;
   private List<ShoppingListItem> shoppingListItems;
+  private HashMap<String, Userfield> userfieldHashMap;
   private RecipeFulfillment recipeFulfillment;
+  private FilterChipLiveDataFields filterChipLiveDataRecipeInfoFields;
+  private FilterChipLiveDataFields filterChipLiveDataIngredientFields;
 
   private Timer timerUpdateData;
   private final int maxDecimalPlacesAmount;
@@ -107,6 +118,26 @@ public class RecipeViewModel extends BaseViewModel {
     recipeLive = new MutableLiveData<>();
     servingsDesiredLive = new MutableLiveData<>();
     displayFulfillmentWrongInfo = new MutableLiveData<>(false);
+    boolean priceTracking = sharedPrefs.getBoolean(PREF.FEATURE_STOCK_PRICE_TRACKING, true);
+    filterChipLiveDataRecipeInfoFields = new FilterChipLiveDataFields(
+        getApplication(),
+        PREF.RECIPE_INFO_FIELDS,
+        () -> loadFromDatabase(false),
+        new Field(FIELD_FULFILLMENT, getString(R.string.property_requirements_fulfilled), true),
+        new Field(FIELD_ENERGY, getString(R.string.property_energy_only), true),
+        priceTracking
+            ? new Field(FIELD_PRICE, getString(R.string.property_price), true) : null
+    );
+    filterChipLiveDataIngredientFields = new FilterChipLiveDataFields(
+        getApplication(),
+        PREF.RECIPE_INGREDIENT_FIELDS,
+        () -> loadFromDatabase(false),
+        new Field(FIELD_FULFILLMENT, getString(R.string.property_requirements_fulfilled), true),
+        new Field(FIELD_NOTE, getString(R.string.property_note), true),
+        new Field(FIELD_ENERGY, getString(R.string.property_energy_only), true),
+        priceTracking
+            ? new Field(FIELD_PRICE, getString(R.string.property_price), true) : null
+    );
 
     timerUpdateData = new Timer();
     maxDecimalPlacesAmount = sharedPrefs.getInt(
@@ -136,6 +167,8 @@ public class RecipeViewModel extends BaseViewModel {
       quantityUnitConversions = data.getQuantityUnitConversionsResolved();
       stockItemHashMap = ArrayUtil.getStockItemHashMap(data.getStockItems());
       shoppingListItems = data.getShoppingListItems();
+      userfieldHashMap = ArrayUtil.getUserfieldHashMap(data.getUserfields());
+      filterChipLiveDataRecipeInfoFields.setUserfields(data.getUserfields(), ENTITY.RECIPES);
 
       Recipe recipe = Recipe.getRecipeFromId(recipes, args.getRecipeId());
       recipeLive.setValue(recipe);
@@ -167,7 +200,8 @@ public class RecipeViewModel extends BaseViewModel {
         QuantityUnit.class,
         QuantityUnitConversionResolved.class,
         StockItem.class,
-        ShoppingListItem.class
+        ShoppingListItem.class,
+        Userfield.class
     );
   }
 
@@ -311,6 +345,18 @@ public class RecipeViewModel extends BaseViewModel {
 
   public List<ShoppingListItem> getShoppingListItems() {
     return shoppingListItems;
+  }
+
+  public FilterChipLiveDataFields getFilterChipLiveDataRecipeInfoFields() {
+    return filterChipLiveDataRecipeInfoFields;
+  }
+
+  public FilterChipLiveDataFields getFilterChipLiveDataIngredientFields() {
+    return filterChipLiveDataIngredientFields;
+  }
+
+  public HashMap<String, Userfield> getUserfieldHashMap() {
+    return userfieldHashMap;
   }
 
   public MutableLiveData<Recipe> getRecipeLive() {

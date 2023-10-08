@@ -1,7 +1,7 @@
 ## 3.4.0
 
-- New: Initial support for viewing userfields (custom values) on stock overview page, grouping and
-  sorting by userfield is also possible (#601)
+- New: Initial support for viewing userfields (custom values) on stock overview page
+  and recipe page; grouping and sorting by userfield is also possible (#601)
 - New: Added option to backup and restore settings with file (#437)
 - Improved: Added sort option "creation time" on stock overview and master data lists (#769)
 - Improved: Filter bar with product group and sort on master data pages (instead of old menu)
@@ -10,6 +10,7 @@
 - Improved: Better picture mode on recipe page
 - Improved: Fullscreen viewer for recipe picture
 - Improved: Added grouping for recipe ingredients on recipe page
+- Improved: Keyboard directly shown when opening input bottom sheet for numbers
 - Fixed: On purchase page, decimal places for displaying prices were used for quantity unit
   conversion instead of decimal places for input (#778)
 - Fixed: Form validation bug on inventory page when using quantity unit conversion

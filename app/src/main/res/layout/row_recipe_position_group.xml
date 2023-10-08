@@ -22,7 +22,7 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:orientation="vertical"
-  android:layout_width="match_parent"
+  android:layout_width="wrap_content"
   android:layout_height="wrap_content"
   android:layout_marginHorizontal="16dp"
   android:gravity="center_vertical">
@@ -30,17 +30,19 @@
   <com.google.android.material.divider.MaterialDivider
     android:id="@+id/divider"
     style="@style/Widget.Grocy.Divider.Margin"
-    android:layout_marginBottom="0dp" />
+    android:layout_width="match_parent"
+    android:layout_marginBottom="0dp"/>
 
   <TextView
     android:id="@+id/name"
     style="@style/Widget.Grocy.TextView.Category"
     android:textAlignment="viewStart"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:paddingTop="8dp"
+    android:paddingTop="4dp"
     android:paddingBottom="6dp"
     android:layout_marginStart="0dp"
-    android:singleLine="true" />
+    android:layout_marginEnd="8dp"
+    android:singleLine="true"/>
 
 </LinearLayout>
