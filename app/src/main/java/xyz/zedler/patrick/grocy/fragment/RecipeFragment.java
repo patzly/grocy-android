@@ -364,7 +364,6 @@ public class RecipeFragment extends BaseFragment implements
           recipeFulfillment.getCosts(), viewModel.getDecimalPlacesPriceDisplay()
       ) + " " + viewModel.getCurrency()));
     }
-    boolean separatorNotInserted = true;
     for (String activeField : activeFields) {
       if (activeField.startsWith(Userfield.NAME_PREFIX)) {
         String userfieldName = activeField.substring(
@@ -378,10 +377,6 @@ public class RecipeFragment extends BaseFragment implements
             userfield,
             recipe.getUserfields().get(userfieldName)
         );
-        if (chipFilled != null && separatorNotInserted) {
-          binding.infoContainer.addView(chipUtil.createSeparator());
-          separatorNotInserted = false;
-        }
         if (chipFilled != null) binding.infoContainer.addView(chipFilled);
       }
     }

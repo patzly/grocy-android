@@ -25,10 +25,12 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
@@ -45,7 +47,9 @@ import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.Userfield;
 import xyz.zedler.patrick.grocy.repository.RecipesRepository;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class RecipesViewModel extends BaseViewModel {
@@ -79,6 +83,7 @@ public class RecipesViewModel extends BaseViewModel {
   private List<Product> products;
   private List<QuantityUnit> quantityUnits;
   private List<QuantityUnitConversionResolved> quantityUnitConversions;
+  private HashMap<String, Userfield> userfieldHashMap;
 
   private String searchInput;
 
@@ -122,6 +127,8 @@ public class RecipesViewModel extends BaseViewModel {
       products = data.getProducts();
       quantityUnits = data.getQuantityUnits();
       quantityUnitConversions = data.getQuantityUnitConversionsResolved();
+      userfieldHashMap = ArrayUtil.getUserfieldHashMap(data.getUserfields());
+      filterChipLiveDataFields.setUserfields(data.getUserfields(), ENTITY.RECIPES);
 
       updateFilteredRecipes();
       if (downloadAfterLoading) {
@@ -145,7 +152,8 @@ public class RecipesViewModel extends BaseViewModel {
         QuantityUnit.class,
         QuantityUnitConversionResolved.class,
         StockItem.class,
-        ShoppingListItem.class
+        ShoppingListItem.class,
+        Userfield.class
     );
   }
 
@@ -243,6 +251,10 @@ public class RecipesViewModel extends BaseViewModel {
 
   public List<QuantityUnitConversionResolved> getQuantityUnitConversions() {
     return quantityUnitConversions;
+  }
+
+  public HashMap<String, Userfield> getUserfieldHashMap() {
+    return userfieldHashMap;
   }
 
   public boolean isSearchActive() {

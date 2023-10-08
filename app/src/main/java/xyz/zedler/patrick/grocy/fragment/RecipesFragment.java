@@ -169,6 +169,7 @@ public class RecipesFragment extends BaseFragment implements
       adapter.updateData(
           items,
           viewModel.getRecipeFulfillments(),
+          viewModel.getUserfieldHashMap(),
           viewModel.getSortMode(),
           viewModel.isSortAscending(),
           viewModel.getActiveFields(),

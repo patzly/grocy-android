@@ -32,6 +32,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.elevation.SurfaceColors;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
+import xyz.zedler.patrick.grocy.model.Userfield;
 
 public class ChipUtil {
 
@@ -112,6 +113,38 @@ public class ChipUtil {
           .create().show();
     });
     return chipFulfillment;
+  }
+
+  public Chip createRecipeDueScoreChip(int dueScore) {
+    Chip dueScoreChip;
+    if (dueScore == 0) {
+      dueScoreChip = createChip(context, context.getString(
+          R.string.subtitle_recipe_due_score,
+          String.valueOf(dueScore)
+      ), -1);
+    } else if (dueScore <= 10) {
+      dueScoreChip = createChip(context, context.getString(
+          R.string.subtitle_recipe_due_score,
+          String.valueOf(dueScore)
+      ), colorYellow.getOnAccentContainer());
+      dueScoreChip.setChipBackgroundColor(
+          ColorStateList.valueOf(colorYellow.getAccentContainer()));
+    } else {
+      dueScoreChip = createChip(context, context.getString(
+          R.string.subtitle_recipe_due_score,
+          String.valueOf(dueScore)
+      ), colorRed.getOnAccentContainer());
+      dueScoreChip.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getAccentContainer()));
+    }
+    dueScoreChip.setEnabled(false);
+    dueScoreChip.setClickable(false);
+    dueScoreChip.setFocusable(false);
+    return dueScoreChip;
+  }
+
+  public Chip createUserfieldChip(Userfield userfield, String value) {
+    Chip chipUserfield = createTextChip(null);
+    return Userfield.fillChipWithUserfield(chipUserfield, userfield, value);
   }
 
   public View createSeparator() {

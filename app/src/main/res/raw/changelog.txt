@@ -1,6 +1,6 @@
 ## 3.4.0
 
-- New: Initial support for viewing userfields (custom values) on stock overview page
+- New: Initial support for viewing userfields (custom values) on stock overview, recipes overview
   and recipe page; grouping and sorting by userfield is also possible (#601)
 - New: Added option to backup and restore settings with file (#437)
 - Improved: Added sort option "creation time" on stock overview and master data lists (#769)

@@ -23,7 +23,6 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,9 +39,8 @@ import com.bumptech.glide.load.model.LazyHeaders;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.color.ColorRoles;
-import com.google.android.material.elevation.SurfaceColors;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
@@ -53,11 +51,11 @@ import xyz.zedler.patrick.grocy.databinding.RowRecipeEntryBinding;
 import xyz.zedler.patrick.grocy.databinding.RowRecipeEntryGridBinding;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
+import xyz.zedler.patrick.grocy.model.Userfield;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.ChipUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PictureUtil;
-import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipesViewModel;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
@@ -71,6 +69,7 @@ public class RecipeEntryAdapter extends
   private final LayoutManager layoutManager;
   private final ArrayList<Recipe> recipes;
   private final ArrayList<RecipeFulfillment> recipeFulfillments;
+  private final HashMap<String, Userfield> userfieldHashMap;
   private final RecipesItemAdapterListener listener;
   private final GrocyApi grocyApi;
   private final LazyHeaders grocyAuthHeaders;
@@ -90,6 +89,7 @@ public class RecipeEntryAdapter extends
     this.layoutManager = layoutManager;
     this.recipes = new ArrayList<>();
     this.recipeFulfillments = new ArrayList<>();
+    this.userfieldHashMap = new HashMap<>();
     this.listener = listener;
     this.grocyApi = new GrocyApi((Application) context.getApplicationContext());
     this.grocyAuthHeaders = RequestHeaders.getGlideGrocyAuthHeaders(context);
@@ -198,68 +198,44 @@ public class RecipeEntryAdapter extends
 
     title.setText(recipe.getName());
 
+    ChipUtil chipUtil = new ChipUtil(context);
     chips.removeAllViews();
-
-    ColorRoles colorGreen = ResUtil.getHarmonizedRoles(context, R.color.green);
-    ColorRoles colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
-    ColorRoles colorRed = ResUtil.getHarmonizedRoles(context, R.color.red);
 
     if (activeFields.contains(RecipesViewModel.FIELD_DUE_SCORE)
         && recipeFulfillment != null) {
-
-      // DUE SCORE
-      int due_score = recipeFulfillment.getDueScore();
-
-      Chip dueScoreChip;
-      if (due_score == 0) {
-        dueScoreChip = createChip(context, context.getString(
-            R.string.subtitle_recipe_due_score,
-            String.valueOf(recipeFulfillment.getDueScore())
-        ), -1);
-      } else if (due_score <= 10) {
-        dueScoreChip = createChip(context, context.getString(
-            R.string.subtitle_recipe_due_score,
-            String.valueOf(recipeFulfillment.getDueScore())
-        ), colorYellow.getOnAccentContainer());
-        dueScoreChip.setChipBackgroundColor(
-            ColorStateList.valueOf(colorYellow.getAccentContainer()));
-      } else {
-        dueScoreChip = createChip(context, context.getString(
-            R.string.subtitle_recipe_due_score,
-            String.valueOf(recipeFulfillment.getDueScore())
-        ), colorRed.getOnAccentContainer());
-        dueScoreChip.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getAccentContainer()));
-      }
-      dueScoreChip.setEnabled(false);
-      dueScoreChip.setClickable(false);
-      dueScoreChip.setFocusable(false);
-      chips.addView(dueScoreChip);
+      chips.addView(chipUtil.createRecipeDueScoreChip(recipeFulfillment.getDueScore()));
     }
-
     if (activeFields.contains(RecipesViewModel.FIELD_FULFILLMENT)
         && recipeFulfillment != null) {
-
-      // REQUIREMENTS FULFILLED
-      ChipUtil chipUtil = new ChipUtil(context);
       chips.addView(chipUtil.createRecipeFulfillmentChip(recipeFulfillment));
     }
-
     if (activeFields.contains(RecipesViewModel.FIELD_CALORIES)
         && recipeFulfillment != null) {
-      chips.addView(createChip(context, NumUtil.trimAmount(
+      chips.addView(chipUtil.createTextChip(NumUtil.trimAmount(
           recipeFulfillment.getCalories(), maxDecimalPlacesAmount
-      ) + " " + energyUnit, -1));
+      ) + " " + energyUnit));
     }
-
     if (activeFields.contains(RecipesViewModel.FIELD_DESIRED_SERVINGS)
         && recipeFulfillment != null) {
-      chips.addView(createChip(
-          context,
+      chips.addView(chipUtil.createTextChip(
           context.getString(R.string.property_servings_desired_insert, NumUtil.trimAmount(
           recipe.getDesiredServings(), maxDecimalPlacesAmount
-          )),
-          -1
+          ))
       ));
+    }
+    for (String activeField : activeFields) {
+      if (activeField.startsWith(Userfield.NAME_PREFIX)) {
+        String userfieldName = activeField.substring(
+            Userfield.NAME_PREFIX.length()
+        );
+        Userfield userfield = userfieldHashMap.get(userfieldName);
+        if (userfield == null) continue;
+        Chip chipUserfield = chipUtil.createUserfieldChip(
+            userfield,
+            recipe.getUserfields().get(userfieldName)
+        );
+        if (chipUserfield != null) chips.addView(chipUserfield);
+      }
     }
 
     chips.setVisibility(chips.getChildCount() > 0 ? View.VISIBLE : View.GONE);
@@ -293,18 +269,6 @@ public class RecipeEntryAdapter extends
     );
   }
 
-  private static Chip createChip(Context ctx, String text, int textColor) {
-    @SuppressLint("InflateParams")
-    Chip chip = (Chip) LayoutInflater.from(ctx)
-        .inflate(R.layout.view_info_chip, null, false);
-    chip.setChipBackgroundColor(ColorStateList.valueOf(SurfaceColors.SURFACE_4.getColor(ctx)));
-    chip.setText(text);
-    if (textColor != -1) {
-      chip.setTextColor(textColor);
-    }
-    return chip;
-  }
-
   @Override
   public int getItemCount() {
     return recipes.size();
@@ -318,6 +282,7 @@ public class RecipeEntryAdapter extends
   public void updateData(
       ArrayList<Recipe> newList,
       ArrayList<RecipeFulfillment> newRecipeFulfillments,
+      HashMap<String, Userfield> newUserfieldHashMap,
       String sortMode,
       boolean sortAscending,
       List<String> activeFields,
@@ -329,6 +294,8 @@ public class RecipeEntryAdapter extends
         newList,
         this.recipeFulfillments,
         newRecipeFulfillments,
+        this.userfieldHashMap,
+        newUserfieldHashMap,
         this.sortMode,
         sortMode,
         this.sortAscending,
@@ -346,6 +313,8 @@ public class RecipeEntryAdapter extends
     this.recipes.addAll(newList);
     this.recipeFulfillments.clear();
     this.recipeFulfillments.addAll(newRecipeFulfillments);
+    this.userfieldHashMap.clear();
+    this.userfieldHashMap.putAll(newUserfieldHashMap);
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
     this.activeFields.clear();
@@ -359,6 +328,8 @@ public class RecipeEntryAdapter extends
     ArrayList<Recipe> newItems;
     ArrayList<RecipeFulfillment> oldRecipeFulfillments;
     ArrayList<RecipeFulfillment> newRecipeFulfillments;
+    HashMap<String, Userfield> oldUserfieldHashMap;
+    HashMap<String, Userfield> newUserfieldHashMap;
     String sortModeOld;
     String sortModeNew;
     boolean sortAscendingOld;
@@ -371,6 +342,8 @@ public class RecipeEntryAdapter extends
         ArrayList<Recipe> newItems,
         ArrayList<RecipeFulfillment> oldRecipeFulfillments,
         ArrayList<RecipeFulfillment> newRecipeFulfillments,
+        HashMap<String, Userfield> oldUserfieldHashMap,
+        HashMap<String, Userfield> newUserfieldHashMap,
         String sortModeOld,
         String sortModeNew,
         boolean sortAscendingOld,
@@ -382,6 +355,8 @@ public class RecipeEntryAdapter extends
       this.newItems = newItems;
       this.oldRecipeFulfillments = oldRecipeFulfillments;
       this.newRecipeFulfillments = newRecipeFulfillments;
+      this.oldUserfieldHashMap = oldUserfieldHashMap;
+      this.newUserfieldHashMap = newUserfieldHashMap;
       this.sortModeOld = sortModeOld;
       this.sortModeNew = sortModeNew;
       this.sortAscendingOld = sortAscendingOld;
@@ -418,6 +393,9 @@ public class RecipeEntryAdapter extends
         return newItem.getId() == oldItem.getId();
       }
       if (!ArrayUtil.areListsEqualIgnoreOrder(activeFieldsOld, activeFieldsNew)) {
+        return false;
+      }
+      if (!oldUserfieldHashMap.equals(newUserfieldHashMap)) {
         return false;
       }
 
