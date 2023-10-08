@@ -129,6 +129,7 @@
         android:overScrollMode="never"
         android:animateLayoutChanges="true"
         app:transitionTypeChanging="@{true}"
+        app:enabled="@{false}"
         app:setRefreshing="@{viewModel.isLoadingLive}"
         app:onRefreshListener="@{() -> viewModel.downloadData(true)}">
 

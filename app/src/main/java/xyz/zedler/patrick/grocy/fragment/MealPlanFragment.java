@@ -32,6 +32,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
+import com.kizitonwose.calendar.core.Week;
 import com.kizitonwose.calendar.core.WeekDay;
 import com.kizitonwose.calendar.core.WeekDayPosition;
 import com.kizitonwose.calendar.view.ViewContainer;
@@ -54,6 +55,7 @@ import xyz.zedler.patrick.grocy.databinding.ViewCalendarDayLayoutBinding;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MealPlanViewModel;
 
 public class MealPlanFragment extends BaseFragment {
@@ -135,8 +137,9 @@ public class MealPlanFragment extends BaseFragment {
 
           container.binding.card.setStrokeColor(colorOutline);
           container.binding.card.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent));
-          container.binding.weekday.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
-          container.binding.day.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
+          int textColor = ResUtil.getColorAttr(activity, R.attr.colorOnBackground);
+          container.binding.weekday.setTextColor(textColor);
+          container.binding.day.setTextColor(textColor);
         }
         container.binding.card.setOnClickListener((view) -> selectDate(data));
       }
@@ -161,11 +164,22 @@ public class MealPlanFragment extends BaseFragment {
       return null;
     });
     binding.calendarView.scrollToWeek(viewModel.getSelectedDate());
-    binding.today.setOnClickListener(v -> binding.calendarView.smoothScrollToWeek(LocalDate.now()));
+    binding.today.setOnClickListener(v -> {
+      LocalDate date = LocalDate.now();
+      DayOfWeek selected = date.getDayOfWeek();
+      Week currentWeek = binding.calendarView.findFirstVisibleWeek();
+      if (currentWeek == null) {
+        selectDate(new WeekDay(date, WeekDayPosition.RangeDate));
+        return;
+      }
+      LocalDate newSelectedDay = currentWeek.getDays().get(0).getDate()
+          .with(TemporalAdjusters.nextOrSame(DayOfWeek.of(selected.getValue())));
+      selectDate(new WeekDay(newSelectedDay, WeekDayPosition.RangeDate));
+      binding.calendarView.smoothScrollToWeek(date);
+    });
 
     MealPlanPagerAdapter adapter = new MealPlanPagerAdapter(activity, viewModel.getSelectedDate());
     binding.viewPager.setAdapter(adapter);
-    binding.viewPager.setCurrentItem(Integer.MAX_VALUE / 2);
 
     binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
       @Override
@@ -178,7 +192,8 @@ public class MealPlanFragment extends BaseFragment {
 
     viewModel.getSelectedDateLive().observe(getViewLifecycleOwner(), date -> {
       int position = (int) ChronoUnit.DAYS.between(LocalDate.now(), date) + Integer.MAX_VALUE / 2;
-      binding.viewPager.setCurrentItem(position, true);
+      binding.viewPager.setCurrentItem(position, viewModel.isInitialScrollDone());
+      if (!viewModel.isInitialScrollDone()) viewModel.setInitialScrollDone(true);
     });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {

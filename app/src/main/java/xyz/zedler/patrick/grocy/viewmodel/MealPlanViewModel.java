@@ -88,6 +88,7 @@ public class MealPlanViewModel extends BaseViewModel {
   private String searchInput;
   private ArrayList<String> searchResultsFuzzy;
   private final int maxDecimalPlacesAmount;
+  private boolean initialScrollDone;
   private final boolean debug;
 
   public MealPlanViewModel(@NonNull Application application, StockOverviewFragmentArgs args) {
@@ -99,6 +100,7 @@ public class MealPlanViewModel extends BaseViewModel {
         STOCK.DECIMAL_PLACES_AMOUNT,
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
     );
+    initialScrollDone = false;
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
@@ -211,6 +213,14 @@ public class MealPlanViewModel extends BaseViewModel {
 
   public QuantityUnit getQuantityUnitFromId(int id) {
     return quantityUnitHashMap.get(id);
+  }
+
+  public boolean isInitialScrollDone() {
+    return initialScrollDone;
+  }
+
+  public void setInitialScrollDone(boolean initialScrollDone) {
+    this.initialScrollDone = initialScrollDone;
   }
 
   @NonNull
