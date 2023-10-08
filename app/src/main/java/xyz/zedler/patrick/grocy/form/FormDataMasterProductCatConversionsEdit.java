@@ -198,7 +198,7 @@ public class FormDataMasterProductCatConversionsEdit {
     return true;
   }
 
-  public boolean isQuanityUnitValid() {
+  public boolean isQuantityUnitValid() {
     quantityUnitFromErrorLive.setValue(quantityUnitFromLive.getValue() == null);
     quantityUnitToErrorLive.setValue(quantityUnitToLive.getValue() == null);
     if (quantityUnitFromLive.getValue() == null || quantityUnitToLive.getValue() == null) {
@@ -242,7 +242,7 @@ public class FormDataMasterProductCatConversionsEdit {
 
   public boolean isFormValid() {
     boolean valid = isFactorValid();
-    valid = isQuanityUnitValid() && valid;
+    valid = isQuantityUnitValid() && valid;
     return valid;
   }
 

@@ -25,6 +25,7 @@
     <import type="android.view.View" />
     <import type="xyz.zedler.patrick.grocy.R" />
     <import type="xyz.zedler.patrick.grocy.Constants" />
+    <import type="xyz.zedler.patrick.grocy.BuildConfig" />
     <variable
       name="viewModel"
       type="xyz.zedler.patrick.grocy.viewmodel.OverviewStartViewModel" />
@@ -66,12 +67,46 @@
           android:src="@drawable/ic_round_grocy_anim"
           tools:ignore="ContentDescription" />
 
-        <TextView
-          style="@style/Widget.Grocy.TextView.Toolbar"
-          android:text="@string/app_name"
+        <LinearLayout
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_gravity="center" />
+          android:layout_gravity="center"
+          android:orientation="horizontal"
+          tools:ignore="UseCompoundDrawables">
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.Toolbar"
+            android:text="@string/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+          <FrameLayout
+            android:id="@+id/frame_label_debug"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="4dp"
+            android:layout_gravity="center_vertical"
+            android:visibility="@{BuildConfig.DEBUG ? View.VISIBLE : View.GONE}">
+
+            <ImageView
+              android:id="@+id/image_label_debug_bg"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:src="@drawable/ic_round_dev_bg"
+              app:tint="?attr/colorSecondary"
+              tools:ignore="ContentDescription" />
+
+            <ImageView
+              android:id="@+id/image_label_debug"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:src="@drawable/ic_round_dev"
+              app:tint="?attr/colorOnSecondary"
+              tools:ignore="ContentDescription" />
+
+          </FrameLayout>
+
+        </LinearLayout>
 
         <androidx.appcompat.widget.Toolbar
           android:id="@+id/toolbar"
@@ -110,7 +145,7 @@
       android:layout_below="@+id/app_bar"
       android:overScrollMode="never"
       app:setRefreshing="@{viewModel.isLoadingLive}"
-      app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
+      app:onRefreshListener="@{() -> viewModel.downloadData(true)}">
 
       <FrameLayout
         android:id="@+id/frame_container"
@@ -415,6 +450,7 @@
                     android:scrollbars="none">
 
                     <LinearLayout
+                      android:id="@+id/linear_stock_actions_container"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:orientation="horizontal"
@@ -423,6 +459,7 @@
                       android:layout_gravity="end">
 
                       <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_inventory_text"
                         style="@style/Widget.Grocy.Button.OutlinedButton.Icon"
                         android:layout_marginEnd="8dp"
                         android:text="@string/title_inventory"
@@ -431,10 +468,29 @@
                         app:icon="@drawable/ic_round_inventory" />
 
                       <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_inventory_icon"
+                        style="@style/Widget.Grocy.Button.IconButton.Filled.Tonal.Small"
+                        android:layout_marginEnd="8dp"
+                        android:visibility="gone"
+                        android:onClick="@{() -> activity.navUtil.navigateFragment(R.id.inventoryFragment)}"
+                        app:clickUtil="@{clickUtil}"
+                        app:icon="@drawable/ic_round_inventory" />
+
+                      <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_transfer_text"
                         style="@style/Widget.Grocy.Button.OutlinedButton.Icon"
                         android:layout_marginEnd="8dp"
                         android:text="@string/title_transfer"
                         android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) ? View.VISIBLE : View.GONE}"
+                        android:onClick="@{() -> activity.navUtil.navigateFragment(R.id.transferFragment)}"
+                        app:clickUtil="@{clickUtil}"
+                        app:icon="@drawable/ic_round_swap_horiz" />
+
+                      <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_transfer_icon"
+                        style="@style/Widget.Grocy.Button.IconButton.Filled.Tonal.Small"
+                        android:layout_marginEnd="8dp"
+                        android:visibility="gone"
                         android:onClick="@{() -> activity.navUtil.navigateFragment(R.id.transferFragment)}"
                         app:clickUtil="@{clickUtil}"
                         app:icon="@drawable/ic_round_swap_horiz" />
@@ -523,6 +579,7 @@
                     android:scrollbars="none">
 
                     <LinearLayout
+                      android:id="@+id/linear_shopping_list_actions_container"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:orientation="horizontal"
@@ -531,8 +588,19 @@
                       android:layout_gravity="end">
 
                       <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_shopping_text"
                         style="@style/Widget.Grocy.Button.OutlinedButton.Icon"
+                        android:layout_marginEnd="8dp"
                         android:text="@string/title_shopping_mode"
+                        android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_shoppingModeFragment)}"
+                        app:clickUtil="@{clickUtil}"
+                        app:icon="@drawable/ic_round_storefront" />
+
+                      <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_shopping_icon"
+                        style="@style/Widget.Grocy.Button.IconButton.Filled.Tonal.Small"
+                        android:layout_marginEnd="8dp"
+                        android:visibility="gone"
                         android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_shoppingModeFragment)}"
                         app:clickUtil="@{clickUtil}"
                         app:icon="@drawable/ic_round_storefront" />
@@ -542,7 +610,6 @@
                         style="@style/Widget.Grocy.Button.TonalButton.Icon"
                         android:text="@string/title_entry_new"
                         android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_shoppingListItemEditFragmentCreate)}"
-                        android:layout_marginStart="8dp"
                         app:icon="@drawable/ic_round_add_anim" />
 
                     </LinearLayout>

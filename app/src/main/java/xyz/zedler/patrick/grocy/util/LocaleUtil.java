@@ -112,29 +112,34 @@ public class LocaleUtil {
     }
   }
 
-  public static void setLocalizedGrocyDemoInstance(Context context, SharedPreferences sharedPrefs) {
+  public static String getLocalizedGrocyDemoDomain(Context context) {
     Locale locale = LocaleUtil.getLocale();
     String fullLocaleStr = locale.getCountry().isEmpty() ? locale.getLanguage()
         : locale.getLanguage() + "-" + locale.getCountry();
-    String serverUrl = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
-    if (serverUrl != null && serverUrl.contains("demo.grocy.info")
-        && !serverUrl.contains("test-")) {
-      List<Language> languages = LocaleUtil.getLanguages(context);
-      String demoDomain = null;
+    String demoDomain = null;
+    List<Language> languages = LocaleUtil.getLanguages(context);
+    for (Language language : languages) {
+      if (language.getCode().equals(fullLocaleStr)) {
+        demoDomain = language.getDemoDomain();
+        break;
+      }
+    }
+    if (demoDomain == null) {
       for (Language language : languages) {
-        if (language.getCode().equals(fullLocaleStr)) {
+        if (language.getCode().equals(locale.getLanguage())) {
           demoDomain = language.getDemoDomain();
           break;
         }
       }
-      if (demoDomain == null) {
-        for (Language language : languages) {
-          if (language.getCode().equals(locale.getLanguage())) {
-            demoDomain = language.getDemoDomain();
-            break;
-          }
-        }
-      }
+    }
+    return demoDomain;
+  }
+
+  public static void setLocalizedGrocyDemoInstance(Context context, SharedPreferences sharedPrefs) {
+    String serverUrl = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
+    if (serverUrl != null && serverUrl.contains("demo.grocy.info")
+        && !serverUrl.contains("test-")) {
+      String demoDomain = getLocalizedGrocyDemoDomain(context);
       if (demoDomain != null && !serverUrl.contains(demoDomain)) {
         serverUrl = serverUrl.replaceAll(
             "[a-z]+-?[a-z]*\\.demo\\.grocy\\.info", demoDomain

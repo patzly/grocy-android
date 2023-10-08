@@ -29,6 +29,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.util.LocaleUtil;
 
 public class GrocyApi {
 
@@ -49,16 +50,19 @@ public class GrocyApi {
     public final static String STORES = "shopping_locations";
     public final static String QUANTITY_UNITS = "quantity_units";
     public final static String QUANTITY_UNIT_CONVERSIONS = "quantity_unit_conversions";
+    public final static String QUANTITY_UNIT_CONVERSIONS_RESOLVED = "quantity_unit_conversions_resolved";
     public final static String SHOPPING_LIST = "shopping_list";
     public final static String SHOPPING_LISTS = "shopping_lists";
     public final static String RECIPES = "recipes";
     public final static String RECIPES_POS = "recipes_pos";
-    public final static String RECIPES_NEST = "recipes_nestings";
+    public final static String RECIPES_POS_RESOLVED = "recipes_pos_resolved";
+    public final static String RECIPES_NESTINGS = "recipes_nestings";
     public final static String PRODUCT_GROUPS = "product_groups";
     public final static String MEAL_PLAN = "meal_plan";
     public final static String TASKS = "tasks";
     public final static String TASK_CATEGORIES = "task_categories";
     public final static String CHORES = "chores";
+    public final static String USERFIELDS = "userfields";
   }
 
   public final static class COMPARISON_OPERATOR {
@@ -103,9 +107,12 @@ public class GrocyApi {
 
   public GrocyApi(Application application) {
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
+    String demoDomain = LocaleUtil.getLocalizedGrocyDemoDomain(application);
     baseUrl = sharedPrefs.getString(
         Constants.PREF.SERVER_URL,
-        application.getString(R.string.url_grocy_demo)
+        demoDomain != null && !demoDomain.isBlank()
+            ? "https://" + demoDomain
+            : application.getString(R.string.url_grocy_demo_default)
     );
   }
 
@@ -425,23 +432,34 @@ public class GrocyApi {
    */
   public String getRecipes() {
     return getObjects(
-            "recipes",
-            new COMPARISON("id", COMPARISON_OPERATOR.GREATER, "0")
+        ENTITY.RECIPES,
+        new COMPARISON("id", COMPARISON_OPERATOR.GREATER, "0")
     );
   }
 
   public String getRecipeFulfillments() {
     return getUrl(
-            "/recipes/fulfillment",
-            new COMPARISON("recipe_id", COMPARISON_OPERATOR.GREATER, "0")
+        "/recipes/fulfillment",
+        new COMPARISON("recipe_id", COMPARISON_OPERATOR.GREATER, "0")
     );
   }
 
   public String getRecipePositions() {
     return getObjects(
-            "recipes_pos",
-            new COMPARISON("recipe_id", COMPARISON_OPERATOR.GREATER, "0")
+        ENTITY.RECIPES_POS,
+        new COMPARISON("recipe_id", COMPARISON_OPERATOR.GREATER, "0")
     );
+  }
+
+  public String getRecipePositionsResolved() {
+    return getObjects(
+        ENTITY.RECIPES_POS_RESOLVED,
+        new COMPARISON("recipe_id", COMPARISON_OPERATOR.GREATER, "0")
+    );
+  }
+
+  public String getRecipeNestings() {
+    return getObjects(ENTITY.RECIPES_NESTINGS);
   }
 
   public String consumeRecipe(int recipeId) {
@@ -466,8 +484,17 @@ public class GrocyApi {
     return getUrl(
         "/files/recipepictures/"
             + fileNameEncoded.replace("\n", "")
-            + "?force_serve_as=picture&best_fit_height=240&best_fit_width=360"
     );
+  }
+
+  public String getRecipePictureServeSmall(String filename) {
+    return getRecipePicture(filename)
+        + "?force_serve_as=picture&best_fit_height=240&best_fit_width=360";
+  }
+
+  public String getRecipePictureServeLarge(String filename) {
+    return getRecipePicture(filename)
+        + "?force_serve_as=picture&best_fit_height=800&best_fit_width=1280";
   }
 
   public String getProductPicture(String filename) {
@@ -478,7 +505,16 @@ public class GrocyApi {
     return getUrl(
         "/files/productpictures/"
             + fileNameEncoded.replace("\n", "")
-            + "?force_serve_as=picture&best_fit_height=240&best_fit_width=360"
     );
+  }
+
+  public String getProductPictureServeSmall(String filename) {
+    return getProductPicture(filename)
+        + "?force_serve_as=picture&best_fit_height=240&best_fit_width=360";
+  }
+
+  public String getProductPictureServeLarge(String filename) {
+    return getProductPicture(filename)
+        + "?force_serve_as=picture&best_fit_height=800&best_fit_width=1280";
   }
 }

@@ -24,24 +24,16 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.text.Spanned;
 import android.widget.ImageView;
-
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Transformations;
-
 import java.util.ArrayList;
-
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.RecipeEditFragmentArgs;
 import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.Recipe;
-import xyz.zedler.patrick.grocy.util.AmountUtil;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -51,20 +43,21 @@ public class FormDataRecipeEdit {
   private final Application application;
   private final SharedPreferences sharedPrefs;
   private final MutableLiveData<Boolean> displayHelpLive;
+  private final MutableLiveData<Boolean> displayPictureWarningLive;
   private final MutableLiveData<String> nameLive;
   private final MutableLiveData<Integer> nameErrorLive;
   private final MutableLiveData<String> baseServingsLive;
   private final MutableLiveData<Integer> baseServingsErrorLive;
   private final MutableLiveData<Boolean> notCheckShoppingListLive;
   private final MutableLiveData<ArrayList<Product>> productsLive;
-  private final MutableLiveData<ProductDetails> productDetailsLive;
-  private final MutableLiveData<String> productNameLive;
-  private final LiveData<String> productNameInfoStockLive;
-  private final MutableLiveData<Integer> productNameErrorLive;
+  private final MutableLiveData<Product> productProducedLive;
+  private final MutableLiveData<String> productProducedNameLive;
+  private final MutableLiveData<Integer> productProducedNameErrorLive;
   private final MutableLiveData<String> barcodeLive;
   private final MutableLiveData<String> preparationLive;
   private final MutableLiveData<Spanned> preparationSpannedLive;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
+  private final MutableLiveData<String> pictureFilenameLive;
   private final PluralUtil pluralUtil;
   private boolean filledWithRecipe;
   private final int maxDecimalPlacesAmount;
@@ -83,23 +76,16 @@ public class FormDataRecipeEdit {
         Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
         Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
     ));
+    displayPictureWarningLive = new MutableLiveData<>(false);
     nameLive = new MutableLiveData<>();
     nameErrorLive = new MutableLiveData<>();
-    baseServingsLive = new MutableLiveData<>("1");
+    baseServingsLive = new MutableLiveData<>(String.valueOf(1));
     baseServingsErrorLive = new MutableLiveData<>();
     notCheckShoppingListLive = new MutableLiveData<>();
     productsLive = new MutableLiveData<>();
-    productDetailsLive = new MutableLiveData<>();
-    productDetailsLive.setValue(null);
-    productNameLive = new MutableLiveData<>();
-    productNameInfoStockLive = Transformations.map(
-            productDetailsLive,
-            productDetails -> {
-              String info = AmountUtil.getStockAmountInfo(application, pluralUtil, productDetails, maxDecimalPlacesAmount);
-              return info != null ? application.getString(R.string.property_in_stock, info) : " ";
-            }
-    );
-    productNameErrorLive = new MutableLiveData<>();
+    productProducedLive = new MutableLiveData<>();
+    productProducedNameLive = new MutableLiveData<>();
+    productProducedNameErrorLive = new MutableLiveData<>();
     barcodeLive = new MutableLiveData<>();
     preparationLive = new MutableLiveData<>();
     preparationSpannedLive = new MutableLiveData<>();
@@ -111,6 +97,7 @@ public class FormDataRecipeEdit {
             .getCloseWhenFinished()) {
       scannerVisibilityLive.setValue(true);
     }
+    pictureFilenameLive = new MutableLiveData<>("");
 
     filledWithRecipe = false;
   }
@@ -122,6 +109,15 @@ public class FormDataRecipeEdit {
   public void toggleDisplayHelpLive() {
     assert displayHelpLive.getValue() != null;
     displayHelpLive.setValue(!displayHelpLive.getValue());
+  }
+
+  public MutableLiveData<Boolean> getDisplayPictureWarningLive() {
+    return displayPictureWarningLive;
+  }
+
+  public void toggleDisplayPictureWarningLive() {
+    assert displayPictureWarningLive.getValue() != null;
+    displayPictureWarningLive.setValue(!displayPictureWarningLive.getValue());
   }
 
   public MutableLiveData<String> getNameLive() {
@@ -148,20 +144,16 @@ public class FormDataRecipeEdit {
     return productsLive;
   }
 
-  public MutableLiveData<ProductDetails> getProductDetailsLive() {
-    return productDetailsLive;
+  public MutableLiveData<Product> getProductProducedLive() {
+    return productProducedLive;
   }
 
-  public MutableLiveData<String> getProductNameLive() {
-    return productNameLive;
+  public MutableLiveData<String> getProductProducedNameLive() {
+    return productProducedNameLive;
   }
 
-  public LiveData<String> getProductNameInfoStockLive() {
-    return productNameInfoStockLive;
-  }
-
-  public MutableLiveData<Integer> getProductNameErrorLive() {
-    return productNameErrorLive;
+  public MutableLiveData<Integer> getProductProducedNameErrorLive() {
+    return productProducedNameErrorLive;
   }
 
   public MutableLiveData<String> getBarcodeLive() {
@@ -174,6 +166,10 @@ public class FormDataRecipeEdit {
 
   public MutableLiveData<Spanned> getPreparationSpannedLive() {
     return preparationSpannedLive;
+  }
+
+  public MutableLiveData<String> getPictureFilenameLive() {
+    return pictureFilenameLive;
   }
 
   public boolean isFilledWithRecipe() {
@@ -201,23 +197,23 @@ public class FormDataRecipeEdit {
   }
 
   public boolean isProductNameValid() {
-    if (productNameLive.getValue() == null || productNameLive.getValue().isEmpty()) {
-      productDetailsLive.setValue(null);
-      productNameErrorLive.setValue(null);
+    if (productProducedNameLive.getValue() == null || productProducedNameLive.getValue().isEmpty()) {
+      productProducedLive.setValue(null);
+      productProducedNameErrorLive.setValue(null);
       return true;
     }
-    if (productDetailsLive.getValue() == null || productNameLive.getValue().isEmpty()) {
-      productNameErrorLive.setValue(R.string.error_invalid_product);
+    if (productProducedLive.getValue() == null || productProducedNameLive.getValue().isEmpty()) {
+      productProducedNameErrorLive.setValue(R.string.error_invalid_product);
       return false;
     }
-    if (productDetailsLive.getValue() != null && !productNameLive.getValue().isEmpty()
-            && !productDetailsLive.getValue().getProduct().getName()
-            .equals(productNameLive.getValue())
+    if (productProducedLive.getValue() != null && !productProducedNameLive.getValue().isEmpty()
+            && !productProducedLive.getValue().getName()
+            .equals(productProducedNameLive.getValue())
     ) {
-      productNameErrorLive.setValue(R.string.error_invalid_product);
+      productProducedNameErrorLive.setValue(R.string.error_invalid_product);
       return false;
     }
-    productNameErrorLive.setValue(null);
+    productProducedNameErrorLive.setValue(null);
     return true;
   }
 
@@ -277,9 +273,10 @@ public class FormDataRecipeEdit {
     }
 
     recipe.setNotCheckShoppingList(notCheckShoppingListLive.getValue() != null ? notCheckShoppingListLive.getValue() : false);
-    ProductDetails productDetails = productDetailsLive.getValue();
-    recipe.setProductId(productDetails == null ? null : productDetails.getProduct().getId());
+    Product productProduced = productProducedLive.getValue();
+    recipe.setProductId(productProduced == null ? null : productProduced.getId());
     recipe.setDescription(preparationLive.getValue());
+    recipe.setPictureFileName(pictureFilenameLive.getValue());
     return recipe;
   }
 
@@ -287,13 +284,16 @@ public class FormDataRecipeEdit {
     nameLive.setValue(null);
     baseServingsLive.setValue(null);
     notCheckShoppingListLive.setValue(false);
-    productDetailsLive.setValue(null);
-    productNameLive.setValue(null);
-    productNameErrorLive.setValue(null);
+    productProducedLive.setValue(null);
+    productProducedNameLive.setValue(null);
+    productProducedNameErrorLive.setValue(null);
     barcodeLive.setValue(null);
     preparationLive.setValue(null);
     preparationSpannedLive.setValue(null);
-    new Handler().postDelayed(() -> nameErrorLive.setValue(null), 50);
+    new Handler().postDelayed(() -> {
+      nameErrorLive.setValue(null);
+      baseServingsErrorLive.setValue(null);
+    }, 50);
   }
 
   public MutableLiveData<Boolean> getScannerVisibilityLive() {
@@ -324,9 +324,5 @@ public class FormDataRecipeEdit {
             Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER,
             Constants.SETTINGS_DEFAULT.SCANNER.EXTERNAL_SCANNER
     );
-  }
-
-  private String getString(@StringRes int res) {
-    return application.getString(res);
   }
 }

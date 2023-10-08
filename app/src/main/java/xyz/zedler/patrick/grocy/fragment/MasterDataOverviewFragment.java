@@ -68,7 +68,6 @@ public class MasterDataOverviewFragment extends BaseFragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
     viewModel = new ViewModelProvider(this).get(MasterDataOverviewViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
@@ -122,14 +121,6 @@ public class MasterDataOverviewFragment extends BaseFragment {
     binding.linearChores.setOnClickListener(
         v -> viewModel.showMessage(R.string.msg_not_implemented_yet)
     );
-
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
-      binding.swipe.setRefreshing(state);
-      if (!state) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
-    binding.swipe.setOnRefreshListener(() -> viewModel.downloadDataForceUpdate());
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -221,10 +212,7 @@ public class MasterDataOverviewFragment extends BaseFragment {
     if (!online == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!online);
-    if (online) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
   }
 
   @NonNull

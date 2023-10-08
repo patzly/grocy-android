@@ -270,6 +270,7 @@ public class NavUtil {
         } else {
           encoded = URLEncoder.encode(valueBundle.toString(), "UTF-8");
         }
+        encoded = encoded.replace("+", "%20");
         finalDeepLink.append(key).append("=").append(encoded);
       } catch (Throwable ignore) {
       }

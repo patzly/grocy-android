@@ -42,6 +42,7 @@ public class FormDataMasterProductCatOptional {
   private final Application application;
   private final SharedPreferences sharedPrefs;
   private final MutableLiveData<Boolean> displayHelpLive;
+  private final MutableLiveData<Boolean> displayPictureWarningLive;
   private final MutableLiveData<Boolean> isActiveLive;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
   private final MutableLiveData<List<Product>> productsLive;
@@ -59,6 +60,7 @@ public class FormDataMasterProductCatOptional {
   private final MutableLiveData<Boolean> neverShowOnStockLive;
   private final MutableLiveData<Boolean> noOwnStockLive;
   private final MutableLiveData<Boolean> shouldNotBeFrozenLive;
+  private final MutableLiveData<String> pictureFilenameLive;
 
   private final MutableLiveData<Product> productLive;
   private boolean filledWithProduct;
@@ -71,6 +73,7 @@ public class FormDataMasterProductCatOptional {
     this.application = application;
     this.sharedPrefs = sharedPrefs;
     displayHelpLive = new MutableLiveData<>(beginnerMode);
+    displayPictureWarningLive = new MutableLiveData<>(false);
     isActiveLive = new MutableLiveData<>();
     scannerVisibilityLive = new MutableLiveData<>(false);
     productsLive = new MutableLiveData<>(new ArrayList<>());
@@ -94,6 +97,7 @@ public class FormDataMasterProductCatOptional {
     neverShowOnStockLive = new MutableLiveData<>(false);
     noOwnStockLive = new MutableLiveData<>(false);
     shouldNotBeFrozenLive = new MutableLiveData<>(false);
+    pictureFilenameLive = new MutableLiveData<>("");
 
     productLive = new MutableLiveData<>();
     filledWithProduct = false;
@@ -106,6 +110,15 @@ public class FormDataMasterProductCatOptional {
   public void toggleDisplayHelpLive() {
     assert displayHelpLive.getValue() != null;
     displayHelpLive.setValue(!displayHelpLive.getValue());
+  }
+
+  public MutableLiveData<Boolean> getDisplayPictureWarningLive() {
+    return displayPictureWarningLive;
+  }
+
+  public void toggleDisplayPictureWarningLive() {
+    assert displayPictureWarningLive.getValue() != null;
+    displayPictureWarningLive.setValue(!displayPictureWarningLive.getValue());
   }
 
   public MutableLiveData<Boolean> getIsActiveLive() {
@@ -200,6 +213,10 @@ public class FormDataMasterProductCatOptional {
     shouldNotBeFrozenLive.setValue(
         shouldNotBeFrozenLive.getValue() == null || !shouldNotBeFrozenLive.getValue()
     );
+  }
+
+  public MutableLiveData<String> getPictureFilenameLive() {
+    return pictureFilenameLive;
   }
 
   public MutableLiveData<Boolean> getScannerVisibilityLive() {
@@ -316,6 +333,7 @@ public class FormDataMasterProductCatOptional {
     product.setHideOnStockOverviewBoolean(neverShowOnStockLive.getValue());
     product.setNoOwnStockBoolean(noOwnStockLive.getValue());
     product.setShouldNotBeFrozenBoolean(shouldNotBeFrozenLive.getValue());
+    product.setPictureFileName(pictureFilenameLive.getValue());
     return product;
   }
 
@@ -346,6 +364,7 @@ public class FormDataMasterProductCatOptional {
     neverShowOnStockLive.setValue(product.getHideOnStockOverviewBoolean());
     noOwnStockLive.setValue(product.getNoOwnStockBoolean());
     shouldNotBeFrozenLive.setValue(product.getShouldNotBeFrozenBoolean());
+    pictureFilenameLive.setValue(product.getPictureFileName());
     filledWithProduct = true;
   }
 

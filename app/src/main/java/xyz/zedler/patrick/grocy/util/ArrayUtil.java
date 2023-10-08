@@ -33,13 +33,14 @@ import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
+import xyz.zedler.patrick.grocy.model.Userfield;
 
 public class ArrayUtil {
 
@@ -138,22 +139,6 @@ public class ArrayUtil {
     return hashMap;
   }
 
-  public static HashMap<Integer, ArrayList<QuantityUnitConversion>> getUnitConversionsHashMap(
-      List<QuantityUnitConversion> unitConversions
-  ) {
-    HashMap<Integer, ArrayList<QuantityUnitConversion>> hashMap = new HashMap<>();
-    for (QuantityUnitConversion unitConversion : unitConversions) {
-      ArrayList<QuantityUnitConversion> unitConversionArrayList
-          = hashMap.get(unitConversion.getProductIdInt());
-      if (unitConversionArrayList == null) {
-        unitConversionArrayList = new ArrayList<>();
-        hashMap.put(unitConversion.getProductIdInt(), unitConversionArrayList);
-      }
-      unitConversionArrayList.add(unitConversion);
-    }
-    return hashMap;
-  }
-
   public static HashMap<Integer, Task> getTasksHashMap(List<Task> tasks) {
     HashMap<Integer, Task> hashMap = new HashMap<>();
     for (Task t : tasks) {
@@ -209,6 +194,16 @@ public class ArrayUtil {
     return stockItemHashMap;
   }
 
+  public static HashMap<Integer, RecipePosition> getRecipePositionHashMap(
+      List<RecipePosition> recipePositions
+  ) {
+    HashMap<Integer, RecipePosition> recipePositionHashMap = new HashMap<>();
+    for (RecipePosition recipePosition : recipePositions) {
+      recipePositionHashMap.put(recipePosition.getId(), recipePosition);
+    }
+    return recipePositionHashMap;
+  }
+
   public static boolean contains(String[] array, String value) {
     if (array != null) {
       for (String i : array) {
@@ -218,6 +213,14 @@ public class ArrayUtil {
       }
     }
     return false;
+  }
+
+  public static HashMap<String, Userfield> getUserfieldHashMap(List<Userfield> userfields) {
+    HashMap<String, Userfield> hashMap = new HashMap<>();
+    for (Userfield u : userfields) {
+      hashMap.put(u.getName(), u);
+    }
+    return hashMap;
   }
 
   public static boolean areListsEqualIgnoreOrder(List<String> list1, List<String> list2) {

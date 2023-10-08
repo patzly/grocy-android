@@ -70,7 +70,7 @@
   <string name="action_cancel">Zrušit</string>
   <string name="action_add">Přidat</string>
   <string name="action_clear">Smazat</string>
-  <string name="action_clear_shopping_list">Vymazat obsah nákupního seznamu</string>
+  <string name="action_clear_shopping_list">Vyčistit seznam</string>
   <string name="action_rate">Napsat hodnocení na Google Play</string>
   <string name="action_rate_description">Udělejte něco pro autory</string>
   <string name="action_email">Poslat email</string>
@@ -98,12 +98,17 @@
   <string name="action_open_scanner">Spustit čtečku</string>
   <string name="action_discard">Smazat</string>
   <string name="action_clear_form">Vyčistit formulář</string>
-  <!-- Short form for "Link barcode to existing product and clear form", this should fit into a button so keep it short -->
-  <string name="action_link_and_clear">Vložit a smazat</string>
+  <string name="action_take_photo">Vyfotografujte produkt</string>
+  <!-- "Paste" like in "Paste from clipboard" -->
+  <string name="action_paste">Vložit</string>
+  <!-- Short form for "Only link barcode to existing product", this should fit into a
+  button so keep it short. -->
+  <string name="action_link_and_clear">Jen existující</string>
   <string name="action_toggle_done">Přidat/odebrat z košíku</string>
+  <string name="action_change_layout">Změnit rozvržení</string>
   <string name="action_edit_notes">Upravit poznámky</string>
   <string name="action_add_missing">Přidat produkty s malou zásobou</string>
-  <string name="action_purchase_done_items">Nakoupit produkty z nákupního košíku</string>
+  <string name="action_purchase_done_items">Nakoupit jen vybrané</string>
   <string name="action_purchase_all_items">Nakoupit všechno</string>
   <string name="action_skip_entry">Přeskočit položku</string>
   <string name="action_toggle_flash">Vybrat/nevybrat</string>
@@ -119,15 +124,21 @@
   <string name="action_clear_done">V košíku</string>
   <string name="action_display_help">Zobrazit nápovědu</string>
   <string name="action_demo_server">Server s demoverzí</string>
-  <string name="action_own_server">Můj server s grocy</string>
+  <string name="action_own_server">Můj server s Grocy</string>
   <string name="action_enter_data_manually">Ruční vložení údajů o serveru</string>
+  <string name="action_details">Podrobnosti</string>
   <string name="action_perform">Provést akci</string>
   <string name="action_share">Sdílet</string>
   <string name="action_share_description">Řekněte ostatním o Grocy pro Android</string>
   <string name="action_no_filter">Bez filtru</string>
   <string name="action_show_done_tasks">Zobrazit hotové úkoly</string>
-  <string name="action_track_chore_execution">Splnění povinnosti</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_chore_execution">Splnění povinnosti s dnešním datem</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_next_chore_schedule">Označit následující datum povinnosti jako splněné</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_skip_next_chore_schedule">Přeskočit aktuální datum splnění úkolu</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Změna data příštího plnění povinnosti</string>
   <string name="action_put_missing_products_on_shopping_list">Vložit produkty pod min. stavem zásoby</string>
 
@@ -242,6 +253,20 @@
     <item quantity="many">%1$d po termínu</item>
     <item quantity="other">%1$d po termínu</item>
   </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_short">
+    <item quantity="one">úkol: %1$d</item>
+    <item quantity="few">úkoly: %1$d</item>
+    <item quantity="many">úkolů: %1$d</item>
+    <item quantity="other">úkolů: %1$d</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_long">
+    <item quantity="one">úkol: %1$d (následující)</item>
+    <item quantity="few">úkoly: %1$d (všechny následující)</item>
+    <item quantity="many">úkolů: %1$d (všechny následující)</item>
+    <item quantity="other">úkolů: %1$d (všechny následující)</item>
+  </plurals>
   <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
   <plurals name="msg_assigned_tasks">
     <item quantity="one">%1$d je váš</item>
@@ -288,6 +313,7 @@
   <!-- %1$s is a product name -->
   <string name="msg_no_stock_entries">Produkt %1$s nemá žádnou zásobu</string>
   <string name="msg_not_found">Produkt nenalezen</string>
+  <string name="msg_returning_to_overview">Za pár vteřin se vrátíte na Přehled zásob</string>
   <string name="msg_editor_hint">Zapište text</string>
   <string name="msg_coming_soon">Tato funkce bude v dalších verzích...</string>
   <string name="msg_undo_transaction">Vrátit transakci?</string>
@@ -329,6 +355,7 @@
   <string name="msg_item_marked_as_undone">Stav položky byl vrácen</string>
   <string name="option_synced_success">Volba byla zapsána na server</string>
   <string name="option_synced_error">Volbu se nepodařilo zapsat na server</string>
+  <string name="msg_data_copied_from_product">Zkopírováno z produktu: %1$s</string>
   <string name="msg_recipe_added_to_cart">Všechny ingredience receptu jsou vloženy do nákupního košíku</string>
   <string name="msg_recipe_consumed">Všechny ingredience z receptu „%1$s“ byly odebrány ze zásob</string>
   <string name="msg_stored_purchases_overview">Několik nákupů ještě nebylo zapsáno na server. Pro podrobnosti klepněte sem.</string>
@@ -355,28 +382,34 @@
   <string name="msg_quick_mode_confirm_transfer">Provede se:\nPřesun %1$s %2$s produktu %3$s\nZ: %4$s\nDo: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">Provede se:\nZměna množství produktu %1$s na %2$s %3$s\nna všech přidaných baleních\nDatum min. trvanlivosti:%4$s \nCena: %5$s\nObchod: %6$s\nUmístění: %7$s</string>
-  <string name="msg_compatibility">Tato verze aplikace není kompatibilní s verzí grocy na serveru.\n\nVerze na serveru: %1$s\n\nPodporovaná verze: %2$s\n\nJestliže má aktuální verze vyšší první číslo než podporovaná verze, mohlo by dojít až ke ztrátě dat na serveru nebo (což je pravděpodobnější) ke zhroucení aplikace.\nJestliže má nová verze vyšší druhé nebo třetí číslo, pak je riziko problémů malé.</string>
+  <string name="msg_compatibility">Tato verze aplikace není kompatibilní s verzí Grocy na serveru.\n\nVerze na serveru: %1$s\n\nPodporovaná verze: %2$s\n\nJestliže má aktuální verze vyšší první číslo než podporovaná verze, mohlo by dojít až ke ztrátě dat na serveru nebo (což je pravděpodobnější) ke zhroucení této aplikace.\nJestlinJestliže má nová verze vyšší druhé nebo třetí číslo, pak je riziko problémů malé.</string>
   <string name="msg_logout">Na váš server se nic neuloží. Budete přesměrováni na přihlašovací stránku.</string>
   <string name="msg_logout_demo">Používáte veřejně přístupný demo server <u>https://grocy.info</u>.\n\n<b>Žádné vaše změny nebudou trvalé!\nVše co zapíšete ale zůstane veřejné, dokud se server neuvede do výchozího stavu, což se děje jednou za den.</b>\n\nNa přihlašovací stránce můžete zadat adresu vlastního serveru.</string>
   <string name="msg_logout_demo_short">Toto je veřejný grocy demo server. Klepněte pro více informací.</string>
   <string name="msg_restart">Restartujte, prosím, aplikaci, aby se nová konfigurace grocy načetla celá.</string>
   <string name="msg_full_description">Klepnutím zobrazíte kompletní popis</string>
+  <string name="msg_copied_clipboard">Zkopírováno</string>
   <string name="msg_shortcuts">Můžete použít až 4 zkratky:</string>
   <string name="msg_shortcuts_not_supported">Tato verze Androidu zkratky nepodporuje</string>
   <string name="msg_barcode_formats">Pokud vyberete jen ty druhy čárových (či jiných) kódů, které jsou u vámi nakupovaných produktů obvyklé, zrychlíte tak jejich přečtení</string>
   <string name="msg_features">Úvod si můžete znovu přehrát v sekci „O programu”</string>
   <string name="msg_feedback">Máte nějaké přání, otázky nebo jste našli chybu? Kontaktujte nás a my vám pomůžeme.\nRádi si od vás přečteme pěknou recenzi na Google Play.</string>
   <string name="msg_point_at_barcode">Namiřte kameru na čárový kód</string>
+  <string name="msg_save_product_first">Nejprve produkt uložte</string>
+  <string name="msg_save_recipe_first">Nejprve recept uložte</string>
   <string name="msg_press_hold_confirm">Podržením potvrdíte odstranění</string>
+  <string name="msg_recipe_consume_ask">Opravdu si přejete spotřebovat všechny ingredience receptu „%1$s“? Suroviny označené „Zkontrolovat pouze zda je v zásobě jakékoliv množství“ budou ignorovány.</string>
+  <string name="msg_recipe_shopping_list_ask">Chcete přidat všechny chybějící ingredience z receptu „%1$s“ do nákupního seznamu?\nOdškrtněte ty, které v nákupním seznamu nechcete.</string>
   <string name="msg_welcome">Grocy pro Android vás vítá</string>
-  <string name="msg_welcome_introduce">Chcete-li grocy používat, musíte si ji nejprve nainstalovat na svůj server nebo jako grocy add-on pro Home Assistant.\nPokud si jen chcete aplikaci vyzkoušet, můžete použít demo server od Bernda Bestela, tvůrce grocy.</string>
+  <string name="msg_welcome_introduce">Chcete-li Grocy používat, musíte si ji nejprve nainstalovat na svůj server nebo jako Grocy add-on pro Home Assistant.\nPokud si jen chcete aplikaci vyzkoušet, můžete použít demo server od Bernda Bestela, tvůrce Grocy.</string>
   <string name="msg_choose_option_below">Vyberte si jednu z možností</string>
-  <string name="msg_qr_code_scan">Nejprve navštivte web vašeho grocy serveru a přejděte na stránku \'Spravovat API klíče\'. Klikněte na „Přidat”. Poté API klíč zkopírujte a použijte v této aplikaci. Pohodlnější je otevřít web grocy na jiném zařízení. Tam na stránce \'Spravovat API klíče\' klikněte na ikonu QR kódu a API klíč naskenujte.</string>
-  <string name="msg_qr_code_scan_token">Používáte doplněk pro Home Assistant. Vytvořte přístupový kód s dlouhou životností ve svém profilu aplikace Home Assistant. Funkci najdete v poslední sekci. Po vytvoření klikněte na Generate QR Code a sejměte ho tu.</string>
+  <string name="msg_qr_code_scan">Nejprve navštivte web vašeho Grocy serveru a přejděte na stránku „Spravovat API klíče”. Klikněte na „Přidat”. Poté API klíč zkopírujte a použijte v této aplikaci. Pohodlnější způsob je otevřít web Grocy na jiném zařízení. Tam na stránce „Spravovat API klíče” klikněte na ikonu QR kódu a API klíč naskenujte.</string>
+  <string name="msg_qr_code_scan_token">Používáte doplněk pro Home Assistant. Vytvořte přístupový kód s dlouhou životností ve svém profilu aplikace Home Assistant. Funkci najdete v poslední sekci. Po vytvoření klikněte na „Generate QR Code” a sejměte ho tu.</string>
   <string name="msg_port_connection_info_without_port">Aplikace se připojuje k portu %1$s.\nJestliže ji chcete připojit k jinému číslu portu, přidejte toto číslo (např. 81) k URL vašeho serveru.\nPříklad: http://mujserver.cz:81/</string>
   <string name="msg_port_connection_info_with_port">Aplikace se připojuje k portu č.: %1$s</string>
   <string name="msg_clear_form_first">Nejprve smažte všechny údaje než začnete skenovat další čárový kód</string>
   <string name="msg_not_implemented_yet">Tato funkce zatím není implemetována. Zatím, prosím, použijte rozhraní svého serveru.</string>
+  <string name="msg_help_picture_changes">Každá změna snímku se ihned synchronizuje se serverem</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_stock_label_type">Výchozí typ nálepky s čárovým kódem pro produkt při nákupu</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -404,14 +437,23 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_stock">Jednotku množství zásoby již není možné po prvním nákupu změnit.</string>
   <string name="msg_help_qu_stock_changeable">Měrnou jednotka zásoby můžete změnit jen tehdy, pokud je definován její převod do jiné jednotky.</string>
+  <string name="msg_help_qu_changeable">Měrnou jednotku produktu lze změnit jen tehdy, pokud jste pro ni definovali převodní poměr</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_qu_purchase">Toto je výchozí měrná jednotka produktu při jeho přidání do nákupního seznamu</string>
+  <string name="msg_help_qu_purchase">Výchozí množstevní jednotka pro akci Nakoupit a pro vkládání produktu do nákupního seznamu</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_consume">Měrná jednotka produktu pro funkci Spotřebovat</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_price">Zobrazované ceny produktu budou odpovídat této množstevní jednotce</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">Pokud je zaškrtnuto, minimální množství zásob podřízených produktů bude přičteno do tohoto produktu. To znamená že podřízené produkty nikdy nebudou chybět, ale pouze tento produkt.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_treat_opened_as_out_of_stock">Otevřená balení tedy nebudou započítána do zásob. To lze využít pro plánování nákupů.</string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">Tento počet je použit pro tlačítko „rychle spotřebovat/otevřít“ na stránce přehledu zásob. Vztaženo k početní jednotce zásoby.</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_consume_amount_new">Hodnota množství pro tlačítko Spotřebovat v Přehledu zásob. Vztahuje se k měrné jednotce zásob.</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_open_amount">Hodnota množství pro tlačítko Otevřít v Přehledu zásob. Vztahuje se k měrné jednotce zásob.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_tare_weight">Hodí se například pro produkty v nádobách, které se zváží včetně ní, a jejíž váha je automaticky odečtena podle uložené hodnoty táry</string>
   <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -438,24 +480,36 @@
   <string name="msg_help_not_check_shopping_list">Normálně je množství produktu vložené do nákupního seznamu výsledkem vzorce: potřebné množství – dostupné množství – množství produktu již v nákupním seznamu.
 Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu.</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_servings">Zobrazené ingredience odpovídají tomuto počtu porcí</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_produces_product">Pokud tu vyberete produkt, bude po kliknutí na „Spotřebovat všechny suroviny použité v tomto receptu“ receptu přidán do stavu zásob a to v množství odpovídajícím počtu porcí při spotřebování receptu.</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_only_check_any_amount">Je-li zaškrtnuto, smíte vybrat jakoukoliv měrnou jednotku produktu. V receptu se pak objeví, že je produkt v zásobě, je-li k dispozici jakékoliv jeho množství.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_variable_amount">Pokud vyplníte množství sem, objeví se jako množství produktu v receptu. Ovšem kontrola stavu produktu bude stále prováděna podle množství o řádek výše.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_group">Text bude použit jako nadpis pro skupinu ingrediencí</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_price_factor">Konečná cena této ingredience bude vynásobena tímto číslem. Vhodné např. pro prodej produktu vyrobeného z receptu.</string>
+  <string name="msg_help_recipe_ingredients_wrong">Pokud ne serveru používáte verzi Grocy nižší, než 4.0.0, mohou se v tomto seznamu objevit chybné informace. Aktualizujte, prosím, serverovou verzi alespoň na 4.0.0.</string>
   <string name="msg_help_date_chooser">Můžete si nastavit i vkládání dat klávesnicí. Urychlí to práci.</string>
   <string name="msg_help_date_chooser_keyboard">Můžete si změnit formát zápisu data na DDMMRR.\nPomocí klávesy Done (Hotovo, Enter...) na klávesnici tuto stránku uložíte a zavřete.</string>
+  <string name="msg_help_notifications_tap">Klepněte sem, pokud dostáváte upozornění z Grocy se zpožděním nebo vůbec ne</string>
+  <string name="msg_help_notifications">Pokud vám nepřišlo upozornění, zkontrolujte v nastavení pro aplikace, jestli jsou pro Grocy povolena a jestli je nezadržuje režim úspory energie. Ten můžete vypnout jen pro Grocy.</string>
+  <string name="msg_help_notifications_other">Neodstraňujte Grocy z přehledu otevřených aplikací. U některých modifikací Androidu to znamená zastavit upozorňování.</string>
   <string name="msg_help_quick_mode">Podržením prstu na titulku se přepnete do zrychleného režimu. Pokud jsou k produktu nebo k jeho čárovému kódu vyplněny všechny informace, pak stačí naskenovat jeho čárový kód a přidání do zásoby se provede z těchto dat.</string>
   <string name="msg_help_loading_circle_settings">Na každé stránce, kde se něco čte ze serveru, aplikace nejprve zkontroluje, zda se databáze na serveru změnila od poslední aktualizace a pokud ano, načte nová data. Zapněte tuto volbu pokud chcete zobrazit symbol komunikace i pro ověřování aktuálnosti databáze.</string>
   <string name="msg_help_start">Je aktivní režim pro začátečníky. Texty nápovědy jsou automaticky zobrazeny na všech stránkách, kde jsou dostupné. Klepnutím to změníte.</string>
   <string name="msg_help_purchased_date_settings">Zobrazit možnost zadání data nákupu na stránce nákupu. Jinak se bude ukládat aktuální datum.</string>
-  <string name="msg_help_normal_login">Klepněte na tuto kartu pokud používáte Home Assistant s doplňkem pro grocy.</string>
-  <string name="msg_help_home_assistant_login">Používáte doplněk grocy pro Home Assistant. To vyžaduje doplňkové informace. Klepněte na tuto kartu pro přepnutí na běžné přihlášení.</string>
+  <string name="msg_help_normal_login">Klepněte na tuto kartu pokud používáte Home Assistant s doplňkem pro Grocy</string>
+  <string name="msg_help_home_assistant_login">Používáte doplněk Grocy pro Home Assistant. To vyžaduje doplňkové informace. Klepněte na tuto kartu pro přepnutí na běžné přihlašování.</string>
   <string name="msg_help_home_assistant_login_help_show">Klepnutím zobrazíte nápovědu</string>
   <string name="msg_help_home_assistant_login_help_hide">Klepnutím nápovědu skryjete</string>
   <string name="msg_help_home_assistant_login_server">Zde můžete zadat URL adresu vašeho Nabu Casa cloudu, pokud ho používáte. Klepněte na tuto kartu pro otevření webu Nabu Casa.</string>
   <string name="msg_help_home_assistant_login_token">Můžete si vytvořit přístupový kód s dlouhou životností ve svém profilu aplikace Home Assistant. Klepnutím otevřete výše uvedenou adresu</string>
   <string name="msg_help_home_assistant_login_proxy_id">Vraťte se zpět nebo klikněte na tuto kartu pro naskenování QR kódu, který vyplní všechny údaje.</string>
   <string name="msg_help_fab_overview_start">V tomto přehledu má tlačítko dvě funkce:\n\n– sejmutím čárového kódu a klepnutím produkt spotřebujete\n– sejmutím čárového kódu a podržením produkt nakoupíte\n\nTtoto tlačítko je vždy aktivní a můžete jím produkty spotřebovat nebo nakoupit. V nastavení aplikace to můžete změnit.</string>
-  <string name="msg_share">Tato aplikace je klient projektu grocy: \nhttps://github.com/patzly/grocy-android</string>
+  <string name="msg_share">Tato aplikace je klient projektu Grocy: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">Tento API klíč nefunguje</string>
   <string name="error_orbot_not_installed">Orbot není instalován</string>
@@ -492,9 +546,10 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="error_invalid_price">Neplatná cena</string>
   <string name="error_invalid_factor">Neplatný násobitel</string>
   <string name="error_invalid_date_format">Nesprávný formát data</string>
-  <string name="error_api_qr_code">Tento QR kód neobsahuje přihlašovací údaje Grocy API</string>
+  <string name="error_api_qr_code">Tento QR kód neobsahuje autorizační údaje Grocy API</string>
   <string name="error_token_qr_code">Toto není správný QR kód z Home Assistant s dlouhou životností</string>
   <string name="error_loading_qus">Nepodařilo se načíst měrné jednotky produktu</string>
+  <string name="error_clipboard_no_image">Ve schránce není obrázek nebo není čitelný</string>
   <string name="error_no_children">Vybraný produkt nemá žádné podřízené produkty</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Nemůže být roven %1$s</string>
@@ -509,12 +564,15 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="error_offline">Nepřipojen k serveru</string>
   <string name="error_offline_subtitle">K zobrazení této stránky potřebujete připojení k internetu.</string>
   <string name="error_no_done_items">Zatím není nic vloženo do nákupního košíku</string>
-  <string name="error_name_exists">Toto jméno již existuje</string>
+  <string name="error_already_exists">Již existuje</string>
   <string name="error_network">Chyba sítě</string>
   <string name="error_network_subtitle">Potřebná data nemohla být načtena</string>
   <string name="error_network_exact">Chyba sítě: %1$s</string>
+  <string name="error_database">Chyba v databázi</string>
+  <string name="error_insert">Chyba: %1$s</string>
+  <string name="error_details">Podrobnosti k chybě</string>
   <string name="error_unknown">Jejda!</string>
-  <string name="error_not_grocy_instance">Neplatná instance grocy</string>
+  <string name="error_not_grocy_instance">Neplatná instance Grocy</string>
   <string name="error_timeout">Odezva serveru byla příliš dlouhá</string>
   <string name="error_no_product_selected">Nebyl vybrán žádný produkt</string>
   <string name="error_failed_to_connect_to">Nepodařilo se připojit k serveru</string>
@@ -529,9 +587,12 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="error_failed_barcode_upload">Čárový kód se nepodařilo odeslat na server</string>
   <string name="error_wrong_grocycode_type">Tento grocycode obsahuje chybný druh pole</string>
   <string name="error_stock_entry_grocycode">Podle tohoto grocycode nebyl nalezen žádný produkt v zásobě</string>
+  <string name="error_picture_uploads_forbidden">Snímky lze ukládat jen váš server. Na právě používanou demoverzi to možné není.</string>
   <string name="error_permission">Pro tuto akci nemáte přidělené oprávnění</string>
+  <string name="error_permission_notification">Abyste dostávali z Grocy upozornění, musíte je povolit v nastaveních pro aplikace</string>
   <string name="error_undefined">Došlo k chybě</string>
   <string name="error_invalid_base_servings">Počet porcí je nesprávný</string>
+  <string name="error_pictures_size_exceeds_limit">Některé obrázky produktů nebo jídel jsou příliš velké a proto je aplikace nezobrazí. Zmenšete, prosím, velké obrázky. Zrychlí se tím načítání dat.</string>
 
   <string name="title_overview">Přehled</string>
   <string name="title_stock_overview">Přehled zásob</string>
@@ -553,6 +614,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="title_shopping_list">Nákupní seznam</string>
   <string name="title_feedback">Zpětná vazba</string>
   <string name="title_settings">Nastavení</string>
+  <string name="title_options">Možnosti</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="title_barcode_scanner">Skener čárových kódů</string>
   <!-- Context: About this app -->
@@ -576,10 +638,16 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="title_chores">Povinnosti</string>
   <string name="title_chore">Povinnost</string>
   <string name="title_recipes">Recepty</string>
-  <string name="title_recipe_create">Nový recept</string>
-  <string name="title_recipe_edit">Upravit recept</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Úpravy</string>
+  <string name="title_task_new">Přidat úkol</string>
+  <string name="title_task_edit">Upravit úkol</string>
+  <string name="title_entry_new">Nová položka</string>
+  <string name="title_entry_edit">Upravit položku</string>
+  <string name="title_ingredient_new">Přidat ingredienci</string>
+  <string name="title_ingredient_edit">Upravit ingredienci</string>
+  <string name="title_recipe_create">Přidat recept</string>
+  <string name="title_recipe_edit">Upravit recept</string>
 
   <string name="title_spoiled">Zkaženo</string>
   <string name="title_use_specific">Vybrat balení produktu ze zásob</string>
@@ -658,6 +726,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="subtitle_product_hidden">Produkt je skrytý</string>
   <string name="subtitle_product_not_hidden">Produkt není skrytý</string>
   <string name="subtitle_product_not_on_server">Produkt není uložen na serveru</string>
+
   <string name="subtitle_barcodes_will_be_added">Přečtené čárové kódy se uloží k datům produktu</string>
   <string name="subtitle_unknown">Neznámý</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
@@ -677,7 +746,6 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="subtitle_product_optional_properties">Stav, Nadřazený produkt, Popis, Skupina produktů, Energie, Obrázek</string>
   <string name="subtitle_product_quantity_unit">Výchozí hodnoty pro zásobu a nákup</string>
   <string name="subtitle_synced_with_server">Uloženo na server</string>
-  <string name="subtitle_recipe_not_on_server">Recept není uložen na serveru</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">Index min. trvanlivosti: %1$s</string>
   <string name="subtitle_per_serving">na 1 porci</string>
@@ -843,8 +911,10 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_product_name">Jméno produktu</string>
   <string name="property_parent_product">Nadřazený produkt</string>
   <string name="property_description">Popis</string>
+  <string name="property_product_description">Popis</string>
   <string name="property_note">Poznámka</string>
-  <string name="property_status">Status</string>
+  <string name="property_status">Filtr</string>
+  <string name="property_status_insert">Filtr:</string>
   <string name="property_amount">Množství</string>
   <string name="property_amount_insert">Množství: %1$s</string>
   <string name="property_seconds">Sekund</string>
@@ -864,6 +934,8 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_price_unit">Cena za %1$s</string>
   <!-- %1$s is a price and %2$s is a quantity unit-->
   <string name="property_price_unit_insert">%1$s za %2$s</string>
+  <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_with_currency">%1$s %2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Cena v %1$s</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -876,6 +948,14 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_qu_stock">Měrná jednotka zásoby</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Převodní koeficient (násobek) měrné jednotky nákupu produktu do měrné jednotky zásob</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_default_qu_consume">Výchozí měrná jednotka pro spotřebu</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_prices">Množstevní jednotka pro ceny</string>
+  <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
+  <string name="property_quantity_unit_from">Převést z jednotky</string>
+  <!-- Example: "Convert to cup"; This string is part of a pair, there is also 'Convert from' -->
+  <string name="property_quantity_unit_to">na jednotku</string>
   <string name="property_factor">Násobek</string>
   <string name="property_barcode">Čárový kód</string>
   <string name="property_barcodes">Čárové kódy</string>
@@ -942,7 +1022,6 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_not_opened">neotevřeno</string>
   <string name="property_is_freezer">Místo je mrazící box</string>
   <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">Energie (kcal) jedné jednotky produktu</string>
   <string name="property_active">Aktivní</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Nezobrazovat v Přehledu zásob</string>
@@ -963,6 +1042,10 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_amount_quick_consume">Množství pro „rychle spotřebovat“</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_quick_consume_in">Měrná jednotka pro „rychle spotřebovat“ %1$s</string>
+  <!--The same string is also in the web interface (server v4.0.0 or later): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_amount_quick_open">Množství pro tlačítko Otevřít</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_quick_open_in">Měrná jednotka pro tlačítko Otevřít: %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">Sčítat minimální počet skladových zásob podřízených produktů</string>
   <string name="property_picture">Obrázek</string>
@@ -981,11 +1064,21 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_ungrouped">Neseskupeno</string>
   <!-- %1$s is a property like "product group" or "due date" -->
   <string name="property_extra_field">Další sloupec: %1$s</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields">Položky</string>
   <string name="property_task_category">Kategorie úkolu</string>
   <string name="property_task_categories">Kategorie úkolů</string>
   <string name="property_calories">Kalorie</string>
   <string name="property_calories_unit">Kalorií v jednotce</string>
   <string name="property_calories_total">Kalorií celkem</string>
+  <!-- %1$s is a value like energy or price, unit means value of items per unit -->
+  <string name="property_insert_per_unit">%1$s (za jednotku)</string>
+  <!-- %1$s is a value like energy or price, total means value of many items in total -->
+  <string name="property_insert_total">%1$s (celkem)</string>
+  <!-- %1$s is a value like price, average means average price -->
+  <string name="property_insert_average">%1$s (průměr)</string>
+  <!-- %1$s is a value like price, "last" is like for example in "last price" -->
+  <string name="property_insert_last">%1$s (poslední)</string>
   <string name="property_category">Kategorie</string>
   <string name="property_assigned_to">Přiřazeno</string>
   <string name="property_users">Uživatelé</string>
@@ -1006,6 +1099,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_servings_base_insert">Výchozí počet porcí: %1$s</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_servings_desired">Potřebný počet porcí</string>
+  <string name="property_servings_desired_insert">Počet porcí: %1$s</string>
   <string name="property_not_check_shopping_list">Nekontrolovat, jestli je produkt v nákupním seznamu</string>
   <string name="property_not_check_shopping_list_description">Pokud přidáváte chybějící produkt</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
@@ -1023,6 +1117,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_variable_amount">Proměnné množství</string>
   <string name="property_requirements_fulfilled">Všechny požadavky jsou splněny</string>
   <string name="property_produces_product">Recept vyrobí produkt</string>
+  <string name="property_price_factor">Násobek ceny ingredience</string>
 
   <string name="date_today">Dnes</string>
   <string name="date_unknown">Neznámý</string>
@@ -1092,7 +1187,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
     <item quantity="other">Za %d let</item>
   </plurals>
 
-  <string name="info_acknowledgement">Děkujeme vývojáři grocy Berndu Bestelovi, bez jehož skvělé práce by tato aplikace nevznikla.</string>
+  <string name="info_acknowledgement">Děkujeme vývojáři Grocy, Berndu Bestelovi, bez jehož skvělé práce by tato aplikace nevznikla.</string>
   <string name="info_intro">Přehrát úvodní animaci</string>
   <string name="info_intro_description">Představení funkcí</string>
   <string name="info_dev_beginning">Vyvíjeno od</string>
@@ -1125,6 +1220,10 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="category_network">Síť</string>
   <string name="category_network_proxy">Proxy server</string>
   <string name="category_behavior">Chování</string>
+  <string name="category_display_behavior">Způsob zobrazení</string>
+  <string name="category_input_behavior">Způsob zadávání</string>
+  <string name="category_additional_services">Další služby</string>
+  <string name="category_other_behavior">Další možnosti</string>
   <string name="category_debugging">Ladění</string>
   <string name="category_new_product">Nový produkt</string>
   <string name="category_existing_products">Uložený produkt</string>
@@ -1176,7 +1275,6 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="setting_show_done_items_description">na konci seznamu</string>
   <string name="setting_smaller_font">Menší písmo</string>
   <string name="setting_smaller_font_description">aby se mohlo zobrazit více řádků</string>
-  <string name="setting_show_product_description">Zobrazit popis produktu</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Počet dní ve filtru produktů v Přehledu</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -1208,14 +1306,18 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">Rozbalit kontextové záložky</string>
   <string name="setting_expand_bottom_sheets_description">je-li displej na šířku</string>
+  <string name="setting_bottom_menu_button">Zobrazit tlačítko hlavního menu</string>
+  <string name="setting_bottom_menu_button_description">Spodní navigační pruh</string>
+  <string name="setting_turn_on_quick_mode">Používat zrychlený způsob zadávání</string>
+  <string name="setting_turn_on_quick_mode_description">při použití tlačítka skenování ve výchozí stránce</string>
+  <string name="setting_quick_mode_return">Do Přehledu zásob se vrátíte za 20s.</string>
+  <string name="setting_quick_mode_return_description">pokud používáte tlačítko skenování v Přehledu zásob a nepoužíváte zrychlený způsob zadávání.</string>
   <string name="setting_speed_up_start">Zrychlení startu aplikace</string>
   <string name="setting_speed_up_start_description">funguje jen na rychlých zařízeních</string>
   <string name="setting_date_keyboard_input">Zadávat datum klávesnicí</string>
   <string name="setting_date_keyboard_input_description">místo vybírání z nabídky</string>
   <string name="setting_date_keyboard_reverse">Zadávat nejprve den v datumu</string>
   <string name="setting_date_keyboard_reverse_description">DDMMRR (DenMěsícRok) místo RRMMDD</string>
-  <string name="setting_copy_barcode_note">Zkopírovat poznámku z čárového kódu do poznámky v Seznamu zásob</string>
-  <string name="setting_copy_barcode_note_description">Při nákupu</string>
   <string name="setting_loading_circle">Zobrazovat symbol čtení ze serveru u všech požadavků</string>
   <string name="setting_loading_circle_description">vhodné pro pomalé připojení k internetu nebo serveru</string>
   <string name="setting_tor">Použít službu Tor</string>
@@ -1231,21 +1333,29 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="setting_message_duration">Na jak dlouho se objeví zprávy</string>
   <string name="setting_message_duration_description">o provedených akcích</string>
   <string name="setting_notifications_enable">Zapnout upozorňování</string>
-  <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
-  few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_due_soon">Povinnosti s blížícím se datem splnění</string>
-  <string name="setting_notifications_due_soon_description">Každý den vás informuje o blížící se min. trvanlivosti produktů</string>
-  <string name="setting_notifications_chores_description">Každý den vás informuje o povinnostech, které máte vykonat</string>
+  <!-- The string belongs to the stock overview (stock items can be expired, overdue or due soon). -->
+  <string name="setting_notifications_stock_description">Denní upozornění, jestli se neblíží (nebo již nevypršela) doba min. trvanlivosti či použitelnosti produktů</string>
+  <string name="setting_notifications_chores_description">Denní upozornění, jestli se neblíží (nebo již nevypršela) doba splnění povinnosti</string>
   <string name="setting_notification_time">Čas upozornění</string>
-  <!-- the description of the notification time preference.
-  With the "Due soon" check enabled, the user will be notified every day at the selected time how
-  many products in stock are due soon, so check means a check of the products in stock -->
+  <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">Čas, kdy aplikace zobrazí informace o stavu zásob.</string>
   <string name="setting_keep_screen_on_recipes_description">když je zobrazený recept</string>
 
-  <string name="notification_due_soon_content">Spotřebujte je brzy, aby se nezkazily</string>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="notification_stock_not_fresh_title">
+    <item quantity="one">%1$d produktu se blíží (nebo již vypršela) doba min. trvanlivosti či použitelnosti</item>
+    <item quantity="few">%1$d produktům se blíží (nebo již vypršela) doba min. trvanlivosti či použitelnosti</item>
+    <item quantity="many">%1$d produktům se blíží (nebo již vypršela) doba min. trvanlivosti či použitelnosti</item>
+    <item quantity="other">%1$d produktům se blíží (nebo již vypršela) doba min. trvanlivosti či použitelnosti</item>
+  </plurals>
+  <string name="notification_stock_content">Spotřebujte je co nejdříve, ať neplýtváte. Klepněte pro jejich seznam.</string>
+  <!-- %1$s is a number -->
+  <plurals name="notification_chores_due_title">
+    <item quantity="one">Měli byste splnit %1$d povinnost</item>
+    <item quantity="few">Měli byste splnit %1$d povinnosti</item>
+    <item quantity="many">Měli byste splnit %1$d povinností</item>
+    <item quantity="other">Měli byste splnit %1$d povinností</item>
+  </plurals>
+  <string name="notification_chores_content">Odkládání povinností nikam nevede. Klepněte pro jejich seznam.</string>
 
-  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
-  Examples: 'de' for German; 'fr' for French -->
-  <string name="url_grocy_demo">https://cs.demo.grocy.info</string>
   </resources>

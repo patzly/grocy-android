@@ -29,7 +29,7 @@ import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 
 public class ShoppingListItemEditRepository {
@@ -50,14 +50,14 @@ public class ShoppingListItemEditRepository {
     private final List<Product> products;
     private final List<ProductBarcode> barcodes;
     private final List<QuantityUnit> quantityUnits;
-    private final List<QuantityUnitConversion> quantityUnitConversions;
+    private final List<QuantityUnitConversionResolved> quantityUnitConversions;
 
     public ShoppingListItemEditData(
         List<ShoppingList> shoppingLists,
         List<Product> products,
         List<ProductBarcode> barcodes,
         List<QuantityUnit> quantityUnits,
-        List<QuantityUnitConversion> quantityUnitConversions
+        List<QuantityUnitConversionResolved> quantityUnitConversions
     ) {
       this.shoppingLists = shoppingLists;
       this.products = products;
@@ -82,7 +82,7 @@ public class ShoppingListItemEditRepository {
       return quantityUnits;
     }
 
-    public List<QuantityUnitConversion> getQuantityUnitConversions() {
+    public List<QuantityUnitConversionResolved> getQuantityUnitConversions() {
       return quantityUnitConversions;
     }
   }
@@ -94,7 +94,7 @@ public class ShoppingListItemEditRepository {
             appDatabase.productDao().getProducts(),
             appDatabase.productBarcodeDao().getProductBarcodes(),
             appDatabase.quantityUnitDao().getQuantityUnits(),
-            appDatabase.quantityUnitConversionDao().getConversions(),
+            appDatabase.quantityUnitConversionResolvedDao().getConversionsResolved(),
             ShoppingListItemEditData::new
         )
         .subscribeOn(Schedulers.io())

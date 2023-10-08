@@ -28,6 +28,8 @@ import android.view.ViewGroup;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import xyz.zedler.patrick.grocy.NavigationMainDirections;
+import xyz.zedler.patrick.grocy.NavigationMainDirections.ActionGlobalOnboardingFragment;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -113,7 +115,10 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
 
     if (v.getId() == R.id.linear_intro) {
       ViewUtil.startIcon(binding.imageIntro);
-      activity.navUtil.navigateFragment(R.id.onboardingFragment);
+      ActionGlobalOnboardingFragment directions
+          = NavigationMainDirections.actionGlobalOnboardingFragment();
+      directions.setShowAgain(true);
+      activity.navUtil.navigateFragment(directions);
     } else if (v.getId() == R.id.linear_changelog) {
       ViewUtil.startIcon(binding.imageChangelog);
       VersionUtil.showChangelogBottomSheet(activity);

@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.model;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -35,16 +36,18 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.database.Converters;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
+import xyz.zedler.patrick.grocy.web.NetworkQueue.QueueItem;
 
 @Entity(tableName = "location_table")
 public class Location implements Parcelable {
@@ -61,6 +64,10 @@ public class Location implements Parcelable {
   @ColumnInfo(name = "description")
   @SerializedName("description")
   private String description;
+
+  @ColumnInfo(name = "userfields")
+  @SerializedName("userfields")
+  private Map<String, String> userfields;
 
   @ColumnInfo(name = "row_created_timestamp")
   @SerializedName("row_created_timestamp")
@@ -79,6 +86,7 @@ public class Location implements Parcelable {
     id = parcel.readInt();
     name = parcel.readString();
     description = parcel.readString();
+    userfields = Converters.stringToMap(parcel.readString());
     rowCreatedTimestamp = parcel.readString();
     isFreezer = parcel.readString();
   }
@@ -88,6 +96,7 @@ public class Location implements Parcelable {
     dest.writeInt(id);
     dest.writeString(name);
     dest.writeString(description);
+    dest.writeString(Converters.mapToString(userfields));
     dest.writeString(rowCreatedTimestamp);
     dest.writeString(isFreezer);
   }
@@ -135,6 +144,14 @@ public class Location implements Parcelable {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public Map<String, String> getUserfields() {
+    return userfields;
+  }
+
+  public void setUserfields(Map<String, String> userfields) {
+    this.userfields = userfields;
   }
 
   public String getRowCreatedTimestamp() {
@@ -232,14 +249,16 @@ public class Location implements Parcelable {
     };
   }
 
+  @SuppressLint("CheckResult")
   public static QueueItem updateLocations(
       DownloadHelper dlHelper,
       String dbChangedTime,
+      boolean forceUpdate,
       OnObjectsResponseListener<Location> onResponseListener
   ) {
-    String lastTime = dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
+    String lastTime = !forceUpdate ? dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_LOCATIONS, null
-    );
+    ) : null;
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
       return new QueueItem() {
         @Override
@@ -269,11 +288,6 @@ public class Location implements Parcelable {
                 })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError(throwable -> {
-                      if (errorListener != null) {
-                        errorListener.onError(throwable);
-                      }
-                    })
                     .doFinally(() -> {
                       if (onResponseListener != null) {
                         onResponseListener.onResponse(locations);
@@ -282,7 +296,11 @@ public class Location implements Parcelable {
                         responseListener.onResponse(response);
                       }
                     })
-                    .subscribe();
+                    .subscribe(ignored -> {}, throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    });
               },
               error -> {
                 if (errorListener != null) {

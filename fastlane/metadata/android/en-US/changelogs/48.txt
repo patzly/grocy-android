@@ -1,0 +1,4 @@
+Grocy server version 4.0.0 has some bigger changes with quantity units and unit conversions.
+Please read the server changelog carefully for longer explanations of the changes before or after your server update. We recommend installing the update as our app was mainly tested with it and recipe ingredient fulfillment information in our app are finally all correct and complete with it.
+Older supported versions still work but are not tested with every new change.
+You can find the full changelog with many improvements and new features in the app.

@@ -73,7 +73,7 @@ public class MasterProductCatAmountFragment extends BaseFragment {
   @Override
   public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    MasterProductFragmentArgs args = MasterProductFragmentArgs
+    MasterProductCatAmountFragmentArgs args = MasterProductCatAmountFragmentArgs
         .fromBundle(requireArguments());
     viewModel = new ViewModelProvider(this, new MasterProductCatAmountViewModel
         .MasterProductCatAmountViewModelFactory(activity.getApplication(), args)
@@ -117,12 +117,6 @@ public class MasterProductCatAmountFragment extends BaseFragment {
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
 
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
-      if (!isLoading) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
-
     viewModel.getFormData().getTareWeightErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textTareWeightLabel.setTextColor(
             ResUtil.getColorAttr(
@@ -154,7 +148,7 @@ public class MasterProductCatAmountFragment extends BaseFragment {
                 Constants.ARGUMENT.ACTION,
                 Constants.ACTION.DELETE
             );
-            activity.onBackPressed();
+            activity.performOnBackPressed();
             return true;
           }
           if (menuItem.getItemId() == R.id.action_save) {
@@ -163,24 +157,25 @@ public class MasterProductCatAmountFragment extends BaseFragment {
                 Constants.ARGUMENT.ACTION,
                 ACTION.SAVE_CLOSE
             );
-            activity.onBackPressed();
+            activity.performOnBackPressed();
             return true;
           }
           return false;
         }
     );
+    boolean showSaveWithCloseButton = viewModel.isActionEdit() || args.getForceSaveWithClose();
     activity.updateFab(
-        viewModel.isActionEdit() ? R.drawable.ic_round_save : R.drawable.ic_round_save_as,
-        viewModel.isActionEdit() ? R.string.action_save : R.string.action_save_not_close,
-        viewModel.isActionEdit() ? Constants.FAB.TAG.SAVE : Constants.FAB.TAG.SAVE_NOT_CLOSE,
+        showSaveWithCloseButton ? R.drawable.ic_round_save : R.drawable.ic_round_save_as,
+        showSaveWithCloseButton ? R.string.action_save : R.string.action_save_not_close,
+        showSaveWithCloseButton ? Constants.FAB.TAG.SAVE : Constants.FAB.TAG.SAVE_NOT_CLOSE,
         savedInstanceState == null,
         () -> {
           setForDestination(
               R.id.masterProductFragment,
               Constants.ARGUMENT.ACTION,
-              viewModel.isActionEdit() ? ACTION.SAVE_CLOSE : ACTION.SAVE_NOT_CLOSE
+              showSaveWithCloseButton ? ACTION.SAVE_CLOSE : ACTION.SAVE_NOT_CLOSE
           );
-          activity.onBackPressed();
+          activity.performOnBackPressed();
         }
     );
   }
@@ -198,8 +193,8 @@ public class MasterProductCatAmountFragment extends BaseFragment {
       hint = getString(R.string.property_amount_min_stock);
     } else if (type == FormDataMasterProductCatAmount.QUICK_CONSUME_AMOUNT) {
       hint = getString(R.string.property_amount_quick_consume);
-    } else if (type == FormDataMasterProductCatAmount.FACTOR_AMOUNT) {
-      hint = getString(R.string.property_qu_factor);
+    } else if (type == FormDataMasterProductCatAmount.QUICK_OPEN_AMOUNT) {
+      hint = getString(R.string.property_amount_quick_open);
     } else if (type == FormDataMasterProductCatAmount.TARE_WEIGHT) {
       hint = getString(R.string.property_tare_weight);
     }
@@ -232,7 +227,7 @@ public class MasterProductCatAmountFragment extends BaseFragment {
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
+    viewModel.downloadData(false);
   }
 
   @NonNull

@@ -21,8 +21,6 @@ package xyz.zedler.patrick.grocy.util;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,6 +37,7 @@ public class VersionUtil {
   public final static String SERVER_3_2_0 = "3.2.0";
   public final static String SERVER_3_3_0 = "3.3.0";
   public final static String SERVER_3_3_1 = "3.3.1";
+  public final static String SERVER_4_0_0 = "4.0.0";
 
   public static boolean isGrocyServerMin320(SharedPreferences prefs) {
     return isGrocyThisVersionOrHigher(prefs, SERVER_3_2_0);
@@ -50,6 +49,10 @@ public class VersionUtil {
 
   public static boolean isGrocyServerMin331(SharedPreferences prefs) {
     return isGrocyThisVersionOrHigher(prefs, SERVER_3_3_1);
+  }
+
+  public static boolean isGrocyServerMin400(SharedPreferences prefs) {
+    return isGrocyThisVersionOrHigher(prefs, SERVER_4_0_0);
   }
 
   public static boolean isGrocyThisVersionOrHigher(SharedPreferences prefs, @NonNull String version) {
@@ -93,20 +96,29 @@ public class VersionUtil {
     mainActivity.showBottomSheet(new CompatibilityBottomSheet(), bundle);
   }
 
-  public static void showVersionChangelogIfAppUpdated(
-      MainActivity mainActivity,
-      SharedPreferences sharedPrefs
-  ) {
+  public static boolean isAppUpdated(SharedPreferences sharedPrefs) {
     int versionNew = BuildConfig.VERSION_CODE;
     int versionOld = sharedPrefs.getInt(PREF.LAST_VERSION, 0);
     if (versionOld == 0) {
       sharedPrefs.edit().putInt(PREF.LAST_VERSION, versionNew).apply();
+      return false;
     } else if (versionOld != versionNew) {
       sharedPrefs.edit().putInt(PREF.LAST_VERSION, versionNew).apply();
-      new Handler(Looper.getMainLooper()).postDelayed(
-          () -> showChangelogBottomSheet(mainActivity), 900
-      );
+      return true;
     }
+    return false;
+  }
+
+  public static boolean isDatabaseUpdated(SharedPreferences sharedPrefs, int currentVersion) {
+    int versionOld = sharedPrefs.getInt(PREF.LAST_VERSION_DATABASE, 0);
+    if (versionOld == 0) {
+      sharedPrefs.edit().putInt(PREF.LAST_VERSION_DATABASE, currentVersion).apply();
+      return false;
+    } else if (versionOld != currentVersion) {
+      sharedPrefs.edit().putInt(PREF.LAST_VERSION_DATABASE, currentVersion).apply();
+      return true;
+    }
+    return false;
   }
 
   public static void showChangelogBottomSheet(MainActivity mainActivity) {

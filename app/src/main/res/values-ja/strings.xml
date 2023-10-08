@@ -98,6 +98,9 @@
   <string name="action_open_scanner">スキャナを開く</string>
   <string name="action_discard">取消</string>
   <string name="action_clear_form">フォームをクリアする</string>
+  <string name="action_take_photo">写真を撮影</string>
+  <!-- "Paste" like in "Paste from clipboard" -->
+  <string name="action_paste">ペースト</string>
   <!-- Short form for "Only link barcode to existing product", this should fit into a
   button so keep it short. -->
   <string name="action_link_and_clear">リンクのみ</string>
@@ -129,8 +132,9 @@
   <string name="action_share_description">友人にGrocy Androidを紹介</string>
   <string name="action_no_filter">フィルターなし</string>
   <string name="action_show_done_tasks">完了済みタスクを表示</string>
-  <string name="action_track_chore_execution">家事の実行を登録</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_skip_next_chore_schedule">次の家事実行をスキップ</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">次回実行をリスケジュール</string>
   <string name="action_put_missing_products_on_shopping_list">不足商品を買い物リストに追加</string>
 
@@ -272,6 +276,7 @@
   <string name="msg_item_marked_as_undone">アイテムを未完了として登録</string>
   <string name="option_synced_success">オプションが同期されました</string>
   <string name="option_synced_error">オプションが同期できませんでした</string>
+  <string name="msg_data_copied_from_product">製品「%1$s」のデータがコピーされました。</string>
   <string name="msg_recipe_added_to_cart">レシピの材料をカートに追加しました</string>
   <string name="msg_recipe_consumed">レシピ \"%1$s\" の材料を在庫から消去しました</string>
   <string name="msg_stored_purchases_overview">サーバーに送信できなかった購入情報があります。詳細はここをタップ</string>
@@ -298,30 +303,34 @@
   <string name="msg_quick_mode_confirm_transfer">以下のトランザクションを実行します：%3$sを%1$s%2$s移動\n移動元：%4$s\n移動先：%5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">以下のトランザクションを実行します：\n\n在庫を%1$sから%2$s%3$sへ変更\n追加された製品：\n期限：%4$s\n価格：\n購入店：%5$s\n場所：%7$s</string>
-  <string name="msg_compatibility">このアプリのバージョンは、サーバー上の grocy バージョンと互換性がありません。\n\n現在のサーバー バージョン: %1$s\n\nサポートされているサーバー バージョン:\n\n現在のサーバー バージョンのメジャー バージョン番号 (最初の桁) がサポートされているバージョンよりも新しい場合、この警告を無視すると、(可能性は低いですが) データ損失またはクラッシュが発生する可能性があります。\nわずかな違いしかない場合 (たとえば、3 桁目が新しいなど) はこの警告を無視してもおそらく問題ありません。</string>
+  <string name="msg_compatibility">このアプリのバージョンは、サーバー上の Grocy バージョンと互換性がありません。\n\n現在のサーバー バージョン: %1$s \n\nサポートされているサーバー バージョン:%2$s\n\n現在のサーバー バージョンのメジャー バージョン番号(最初の桁)がサポートされているバージョンよりも大きい場合、この警告を無視すると、(低い確率で)データ損失または(高い確率で)クラッシュが発生する可能性があります。\nわずかな違いしかない場合(たとえば3 桁目が大きいなど)、この警告はおそらく無視しても問題ありません。</string>
   <string name="msg_logout">サーバー上のデータは何も変更されません。 ログインページにリダイレクトされます。</string>
   <string name="msg_logout_demo">パブリック デモ サーバー <u>https://grocy.info</u> を使用しています。\n\n<b>ここでの変更は永久に保存されません!\nサーバーが 1 日に 1 回自動的に上書きするまで、変更は公開されたままになります。</b>\n\nログイン画面で、自前サーバーのアドレスを入力できます。</string>
   <string name="msg_logout_demo_short">パブリックデモサーバーです。 タップで詳細表示</string>
   <string name="msg_restart">現在の構成を適用するには、アプリを再起動する必要があります。 今すぐ再起動しますか?</string>
   <string name="msg_full_description">ここをタップすると完全な説明が表示されます</string>
+  <string name="msg_copied_clipboard">クリップボードにコピーしました</string>
   <string name="msg_shortcuts">最大 4 つのショートカットを有効にできます</string>
   <string name="msg_shortcuts_not_supported">この Android バージョンではショートカットはサポートされていません</string>
   <string name="msg_barcode_formats">予想される形式のみを検出するようバーコード検出器を構成することで、バーコードの検出速度を向上させることができます</string>
   <string name="msg_features">「概要」からイントロをもう一度開始</string>
   <string name="msg_feedback">ご要望、ご質問、間違いなどございましたら私たちにご連絡ください。お手伝いいたします!\nまたはPlay ストアで素敵なレビューをいただければ幸いです。</string>
   <string name="msg_point_at_barcode">カメラをバーコードに向けます</string>
+  <string name="msg_save_product_first">製品を保存してください</string>
+  <string name="msg_save_recipe_first">レシピを保存してください</string>
   <string name="msg_press_hold_confirm">長押しして削除</string>
   <string name="msg_recipe_consume_ask">レシピ「%1$s」に必要な材料をすべて消費しますか？ （「在庫が存在する場合のみチェック」がチェックされている食材は無視されます）</string>
   <string name="msg_recipe_shopping_list_ask">レシピ「%1$s」に必要な不足材料をすべて買い物リストに追加してもよろしいですか?\n\n材料を買い物リストに追加しない場合は、材料のチェックを外してください:</string>
   <string name="msg_welcome">Grocy Android へようこそ!</string>
-  <string name="msg_welcome_introduce">grocy を生産的に使用するには、独自のサーバーまたは Home Assistant 用の grocy アドオンが必要です。\nこのアプリを試してみたいだけの場合は、grocy の作成者 Bernd Bestel のデモ サーバーを使用できます。</string>
+  <string name="msg_welcome_introduce">Grocy を生産的に使用するには、独自のサーバーまたは Home Assistant 用の Grocy アドオンが必要です。\nこのアプリを試してみたいだけの場合は、grocy の作成者である Bernd Bestel のデモ サーバーを使用できます。</string>
   <string name="msg_choose_option_below">以下のオプションを選択してください</string>
-  <string name="msg_qr_code_scan">別のデバイスで、grocy webサイトにアクセスし、「API キー」ページに移動します。 [追加] をクリックし、小さく表示されている QR コード シンボルをクリックしてQR コードをスキャンします。</string>
-  <string name="msg_qr_code_scan_token">grocy Home Assistant アドオンを使用しています。 ホーム アシスタントのプロファイル設定で、長有効期間のアクセス トークンを作成します (最後のセクション)。 トークンフィールドの下にある「QRコードを生成」をクリックし、ここでスキャンします。</string>
+  <string name="msg_qr_code_scan">別のデバイスで、Grocy Web サイトにアクセスし、「API キー」ページに移動します。 「追加」をクリックし、小さな QR コード シンボルをクリックして QR コードをスキャンします。</string>
+  <string name="msg_qr_code_scan_token">Grocy Home Assistant アドオンを使用しています。 ホーム アシスタントのプロファイル設定で、有効期間の長いアクセス トークンを作成します (最後のセクション)。 トークンフィールドの下にある「QRコードを生成」をクリックし、ここでスキャンします。</string>
   <string name="msg_port_connection_info_without_port">このアプリはポート%1$sに接続します。\n別のポートに接続する場合は、URL にポートを追加できます。\n例: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">このアプリはポート%1$sに接続します</string>
   <string name="msg_clear_form_first">別の既知のバーコードをスキャンする前に、まずフォームをクリアしてください。</string>
   <string name="msg_not_implemented_yet">近日実装予定です。 サーバー インターフェイスをご利用ください。</string>
+  <string name="msg_help_picture_changes">画像の変更は、保存時だけでなく、すぐにサーバーと同期されます。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_stock_label_type">これは、購入時に事前入力されるデフォルトの在庫項目ラベル タイプです。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -350,12 +359,10 @@
   <string name="msg_help_qu_stock">最初の購入後に数量単位在庫を変更することはできません</string>
   <string name="msg_help_qu_stock_changeable">数量単位在庫は、現在の数量単位の単位換算が存在する場合にのみ変更できます</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_qu_purchase">製品を買い物 リストに追加するときに使用されるデフォルト数量単位です</string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">有効にすると、最小値が表示されます。 サブ製品の在庫量の総和が表示されます。その際にサブ製品が「欠落」する代わりにこの製品が増える、という挙動はしません。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_treat_opened_as_out_of_stock">有効にすると、この製品が最低在庫量を下回っている場合、開封済みアイテムが不足としてカウントされます。</string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">この数量は、在庫概要ページの「クイック消費/買う風ボタン」で使用されます(数量単位在庫に関連しています) 。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_tare_weight">容器による管理は、瓶入りの小麦粉などで便利です。購入/消費/在庫目録に記録される量は、瓶全体の重量を入力すると、在庫にあるものと以下に定義されている風袋重量に基づいて常に自動計算されます。</string>
@@ -379,24 +386,33 @@
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_not_check_shopping_list">デフォルトでは、買い物リストに追加される数量は「必要量 - 在庫量 - 買い物リストの金額」となります。 これを有効にすると、既に買い物リストにあるものではなく、在庫量に対してのみチェックされます。</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_servings">このレシピの材料を使用した際に生産される量</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_produces_product">製品が選択されると、このレシピを消費した際に1 単位 (在庫数量単位で 1 食分あたり) が在庫に追加されます。</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_only_check_any_amount">在庫確認の際、以下の数量/単位を使用します。その製品の数量が十分であれば在庫確認しますが、不足している場合は確認しません。</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_variable_amount">値を設定すると、上で設定した量の代わりにレシピに表示されますが、在庫量を確認するときの値は変更されません</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_group">材料をグループ化するための見出しとして使用されます。</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_price_factor">価格計算時に、この材料の価格に乗算する係数</string>
+  <string name="msg_help_recipe_ingredients_wrong">Grocy サーバーのバージョンが 4.0.0 未満の場合、このリストには間違ったフルフィルメント情報が含まれる可能性があります。 正しい値を確認するには、サーバーをバージョン 4.0.0 以降に更新してください。</string>
   <string name="msg_help_date_chooser">設定からキーボードによる入力を選択できます。入力スピードを向上できます。</string>
   <string name="msg_help_date_chooser_keyboard">お住まいの国で DDMMYY が使用されている場合は、設定で逆順日付形式を有効化できます。\n入力を適用してこのページを閉じるには、キーボードの「完了」キーを使用できます。</string>
   <string name="msg_help_quick_mode">上のタイトル バーを長押しすると、クイック モードが起動します。 このモードでは、製品が入力またはスキャンされ、すべてのフィールド (製品および/またはバーコードのデフォルト値) が自動的に入力され、トランザクションがすぐに実行されます。</string>
   <string name="msg_help_loading_circle_settings">各ページでサーバーから何かを読み込む際、アプリは最初にサーバー データベースの変更があるかどうかを確認し、古いデータのみを更新します。 こうした小さいリクエストでもローディング サークルを表示するには、以下のオプションを有効にします。</string>
   <string name="msg_help_start">初心者モードがアクティブです。ヘルプ テキストが利用可能な場合、デフォルトですべてのページに表示されます。 タップで変更できます。</string>
   <string name="msg_help_purchased_date_settings">以下のオプションを有効にすると、購入日のフィールドが購入・在庫目録ページに表示されます。 それ以外の場合、購入日はデフォルトで今日になります。</string>
-  <string name="msg_help_normal_login">grocy アドオンで Home Assistant を使用している場合は、このカードをタップします。</string>
-  <string name="msg_help_home_assistant_login">grocy Home Assistant アドオンを使用しています。 追加の詳細が必要です。 このカードをタップすると、通常のログインに切り替わります。</string>
+  <string name="msg_help_normal_login">Grocy アドオンで Home Assistant を使用している場合は、このカードをタップします。</string>
+  <string name="msg_help_home_assistant_login">Grocy Home Assistant アドオンを使用しているため、追加でいくつかの詳細が必要になります。 このカードをタップすると、通常のログインに切り替わります。</string>
   <string name="msg_help_home_assistant_login_help_show">タップしてヘルプを表示</string>
   <string name="msg_help_home_assistant_login_help_hide">タップしてヘルプを非表示</string>
   <string name="msg_help_home_assistant_login_server">Nabu Casa クラウドのサービスを使用している場合は、下のフィールドにその URL を入力できます。 このカードをタップすると、Nabu Casa の Web サイトにアクセスします。</string>
   <string name="msg_help_home_assistant_login_token">ホーム アシスタントのプロファイル設定 (最後のセクション) から長有効期間アクセス トークンを作成できます。 ここをタップすると上記URLを開きます。</string>
   <string name="msg_help_home_assistant_login_proxy_id">戻るか、このカードをタップして、下のフィールドに入力する QR コードをスキャンします。</string>
   <string name="msg_help_fab_overview_start">この概要ページのアクション ボタンには 2 つのアクションがあります:\n\n- 短くタップ: バーコード スキャナで消費\n- 長タップ: バーコード スキャナで購入\n\nこのボタンを使用すると、各ページのクイック モードがデフォルトでオンになります。 これは動作設定で変更できます。</string>
-  <string name="msg_share">素晴らしい grocy プロジェクトについては、この Android クライアントをチェックしてください: \nhttps://github.com/patzly/grocy-android</string>
+  <string name="msg_share">素晴らしい Grocy プロジェクトについては、この Android クライアントをチェックしてください: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">APIキーが無効です</string>
   <string name="error_orbot_not_installed">Orbotがインストールされていません</string>
@@ -433,9 +449,10 @@
   <string name="error_invalid_price">無効な価格</string>
   <string name="error_invalid_factor">無効な係数</string>
   <string name="error_invalid_date_format">無効な日付フォーマット</string>
-  <string name="error_api_qr_code">grocy API認証のQRコードではありません</string>
+  <string name="error_api_qr_code">Grocy API 認証情報を含む QR コードではありません</string>
   <string name="error_token_qr_code">Home Assistantの長有効期間アクセストークンによるQRコードではありません</string>
   <string name="error_loading_qus">製品から数量単位をロードできません</string>
+  <string name="error_clipboard_no_image">クリップボードに画像が含まれていないか、読み取ることができませんでした</string>
   <string name="error_no_children">選択した製品には子製品がありません</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">%1$sと等しくできません</string>
@@ -450,16 +467,15 @@
   <string name="error_offline">オフライン</string>
   <string name="error_offline_subtitle">ネット接続が必要です。接続されていますか？</string>
   <string name="error_no_done_items">実行済のアイテムがありません</string>
-  <string name="error_name_exists">すでに存在する名前です</string>
+  <string name="error_already_exists">すでに存在します</string>
   <string name="error_network">ネットワークエラー</string>
   <string name="error_network_subtitle">必要なデータを完全にはロードできませんでした</string>
   <string name="error_network_exact">ネットワークエラー：%1$s</string>
   <string name="error_database">データベースエラー</string>
-  <string name="error_database_exact">データベースエラー：%1$s</string>
-  <string name="error_database_object_too_large">データベースエラー</string>
+  <string name="error_insert">エラー：%1$s</string>
   <string name="error_details">エラーの詳細</string>
   <string name="error_unknown">おっと！</string>
-  <string name="error_not_grocy_instance">無効なgrocyインスタンスです</string>
+  <string name="error_not_grocy_instance">有効な Grocy インスタンスではありません</string>
   <string name="error_timeout">タイムアウトエラー</string>
   <string name="error_no_product_selected">製品が未選択</string>
   <string name="error_failed_to_connect_to">サーバーに接続できません</string>
@@ -477,6 +493,7 @@
   <string name="error_permission">実行権限がありません</string>
   <string name="error_undefined">エラーが発生しました</string>
   <string name="error_invalid_base_servings">無効な提供数</string>
+  <string name="error_pictures_size_exceeds_limit">サーバー上の製品またはレシピの説明に埋め込まれた画像があり、このアプリで処理できる限界を超えています。 説明から高品質で大きなサイズの写真を削除してください。これにより、データの読み込みも高速化されます。</string>
 
   <string name="title_overview">概要</string>
   <string name="title_stock_overview">在庫の概要</string>
@@ -498,6 +515,7 @@
   <string name="title_shopping_list">買い物リスト</string>
   <string name="title_feedback">フィードバック</string>
   <string name="title_settings">設定</string>
+  <string name="title_options">オプション</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="title_barcode_scanner">バーコードスキャナ</string>
   <!-- Context: About this app -->
@@ -609,6 +627,7 @@
   <string name="subtitle_product_hidden">製品が非表示です</string>
   <string name="subtitle_product_not_hidden">製品が表示されています</string>
   <string name="subtitle_product_not_on_server">サーバーに製品がありません</string>
+
   <string name="subtitle_barcodes_will_be_added">バーコードが保存されており、保存の操作によって製品に追加されます。</string>
   <string name="subtitle_unknown">不明</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
@@ -628,7 +647,6 @@
   <string name="subtitle_product_optional_properties">状態・親製品・説明・製品グループ・エネルギー・画像</string>
   <string name="subtitle_product_quantity_unit">在庫、購入のデフォルト</string>
   <string name="subtitle_synced_with_server">サーバーと同期</string>
-  <string name="subtitle_recipe_not_on_server">サーバーにレシピがありません</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">期限スコア：%1$s</string>
   <string name="subtitle_per_serving">1提供あたり</string>
@@ -737,8 +755,10 @@
   <string name="property_product_name">製品名</string>
   <string name="property_parent_product">親製品</string>
   <string name="property_description">説明</string>
+  <string name="property_product_description">製品の説明</string>
   <string name="property_note">ノート</string>
   <string name="property_status">状態</string>
+  <string name="property_status_insert">状態：</string>
   <string name="property_amount">数量</string>
   <string name="property_amount_insert">数量：%1$s</string>
   <string name="property_seconds">秒</string>
@@ -755,6 +775,8 @@
   <string name="property_price_unit">1 %1$sあたりの価格</string>
   <!-- %1$s is a price and %2$s is a quantity unit-->
   <string name="property_price_unit_insert">1 %2$sあたり%1$s</string>
+  <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_with_currency">%1$s%2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">通貨：%1$s での価格</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -837,7 +859,6 @@
   <string name="property_not_opened">未開封</string>
   <string name="property_is_freezer">冷凍庫です</string>
   <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">在庫単位料当たりのエネルギー(kcal)</string>
   <string name="property_active">有効</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">ストック概要に表示しない</string>
@@ -876,11 +897,21 @@
   <string name="property_ungrouped">グループ化されていない</string>
   <!-- %1$s is a property like "product group" or "due date" -->
   <string name="property_extra_field">ほかのフィールド：%1$s</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields">フィールド</string>
   <string name="property_task_category">タスク種別</string>
   <string name="property_task_categories">タスク種別</string>
   <string name="property_calories">カロリー</string>
   <string name="property_calories_unit">カロリー(単位)</string>
   <string name="property_calories_total">カロリー(総量)</string>
+  <!-- %1$s is a value like energy or price, unit means value of items per unit -->
+  <string name="property_insert_per_unit">%1$s (単位あたり)</string>
+  <!-- %1$s is a value like energy or price, total means value of many items in total -->
+  <string name="property_insert_total">%1$s (すべて)</string>
+  <!-- %1$s is a value like price, average means average price -->
+  <string name="property_insert_average">%1$s (平均)</string>
+  <!-- %1$s is a value like price, "last" is like for example in "last price" -->
+  <string name="property_insert_last">%1$s (前回)</string>
   <string name="property_category">種別</string>
   <string name="property_assigned_to">割り当て：</string>
   <string name="property_users">ユーザー</string>
@@ -901,6 +932,7 @@
   <string name="property_servings_base_insert">基本提供量：%1$s</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_servings_desired">希望提供数</string>
+  <string name="property_servings_desired_insert">必要提供数：%1$s</string>
   <string name="property_not_check_shopping_list">買い物リストをチェックしない</string>
   <string name="property_not_check_shopping_list_description">不足アイテムを追加する場合</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
@@ -918,6 +950,7 @@
   <string name="property_variable_amount">変動可能な数量</string>
   <string name="property_requirements_fulfilled">必要条件が満たされました</string>
   <string name="property_produces_product">製品を製造</string>
+  <string name="property_price_factor">価格の係数</string>
 
   <string name="date_today">今日</string>
   <string name="date_unknown">不明</string>
@@ -960,7 +993,7 @@
     <item quantity="other">%d年後</item>
   </plurals>
 
-  <string name="info_acknowledgement">grocy の開発者である Bernd Bestel に感謝します。彼の素晴らしい仕事がなければ、このアプリは決して実現できなかったでしょう。</string>
+  <string name="info_acknowledgement">Grocy の開発者である Bernd Bestel に感謝します。彼の素晴らしい仕事がなければ、このアプリは決して実現できなかったでしょう。</string>
   <string name="info_intro">イントロを再表示</string>
   <string name="info_intro_description">ショーケース機能</string>
   <string name="info_dev_beginning">開発の開始</string>
@@ -1048,7 +1081,6 @@
   <string name="setting_show_done_items_description">下部に表示</string>
   <string name="setting_smaller_font">小さいフォントを使用</string>
   <string name="setting_smaller_font_description">さらにアイテムを表示するには</string>
-  <string name="setting_show_product_description">製品説明を表示</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">期限間近として表示する日数</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -1090,8 +1122,6 @@
   <string name="setting_date_keyboard_input_description">日付ホイールを使用しない</string>
   <string name="setting_date_keyboard_reverse">逆順日付形式を入力に使用</string>
   <string name="setting_date_keyboard_reverse_description">YYMMDD の代わりに DDMMYY</string>
-  <string name="setting_copy_barcode_note">在庫項目のノートにバーコードのノートをコピー</string>
-  <string name="setting_copy_barcode_note_description">製品の購入時</string>
   <string name="setting_loading_circle">全リクエストでローディングサークルを表示</string>
   <string name="setting_loading_circle_description">低速ネットワークに適する</string>
   <string name="setting_tor">Torを使用</string>
@@ -1107,21 +1137,9 @@
   <string name="setting_message_duration">メッセージの時刻を表示</string>
   <string name="setting_message_duration_description">トランザクションメッセージのみに関係する</string>
   <string name="setting_notifications_enable">通知を有効化</string>
-  <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
-  few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_due_soon">期限切れが近いアイテム</string>
-  <string name="setting_notifications_due_soon_description">毎日在庫を確認し、期限が近い製品を通知</string>
-  <string name="setting_notifications_chores_description">毎日家事を確認し、期限が近い家事を通知</string>
   <string name="setting_notification_time">通知の時刻</string>
-  <!-- the description of the notification time preference.
-  With the "Due soon" check enabled, the user will be notified every day at the selected time how
-  many products in stock are due soon, so check means a check of the products in stock -->
+  <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">確認完了時</string>
   <string name="setting_keep_screen_on_recipes_description">レシピ閲覧中</string>
 
-  <string name="notification_due_soon_content">食品ロスを減らすために数日間で消費。</string>
-
-  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
-  Examples: 'de' for German; 'fr' for French -->
-  <string name="url_grocy_demo">https://ja.demo.grocy.info</string>
   </resources>

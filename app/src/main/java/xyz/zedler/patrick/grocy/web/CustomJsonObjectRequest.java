@@ -29,7 +29,6 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import java.io.UnsupportedEncodingException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -39,7 +38,6 @@ import org.json.JSONObject;
 
 public class CustomJsonObjectRequest extends JsonObjectRequest {
 
-  private final Runnable onRequestFinished;
   private final String url;
   private final String apiKey;
   private final String homeAssistantIngressSessionKey;
@@ -53,24 +51,14 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
       @Nullable JSONObject jsonRequest,
       Response.Listener<JSONObject> listener,
       @Nullable Response.ErrorListener errorListener,
-      @Nullable Runnable onRequestFinished,
       int timeoutSeconds,
       String tag
   ) {
-    super(method, url, jsonRequest, response -> {
-      if (onRequestFinished != null) {
-        onRequestFinished.run();
-      }
-      listener.onResponse(response);
-    }, error -> {
-      if (onRequestFinished != null) {
-        onRequestFinished.run();
-      }
+    super(method, url, jsonRequest, listener, error -> {
       if (errorListener != null) {
         errorListener.onErrorResponse(error);
       }
     });
-    this.onRequestFinished = onRequestFinished;
     this.url = url;
     this.apiKey = apiKey;
     this.homeAssistantIngressSessionKey = homeAssistantIngressSessionKey;
@@ -105,14 +93,6 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
   }
 
   @Override
-  public void cancel() {
-    super.cancel();
-    if (onRequestFinished != null) {
-      onRequestFinished.run();
-    }
-  }
-
-  @Override
   public Map<String, String> getHeaders() {
     Map<String, String> params = new HashMap<>();
     if (apiKey != null && !apiKey.isEmpty()) {
@@ -133,6 +113,7 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
     if (homeAssistantIngressSessionKey != null) {
       params.put("Cookie", "ingress_session=" + homeAssistantIngressSessionKey);
     }
-    return params.isEmpty() ? Collections.emptyMap() : params;
+    params.put("Content-Type", "application/json");
+    return params;
   }
 }

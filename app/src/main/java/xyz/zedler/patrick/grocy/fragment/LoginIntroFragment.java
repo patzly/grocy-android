@@ -33,6 +33,7 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentLoginIntroBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
+import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class LoginIntroFragment extends BaseFragment {
@@ -77,9 +78,12 @@ public class LoginIntroFragment extends BaseFragment {
   }
 
   public void loginDemoInstance() {
+    String demoDomain = LocaleUtil.getLocalizedGrocyDemoDomain(requireContext());
     activity.navUtil.navigateFragment(
         LoginIntroFragmentDirections.actionLoginIntroFragmentToLoginRequestFragment(
-            getString(R.string.url_grocy_demo),
+            demoDomain != null && !demoDomain.isBlank()
+                ? "https://" + demoDomain
+                : getString(R.string.url_grocy_demo_default),
             ""
         )
     );

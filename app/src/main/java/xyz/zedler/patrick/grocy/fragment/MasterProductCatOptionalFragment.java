@@ -19,16 +19,25 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
@@ -36,6 +45,7 @@ import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatOptionalBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheet;
@@ -48,7 +58,9 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
+import xyz.zedler.patrick.grocy.util.PictureUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatOptionalViewModel;
+import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class MasterProductCatOptionalFragment extends BaseFragment implements BarcodeListener {
 
@@ -59,6 +71,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
   private MasterProductCatOptionalViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
+  private ActivityResultLauncher<Intent> mActivityResultLauncherTakePicture;
 
   @Override
   public View onCreateView(
@@ -86,7 +99,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
   @Override
   public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    MasterProductFragmentArgs args = MasterProductFragmentArgs
+    MasterProductCatOptionalFragmentArgs args = MasterProductCatOptionalFragmentArgs
         .fromBundle(requireArguments());
     viewModel = new ViewModelProvider(this, new MasterProductCatOptionalViewModel
         .MasterProductCatOptionalViewModelFactory(activity.getApplication(), args)
@@ -133,21 +146,39 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
           .setValue(Html.fromHtml((String) descriptionEdited));
     }
 
+    Object newProductGroupId = getFromThisDestinationNow(ARGUMENT.OBJECT_ID);
+    if (newProductGroupId != null) {  // if user created a new product group and navigates back to this fragment this is the new productGroupId
+      removeForThisDestination(ARGUMENT.OBJECT_ID);
+      viewModel.setQueueEmptyAction(() -> {
+        List<ProductGroup> groups = viewModel.getFormData().getProductGroupsLive().getValue();
+        if (groups == null) return;
+        ProductGroup productGroup = ProductGroup.getFromId(groups, (Integer) newProductGroupId);
+        selectProductGroup(productGroup);
+      });
+    }
+
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
 
+    binding.energy.setHint(getString(R.string.property_energy_insert, viewModel.getEnergyUnit()));
+
     embeddedFragmentScanner.setScannerVisibilityLive(
         viewModel.getFormData().getScannerVisibilityLive()
     );
 
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
-      if (!isLoading) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
+    viewModel.getFormData().getPictureFilenameLive().observe(getViewLifecycleOwner(),
+        this::loadProductPicture);
+
+    mActivityResultLauncherTakePicture = registerForActivityResult(
+        new ActivityResultContracts.StartActivityForResult(),
+        result -> {
+          if (result.getResultCode() == Activity.RESULT_OK) {
+            viewModel.scaleAndUploadBitmap(viewModel.getCurrentFilePath(), null);
+          }
+        });
 
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
@@ -172,7 +203,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
                 Constants.ARGUMENT.ACTION,
                 Constants.ACTION.DELETE
             );
-            activity.onBackPressed();
+            activity.performOnBackPressed();
             return true;
           }
           if (menuItem.getItemId() == R.id.action_save) {
@@ -181,24 +212,25 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
                 Constants.ARGUMENT.ACTION,
                 ACTION.SAVE_CLOSE
             );
-            activity.onBackPressed();
+            activity.performOnBackPressed();
             return true;
           }
           return false;
         }
     );
+    boolean showSaveWithCloseButton = viewModel.isActionEdit() || args.getForceSaveWithClose();
     activity.updateFab(
-        viewModel.isActionEdit() ? R.drawable.ic_round_save : R.drawable.ic_round_save_as,
-        viewModel.isActionEdit() ? R.string.action_save : R.string.action_save_not_close,
-        viewModel.isActionEdit() ? Constants.FAB.TAG.SAVE : Constants.FAB.TAG.SAVE_NOT_CLOSE,
+        showSaveWithCloseButton ? R.drawable.ic_round_save : R.drawable.ic_round_save_as,
+        showSaveWithCloseButton ? R.string.action_save : R.string.action_save_not_close,
+        showSaveWithCloseButton ? Constants.FAB.TAG.SAVE : Constants.FAB.TAG.SAVE_NOT_CLOSE,
         savedInstanceState == null,
         () -> {
           setForDestination(
               R.id.masterProductFragment,
               Constants.ARGUMENT.ACTION,
-              viewModel.isActionEdit() ? ACTION.SAVE_CLOSE : ACTION.SAVE_NOT_CLOSE
+              showSaveWithCloseButton ? ACTION.SAVE_CLOSE : ACTION.SAVE_NOT_CLOSE
           );
-          activity.onBackPressed();
+          activity.performOnBackPressed();
         }
     );
   }
@@ -280,6 +312,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
         productGroups != null ? new ArrayList<>(productGroups) : null
     );
     bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
+    bundle.putBoolean(ARGUMENT.DISPLAY_NEW_OPTION, true);
 
     ProductGroup productGroup = viewModel.getFormData().getProductGroupLive().getValue();
     int productGroupId = productGroup != null ? productGroup.getId() : -1;
@@ -288,10 +321,54 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
   }
 
   @Override
+  public void createProductGroup() {
+    activity.navUtil.navigateFragment(MasterProductCatOptionalFragmentDirections
+        .actionMasterProductCatOptionalFragmentToMasterProductGroupFragment());
+  }
+  @Override
   public void selectProductGroup(ProductGroup productGroup) {
     viewModel.getFormData().getProductGroupLive().setValue(
         productGroup == null || productGroup.getId() == -1 ? null : productGroup
     );
+  }
+
+  private void loadProductPicture(String filename) {
+    if (filename != null && !filename.isBlank()) {
+      GrocyApi grocyApi = new GrocyApi(activity.getApplication());
+      PictureUtil.loadPicture(
+          binding.picture,
+          null,
+          null,
+          grocyApi.getProductPictureServeLarge(filename),
+          RequestHeaders.getGlideGrocyAuthHeaders(requireContext()),
+          true
+      );
+    } else {
+      binding.picture.setVisibility(View.GONE);
+    }
+  }
+
+  public void dispatchTakePictureIntent() {
+    if (viewModel.isDemoInstance()) {
+      viewModel.showMessage(R.string.error_picture_uploads_forbidden);
+      return;
+    }
+    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    // Create the File where the photo should go
+    File photoFile = null;
+    try {
+      photoFile = viewModel.createImageFile();
+    } catch (IOException ex) {
+      viewModel.showErrorMessage();
+      viewModel.setCurrentFilePath(null);
+    }
+    if (photoFile != null) {
+      Uri photoURI = FileProvider.getUriForFile(requireContext(),
+          requireContext().getPackageName() + ".fileprovider",
+          photoFile);
+      takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+      mActivityResultLauncherTakePicture.launch(takePictureIntent);
+    }
   }
 
   @Override
@@ -309,10 +386,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
   }
 
   @NonNull

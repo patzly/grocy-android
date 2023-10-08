@@ -35,6 +35,8 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentRecipeEditIngredientEditBinding;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
@@ -217,7 +219,7 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
     if (product == null) {
       return;
     }
-    viewModel.setProduct(product.getId(), null, null, null);
+    viewModel.setProduct(product.getId(), null, null);
   }
 
   public void clearFocusAndCheckProductInput() {
@@ -233,7 +235,19 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
   }
 
   private boolean onMenuItemClick(MenuItem item) {
-    if (item.getItemId() == R.id.action_delete) {
+    if (item.getItemId() == R.id.action_product_overview) {
+      ViewUtil.startIcon(item);
+      if (!viewModel.getFormData().isProductNameValid()) {
+        return false;
+      }
+      activity.showBottomSheet(
+          new ProductOverviewBottomSheet(),
+          new ProductOverviewBottomSheetArgs.Builder()
+              .setProductDetails(viewModel.getFormData().getProductDetailsLive().getValue()).build()
+              .toBundle()
+      );
+      return true;
+    } else if (item.getItemId() == R.id.action_delete) {
       ViewUtil.startIcon(item);
       viewModel.deleteEntry();
       return true;
@@ -291,10 +305,7 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
     if (systemBarBehavior != null) {
       systemBarBehavior.refresh();
     }

@@ -30,14 +30,12 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.TaskEntryAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
@@ -98,7 +96,6 @@ public class TasksFragment extends BaseFragment implements
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
     viewModel = new ViewModelProvider(this).get(TasksViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
     binding.setFragment(this);
@@ -130,18 +127,17 @@ public class TasksFragment extends BaseFragment implements
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
-    binding.recycler.setAdapter(new MasterPlaceholderAdapter());
+    TaskEntryAdapter adapter = new TaskEntryAdapter(
+        requireContext(),
+        (LinearLayoutManager) binding.recycler.getLayoutManager(),
+        this
+    );
+    binding.recycler.setAdapter(adapter);
 
     if (savedInstanceState == null) {
       binding.recycler.scrollToPosition(0);
       viewModel.resetSearch();
     }
-
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
-      if (!state) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
 
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
@@ -165,28 +161,14 @@ public class TasksFragment extends BaseFragment implements
       } else {
         viewModel.getInfoFullscreenLive().setValue(null);
       }
-      if (binding.recycler.getAdapter() instanceof TaskEntryAdapter) {
-        ((TaskEntryAdapter) binding.recycler.getAdapter()).updateData(
-            items,
-            viewModel.getTaskCategoriesHashMap(),
-            viewModel.getUsersHashMap(),
-            viewModel.getSortMode(),
-            viewModel.isSortAscending()
-        );
-      } else {
-        binding.recycler.setAdapter(
-            new TaskEntryAdapter(
-                requireContext(),
-                (LinearLayoutManager) binding.recycler.getLayoutManager(),
-                items,
-                viewModel.getTaskCategoriesHashMap(),
-                viewModel.getUsersHashMap(),
-                this,
-                viewModel.getSortMode(),
-                viewModel.isSortAscending()
-            )
-        );
-      }
+      adapter.updateData(
+          items,
+          viewModel.getTaskCategoriesHashMap(),
+          viewModel.getUsersHashMap(),
+          viewModel.getSortMode(),
+          viewModel.isSortAscending(),
+          () -> binding.recycler.scheduleLayoutAnimation()
+      );
     });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
@@ -194,6 +176,8 @@ public class TasksFragment extends BaseFragment implements
         activity.showSnackbar(
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
+      } else if (event.getType() == Event.SCROLL_UP) {
+        binding.recycler.scrollToPosition(0);
       }
     });
 
@@ -207,23 +191,25 @@ public class TasksFragment extends BaseFragment implements
             RecyclerView.ViewHolder viewHolder,
             List<UnderlayButton> underlayButtons
         ) {
+          if (!(binding.recycler.getAdapter() instanceof TaskEntryAdapter)) return;
           int position = viewHolder.getAdapterPosition();
-          ArrayList<Task> displayedItems = viewModel.getFilteredTasksLive()
-              .getValue();
-          if (displayedItems == null || position < 0
-              || position >= displayedItems.size()) {
+          Task task = ((TaskEntryAdapter) binding.recycler.getAdapter())
+              .getTaskForPos(position);
+          if (task == null) {
             return;
           }
           underlayButtons.add(new UnderlayButton(
               activity,
               R.drawable.ic_round_done,
               pos -> {
-                if (pos >= displayedItems.size()) {
+                Task task1 = ((TaskEntryAdapter) binding.recycler.getAdapter())
+                    .getTaskForPos(position);
+                if (task1 == null) {
                   return;
                 }
                 swipeBehavior.recoverLatestSwipedItem();
                 new Handler().postDelayed(() -> viewModel
-                    .changeTaskDoneStatus(displayedItems.get(pos).getId()), 100);
+                    .changeTaskDoneStatus(task1.getId()), 100);
               }
           ));
         }
@@ -320,10 +306,7 @@ public class TasksFragment extends BaseFragment implements
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
   }
 
   private void hideDisabledFeatures() {

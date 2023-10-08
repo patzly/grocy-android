@@ -120,6 +120,12 @@ public class SettingsCatNetworkFragment extends BaseFragment {
     proxyHostLive = new MutableLiveData<>(viewModel.getProxyHost());
     proxyPortLive = new MutableLiveData<>(String.valueOf(viewModel.getProxyPort()));
 
+    binding.switchLoadingCircle.post(() -> {
+      binding.switchLoadingCircle.jumpDrawablesToCurrentState();
+      binding.switchTor.jumpDrawablesToCurrentState();
+      binding.switchProxy.jumpDrawablesToCurrentState();
+    });
+
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, false

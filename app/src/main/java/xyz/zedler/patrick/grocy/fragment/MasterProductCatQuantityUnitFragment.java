@@ -28,10 +28,13 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatQuantityUnitBinding;
+import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatQuantityUnit;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -71,7 +74,7 @@ public class MasterProductCatQuantityUnitFragment extends BaseFragment {
   @Override
   public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    MasterProductFragmentArgs args = MasterProductFragmentArgs
+    MasterProductCatQuantityUnitFragmentArgs args = MasterProductCatQuantityUnitFragmentArgs
         .fromBundle(requireArguments());
     viewModel = new ViewModelProvider(this, new MasterProductCatQuantityUnitViewModel
         .MasterProductCatQuantityUnitViewModelFactory(activity.getApplication(), args)
@@ -110,17 +113,27 @@ public class MasterProductCatQuantityUnitFragment extends BaseFragment {
       }
     });
 
+    Object newQuId = getFromThisDestinationNow(ARGUMENT.OBJECT_ID);
+    if (newQuId != null) {  // if user created a new QU and navigates back to this fragment this is the new quId
+      removeForThisDestination(ARGUMENT.OBJECT_ID);
+      String idForValue = (String) getFromThisDestinationNow(ARGUMENT.OBJECT_NAME);
+      viewModel.setQueueEmptyAction(() -> {
+        Bundle bundle = new Bundle();
+        bundle.putString(
+            FormDataMasterProductCatQuantityUnit.QUANTITY_UNIT_TYPE,
+            idForValue
+        );
+        QuantityUnit quantityUnit = viewModel.getFormData()
+            .getQuantityUnitFromId((Integer) newQuId);
+        selectQuantityUnit(quantityUnit, bundle);
+      });
+    }
+
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
-
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
-      if (!isLoading) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
 
     viewModel.getFormData().getQuStockErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textQuStockName.setTextColor(
@@ -129,6 +142,16 @@ public class MasterProductCatQuantityUnitFragment extends BaseFragment {
     );
     viewModel.getFormData().getQuPurchaseErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textQuPurchaseName.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+        )
+    );
+    viewModel.getFormData().getQuConsumeErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textQuConsumeName.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+        )
+    );
+    viewModel.getFormData().getQuPriceErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textQuPriceName.setTextColor(
             ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
         )
     );
@@ -156,7 +179,7 @@ public class MasterProductCatQuantityUnitFragment extends BaseFragment {
                 Constants.ARGUMENT.ACTION,
                 Constants.ACTION.DELETE
             );
-            activity.onBackPressed();
+            activity.performOnBackPressed();
             return true;
           }
           if (menuItem.getItemId() == R.id.action_save) {
@@ -165,24 +188,25 @@ public class MasterProductCatQuantityUnitFragment extends BaseFragment {
                 Constants.ARGUMENT.ACTION,
                 ACTION.SAVE_CLOSE
             );
-            activity.onBackPressed();
+            activity.performOnBackPressed();
             return true;
           }
           return false;
         }
     );
+    boolean showSaveWithCloseButton = viewModel.isActionEdit() || args.getForceSaveWithClose();
     activity.updateFab(
-        viewModel.isActionEdit() ? R.drawable.ic_round_save : R.drawable.ic_round_save_as,
-        viewModel.isActionEdit() ? R.string.action_save : R.string.action_save_not_close,
-        viewModel.isActionEdit() ? Constants.FAB.TAG.SAVE : Constants.FAB.TAG.SAVE_NOT_CLOSE,
+        showSaveWithCloseButton ? R.drawable.ic_round_save : R.drawable.ic_round_save_as,
+        showSaveWithCloseButton ? R.string.action_save : R.string.action_save_not_close,
+        showSaveWithCloseButton ? Constants.FAB.TAG.SAVE : Constants.FAB.TAG.SAVE_NOT_CLOSE,
         savedInstanceState == null,
         () -> {
           setForDestination(
               R.id.masterProductFragment,
               Constants.ARGUMENT.ACTION,
-              viewModel.isActionEdit() ? ACTION.SAVE_CLOSE : ACTION.SAVE_NOT_CLOSE
+              showSaveWithCloseButton ? ACTION.SAVE_CLOSE : ACTION.SAVE_NOT_CLOSE
           );
-          activity.onBackPressed();
+          activity.performOnBackPressed();
         }
     );
   }
@@ -192,8 +216,30 @@ public class MasterProductCatQuantityUnitFragment extends BaseFragment {
   }
 
   @Override
+  public void createQuantityUnit(Bundle args) {
+    activity.navUtil.navigateFragment(MasterProductCatQuantityUnitFragmentDirections
+        .actionMasterProductCatQuantityUnitFragmentToMasterQuantityUnitFragment()
+        .setIdForReturnValue(args.getString(
+            FormDataMasterProductCatQuantityUnit.QUANTITY_UNIT_TYPE,
+            FormDataMasterProductCatQuantityUnit.STOCK
+        )));
+  }
+
+  @Override
   public void selectQuantityUnit(QuantityUnit quantityUnit, Bundle argsBundle) {
     viewModel.getFormData().selectQuantityUnit(quantityUnit, argsBundle);
+  }
+
+  public void showInputNumberBottomSheet() {
+    Bundle bundle = new Bundle();
+    bundle.putDouble(Constants.ARGUMENT.NUMBER, viewModel.getFormData().getFactorPurchaseToStock());
+    bundle.putString(ARGUMENT.HINT, getString(R.string.property_qu_factor));
+    activity.showBottomSheet(new InputBottomSheet(), bundle);
+  }
+
+  @Override
+  public void saveInput(String text, Bundle argsBundle) {
+    viewModel.getFormData().setFactorPurchaseToStock(text);
   }
 
   @Override
@@ -211,10 +257,7 @@ public class MasterProductCatQuantityUnitFragment extends BaseFragment {
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
     systemBarBehavior.refresh();
   }
 

@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy.viewmodel;
 import android.app.Application;
 import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,7 +31,7 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatLocation;
-import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.MasterProductCatLocationFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -41,7 +40,6 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class MasterProductCatLocationViewModel extends BaseViewModel {
 
@@ -51,7 +49,7 @@ public class MasterProductCatLocationViewModel extends BaseViewModel {
   private final DownloadHelper dlHelper;
   private final MasterProductRepository repository;
   private final FormDataMasterProductCatLocation formData;
-  private final MasterProductFragmentArgs args;
+  private final MasterProductCatLocationFragmentArgs args;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -59,13 +57,13 @@ public class MasterProductCatLocationViewModel extends BaseViewModel {
   private List<Location> locations;
   private List<Store> stores;
 
-  private NetworkQueue currentQueueLoading;
+  private Runnable queueEmptyAction;
   private final boolean debug;
   private final boolean isActionEdit;
 
   public MasterProductCatLocationViewModel(
       @NonNull Application application,
-      @NonNull MasterProductFragmentArgs startupArgs
+      @NonNull MasterProductCatLocationFragmentArgs startupArgs
   ) {
     super(application);
 
@@ -73,7 +71,7 @@ public class MasterProductCatLocationViewModel extends BaseViewModel {
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     repository = new MasterProductRepository(application);
     formData = new FormDataMasterProductCatLocation(
         application,
@@ -102,63 +100,36 @@ public class MasterProductCatLocationViewModel extends BaseViewModel {
       this.stores = data.getStores();
       formData.getLocationsLive().setValue(this.locations);
       formData.getStoresLive().setValue(this.stores);
-      formData.fillWithProductIfNecessary(args.getProduct());
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
+      } else {
+        if (queueEmptyAction != null) {
+          queueEmptyAction.run();
+          queueEmptyAction = null;
+        }
+        formData.fillWithProductIfNecessary(args.getProduct());
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, null));
-      return;
-    }
-
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, null));
-    queue.append(
-        Location.updateLocations(dlHelper, dbChangedTime, locations -> {
-          this.locations = locations;
-          formData.getLocationsLive().setValue(locations);
-        }),
-        Store.updateStores(dlHelper, dbChangedTime, stores -> {
-          this.stores = stores;
-          formData.getStoresLive().setValue(stores);
-        })
+  public void downloadData(boolean forceUpdate) {
+    dlHelper.updateData(
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            if (queueEmptyAction != null) {
+              queueEmptyAction.run();
+              queueEmptyAction = null;
+            }
+            formData.fillWithProductIfNecessary(args.getProduct());
+          }
+        }, error -> onError(error, null),
+        forceUpdate,
+        false,
+        Location.class,
+        Store.class
     );
-    if (queue.isEmpty()) {
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
-    editPrefs.apply();
-    downloadData();
-  }
-
-  private void onQueueEmpty() {
-    if (isOffline()) {
-      setOfflineLive(false);
-    }
-    formData.fillWithProductIfNecessary(args.getProduct());
   }
 
   @NonNull
@@ -171,8 +142,8 @@ public class MasterProductCatLocationViewModel extends BaseViewModel {
     return infoFullscreenLive;
   }
 
-  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
-    currentQueueLoading = queueLoading;
+  public void setQueueEmptyAction(Runnable queueEmptyAction) {
+    this.queueEmptyAction = queueEmptyAction;
   }
 
   public boolean showConsumeLocationOption() {
@@ -189,11 +160,11 @@ public class MasterProductCatLocationViewModel extends BaseViewModel {
       ViewModelProvider.Factory {
 
     private final Application application;
-    private final MasterProductFragmentArgs args;
+    private final MasterProductCatLocationFragmentArgs args;
 
     public MasterProductCatLocationViewModelFactory(
         Application application,
-        MasterProductFragmentArgs args
+        MasterProductCatLocationFragmentArgs args
     ) {
       this.application = application;
       this.args = args;

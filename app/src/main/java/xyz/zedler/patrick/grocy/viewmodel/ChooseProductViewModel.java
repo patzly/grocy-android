@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy.viewmodel;
 import android.app.Application;
 import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,7 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import me.xdrop.fuzzywuzzy.model.BoundExtractedResult;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -43,7 +41,6 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.repository.ChooseProductRepository;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class ChooseProductViewModel extends BaseViewModel {
 
@@ -73,8 +70,6 @@ public class ChooseProductViewModel extends BaseViewModel {
   private final boolean forbidCreateProductInitial;
   private final boolean pendingProductsActive;
   private String nameFromOnlineSource;
-
-  private NetworkQueue currentQueueLoading;
   private final boolean debug;
 
   public ChooseProductViewModel(
@@ -90,7 +85,7 @@ public class ChooseProductViewModel extends BaseViewModel {
 
     displayHelpLive = new MutableLiveData<>(false);
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, null);
     repository = new ChooseProductRepository(application);
 
     displayedItemsLive = new MutableLiveData<>();
@@ -131,98 +126,27 @@ public class ChooseProductViewModel extends BaseViewModel {
       }
       displayItems();
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
+      } else {
+        fillProductNameIfPossible();
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(
-          this::downloadData,
-          error -> onError(error, TAG)
-      );
-      return;
-    }
-
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
-    queue.append(Product.updateProducts(dlHelper, dbChangedTime, products -> {
-      this.products = products;
-      productHashMap.clear();
-      for (Product product : products) {
-        productHashMap.put(product.getName().toLowerCase(), product);
-      }
-    }));
-
-
-    if (queue.isEmpty()) {
-      onQueueEmpty();
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.apply();
-    downloadData();
-  }
-
-  private void onQueueEmpty() {
-    if (isOffline()) {
-      setOfflineLive(false);
-    }
-    displayItems();
-
-    boolean productNameFilled = productNameLive.getValue() != null
-        && !productNameLive.getValue().isEmpty();
-    if(isOpenFoodFactsEnabled() && !productNameFilled) {
-      OpenFoodFactsProduct.getOpenFoodFactsProduct(
-          dlHelper,
-          barcode,
-          product -> {
-            productNameLive.setValue(product.getLocalizedProductName(getApplication()));
-            nameFromOnlineSource = product.getLocalizedProductName(getApplication());
-            offHelpText.setValue(getString(R.string.msg_product_name_off));
-          },
-          error -> OpenBeautyFactsProduct.getOpenBeautyFactsProduct(
-              dlHelper,
-              barcode,
-              product -> {
-                String productName = product.getLocalizedProductName(getApplication());
-                if (productName != null && !productName.isEmpty()) {
-                  productNameLive.setValue(productName);
-                  nameFromOnlineSource = productName;
-                  offHelpText.setValue(getString(R.string.msg_product_name_obf));
-                } else {
-                  offHelpText.setValue(getString(R.string.msg_product_name_lookup_empty));
-                  sendEvent(Event.FOCUS_INVALID_VIEWS);
-                }
-              },
-              error1 -> {
-                offHelpText.setValue(getString(R.string.msg_product_name_lookup_error));
-                sendEvent(Event.FOCUS_INVALID_VIEWS);
-              }
-          )
-      );
-    } else if (!productNameFilled) {
-      sendEvent(Event.FOCUS_INVALID_VIEWS);
-    }
+  public void downloadData(boolean forceUpdate) {
+    dlHelper.updateData(
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            fillProductNameIfPossible();
+          }
+        },
+        error -> onError(error, TAG),
+        forceUpdate,
+        false,
+        Product.class
+    );
   }
 
   public void displayItems() {
@@ -278,6 +202,43 @@ public class ChooseProductViewModel extends BaseViewModel {
     existingProductsCategoryTextLive.setValue(
         getString(R.string.category_existing_products_similar)
     );
+  }
+
+  public void fillProductNameIfPossible() {
+    boolean productNameFilled = productNameLive.getValue() != null
+        && !productNameLive.getValue().isEmpty();
+    if(isOpenFoodFactsEnabled() && !productNameFilled) {
+      OpenFoodFactsProduct.getOpenFoodFactsProduct(
+          dlHelper,
+          barcode,
+          product -> {
+            productNameLive.setValue(product.getLocalizedProductName(getApplication()));
+            nameFromOnlineSource = product.getLocalizedProductName(getApplication());
+            offHelpText.setValue(getString(R.string.msg_product_name_off));
+          },
+          error -> OpenBeautyFactsProduct.getOpenBeautyFactsProduct(
+              dlHelper,
+              barcode,
+              product -> {
+                String productName = product.getLocalizedProductName(getApplication());
+                if (productName != null && !productName.isEmpty()) {
+                  productNameLive.setValue(productName);
+                  nameFromOnlineSource = productName;
+                  offHelpText.setValue(getString(R.string.msg_product_name_obf));
+                } else {
+                  offHelpText.setValue(getString(R.string.msg_product_name_lookup_empty));
+                  sendEvent(Event.FOCUS_INVALID_VIEWS);
+                }
+              },
+              error1 -> {
+                offHelpText.setValue(getString(R.string.msg_product_name_lookup_error));
+                sendEvent(Event.FOCUS_INVALID_VIEWS);
+              }
+          )
+      );
+    } else if (!productNameFilled) {
+      sendEvent(Event.FOCUS_INVALID_VIEWS);
+    }
   }
 
   public void createPendingProduct(ChooseProductRepository.CreatePendingProductListener listener) {
@@ -346,10 +307,6 @@ public class ChooseProductViewModel extends BaseViewModel {
   @NonNull
   public MutableLiveData<Boolean> getIsLoadingLive() {
     return isLoadingLive;
-  }
-
-  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
-    currentQueueLoading = queueLoading;
   }
 
   public boolean isFeatureEnabled(String pref) {

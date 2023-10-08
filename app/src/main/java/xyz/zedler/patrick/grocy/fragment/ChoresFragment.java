@@ -30,14 +30,12 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ChoreEntryAdapter;
 import xyz.zedler.patrick.grocy.adapter.ChoreEntryAdapter.ChoreEntryAdapterListener;
-import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -94,8 +92,10 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    viewModel = new ViewModelProvider(this).get(ChoresViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
+    viewModel = new ViewModelProvider(this, new ChoresViewModel.ChoresViewModelFactory(
+        activity.getApplication(),
+        ChoresFragmentArgs.fromBundle(requireArguments())
+    )).get(ChoresViewModel.class);
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
     binding.setFragment(this);
@@ -127,18 +127,17 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
-    binding.recycler.setAdapter(new MasterPlaceholderAdapter());
+    ChoreEntryAdapter adapter = new ChoreEntryAdapter(
+        requireContext(),
+        (LinearLayoutManager) binding.recycler.getLayoutManager(),
+        this
+    );
+    binding.recycler.setAdapter(adapter);
 
     if (savedInstanceState == null) {
       binding.recycler.scrollToPosition(0);
       viewModel.resetSearch();
     }
-
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
-      if (!state) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
 
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
@@ -162,28 +161,14 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
       } else {
         viewModel.getInfoFullscreenLive().setValue(null);
       }
-      if (binding.recycler.getAdapter() instanceof ChoreEntryAdapter) {
-        ((ChoreEntryAdapter) binding.recycler.getAdapter()).updateData(
-            items,
-            viewModel.getChoreHashMap(),
-            viewModel.getUsersHashMap(),
-            viewModel.getSortMode(),
-            viewModel.isSortAscending()
-        );
-      } else {
-        binding.recycler.setAdapter(
-            new ChoreEntryAdapter(
-                requireContext(),
-                (LinearLayoutManager) binding.recycler.getLayoutManager(),
-                items,
-                viewModel.getChoreHashMap(),
-                viewModel.getUsersHashMap(),
-                this,
-                viewModel.getSortMode(),
-                viewModel.isSortAscending()
-            )
-        );
-      }
+      adapter.updateData(
+          items,
+          viewModel.getChoreHashMap(),
+          viewModel.getUsersHashMap(),
+          viewModel.getSortMode(),
+          viewModel.isSortAscending(),
+          () -> binding.recycler.scheduleLayoutAnimation()
+      );
     });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
@@ -191,6 +176,8 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
         activity.showSnackbar(
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
+      } else if (event.getType() == Event.SCROLL_UP) {
+        binding.recycler.scrollToPosition(0);
       }
     });
 
@@ -204,38 +191,39 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
             RecyclerView.ViewHolder viewHolder,
             List<UnderlayButton> underlayButtons
         ) {
+          if (!(binding.recycler.getAdapter() instanceof ChoreEntryAdapter)) return;
           int position = viewHolder.getAdapterPosition();
-          ArrayList<ChoreEntry> displayedItems = viewModel.getFilteredChoreEntriesLive().getValue();
-          if (displayedItems == null || position < 0
-              || position >= displayedItems.size()) {
+          ChoreEntry entry = ((ChoreEntryAdapter) binding.recycler.getAdapter())
+              .getEntryForPos(position);
+          if (entry == null) {
             return;
           }
           underlayButtons.add(new UnderlayButton(
               activity,
               R.drawable.ic_round_play_arrow,
               pos -> {
-                if (pos >= displayedItems.size()) {
-                  return;
-                }
                 swipeBehavior.recoverLatestSwipedItem();
+                ChoreEntry entry1 = ((ChoreEntryAdapter) binding.recycler.getAdapter())
+                    .getEntryForPos(position);
+                if (entry1 == null) return;
                 new Handler().postDelayed(
-                    () -> viewModel.executeChore(displayedItems.get(pos).getChoreId(), false),
+                    () -> viewModel.executeChore(entry1, entry1.getNextEstimatedExecutionTime(), false),
                     100
                 );
               }
           ));
           if (VersionUtil.isGrocyServerMin320(viewModel.getSharedPrefs())
-              && !viewModel.hasManualScheduling(displayedItems.get(position).getChoreId())) {
+              && !viewModel.hasManualScheduling(entry.getChoreId())) {
             underlayButtons.add(new UnderlayButton(
                 activity,
                 R.drawable.ic_round_skip_next,
                 pos -> {
-                  if (pos >= displayedItems.size()) {
-                    return;
-                  }
                   swipeBehavior.recoverLatestSwipedItem();
+                  ChoreEntry entry1 = ((ChoreEntryAdapter) binding.recycler.getAdapter())
+                      .getEntryForPos(position);
+                  if (entry1 == null) return;
                   new Handler().postDelayed(
-                      () -> viewModel.executeChore(displayedItems.get(pos).getChoreId(), true),
+                      () -> viewModel.executeChore(entry1, entry1.getNextEstimatedExecutionTime(), true),
                       100
                   );
                 }
@@ -293,22 +281,28 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
     }
     Bundle bundle = new Bundle();
     bundle.putParcelable(ARGUMENT.CHORE, chore);
+    bundle.putParcelable(ARGUMENT.CHORE_ENTRY, choreEntry);
     activity.showBottomSheet(new ChoreEntryBottomSheet(), bundle);
   }
 
   @Override
-  public void trackChoreExecution(int choreId) {
-    viewModel.executeChore(choreId, false);
+  public void trackNextChoreSchedule(ChoreEntry choreEntry) {
+    viewModel.executeChore(choreEntry, choreEntry.getNextEstimatedExecutionTime(), false);
   }
 
   @Override
-  public void skipNextChoreSchedule(int choreId) {
-    viewModel.executeChore(choreId, true);
+  public void skipNextChoreSchedule(ChoreEntry choreEntry) {
+    viewModel.executeChore(choreEntry, choreEntry.getNextEstimatedExecutionTime(), true);
   }
 
   @Override
-  public void rescheduleNextExecution(int choreId) {
-    Chore chore = viewModel.getChoreHashMap().get(choreId);
+  public void trackChoreExecutionNow(ChoreEntry choreEntry) {
+    viewModel.executeChore(choreEntry, null, false);
+  }
+
+  @Override
+  public void rescheduleNextExecution(ChoreEntry choreEntry) {
+    Chore chore = viewModel.getChoreHashMap().get(choreEntry.getChoreId());
     if (chore == null) {
       viewModel.showErrorMessage();
       return;
@@ -323,10 +317,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
   }
 
   private void hideDisabledFeatures() {

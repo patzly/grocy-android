@@ -22,13 +22,11 @@ package xyz.zedler.patrick.grocy.viewmodel;
 import android.app.Application;
 import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
@@ -37,7 +35,6 @@ import xyz.zedler.patrick.grocy.model.PendingProductInfo;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.repository.StoredPurchasesRepository;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class StoredPurchasesViewModel extends BaseViewModel {
 
@@ -61,7 +58,6 @@ public class StoredPurchasesViewModel extends BaseViewModel {
   private final HashMap<Integer, List<StoredPurchase>> pendingPurchasesHashMap;
 
   private Runnable queueEmptyAction;
-  private NetworkQueue currentQueueLoading;
 
   public StoredPurchasesViewModel(@NonNull Application application) {
     super(application);
@@ -70,7 +66,7 @@ public class StoredPurchasesViewModel extends BaseViewModel {
 
     displayHelpLive = new MutableLiveData<>(false);
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     repository = new StoredPurchasesRepository(application);
 
     displayedItemsLive = new MutableLiveData<>();
@@ -118,69 +114,28 @@ public class StoredPurchasesViewModel extends BaseViewModel {
       }
       displayItems();
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
+      } else if (queueEmptyAction != null) {
+        queueEmptyAction.run();
+        queueEmptyAction = null;
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(
-          this::downloadData,
-          error -> onError(error, TAG)
-      );
-      return;
-    }
-
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
-    queue.append(Product.updateProducts(dlHelper, dbChangedTime, products -> {
-      this.products = products;
-      productHashMap.clear();
-      for (Product product : products) {
-        PendingProduct pendingProduct = pendingProductHashMap.get(product.getName());
-        if (pendingProduct != null) product.setPendingProductId(pendingProduct.getId());
-        productHashMap.put(product.getName(), product);
-      }
-    }));
-
-
-    if (queue.isEmpty()) {
-      onQueueEmpty();
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.apply();
-    downloadData();
-  }
-
-  private void onQueueEmpty() {
-    if (isOffline()) {
-      setOfflineLive(false);
-    }
-    if (queueEmptyAction != null) {
-      queueEmptyAction.run();
-      queueEmptyAction = null;
-    }
-    displayItems();
+  public void downloadData(boolean forceUpdate) {
+    dlHelper.updateData(
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else if (queueEmptyAction != null) {
+            queueEmptyAction.run();
+            queueEmptyAction = null;
+          }
+        }, error -> onError(error, TAG),
+        forceUpdate,
+        true,
+        Product.class
+    );
   }
 
   public void displayItems() {
@@ -241,10 +196,6 @@ public class StoredPurchasesViewModel extends BaseViewModel {
   @NonNull
   public MutableLiveData<Boolean> getIsLoadingLive() {
     return isLoadingLive;
-  }
-
-  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
-    currentQueueLoading = queueLoading;
   }
 
   public void setQueueEmptyAction(Runnable queueEmptyAction) {

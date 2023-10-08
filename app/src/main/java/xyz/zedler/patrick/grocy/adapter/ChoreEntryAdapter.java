@@ -62,22 +62,15 @@ public class ChoreEntryAdapter extends
   public ChoreEntryAdapter(
       Context context,
       LinearLayoutManager linearLayoutManager,
-      ArrayList<ChoreEntry> choreEntries,
-      HashMap<Integer, Chore> choreHashMap,
-      HashMap<Integer, User> usersHashMap,
-      ChoreEntryAdapterListener listener,
-      String sortMode,
-      boolean sortAscending
+      ChoreEntryAdapterListener listener
   ) {
     this.context = context;
     this.linearLayoutManager = linearLayoutManager;
-    this.choreEntries = new ArrayList<>(choreEntries);
-    this.choreHashMap = new HashMap<>(choreHashMap);
-    this.usersHashMap = new HashMap<>(usersHashMap);
+    this.choreEntries = new ArrayList<>();
+    this.choreHashMap = new HashMap<>();
+    this.usersHashMap = new HashMap<>();
     this.listener = listener;
     this.dateUtil = new DateUtil(context);
-    this.sortMode = sortMode;
-    this.sortAscending = sortAscending;
   }
 
   @Override
@@ -227,14 +220,21 @@ public class ChoreEntryAdapter extends
     void onItemRowClicked(ChoreEntry choreEntry);
   }
 
+  public ChoreEntry getEntryForPos(int position) {
+    if (position < 0 || position >= choreEntries.size()) {
+      return null;
+    }
+    return choreEntries.get(position);
+  }
+
   public void updateData(
       ArrayList<ChoreEntry> newList,
       HashMap<Integer, Chore> choreHashMap,
       HashMap<Integer, User> usersHashMap,
       String sortMode,
-      boolean sortAscending
+      boolean sortAscending,
+      Runnable onListFilled
   ) {
-
     ChoreEntryAdapter.DiffCallback diffCallback = new ChoreEntryAdapter.DiffCallback(
         this.choreEntries,
         newList,
@@ -247,6 +247,11 @@ public class ChoreEntryAdapter extends
         this.sortAscending,
         sortAscending
     );
+
+    if (onListFilled != null && !newList.isEmpty() && choreEntries.isEmpty()) {
+      onListFilled.run();
+    }
+
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.choreEntries.clear();
     this.choreEntries.addAll(newList);
@@ -319,13 +324,6 @@ public class ChoreEntryAdapter extends
     private boolean compare(int oldItemPos, int newItemPos, boolean compareContent) {
       ChoreEntry newItem = newItems.get(newItemPos);
       ChoreEntry oldItem = oldItems.get(oldItemPos);
-
-      if (!sortModeOld.equals(sortModeNew)) {
-        return false;
-      }
-      if (sortAscendingOld != sortAscendingNew) {
-        return false;
-      }
 
       Chore choreOld = choreHashMapOld.get(oldItem.getChoreId());
       Chore choreNew = choreHashMapNew.get(newItem.getChoreId());

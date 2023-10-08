@@ -73,7 +73,7 @@ public class MasterProductCatDueDateFragment extends BaseFragment {
   @Override
   public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    MasterProductFragmentArgs args = MasterProductFragmentArgs
+    MasterProductCatDueDateFragmentArgs args = MasterProductCatDueDateFragmentArgs
         .fromBundle(requireArguments());
     viewModel = new ViewModelProvider(this, new MasterProductCatDueDateViewModel
         .MasterProductCatDueDateViewModelFactory(activity.getApplication(), args)
@@ -146,7 +146,7 @@ public class MasterProductCatDueDateFragment extends BaseFragment {
                 Constants.ARGUMENT.ACTION,
                 Constants.ACTION.DELETE
             );
-            activity.onBackPressed();
+            activity.performOnBackPressed();
             return true;
           }
           if (menuItem.getItemId() == R.id.action_save) {
@@ -155,24 +155,25 @@ public class MasterProductCatDueDateFragment extends BaseFragment {
                 Constants.ARGUMENT.ACTION,
                 ACTION.SAVE_CLOSE
             );
-            activity.onBackPressed();
+            activity.performOnBackPressed();
             return true;
           }
           return false;
         }
     );
+    boolean showSaveWithCloseButton = viewModel.isActionEdit() || args.getForceSaveWithClose();
     activity.updateFab(
-        viewModel.isActionEdit() ? R.drawable.ic_round_save : R.drawable.ic_round_save_as,
-        viewModel.isActionEdit() ? R.string.action_save : R.string.action_save_not_close,
-        viewModel.isActionEdit() ? Constants.FAB.TAG.SAVE : Constants.FAB.TAG.SAVE_NOT_CLOSE,
+        showSaveWithCloseButton ? R.drawable.ic_round_save : R.drawable.ic_round_save_as,
+        showSaveWithCloseButton ? R.string.action_save : R.string.action_save_not_close,
+        showSaveWithCloseButton ? Constants.FAB.TAG.SAVE : Constants.FAB.TAG.SAVE_NOT_CLOSE,
         savedInstanceState == null,
         () -> {
           setForDestination(
               R.id.masterProductFragment,
               Constants.ARGUMENT.ACTION,
-              viewModel.isActionEdit() ? ACTION.SAVE_CLOSE : ACTION.SAVE_NOT_CLOSE
+              showSaveWithCloseButton ? ACTION.SAVE_CLOSE : ACTION.SAVE_NOT_CLOSE
           );
-          activity.onBackPressed();
+          activity.performOnBackPressed();
         }
     );
   }
@@ -224,14 +225,6 @@ public class MasterProductCatDueDateFragment extends BaseFragment {
         viewModel.getFilledProduct()
     );
     return false;
-  }
-
-  @Override
-  public void updateConnectivity(boolean isOnline) {
-    if (!isOnline == viewModel.isOffline()) {
-      return;
-    }
-    viewModel.setOfflineLive(!isOnline);
   }
 
   @NonNull

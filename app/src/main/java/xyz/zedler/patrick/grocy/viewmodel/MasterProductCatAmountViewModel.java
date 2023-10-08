@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy.viewmodel;
 import android.app.Application;
 import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,13 +29,13 @@ import androidx.preference.PreferenceManager;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatAmount;
-import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.MasterProductCatAmountFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class MasterProductCatAmountViewModel extends BaseViewModel {
 
@@ -46,26 +45,25 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
   private final DownloadHelper dlHelper;
   private final MasterProductRepository repository;
   private final FormDataMasterProductCatAmount formData;
-  private final MasterProductFragmentArgs args;
+  private final MasterProductCatAmountFragmentArgs args;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
 
   private List<QuantityUnit> quantityUnits;
 
-  private NetworkQueue currentQueueLoading;
   private final boolean isActionEdit;
 
   public MasterProductCatAmountViewModel(
       @NonNull Application application,
-      @NonNull MasterProductFragmentArgs startupArgs
+      @NonNull MasterProductCatAmountFragmentArgs startupArgs
   ) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     repository = new MasterProductRepository(application);
     formData = new FormDataMasterProductCatAmount(application, sharedPrefs, getBeginnerModeEnabled());
     args = startupArgs;
@@ -89,52 +87,27 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
       this.quantityUnits = data.getQuantityUnits();
-      formData.fillWithProductIfNecessary(args.getProduct(), this.quantityUnits);
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
+      } else {
+        formData.fillWithProductIfNecessary(args.getProduct(), this.quantityUnits);
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, null));
-      return;
-    }
-
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, null));
-    queue.append(
-        QuantityUnit.updateQuantityUnits(
-            dlHelper,
-            dbChangedTime,
-            quantityUnits -> this.quantityUnits = quantityUnits
-        )
+  public void downloadData(boolean forceUpdate) {
+    dlHelper.updateData(
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            formData.fillWithProductIfNecessary(args.getProduct(), this.quantityUnits);
+          }
+        }, error -> onError(error, null),
+        forceUpdate,
+        false,
+        QuantityUnit.class
     );
-    if (queue.isEmpty()) {
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null);
-  }
-
-  private void onQueueEmpty() {
-    if (isOffline()) {
-      setOfflineLive(false);
-    }
-    formData.fillWithProductIfNecessary(args.getProduct(), quantityUnits);
   }
 
   @NonNull
@@ -145,10 +118,6 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
   @NonNull
   public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
     return infoFullscreenLive;
-  }
-
-  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
-    currentQueueLoading = queueLoading;
   }
 
   public boolean isFeatureEnabled(String pref) {
@@ -165,6 +134,10 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
     );
   }
 
+  public boolean isQuickOpenAmountOptionAvailable() {
+    return VersionUtil.isGrocyServerMin400(sharedPrefs);
+  }
+
   @Override
   protected void onCleared() {
     dlHelper.destroy();
@@ -174,11 +147,11 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
   public static class MasterProductCatAmountViewModelFactory implements ViewModelProvider.Factory {
 
     private final Application application;
-    private final MasterProductFragmentArgs args;
+    private final MasterProductCatAmountFragmentArgs args;
 
     public MasterProductCatAmountViewModelFactory(
         Application application,
-        MasterProductFragmentArgs args
+        MasterProductCatAmountFragmentArgs args
     ) {
       this.application = application;
       this.args = args;

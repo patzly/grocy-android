@@ -24,7 +24,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -33,16 +32,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import java.util.ArrayList;
-import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterObjectListAdapter;
-import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
@@ -51,7 +46,6 @@ import xyz.zedler.patrick.grocy.databinding.FragmentMasterObjectListBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -61,7 +55,6 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterObjectListViewModel;
 
@@ -110,6 +103,9 @@ public class MasterObjectListFragment extends BaseFragment
         title = R.string.property_stores;
     }
     binding.toolbarDefault.setTitle(title);
+    binding.containerProductGroupFilter.setVisibility(
+        entity.equals(GrocyApi.ENTITY.PRODUCTS) ? View.VISIBLE : View.GONE
+    );
     return binding.getRoot();
   }
 
@@ -134,7 +130,6 @@ public class MasterObjectListFragment extends BaseFragment
     viewModel = new ViewModelProvider(this, new MasterObjectListViewModel
         .MasterObjectListViewModelFactory(activity.getApplication(), entity)
     ).get(MasterObjectListViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
@@ -147,13 +142,15 @@ public class MasterObjectListFragment extends BaseFragment
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
-      binding.swipe.setRefreshing(state);
-      if (!state) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
-    binding.swipe.setOnRefreshListener(() -> viewModel.downloadDataForceUpdate());
+    binding.recycler.setLayoutManager(
+        new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+    );
+    MasterObjectListAdapter adapter = new MasterObjectListAdapter(
+        requireContext(),
+        entity,
+        this
+    );
+    binding.recycler.setAdapter(adapter);
 
     viewModel.getDisplayedItemsLive().observe(getViewLifecycleOwner(), objects -> {
       if (objects == null) {
@@ -190,18 +187,7 @@ public class MasterObjectListFragment extends BaseFragment
       } else {
         viewModel.getInfoFullscreenLive().setValue(null);
       }
-      if (binding.recycler.getAdapter() instanceof MasterObjectListAdapter) {
-        ((MasterObjectListAdapter) binding.recycler.getAdapter()).updateData(objects);
-      } else {
-        binding.recycler.setAdapter(new MasterObjectListAdapter(
-            getContext(),
-            entity,
-            objects,
-            this,
-            viewModel.getHorizontalFilterBarMulti()
-        ));
-        binding.recycler.scheduleLayoutAnimation();
-      }
+      adapter.updateData(objects, () -> binding.recycler.scheduleLayoutAnimation());
     });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
@@ -212,6 +198,8 @@ public class MasterObjectListFragment extends BaseFragment
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
+      } else if (event.getType() == Event.SCROLL_UP) {
+        binding.recycler.scrollToPosition(0);
       }
     });
 
@@ -221,7 +209,7 @@ public class MasterObjectListFragment extends BaseFragment
 
     // INITIALIZE VIEWS
 
-    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.onBackPressed());
+    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.performOnBackPressed());
     binding.searchClose.setOnClickListener(v -> dismissSearch());
     binding.editTextSearch.addTextChangedListener(new TextWatcher() {
       public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -264,12 +252,6 @@ public class MasterObjectListFragment extends BaseFragment
       appBarBehavior.switchToSecondary();
     }
 
-    binding.recycler.setLayoutManager(
-        new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-    );
-    binding.recycler.setItemAnimator(new DefaultItemAnimator());
-    binding.recycler.setAdapter(new MasterPlaceholderAdapter());
-
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
     }
@@ -283,9 +265,7 @@ public class MasterObjectListFragment extends BaseFragment
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,
-        !entity.equals(GrocyApi.ENTITY.PRODUCTS)
-            ? viewModel.isSortAscending() ? R.menu.menu_master_items_asc : R.menu.menu_master_items_desc
-            : viewModel.isSortAscending() ? R.menu.menu_master_products_asc : R.menu.menu_master_products_desc,
+        R.menu.menu_master_items,
         getBottomMenuClickListener()
     );
     activity.updateFab(
@@ -329,41 +309,6 @@ public class MasterObjectListFragment extends BaseFragment
       if (item.getItemId() == R.id.action_search) {
         ViewUtil.startIcon(item);
         setUpSearch();
-        return true;
-      } else if (item.getItemId() == R.id.action_filter) {
-        SubMenu menuProductGroups = item.getSubMenu();
-        menuProductGroups.clear();
-        List<ProductGroup> productGroups = viewModel.getProductGroups();
-        if (productGroups != null && !productGroups.isEmpty()) {
-          ArrayList<ProductGroup> sorted = new ArrayList<>(productGroups);
-          SortUtil.sortProductGroupsByName(sorted, true);
-          for (ProductGroup pg : sorted) {
-            menuProductGroups.add(pg.getName()).setOnMenuItemClickListener(itemTemp -> {
-              if (binding.recycler.getAdapter() == null) {
-                return false;
-              }
-              viewModel.getHorizontalFilterBarMulti().addFilter(
-                  HorizontalFilterBarMulti.PRODUCT_GROUP,
-                  new HorizontalFilterBarMulti.Filter(pg.getName(), pg.getId())
-              );
-              binding.recycler.getAdapter().notifyItemChanged(0);
-              return true;
-            });
-          }
-        } else {
-          activity.showSnackbar(R.string.error_undefined, false);
-        }
-        return true;
-      } else if (item.getItemId() == R.id.action_sort_ascending) {
-        viewModel.setSortAscending(!viewModel.isSortAscending());
-        item.setIcon(
-            viewModel.isSortAscending()
-                ? R.drawable.ic_round_sort_asc_to_desc
-                : R.drawable.ic_round_sort_desc_to_asc_anim
-        );
-        item.getIcon().setAlpha(255);
-        item.setChecked(viewModel.isSortAscending());
-        ViewUtil.startIcon(item);
         return true;
       }
       return false;
@@ -450,11 +395,6 @@ public class MasterObjectListFragment extends BaseFragment
   }
 
   @Override
-  public void deleteObjectSafely(Object object) {
-    viewModel.deleteObjectSafely(object);
-  }
-
-  @Override
   public void deleteObject(int objectId) {
     viewModel.deleteObject(objectId);
   }
@@ -464,8 +404,7 @@ public class MasterObjectListFragment extends BaseFragment
     if (!online == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!online);
-    if (online) viewModel.downloadData();
+    viewModel.downloadData(false);
   }
 
   @NonNull

@@ -28,11 +28,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.APPEARANCE;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.NETWORK;
@@ -63,6 +63,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.repository.MainRepository;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.ReminderUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
@@ -74,7 +75,8 @@ public class SettingsViewModel extends BaseViewModel {
 
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
-  private MainRepository repository;
+  private final MainRepository repository;
+  private final ReminderUtil reminderUtil;
 
   private MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<Boolean> getExternalScannerEnabledLive;
@@ -82,11 +84,11 @@ public class SettingsViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> torEnabledLive;
   private final MutableLiveData<Boolean> proxyEnabledLive;
   private final MutableLiveData<String> shoppingModeUpdateIntervalTextLive;
-  private ArrayList<Location> locations;
+  private List<Location> locations;
   private final MutableLiveData<String> presetLocationTextLive;
-  private ArrayList<ProductGroup> productGroups;
+  private List<ProductGroup> productGroups;
   private final MutableLiveData<String> presetProductGroupTextLive;
-  private ArrayList<QuantityUnit> quantityUnits;
+  private List<QuantityUnit> quantityUnits;
   private final MutableLiveData<String> presetQuantityUnitTextLive;
   private final MutableLiveData<String> defaultDueDaysTextLive;
   private final MutableLiveData<String> dueSoonDaysTextLive;
@@ -98,6 +100,7 @@ public class SettingsViewModel extends BaseViewModel {
   private final MutableLiveData<String> dueSoonNotificationsTimeTextLive;
   private final MutableLiveData<Boolean> choresNotificationsEnabledLive;
   private final MutableLiveData<String> choresNotificationsTimeTextLive;
+  private final MutableLiveData<Boolean> displayHelpForNotificationsLive;
 
   private final int allowedDecimalPlacesAmount;
 
@@ -105,16 +108,12 @@ public class SettingsViewModel extends BaseViewModel {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-
-    dlHelper = new DownloadHelper(
-        getApplication(),
-        TAG,
-        isLoading -> isLoadingLive.setValue(isLoading)
-    );
+    isLoadingLive = new MutableLiveData<>(false);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new MainRepository(getApplication());
+    reminderUtil = new ReminderUtil(getApplication());
 
-    isLoadingLive = new MutableLiveData<>(false);
     getExternalScannerEnabledLive = new MutableLiveData<>(getExternalScannerEnabled());
     needsRestartLive = new MutableLiveData<>(false);
     torEnabledLive = new MutableLiveData<>(getTorEnabled());
@@ -131,19 +130,15 @@ public class SettingsViewModel extends BaseViewModel {
         SHOPPING_LIST.AUTO_ADD, SETTINGS_DEFAULT.SHOPPING_LIST.AUTO_ADD
     ));
     autoAddToShoppingListTextLive = new MutableLiveData<>(getString(R.string.setting_loading));
-    dueSoonNotificationsEnabledLive = new MutableLiveData<>(getDueSoonNotificationsEnabled());
-    dueSoonNotificationsTimeTextLive = new MutableLiveData<>(getDueSoonNotificationsTime());
+    dueSoonNotificationsEnabledLive = new MutableLiveData<>(getStockNotificationsEnabled());
+    dueSoonNotificationsTimeTextLive = new MutableLiveData<>(getStockNotificationsTime());
     choresNotificationsEnabledLive = new MutableLiveData<>(getChoresNotificationsEnabled());
     choresNotificationsTimeTextLive = new MutableLiveData<>(getChoresNotificationsTime());
+    displayHelpForNotificationsLive = new MutableLiveData<>(false);
 
     allowedDecimalPlacesAmount = sharedPrefs.getInt(
         STOCK.DECIMAL_PLACES_AMOUNT, SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
     );
-  }
-
-  public boolean isDemo() {
-    String server = getServerUrl();
-    return server != null && server.contains("grocy.info");
   }
 
   public boolean isVersionCompatible() {
@@ -176,7 +171,7 @@ public class SettingsViewModel extends BaseViewModel {
         Constants.PREF.GROCY_VERSION,
         getString(R.string.date_unknown)
     ));
-    bundle.putBoolean(Constants.ARGUMENT.DEMO_CHOSEN, isDemo());
+    bundle.putBoolean(Constants.ARGUMENT.DEMO_CHOSEN, isDemoInstance());
     bundle.putStringArrayList(
         Constants.ARGUMENT.SUPPORTED_VERSIONS,
         getSupportedVersions()
@@ -328,20 +323,29 @@ public class SettingsViewModel extends BaseViewModel {
   }
 
   public void setSpeedUpStartEnabled(boolean enabled) {
-    sharedPrefs.edit()
-        .putBoolean(Constants.SETTINGS.BEHAVIOR.SPEED_UP_START, enabled).apply();
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.BEHAVIOR.SPEED_UP_START, enabled).apply();
   }
 
   public boolean getTurnOnQuickModeEnabled() {
     return sharedPrefs.getBoolean(
-        BEHAVIOR.DATE_KEYBOARD_INPUT,
+        BEHAVIOR.TURN_ON_QUICK_MODE,
         SETTINGS_DEFAULT.BEHAVIOR.TURN_ON_QUICK_MODE
     );
   }
 
   public void setTurnOnQuickModeEnabled(boolean enabled) {
-    sharedPrefs.edit()
-        .putBoolean(Constants.SETTINGS.BEHAVIOR.TURN_ON_QUICK_MODE, enabled).apply();
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.BEHAVIOR.TURN_ON_QUICK_MODE, enabled).apply();
+  }
+
+  public boolean getQuickModeReturnEnabled() {
+    return sharedPrefs.getBoolean(
+        BEHAVIOR.QUICK_MODE_RETURN,
+        SETTINGS_DEFAULT.BEHAVIOR.QUICK_MODE_RETURN
+    );
+  }
+
+  public void setQuickModeReturnEnabled(boolean enabled) {
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.BEHAVIOR.QUICK_MODE_RETURN, enabled).apply();
   }
 
   public boolean getDateKeyboardInputEnabled() {
@@ -378,18 +382,6 @@ public class SettingsViewModel extends BaseViewModel {
   public void setKeepScreenOnRecipesEnabled(boolean enabled) {
     sharedPrefs.edit()
             .putBoolean(Constants.SETTINGS.RECIPES.KEEP_SCREEN_ON, enabled).apply();
-  }
-
-  public boolean getCopyBarcodeNoteEnabled() {
-    return sharedPrefs.getBoolean(
-        BEHAVIOR.COPY_BARCODE_NOTE,
-        SETTINGS_DEFAULT.BEHAVIOR.COPY_BARCODE_NOTE
-    );
-  }
-
-  public void setCopyBarcodeNoteEnabled(boolean enabled) {
-    sharedPrefs.edit()
-        .putBoolean(Constants.SETTINGS.BEHAVIOR.COPY_BARCODE_NOTE, enabled).apply();
   }
 
   public boolean getFrontCamEnabled() {
@@ -558,17 +550,6 @@ public class SettingsViewModel extends BaseViewModel {
     sharedPrefs.edit().putBoolean(SHOPPING_MODE.USE_SMALLER_FONT, enabled).apply();
   }
 
-  public boolean getShoppingModeShowProductDescriptionEnabled() {
-    return sharedPrefs.getBoolean(
-        SHOPPING_MODE.SHOW_PRODUCT_DESCRIPTION,
-        SETTINGS_DEFAULT.SHOPPING_MODE.SHOW_PRODUCT_DESCRIPTION
-    );
-  }
-
-  public void setShoppingModeShowProductDescriptionEnabled(boolean enabled) {
-    sharedPrefs.edit().putBoolean(SHOPPING_MODE.SHOW_PRODUCT_DESCRIPTION, enabled).apply();
-  }
-
   public boolean getListIndicatorEnabled() {
     return sharedPrefs.getBoolean(
         Constants.SETTINGS.STOCK.DISPLAY_DOTS_IN_STOCK,
@@ -648,7 +629,7 @@ public class SettingsViewModel extends BaseViewModel {
       return;
     }
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(ARGUMENT.LOCATIONS, locations);
+    bundle.putParcelableArrayList(ARGUMENT.LOCATIONS, new ArrayList<>(locations));
     bundle.putInt(
         ARGUMENT.SELECTED_ID,
         sharedPrefs.getInt(STOCK.LOCATION, SETTINGS_DEFAULT.STOCK.LOCATION)
@@ -662,7 +643,7 @@ public class SettingsViewModel extends BaseViewModel {
       return;
     }
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(ARGUMENT.PRODUCT_GROUPS, productGroups);
+    bundle.putParcelableArrayList(ARGUMENT.PRODUCT_GROUPS, new ArrayList<>(productGroups));
     bundle.putInt(
         ARGUMENT.SELECTED_ID,
         sharedPrefs.getInt(STOCK.PRODUCT_GROUP, SETTINGS_DEFAULT.STOCK.PRODUCT_GROUP)
@@ -676,7 +657,7 @@ public class SettingsViewModel extends BaseViewModel {
       return;
     }
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(ARGUMENT.QUANTITY_UNITS, quantityUnits);
+    bundle.putParcelableArrayList(ARGUMENT.QUANTITY_UNITS, new ArrayList<>(quantityUnits));
     bundle.putInt(
         ARGUMENT.SELECTED_ID,
         sharedPrefs.getInt(STOCK.QUANTITY_UNIT, SETTINGS_DEFAULT.STOCK.QUANTITY_UNIT)
@@ -1000,44 +981,58 @@ public class SettingsViewModel extends BaseViewModel {
     showBottomSheet(new InputBottomSheet(), bundle);
   }
 
-  public boolean getDueSoonNotificationsEnabled() {
-    return sharedPrefs.getBoolean(
-        NOTIFICATIONS.DUE_SOON_ENABLE,
-        SETTINGS_DEFAULT.NOTIFICATIONS.DUE_SOON_ENABLE
-    );
+  public ReminderUtil getReminderUtil() {
+    return reminderUtil;
   }
 
-  public MutableLiveData<Boolean> getDueSoonNotificationsEnabledLive() {
+  public boolean getStockNotificationsEnabled() {
+    boolean isActivated = sharedPrefs.getBoolean(
+        NOTIFICATIONS.STOCK_ENABLE, SETTINGS_DEFAULT.NOTIFICATIONS.STOCK_ENABLE
+    );
+    if (isActivated && !reminderUtil.hasPermission()) {
+      isActivated = false;
+      setStockNotificationsEnabled(false);
+    }
+    return isActivated;
+  }
+
+  public MutableLiveData<Boolean> getStockNotificationsEnabledLive() {
     return dueSoonNotificationsEnabledLive;
   }
 
-  public void setDueSoonNotificationsEnabled(boolean enabled) {
+  public void setStockNotificationsEnabled(boolean enabled) {
+    if(dueSoonNotificationsEnabledLive == null) {
+      return;
+    }
     dueSoonNotificationsEnabledLive.setValue(enabled);
-    (new ReminderUtil(getApplication())).setReminderEnabled(enabled);
+    reminderUtil.setReminderEnabled(ReminderUtil.STOCK_TYPE, enabled);
   }
 
-  public String getDueSoonNotificationsTime() {
+  public String getStockNotificationsTime() {
     return sharedPrefs.getString(
-        NOTIFICATIONS.DUE_SOON_TIME,
-        SETTINGS_DEFAULT.NOTIFICATIONS.DUE_SOON_TIME
+        NOTIFICATIONS.STOCK_TIME, SETTINGS_DEFAULT.NOTIFICATIONS.STOCK_TIME
     );
   }
 
-  public MutableLiveData<String> getDueSoonNotificationsTimeTextLive() {
+  public MutableLiveData<String> getStockNotificationsTimeTextLive() {
     return dueSoonNotificationsTimeTextLive;
   }
 
-  public void setDueSoonNotificationsTime(String text) {
-    sharedPrefs.edit().putString(NOTIFICATIONS.DUE_SOON_TIME, text).apply();
+  public void setStockNotificationsTime(String text) {
+    sharedPrefs.edit().putString(NOTIFICATIONS.STOCK_TIME, text).apply();
     dueSoonNotificationsTimeTextLive.setValue(text);
-    setDueSoonNotificationsEnabled(true);
+    setStockNotificationsEnabled(reminderUtil.hasPermission());
   }
 
   public boolean getChoresNotificationsEnabled() {
-    return sharedPrefs.getBoolean(
-        NOTIFICATIONS.CHORES_ENABLE,
-        SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_ENABLE
+    boolean isActivated = sharedPrefs.getBoolean(
+        NOTIFICATIONS.CHORES_ENABLE, SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_ENABLE
     );
+    if (isActivated && !reminderUtil.hasPermission()) {
+      isActivated = false;
+      setChoresNotificationsEnabled(false);
+    }
+    return isActivated;
   }
 
   public MutableLiveData<Boolean> getChoresNotificationsEnabledLive() {
@@ -1045,14 +1040,16 @@ public class SettingsViewModel extends BaseViewModel {
   }
 
   public void setChoresNotificationsEnabled(boolean enabled) {
-    //choresNotificationsEnabledLive.setValue(enabled);
-    //(new ReminderUtil(getApplication())).setReminderEnabled(enabled);
+    if(choresNotificationsEnabledLive == null) {
+      return;
+    }
+    choresNotificationsEnabledLive.setValue(enabled);
+    reminderUtil.setReminderEnabled(ReminderUtil.CHORES_TYPE, enabled);
   }
 
   public String getChoresNotificationsTime() {
     return sharedPrefs.getString(
-        NOTIFICATIONS.CHORES_TIME,
-        SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_TIME
+        NOTIFICATIONS.CHORES_TIME, SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_TIME
     );
   }
 
@@ -1063,18 +1060,22 @@ public class SettingsViewModel extends BaseViewModel {
   public void setChoresNotificationsTime(String text) {
     sharedPrefs.edit().putString(NOTIFICATIONS.CHORES_TIME, text).apply();
     choresNotificationsTimeTextLive.setValue(text);
-    setChoresNotificationsEnabled(true);
+    setChoresNotificationsEnabled(reminderUtil.hasPermission());
+  }
+
+  public MutableLiveData<Boolean> getDisplayHelpForNotificationsLive() {
+    return displayHelpForNotificationsLive;
+  }
+
+  public void toggleDisplayHelpForNotifications() {
+    displayHelpForNotificationsLive.setValue(
+        Boolean.FALSE.equals(displayHelpForNotificationsLive.getValue()));
   }
 
   public ArrayList<String> getSupportedVersions() {
     return new ArrayList<>(Arrays.asList(
         getApplication().getResources().getStringArray(R.array.compatible_grocy_versions)
     ));
-  }
-
-  public boolean getIsDemoInstance() {
-    String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
-    return server != null && server.contains("grocy.info");
   }
 
   public boolean isFeatureEnabled(String pref) {
@@ -1089,37 +1090,7 @@ public class SettingsViewModel extends BaseViewModel {
   }
 
   public void clearServerRelatedSharedPreferences() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.remove(PREF.DB_LAST_TIME_STOCK_ITEMS);
-    editPrefs.remove(PREF.DB_LAST_TIME_STORES);
-    editPrefs.remove(PREF.DB_LAST_TIME_LOCATIONS);
-    editPrefs.remove(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS);
-    editPrefs.remove(PREF.DB_LAST_TIME_SHOPPING_LISTS);
-    editPrefs.remove(PREF.DB_LAST_TIME_PRODUCT_GROUPS);
-    editPrefs.remove(PREF.DB_LAST_TIME_QUANTITY_UNITS);
-    editPrefs.remove(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS);
-    editPrefs.remove(PREF.DB_LAST_TIME_PRODUCTS);
-    editPrefs.remove(PREF.DB_LAST_TIME_PRODUCTS_LAST_PURCHASED);
-    editPrefs.remove(PREF.DB_LAST_TIME_PRODUCTS_AVERAGE_PRICE);
-    editPrefs.remove(PREF.DB_LAST_TIME_PRODUCT_BARCODES);
-    editPrefs.remove(PREF.DB_LAST_TIME_VOLATILE);
-    editPrefs.remove(PREF.DB_LAST_TIME_VOLATILE_MISSING);
-    editPrefs.remove(PREF.DB_LAST_TIME_TASKS);
-    editPrefs.remove(PREF.DB_LAST_TIME_TASK_CATEGORIES);
-    editPrefs.remove(PREF.DB_LAST_TIME_CHORES);
-    editPrefs.remove(PREF.DB_LAST_TIME_CHORE_ENTRIES);
-    editPrefs.remove(PREF.DB_LAST_TIME_USERS);
-
-    editPrefs.remove(PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY);
-    editPrefs.remove(PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY_TIME);
-    editPrefs.remove(PREF.SERVER_URL);
-    editPrefs.remove(PREF.HOME_ASSISTANT_SERVER_URL);
-    editPrefs.remove(PREF.HOME_ASSISTANT_LONG_LIVED_TOKEN);
-    editPrefs.remove(PREF.API_KEY);
-    editPrefs.remove(PREF.SHOPPING_LIST_LAST_ID);
-    editPrefs.remove(PREF.GROCY_VERSION);
-    editPrefs.remove(PREF.CURRENT_USER_ID);
-    editPrefs.apply();
+    PrefsUtil.clearServerRelatedSharedPreferences(sharedPrefs);
   }
 
   @Override

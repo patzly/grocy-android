@@ -23,7 +23,10 @@ import android.animation.ValueAnimator;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -31,9 +34,11 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.MenuCompat;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.elevation.SurfaceColors;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -47,7 +52,9 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetProductOverviewBinding;
+import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.StockEntriesFragmentArgs;
@@ -63,6 +70,7 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PictureUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
@@ -73,17 +81,19 @@ import xyz.zedler.patrick.grocy.view.BezierCurveChart;
 public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = ProductOverviewBottomSheet.class.getSimpleName();
+  private static final String DIALOG_DELETE = "dialog_delete";
 
   private SharedPreferences sharedPrefs;
   private MainActivity activity;
   private FragmentBottomsheetProductOverviewBinding binding;
-  private StockItem stockItem;
-  private ProductDetails productDetails;
+  @Nullable private StockItem stockItem;
+  @Nullable private ProductDetails productDetails;
   private Product product;
   private QuantityUnit quantityUnitStock;
   private QuantityUnit quantityUnitPurchase;
   private PluralUtil pluralUtil;
   private Location location;
+  private AlertDialog dialogDelete;
   private DownloadHelper dlHelper;
   private int maxDecimalPlacesAmount;
   private int decimalPlacesPriceDisplay;
@@ -121,7 +131,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
 
     boolean showActions = args.getShowActions();
 
-    // setup in CONSUME/PURCHASE with ProductDetails, in STOCK with StockItem
+    // setup in CONSUME/PURCHASE with ProductDetails, in STOCK with StockItem, in MasterProduct with Product
 
     if (args.getProductDetails() != null) {
       productDetails = args.getProductDetails();
@@ -133,6 +143,11 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       quantityUnitPurchase = args.getQuantityUnitPurchase();
       location = args.getLocation();
       product = stockItem.getProduct();
+    } else if (args.getProduct() != null) {
+      product = args.getProduct();
+      quantityUnitStock = args.getQuantityUnitStock();
+      quantityUnitPurchase = args.getQuantityUnitPurchase();
+      location = args.getLocation();
     }
 
     // WEB REQUESTS
@@ -147,13 +162,18 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
 
     // TOOLBAR
 
-    boolean isInStock = stockItem.getAmountDouble() > 0;
+    boolean isInStock = stockItem != null && stockItem.getAmountDouble() > 0;
     MenuCompat.setGroupDividerEnabled(binding.toolbar.getMenu(), true);
     // disable actions if necessary
-    binding.toolbar.getMenu().findItem(R.id.action_consume_all).setEnabled(isInStock);
-    binding.toolbar.getMenu().findItem(R.id.action_consume_spoiled).setEnabled(
-        isInStock && product.getEnableTareWeightHandlingInt() == 0
-    );
+    MenuItem itemConsumeAll = binding.toolbar.getMenu().findItem(R.id.action_consume_all);
+    if (itemConsumeAll != null) {
+      itemConsumeAll.setEnabled(isInStock);
+    }
+    MenuItem itemConsumeSpoiled = binding.toolbar.getMenu().findItem(R.id.action_consume_spoiled);
+    if (itemConsumeSpoiled != null) {
+      itemConsumeSpoiled.setEnabled(isInStock && product.getEnableTareWeightHandlingInt() == 0);
+    }
+    BaseFragment fragmentCurrent = activity.getCurrentFragment();
     binding.toolbar.setOnMenuItemClickListener(item -> {
       if (item.getItemId() == R.id.action_add_to_shopping_list) {
         activity.navUtil.navigateDeepLink(R.string.deep_link_shoppingListItemEditFragment,
@@ -188,9 +208,23 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
             new StockEntriesFragmentArgs.Builder().setProductId(productId).build().toBundle());
         dismiss();
         return true;
+      } else if (item.getItemId() == R.id.action_edit) {
+        fragmentCurrent.editObject(product);
+        dismiss();
+      } else if (item.getItemId() == R.id.action_copy) {
+        fragmentCurrent.copyProduct(product);
+        dismiss();
+      } else if (item.getItemId() == R.id.action_delete) {
+        showDeleteConfirmationDialog();
       }
       return false;
     });
+
+    if (savedInstanceState != null && savedInstanceState.getBoolean(DIALOG_DELETE)) {
+      new Handler(Looper.getMainLooper()).postDelayed(
+          this::showDeleteConfirmationDialog, 1
+      );
+    }
 
     // ACTIONS
     if (!showActions) {
@@ -198,7 +232,11 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       binding.linearActionContainer.setVisibility(View.GONE);
       // set info menu
       binding.toolbar.getMenu().clear();
-      binding.toolbar.inflateMenu(R.menu.menu_actions_product_overview_info);
+      if (args.getProduct() != null) {
+        binding.toolbar.inflateMenu(R.menu.menu_actions_master_product);
+      } else {
+        binding.toolbar.inflateMenu(R.menu.menu_actions_product_overview_info);
+      }
     }
     ResUtil.tintMenuItemIcons(activity, binding.toolbar.getMenu());
 
@@ -308,14 +346,36 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       loadPriceHistory((float) productDetails.getProduct().getQuFactorPurchaseToStockDouble());
     }
 
+    if (product.getPictureFileName() != null && !product.getPictureFileName().isBlank()) {
+      GrocyApi grocyApi = new GrocyApi(activity.getApplication());
+      PictureUtil.loadPicture(
+          binding.photoView,
+          binding.photoViewCard,
+          grocyApi.getProductPictureServeLarge(product.getPictureFileName())
+      );
+    } else {
+      binding.photoViewCard.setVisibility(View.GONE);
+    }
+
     hideDisabledFeatures();
   }
 
   @Override
   public void onDestroyView() {
+    if (dialogDelete != null) {
+      // Else it throws an leak exception because the context is somehow from the activity
+      dialogDelete.dismiss();
+    }
     super.onDestroyView();
     dlHelper.destroy();
     binding = null;
+  }
+
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    super.onSaveInstanceState(outState);
+    boolean isShowing = dialogDelete != null && dialogDelete.isShowing();
+    outState.putBoolean(DIALOG_DELETE, isShowing);
   }
 
   private void refreshItems() {
@@ -328,21 +388,28 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     }
 
     // AMOUNT
-    StringBuilder amountNormal = new StringBuilder();
-    StringBuilder amountAggregated = new StringBuilder();
-    AmountUtil.addStockAmountNormalInfo(activity, pluralUtil, amountNormal, stockItem,
-        quantityUnitStock, maxDecimalPlacesAmount);
-    AmountUtil.addStockAmountAggregatedInfo(activity, pluralUtil, amountAggregated, stockItem,
-        quantityUnitStock, maxDecimalPlacesAmount, false);
-    binding.itemAmount.setText(
-        activity.getString(R.string.property_amount),
-        product.getNoOwnStockBoolean()
-            ? !amountAggregated.toString().isBlank() ? amountAggregated.toString() : getString(R.string.subtitle_none)
-            : amountNormal.toString(),
-        amountAggregated.toString().isEmpty() || product.getNoOwnStockBoolean() ?
-            null : amountAggregated.toString()
-    );
-    binding.itemAmount.setSingleLine(false);
+    if (stockItem != null) {
+      StringBuilder amountNormal = new StringBuilder();
+      StringBuilder amountAggregated = new StringBuilder();
+      AmountUtil.addStockAmountNormalInfo(activity, pluralUtil, amountNormal, stockItem,
+          quantityUnitStock, maxDecimalPlacesAmount);
+      AmountUtil.addStockAmountAggregatedInfo(activity, pluralUtil, amountAggregated, stockItem,
+          quantityUnitStock, maxDecimalPlacesAmount, false);
+      binding.itemAmount.setText(
+          activity.getString(R.string.property_amount),
+          product.getNoOwnStockBoolean()
+              ? !amountAggregated.toString().isBlank() ? amountAggregated.toString() : getString(R.string.subtitle_none)
+              : amountNormal.toString(),
+          amountAggregated.toString().isEmpty() || product.getNoOwnStockBoolean() ?
+              null : amountAggregated.toString()
+      );
+      binding.itemAmount.setSingleLine(false);
+    } else {
+      binding.itemAmount.setText(
+          activity.getString(R.string.property_amount),
+          activity.getString(R.string.subtitle_unknown)
+      );
+    }
 
     // LOCATION
     if (hasDetails()) {
@@ -360,7 +427,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
 
     // BEST BEFORE
     if (isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
-      String bestBefore = stockItem.getBestBeforeDate();
+      String bestBefore = stockItem != null ? stockItem.getBestBeforeDate() : null;
       if (bestBefore == null) {
         bestBefore = ""; // for "never" from dateUtil
       }
@@ -602,11 +669,11 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
 
   private void refreshButtonStates() {
     binding.buttonConsume.setEnabled(
-        stockItem.getAmountDouble() > 0
+        stockItem != null && stockItem.getAmountDouble() > 0
             && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0
     );
     binding.buttonOpen.setEnabled(
-        stockItem.getAmountDouble() > stockItem.getAmountOpenedDouble()
+        stockItem != null && stockItem.getAmountDouble() > stockItem.getAmountOpenedDouble()
             && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0
     );
   }
@@ -616,9 +683,30 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     binding.buttonOpen.setEnabled(false);
   }
 
+  private void showDeleteConfirmationDialog() {
+    dialogDelete = new MaterialAlertDialogBuilder(
+        activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution
+    ).setTitle(R.string.title_confirmation)
+        .setMessage(
+            getString(
+                R.string.msg_master_delete_product,
+                product.getName()
+            )
+        ).setPositiveButton(R.string.action_delete, (dialog, which) -> {
+          performHapticClick();
+          activity.getCurrentFragment().deleteObject(product.getId());
+          dismiss();
+        }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
+        .create();
+    dialogDelete.show();
+  }
+
   private void hideDisabledFeatures() {
     if (!isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)) {
-      binding.toolbar.getMenu().findItem(R.id.action_add_to_shopping_list).setVisible(false);
+      MenuItem item = binding.toolbar.getMenu().findItem(R.id.action_add_to_shopping_list);
+      if (item != null) {
+        item.setVisible(false);
+      }
     }
     if (!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
       binding.itemDueDate.setVisibility(View.GONE);

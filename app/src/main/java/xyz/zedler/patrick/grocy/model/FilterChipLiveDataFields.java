@@ -26,9 +26,8 @@ import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import xyz.zedler.patrick.grocy.R;
 
 public class FilterChipLiveDataFields extends FilterChipLiveData {
 
@@ -36,79 +35,157 @@ public class FilterChipLiveDataFields extends FilterChipLiveData {
   public final static String VALUE_SEPARATOR = "%=";
 
   private final String prefKey;
-  private final HashMap<String, Boolean> fieldStates;
+  private final List<Field> fields;
   private final SharedPreferences sharedPrefs;
 
   public FilterChipLiveDataFields(
-      String prefKey,
       Application application,
-      String... defaultFields
+      String prefKey,
+      Runnable clickListener,
+      Field... fields
   ) {
     this.prefKey = prefKey;
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
-    fieldStates = getFieldStatesFromMulti(
+    this.fields = getFieldsFromFieldsWithDefault(
         sharedPrefs.getString(prefKey, null),
-        defaultFields
+        fields
     );
+
+    setText(application.getString(R.string.property_fields));
+    setItems();
+    if (clickListener != null) {
+      setMenuItemClickListener(item -> {
+        setValues(item.getItemId());
+        setItems();
+        emitValue();
+        clickListener.run();
+        return true;
+      });
+    }
+  }
+
+  public void setUserfields(List<Userfield> userfields, String... displayedEntities) {
+    List<Field> fieldsWithoutUserfields = this.fields.stream()
+        .filter(field -> !field.isUserfield).collect(Collectors.toList());
+    this.fields.clear();
+    this.fields.addAll(fieldsWithoutUserfields);
+
+    List<Field> fieldsFromUser = new ArrayList<>();
+    for (Userfield userfield : userfields) {
+      if (userfield == null) continue;
+      if (displayedEntities.length > 0) {
+        boolean isDisplayed = false;
+        for (String displayedEntity : displayedEntities) {
+          if (displayedEntity.equals(userfield.getEntity())
+              && userfield.getShowAsColumnInTablesBoolean()) {
+            isDisplayed = true;
+            break;
+          }
+        }
+        if (!isDisplayed) continue;
+      }
+      fieldsFromUser.add(new Field(
+          userfield.getName(),
+          userfield.getCaption(),
+          false,
+          true
+      ));
+    }
+    this.fields.addAll(getFieldsFromFieldsWithDefault(
+        sharedPrefs.getString(prefKey, null),
+        fieldsFromUser.toArray(new Field[0])
+    ));
+    setItems();
+  }
+
+  public void setValues(int id) {
+    if (id > fields.size()-1) return;
+    Field field = fields.get(id);
+    field.currentValue = !field.currentValue;
+    sharedPrefs.edit().putString(prefKey, createMultiFieldStates()).apply();
+  }
+
+  private void setItems() {
+    ArrayList<MenuItemData> menuItemDataList = new ArrayList<>();
+    for (int id=0; id < fields.size(); id++) {
+      Field field = fields.get(id);
+      menuItemDataList.add(new MenuItemData(
+          id,
+          field.isUserfield ? 1 : 0,
+          field.caption,
+          field.currentValue
+      ));
+    }
+    setMenuItemDataList(menuItemDataList);
+    setMenuItemGroups(
+        new MenuItemGroup(0, true, false),
+        new MenuItemGroup(1, true, false)
+    );
+    emitValue();
   }
 
   public List<String> getActiveFields() {
-    return fieldStates.entrySet().stream()
-        .filter(Entry::getValue)
-        .map(Map.Entry::getKey)
+    return fields.stream()
+        .filter(field -> field.currentValue)
+        .map(field -> field.name)
         .collect(Collectors.toList());
   }
 
-  public HashMap<String, Boolean> getFieldStatesFromMulti(
+  public List<Field> getFieldsFromFieldsWithDefault(
       @Nullable String multiFieldStates,
-      String... defaultFields
+      Field[] fields
   ) {
-    HashMap<String, Boolean> fieldStates = new HashMap<>();
+    HashMap<String, Boolean> savedStates = new HashMap<>();
     if (multiFieldStates != null && !multiFieldStates.isBlank()) {
       for (String fieldStatePair : multiFieldStates.split(MULTI_SEPARATOR)) {
         String[] pairArray = fieldStatePair.split(VALUE_SEPARATOR);
         if (pairArray.length != 2) continue;
-        fieldStates.put(pairArray[0], Boolean.parseBoolean(pairArray[1]));
+        savedStates.put(pairArray[0], Boolean.parseBoolean(pairArray[1]));
       }
     }
-    for (String defaultField : defaultFields) {
-      if (!fieldStates.containsKey(defaultField)) {
-        fieldStates.put(defaultField, true);
+
+    List<Field> fieldList = new ArrayList<>();
+    for (Field field : fields) {
+      if (field == null) continue;
+      if (savedStates.containsKey(field.name)) {
+        field.currentValue = Boolean.TRUE.equals(savedStates.get(field.name));
+      } else {
+        field.currentValue = field.defaultValue;
       }
+      fieldList.add(field);
     }
-    return fieldStates;
-  }
-
-  public boolean isFieldActive(String field) {
-    if (!fieldStates.containsKey(field)) return false;
-    return Boolean.TRUE.equals(fieldStates.get(field));
-  }
-
-  public void enableOrDisableField(String field) {
-    if (fieldStates == null || field == null) return;
-    if (fieldStates.containsKey(field) && Boolean.TRUE.equals(fieldStates.get(field))) {
-      fieldStates.put(field, false);
-    } else {
-      fieldStates.put(field, true);
-    }
-  }
-
-  public void storeFieldStates() {
-    sharedPrefs.edit().putString(prefKey, createMultiFieldStates()).apply();
+    return fieldList;
   }
 
   public String createMultiFieldStates() {
-    if (fieldStates.isEmpty()) return "";
+    if (fields.isEmpty()) return "";
     StringBuilder stringBuilder = new StringBuilder();
-    List<String> fields = new ArrayList<>(fieldStates.keySet());
-    for (String field : fields) {
-      stringBuilder.append(field);
+    for (Field field : fields) {
+      stringBuilder.append(field.name);
       stringBuilder.append(VALUE_SEPARATOR);
-      stringBuilder.append(Boolean.TRUE.equals(fieldStates.get(field)) ? "true" : "false");
+      stringBuilder.append(field.currentValue ? "true" : "false");
       if (!fields.get(fields.size()-1).equals(field)) {
         stringBuilder.append(MULTI_SEPARATOR);
       }
     }
     return stringBuilder.toString();
+  }
+
+  public static class Field {
+    public final String name;
+    public final String caption;
+    public final boolean defaultValue;
+    public boolean currentValue;
+    public boolean isUserfield = false;
+    public Field(String name, String caption, boolean defaultValue) {
+      this.name = name;
+      this.caption = caption;
+      this.defaultValue = defaultValue;
+    }
+
+    public Field(String name, String caption, boolean defaultValue, boolean isUserfield) {
+      this(isUserfield ? Userfield.NAME_PREFIX + name : name, caption, defaultValue);
+      this.isUserfield = isUserfield;
+    }
   }
 }

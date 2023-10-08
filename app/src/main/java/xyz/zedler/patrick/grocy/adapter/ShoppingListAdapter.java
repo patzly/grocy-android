@@ -47,13 +47,10 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
   private final boolean showActions;
 
   public ShoppingListAdapter(
-      List<ShoppingList> shoppingLists,
-      Object selectedId,
       ShoppingListAdapterListener listener,
       boolean showActions
   ) {
-    this.shoppingLists = new ArrayList<>(shoppingLists);
-    this.selectedId = selectedId != null ? (Integer) selectedId : -1;
+    this.shoppingLists = new ArrayList<>();
     this.listener = listener;
     this.showActions = showActions;
   }

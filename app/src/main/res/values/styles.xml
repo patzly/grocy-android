@@ -277,6 +277,28 @@
   </style>
 
   <style
+    name="Widget.Grocy.Button.IconButton.Filled.Tonal"
+    parent="Widget.Material3.Button.IconButton.Filled.Tonal">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="iconSize">24dp</item>
+    <item name="android:paddingLeft">8dp</item>
+    <item name="android:paddingRight">8dp</item>
+    <item name="android:paddingTop">6dp</item>
+    <item name="android:paddingBottom">6dp</item>
+  </style>
+
+  <style
+    name="Widget.Grocy.Button.IconButton.Filled.Tonal.Small"
+    parent="Widget.Material3.Button.IconButton.Filled.Tonal">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:insetLeft">0dp</item>
+    <item name="android:insetRight">0dp</item>
+    <item name="iconSize">20dp</item>
+  </style>
+
+  <style
     name="Widget.Grocy.Button.IconButton.Outlined"
     parent="Widget.Material3.Button.IconButton.Outlined">
     <item name="android:layout_width">wrap_content</item>

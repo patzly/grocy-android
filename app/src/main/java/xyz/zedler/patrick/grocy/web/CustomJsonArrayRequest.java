@@ -40,7 +40,6 @@ import org.json.JSONObject;
 
 public class CustomJsonArrayRequest extends JsonRequest<JSONArray> {
 
-  private final Runnable onRequestFinished;
   private final String url;
   private final String apiKey;
   private final String homeAssistantIngressSessionKey;
@@ -50,27 +49,17 @@ public class CustomJsonArrayRequest extends JsonRequest<JSONArray> {
       String url,
       String apiKey,
       String homeAssistantIngressSessionKey,
-      @Nullable JSONObject jsonRequest,
+      JSONObject jsonRequest,
       Response.Listener<JSONArray> listener,
       @Nullable Response.ErrorListener errorListener,
-      @Nullable Runnable onRequestFinished,
       int timeoutSeconds,
       String tag
   ) {
-    super(method, url, jsonRequest.toString(), response -> {
-      if (onRequestFinished != null) {
-        onRequestFinished.run();
-      }
-      listener.onResponse(response);
-    }, error -> {
-      if (onRequestFinished != null) {
-        onRequestFinished.run();
-      }
+    super(method, url, jsonRequest.toString(), listener, error -> {
       if (errorListener != null) {
         errorListener.onErrorResponse(error);
       }
     });
-    this.onRequestFinished = onRequestFinished;
     this.url = url;
     this.apiKey = apiKey;
     this.homeAssistantIngressSessionKey = homeAssistantIngressSessionKey;
@@ -104,14 +93,6 @@ public class CustomJsonArrayRequest extends JsonRequest<JSONArray> {
   }
 
   @Override
-  public void cancel() {
-    super.cancel();
-    if (onRequestFinished != null) {
-      onRequestFinished.run();
-    }
-  }
-
-  @Override
   public Map<String, String> getHeaders() {
     Map<String, String> params = new HashMap<>();
     Matcher matcher = Pattern.compile("(http|https)://(\\S+):(\\S+)@(\\S+)").matcher(url);
@@ -128,6 +109,7 @@ public class CustomJsonArrayRequest extends JsonRequest<JSONArray> {
     if (homeAssistantIngressSessionKey != null) {
       params.put("Cookie", "ingress_session=" + homeAssistantIngressSessionKey);
     }
+    params.put("Content-Type", "application/json");
     return params.isEmpty() ? Collections.emptyMap() : params;
   }
 }

@@ -36,7 +36,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
@@ -50,7 +49,6 @@ import xyz.zedler.patrick.grocy.repository.ChoresRepository;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class ChoreEntryRescheduleViewModel extends BaseViewModel {
 
@@ -73,8 +71,6 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
   private final LiveData<String> userTextLive;
 
   private List<User> users;
-
-  private NetworkQueue currentQueueLoading;
   private final Chore chore;
   private final boolean debug;
 
@@ -86,7 +82,7 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
     DateUtil dateUtil = new DateUtil(application);
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new ChoresRepository(application);
 
@@ -134,36 +130,22 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
             ));
           }
           if (downloadAfterLoading) {
-            downloadData();
+            downloadData(false);
           }
         }, error -> onError(error, TAG)
     );
   }
 
-  public void downloadData() {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-    dlHelper.updateData(this::onQueueEmpty, error -> onError(error, TAG), User.class);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_USERS, null);
-    editPrefs.apply();
-    downloadData();
-  }
-
-  private void onQueueEmpty() {
-    if (isOffline()) {
-      setOfflineLive(false);
-    }
-    loadFromDatabase(false);
+  public void downloadData(boolean forceUpdate) {
+    dlHelper.updateData(
+        updated -> {
+          if (updated) loadFromDatabase(false);
+        },
+        error -> onError(error, TAG),
+        forceUpdate,
+        false,
+        User.class
+    );
   }
 
   public void rescheduleChore() {
@@ -271,10 +253,6 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
   @NonNull
   public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
     return infoFullscreenLive;
-  }
-
-  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
-    currentQueueLoading = queueLoading;
   }
 
   @Override

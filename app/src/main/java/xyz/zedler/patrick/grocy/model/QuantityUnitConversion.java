@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.model;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -46,8 +47,8 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.web.NetworkQueue.QueueItem;
 
 @Entity(tableName = "quantity_unit_conversion_table")
 public class QuantityUnitConversion implements Parcelable {
@@ -216,7 +217,9 @@ public class QuantityUnitConversion implements Parcelable {
         if (NumUtil.isStringInt(quantityUnitConversion.getProductId()) && quantityUnitConversion.getProductIdInt() == productId) {
           return quantityUnitConversion;
         }
-        tempConversion = quantityUnitConversion;
+        if (!NumUtil.isStringInt(quantityUnitConversion.getProductId())) {
+          tempConversion = quantityUnitConversion;
+        }
       }
     }
     return tempConversion;
@@ -257,17 +260,19 @@ public class QuantityUnitConversion implements Parcelable {
   @NonNull
   @Override
   public String toString() {
-    return "QuantityUnitConversion(" + id + ')';
+    return "QuantityUnitConversion(" + productId + ", " + fromQuId + ", " + toQuId + ", " + factor + ")";
   }
 
+  @SuppressLint("CheckResult")
   public static QueueItem updateQuantityUnitConversions(
       DownloadHelper dlHelper,
       String dbChangedTime,
+      boolean forceUpdate,
       OnObjectsResponseListener<QuantityUnitConversion> onResponseListener
   ) {
-    String lastTime = dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
+    String lastTime = !forceUpdate ? dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null
-    );
+    ) : null;
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
       return new QueueItem() {
         @Override
@@ -282,7 +287,7 @@ public class QuantityUnitConversion implements Parcelable {
               response -> {
                 Type type = new TypeToken<List<QuantityUnitConversion>>() {
                 }.getType();
-                ArrayList<QuantityUnitConversion> conversions
+                List<QuantityUnitConversion> conversions
                     = dlHelper.gson.fromJson(response, type);
                 if (dlHelper.debug) {
                   Log.i(dlHelper.tag, "download QuantityUnitConversions: "
@@ -299,11 +304,6 @@ public class QuantityUnitConversion implements Parcelable {
                 })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError(throwable -> {
-                      if (errorListener != null) {
-                        errorListener.onError(throwable);
-                      }
-                    })
                     .doFinally(() -> {
                       if (onResponseListener != null) {
                         onResponseListener.onResponse(conversions);
@@ -312,7 +312,11 @@ public class QuantityUnitConversion implements Parcelable {
                         responseListener.onResponse(response);
                       }
                     })
-                    .subscribe();
+                    .subscribe(ignored -> {}, throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    });
               },
               error -> {
                 if (errorListener != null) {

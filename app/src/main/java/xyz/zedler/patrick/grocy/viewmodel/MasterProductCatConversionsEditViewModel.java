@@ -24,7 +24,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -34,7 +33,6 @@ import java.util.List;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -50,7 +48,6 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
 
@@ -70,7 +67,6 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
   private List<QuantityUnit> quantityUnits;
   private List<QuantityUnitConversion> unitConversions;
 
-  private NetworkQueue currentQueueLoading;
   private Runnable queueEmptyAction;
   private final boolean debug;
   private final boolean isActionEdit;
@@ -85,7 +81,7 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new MasterProductRepository(application);
     formData = new FormDataMasterProductCatConversionsEdit(application, startupArgs.getProduct());
@@ -101,67 +97,39 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
       this.quantityUnits = data.getQuantityUnits();
+      formData.getQuantityUnitsLive().setValue(data.getQuantityUnits());
       this.unitConversions = data.getConversions();
-      fillWithConversionIfNecessary();
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
+      } else {
+        fillWithConversionIfNecessary();
+        if (queueEmptyAction != null) {
+          queueEmptyAction.run();
+          queueEmptyAction = null;
+        }
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, TAG));
-      return;
-    }
-
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
-    queue.append(
-        QuantityUnitConversion.updateQuantityUnitConversions(
-            dlHelper, dbChangedTime, conversions -> this.unitConversions = conversions
-        ), QuantityUnit.updateQuantityUnits(
-            dlHelper, dbChangedTime, quantityUnits -> this.quantityUnits = quantityUnits
-        )
+  public void downloadData(boolean forceUpdate) {
+    dlHelper.updateData(
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            fillWithConversionIfNecessary();
+            if (queueEmptyAction != null) {
+              queueEmptyAction.run();
+              queueEmptyAction = null;
+            }
+          }
+        },
+        error -> onError(error, TAG),
+        forceUpdate,
+        false,
+        QuantityUnit.class,
+        QuantityUnitConversion.class
     );
-    if (queue.isEmpty()) {
-      onQueueEmpty();
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.apply();
-    downloadData();
-  }
-
-  private void onQueueEmpty() {
-    if (isOffline()) {
-      setOfflineLive(false);
-    }
-    if (queueEmptyAction != null) {
-      queueEmptyAction.run();
-      queueEmptyAction = null;
-      return;
-    }
-    fillWithConversionIfNecessary();
   }
 
   public void saveItem() {
@@ -204,7 +172,6 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
     if (formData.isFilledWithConversion()) {
       return;
     } else if(!isActionEdit) {
-      formData.getQuantityUnitsLive().setValue(quantityUnits);
       QuantityUnit quStock = QuantityUnit
           .getFromId(quantityUnits, args.getProduct().getQuIdStockInt());
       formData.getQuantityUnitFromLive().setValue(quStock);
@@ -214,8 +181,6 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
 
     QuantityUnitConversion conversion = args.getConversion();
     assert conversion != null;
-
-    formData.getQuantityUnitsLive().setValue(quantityUnits);
     formData.getQuantityUnitFromLive().setValue(
         QuantityUnit.getFromId(quantityUnits, conversion.getFromQuId())
     );
@@ -236,6 +201,7 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
     Bundle bundle = new Bundle();
     bundle.putParcelableArrayList(ARGUMENT.QUANTITY_UNITS, new ArrayList<>(quantityUnits));
     bundle.putBoolean(QUANTITY_UNIT_IS_FROM, from);
+    bundle.putBoolean(ARGUMENT.DISPLAY_NEW_OPTION, true);
     QuantityUnit quantityUnit;
     if (from) {
       quantityUnit = formData.getQuantityUnitFromLive().getValue();
@@ -278,10 +244,6 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
 
   public void setQueueEmptyAction(Runnable queueEmptyAction) {
     this.queueEmptyAction = queueEmptyAction;
-  }
-
-  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
-    currentQueueLoading = queueLoading;
   }
 
   public boolean getExternalScannerEnabled() {

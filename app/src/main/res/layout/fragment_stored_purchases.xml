@@ -129,7 +129,7 @@
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never"
       app:setRefreshing="@{viewModel.isLoadingLive}"
-      app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
+      app:onRefreshListener="@{() -> viewModel.downloadData(true)}">
 
       <FrameLayout
         android:id="@+id/container"

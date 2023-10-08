@@ -30,7 +30,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
@@ -43,6 +42,7 @@ import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class FormDataRecipeEditIngredientEdit {
@@ -66,12 +66,13 @@ public class FormDataRecipeEditIngredientEdit {
   private final MutableLiveData<HashMap<QuantityUnit, Double>> quantityUnitsFactorsLive;
   private final MutableLiveData<QuantityUnit> quantityUnitLive;
   private final MutableLiveData<String> quantityUnitLabelLive;
+  private final MutableLiveData<QuantityUnit> quantityUnitStockLive;
   private final MutableLiveData<String> variableAmountLive;
   private final MutableLiveData<Boolean> notCheckStockFulfillmentLive;
   private final MutableLiveData<String> ingredientGroupLive;
   private final MutableLiveData<String> noteLive;
   private final MutableLiveData<String> priceFactorLive;
-  private final MutableLiveData<Integer> priceFactorErrorLive;
+  private final MutableLiveData<String> priceFactorErrorLive;
   private final PluralUtil pluralUtil;
   private boolean filledWithRecipePosition;
   private final int maxDecimalPlacesAmount;
@@ -118,6 +119,7 @@ public class FormDataRecipeEditIngredientEdit {
     quantityUnitsFactorsLive = new MutableLiveData<>();
     quantityUnitLive = new MutableLiveData<>();
     quantityUnitLabelLive = new MutableLiveData<>(getString(R.string.subtitle_none_selected));
+    quantityUnitStockLive = new MutableLiveData<>();
     amountHintLive = Transformations.map(
         quantityUnitLive,
         quantityUnit -> quantityUnit != null ? application.getString(
@@ -134,6 +136,8 @@ public class FormDataRecipeEditIngredientEdit {
         .addSource(amountStockLive, i -> amountHelperLive.setValue(getAmountHelpText()));
     amountHelperLive
         .addSource(quantityUnitsFactorsLive, i -> amountHelperLive.setValue(getAmountHelpText()));
+    amountHelperLive
+        .addSource(quantityUnitStockLive, i -> amountHelperLive.setValue(getAmountHelpText()));
     variableAmountLive = new MutableLiveData<>();
     notCheckStockFulfillmentLive = new MutableLiveData<>(false);
     ingredientGroupLive = new MutableLiveData<>();
@@ -197,54 +201,23 @@ public class FormDataRecipeEditIngredientEdit {
     return amountHintLive;
   }
 
-  private QuantityUnit getStockQuantityUnit() {
-    HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-    if (hashMap == null || !hashMap.containsValue((double) -1)) {
-      return null;
-    }
-    for (Map.Entry<QuantityUnit, Double> entry : hashMap.entrySet()) {
-      if (entry.getValue() == -1) {
-        return entry.getKey();
-      }
-    }
-    return null;
-  }
-
   private String getAmountStock() {
-    QuantityUnit stock = getStockQuantityUnit();
-    QuantityUnit current = quantityUnitLive.getValue();
-    if (!NumUtil.isStringDouble(amountLive.getValue())
-        || quantityUnitsFactorsLive.getValue() == null
-        || onlyCheckSingleUnitInStockLive.getValue()
-    ) {
-      return null;
-    }
-    assert amountLive.getValue() != null;
-
-    if (stock != null && current != null && stock.getId() != current.getId()) {
-      HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-      double amount = NumUtil.toDouble(amountLive.getValue());
-      Object currentFactor = hashMap.get(current);
-      if (currentFactor == null) {
-        amountHelperLive.setValue(null);
-        return null;
-      }
-      double amountMultiplied;
-      if (productDetailsLive.getValue() != null
-          && current.getId() == productDetailsLive.getValue().getProduct().getQuIdPurchaseInt()) {
-        amountMultiplied = amount * (double) currentFactor;
-      } else {
-        amountMultiplied = amount / (double) currentFactor;
-      }
-      return NumUtil.trimAmount(amountMultiplied, maxDecimalPlacesAmount);
-    } else {
-      return null;
-    }
+    if (productDetailsLive.getValue() == null) return null;
+    return QuantityUnitConversionUtil.getAmountStock(
+        quantityUnitStockLive.getValue(),
+        quantityUnitLive.getValue(),
+        amountLive.getValue(),
+        quantityUnitsFactorsLive.getValue(),
+        Boolean.TRUE.equals(onlyCheckSingleUnitInStockLive.getValue()),
+        maxDecimalPlacesAmount
+    );
   }
 
   private String getAmountHelpText() {
-    QuantityUnit stock = getStockQuantityUnit();
-    if (stock == null || !NumUtil.isStringDouble(amountStockLive.getValue())) {
+    QuantityUnit stock = quantityUnitStockLive.getValue();
+    if (stock == null || !NumUtil.isStringDouble(amountStockLive.getValue())
+        || quantityUnitLive.getValue() != null
+        && stock.getId() == quantityUnitLive.getValue().getId()) {
       return null;
     }
     return application.getString(
@@ -273,6 +246,10 @@ public class FormDataRecipeEditIngredientEdit {
     );
   }
 
+  public MutableLiveData<QuantityUnit> getQuantityUnitStockLive() {
+    return quantityUnitStockLive;
+  }
+
   public MutableLiveData<String> getVariableAmountLive() {
     return variableAmountLive;
   }
@@ -293,7 +270,7 @@ public class FormDataRecipeEditIngredientEdit {
     return priceFactorLive;
   }
 
-  public MutableLiveData<Integer> getPriceFactorErrorLive() {
+  public MutableLiveData<String> getPriceFactorErrorLive() {
     return priceFactorErrorLive;
   }
 
@@ -306,7 +283,10 @@ public class FormDataRecipeEditIngredientEdit {
   }
 
   public boolean isFormValid() {
-    return isProductNameValid() && isAmountValid();
+    boolean valid = isProductNameValid();
+    valid = isAmountValid() && valid;
+    valid = isPriceFactorValid() && valid;
+    return valid;
   }
 
   public boolean isProductNameValid() {
@@ -333,7 +313,7 @@ public class FormDataRecipeEditIngredientEdit {
 
   public boolean isAmountValid() {
     if (amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
-      amountErrorLive.setValue(application.getString(R.string.error_invalid_base_servings));
+      amountErrorLive.setValue(application.getString(R.string.error_invalid_amount));
       return false;
     }
 
@@ -344,9 +324,9 @@ public class FormDataRecipeEditIngredientEdit {
       return false;
     }
 
-    double baseServings = NumUtil.toDouble(amountLive.getValue());
-    if (baseServings <= 0) {
-      amountErrorLive.setValue(application.getString(R.string.error_invalid_base_servings));
+    double amount = NumUtil.toDouble(amountLive.getValue());
+    if (amount <= 0) {
+      amountErrorLive.setValue(application.getString(R.string.error_invalid_amount));
       return false;
     }
     amountErrorLive.setValue(null);
@@ -369,11 +349,49 @@ public class FormDataRecipeEditIngredientEdit {
       amountLive.setValue(NumUtil.trimAmount(1.0, maxDecimalPlacesAmount));
     } else {
       double currentValue = NumUtil.toDouble(amountLive.getValue());
-
-      if (currentValue == 1)
-        return;
-
+      if (currentValue == 1) return;
       amountLive.setValue(NumUtil.trimAmount(currentValue - 1, maxDecimalPlacesAmount));
+    }
+  }
+
+  public boolean isPriceFactorValid() {
+    if (priceFactorLive.getValue() == null || priceFactorLive.getValue().isEmpty()) {
+      priceFactorErrorLive.setValue(application.getString(R.string.error_invalid_factor));
+      return false;
+    }
+
+    if (NumUtil.getDecimalPlacesCount(priceFactorLive.getValue()) > maxDecimalPlacesAmount) {
+      priceFactorErrorLive.setValue(application.getResources().getQuantityString(
+          R.plurals.error_max_decimal_places, maxDecimalPlacesAmount, maxDecimalPlacesAmount
+      ));
+      return false;
+    }
+
+    double factor = NumUtil.toDouble(priceFactorLive.getValue());
+    if (factor <= 0) {
+      priceFactorErrorLive.setValue(application.getString(R.string.error_invalid_factor));
+      return false;
+    }
+    priceFactorErrorLive.setValue(null);
+    return true;
+  }
+
+  public void morePriceFactor() {
+    if (priceFactorLive.getValue() == null || priceFactorLive.getValue().isEmpty()) {
+      amountLive.setValue(NumUtil.trimAmount(1.0, maxDecimalPlacesAmount));
+    } else {
+      double currentValue = NumUtil.toDouble(priceFactorLive.getValue());
+      priceFactorLive.setValue(NumUtil.trimAmount(currentValue + 1, maxDecimalPlacesAmount));
+    }
+  }
+
+  public void lessPriceFactor() {
+    if (priceFactorLive.getValue() == null || priceFactorLive.getValue().isEmpty()) {
+      priceFactorLive.setValue(NumUtil.trimAmount(1.0, maxDecimalPlacesAmount));
+    } else {
+      double currentValue = NumUtil.toDouble(priceFactorLive.getValue());
+      if (currentValue == 1) return;
+      priceFactorLive.setValue(NumUtil.trimAmount(currentValue - 1, maxDecimalPlacesAmount));
     }
   }
 
@@ -396,6 +414,8 @@ public class FormDataRecipeEditIngredientEdit {
     recipePosition.setNotCheckStockFulfillment(notCheckStockFulfillmentLive.getValue());
     recipePosition.setIngredientGroup(ingredientGroupLive.getValue());
     recipePosition.setNote(noteLive.getValue());
+    recipePosition.setPriceFactor(NumUtil.isStringDouble(priceFactorLive.getValue())
+        ? NumUtil.toDouble(priceFactorLive.getValue()) : 1);
 
     return recipePosition;
   }
@@ -410,6 +430,7 @@ public class FormDataRecipeEditIngredientEdit {
     amountErrorLive.setValue(null);
     quantityUnitLive.setValue(null);
     quantityUnitLabelLive.setValue(getString(R.string.subtitle_none_selected));
+    quantityUnitStockLive.setValue(null);
     variableAmountLive.setValue(null);
     notCheckStockFulfillmentLive.setValue(false);
     ingredientGroupLive.setValue(null);

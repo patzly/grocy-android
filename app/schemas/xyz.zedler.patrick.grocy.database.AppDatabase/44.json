@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 44,
-    "identityHash": "6f59292349b15f02d8469fe226a3e23b",
+    "identityHash": "8b369ce2d93655571a1cade6d297ed14",
     "entities": [
       {
         "tableName": "shopping_list_table",
@@ -534,6 +534,56 @@
       },
       {
         "tableName": "quantity_unit_conversion_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `from_qu_id` INTEGER NOT NULL, `to_qu_id` INTEGER NOT NULL, `factor` REAL NOT NULL, `product_id` TEXT, `row_created_timestamp` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fromQuId",
+            "columnName": "from_qu_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "toQuId",
+            "columnName": "to_qu_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "factor",
+            "columnName": "factor",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productId",
+            "columnName": "product_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "rowCreatedTimestamp",
+            "columnName": "row_created_timestamp",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "quantity_unit_conversion_resolved_table",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `from_qu_id` INTEGER NOT NULL, `to_qu_id` INTEGER NOT NULL, `factor` REAL NOT NULL, `product_id` TEXT, `row_created_timestamp` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -1913,92 +1963,12 @@
         },
         "indices": [],
         "foreignKeys": []
-      },
-      {
-        "tableName": "meal_plan_entry_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `day` TEXT, `type` TEXT, `recipe_id` TEXT, `recipe_servings` TEXT, `note` TEXT, `product_id` TEXT, `product_amount` TEXT, `product_qu_id` TEXT, `done` TEXT, `section_id` TEXT, PRIMARY KEY(`id`))",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "day",
-            "columnName": "day",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "type",
-            "columnName": "type",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "recipeId",
-            "columnName": "recipe_id",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "recipeServings",
-            "columnName": "recipe_servings",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "note",
-            "columnName": "note",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "productId",
-            "columnName": "product_id",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "productAmount",
-            "columnName": "product_amount",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "productQuId",
-            "columnName": "product_qu_id",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "done",
-            "columnName": "done",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "sectionId",
-            "columnName": "section_id",
-            "affinity": "TEXT",
-            "notNull": false
-          }
-        ],
-        "primaryKey": {
-          "autoGenerate": false,
-          "columnNames": [
-            "id"
-          ]
-        },
-        "indices": [],
-        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6f59292349b15f02d8469fe226a3e23b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8b369ce2d93655571a1cade6d297ed14')"
     ]
   }
 }

@@ -20,8 +20,10 @@
 package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Paint;
 import android.text.Html;
 import android.text.Spanned;
@@ -30,11 +32,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.load.model.LazyHeaders;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
+import com.google.android.material.elevation.SurfaceColors;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,25 +47,31 @@ import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListBottomNotesBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListItemBinding;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListExtraField;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListGrouping;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataGroupingShoppingList;
 import xyz.zedler.patrick.grocy.model.GroupHeader;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PictureUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
+import xyz.zedler.patrick.grocy.viewmodel.ShoppingListViewModel;
+import xyz.zedler.patrick.grocy.viewmodel.StockOverviewViewModel;
+import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class ShoppingListItemAdapter extends
     RecyclerView.Adapter<ShoppingListItemAdapter.ViewHolder> {
@@ -72,12 +82,15 @@ public class ShoppingListItemAdapter extends
   private final HashMap<Integer, Product> productHashMap;
   private final HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+  private final List<QuantityUnitConversionResolved> unitConversions;
   private final HashMap<Integer, Double> shoppingListItemAmountsHashMap;
   private final ArrayList<Integer> missingProductIds;
   private final ShoppingListItemAdapterListener listener;
+  private final GrocyApi grocyApi;
+  private final LazyHeaders grocyAuthHeaders;
   private final PluralUtil pluralUtil;
   private String groupingMode;
-  private String extraField;
+  private final List<String> activeFields;
   private final int maxDecimalPlacesAmount;
   private final int decimalPlacesPriceDisplay;
   private final String currency;
@@ -85,19 +98,7 @@ public class ShoppingListItemAdapter extends
 
   public ShoppingListItemAdapter(
       Context context,
-      ArrayList<ShoppingListItem> shoppingListItems,
-      HashMap<Integer, Product> productHashMap,
-      HashMap<Integer, String> productNamesHashMap,
-      HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap,
-      HashMap<Integer, QuantityUnit> quantityUnitHashMap,
-      HashMap<Integer, ProductGroup> productGroupHashMap,
-      HashMap<Integer, Store> storeHashMap,
-      HashMap<Integer, Double> shoppingListItemAmountsHashMap,
-      ArrayList<Integer> missingProductIds,
-      ShoppingListItemAdapterListener listener,
-      String shoppingListNotes,
-      String groupingMode,
-      String extraField
+      ShoppingListItemAdapterListener listener
   ) {
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     this.maxDecimalPlacesAmount = sharedPrefs.getInt(
@@ -111,19 +112,18 @@ public class ShoppingListItemAdapter extends
     this.currency = sharedPrefs.getString(PREF.CURRENCY, "");
     this.priceTrackingEnabled = sharedPrefs
         .getBoolean(PREF.FEATURE_STOCK_PRICE_TRACKING, true);
-    this.productHashMap = new HashMap<>(productHashMap);
-    this.productLastPurchasedHashMap = new HashMap<>(productLastPurchasedHashMap);
-    this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
-    this.shoppingListItemAmountsHashMap = new HashMap<>(shoppingListItemAmountsHashMap);
-    this.missingProductIds = new ArrayList<>(missingProductIds);
+    this.productHashMap = new HashMap<>();
+    this.productLastPurchasedHashMap = new HashMap<>();
+    this.quantityUnitHashMap = new HashMap<>();
+    this.unitConversions = new ArrayList<>();
+    this.shoppingListItemAmountsHashMap = new HashMap<>();
+    this.missingProductIds = new ArrayList<>();
     this.listener = listener;
+    this.grocyApi = new GrocyApi((Application) context.getApplicationContext());
+    this.grocyAuthHeaders = RequestHeaders.getGlideGrocyAuthHeaders(context);
     this.pluralUtil = new PluralUtil(context);
-    this.groupingMode = groupingMode;
-    this.extraField = extraField;
-    this.groupedListItems = getGroupedListItems(context, shoppingListItems,
-        productGroupHashMap, productHashMap, productNamesHashMap, storeHashMap,
-        productLastPurchasedHashMap, shoppingListItemAmountsHashMap,
-        shoppingListNotes, groupingMode, priceTrackingEnabled, decimalPlacesPriceDisplay, currency);
+    this.activeFields = new ArrayList<>();
+    this.groupedListItems = new ArrayList<>();
   }
 
   static ArrayList<GroupedListItem> getGroupedListItems(
@@ -141,7 +141,7 @@ public class ShoppingListItemAdapter extends
       int decimalPlacesPriceDisplay,
       String currency
   ) {
-    if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_NONE)) {
+    if (groupingMode.equals(FilterChipLiveDataGroupingShoppingList.GROUPING_NONE)) {
       SortUtil.sortShoppingListItemsByName(shoppingListItems, productNamesHashMap, true);
       ArrayList<GroupedListItem> groupedListItems = new ArrayList<>(shoppingListItems);
       addBottomNotes(
@@ -202,7 +202,7 @@ public class ShoppingListItemAdapter extends
     return groupedListItems;
   }
 
-  public static String getGroupName(
+  static String getGroupName(
       ShoppingListItem shoppingListItem,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, ProductGroup> productGroupHashMap,
@@ -210,7 +210,7 @@ public class ShoppingListItemAdapter extends
       String groupingMode
   ) {
     String groupName = null;
-    if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_PRODUCT_GROUP)
+    if (groupingMode.equals(FilterChipLiveDataGroupingShoppingList.GROUPING_PRODUCT_GROUP)
         && shoppingListItem.hasProduct()) {
       Product product = productHashMap.get(shoppingListItem.getProductIdInt());
       Integer productGroupId = product != null && NumUtil.isStringInt(product.getProductGroupId())
@@ -220,7 +220,7 @@ public class ShoppingListItemAdapter extends
           ? productGroupHashMap.get(productGroupId)
           : null;
       groupName = productGroup != null ? productGroup.getName() : null;
-    } else if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_STORE)
+    } else if (groupingMode.equals(FilterChipLiveDataGroupingShoppingList.GROUPING_STORE)
         && shoppingListItem.hasProduct()) {
       Product product = productHashMap.get(shoppingListItem.getProductIdInt());
       Integer storeId = product != null && NumUtil.isStringInt(product.getStoreId())
@@ -234,7 +234,7 @@ public class ShoppingListItemAdapter extends
     return groupName;
   }
 
-  private static void addBottomNotes(
+  static void addBottomNotes(
       Context context,
       String shoppingListNotes,
       ArrayList<GroupedListItem> groupedListItems,
@@ -253,7 +253,7 @@ public class ShoppingListItemAdapter extends
     }
   }
 
-  private static void addTotalPrice(
+  static void addTotalPrice(
       Context context,
       List<ShoppingListItem> shoppingListItems,
       ArrayList<GroupedListItem> groupedListItems,
@@ -438,66 +438,65 @@ public class ShoppingListItemAdapter extends
       binding.noteAsName.setText(null);
     }
 
+    binding.flexboxLayout.removeAllViews();
+
     // AMOUNT
 
     Double amountInQuUnit = shoppingListItemAmountsHashMap.get(item.getId());
-    if (product != null && amountInQuUnit != null) {
-      QuantityUnit quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
-      String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, amountInQuUnit);
-      if (quStr != null) {
-        binding.amount.setText(
-            binding.amount.getContext()
-                .getString(R.string.subtitle_amount, NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount), quStr)
-        );
+    if (activeFields.contains(ShoppingListViewModel.FIELD_AMOUNT)) {
+      StringBuilder stringBuilderAmount = new StringBuilder();
+      if (product != null && amountInQuUnit != null) {
+        QuantityUnit quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
+        String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, amountInQuUnit);
+        if (quStr != null) {
+          stringBuilderAmount.append(context.getString(
+              R.string.subtitle_amount,
+              NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount),
+              quStr
+          ));
+        } else {
+          stringBuilderAmount.append(NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount));
+        }
+      } else if (product != null) {
+        QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
+        String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble());
+        if (quStr != null) {
+          stringBuilderAmount.append(context.getString(
+              R.string.subtitle_amount,
+              NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount),
+              quStr
+          ));
+        } else {
+          stringBuilderAmount.append(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
+        }
       } else {
-        binding.amount.setText(NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount));
+        stringBuilderAmount.append(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
       }
-    } else if (product != null) {
-      QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
-      String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble());
-      if (quStr != null) {
-        binding.amount.setText(
-            binding.amount.getContext()
-                .getString(R.string.subtitle_amount, NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount), quStr)
-        );
+      Chip chipAmount = createChip(context, stringBuilderAmount.toString());
+      if (item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {
+        chipAmount.setTextColor(colorBlue.getOnAccentContainer());
+        chipAmount.setChipBackgroundColor(ColorStateList.valueOf(colorBlue.getAccentContainer()));
+      }
+      if (item.isUndone()) {
+        chipAmount.setPaintFlags(chipAmount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+        chipAmount.setAlpha(1);
       } else {
-        binding.amount.setText(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
+        chipAmount.setPaintFlags(chipAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        chipAmount.setAlpha(0.61f);
       }
-    } else {
-      binding.amount.setText(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
-    }
-
-    if (item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {
-      binding.amount.setTypeface(
-          ResourcesCompat.getFont(binding.amount.getContext(), R.font.jost_medium)
-      );
-      binding.amount.setTextColor(colorBlue.getAccent());
-      binding.amount.setAlpha(1);
-    } else {
-      binding.amount.setTypeface(
-          ResourcesCompat.getFont(binding.amount.getContext(), R.font.jost_book)
-      );
-      binding.amount.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnBackground));
-      binding.amount.setAlpha(0.61f);
-    }
-    if (item.isUndone()) {
-      binding.amount.setPaintFlags(
-          binding.amount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
-      );
-      binding.amount.setAlpha(1);
-    } else {
-      binding.amount.setPaintFlags(
-          binding.amount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-      );
-      binding.amount.setAlpha(0.61f);
+      binding.flexboxLayout.addView(chipAmount);
     }
 
     // NOTE
 
     if (item.getNote() != null && !item.getNote().trim().isEmpty()) {
       if (binding.name.getVisibility() == View.VISIBLE) {
-        binding.note.setVisibility(View.VISIBLE);
-        binding.note.setText(item.getNote().trim());
+        if (activeFields.contains(ShoppingListViewModel.FIELD_NOTES)) {
+          binding.note.setVisibility(View.VISIBLE);
+          binding.note.setText(item.getNote().trim());
+        } else {
+          binding.note.setVisibility(View.GONE);
+        }
       } else {
         binding.noteAsName.setVisibility(View.VISIBLE);
         binding.noteAsName.setText(item.getNote().trim());
@@ -536,32 +535,70 @@ public class ShoppingListItemAdapter extends
       }
     }
 
-    if (extraField.equals(FilterChipLiveDataShoppingListExtraField.EXTRA_FIELD_LAST_PRICE_UNIT)
-        || extraField.equals(FilterChipLiveDataShoppingListExtraField.EXTRA_FIELD_LAST_PRICE_TOTAL)
-    ) {
+    double conversionFactor = 1.0;
+    if ((activeFields.contains(ShoppingListViewModel.FIELD_PRICE_LAST_TOTAL)
+        || activeFields.contains(ShoppingListViewModel.FIELD_PRICE_LAST_UNIT)) && product != null) {
+      QuantityUnitConversionResolved c = QuantityUnitConversionResolved.findConversion(
+          unitConversions,
+          product.getId(),
+          item.getQuIdInt(),
+          product.getQuIdStockInt()
+      );
+      if (c != null) {
+        conversionFactor = c.getFactor();
+      }
+    }
+    if (activeFields.contains(ShoppingListViewModel.FIELD_PRICE_LAST_TOTAL)) {
       ProductLastPurchased p = product != null
           ? productLastPurchasedHashMap.get(product.getId()) : null;
       if (p != null && p.getPrice() != null && !p.getPrice().isEmpty()) {
-        String price;
-        if (extraField
-            .equals(FilterChipLiveDataShoppingListExtraField.EXTRA_FIELD_LAST_PRICE_TOTAL)) {
-          double amount = amountInQuUnit != null ? amountInQuUnit : item.getAmountDouble();
-          price = NumUtil.isStringDouble(p.getPrice())
-              ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice()) * amount, decimalPlacesPriceDisplay) : p.getPrice();
-        } else {
-          price = NumUtil.isStringDouble(p.getPrice())
-              ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice()), decimalPlacesPriceDisplay) : p.getPrice();
-        }
-        binding.extraField.setText(price);
-        binding.extraFieldSubtitle.setText(currency);
-        binding.extraFieldSubtitle.setVisibility(currency != null && !currency.isBlank()
-            ? View.VISIBLE : View.GONE);
-        binding.extraFieldContainer.setVisibility(View.VISIBLE);
-      } else {
-        binding.extraFieldContainer.setVisibility(View.GONE);
+        double amount = amountInQuUnit != null ? amountInQuUnit : item.getAmountDouble();
+        String price = NumUtil.isStringDouble(p.getPrice())
+            ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice()) * amount,
+            decimalPlacesPriceDisplay)
+            : p.getPrice();
+        Chip chipValue = createChip(context, context.getString(
+            R.string.property_insert_total,
+            context.getString(R.string.property_price_with_currency, price, currency)
+        ));
+        binding.flexboxLayout.addView(chipValue);
       }
+    }
+    if (activeFields.contains(ShoppingListViewModel.FIELD_PRICE_LAST_UNIT)) {
+      ProductLastPurchased p = product != null
+          ? productLastPurchasedHashMap.get(product.getId()) : null;
+      if (p != null && p.getPrice() != null && !p.getPrice().isEmpty()) {
+        String price = NumUtil.isStringDouble(p.getPrice())
+            ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice()) * conversionFactor,
+            decimalPlacesPriceDisplay)
+            : p.getPrice();
+        Chip chipValue = createChip(context, context.getString(
+            R.string.property_insert_per_unit,
+            context.getString(R.string.property_price_with_currency, price, currency)
+        ));
+        binding.flexboxLayout.addView(chipValue);
+      }
+    }
+
+    binding.flexboxLayout.setVisibility(
+        binding.flexboxLayout.getChildCount() > 0 ? View.VISIBLE : View.GONE
+    );
+
+    String pictureFileName = product != null ? product.getPictureFileName() : null;
+    if (activeFields.contains(StockOverviewViewModel.FIELD_PICTURE)
+        && pictureFileName != null && !pictureFileName.isEmpty()) {
+      binding.picture.layout(0, 0, 0, 0);
+
+      PictureUtil.loadPicture(
+          binding.picture,
+          null,
+          null,
+          grocyApi.getProductPictureServeSmall(pictureFileName),
+          grocyAuthHeaders,
+          false
+      );
     } else {
-      binding.extraFieldContainer.setVisibility(View.GONE);
+      binding.picture.setVisibility(View.GONE);
     }
 
     // CONTAINER
@@ -572,13 +609,29 @@ public class ShoppingListItemAdapter extends
 
   }
 
+  private static Chip createChip(Context ctx, String text) {
+    @SuppressLint("InflateParams")
+    Chip chip = (Chip) LayoutInflater.from(ctx)
+        .inflate(R.layout.view_info_chip, null, false);
+    chip.setChipBackgroundColor(ColorStateList.valueOf(SurfaceColors.SURFACE_4.getColor(ctx)));
+    chip.setText(text);
+    chip.setEnabled(false);
+    chip.setClickable(false);
+    chip.setFocusable(false);
+    return chip;
+  }
+
   @Override
   public int getItemCount() {
     return groupedListItems.size();
   }
 
-  public ArrayList<GroupedListItem> getGroupedListItems() {
-    return groupedListItems;
+  public GroupedListItem getGroupedListItemForPos(int position) {
+    if (groupedListItems == null || position < 0
+        || position >= groupedListItems.size()) {
+      return null;
+    }
+    return groupedListItems.get(position);
   }
 
   public interface ShoppingListItemAdapterListener {
@@ -629,40 +682,46 @@ public class ShoppingListItemAdapter extends
 
     // AMOUNT
 
+    StringBuilder stringBuilderAmount = new StringBuilder();
     Double amountInQuUnit = shoppingListItemAmountsHashMap.get(item.getId());
     if (product != null && amountInQuUnit != null) {
       QuantityUnit quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
       String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, amountInQuUnit);
       if (quStr != null) {
-        binding.amount.setText(
-            context.getString(R.string.subtitle_amount, NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount), quStr)
-        );
+        stringBuilderAmount.append(context.getString(
+            R.string.subtitle_amount,
+            NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount),
+            quStr
+        ));
       } else {
-        binding.amount.setText(NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount));
+        stringBuilderAmount.append(NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount));
       }
     } else if (product != null) {
       QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
       String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble());
       if (quStr != null) {
-        binding.amount.setText(
-            context.getString(R.string.subtitle_amount, NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount), quStr)
-        );
+        stringBuilderAmount.append(context.getString(
+            R.string.subtitle_amount,
+            NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount),
+            quStr
+        ));
       } else {
-        binding.amount.setText(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
+        stringBuilderAmount.append(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
       }
     } else {
-      binding.amount.setText(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
+      stringBuilderAmount.append(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
     }
 
+    binding.flexboxLayout.removeAllViews();
+    Chip chipAmount = createChip(context, stringBuilderAmount.toString());
     if (item.isUndone()) {
-      binding.amount.setPaintFlags(
-          binding.amount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
-      );
+      chipAmount.setPaintFlags(chipAmount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+      chipAmount.setAlpha(1);
     } else {
-      binding.amount.setPaintFlags(
-          binding.amount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-      );
+      chipAmount.setPaintFlags(chipAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+      chipAmount.setAlpha(0.61f);
     }
+    binding.flexboxLayout.addView(chipAmount);
 
     // NOTE
 
@@ -710,13 +769,15 @@ public class ShoppingListItemAdapter extends
       HashMap<Integer, String> productNamesHashMap,
       HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      List<QuantityUnitConversionResolved> unitConversions,
       HashMap<Integer, ProductGroup> productGroupHashMap,
       HashMap<Integer, Store> storeHashMap,
       HashMap<Integer, Double> shoppingListItemAmountsHashMap,
       ArrayList<Integer> missingProductIds,
       String shoppingListNotes,
       String groupingMode,
-      String extraField
+      List<String> activeFields,
+      Runnable onListFilled
   ) {
     ArrayList<GroupedListItem> newGroupedListItems = getGroupedListItems(context, shoppingListItems,
         productGroupHashMap, productHashMap, productNamesHashMap, storeHashMap,
@@ -731,15 +792,22 @@ public class ShoppingListItemAdapter extends
         productLastPurchasedHashMap,
         this.quantityUnitHashMap,
         quantityUnitHashMap,
+        this.unitConversions,
+        unitConversions,
         this.shoppingListItemAmountsHashMap,
         shoppingListItemAmountsHashMap,
         this.missingProductIds,
         missingProductIds,
         this.groupingMode,
         groupingMode,
-        this.extraField,
-        extraField
+        this.activeFields,
+        activeFields
     );
+
+    if (onListFilled != null && !newGroupedListItems.isEmpty() && groupedListItems.isEmpty()) {
+      onListFilled.run();
+    }
+
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.groupedListItems.clear();
     this.groupedListItems.addAll(newGroupedListItems);
@@ -747,6 +815,8 @@ public class ShoppingListItemAdapter extends
     this.productHashMap.putAll(productHashMap);
     this.quantityUnitHashMap.clear();
     this.quantityUnitHashMap.putAll(quantityUnitHashMap);
+    this.unitConversions.clear();
+    this.unitConversions.addAll(unitConversions);
     this.productLastPurchasedHashMap.clear();
     this.productLastPurchasedHashMap.putAll(productLastPurchasedHashMap);
     this.shoppingListItemAmountsHashMap.clear();
@@ -754,7 +824,8 @@ public class ShoppingListItemAdapter extends
     this.missingProductIds.clear();
     this.missingProductIds.addAll(missingProductIds);
     this.groupingMode = groupingMode;
-    this.extraField = extraField;
+    this.activeFields.clear();
+    this.activeFields.addAll(activeFields);
     diffResult.dispatchUpdatesTo(this);
   }
 
@@ -768,14 +839,16 @@ public class ShoppingListItemAdapter extends
     HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapNew;
     HashMap<Integer, QuantityUnit> quantityUnitHashMapOld;
     HashMap<Integer, QuantityUnit> quantityUnitHashMapNew;
+    List<QuantityUnitConversionResolved> unitConversionsOld;
+    List<QuantityUnitConversionResolved> unitConversionsNew;
     HashMap<Integer, Double> shoppingListItemAmountsHashMapOld;
     HashMap<Integer, Double> shoppingListItemAmountsHashMapNew;
     ArrayList<Integer> missingProductIdsOld;
     ArrayList<Integer> missingProductIdsNew;
     String groupingModeOld;
     String groupingModeNew;
-    String extraFieldOld;
-    String extraFieldNew;
+    List<String> activeFieldsOld;
+    List<String> activeFieldsNew;
 
     public DiffCallback(
         ArrayList<GroupedListItem> oldItems,
@@ -786,14 +859,16 @@ public class ShoppingListItemAdapter extends
         HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapNew,
         HashMap<Integer, QuantityUnit> quantityUnitHashMapOld,
         HashMap<Integer, QuantityUnit> quantityUnitHashMapNew,
+        List<QuantityUnitConversionResolved> unitConversionsOld,
+        List<QuantityUnitConversionResolved> unitConversionsNew,
         HashMap<Integer, Double> shoppingListItemAmountsHashMapOld,
         HashMap<Integer, Double> shoppingListItemAmountsHashMapNew,
         ArrayList<Integer> missingProductIdsOld,
         ArrayList<Integer> missingProductIdsNew,
         String groupingModeOld,
         String groupingModeNew,
-        String extraFieldOld,
-        String extraFieldNew
+        List<String> activeFieldsOld,
+        List<String> activeFieldsNew
     ) {
       this.oldItems = oldItems;
       this.newItems = newItems;
@@ -803,14 +878,16 @@ public class ShoppingListItemAdapter extends
       this.productLastPurchasedHashMapNew = productLastPurchasedHashMapNew;
       this.quantityUnitHashMapOld = quantityUnitHashMapOld;
       this.quantityUnitHashMapNew = quantityUnitHashMapNew;
+      this.unitConversionsOld = unitConversionsOld;
+      this.unitConversionsNew = unitConversionsNew;
       this.shoppingListItemAmountsHashMapOld = shoppingListItemAmountsHashMapOld;
       this.shoppingListItemAmountsHashMapNew = shoppingListItemAmountsHashMapNew;
       this.missingProductIdsOld = missingProductIdsOld;
       this.missingProductIdsNew = missingProductIdsNew;
       this.groupingModeOld = groupingModeOld;
       this.groupingModeNew = groupingModeNew;
-      this.extraFieldOld = extraFieldOld;
-      this.extraFieldNew = extraFieldNew;
+      this.activeFieldsOld = activeFieldsOld;
+      this.activeFieldsNew = activeFieldsNew;
     }
 
     @Override
@@ -845,14 +922,14 @@ public class ShoppingListItemAdapter extends
       if (oldItemType != newItemType) {
         return false;
       }
-      if (!groupingModeOld.equals(groupingModeNew) || !extraFieldOld.equals(extraFieldNew)) {
-        return false;
-      }
       if (oldItemType == GroupedListItem.TYPE_ENTRY) {
         ShoppingListItem newItem = (ShoppingListItem) newItems.get(newItemPos);
         ShoppingListItem oldItem = (ShoppingListItem) oldItems.get(oldItemPos);
         if (!compareContent) {
           return newItem.getId() == oldItem.getId();
+        }
+        if (!ArrayUtil.areListsEqualIgnoreOrder(activeFieldsOld, activeFieldsNew)) {
+          return false;
         }
 
         Integer productIdOld =
@@ -881,8 +958,8 @@ public class ShoppingListItemAdapter extends
         Boolean missingNew =
             productIdNew != null ? missingProductIdsNew.contains(productIdNew) : null;
 
-        if (extraFieldNew.equals(FilterChipLiveDataShoppingListExtraField.EXTRA_FIELD_LAST_PRICE_UNIT)
-            || extraFieldNew.equals(FilterChipLiveDataShoppingListExtraField.EXTRA_FIELD_LAST_PRICE_TOTAL)) {
+        if (activeFieldsNew.contains(ShoppingListViewModel.FIELD_PRICE_LAST_UNIT)
+            || activeFieldsNew.contains(ShoppingListViewModel.FIELD_PRICE_LAST_TOTAL)) {
           ProductLastPurchased purchasedOld = productIdOld != null
               ? productLastPurchasedHashMapOld.get(productIdOld) : null;
           ProductLastPurchased purchasedNew = productIdNew != null
@@ -890,6 +967,24 @@ public class ShoppingListItemAdapter extends
           if (purchasedOld == null && purchasedNew != null
               || purchasedOld != null && purchasedNew != null && !purchasedOld.equals(purchasedNew)) {
             return false;
+          }
+
+          if (productOld != null && productNew != null) {
+            QuantityUnitConversionResolved oldCon = QuantityUnitConversionResolved.findConversion(
+                unitConversionsOld,
+                productOld.getId(),
+                oldItem.getQuIdInt(),
+                productOld.getQuIdStockInt()
+            );
+            QuantityUnitConversionResolved newCon = QuantityUnitConversionResolved.findConversion(
+                unitConversionsNew,
+                productNew.getId(),
+                newItem.getQuIdInt(),
+                productNew.getQuIdStockInt()
+            );
+            if (oldCon == null && newCon != null || newCon != null && !newCon.equals(oldCon)) {
+              return false;
+            }
           }
         }
 

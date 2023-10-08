@@ -39,4 +39,8 @@ public class MainRepository {
         .subscribeOn(Schedulers.io())
         .subscribe();
   }
+
+  public interface OnVersionListener {
+    void onVersion(int version);
+  }
 }

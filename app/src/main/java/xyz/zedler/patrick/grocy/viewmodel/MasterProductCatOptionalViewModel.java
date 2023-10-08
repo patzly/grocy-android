@@ -20,18 +20,37 @@
 package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import org.json.JSONException;
+import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatOptional;
-import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.MasterProductCatOptionalFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -40,16 +59,18 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
+import xyz.zedler.patrick.grocy.util.PictureUtil;
 
 public class MasterProductCatOptionalViewModel extends BaseViewModel {
 
   private static final String TAG = MasterProductCatOptionalViewModel.class.getSimpleName();
 
   private final DownloadHelper dlHelper;
+  private final GrocyApi grocyApi;
   private final MasterProductRepository repository;
+  private final SharedPreferences sharedPrefs;
   private final FormDataMasterProductCatOptional formData;
-  private final MasterProductFragmentArgs args;
+  private final MasterProductCatOptionalFragmentArgs args;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -58,20 +79,26 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
   private List<ProductGroup> productGroups;
   private List<ProductBarcode> barcodes;
 
-  private NetworkQueue currentQueueLoading;
+  private Runnable queueEmptyAction;
   private final boolean isActionEdit;
+  private String currentFilePath;
 
   public MasterProductCatOptionalViewModel(
       @NonNull Application application,
-      @NonNull MasterProductFragmentArgs startupArgs
+      @NonNull MasterProductCatOptionalFragmentArgs startupArgs
   ) {
     super(application);
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
+    grocyApi = new GrocyApi(application);
     repository = new MasterProductRepository(application);
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-    formData = new FormDataMasterProductCatOptional(application, prefs, getBeginnerModeEnabled());
+    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
+    formData = new FormDataMasterProductCatOptional(
+        application,
+        sharedPrefs,
+        getBeginnerModeEnabled()
+    );
     args = startupArgs;
     isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
     infoFullscreenLive = new MutableLiveData<>();
@@ -96,66 +123,37 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
       this.barcodes = data.getBarcodes();
       formData.getProductsLive().setValue(products);
       formData.getProductGroupsLive().setValue(productGroups);
-      formData.fillWithProductIfNecessary(args.getProduct());
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
+      } else {
+        if (queueEmptyAction != null) {
+          queueEmptyAction.run();
+          queueEmptyAction = null;
+        }
+        formData.fillWithProductIfNecessary(args.getProduct());
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, TAG));
-      return;
-    }
-
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
-    queue.append(
-        Product.updateProducts(dlHelper, dbChangedTime, products -> {
-          this.products = products;
-          formData.getProductsLive().setValue(products);
-        }), ProductGroup.updateProductGroups(dlHelper, dbChangedTime, productGroups -> {
-          this.productGroups = productGroups;
-          formData.getProductGroupsLive().setValue(productGroups);
-        }), ProductBarcode.updateProductBarcodes(
-            dlHelper,
-            dbChangedTime,
-            barcodes -> this.barcodes = barcodes
-        )
+  public void downloadData(boolean forceUpdate) {
+    dlHelper.updateData(
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            if (queueEmptyAction != null) {
+              queueEmptyAction.run();
+              queueEmptyAction = null;
+            }
+            formData.fillWithProductIfNecessary(args.getProduct());
+          }
+        }, error -> onError(error, null),
+        forceUpdate,
+        false,
+        Product.class,
+        ProductBarcode.class,
+        ProductGroup.class
     );
-    if (queue.isEmpty()) {
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = getSharedPrefs().edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.apply();
-    downloadData();
-  }
-
-  private void onQueueEmpty() {
-    if (isOffline()) {
-      setOfflineLive(false);
-    }
-    formData.fillWithProductIfNecessary(args.getProduct());
   }
 
   public void onBarcodeRecognized(String barcode) {
@@ -180,6 +178,130 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
     }
   }
 
+  public void pasteFromClipboard() {
+    if (isDemoInstance()) {
+      showMessage(R.string.error_picture_uploads_forbidden);
+      return;
+    }
+    ClipboardManager clipboard = (ClipboardManager) getApplication()
+        .getSystemService(Context.CLIPBOARD_SERVICE);
+    if (clipboard == null) {
+      showMessage(R.string.error_clipboard_no_image);
+      return;
+    }
+    if (!clipboard.hasPrimaryClip()) {
+      showMessage(R.string.error_clipboard_no_image);
+      return;
+    }
+    ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
+    if (item.getUri() == null) {
+      showMessage(R.string.error_clipboard_no_image);
+      return;
+    }
+    try {
+      InputStream imageStream = getApplication().getContentResolver().openInputStream(item.getUri());
+      Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+      scaleAndUploadBitmap(null, bitmap);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      showMessage(R.string.error_clipboard_no_image);
+    }
+  }
+
+  public File createImageFile() throws IOException {
+    File storageDir = getApplication().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+    File image = PictureUtil.createImageFile(storageDir);
+    currentFilePath = image.getAbsolutePath();
+    return image;
+  }
+
+  public void scaleAndUploadBitmap(@Nullable String filePath, @Nullable Bitmap image) {
+    if (filePath == null && image == null) {
+      showErrorMessage();
+      return;
+    }
+    isLoadingLive.setValue(true);
+    ExecutorService executor = Executors.newSingleThreadExecutor();
+    executor.execute(() -> {
+      Bitmap scaledBitmap = filePath != null
+          ? PictureUtil.scaleBitmap(filePath)
+          : PictureUtil.scaleBitmap(image);
+      byte[] imageArray = PictureUtil.convertBitmapToByteArray(scaledBitmap);
+      new Handler(Looper.getMainLooper()).post(() -> {
+        uploadPicture(imageArray);
+        executor.shutdown();
+      });
+    });
+  }
+
+  public void uploadPicture(byte[] pictureData) {
+    if (pictureData == null) {
+      showErrorMessage();
+      isLoadingLive.setValue(false);
+      return;
+    }
+    String filename = PictureUtil.createImageFilename();
+    dlHelper.putFile(
+        grocyApi.getProductPicture(filename),
+        pictureData,
+        () -> {
+          deleteCurrentPicture(filename);
+          formData.getPictureFilenameLive().setValue(filename);
+        },
+        error -> {
+          isLoadingLive.setValue(false);
+          showNetworkErrorMessage(error);
+        }
+    );
+  }
+
+  public void deleteCurrentPicture(String newFilename) {
+    if (isActionEdit()) {
+      JSONObject jsonObject = new JSONObject();
+      try {
+        jsonObject.put("picture_file_name", newFilename != null ? newFilename : "");
+        dlHelper.put(
+            grocyApi.getObject(ENTITY.PRODUCTS, args.getProduct().getId()),
+            jsonObject,
+            response -> {},
+            volleyError -> {}
+        );
+      } catch (JSONException ignored) {}
+    }
+    String lastFilename = formData.getPictureFilenameLive().getValue();
+    if (lastFilename != null && !lastFilename.isBlank()) {
+      dlHelper.delete(
+          grocyApi.getProductPicture(lastFilename),
+          response -> {
+            isLoadingLive.setValue(false);
+            formData.getPictureFilenameLive().setValue("");
+          },
+          volleyError -> {
+            isLoadingLive.setValue(false);
+            showNetworkErrorMessage(volleyError);
+            formData.getPictureFilenameLive().setValue(lastFilename);
+          }
+      );
+    } else if (lastFilename != null && lastFilename.isBlank()) {
+      isLoadingLive.setValue(false);
+      formData.getPictureFilenameLive().setValue("");
+    } else {
+      isLoadingLive.setValue(false);
+    }
+  }
+
+  public String getCurrentFilePath() {
+    return currentFilePath;
+  }
+
+  public void setCurrentFilePath(String currentFilePath) {
+    this.currentFilePath = currentFilePath;
+  }
+
+  public String getEnergyUnit() {
+    return sharedPrefs.getString(PREF.ENERGY_UNIT, "kcal");
+  }
+
   @NonNull
   public MutableLiveData<Boolean> getIsLoadingLive() {
     return isLoadingLive;
@@ -190,8 +312,8 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
     return infoFullscreenLive;
   }
 
-  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
-    currentQueueLoading = queueLoading;
+  public void setQueueEmptyAction(Runnable queueEmptyAction) {
+    this.queueEmptyAction = queueEmptyAction;
   }
 
   @Override
@@ -204,11 +326,11 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
       ViewModelProvider.Factory {
 
     private final Application application;
-    private final MasterProductFragmentArgs args;
+    private final MasterProductCatOptionalFragmentArgs args;
 
     public MasterProductCatOptionalViewModelFactory(
         Application application,
-        MasterProductFragmentArgs args
+        MasterProductCatOptionalFragmentArgs args
     ) {
       this.application = application;
       this.args = args;

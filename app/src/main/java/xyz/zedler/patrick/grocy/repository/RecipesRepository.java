@@ -21,19 +21,21 @@ package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
+import xyz.zedler.patrick.grocy.model.RecipePositionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.Userfield;
+import xyz.zedler.patrick.grocy.util.RxJavaUtil;
 
 public class RecipesRepository {
 
@@ -53,29 +55,36 @@ public class RecipesRepository {
     private final List<Recipe> recipes;
     private final List<RecipeFulfillment> recipeFulfillments;
     private final List<RecipePosition> recipePositions;
+    private final List<RecipePositionResolved> recipePositionsResolved;
     private final List<Product> products;
     private final List<QuantityUnit> quantityUnits;
-    private final List<QuantityUnitConversion> quantityUnitConversions;
+    private final List<QuantityUnitConversionResolved> quantityUnitConversions;
     private final List<StockItem> stockItems;
     private final List<ShoppingListItem> shoppingListItems;
+    private final List<Userfield> userfields;
 
     public RecipesData(
         List<Recipe> recipes,
         List<RecipeFulfillment> recipeFulfillments,
         List<RecipePosition> recipePositions,
+        List<RecipePositionResolved> recipePositionsResolved,
         List<Product> products,
         List<QuantityUnit> quantityUnits,
-        List<QuantityUnitConversion> quantityUnitConversions,
+        List<QuantityUnitConversionResolved> quantityUnitConversions,
         List<StockItem> stockItems,
-        List<ShoppingListItem> shoppingListItems) {
+        List<ShoppingListItem> shoppingListItems,
+        List<Userfield> userfields
+    ) {
       this.recipes = recipes;
       this.recipeFulfillments = recipeFulfillments;
       this.recipePositions = recipePositions;
+      this.recipePositionsResolved = recipePositionsResolved;
       this.products = products;
       this.quantityUnits = quantityUnits;
       this.quantityUnitConversions = quantityUnitConversions;
       this.stockItems = stockItems;
       this.shoppingListItems = shoppingListItems;
+      this.userfields = userfields;
     }
 
     public List<Recipe> getRecipes() {
@@ -90,6 +99,10 @@ public class RecipesRepository {
       return recipePositions;
     }
 
+    public List<RecipePositionResolved> getRecipePositionsResolved() {
+      return recipePositionsResolved;
+    }
+
     public List<Product> getProducts() {
       return products;
     }
@@ -98,7 +111,7 @@ public class RecipesRepository {
       return quantityUnits;
     }
 
-    public List<QuantityUnitConversion> getQuantityUnitConversions() {
+    public List<QuantityUnitConversionResolved> getQuantityUnitConversionsResolved() {
       return quantityUnitConversions;
     }
 
@@ -109,19 +122,25 @@ public class RecipesRepository {
     public List<ShoppingListItem> getShoppingListItems() {
       return shoppingListItems;
     }
+
+    public List<Userfield> getUserfields() {
+      return userfields;
+    }
   }
 
   public void loadFromDatabase(RecipesDataListener onSuccess, Consumer<Throwable> onError) {
-    Single
+    RxJavaUtil
         .zip(
             appDatabase.recipeDao().getRecipes(),
             appDatabase.recipeFulfillmentDao().getRecipeFulfillments(),
             appDatabase.recipePositionDao().getRecipePositions(),
+            appDatabase.recipePositionResolvedDao().getRecipePositionsResolved(),
             appDatabase.productDao().getProducts(),
             appDatabase.quantityUnitDao().getQuantityUnits(),
-            appDatabase.quantityUnitConversionDao().getConversions(),
+            appDatabase.quantityUnitConversionResolvedDao().getConversionsResolved(),
             appDatabase.stockItemDao().getStockItems(),
             appDatabase.shoppingListItemDao().getShoppingListItems(),
+            appDatabase.userfieldDao().getUserfields(),
             RecipesData::new
         )
         .subscribeOn(Schedulers.io())

@@ -19,8 +19,15 @@
 
 package xyz.zedler.patrick.grocy.util;
 
+import android.annotation.SuppressLint;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.view.View;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.Lifecycle.Event;
+import androidx.lifecycle.LifecycleEventObserver;
+import androidx.lifecycle.LifecycleObserver;
 
 public class ClickUtil {
 
@@ -51,6 +58,68 @@ public class ClickUtil {
   public static void setOnClickListeners(View.OnClickListener listener, View... views) {
     for (View view : views) {
       view.setOnClickListener(listener);
+    }
+  }
+
+  public static class InactivityUtil implements LifecycleObserver {
+    private final int inactivityInterval;
+    private CountDownTimer countDownTimer;
+    private final Runnable onTimeElapsedListener;
+    private final OnAlmostTimeElapsedListener onAlmostTimeElapsedListener;
+    private boolean almostTimeElapsed = false;
+
+    public interface OnAlmostTimeElapsedListener {
+      void onAlmostTimeElapsed(InactivityUtil inactivityUtil);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    public InactivityUtil(
+        @NonNull Lifecycle lifecycle,
+        OnAlmostTimeElapsedListener onHalfTimeElapsedListener,
+        Runnable onTimeElapsedListener,
+        int intervalSeconds
+    ) {
+      this.onTimeElapsedListener = onTimeElapsedListener;
+      this.onAlmostTimeElapsedListener = onHalfTimeElapsedListener;
+      this.inactivityInterval = intervalSeconds * 1000;
+      countDownTimer = createCountDownTimer();
+
+      lifecycle.addObserver((LifecycleEventObserver) (source, event) -> {
+        if (event == Event.ON_RESUME) {
+          startTimer();
+        } else if (event == Event.ON_PAUSE) {
+          stopTimer();
+        }
+      });
+    }
+
+    private CountDownTimer createCountDownTimer() {
+      return new CountDownTimer(inactivityInterval, 1000) {
+        public void onTick(long millisUntilFinished) {
+          if (millisUntilFinished <= 5000 && !almostTimeElapsed) {
+            onAlmostTimeElapsedListener.onAlmostTimeElapsed(InactivityUtil.this);
+            almostTimeElapsed = true;
+          }
+        }
+
+        public void onFinish() {
+          onTimeElapsedListener.run();
+        }
+      };
+    }
+
+    public void resetTimer() {
+      countDownTimer.cancel();
+      countDownTimer = createCountDownTimer();
+      countDownTimer.start();
+    }
+
+    public void startTimer() {
+      countDownTimer.start();
+    }
+
+    public void stopTimer() {
+      countDownTimer.cancel();
     }
   }
 }

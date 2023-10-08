@@ -20,7 +20,6 @@
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -30,16 +29,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.MutableLiveData;
-import androidx.preference.PreferenceManager;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListAdapter;
-import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetListSelectionBinding;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragmentDirections;
@@ -73,11 +68,6 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
 
     activity = (MainActivity) requireActivity();
 
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-    boolean multipleListsFeature = sharedPrefs.getBoolean(
-        Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true
-    );
-
     MutableLiveData<Integer> selectedIdLive = activity.getCurrentFragment()
         .getSelectedShoppingListIdLive();
     int selectedId = getArguments() != null
@@ -87,14 +77,15 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
       return binding.getRoot();
     }
 
-    binding.textListSelectionTitle.setText(activity.getString(R.string.property_shopping_lists));
-    ViewUtil.centerText(binding.textListSelectionTitle);
-
     binding.recyclerListSelection.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
-    binding.recyclerListSelection.setItemAnimator(new DefaultItemAnimator());
-    binding.recyclerListSelection.setAdapter(new ShoppingPlaceholderAdapter());
+    ShoppingListAdapter adapter = new ShoppingListAdapter(
+        this,
+        activity.getCurrentFragment() instanceof ShoppingListFragment
+            && activity.isOnline()
+    );
+    binding.recyclerListSelection.setAdapter(adapter);
     ViewUtil.setOnlyOverScrollStretchEnabled(binding.recyclerListSelection);
 
     ShoppingListRepository repository = new ShoppingListRepository(activity.getApplication());
@@ -102,24 +93,11 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
       if (shoppingLists == null) {
         return;
       }
-      if (binding.recyclerListSelection.getAdapter() == null
-          || !(binding.recyclerListSelection.getAdapter() instanceof ShoppingListAdapter)
-      ) {
-        binding.recyclerListSelection.setAdapter(new ShoppingListAdapter(
-            shoppingLists,
-            selectedIdLive != null && selectedIdLive.getValue() != null
-                ? selectedIdLive.getValue() : selectedId,
-            this,
-            activity.getCurrentFragment() instanceof ShoppingListFragment
-                && activity.isOnline()
-        ));
-      } else {
-        ((ShoppingListAdapter) binding.recyclerListSelection.getAdapter()).updateData(
-            shoppingLists,
-            selectedIdLive != null && selectedIdLive.getValue() != null
-                ? selectedIdLive.getValue() : selectedId
-        );
-      }
+      adapter.updateData(
+          shoppingLists,
+          selectedIdLive != null && selectedIdLive.getValue() != null
+              ? selectedIdLive.getValue() : selectedId
+      );
     });
 
     if (selectedIdLive != null) {
@@ -135,9 +113,11 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
       });
     }
 
-    if (activity.isOnline() && multipleListsFeature
-        && activity.getCurrentFragment() instanceof ShoppingListFragment
-    ) {
+    boolean hasOptions = false;
+    if (getArguments() != null
+        && getArguments().getBoolean(ARGUMENT.DISPLAY_NEW_OPTION, false)
+        && activity.getCurrentFragment() instanceof ShoppingListFragment) {
+      hasOptions = true;
       binding.buttonListSelectionNew.setVisibility(View.VISIBLE);
       binding.buttonListSelectionNew.setOnClickListener(v -> {
         dismiss();
@@ -145,6 +125,11 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
             ShoppingListFragmentDirections.actionShoppingListFragmentToShoppingListEditFragment()
         );
       });
+    }
+
+    binding.textListSelectionTitle.setText(activity.getString(R.string.property_shopping_lists));
+    if (!hasOptions) {
+      ViewUtil.centerText(binding.textListSelectionTitle);
     }
 
     if (savedInstanceState != null && savedInstanceState.getBoolean(DIALOG_DELETE_SHOWING)) {

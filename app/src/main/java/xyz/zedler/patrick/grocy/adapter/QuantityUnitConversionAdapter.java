@@ -50,14 +50,12 @@ public class QuantityUnitConversionAdapter extends RecyclerView.Adapter<Quantity
 
   public QuantityUnitConversionAdapter(
       Context context,
-      ArrayList<QuantityUnitConversion> quantityUnitConversions,
-      QuantityUnitConversionAdapterListener listener,
-      HashMap<Integer, QuantityUnit> quantityUnitHashMap
+      QuantityUnitConversionAdapterListener listener
   ) {
     this.pluralUtil = new PluralUtil(context);
-    this.quantityUnitConversions = new ArrayList<>(quantityUnitConversions);
+    this.quantityUnitConversions = new ArrayList<>();
     this.listener = listener;
-    this.quantityUnitHashMap = quantityUnitHashMap;
+    this.quantityUnitHashMap = new HashMap<>();
     maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(context).getInt(
         STOCK.DECIMAL_PLACES_AMOUNT,
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
@@ -115,14 +113,28 @@ public class QuantityUnitConversionAdapter extends RecyclerView.Adapter<Quantity
     return quantityUnitConversions.size();
   }
 
-  public void updateData(ArrayList<QuantityUnitConversion> quantityUnitConversionsNew) {
+  public void updateData(
+      ArrayList<QuantityUnitConversion> quantityUnitConversionsNew,
+      HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      Runnable onListFilled
+  ) {
     DiffCallback diffCallback = new DiffCallback(
         this.quantityUnitConversions,
-        quantityUnitConversionsNew
+        quantityUnitConversionsNew,
+        this.quantityUnitHashMap,
+        quantityUnitHashMap
     );
+
+    if (onListFilled != null && !quantityUnitConversionsNew.isEmpty()
+        && quantityUnitConversions.isEmpty()) {
+      onListFilled.run();
+    }
+
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.quantityUnitConversions.clear();
     this.quantityUnitConversions.addAll(quantityUnitConversionsNew);
+    this.quantityUnitHashMap.clear();
+    this.quantityUnitHashMap.putAll(quantityUnitHashMap);
     diffResult.dispatchUpdatesTo(this);
   }
 
@@ -130,13 +142,19 @@ public class QuantityUnitConversionAdapter extends RecyclerView.Adapter<Quantity
 
     ArrayList<QuantityUnitConversion> oldItems;
     ArrayList<QuantityUnitConversion> newItems;
+    HashMap<Integer, QuantityUnit> oldQuantityUnitHashMap;
+    HashMap<Integer, QuantityUnit> newQuantityUnitHashMap;
 
     public DiffCallback(
         ArrayList<QuantityUnitConversion> oldItems,
-        ArrayList<QuantityUnitConversion> newItems
+        ArrayList<QuantityUnitConversion> newItems,
+        HashMap<Integer, QuantityUnit> oldQuantityUnitHashMap,
+        HashMap<Integer, QuantityUnit> newQuantityUnitHashMap
     ) {
       this.newItems = newItems;
       this.oldItems = oldItems;
+      this.oldQuantityUnitHashMap = oldQuantityUnitHashMap;
+      this.newQuantityUnitHashMap = newQuantityUnitHashMap;
     }
 
     @Override
@@ -164,6 +182,9 @@ public class QuantityUnitConversionAdapter extends RecyclerView.Adapter<Quantity
       QuantityUnitConversion oldItem = oldItems.get(oldItemPos);
       if (!compareContent) {
         return newItem.getId() == oldItem.getId();
+      }
+      if (oldQuantityUnitHashMap.size() != newQuantityUnitHashMap.size()) {
+        return false;
       }
 
       return newItem.equals(oldItem);

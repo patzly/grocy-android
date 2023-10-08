@@ -108,7 +108,7 @@ public class OverviewStartViewModel extends BaseViewModel {
     );
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     repository = new OverviewStartRepository(application);
 
     stockItemsLive = new MutableLiveData<>();
@@ -378,6 +378,7 @@ public class OverviewStartViewModel extends BaseViewModel {
       this.stockItemsLive.setValue(data.getStockItems());
       this.shoppingListItemsLive.setValue(data.getShoppingListItems());
       this.productsLive.setValue(data.getProducts());
+      HashMap<Integer, Product> productHashMap = ArrayUtil.getProductsHashMap(data.getProducts());
       this.storedPurchasesOnDevice.setValue(data.getStoredPurchases().size() > 0);
       this.recipesLive.setValue(data.getRecipes());
       this.choreEntriesLive.setValue(data.getChoreEntries());
@@ -433,6 +434,8 @@ public class OverviewStartViewModel extends BaseViewModel {
       int itemsInStockCount = 0;
       double stockValue = 0;
       for (StockItem stockItem : data.getStockItems()) {
+        Product product = productHashMap.get(stockItem.getProductId());
+        if (product != null && product.getHideOnStockOverviewBoolean()) continue;
         if (!stockItem.isItemMissing() || stockItem.isItemMissingAndPartlyInStock()) {
           itemsInStockCount++;
           stockValue += stockItem.getValueDouble();
@@ -481,18 +484,24 @@ public class OverviewStartViewModel extends BaseViewModel {
       alreadyLoadedFromDatabase = true;
       if (downloadAfterLoading) {
         downloadData(false);
+      } else {
+        onQueueEmpty();
       }
-    }, this::showDatabaseErrorMessage);
+    }, this::showThrowableErrorMessage);
   }
 
-  public void downloadData(boolean skipOfflineCheck) {
-    if (!skipOfflineCheck && isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        this::onQueueEmpty,
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            onQueueEmpty();
+          }
+        },
         error -> onError(error, TAG),
+        forceUpdate,
+        true,
         StockItem.class,
         ShoppingListItem.class,
         ShoppingList.class,
@@ -504,23 +513,7 @@ public class OverviewStartViewModel extends BaseViewModel {
     );
   }
 
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_STOCK_ITEMS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_VOLATILE, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_RECIPES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_TASKS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_CHORE_ENTRIES, null);
-    editPrefs.apply();
-    downloadData(true);
-  }
-
-  private void onQueueEmpty() {
-    if (isOffline()) setOfflineLive(false);
-
+  private void onQueueEmpty() { // TODO: Test
     if (sharedPrefs.getInt(PREF.CURRENT_USER_ID, -1) == -1) {
       User.getCurrentUserId(dlHelper, id -> {
         if (id != -1) {
@@ -540,12 +533,10 @@ public class OverviewStartViewModel extends BaseViewModel {
           }
         }
       }).perform(
-          i -> loadFromDatabase(false),
-          error -> loadFromDatabase(false),
+          i -> {},
+          error -> {},
           dlHelper.getUuid()
       );
-    } else {
-      loadFromDatabase(false);
     }
   }
 
@@ -634,11 +625,6 @@ public class OverviewStartViewModel extends BaseViewModel {
         Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
         Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
     );
-  }
-
-  public boolean getIsDemoInstance() {
-    String server = sharedPrefs.getString(PREF.SERVER_URL, null);
-    return server != null && server.contains("grocy.info");
   }
 
   public boolean getOverviewFabInfoShown() {

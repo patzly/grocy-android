@@ -27,7 +27,8 @@
 
   <declare-styleable name="RoundedCornerImageView">
     <attr name="radius" format="dimension" />
-    <attr name="onlyBottomCornersRound" format="boolean" />
+    <attr name="bottomCornersRound" format="boolean" />
+    <attr name="topCornersRound" format="boolean" />
     <attr name="showBottomShadow" format="boolean" />
   </declare-styleable>
 

@@ -19,40 +19,66 @@
 
 package xyz.zedler.patrick.grocy.util;
 
-import android.content.Context;
-import androidx.lifecycle.LiveData;
 import java.util.HashMap;
 import java.util.List;
-import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 
 public class QuantityUnitConversionUtil {
-
   public static HashMap<QuantityUnit, Double> getUnitFactors(
-      Context context,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
-      List<QuantityUnitConversion> unitConversions,
+      List<QuantityUnitConversionResolved> unitConversions,
       Product product,
-      boolean relativeToStockUnit
+      boolean useResolvedConversions
   ) {
-    QuantityUnit relativeToUnit = relativeToStockUnit
-        ? quantityUnitHashMap.get(product.getQuIdStockInt())
-        : quantityUnitHashMap.get(product.getQuIdPurchaseInt());
+    // useResolvedConversions is always the VersionUtil.isGrocyServerMin400() value because
+    // starting with this version, transitive conversions are
+    // calculated (see QuantityUnitConversionResolved class). For easier version compatibility
+    // changes of this app in future versions, the QuantityUnitConversionsResolved table of this app
+    // contains with earlier server versions just the simple conversions from the Grocy
+    // server (not resolved). If 4.0.0 is the min. server version requirement, this behavior
+    // can simply be removed and not all pages have to be edited.
+    if (!useResolvedConversions) {
+      return getUnitFactors(quantityUnitHashMap, unitConversions, product);
+    }
+    HashMap<QuantityUnit, Double> unitFactors = new HashMap<>();
+    for (QuantityUnitConversion conversion : unitConversions) {
+      if (conversion.getProductIdInt() != product.getId()) continue;
+
+      // We need this check because unitConversions list can contain multiple entry for the same "to" QU.
+      //
+      // Example:
+      // Bottle -> mL | 100.0
+      // mL -> Bottle | 0.01
+      // Bottle -> Bottle | 1.0
+      //
+      // Without this check the output map will contain 0.01 for Bottle key
+      if (conversion.getFromQuId() != product.getQuIdStockInt()) continue;
+
+      QuantityUnit unit = quantityUnitHashMap.get(conversion.getToQuId());
+      if (unit == null || unitFactors.containsKey(unit)) continue;
+      unitFactors.put(unit, conversion.getFactor());
+    }
+    return unitFactors;
+  }
+
+  private static HashMap<QuantityUnit, Double> getUnitFactors(
+      HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      List<QuantityUnitConversionResolved> unitConversions,
+      Product product
+  ) {
     QuantityUnit stockUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
     QuantityUnit purchaseUnit = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
 
-    if (relativeToUnit == null || stockUnit == null || purchaseUnit == null) {
-      throw new IllegalArgumentException(context.getString(R.string.error_loading_qus));
-    }
-
     HashMap<QuantityUnit, Double> unitFactors = new HashMap<>();
-    unitFactors.put(relativeToUnit, (double) -1);
-    if (relativeToStockUnit && !unitFactors.containsKey(purchaseUnit)) {
-      unitFactors.put(purchaseUnit, product.getQuFactorPurchaseToStockDouble());
-    } else if (!relativeToStockUnit && !unitFactors.containsKey(stockUnit)) {
-      unitFactors.put(stockUnit, product.getQuFactorPurchaseToStockDouble());
+    if (stockUnit == null || purchaseUnit == null) {
+      return unitFactors;
+    }
+    unitFactors.put(stockUnit, (double) 1);
+    if (!unitFactors.containsKey(purchaseUnit)) {
+      unitFactors.put(purchaseUnit, 1 / product.getQuFactorPurchaseToStockDouble());
     }
     for (QuantityUnitConversion conversion : unitConversions) {
       if (!NumUtil.isStringInt(conversion.getProductId())
@@ -69,7 +95,7 @@ public class QuantityUnitConversionUtil {
     }
     for (QuantityUnitConversion conversion : unitConversions) {
       if (NumUtil.isStringInt(conversion.getProductId())
-          || relativeToUnit.getId() != conversion.getFromQuId()) {
+          || stockUnit.getId() != conversion.getFromQuId()) {
         continue;
       }
       // Only add standard unit conversions
@@ -82,66 +108,54 @@ public class QuantityUnitConversionUtil {
     return unitFactors;
   }
 
-  public static HashMap<QuantityUnit, Double> getUnitFactors(
-      Context context,
-      HashMap<Integer, QuantityUnit> quantityUnitHashMap,
-      List<QuantityUnitConversion> unitConversions,
-      Product product
-  ) {
-    return getUnitFactors(context, quantityUnitHashMap, unitConversions, product, true);
-  }
-
   public static String getAmountStock(
-      Product product,
       QuantityUnit stock,
       QuantityUnit current,
-      LiveData<String> amountLive,
-      LiveData<HashMap<QuantityUnit, Double>> quantityUnitsFactorsLive,
+      String amountStr,
+      HashMap<QuantityUnit, Double> quantityUnitsFactors,
+      boolean onlyCheckSingleUnitInStock,
       int maxDecimalPlacesAmount
   ) {
-    if (!NumUtil.isStringDouble(amountLive.getValue())
-        || quantityUnitsFactorsLive.getValue() == null
+    if (!NumUtil.isStringDouble(amountStr)
+        || quantityUnitsFactors == null || onlyCheckSingleUnitInStock
     ) {
       return null;
     }
-    assert amountLive.getValue() != null;
-
-    if (stock != null && current != null && stock.getId() != current.getId()) {
-      HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-      double amount = NumUtil.toDouble(amountLive.getValue());
-      Object currentFactor = hashMap.get(current);
-      if (currentFactor == null) {
-        //amountHelperLive.setValue(null);
-        return null;
-      }
-      double amountMultiplied;
-      if (product != null && current.getId() == product.getQuIdPurchaseInt()) {
-        amountMultiplied = amount * (double) currentFactor;
-      } else {
-        amountMultiplied = amount / (double) currentFactor;
-      }
-      return NumUtil.trimAmount(amountMultiplied, maxDecimalPlacesAmount);
+    if (stock != null && current != null) {
+      double amount = NumUtil.toDouble(amountStr);
+      Object currentFactor = quantityUnitsFactors.get(current);
+      if (currentFactor == null) return null;
+      return NumUtil.trimAmount(amount / (double) currentFactor, maxDecimalPlacesAmount);
     } else {
       return null;
     }
   }
 
-  public static double getAmountRelativeToUnit(
-      HashMap<QuantityUnit, Double> unitFactors,
-      Product product,
-      QuantityUnit quantityUnit,
-      double inputAmount
+  public static String getPriceStock(
+      QuantityUnit current,
+      String amountStr,
+      String priceStr,
+      HashMap<QuantityUnit, Double> quantityUnitsFactors,
+      boolean isTareWeightEnabled,
+      boolean isTotalPrice,
+      int decimalPlacesPriceDisplay
   ) {
-    if (quantityUnit == null || !unitFactors.containsKey(quantityUnit)) {
-      return inputAmount;
+    if (!NumUtil.isStringDouble(priceStr) || !NumUtil.isStringDouble(amountStr)
+        || current == null) {
+      return null;
     }
-    Double factor = unitFactors.get(quantityUnit);
-    assert factor != null;
-    if (factor != -1 && quantityUnit.getId() == product.getQuIdPurchaseInt()) {
-      return inputAmount / factor;
-    } else if (factor != -1) {
-      return inputAmount * factor;
+    if (!NumUtil.isStringDouble(amountStr) || quantityUnitsFactors == null) {
+      return null;
     }
-    return inputAmount;
+    double amount = NumUtil.toDouble(amountStr);
+    double price = NumUtil.toDouble(priceStr);
+    Object currentFactor = quantityUnitsFactors.get(current);
+    if (currentFactor == null) return null;
+
+    double priceMultiplied = isTareWeightEnabled ? price : price * (double) currentFactor;
+    if (isTotalPrice) {
+      priceMultiplied /= amount;
+    }
+    return NumUtil.trimPrice(priceMultiplied, decimalPlacesPriceDisplay);
   }
 }

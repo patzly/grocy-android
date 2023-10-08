@@ -34,6 +34,7 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.TaskEntryEditFragmentArgs;
 
 public class ShortcutUtil {
 
@@ -45,6 +46,7 @@ public class ShortcutUtil {
   public final static String CONSUME = "shortcut_consume";
   public final static String INVENTORY = "shortcut_inventory";
   public final static String TRANSFER = "shortcut_transfer";
+  public final static String CHORES = "shortcut_chores";
   public final static String TASKS = "shortcut_tasks";
   public final static String ADD_TASK = "shortcut_add_task";
   public final static String RECIPES = "shortcut_recipes";
@@ -101,13 +103,22 @@ public class ShortcutUtil {
         newShortcutInfos.add(createShortcutInventory(
             context, context.getString(R.string.title_inventory)
         ));
+      } else if (shortcutInfo.getId().equals(CHORES)) {
+        newShortcutInfos.add(createShortcutChores(
+            context, context.getString(R.string.title_chores)
+        ));
       } else if (shortcutInfo.getId().equals(TASKS)) {
         newShortcutInfos.add(createShortcutTasks(
             context, context.getString(R.string.title_tasks)
         ));
       } else if (shortcutInfo.getId().equals(ADD_TASK)) {
-        newShortcutInfos.add(createShortcutTasks(
-            context, context.getString(R.string.title_task_new)
+        Uri uriAddToTaskDeepLink = NavUtil.getUriWithArgs(
+            context.getString(R.string.deep_link_taskEntryEditFragment),
+            new TaskEntryEditFragmentArgs.Builder(Constants.ACTION.CREATE)
+                .build().toBundle()
+        );
+        newShortcutInfos.add(createShortcutTaskAdd(
+            context, uriAddToTaskDeepLink, context.getString(R.string.title_task_new)
         ));
       } else if (shortcutInfo.getId().equals(RECIPES)) {
         newShortcutInfos.add(createShortcutRecipes(
@@ -117,7 +128,7 @@ public class ShortcutUtil {
     }
     List<String> shortcutIdsSorted = Arrays.asList(
         STOCK_OVERVIEW, SHOPPING_LIST, ADD_TO_SHOPPING_LIST,
-        SHOPPING_MODE, PURCHASE, CONSUME, TRANSFER, INVENTORY, TASKS, ADD_TASK, RECIPES
+        SHOPPING_MODE, PURCHASE, CONSUME, TRANSFER, INVENTORY, CHORES, TASKS, ADD_TASK, RECIPES
     );
     shortcutManager.removeAllDynamicShortcuts();
     newShortcutInfos = SortUtil.sortShortcutsById(newShortcutInfos, shortcutIdsSorted);
@@ -208,6 +219,17 @@ public class ShortcutUtil {
     return new ShortcutInfo.Builder(context, TRANSFER)
         .setShortLabel(label)
         .setIcon(Icon.createWithResource(context, R.mipmap.ic_transfer))
+        .setIntent(intent).build();
+  }
+
+  @RequiresApi(api = Build.VERSION_CODES.N_MR1)
+  public static ShortcutInfo createShortcutChores(Context context, CharSequence label) {
+    Uri uri = Uri.parse(context.getString(R.string.deep_link_choresFragment));
+    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+    intent.setClass(context, MainActivity.class);
+    return new ShortcutInfo.Builder(context, CHORES)
+        .setShortLabel(label)
+        .setIcon(Icon.createWithResource(context, R.mipmap.ic_chores))
         .setIntent(intent).build();
   }
 

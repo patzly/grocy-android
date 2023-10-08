@@ -288,7 +288,6 @@
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">Kontrollera din anslutning och försök igen</string>
   <string name="error_no_done_items">Inget är \"klar\" markerat</string>
-  <string name="error_name_exists">Namn finns redan</string>
   <string name="error_network">Nätverksfel</string>
   <string name="error_network_subtitle">Kunde inte fullföra nerladningen</string>
   <string name="error_unknown">Uups!</string>
@@ -531,7 +530,6 @@
   <string name="property_not_opened">inte öppnad</string>
   <string name="property_is_freezer">Är frys</string>
   <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">Energi (kcal)</string>
   <string name="property_active">Aktiv</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Visa aldrig i lagerstatus</string>
@@ -716,5 +714,4 @@
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
-  <string name="url_grocy_demo">https://sv.demo.grocy.info</string>
-  </resources>
+</resources>

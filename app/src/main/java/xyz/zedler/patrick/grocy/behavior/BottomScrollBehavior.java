@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.behavior;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
@@ -35,6 +36,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.core.widget.NestedScrollView;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
 import com.google.android.material.appbar.AppBarLayout;
@@ -57,7 +59,7 @@ public class BottomScrollBehavior {
   private final FloatingActionButton fabMain, fabTopScroll;
   private AppBarLayout appBar;
   private ViewGroup scrollView;
-  private final View snackbarAnchor;
+  private final View snackbarAnchor, snackbarAnchorMaxBottom;
   private boolean liftOnScroll;
   private boolean provideTopScroll;
 
@@ -72,16 +74,19 @@ public class BottomScrollBehavior {
   private boolean canBottomAppBarBeVisible;
   private boolean useOverScrollFix;
   private boolean useTopScrollAsAnchor, useFabAsAnchor;
+  private boolean anchorAnimPending;
+  private ValueAnimator anchorAnimator;
 
   public BottomScrollBehavior(
       @NonNull Context context, @NonNull BottomAppBar bottomAppBar,
       @NonNull FloatingActionButton fabMain, @NonNull FloatingActionButton fabTopScroll,
-      @NonNull View snackbarAnchor
+      @NonNull View snackbarAnchor, @NonNull View snackbarAnchorMaxBottom
   ) {
     this.bottomAppBar = bottomAppBar;
     this.fabMain = fabMain;
     this.fabTopScroll = fabTopScroll;
     this.snackbarAnchor = snackbarAnchor;
+    this.snackbarAnchorMaxBottom = snackbarAnchorMaxBottom;
 
     ViewCompat.setOnApplyWindowInsetsListener(fabTopScroll, (v, insets) -> {
       int insetBottom = insets.getInsets(Type.systemBars()).bottom;
@@ -130,6 +135,9 @@ public class BottomScrollBehavior {
       @Override
       public void onAnimationEnd(Animator animation) {
         useFabAsAnchor = false;
+        if (!anchorAnimPending) {
+          anchorAnimPending = !useTopScrollAsAnchor;
+        }
         updateSnackbarAnchor();
       }
     });
@@ -137,6 +145,9 @@ public class BottomScrollBehavior {
       @Override
       public void onAnimationStart(Animator animation) {
         useFabAsAnchor = true;
+        if (!anchorAnimPending) {
+          anchorAnimPending = !useTopScrollAsAnchor;
+        }
         updateSnackbarAnchor();
       }
     });
@@ -145,6 +156,7 @@ public class BottomScrollBehavior {
       @Override
       public void onAnimationEnd(Animator animation) {
         useTopScrollAsAnchor = false;
+        anchorAnimPending = true;
         updateSnackbarAnchor();
       }
     });
@@ -152,6 +164,7 @@ public class BottomScrollBehavior {
       @Override
       public void onAnimationStart(Animator animation) {
         useTopScrollAsAnchor = true;
+        anchorAnimPending = true;
         updateSnackbarAnchor();
       }
     });
@@ -161,17 +174,6 @@ public class BottomScrollBehavior {
     useOverScrollFix = Build.VERSION.SDK_INT < 31;
     useFabAsAnchor = true;
     useTopScrollAsAnchor = false;
-  }
-
-  private void test(MainActivity activity) {
-    activity.getScrollBehavior().setUpScroll(
-        appBar, liftOnScroll, scrollView, provideTopScroll, false
-    );
-    activity.getScrollBehavior().setUpScroll(appBar, liftOnScroll, scrollView, false);
-    activity.getScrollBehavior().setUpScroll(appBar, liftOnScroll, scrollView);
-    activity.getScrollBehavior().setBottomBarVisibility(true, false, false);
-    activity.getScrollBehavior().setBottomBarVisibility(true, true);
-    activity.getScrollBehavior().setBottomBarVisibility(true);
   }
 
   /**
@@ -461,16 +463,43 @@ public class BottomScrollBehavior {
   }
 
   public void updateSnackbarAnchor() {
-    snackbarAnchor.setY(getSnackbarAnchorY());
+    if (anchorAnimator != null) {
+      anchorAnimator.pause();
+      anchorAnimator.cancel();
+      anchorAnimator = null;
+    }
+    if (anchorAnimPending) {
+      anchorAnimator = ValueAnimator.ofFloat(snackbarAnchor.getY(), getSnackbarAnchorY());
+      anchorAnimator.setDuration(300);
+      anchorAnimator.setInterpolator(new FastOutSlowInInterpolator());
+      anchorAnimator.addUpdateListener(animation -> {
+        snackbarAnchor.setY((Float) animation.getAnimatedValue());
+        snackbarAnchor.requestLayout();
+      });
+      anchorAnimator.addListener(new AnimatorListenerAdapter() {
+        @Override
+        public void onAnimationEnd(Animator animation) {
+          if (anchorAnimator.getAnimatedFraction() == 1) {
+            anchorAnimPending = false;
+            anchorAnimator = null;
+          }
+        }
+      });
+      anchorAnimator.start();
+    } else {
+      snackbarAnchor.setY(getSnackbarAnchorY());
+      snackbarAnchor.requestLayout();
+    }
   }
 
   public float getSnackbarAnchorY() {
     if (useTopScrollAsAnchor) {
       return fabTopScroll.getY();
     } else if (useFabAsAnchor) {
-      return Math.min(fabMain.getY(), bottomAppBar.getY());
+      float bottomAppbarY = Math.min(bottomAppBar.getY(), snackbarAnchorMaxBottom.getY());
+      return Math.min(fabMain.getY(), bottomAppbarY);
     } else {
-      return bottomAppBar.getY();
+      return Math.min(bottomAppBar.getY(), snackbarAnchorMaxBottom.getY());
     }
   }
 

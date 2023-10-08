@@ -155,7 +155,7 @@ public class SettingsCatServerFragment extends BaseFragment {
       }
       if (savedInstanceState.getBoolean(DIALOG_LOGOUT_SHOWING)) {
         new Handler(Looper.getMainLooper()).postDelayed(
-            () -> showLogoutDialog(viewModel.isDemo()), 1
+            () -> showLogoutDialog(viewModel.isDemoInstance()), 1
         );
       }
     }

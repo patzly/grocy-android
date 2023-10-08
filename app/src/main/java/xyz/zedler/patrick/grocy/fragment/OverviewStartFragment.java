@@ -25,12 +25,15 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import xyz.zedler.patrick.grocy.BuildConfig;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
@@ -81,7 +84,6 @@ public class OverviewStartFragment extends BaseFragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
     viewModel = new ViewModelProvider(this).get(OverviewStartViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
     binding.setFragment(this);
     binding.setActivity(activity);
@@ -146,6 +148,50 @@ public class OverviewStartFragment extends BaseFragment {
 
     if (savedInstanceState == null || !viewModel.isAlreadyLoadedFromDatabase()) {
       viewModel.loadFromDatabase(true);
+    }
+
+    ViewTreeObserver observer = binding.scrollHorizActionsStockOverview.getViewTreeObserver();
+    observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+      @Override
+      public void onGlobalLayout() {
+        int containerWidthStock = binding.scrollHorizActionsStockOverview.getWidth();
+        int buttonWidthStock = binding.linearStockActionsContainer.getWidth();
+        boolean isScrollableStock
+            = buttonWidthStock >= containerWidthStock - UiUtil.dpToPx(activity, 16);
+        if (isScrollableStock) {
+          binding.buttonInventoryText.setVisibility(View.GONE);
+          binding.buttonInventoryIcon.setVisibility(View.VISIBLE);
+          boolean isLocationTrackingEnabled = viewModel.isFeatureEnabled(
+              Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING
+          );
+          if (isLocationTrackingEnabled) {
+            binding.buttonTransferText.setVisibility(View.GONE);
+            binding.buttonTransferIcon.setVisibility(View.VISIBLE);
+          }
+        }
+
+        int containerWidthShopping = binding.scrollHorizActionsShoppingList.getWidth();
+        int buttonWidthShopping = binding.linearShoppingListActionsContainer.getWidth();
+        boolean isScrollableShopping
+            = buttonWidthShopping >= containerWidthShopping - UiUtil.dpToPx(activity, 16);
+        if (isScrollableShopping) {
+          binding.buttonShoppingText.setVisibility(View.GONE);
+          binding.buttonShoppingIcon.setVisibility(View.VISIBLE);
+        }
+
+        if (binding.scrollHorizActionsStockOverview.getViewTreeObserver().isAlive()) {
+          binding.scrollHorizActionsStockOverview.getViewTreeObserver()
+              .removeOnGlobalLayoutListener(this);
+        }
+      }
+    });
+
+    // DEBUG LABEL
+
+    if (BuildConfig.DEBUG) {
+      ColorRoles roles = ResUtil.getHarmonizedRoles(activity, R.color.yellow);
+      binding.imageLabelDebug.setColorFilter(roles.getOnAccent());
+      binding.imageLabelDebugBg.setColorFilter(roles.getAccent());
     }
 
     // UPDATE UI
@@ -266,7 +312,6 @@ public class OverviewStartFragment extends BaseFragment {
     if (!online == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!online);
     viewModel.downloadData(false);
   }
 

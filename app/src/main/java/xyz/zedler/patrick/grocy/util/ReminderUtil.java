@@ -19,11 +19,13 @@
 
 package xyz.zedler.patrick.grocy.util;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -31,31 +33,33 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
-import android.os.Handler;
-import android.os.Looper;
-import androidx.annotation.Nullable;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.color.DynamicColors;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.NOTIFICATIONS;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT.NOTIFICATIONS;
 import xyz.zedler.patrick.grocy.Constants.THEME;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.notification.BootReceiver;
-import xyz.zedler.patrick.grocy.notification.DueSoonNotificationReceiver;
+import xyz.zedler.patrick.grocy.notification.ChoresNotificationReceiver;
+import xyz.zedler.patrick.grocy.notification.StockNotificationReceiver;
 
 public class ReminderUtil {
 
   private static final String TAG = ReminderUtil.class.getSimpleName();
 
+  public final static String STOCK_TYPE = "STOCK";
+  public final static String CHORES_TYPE = "CHORES";
+
   private final Context context;
   private final SharedPreferences sharedPrefs;
   private final AlarmManager alarmManager;
-  private PendingIntent pendingIntent;
   private final NotificationManager notificationManager;
 
   public ReminderUtil(Context context) {
@@ -68,10 +72,43 @@ public class ReminderUtil {
     );
   }
 
+  public void rescheduleReminders() {
+    List<String> reminderTypes = Arrays.asList(STOCK_TYPE, CHORES_TYPE);
+
+    for (String reminderType : reminderTypes) {
+      switch (reminderType) {
+        case STOCK_TYPE:
+          setReminderEnabled(reminderType, sharedPrefs.getBoolean(NOTIFICATIONS.STOCK_ENABLE,
+              SETTINGS_DEFAULT.NOTIFICATIONS.STOCK_ENABLE));
+          break;
+        case CHORES_TYPE:
+          setReminderEnabled(reminderType, sharedPrefs.getBoolean(NOTIFICATIONS.CHORES_ENABLE,
+              SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_ENABLE));
+          break;
+        default:
+          throw new IllegalArgumentException("Unknown reminder type: " + reminderType);
+      }
+    }
+  }
+
   @SuppressLint("SimpleDateFormat")
-  public void scheduleReminder(@Nullable String time) {
+  public void scheduleReminder(
+      String reminderType,
+      int reminderId,
+      String time,
+      Class<? extends BroadcastReceiver> receiverClass
+  ) {
     if (time == null) {
-      time = NOTIFICATIONS.DUE_SOON_TIME;
+      switch (reminderType) {
+        case STOCK_TYPE:
+          time = NOTIFICATIONS.STOCK_TIME;
+          break;
+        case CHORES_TYPE:
+          time = NOTIFICATIONS.CHORES_TIME;
+          break;
+        default:
+          throw new IllegalArgumentException("Unknown reminder type: " + reminderType);
+      }
     }
 
     Calendar calendar = Calendar.getInstance();
@@ -86,58 +123,95 @@ public class ReminderUtil {
       calendar.add(Calendar.DATE, 1);
     }
 
-    pendingIntent = PendingIntent.getBroadcast(
+    PendingIntent pendingIntent = PendingIntent.getBroadcast(
         context,
-        SETTINGS.NOTIFICATIONS.DUE_SOON_ID,
-        new Intent(context, DueSoonNotificationReceiver.class),
+        reminderId,
+        new Intent(context, receiverClass),
         VERSION.SDK_INT >= VERSION_CODES.M
             ? PendingIntent.FLAG_IMMUTABLE
             : PendingIntent.FLAG_UPDATE_CURRENT
     );
 
     if (notificationManager != null) {
-      notificationManager.cancelAll();
+      notificationManager.cancel(reminderId);
     }
-    if (alarmManager == null) {
-      return;
+    if (alarmManager != null) {
+      alarmManager.cancel(pendingIntent);
+      alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
+  }
 
-    alarmManager.cancel(pendingIntent);
-    new Handler(Looper.getMainLooper()).postDelayed(
-        () -> alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.getTimeInMillis(),
-            AlarmManager.INTERVAL_DAY,
-            pendingIntent
-        ),
-        100
+  public void scheduleAgainIn10Minutes(
+      int reminderId,
+      Class<? extends BroadcastReceiver> receiverClass
+  ) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTimeInMillis(System.currentTimeMillis());
+    calendar.add(Calendar.MINUTE, 10);
+
+    PendingIntent pendingIntent = PendingIntent.getBroadcast(
+        context,
+        reminderId,
+        new Intent(context, receiverClass),
+        VERSION.SDK_INT >= VERSION_CODES.M
+            ? PendingIntent.FLAG_IMMUTABLE
+            : PendingIntent.FLAG_UPDATE_CURRENT
     );
-  }
 
-  public void scheduleReminderIfEnabled() {
-    if (sharedPrefs.getBoolean(
-        SETTINGS.NOTIFICATIONS.DUE_SOON_ENABLE,
-        SETTINGS_DEFAULT.NOTIFICATIONS.DUE_SOON_ENABLE
-    )) {
-      scheduleReminder(sharedPrefs.getString(
-          SETTINGS.NOTIFICATIONS.DUE_SOON_TIME,
-          NOTIFICATIONS.DUE_SOON_TIME
-      ));
+    if (notificationManager != null) {
+      notificationManager.cancel(reminderId);
+    }
+    if (alarmManager != null) {
+      alarmManager.cancel(pendingIntent);
+      alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
   }
 
-  public void setReminderEnabled(boolean enabled) {
-    sharedPrefs.edit().putBoolean(SETTINGS.NOTIFICATIONS.DUE_SOON_ENABLE, enabled).apply();
+  public void setReminderEnabled(String reminderType, boolean enabled) {
+    int reminderId;
+    String reminderTime;
+    String reminderTimeDefault;
+    Class<? extends BroadcastReceiver> receiverClass;
+
+    switch (reminderType) {
+      case STOCK_TYPE:
+        sharedPrefs.edit().putBoolean(NOTIFICATIONS.STOCK_ENABLE, enabled).apply();
+        reminderId = NOTIFICATIONS.STOCK_ID;
+        reminderTime = NOTIFICATIONS.STOCK_TIME;
+        reminderTimeDefault = SETTINGS_DEFAULT.NOTIFICATIONS.STOCK_TIME;
+        receiverClass = StockNotificationReceiver.class;
+        break;
+      case CHORES_TYPE:
+        sharedPrefs.edit().putBoolean(NOTIFICATIONS.CHORES_ENABLE, enabled).apply();
+        reminderId = NOTIFICATIONS.CHORES_ID;
+        reminderTime = NOTIFICATIONS.CHORES_TIME;
+        reminderTimeDefault = SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_TIME;
+        receiverClass = ChoresNotificationReceiver.class;
+        break;
+      default:
+        throw new IllegalArgumentException("Unknown reminder type: " + reminderType);
+    }
+
     if (enabled) {
-      scheduleReminder(sharedPrefs.getString(
-          SETTINGS.NOTIFICATIONS.DUE_SOON_TIME,
-          NOTIFICATIONS.DUE_SOON_TIME
-      ));
+      scheduleReminder(
+          reminderType,
+          reminderId,
+          sharedPrefs.getString(reminderTime, reminderTimeDefault),
+          receiverClass
+      );
     } else {
       if (notificationManager != null) {
-        notificationManager.cancelAll();
+        notificationManager.cancel(reminderId);
       }
-      if (pendingIntent != null && alarmManager != null) {
+      PendingIntent pendingIntent = PendingIntent.getBroadcast(
+          context,
+          reminderId,
+          new Intent(context, receiverClass),
+          VERSION.SDK_INT >= VERSION_CODES.M
+              ? PendingIntent.FLAG_IMMUTABLE
+              : PendingIntent.FLAG_UPDATE_CURRENT
+      );
+      if (alarmManager != null && pendingIntent != null) {
         alarmManager.cancel(pendingIntent);
       }
     }
@@ -152,6 +226,17 @@ public class ReminderUtil {
             : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
         PackageManager.DONT_KILL_APP
     );
+  }
+
+  public boolean hasPermission() {
+    if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
+      int status = ContextCompat.checkSelfPermission(
+          context, Manifest.permission.POST_NOTIFICATIONS
+      );
+      return status == PackageManager.PERMISSION_GRANTED;
+    } else {
+      return true;
+    }
   }
 
   public static Notification getNotification(
@@ -208,6 +293,7 @@ public class ReminderUtil {
     } else {
       colorContext = dynamicColorContext;
     }
+    if (colorContext == null) colorContext = context;
 
     NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId);
     builder

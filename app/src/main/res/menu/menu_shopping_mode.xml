@@ -26,7 +26,29 @@
   <item
     android:id="@+id/action_select"
     android:title="@string/property_shopping_lists"
-    app:showAsAction="never" />
+    app:showAsAction="never" >
+
+    <menu />
+
+  </item>
+
+  <item
+    android:id="@+id/action_grouping_mode"
+    android:title="@string/property_group_by"
+    app:showAsAction="never">
+
+    <menu />
+
+  </item>
+
+  <item
+    android:id="@+id/action_fields"
+    android:title="@string/property_fields"
+    app:showAsAction="never">
+
+    <menu />
+
+  </item>
 
   <item
     android:id="@+id/action_options"

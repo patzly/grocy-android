@@ -37,7 +37,6 @@ import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.RecipeEntryAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -64,6 +63,7 @@ public class RecipesFragment extends BaseFragment implements
   private ClickUtil clickUtil;
   private FragmentRecipesBinding binding;
   private InfoFullscreenHelper infoFullscreenHelper;
+  private RecipeEntryAdapter adapter;
 
   @Override
   public View onCreateView(
@@ -94,7 +94,6 @@ public class RecipesFragment extends BaseFragment implements
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
     viewModel = new ViewModelProvider(this).get(RecipesViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
     binding.setFragment(this);
@@ -124,21 +123,24 @@ public class RecipesFragment extends BaseFragment implements
     );
 
     boolean isGrid = viewModel.getSharedPrefs()
-        .getString(PREF.RECIPES_LIST_LAYOUT, LAYOUT_LINEAR).equals(LAYOUT_LINEAR);
+        .getString(PREF.RECIPES_LIST_LAYOUT, LAYOUT_GRID).equals(LAYOUT_GRID);
     if (isGrid) {
-      binding.recycler.setLayoutManager(
-          new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-      );
-    } else {
       binding.recycler.setLayoutManager(
           new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
       );
+    } else {
+      binding.recycler.setLayoutManager(
+          new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+      );
     }
-
-    binding.recycler.setAdapter(new MasterPlaceholderAdapter());
+    adapter = new RecipeEntryAdapter(
+        requireContext(),
+        binding.recycler.getLayoutManager(),
+        this
+    );
+    binding.recycler.setAdapter(adapter);
 
     if (savedInstanceState == null) {
-      binding.recycler.scrollToPosition(0);
       viewModel.resetSearch();
     }
 
@@ -164,28 +166,15 @@ public class RecipesFragment extends BaseFragment implements
       } else {
         viewModel.getInfoFullscreenLive().setValue(null);
       }
-      if (binding.recycler.getAdapter() instanceof RecipeEntryAdapter) {
-        ((RecipeEntryAdapter) binding.recycler.getAdapter()).updateData(
-            items,
-            viewModel.getRecipeFulfillments(),
-            viewModel.getSortMode(),
-            viewModel.isSortAscending(),
-            viewModel.getActiveFields()
-        );
-      } else {
-        binding.recycler.setAdapter(
-            new RecipeEntryAdapter(
-                requireContext(),
-                binding.recycler.getLayoutManager(),
-                items,
-                viewModel.getRecipeFulfillments(),
-                this,
-                viewModel.getSortMode(),
-                viewModel.isSortAscending(),
-                viewModel.getActiveFields()
-            )
-        );
-      }
+      adapter.updateData(
+          items,
+          viewModel.getRecipeFulfillments(),
+          viewModel.getUserfieldHashMap(),
+          viewModel.getSortMode(),
+          viewModel.isSortAscending(),
+          viewModel.getActiveFields(),
+          () -> binding.recycler.scheduleLayoutAnimation()
+      );
     });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
@@ -193,6 +182,8 @@ public class RecipesFragment extends BaseFragment implements
         activity.showSnackbar(
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
+      } else if (event.getType() == Event.SCROLL_UP) {
+        binding.recycler.scrollToPosition(0);
       }
     });
 
@@ -231,70 +222,15 @@ public class RecipesFragment extends BaseFragment implements
         binding.recycler.setLayoutManager(staggeredGridLayoutManager);
         viewModel.getSharedPrefs().edit().putString(PREF.RECIPES_LIST_LAYOUT, LAYOUT_GRID).apply();
       }
-      binding.recycler.setAdapter(
-          new RecipeEntryAdapter(
-              requireContext(),
-              binding.recycler.getLayoutManager(),
-              viewModel.getFilteredRecipesLive().getValue(),
-              viewModel.getRecipeFulfillments(),
-              this,
-              viewModel.getSortMode(),
-              viewModel.isSortAscending(),
-              viewModel.getActiveFields()
-          )
+      adapter = new RecipeEntryAdapter(
+          requireContext(),
+          binding.recycler.getLayoutManager(),
+          this
       );
-      binding.recycler.scheduleLayoutAnimation();
+      binding.recycler.setAdapter(adapter);
+      viewModel.updateFilteredRecipes();
       fadeInRecyclerView();
     });
-  }
-
-
-  @Override
-  public void consumeRecipe(int recipeId) {
-    if (showOfflineError()) {
-      return;
-    }
-    viewModel.consumeRecipe(recipeId);
-  }
-
-  @Override
-  public void addNotFulfilledProductsToCartForRecipe(int recipeId, int[] excludedProductIds) {
-    if (showOfflineError()) {
-      return;
-    }
-    viewModel.addNotFulfilledProductsToCartForRecipe(recipeId, excludedProductIds);
-  }
-
-  @Override
-  public void editRecipe(Recipe recipe) {
-    if (showOfflineError()) {
-      return;
-    }
-    activity.navUtil.navigateFragment(
-        RecipesFragmentDirections.actionRecipesFragmentToRecipeEditFragment(ACTION.EDIT)
-            .setRecipe(recipe)
-    );
-  }
-
-  @Override
-  public void copyRecipe(int recipeId) {
-    if (showOfflineError()) {
-      return;
-    }
-    viewModel.copyRecipe(recipeId);
-  }
-
-  @Override
-  public void deleteRecipe(int recipeId) {
-    if (showOfflineError()) {
-      return;
-    }
-    viewModel.deleteRecipe(recipeId);
-  }
-
-  @Override
-  public void updateData() {
-    viewModel.downloadData();
   }
 
   @Override
@@ -302,14 +238,6 @@ public class RecipesFragment extends BaseFragment implements
     if (appBarBehavior != null) {
       appBarBehavior.saveInstanceState(outState);
     }
-  }
-
-  private boolean showOfflineError() {
-    if (viewModel.isOffline()) {
-      activity.showSnackbar(R.string.error_offline, false);
-      return true;
-    }
-    return false;
   }
 
   private boolean onMenuItemClick(MenuItem item) {
@@ -342,10 +270,7 @@ public class RecipesFragment extends BaseFragment implements
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
   }
 
   private void setUpSearch() {

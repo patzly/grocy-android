@@ -28,7 +28,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.CursorWindow;
@@ -37,15 +36,18 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
@@ -58,24 +60,14 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsAnimationCompat;
-import androidx.core.view.WindowInsetsAnimationCompat.BoundsCompat;
-import androidx.core.view.WindowInsetsAnimationCompat.Callback;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.preference.PreferenceManager;
-import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.android.material.elevation.SurfaceColors;
-import com.google.android.material.math.MathUtils;
 import com.google.android.material.snackbar.Snackbar;
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 import java.lang.reflect.Field;
-import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS;
@@ -87,6 +79,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomScrollBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
+import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
@@ -119,11 +112,9 @@ public class MainActivity extends AppCompatActivity {
   private BottomScrollBehavior scrollBehavior;
   private SystemBarBehavior systemBarBehavior;
   public HapticUtil hapticUtil;
+  private OnBackPressedDispatcher dispatcher;
   private boolean runAsSuperClass;
   private boolean debug;
-  private boolean wasKeyboardOpened;
-  private float fabBaseY;
-  private int focusedScrollOffset;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+    PrefsUtil.migratePrefs(sharedPrefs);
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     // DARK MODE AND THEME
@@ -179,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
       field.setAccessible(true);
       field.set(null, 10 * 1024 * 1024); // 10MB is the new size
     } catch (Exception e) {
-      e.printStackTrace();
+      Log.e(TAG, "onCreate: " + e);
     }
 
     // WEB
@@ -189,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
       public void onReceive(Context context, Intent intent) {
         Fragment navHostFragment = fragmentManager.findFragmentById(R.id.fragment_main_nav_host);
         assert navHostFragment != null;
-        if (navHostFragment.getChildFragmentManager().getFragments().size() == 0) {
+        if (navHostFragment.getChildFragmentManager().getFragments().isEmpty()) {
           return;
         }
         getCurrentFragment().updateConnectivity(netUtil.isOnline());
@@ -221,168 +213,44 @@ public class MainActivity extends AppCompatActivity {
     }, sharedPrefs, TAG);
     navUtil.updateStartDestination();
 
+    dispatcher = getOnBackPressedDispatcher();
+    OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+      @Override
+      public void handleOnBackPressed() {
+        BaseFragment currentFragment = getCurrentFragment();
+        if (currentFragment.isSearchVisible()) {
+          currentFragment.dismissSearch();
+        } else {
+          boolean handled = currentFragment.onBackPressed();
+          if (!handled) {
+            setEnabled(false);
+            dispatcher.onBackPressed();
+            setEnabled(true);
+          }
+          if (!PrefsUtil.isServerUrlEmpty(sharedPrefs)) {
+            binding.bottomAppBar.performShow();
+          }
+        }
+        hideKeyboard();
+      }
+    };
+    dispatcher.addCallback(this, onBackPressedCallback);
+
     // BOTTOM APP BAR
 
-    binding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
-    binding.bottomAppBar.setMenuAlignmentMode(BottomAppBar.MENU_ALIGNMENT_MODE_START);
-
-    // Use reflection to store bottomInset in BAB manually
-    // The automatic method includes IME insets which is bad behavior for BABs
-    ViewCompat.setOnApplyWindowInsetsListener(binding.bottomAppBar, (v, insets) -> {
-      int bottomInset = insets.getInsets(Type.systemBars()).bottom;
-      ViewCompat.setPaddingRelative(v, 0, 0, 0, bottomInset);
-      Class<?> classBottomAppBar = BottomAppBar.class;
-      Object objectBottomAppBar = classBottomAppBar.cast(binding.bottomAppBar);
-      Field fieldBottomInset = null;
-      try {
-        if (objectBottomAppBar != null && objectBottomAppBar.getClass().getSuperclass() != null) {
-          fieldBottomInset = objectBottomAppBar.getClass().getDeclaredField("bottomInset");
-        } else {
-          Log.e(TAG, "onCreate: reflection for bottomInset not working");
-        }
-      } catch (NoSuchFieldException e) {
-        Log.e(TAG, "onCreate: ", e);
-      }
-      if (fieldBottomInset != null) {
-        fieldBottomInset.setAccessible(true);
-        try {
-          fieldBottomInset.set(objectBottomAppBar, bottomInset);
-        } catch (IllegalAccessException e) {
-          Log.e(TAG, "onCreate: ", e);
-        }
-      }
-      // Calculate initial FAB y position for restoring after shifted by keyboard
-      int babHeight = UiUtil.dpToPx(this, 80);
-      int fabHeight = UiUtil.dpToPx(this, 56);
-      int bottom = UiUtil.getDisplayHeight(this);
-      fabBaseY = bottom - bottomInset - (babHeight / 2f) - (fabHeight / 2f);
-      return insets;
-    });
+    UiUtil uiUtil = new UiUtil();
+    uiUtil.setUpBottomAppBar(TAG, binding);
     updateBottomNavigationMenuButton();
-    binding.bottomAppBar.setBackgroundColor(SurfaceColors.SURFACE_2.getColor(this));
-    binding.fabMainScroll.setBackgroundTintList(
-        ColorStateList.valueOf(SurfaceColors.SURFACE_2.getColor(this))
-    );
-    ViewUtil.setTooltipText(binding.fabMainScroll, R.string.action_top_scroll);
 
     scrollBehavior = new BottomScrollBehavior(
-        this, binding.bottomAppBar, binding.fabMain, binding.fabMainScroll, binding.anchor
+        this,
+        binding.bottomAppBar, binding.fabMain, binding.fabMainScroll,
+        binding.anchor, binding.anchorMaxBottom
     );
 
     // IME ANIMATION
 
-    Callback callback = new Callback(Callback.DISPATCH_MODE_STOP) {
-      WindowInsetsAnimationCompat animation;
-      int bottomInsetStart, bottomInsetEnd;
-      float yStart, yEnd;
-      int yScrollStart, yScrollEnd;
-
-      @Override
-      public void onPrepare(@NonNull WindowInsetsAnimationCompat animation) {
-        this.animation = animation;
-        if (systemBarBehavior != null) {
-          bottomInsetStart = systemBarBehavior.getAdditionalBottomInset();
-        }
-        yStart = binding.fabMain.getY();
-        // scroll offset to keep focused view visible
-        ViewGroup scrollView = scrollBehavior.getScrollView();
-        if (scrollView != null) {
-          yScrollStart = scrollView.getScrollY();
-        }
-      }
-
-      @NonNull
-      @Override
-      public BoundsCompat onStart(
-          @NonNull WindowInsetsAnimationCompat animation, @NonNull BoundsCompat bounds) {
-        if (systemBarBehavior != null) {
-          bottomInsetEnd = systemBarBehavior.getAdditionalBottomInset();
-          systemBarBehavior.setAdditionalBottomInset(bottomInsetStart);
-          systemBarBehavior.refresh(false);
-        }
-        yEnd = binding.fabMain.getY();
-        binding.fabMain.setY(yStart);
-        // scroll offset to keep focused view visible
-        ViewGroup scrollView = scrollBehavior.getScrollView();
-        if (scrollView != null) {
-          yScrollEnd = yScrollStart + focusedScrollOffset;
-        }
-        return bounds;
-      }
-
-      @NonNull
-      @Override
-      public WindowInsetsCompat onProgress(
-          @NonNull WindowInsetsCompat insets,
-          @NonNull List<WindowInsetsAnimationCompat> animations) {
-        if (systemBarBehavior != null) {
-          systemBarBehavior.setAdditionalBottomInset(
-              (int) MathUtils.lerp(
-                  bottomInsetStart, bottomInsetEnd, animation.getInterpolatedFraction()
-              )
-          );
-          systemBarBehavior.refresh(false);
-        }
-        binding.fabMain.setY(MathUtils.lerp(yStart, yEnd, animation.getInterpolatedFraction()));
-        // scroll offset to keep focused view visible
-        ViewGroup scrollView = scrollBehavior.getScrollView();
-        if (scrollView != null) {
-          scrollView.setScrollY(
-              (int) MathUtils.lerp(yScrollStart, yScrollEnd, animation.getInterpolatedFraction())
-          );
-        }
-        return insets;
-      }
-    };
-    ViewCompat.setOnApplyWindowInsetsListener(binding.coordinatorMain, (v, insets) -> {
-      int bottomInset = insets.getInsets(Type.ime()).bottom;
-      if (systemBarBehavior != null) {
-        systemBarBehavior.setAdditionalBottomInset(bottomInset);
-        systemBarBehavior.refresh(false);
-      }
-      if (insets.isVisible(Type.ime())) {
-        wasKeyboardOpened = true;
-        binding.fabMain.setTranslationY(-bottomInset - UiUtil.dpToPx(this, 16));
-        int keyboardY = UiUtil.getDisplayHeight(this) - bottomInset;
-        if (keyboardY < scrollBehavior.getSnackbarAnchorY()) {
-          binding.anchor.setY(keyboardY);
-        } else {
-          scrollBehavior.updateSnackbarAnchor();
-        }
-        float elevation = UiUtil.dpToPx(this, 6);
-        ViewCompat.setElevation(binding.fabMain, elevation);
-        binding.fabMain.setCompatElevation(elevation);
-
-        // scroll offset to keep focused view visible
-        View focused = getCurrentFocus();
-        if (focused != null) {
-          int[] location = new int[2];
-          focused.getLocationInWindow(location);
-          location[1] += focused.getHeight();
-          int screenHeight = UiUtil.getDisplayHeight(this);
-          int bottomSpace = screenHeight - location[1];
-          focusedScrollOffset = bottomInset - bottomSpace;
-        } else {
-          focusedScrollOffset = 0;
-        }
-      } else {
-        binding.fabMain.setY(fabBaseY);
-        scrollBehavior.updateSnackbarAnchor();
-        ViewCompat.setElevation(binding.fabMain, 0);
-        binding.fabMain.setCompatElevation(0);
-        // If the keyboard was shown and the page was therefore scrollable
-        // and the bottom bar has disappeared caused by scrolling down,
-        // then the bottom bar should not stay hidden when the keyboard disappears
-        if (wasKeyboardOpened) {
-          wasKeyboardOpened = false;
-          scrollBehavior.setBottomBarVisibility(true);
-        }
-        // scroll offset to keep focused view visible
-        focusedScrollOffset = 0;
-      }
-      return insets;
-    });
-    ViewCompat.setWindowInsetsAnimationCallback(binding.coordinatorMain, callback);
+    uiUtil.setupImeAnimation(this, systemBarBehavior, scrollBehavior);
 
     // UPDATE CONFIG | CHECK GROCY COMPATIBILITY
     if (!PrefsUtil.isServerUrlEmpty(sharedPrefs)) {
@@ -395,8 +263,18 @@ public class MainActivity extends AppCompatActivity {
       );
     }
 
-    // Show changelog if app was updated
-    VersionUtil.showVersionChangelogIfAppUpdated(this, sharedPrefs);
+    if (VersionUtil.isAppUpdated(sharedPrefs)) {
+      // Show changelog if app was updated
+      VersionUtil.showChangelogBottomSheet(this);
+      PrefsUtil.clearCachingRelatedSharedPreferences(sharedPrefs);
+    } else {
+      // Check if database scheme was updated and clear caching data if necessary
+      AppDatabase.getAppDatabase(getApplication()).getVersion(version -> {
+        if (VersionUtil.isDatabaseUpdated(sharedPrefs, version)) {
+          PrefsUtil.clearCachingRelatedSharedPreferences(sharedPrefs);
+        }
+      });
+    }
   }
 
   @Override
@@ -412,7 +290,9 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   protected void onPause() {
-    netUtil.cancelHassSessionTimer();
+    if (netUtil != null) {
+      netUtil.cancelHassSessionTimer();
+    }
     super.onPause();
   }
 
@@ -530,35 +410,26 @@ public class MainActivity extends AppCompatActivity {
       }
       onClick.run();
     });
-    binding.fabMain.setOnLongClickListener(v -> {
-      if (onLongClick == null) {
-        return false;
-      }
-      Drawable drawable = binding.fabMain.getDrawable();
-      if (drawable instanceof AnimationDrawable) {
-        ViewUtil.startIcon(drawable);
-      }
-      onLongClick.run();
-      return true;
-    });
-    ViewUtil.setTooltipText(binding.fabMain, tooltipStringId);
+    if (onLongClick != null) {
+      binding.fabMain.setOnLongClickListener(v -> {
+        Drawable drawable = binding.fabMain.getDrawable();
+        if (drawable instanceof AnimationDrawable) {
+          ViewUtil.startIcon(drawable);
+        }
+        onLongClick.run();
+        return true;
+      });
+    } else {
+      binding.fabMain.setOnLongClickListener(null);
+      ViewUtil.setTooltipText(binding.fabMain, tooltipStringId);
+    }
   }
 
-  @Override
-  public void onBackPressed() {
-    BaseFragment currentFragment = getCurrentFragment();
-    if (currentFragment.isSearchVisible()) {
-      currentFragment.dismissSearch();
-    } else {
-      boolean handled = currentFragment.onBackPressed();
-      if (!handled) {
-        super.onBackPressed();
-      }
-      if (!PrefsUtil.isServerUrlEmpty(sharedPrefs)) {
-        binding.bottomAppBar.performShow();
-      }
+  public void performOnBackPressed() {
+    if (dispatcher == null) {
+      dispatcher = getOnBackPressedDispatcher();
     }
-    hideKeyboard();
+    dispatcher.onBackPressed();
   }
 
   @Override
@@ -676,7 +547,10 @@ public class MainActivity extends AppCompatActivity {
   public void showKeyboard(EditText editText) {
     editText.requestFocus();
     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-    imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+    new Handler().postDelayed(
+        () -> imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT),
+        50
+    );
   }
 
   public void hideKeyboard() {
@@ -763,6 +637,13 @@ public class MainActivity extends AppCompatActivity {
     }
     ViewUtil.startIcon(view);
   }
+
+  @Override
+  public boolean dispatchTouchEvent(MotionEvent event) {
+    boolean dispatch = getCurrentFragment().dispatchTouchEvent(event);
+    return dispatch || super.dispatchTouchEvent(event);
+  }
+
 
   public void setHapticEnabled(boolean enabled) {
     hapticUtil.setEnabled(enabled);

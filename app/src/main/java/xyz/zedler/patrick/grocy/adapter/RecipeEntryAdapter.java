@@ -22,52 +22,41 @@ package xyz.zedler.patrick.grocy.adapter;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.drawable.Drawable;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestBuilder;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.color.ColorRoles;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.RowRecipeEntryBinding;
 import xyz.zedler.patrick.grocy.databinding.RowRecipeEntryGridBinding;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesFields;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
+import xyz.zedler.patrick.grocy.model.Userfield;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
+import xyz.zedler.patrick.grocy.util.ChipUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
-import xyz.zedler.patrick.grocy.util.ResUtil;
-import xyz.zedler.patrick.grocy.util.UiUtil;
+import xyz.zedler.patrick.grocy.util.PictureUtil;
+import xyz.zedler.patrick.grocy.viewmodel.RecipesViewModel;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class RecipeEntryAdapter extends
@@ -80,6 +69,7 @@ public class RecipeEntryAdapter extends
   private final LayoutManager layoutManager;
   private final ArrayList<Recipe> recipes;
   private final ArrayList<RecipeFulfillment> recipeFulfillments;
+  private final HashMap<String, Userfield> userfieldHashMap;
   private final RecipesItemAdapterListener listener;
   private final GrocyApi grocyApi;
   private final LazyHeaders grocyAuthHeaders;
@@ -87,34 +77,29 @@ public class RecipeEntryAdapter extends
   private boolean sortAscending;
   private final List<String> activeFields;
   private final int maxDecimalPlacesAmount;
+  private final String energyUnit;
   private boolean containsPictures;
-  private RecyclerView recyclerView;
 
   public RecipeEntryAdapter(
       Context context,
       LayoutManager layoutManager,
-      ArrayList<Recipe> recipes,
-      ArrayList<RecipeFulfillment> recipeFulfillments,
-      RecipesItemAdapterListener listener,
-      String sortMode,
-      boolean sortAscending,
-      List<String> activeFields
+      RecipesItemAdapterListener listener
   ) {
     this.context = context;
     this.layoutManager = layoutManager;
-    this.recipes = new ArrayList<>(recipes);
-    this.recipeFulfillments = new ArrayList<>(recipeFulfillments);
+    this.recipes = new ArrayList<>();
+    this.recipeFulfillments = new ArrayList<>();
+    this.userfieldHashMap = new HashMap<>();
     this.listener = listener;
     this.grocyApi = new GrocyApi((Application) context.getApplicationContext());
     this.grocyAuthHeaders = RequestHeaders.getGlideGrocyAuthHeaders(context);
-    this.sortMode = sortMode;
-    this.sortAscending = sortAscending;
-    this.activeFields = new ArrayList<>(activeFields);
-    maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(context).getInt(
+    this.activeFields = new ArrayList<>();
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
         STOCK.DECIMAL_PLACES_AMOUNT,
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
     );
-
+    energyUnit = sharedPrefs.getString(PREF.ENERGY_UNIT, PREF.ENERGY_UNIT_DEFAULT);
     containsPictures = false;
     for (Recipe recipe : recipes) {
       String pictureFileName = recipe.getPictureFileName();
@@ -213,146 +198,62 @@ public class RecipeEntryAdapter extends
 
     title.setText(recipe.getName());
 
+    ChipUtil chipUtil = new ChipUtil(context);
     chips.removeAllViews();
 
-    ColorRoles colorGreen = ResUtil.getHarmonizedRoles(context, R.color.green);
-    ColorRoles colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
-    ColorRoles colorRed = ResUtil.getHarmonizedRoles(context, R.color.red);
-
-    if (activeFields.contains(FilterChipLiveDataRecipesFields.FIELD_DUE_SCORE)
+    if (activeFields.contains(RecipesViewModel.FIELD_DUE_SCORE)
         && recipeFulfillment != null) {
-
-      // DUE SCORE
-      int due_score = recipeFulfillment.getDueScore();
-
-      Chip dueScoreChip;
-      if (due_score == 0) {
-        dueScoreChip = createChip(context, context.getString(
-            R.string.subtitle_recipe_due_score,
-            String.valueOf(recipeFulfillment.getDueScore())
-        ), -1);
-      } else if (due_score <= 10) {
-        dueScoreChip = createChip(context, context.getString(
-            R.string.subtitle_recipe_due_score,
-            String.valueOf(recipeFulfillment.getDueScore())
-        ), colorYellow.getOnAccentContainer());
-        dueScoreChip.setChipBackgroundColor(
-            ColorStateList.valueOf(colorYellow.getAccentContainer()));
-      } else {
-        dueScoreChip = createChip(context, context.getString(
-            R.string.subtitle_recipe_due_score,
-            String.valueOf(recipeFulfillment.getDueScore())
-        ), colorRed.getOnAccentContainer());
-        dueScoreChip.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getAccentContainer()));
-      }
-      chips.addView(dueScoreChip);
+      chips.addView(chipUtil.createRecipeDueScoreChip(recipeFulfillment.getDueScore()));
     }
-
-    if (activeFields.contains(FilterChipLiveDataRecipesFields.FIELD_FULFILLMENT)
+    if (activeFields.contains(RecipesViewModel.FIELD_FULFILLMENT)
         && recipeFulfillment != null) {
-
-      // REQUIREMENTS FULFILLED
-      Chip chipFulfillment;
-      if (recipeFulfillment.isNeedFulfilled()) {
-        textFulfillment = context.getString(R.string.msg_recipes_enough_in_stock);
-        chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorGreen.getOnAccentContainer());
-        chipFulfillment.setCloseIcon(
-            ContextCompat.getDrawable(context, R.drawable.ic_round_check_circle_outline)
-        );
-        chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorGreen.getOnAccentContainer()));
-        chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorGreen.getAccentContainer()));
-      } else if (recipeFulfillment.isNeedFulfilledWithShoppingList()) {
-        textFulfillment = context.getString(R.string.msg_recipes_not_enough) + "\n"
-            + context.getResources()
-            .getQuantityString(R.plurals.msg_recipes_ingredients_missing_but_on_shopping_list,
-                recipeFulfillment.getMissingProductsCount(),
-                recipeFulfillment.getMissingProductsCount());
-        chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorYellow.getOnAccentContainer());
-        chipFulfillment.setCloseIcon(
-            ContextCompat.getDrawable(context, R.drawable.ic_round_error_outline)
-        );
-        chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorYellow.getOnAccentContainer()));
-        chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorYellow.getAccentContainer()));
-      } else {
-        textFulfillment = context.getString(R.string.msg_recipes_not_enough) + "\n"
-            + context.getResources()
-            .getQuantityString(R.plurals.msg_recipes_ingredients_missing,
-                recipeFulfillment.getMissingProductsCount(),
-                recipeFulfillment.getMissingProductsCount());
-        chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorRed.getOnAccentContainer());
-        chipFulfillment.setCloseIcon(
-            ContextCompat.getDrawable(context, R.drawable.ic_round_highlight_off)
-        );
-        chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorRed.getOnAccentContainer()));
-        chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getAccentContainer()));
-      }
-      chipFulfillment.setCloseIconStartPadding(UiUtil.dpToPx(context, 4));
-      chipFulfillment.setCloseIconVisible(true);
-      chips.addView(chipFulfillment);
-      String finalTextFulfillment = textFulfillment;
-      chipFulfillment.setOnClickListener(v -> {
-        new MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_Grocy_AlertDialog)
-            .setTitle(R.string.property_requirements_fulfilled)
-            .setMessage(finalTextFulfillment)
-            .setPositiveButton(R.string.action_close, (dialog, which) -> dialog.dismiss())
-            .create().show();
-      });
+      chips.addView(chipUtil.createRecipeFulfillmentChip(recipeFulfillment));
     }
-
-    if (activeFields.contains(FilterChipLiveDataRecipesFields.FIELD_CALORIES)
+    if (activeFields.contains(RecipesViewModel.FIELD_CALORIES)
         && recipeFulfillment != null) {
-      chips.addView(createChip(context, NumUtil.trimAmount(
+      chips.addView(chipUtil.createTextChip(NumUtil.trimAmount(
           recipeFulfillment.getCalories(), maxDecimalPlacesAmount
-      ) + " kcal", -1)); // TODO: UNIT
+      ) + " " + energyUnit));
     }
-
-    if (activeFields.contains(FilterChipLiveDataRecipesFields.FIELD_DESIRED_SERVINGS)
+    if (activeFields.contains(RecipesViewModel.FIELD_DESIRED_SERVINGS)
         && recipeFulfillment != null) {
-      chips.addView(createChip(
-          context,
+      chips.addView(chipUtil.createTextChip(
           context.getString(R.string.property_servings_desired_insert, NumUtil.trimAmount(
           recipe.getDesiredServings(), maxDecimalPlacesAmount
-          )),
-          -1
+          ))
       ));
+    }
+    for (String activeField : activeFields) {
+      if (activeField.startsWith(Userfield.NAME_PREFIX)) {
+        String userfieldName = activeField.substring(
+            Userfield.NAME_PREFIX.length()
+        );
+        Userfield userfield = userfieldHashMap.get(userfieldName);
+        if (userfield == null) continue;
+        Chip chipUserfield = chipUtil.createUserfieldChip(
+            userfield,
+            recipe.getUserfields().get(userfieldName)
+        );
+        if (chipUserfield != null) chips.addView(chipUserfield);
+      }
     }
 
     chips.setVisibility(chips.getChildCount() > 0 ? View.VISIBLE : View.GONE);
 
     String pictureFileName = recipe.getPictureFileName();
-    if (activeFields.contains(FilterChipLiveDataRecipesFields.FIELD_PICTURE)
+    if (activeFields.contains(RecipesViewModel.FIELD_PICTURE)
         && pictureFileName != null && !pictureFileName.isEmpty()) {
       picture.layout(0, 0, 0, 0);
 
-      RequestBuilder<Drawable> requestBuilder = Glide.with(context).load(new GlideUrl(grocyApi.getRecipePicture(pictureFileName), grocyAuthHeaders));
-      requestBuilder = requestBuilder
-          .transform(new CenterCrop())
-          .transition(DrawableTransitionOptions.withCrossFade());
-      if (viewHolder instanceof RecipeGridViewHolder) {
-        requestBuilder = requestBuilder.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
-      }
-      MaterialCardView finalPicturePlaceholder = picturePlaceholder;
-      requestBuilder.listener(new RequestListener<>() {
-            @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                Target<Drawable> target, boolean isFirstResource) {
-              picture.setVisibility(View.GONE);
-              if (finalPicturePlaceholder != null) {
-                finalPicturePlaceholder.setVisibility(View.VISIBLE);
-              }
-              return false;
-            }
-            @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
-                DataSource dataSource, boolean isFirstResource) {
-              picture.setVisibility(View.VISIBLE);
-              if (finalPicturePlaceholder != null) {
-                finalPicturePlaceholder.setVisibility(View.GONE);
-              }
-              return false;
-            }
-          }).into(picture);
-    } else if (activeFields.contains(FilterChipLiveDataRecipesFields.FIELD_PICTURE)
+      PictureUtil.loadPicture(
+          picture,
+          null,
+          picturePlaceholder,
+          grocyApi.getRecipePictureServeSmall(pictureFileName),
+          grocyAuthHeaders,
+          viewHolder instanceof RecipeGridViewHolder
+      );
+    } else if (activeFields.contains(RecipesViewModel.FIELD_PICTURE)
         && containsPictures && viewHolder instanceof RecipeViewHolder) {
       picture.setVisibility(View.GONE);
       picturePlaceholder.setVisibility(View.VISIBLE);
@@ -366,34 +267,6 @@ public class RecipeEntryAdapter extends
     container.setOnClickListener(
         view -> listener.onItemRowClicked(recipe)
     );
-
-    // DIVIDER
-
-    if (layoutManager instanceof LinearLayoutManager
-        && viewHolder instanceof RecipeViewHolder) {
-      ((RecipeViewHolder) viewHolder).binding.divider.setVisibility(
-          position < recipes.size()-1 ? View.VISIBLE : View.GONE
-      );
-    }
-
-  }
-
-  private static Chip createChip(Context ctx, String text, int textColor) {
-    @SuppressLint("InflateParams")
-    Chip chip = (Chip) LayoutInflater.from(ctx)
-        .inflate(R.layout.view_info_chip, null, false);
-
-    chip.setText(text);
-    if (textColor != -1) {
-      chip.setTextColor(textColor);
-    }
-    return chip;
-  }
-
-  @Override
-  public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
-    super.onAttachedToRecyclerView(recyclerView);
-    this.recyclerView = recyclerView;
   }
 
   @Override
@@ -409,9 +282,11 @@ public class RecipeEntryAdapter extends
   public void updateData(
       ArrayList<Recipe> newList,
       ArrayList<RecipeFulfillment> newRecipeFulfillments,
+      HashMap<String, Userfield> newUserfieldHashMap,
       String sortMode,
       boolean sortAscending,
-      List<String> activeFields
+      List<String> activeFields,
+      Runnable onListFilled
   ) {
 
     RecipeEntryAdapter.DiffCallback diffCallback = new RecipeEntryAdapter.DiffCallback(
@@ -419,6 +294,8 @@ public class RecipeEntryAdapter extends
         newList,
         this.recipeFulfillments,
         newRecipeFulfillments,
+        this.userfieldHashMap,
+        newUserfieldHashMap,
         this.sortMode,
         sortMode,
         this.sortAscending,
@@ -426,11 +303,18 @@ public class RecipeEntryAdapter extends
         this.activeFields,
         activeFields
     );
+
+    if (onListFilled != null && !newList.isEmpty() && recipes.isEmpty()) {
+      onListFilled.run();
+    }
+
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.recipes.clear();
     this.recipes.addAll(newList);
     this.recipeFulfillments.clear();
     this.recipeFulfillments.addAll(newRecipeFulfillments);
+    this.userfieldHashMap.clear();
+    this.userfieldHashMap.putAll(newUserfieldHashMap);
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
     this.activeFields.clear();
@@ -444,6 +328,8 @@ public class RecipeEntryAdapter extends
     ArrayList<Recipe> newItems;
     ArrayList<RecipeFulfillment> oldRecipeFulfillments;
     ArrayList<RecipeFulfillment> newRecipeFulfillments;
+    HashMap<String, Userfield> oldUserfieldHashMap;
+    HashMap<String, Userfield> newUserfieldHashMap;
     String sortModeOld;
     String sortModeNew;
     boolean sortAscendingOld;
@@ -456,6 +342,8 @@ public class RecipeEntryAdapter extends
         ArrayList<Recipe> newItems,
         ArrayList<RecipeFulfillment> oldRecipeFulfillments,
         ArrayList<RecipeFulfillment> newRecipeFulfillments,
+        HashMap<String, Userfield> oldUserfieldHashMap,
+        HashMap<String, Userfield> newUserfieldHashMap,
         String sortModeOld,
         String sortModeNew,
         boolean sortAscendingOld,
@@ -467,6 +355,8 @@ public class RecipeEntryAdapter extends
       this.newItems = newItems;
       this.oldRecipeFulfillments = oldRecipeFulfillments;
       this.newRecipeFulfillments = newRecipeFulfillments;
+      this.oldUserfieldHashMap = oldUserfieldHashMap;
+      this.newUserfieldHashMap = newUserfieldHashMap;
       this.sortModeOld = sortModeOld;
       this.sortModeNew = sortModeNew;
       this.sortAscendingOld = sortAscendingOld;
@@ -499,13 +389,13 @@ public class RecipeEntryAdapter extends
       Recipe newItem = newItems.get(newItemPos);
       Recipe oldItem = oldItems.get(oldItemPos);
 
-      if (!sortModeOld.equals(sortModeNew)) {
-        return false;
-      }
-      if (sortAscendingOld != sortAscendingNew) {
-        return false;
+      if (!compareContent) {
+        return newItem.getId() == oldItem.getId();
       }
       if (!ArrayUtil.areListsEqualIgnoreOrder(activeFieldsOld, activeFieldsNew)) {
+        return false;
+      }
+      if (!oldUserfieldHashMap.equals(newUserfieldHashMap)) {
         return false;
       }
 
@@ -515,10 +405,6 @@ public class RecipeEntryAdapter extends
           || recipeFulfillmentOld != null && recipeFulfillmentNew == null
           || recipeFulfillmentOld != null && !recipeFulfillmentOld.equals(recipeFulfillmentNew)) {
         return false;
-      }
-
-      if (!compareContent) {
-        return newItem.getId() == oldItem.getId();
       }
 
       return newItem.equalsForListDiff(oldItem);

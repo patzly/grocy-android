@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.model;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -36,16 +37,18 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.database.Converters;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
+import xyz.zedler.patrick.grocy.web.NetworkQueue.QueueItem;
 
 @Entity(tableName = "quantity_unit_table")
 public class QuantityUnit implements Parcelable {
@@ -71,6 +74,14 @@ public class QuantityUnit implements Parcelable {
   @SerializedName("plural_forms")
   private String pluralForms;
 
+  @ColumnInfo(name = "userfields")
+  @SerializedName("userfields")
+  private Map<String, String> userfields;
+
+  @ColumnInfo(name = "row_created_timestamp")
+  @SerializedName("row_created_timestamp")
+  private String rowCreatedTimestamp;
+
   public QuantityUnit() {
   }
 
@@ -87,6 +98,8 @@ public class QuantityUnit implements Parcelable {
     description = parcel.readString();
     namePlural = parcel.readString();
     pluralForms = parcel.readString();
+    userfields = Converters.stringToMap(parcel.readString());
+    rowCreatedTimestamp = parcel.readString();
   }
 
   @Override
@@ -96,6 +109,8 @@ public class QuantityUnit implements Parcelable {
     dest.writeString(description);
     dest.writeString(namePlural);
     dest.writeString(pluralForms);
+    dest.writeString(Converters.mapToString(userfields));
+    dest.writeString(rowCreatedTimestamp);
   }
 
   public static final Creator<QuantityUnit> CREATOR = new Creator<>() {
@@ -153,6 +168,22 @@ public class QuantityUnit implements Parcelable {
 
   public void setPluralForms(String pluralForms) {
     this.pluralForms = pluralForms;
+  }
+
+  public Map<String, String> getUserfields() {
+    return userfields;
+  }
+
+  public void setUserfields(Map<String, String> userfields) {
+    this.userfields = userfields;
+  }
+
+  public String getRowCreatedTimestamp() {
+    return rowCreatedTimestamp;
+  }
+
+  public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
+    this.rowCreatedTimestamp = rowCreatedTimestamp;
   }
 
   public static QuantityUnit getFromId(List<QuantityUnit> quantityUnits, int quantityUnitId) {
@@ -253,14 +284,16 @@ public class QuantityUnit implements Parcelable {
     };
   }
 
+  @SuppressLint("CheckResult")
   public static QueueItem updateQuantityUnits(
       DownloadHelper dlHelper,
       String dbChangedTime,
+      boolean forceUpdate,
       OnObjectsResponseListener<QuantityUnit> onResponseListener
   ) {
-    String lastTime = dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
+    String lastTime = !forceUpdate ? dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null
-    );
+    ) : null;
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
       return new QueueItem() {
         @Override
@@ -289,11 +322,6 @@ public class QuantityUnit implements Parcelable {
                 })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError(throwable -> {
-                      if (errorListener != null) {
-                        errorListener.onError(throwable);
-                      }
-                    })
                     .doFinally(() -> {
                       if (onResponseListener != null) {
                         onResponseListener.onResponse(quantityUnits);
@@ -302,7 +330,11 @@ public class QuantityUnit implements Parcelable {
                         responseListener.onResponse(response);
                       }
                     })
-                    .subscribe();
+                    .subscribe(ignored -> {}, throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    });
               },
               error -> {
                 if (errorListener != null) {

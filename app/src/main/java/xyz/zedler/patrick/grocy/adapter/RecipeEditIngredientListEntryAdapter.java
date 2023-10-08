@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,11 +40,10 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowRecipeEditListEntryBinding;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
-import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
 
 public class RecipeEditIngredientListEntryAdapter extends
     RecyclerView.Adapter<RecipeEditIngredientListEntryAdapter.ViewHolder> {
@@ -56,7 +56,7 @@ public class RecipeEditIngredientListEntryAdapter extends
   private final ArrayList<RecipePosition> recipePositions;
   private final ArrayList<Product> products;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-  private final List<QuantityUnitConversion> unitConversions;
+  private final List<QuantityUnitConversionResolved> unitConversions;
   private final RecipeEditIngredientListEntryAdapterListener listener;
 
   private final PluralUtil pluralUtil;
@@ -65,18 +65,14 @@ public class RecipeEditIngredientListEntryAdapter extends
   public RecipeEditIngredientListEntryAdapter(
       Context context,
       LinearLayoutManager linearLayoutManager,
-      ArrayList<RecipePosition> recipePositions,
-      ArrayList<Product> products,
-      HashMap<Integer, QuantityUnit> quantityUnitHashMap,
-      List<QuantityUnitConversion> unitConversions,
       RecipeEditIngredientListEntryAdapterListener listener
   ) {
     this.context = context;
     this.linearLayoutManager = linearLayoutManager;
-    this.recipePositions = new ArrayList<>(recipePositions);
-    this.products = new ArrayList<>(products);
-    this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
-    this.unitConversions = new ArrayList<>(unitConversions);
+    this.recipePositions = new ArrayList<>();
+    this.products = new ArrayList<>();
+    this.quantityUnitHashMap = new HashMap<>();
+    this.unitConversions = new ArrayList<>();
     this.listener = listener;
     this.pluralUtil = new PluralUtil(context);
     maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(context).getInt(
@@ -127,22 +123,19 @@ public class RecipeEditIngredientListEntryAdapter extends
 
     RecipePosition recipePosition = recipePositions.get(position);
     Product product = Product.getProductFromId(products, recipePosition.getProductId());
-    QuantityUnit quantityUnit = quantityUnitHashMap.get(recipePosition.getQuantityUnitId());
-
-    if (product == null || quantityUnit == null)
-      return;
+    if (product == null) return;
+    @Nullable QuantityUnit quantityUnit = quantityUnitHashMap.get(recipePosition.getQuantityUnitId());
 
     holder.binding.title.setText(product.getName());
 
-    if (recipePosition.getVariableAmount() == null || recipePosition.getVariableAmount().isEmpty()) {
+    if (quantityUnit != null && (recipePosition.getVariableAmount() == null
+        || recipePosition.getVariableAmount().isEmpty())) {
       double amount = recipePosition.getAmount();
       if (!recipePosition.isOnlyCheckSingleUnitInStock()) {
-        try {
-          HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil
-              .getUnitFactors(context, quantityUnitHashMap, unitConversions, product);
-          amount = QuantityUnitConversionUtil.getAmountRelativeToUnit(unitFactors, product, quantityUnit, amount);
-        } catch (IllegalArgumentException ignored) {
-        }
+        QuantityUnitConversionResolved conversionResolved = QuantityUnitConversionResolved
+            .findConversion(unitConversions, product.getId(), product.getQuIdStockInt(),
+                recipePosition.getQuantityUnitId());
+        if (conversionResolved != null) amount *= conversionResolved.getFactor();
       }
       holder.binding.quantity.setText(
           context.getString(
@@ -152,7 +145,7 @@ public class RecipeEditIngredientListEntryAdapter extends
           )
       );
       holder.binding.variableAmount.setVisibility(View.GONE);
-    } else {
+    } else if (quantityUnit != null) {
       holder.binding.quantity.setText(
           context.getString(
               R.string.subtitle_amount,
@@ -161,6 +154,9 @@ public class RecipeEditIngredientListEntryAdapter extends
           )
       );
       holder.binding.variableAmount.setVisibility(View.VISIBLE);
+    } else {
+      holder.binding.quantity.setText(context.getString(R.string.error_loading_qus));
+      holder.binding.variableAmount.setVisibility(View.GONE);
     }
 
     holder.binding.linearRecipeIngredientContainer.setOnClickListener(
@@ -178,22 +174,44 @@ public class RecipeEditIngredientListEntryAdapter extends
     void onItemRowClicked(RecipePosition recipePosition, int position);
   }
 
+  public RecipePosition getEntryForPos(int position) {
+    if (position < 0 || position >= recipePositions.size()) {
+      return null;
+    }
+    return recipePositions.get(position);
+  }
+
   public void updateData(
       ArrayList<RecipePosition> newList,
-      ArrayList<Product> newProducts
+      ArrayList<Product> newProducts,
+      HashMap<Integer, QuantityUnit> newQuantityUnitHashMap,
+      List<QuantityUnitConversionResolved> newUnitConversions,
+      Runnable onListFilled
   ) {
-
     RecipeEditIngredientListEntryAdapter.DiffCallback diffCallback = new RecipeEditIngredientListEntryAdapter.DiffCallback(
         this.recipePositions,
         newList,
         this.products,
-        newProducts
+        newProducts,
+        this.quantityUnitHashMap,
+        newQuantityUnitHashMap,
+        this.unitConversions,
+        newUnitConversions
     );
+
+    if (onListFilled != null && !newList.isEmpty() && recipePositions.isEmpty()) {
+      onListFilled.run();
+    }
+
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.recipePositions.clear();
     this.recipePositions.addAll(newList);
     this.products.clear();
     this.products.addAll(newProducts);
+    this.quantityUnitHashMap.clear();
+    this.quantityUnitHashMap.putAll(newQuantityUnitHashMap);
+    this.unitConversions.clear();
+    this.unitConversions.addAll(newUnitConversions);
     diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this, linearLayoutManager));
   }
 
@@ -203,17 +221,29 @@ public class RecipeEditIngredientListEntryAdapter extends
     ArrayList<RecipePosition> newItems;
     ArrayList<Product> oldProducts;
     ArrayList<Product> newProducts;
+    HashMap<Integer, QuantityUnit> oldQuantityUnitHashMap;
+    HashMap<Integer, QuantityUnit> newQuantityUnitHashMap;
+    List<QuantityUnitConversionResolved> oldUnitConversions;
+    List<QuantityUnitConversionResolved> newUnitConversions;
 
     public DiffCallback(
         ArrayList<RecipePosition> oldItems,
         ArrayList<RecipePosition> newItems,
         ArrayList<Product> oldProducts,
-        ArrayList<Product> newProducts
+        ArrayList<Product> newProducts,
+        HashMap<Integer, QuantityUnit> oldQuantityUnitHashMap,
+        HashMap<Integer, QuantityUnit> newQuantityUnitHashMap,
+        List<QuantityUnitConversionResolved> oldUnitConversions,
+        List<QuantityUnitConversionResolved> newUnitConversions
     ) {
       this.oldItems = oldItems;
       this.newItems = newItems;
       this.oldProducts = oldProducts;
       this.newProducts = newProducts;
+      this.oldQuantityUnitHashMap = oldQuantityUnitHashMap;
+      this.newQuantityUnitHashMap = newQuantityUnitHashMap;
+      this.oldUnitConversions = oldUnitConversions;
+      this.newUnitConversions = newUnitConversions;
     }
 
     @Override
@@ -245,8 +275,14 @@ public class RecipeEditIngredientListEntryAdapter extends
       if (!compareContent) {
         return newItem.getId() == oldItem.getId();
       }
-
-      if (newItemProduct == null || oldItemProduct == null || !newItemProduct.equals(oldItemProduct)) {
+      if (newItemProduct == null || !newItemProduct.equals(oldItemProduct)) {
+        return false;
+      }
+      if (newItem.getQuantityUnitId() != oldItem.getQuantityUnitId()) {
+        return false;
+      }
+      if (!newQuantityUnitHashMap.equals(oldQuantityUnitHashMap)
+          || !newUnitConversions.equals(oldUnitConversions)) {
         return false;
       }
 

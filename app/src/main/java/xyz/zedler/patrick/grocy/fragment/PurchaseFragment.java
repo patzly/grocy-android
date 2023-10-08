@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -56,6 +57,7 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
+import xyz.zedler.patrick.grocy.util.ClickUtil.InactivityUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
@@ -74,6 +76,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   private EmbeddedFragmentScanner embeddedFragmentScanner;
   private PluralUtil pluralUtil;
   private Boolean backFromChooseProductPage;
+  private InactivityUtil inactivityUtil;
 
   @Override
   public View onCreateView(
@@ -123,6 +126,16 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
+    if (args.getStartWithScanner() && viewModel.isQuickModeReturnEnabled()
+        && viewModel.isTurnOnQuickModeEnabled()) {
+      inactivityUtil = new InactivityUtil(getLifecycle(), util -> viewModel.showMessageWithAction(
+          R.string.msg_returning_to_overview,
+          R.string.action_cancel,
+          util::stopTimer,
+          5
+      ), this::navigateUp, 20);
+    }
+
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
 
     // INITIALIZE VIEWS
@@ -137,9 +150,6 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
-    );
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isDownloading ->
-        binding.swipe.setRefreshing(isDownloading)
     );
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -341,6 +351,15 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   }
 
   @Override
+  public boolean dispatchTouchEvent(MotionEvent event) {
+    if (inactivityUtil != null && (event.getAction() == MotionEvent.ACTION_DOWN
+        || event.getAction() == MotionEvent.ACTION_UP)) {
+      inactivityUtil.resetTimer();
+    }
+    return false;
+  }
+
+  @Override
   public void onBarcodeRecognized(String rawValue) {
     clearInputFocus();
     if (!viewModel.isQuickModeEnabled()) {
@@ -370,10 +389,14 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   }
 
   @Override
-  public void selectStore(Store store) {
-    viewModel.getFormData().getStoreLive().setValue(
-        store == null || store.getId() == -1 ? null : store
-    );
+  public void selectStore(Store store, boolean pinClicked) {
+    if (pinClicked) {
+      if (store != null) viewModel.getFormData().setPinnedStoreId(store.getId());
+    } else {
+      viewModel.getFormData().getStoreLive().setValue(
+          store == null || store.getId() == -1 ? null : store
+      );
+    }
   }
 
   @Override

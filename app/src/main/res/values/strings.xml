@@ -101,6 +101,9 @@
   <string name="action_open_scanner">Open scanner</string>
   <string name="action_discard">Discard</string>
   <string name="action_clear_form">Clear form</string>
+  <string name="action_take_photo">Take photo</string>
+  <!-- "Paste" like in "Paste from clipboard" -->
+  <string name="action_paste">Paste</string>
   <!-- Short form for "Only link barcode to existing product", this should fit into a
   button so keep it short. -->
   <string name="action_link_and_clear">Link only</string>
@@ -126,6 +129,7 @@
   <string name="action_demo_server">Demo server</string>
   <string name="action_own_server">Own server</string>
   <string name="action_enter_data_manually">Enter data manually</string>
+  <string name="action_settings_backup_restore">Backup or restore settings</string>
   <string name="action_details">Details</string>
   <string name="action_perform">Perform action</string>
   <!-- Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
@@ -136,10 +140,19 @@
   <string name="action_share_description">Tell your friends about Grocy Android</string>
   <string name="action_no_filter">No filter</string>
   <string name="action_show_done_tasks">Show done tasks</string>
-  <string name="action_track_chore_execution">Track chore execution</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_chore_execution">Track chore execution now</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_next_chore_schedule">Track next chore schedule</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_skip_next_chore_schedule">Skip next chore schedule</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Reschedule next execution</string>
   <string name="action_put_missing_products_on_shopping_list">Put missing products on shopping list</string>
+  <!-- This is the action part of "Backup to file" or "Backup data" -->
+  <string name="action_backup">Backup</string>
+  <!-- This is the action part of "Restore from file" or "Restore data" -->
+  <string name="action_restore">Restore</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -187,6 +200,11 @@
   <string name="msg_consumed_spoiled">Consumed %1$s %2$s of %3$s as spoiled</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Mark %1$s %2$s of %3$s as opened</string>
+  <!-- %1$s is the number of servings of a recipe. -->
+  <plurals name="msg_servings">
+    <item quantity="one">%1$s serving</item>
+    <item quantity="other">%1$s servings</item>
+  </plurals>
   <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
   <plurals name="msg_undone_items">
     <item quantity="one">%1$d undone</item>
@@ -221,6 +239,16 @@
   <plurals name="msg_overdue_tasks">
     <item quantity="one">%1$d overdue</item>
     <item quantity="other">%1$d overdue</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_short">
+    <item quantity="one">%1$d due</item>
+    <item quantity="other">%1$d due</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_long">
+    <item quantity="one">%1$d due (all below)</item>
+    <item quantity="other">%1$d due (all below)</item>
   </plurals>
   <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
   <plurals name="msg_assigned_tasks">
@@ -262,6 +290,7 @@
   <!-- %1$s is a product name -->
   <string name="msg_no_stock_entries">No stock entries for %1$s</string>
   <string name="msg_not_found">Product not found</string>
+  <string name="msg_returning_to_overview">Going back to overview page in a few seconds</string>
   <string name="msg_editor_hint">Write text here</string>
   <string name="msg_coming_soon">This feature will be available soon</string>
   <string name="msg_undo_transaction">Undo transaction?</string>
@@ -299,6 +328,7 @@
   <string name="msg_item_marked_as_undone">Marked item as undone</string>
   <string name="option_synced_success">Option synced successfully</string>
   <string name="option_synced_error">Option could not be synced</string>
+  <string name="msg_data_copied_from_product">Data was copied from the product \"%1$s\".</string>
   <string name="msg_recipe_added_to_cart">Added recipe ingredients to cart</string>
   <string name="msg_recipe_consumed">Removed all ingredients of recipe \"%1$s\" from stock</string>
   <string name="msg_stored_purchases_overview">There are purchases on the device that have not yet been transferred to the server. Tap here for details.</string>
@@ -326,30 +356,38 @@
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">Transaction which will be executed:\n\nSet stock amount of %1$s to %2$s %3$s\nApply for added items:\nDue date: %4$s\nPrice: %5$s\nStore: %6$s\nLocation: %7$s</string>
   <string name="msg_quantity_unit_plurals" translatable="false">The plural rules of the current language are not implemented, so maybe a field is missing here where you can enter additional plural forms. You can help translating this app into your language on Transifex (link on our GitHub page) and as soon as your language reaches 80% we will add its plural rules.</string>
-  <string name="msg_compatibility">This app version is not compatible with the grocy version on the server.\n\nCurrent server version: %1$s\n\nSupported server versions:\n%2$s\nIf the current server version has a higher major version number (first digit) than the supported versions and you ignore this warning, data loss (unlikely) or crashes (likely) may occur.\nIf there is only a minor difference (e.g. third digit is higher) you can probably ignore this warning.</string>
+  <string name="msg_compatibility">This app version is not compatible with the Grocy version on the server.\n\nCurrent server version: %1$s\n\nSupported server versions:\n%2$s\nIf the current server version has a higher major version number (first digit) than the supported versions and you ignore this warning, data loss (unlikely) or crashes (likely) may occur.\nIf there is only a minor difference (e.g. third digit is higher) you can probably ignore this warning.</string>
   <string name="msg_logout">Nothing on your server will be changed. You will be redirected to the login page.</string>
   <string name="msg_logout_demo">You\'re using the public demo server <u>https://grocy.info</u>.\n\n<b>None of your changes here are saved forever!\nThey remain public until the server automatically overwrites them once a day.</b>\n\nOn the login screen you can enter your own server address.</string>
   <string name="msg_logout_demo_short">Public demo server. Tap for details.</string>
   <string name="msg_restart">The app must be restarted to apply the current configuration. Do you want to restart it now?</string>
   <string name="msg_full_description">Tap here to show the full description.</string>
+  <string name="msg_copied_clipboard">Copied to clipboard</string>
   <string name="msg_shortcuts">You can enable up to 4 shortcuts:</string>
   <string name="msg_shortcuts_not_supported">Shortcuts are not supported on this Android version.</string>
   <string name="msg_barcode_formats">You can improve the speed of the barcode detector by configuring it to only detect those formats which you expect to read.</string>
   <string name="msg_features">Start intro again in \"About\"</string>
   <string name="msg_feedback">Do you have any wishes, questions or errors? Contact us and let us help!\nOtherwise we would be very happy about a nice review in the Play Store.</string>
   <string name="msg_point_at_barcode">Point your camera at a barcode</string>
+  <string name="msg_save_product_first">Please save the product first</string>
+  <string name="msg_save_recipe_first">Please save the recipe first</string>
+  <string name="msg_recipe_contains_nested_recipes">This recipe contains nested recipes.</string>
   <string name="msg_press_hold_confirm">Press and hold to confirm deletion</string>
   <string name="msg_recipe_consume_ask">Are you sure you want to consume all ingredients needed by the recipe for \"%1$s\"? (ingredients marked with \"only check if any amount is in stock\" will be ignored)</string>
   <string name="msg_recipe_shopping_list_ask">Are you sure you want to put all missing ingredients needed by the recipe for \"%1$s\" on the shopping list?\n\nUncheck ingredients to not put them on the shopping list:</string>
+  <string name="msg_settings_backup_restore">Here you can create or restore a backup of the app settings, e.g. to share it with other family members (file contains credentials like API-Key).\n\nAfter restoring, notifications might not work as desired and have to be restarted in the background in this app by turning the switches off and on again.\n\nIf there is incorrect data in the file being restored, the app might not work after that and the app data will have to be cleared.</string>
+  <string name="msg_settings_backup_success">Settings backup created successfully</string>
+  <string name="msg_settings_restore_success">Settings restored successfully, restarting app in 2 seconds</string>
   <string name="msg_welcome">Welcome to Grocy Android!</string>
-  <string name="msg_welcome_introduce">To use grocy productively you need your own server or the grocy add-on for Home Assistant.\nIf you just want to try out this app you can use the demo server from Bernd Bestel, the creator of grocy.</string>
+  <string name="msg_welcome_introduce">To use Grocy productively you need your own server or the Grocy add-on for Home Assistant.\nIf you just want to try out this app you can use the demo server from Bernd Bestel, the creator of grocy.</string>
   <string name="msg_choose_option_below">Please choose an option below.</string>
-  <string name="msg_qr_code_scan">On another device, visit your grocy website and go to \'API keys\' page. Click \'Add\', then click on the little QR code symbol and scan the QR code.</string>
-  <string name="msg_qr_code_scan_token">You\'re using the grocy Home Assistant add-on. Create a long-lived access token in your Home Assistant profile settings (last section). Below the token field, click on \"Generate QR code\" and scan it here.</string>
+  <string name="msg_qr_code_scan">On another device, visit your Grocy website and go to \'API keys\' page. Click \'Add\', then click on the little QR code symbol and scan the QR code.</string>
+  <string name="msg_qr_code_scan_token">You\'re using the Grocy Home Assistant add-on. Create a long-lived access token in your Home Assistant profile settings (last section). Below the token field, click on \"Generate QR code\" and scan it here.</string>
   <string name="msg_port_connection_info_without_port">The app will connect to port %1$s.\nIf you want it to connect to a different port, you can add one to the URL.\nExample: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">The app will connect to port %1$s.</string>
   <string name="msg_clear_form_first">Clear the form first before scanning another known barcode.</string>
   <string name="msg_not_implemented_yet">This will be implemented soon. Please use your server interface for now.</string>
+  <string name="msg_help_picture_changes">Changes to the image are synchronised with the server immediately, not only when saving!</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_stock_label_type">This is the default stock entry label type which will be prefilled on purchase.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -377,14 +415,23 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_stock">Quantity unit stock cannot be changed after first purchase.</string>
   <string name="msg_help_qu_stock_changeable">Quantity unit stock can only be changed if unit conversions for the current quantity unit exist.</string>
+  <string name="msg_help_qu_changeable">Quantity units can only be changed if unit conversions exist for them.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_qu_purchase">This is the default quantity unit used when adding this product to the shopping list.</string>
+  <string name="msg_help_qu_purchase">This is the default quantity unit used on purchase and when adding this product to the shopping list.</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_consume">This is the default quantity unit used when consuming this product.</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_price">When displaying prices for this product, they will be related to this quantity unit.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">If enabled, the min. stock amount of sub products will be accumulated into this product, means the sub product will never be \"missing\", only this product.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_treat_opened_as_out_of_stock">When enabled, opened items will be counted as missing for calculating if this product is below its minimum stock amount.</string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">This amount is used for the \"quick consume/open buttons\" on the stock overview page (related to quantity unit stock).</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_consume_amount_new">This amount is used for the \"quick consume button\" on the stock overview page (related to quantity unit stock).</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_open_amount">This amount is used for the \"quick open button\" on the stock overview page (related to quantity unit stock).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_tare_weight">Tare weight handling is useful e.g. for flour in jars - on purchase/consume/inventory you always weigh the whole jar, the amount to be posted is then automatically calculated based on what is in stock and the tare weight defined below.</string>
   <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -407,24 +454,36 @@
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_not_check_shopping_list">By default the amount to be added to the shopping list is \"needed amount - stock amount - shopping list amount\". When this is enabled, it is only checked against the stock amount, not against what is already on the shopping list.</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_servings">The ingredients of this recipe result in this amount of servings.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_produces_product">When a product is selected, one unit (per serving in stock quantity unit) will be added to stock on consuming this recipe.</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_only_check_any_amount">A different amount/unit can then be used below while for stock fulfillment checking it is sufficient when any amount of the product in stock.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_variable_amount">When this is not empty, it will be shown instead of the amount entered above while the amount there will still be used for stock fulfillment checking.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_group">This will be used as a headline to group ingredients together.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_price_factor">The resulting price of this ingredient will be multiplied by this factor.</string>
+  <string name="msg_help_recipe_ingredients_wrong">With Grocy server version below 4.0.0 this list can contain wrong fulfillment information. Please update your server to version 4.0.0 or later to see correct values.</string>
   <string name="msg_help_date_chooser">You can switch to keyboard input in settings, this could increase input speed for you.</string>
   <string name="msg_help_date_chooser_keyboard">You can activate reverse date format in settings if DDMMYY is preferred in your country.\nTo apply input and close this page you can use the Done key on your keyboard.</string>
+  <string name="msg_help_notifications_tap">Tap here if you do not receive notifications or receive them unreliably.</string>
+  <string name="msg_help_notifications">If you do not receive notifications, tap here to open the Android app info page and check if notifications are allowed and if power saving measures can be disabled. Android sometimes delivers notifications later than the set time to reduce battery consumption, which is normal behavior.</string>
+  <string name="msg_help_notifications_other">Do not remove the app from the overview with currently running apps, otherwise some manufacturers will delete the notification process.</string>
   <string name="msg_help_quick_mode">You can long tap on the title bar above to activate the quick mode. In this mode, a transaction will be executed immediately if a product has been entered or scanned and all fields could be automatically populated (by product and/or barcode defaults).</string>
   <string name="msg_help_loading_circle_settings">On each page where something has to be loaded from server, the app first checks with a tiny request whether the server database has changed since last time and only updates outdated data. Enable the option below to show a loading circle even for this tiny request.</string>
   <string name="msg_help_start">Beginner mode is active: Help texts are displayed by default on all pages if available. Tap to change.</string>
   <string name="msg_help_purchased_date_settings">If the option below is enabled, a field for purchased date will be displayed on purchase and inventory page. Otherwise the purchased date defaults to today.</string>
-  <string name="msg_help_normal_login">Tap on this card if you use Home Assistant with the grocy add-on.</string>
-  <string name="msg_help_home_assistant_login">You\'re using the grocy Home Assistant add-on. Therefore a few more details are required. Tap on this card to switch to normal login.</string>
+  <string name="msg_help_normal_login">Tap on this card if you use Home Assistant with the Grocy add-on.</string>
+  <string name="msg_help_home_assistant_login">You\'re using the Grocy Home Assistant add-on. Therefore a few more details are required. Tap on this card to switch to normal login.</string>
   <string name="msg_help_home_assistant_login_help_show">Tap here to show help texts.</string>
   <string name="msg_help_home_assistant_login_help_hide">Tap here to hide help texts.</string>
   <string name="msg_help_home_assistant_login_server">In the field below you can also enter your Nabu Casa cloud URL if you\'re using that service. Tap this card to visit the Nabu Casa website.</string>
   <string name="msg_help_home_assistant_login_token">You can create a long-lived access token in your Home Assistant profile settings (last section). Tap here to open the URL from above.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Navigate back or tap this card to scan a QR code which fills the fields below.</string>
   <string name="msg_help_fab_overview_start">The action button on this overview page has two actions:\n\n- Short tap: consume with barcode scanner\n- Long tap: purchase with barcode scanner\n\nWith this button the quick mode on the respective pages is turned on by default. You can change this in behavior settings.</string>
-  <string name="msg_share">Check out this Android client for the awesome grocy-project: \nhttps://github.com/patzly/grocy-android</string>
+  <string name="msg_share">Check out this Android client for the awesome Grocy project: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">API key not working</string>
   <string name="error_orbot_not_installed">Orbot is not installed</string>
@@ -461,9 +520,10 @@
   <string name="error_invalid_price">Invalid price</string>
   <string name="error_invalid_factor">Invalid factor</string>
   <string name="error_invalid_date_format">Invalid date format</string>
-  <string name="error_api_qr_code">Not a QR code with grocy API credentials</string>
+  <string name="error_api_qr_code">Not a QR code with Grocy API credentials</string>
   <string name="error_token_qr_code">Not a QR code with a long-lived access token from Home Assistant</string>
   <string name="error_loading_qus">Failed to load quantity units from product</string>
+  <string name="error_clipboard_no_image">Clipboard does not contain an image or it could not be read</string>
   <string name="error_no_children">The selected product has no children</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Cannot be equal to %1$s</string>
@@ -478,16 +538,15 @@
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">This page only works with internet access. Check your connection.</string>
   <string name="error_no_done_items">There are no items marked as done</string>
-  <string name="error_name_exists">Name already exists</string>
+  <string name="error_already_exists">Already exists</string>
   <string name="error_network">Network error</string>
   <string name="error_network_subtitle">The required data could not be loaded completely</string>
   <string name="error_network_exact">Network error: %1$s</string>
   <string name="error_database">Database error</string>
-  <string name="error_database_exact">Database error: %1$s</string>
-  <string name="error_database_object_too_large">Database error</string>
+  <string name="error_insert">Error: %1$s</string>
   <string name="error_details">Error details</string>
   <string name="error_unknown">Oops!</string>
-  <string name="error_not_grocy_instance">Not a valid grocy instance</string>
+  <string name="error_not_grocy_instance">Not a valid Grocy instance</string>
   <string name="error_timeout">Timeout error</string>
   <string name="error_no_product_selected">No product selected</string>
   <string name="error_failed_to_connect_to">Failed to connect to server</string>
@@ -502,9 +561,15 @@
   <string name="error_failed_barcode_upload">Could not upload barcode</string>
   <string name="error_wrong_grocycode_type">grocycode contains wrong entity type</string>
   <string name="error_stock_entry_grocycode">Stock entry from grocycode not found</string>
+  <string name="error_picture_uploads_forbidden">For security reasons, uploading pictures is only allowed on self-hosted servers. You are currently using the demo instance.</string>
   <string name="error_permission">No permission for this action</string>
+  <string name="error_permission_notification">Notification permission is required for reminders to work</string>
   <string name="error_undefined">An error occurred</string>
   <string name="error_invalid_base_servings">Servings invalid</string>
+  <string name="error_pictures_size_exceeds_limit">There are embedded pictures in product or recipe descriptions on your server, which exceed the parsing limit of this app. Please remove high quality and large sized pictures from your descriptions, this will also speed up data loading.</string>
+  <string name="error_userfield_type_not_supported">Userfield type currently not supported</string>
+  <string name="error_settings_backup">Backup failed</string>
+  <string name="error_settings_restore">Restore failed</string>
 
   <string name="title_overview">Overview</string>
   <string name="title_stock_overview">Stock overview</string>
@@ -563,7 +628,7 @@
   <string name="title_recipe_edit">Edit recipe</string>
 
   <string name="title_home_assistant" translatable="false">Home Assistant</string>
-  <string name="title_grocy" translatable="false">grocy</string>
+  <string name="title_grocy" translatable="false">Grocy</string>
   <string name="title_http" translatable="false">HTTP</string>
   <string name="title_https" translatable="false">HTTPS</string>
   <string name="title_long_lived_access_token" translatable="false">Long-lived access token</string>
@@ -645,6 +710,7 @@
   <string name="subtitle_product_hidden">Product is hidden</string>
   <string name="subtitle_product_not_hidden">Product is not hidden</string>
   <string name="subtitle_product_not_on_server">Product is not on server</string>
+
   <string name="subtitle_barcodes_will_be_added">There are stored barcodes, which are added to the product with the save operation.</string>
   <string name="subtitle_unknown">Unknown</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
@@ -664,7 +730,6 @@
   <string name="subtitle_product_optional_properties">State, Parent product, Description, Product group, Energy, Picture</string>
   <string name="subtitle_product_quantity_unit">Stock, Purchase default</string>
   <string name="subtitle_synced_with_server">Synced with server</string>
-  <string name="subtitle_recipe_not_on_server">Recipe is not on server</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">Due score: %1$s</string>
   <string name="subtitle_per_serving">per serving</string>
@@ -792,6 +857,7 @@
   <string name="property_product_name">Product name</string>
   <string name="property_parent_product">Parent product</string>
   <string name="property_description">Description</string>
+  <string name="property_product_description">Product description</string>
   <string name="property_note">Note</string>
   <string name="property_status">Status</string>
   <string name="property_status_insert">Status:</string>
@@ -812,6 +878,8 @@
   <string name="property_price_unit">Price per %1$s</string>
   <!-- %1$s is a price and %2$s is a quantity unit-->
   <string name="property_price_unit_insert">%1$s per %2$s</string>
+  <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_with_currency">%1$s %2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Price in %1$s</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -824,6 +892,10 @@
   <string name="property_qu_stock">Quantity unit stock</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Factor purchase to stock quantity unit</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_default_qu_consume">Default quantity unit consume</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_prices">Quantity unit for prices</string>
   <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
   <string name="property_quantity_unit_from">Convert from</string>
   <!-- Example: "Convert to cup"; This string is part of a pair, there is also 'Convert from' -->
@@ -884,6 +956,7 @@
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Average shelf life</string>
   <string name="property_spoil_rate">Spoil rate</string>
+  <string name="property_created_timestamp">Creation time</string>
   <string name="property_price_history">Price history</string>
   <string name="property_product_group">Product group</string>
   <string name="property_product_groups">Product groups</string>
@@ -893,8 +966,10 @@
   <string name="property_opened">opened</string>
   <string name="property_not_opened">not opened</string>
   <string name="property_is_freezer">Is freezer</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">Energy (kcal) per stock quantity unit</string>
+  <!-- Means energy of an ingredient or product -->
+  <string name="property_energy_only">Energy</string>
+  <!-- %1$s is a unit for energy, like kcal (kilo calories) -->
+  <string name="property_energy_insert">Energy (%1$s) per stock quantity unit</string>
   <string name="property_active">Active</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Never show on stock overview</string>
@@ -915,6 +990,10 @@
   <string name="property_amount_quick_consume">Quick consume amount</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_quick_consume_in">Quick consume amount in %1$s</string>
+  <!--The same string is also in the web interface (server v4.0.0 or later): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_amount_quick_open">Quick open amount</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_quick_open_in">Quick open amount in %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">Accumulate sub products min. stock amount</string>
   <string name="property_picture">Picture</string>
@@ -935,11 +1014,23 @@
   <string name="property_extra_field">Extra field: %1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">Fields</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value">%1$s: %2$s</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value_without_space">%1$s:%2$s</string>
   <string name="property_task_category">Task category</string>
   <string name="property_task_categories">Task categories</string>
   <string name="property_calories">Calories</string>
   <string name="property_calories_unit">Calories (unit)</string>
   <string name="property_calories_total">Calories (total)</string>
+  <!-- %1$s is a value like energy or price, unit means value of items per unit -->
+  <string name="property_insert_per_unit">%1$s (unit)</string>
+  <!-- %1$s is a value like energy or price, total means value of many items in total -->
+  <string name="property_insert_total">%1$s (total)</string>
+  <!-- %1$s is a value like price, average means average price -->
+  <string name="property_insert_average">%1$s (average)</string>
+  <!-- %1$s is a value like price, "last" is like for example in "last price" -->
+  <string name="property_insert_last">%1$s (last)</string>
   <string name="property_category">Category</string>
   <string name="property_assigned_to">Assigned to</string>
   <string name="property_users">Users</string>
@@ -978,6 +1069,7 @@
   <string name="property_variable_amount">Variable amount</string>
   <string name="property_requirements_fulfilled">Requirements fulfilled</string>
   <string name="property_produces_product">Produces product</string>
+  <string name="property_price_factor">Price factor</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>
@@ -1031,7 +1123,7 @@
     <item quantity="other">%d years from now</item>
   </plurals>
 
-  <string name="info_acknowledgement">We\'d like to thank the developer of grocy, Bernd Bestel, without whose great work this app would never have been possible.</string>
+  <string name="info_acknowledgement">We\'d like to thank the developer of Grocy, Bernd Bestel, without whose great work this app would never have been possible.</string>
   <string name="info_intro">Replay intro</string>
   <string name="info_intro_description">Showcasing features</string>
   <string name="info_dev_beginning">Beginning of development</string>
@@ -1119,7 +1211,6 @@
   <string name="setting_show_done_items_description">At the bottom</string>
   <string name="setting_smaller_font">Use smaller font</string>
   <string name="setting_smaller_font_description">To see more items at once</string>
-  <string name="setting_show_product_description">Show product description</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Due soon days</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -1155,14 +1246,14 @@
   <string name="setting_bottom_menu_button_description">In bottom app bar</string>
   <string name="setting_turn_on_quick_mode">Turn on quick mode by default</string>
   <string name="setting_turn_on_quick_mode_description">When using scan button on overview page</string>
+  <string name="setting_quick_mode_return">Return to overview page after 20 seconds</string>
+  <string name="setting_quick_mode_return_description">When using scan button on overview page and when quick mode is not in use</string>
   <string name="setting_speed_up_start">Reduce app startup time</string>
   <string name="setting_speed_up_start_description">Has an effect only on fast devices</string>
   <string name="setting_date_keyboard_input">Enter dates with keyboard</string>
   <string name="setting_date_keyboard_input_description">Instead of date picker wheels</string>
   <string name="setting_date_keyboard_reverse">Use reverse date format for input</string>
   <string name="setting_date_keyboard_reverse_description">DDMMYY instead of YYMMDD</string>
-  <string name="setting_copy_barcode_note">Copy barcode note to stock entry note</string>
-  <string name="setting_copy_barcode_note_description">When purchasing a product</string>
   <string name="setting_loading_circle">Show loading circle for all requests</string>
   <string name="setting_loading_circle_description">Helpful for slow networks</string>
   <string name="setting_tor">Use Tor</string>
@@ -1178,19 +1269,26 @@
   <string name="setting_message_duration">Display time for messages</string>
   <string name="setting_message_duration_description">Only concerns transaction messages</string>
   <string name="setting_notifications_enable">Enable notifications</string>
-  <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
-  few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_due_soon">Due soon items</string>
-  <string name="setting_notifications_due_soon_description">Checks stock daily and notifies you when products are due soon</string>
-  <string name="setting_notifications_chores_description">Checks chores daily and notifies you when chores are due to be done today</string>
+  <!-- The string belongs to the stock overview (stock items can be expired, overdue or due soon). -->
+  <string name="setting_notifications_stock_description">Checks stock daily and notifies you if there are products that are no longer fresh (expired, overdue or due soon)</string>
+  <string name="setting_notifications_chores_description">Checks chores daily and notifies you when chores are due to be done</string>
   <string name="setting_notification_time">Notification time</string>
-  <!-- the description of the notification time preference.
-  With the "Due soon" check enabled, the user will be notified every day at the selected time how
-  many products in stock are due soon, so check means a check of the products in stock -->
+  <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">When the check is done</string>
   <string name="setting_keep_screen_on_recipes_description">While viewing a recipe</string>
 
-  <string name="notification_due_soon_content">Consume them over the next few days to help reduce food waste.</string>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="notification_stock_not_fresh_title">
+    <item quantity="one">%1$d product in your stock is no longer fresh.</item>
+    <item quantity="other">%1$d products in your stock are no longer fresh.</item>
+  </plurals>
+  <string name="notification_stock_content">Consume them over the next few days to help reduce food waste. Tap to open the list.</string>
+  <!-- %1$s is a number -->
+  <plurals name="notification_chores_due_title">
+    <item quantity="one">%1$d chore is due to be done.</item>
+    <item quantity="other">%1$d chores are due to be done.</item>
+  </plurals>
+  <string name="notification_chores_content">Procrastination is useless. Tap to open the list.</string>
 
   <string name="barcode_format_code128" translatable="false">Code 128</string>
   <string name="barcode_format_code39" translatable="false">Code 39</string>
@@ -1223,9 +1321,7 @@
   <string name="license_xzing_android" translatable="false">ZXing Android Embedded</string>
   <string name="license_xzing_android_author" translatable="false">ZXing authors, Journey Mobile</string>
 
-  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
-  Examples: 'de' for German; 'fr' for French -->
-  <string name="url_grocy_demo">https://en.demo.grocy.info</string>
+  <string name="url_grocy_demo_default" translatable="false">https://en.demo.grocy.info</string>
   <string name="url_grocy" translatable="false">https://grocy.info</string>
   <string name="url_developer" translatable="false">http://play.google.com/store/apps/dev?id=5870283381366287608</string>
   <string name="url_github" translatable="false">https://github.com/patzly/grocy-android/</string>

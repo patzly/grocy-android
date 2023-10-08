@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
+  -->
+
+<FrameLayout
+  android:id="@+id/container"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/transparent"
+  android:clickable="true"
+  android:focusable="true"
+  tools:context=".activity.WebDialogActivity">
+
+  <androidx.cardview.widget.CardView
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginStart="@dimen/mtrl_alert_dialog_background_inset_start"
+    android:layout_marginEnd="@dimen/mtrl_alert_dialog_background_inset_end"
+    android:layout_marginTop="@dimen/mtrl_alert_dialog_background_inset_top"
+    android:layout_marginBottom="@dimen/mtrl_alert_dialog_background_inset_bottom"
+    app:cardCornerRadius="28dp"
+    tools:ignore="PrivateResource">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:clickable="false"
+      android:focusableInTouchMode="false">
+
+      <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/property_description"
+        android:fontFamily="@font/jost_book"
+        android:textSize="24sp"
+        android:lineHeight="32sp"
+        tools:targetApi="p" />
+
+      <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginEnd="17dp"
+        android:layout_marginBottom="4dp"
+        android:scrollbars="none"
+        tools:ignore="WebViewLayout" />
+
+    </LinearLayout>
+
+  </androidx.cardview.widget.CardView>
+
+</FrameLayout>

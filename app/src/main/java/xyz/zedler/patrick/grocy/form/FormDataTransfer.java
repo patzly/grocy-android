@@ -31,15 +31,15 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.TransferFragmentArgs;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
@@ -49,6 +49,7 @@ import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class FormDataTransfer {
@@ -65,7 +66,7 @@ public class FormDataTransfer {
   private final MutableLiveData<Integer> productNameErrorLive;
   private final MutableLiveData<String> barcodeLive;
   private final MutableLiveData<HashMap<QuantityUnit, Double>> quantityUnitsFactorsLive;
-  private final LiveData<QuantityUnit> quantityUnitStockLive;
+  private final MutableLiveData<QuantityUnit> quantityUnitStockLive;
   private final MutableLiveData<QuantityUnit> quantityUnitLive;
   private final LiveData<String> quantityUnitNameLive;
   private final MutableLiveData<Boolean> quantityUnitErrorLive;
@@ -74,14 +75,14 @@ public class FormDataTransfer {
   private final MediatorLiveData<String> amountHelperLive;
   private final LiveData<String> amountHintLive;
   private final MediatorLiveData<String> amountStockLive;
-  private ArrayList<StockLocation> stockLocations;
+  private List<StockLocation> stockLocations;
   private final MutableLiveData<StockLocation> fromLocationLive;
   private final LiveData<String> fromLocationNameLive;
   private final MutableLiveData<Location> toLocationLive;
   private final LiveData<String> toLocationNameLive;
   private final MutableLiveData<Boolean> toLocationErrorLive;
   private final MutableLiveData<Boolean> useSpecificLive;
-  private ArrayList<StockEntry> stockEntries;
+  private List<StockEntry> stockEntries;
   private final MutableLiveData<StockEntry> specificStockEntryLive;
   private final PluralUtil pluralUtil;
   private boolean currentProductFlowInterrupted = false;
@@ -114,10 +115,7 @@ public class FormDataTransfer {
     productNameErrorLive = new MutableLiveData<>();
     barcodeLive = new MutableLiveData<>();
     quantityUnitsFactorsLive = new MutableLiveData<>();
-    quantityUnitStockLive = Transformations.map(
-        quantityUnitsFactorsLive,
-        this::getStockQuantityUnit
-    );
+    quantityUnitStockLive = new MutableLiveData<>();
     quantityUnitsFactorsLive.setValue(null);
     quantityUnitLive = new MutableLiveData<>();
     quantityUnitNameLive = Transformations.map(
@@ -209,7 +207,7 @@ public class FormDataTransfer {
     return quantityUnitsFactorsLive;
   }
 
-  public LiveData<QuantityUnit> getQuantityUnitStockLive() {
+  public MutableLiveData<QuantityUnit> getQuantityUnitStockLive() {
     return quantityUnitStockLive;
   }
 
@@ -223,18 +221,6 @@ public class FormDataTransfer {
 
   public MutableLiveData<Boolean> getQuantityUnitErrorLive() {
     return quantityUnitErrorLive;
-  }
-
-  private QuantityUnit getStockQuantityUnit(HashMap<QuantityUnit, Double> unitsFactors) {
-    if (unitsFactors == null || !unitsFactors.containsValue((double) -1)) {
-      return null;
-    }
-    for (Map.Entry<QuantityUnit, Double> entry : unitsFactors.entrySet()) {
-      if (entry.getValue() == -1) {
-        return entry.getKey();
-      }
-    }
-    return null;
   }
 
   public MutableLiveData<String> getBarcodeLive() {
@@ -259,32 +245,15 @@ public class FormDataTransfer {
 
   private String getAmountStock() {
     ProductDetails productDetails = productDetailsLive.getValue();
-    QuantityUnit stock = quantityUnitStockLive.getValue();
-    QuantityUnit current = quantityUnitLive.getValue();
-    if (!isAmountValid() || quantityUnitsFactorsLive.getValue() == null) {
-      return null;
-    }
-    assert amountLive.getValue() != null;
-
-    if (stock == null || current == null || productDetails == null) {
-      return null;
-    }
-    HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-    double amount = NumUtil.toDouble(amountLive.getValue());
-    Object currentFactor = hashMap.get(current);
-    if (currentFactor == null) {
-      return null;
-    }
-    double amountMultiplied;
-    if ((double) currentFactor == -1) {
-      amountMultiplied = amount;
-    } else if (current.getId() == productDetails.getProduct()
-        .getQuIdPurchaseInt()) {
-      amountMultiplied = amount * (double) currentFactor;
-    } else {
-      amountMultiplied = amount / (double) currentFactor;
-    }
-    return NumUtil.trimAmount(amountMultiplied, maxDecimalPlacesAmount);
+    if (productDetails == null) return null;
+    return QuantityUnitConversionUtil.getAmountStock(
+        quantityUnitStockLive.getValue(),
+        quantityUnitLive.getValue(),
+        amountLive.getValue(),
+        quantityUnitsFactorsLive.getValue(),
+        false,
+        maxDecimalPlacesAmount
+    );
   }
 
   private String getAmountHelpText() {
@@ -343,11 +312,11 @@ public class FormDataTransfer {
     return useSpecificLive;
   }
 
-  public ArrayList<StockEntry> getStockEntries() {
+  public List<StockEntry> getStockEntries() {
     return stockEntries;
   }
 
-  public void setStockEntries(ArrayList<StockEntry> stockEntries) {
+  public void setStockEntries(List<StockEntry> stockEntries) {
     this.stockEntries = stockEntries;
   }
 
@@ -355,11 +324,11 @@ public class FormDataTransfer {
     return specificStockEntryLive;
   }
 
-  public ArrayList<StockLocation> getStockLocations() {
+  public List<StockLocation> getStockLocations() {
     return stockLocations;
   }
 
-  public void setStockLocations(ArrayList<StockLocation> stockLocations) {
+  public void setStockLocations(List<StockLocation> stockLocations) {
     this.stockLocations = stockLocations;
   }
 
@@ -519,7 +488,7 @@ public class FormDataTransfer {
     ProductDetails productDetails = productDetailsLive.getValue();
     assert productDetails != null && amountStockLive.getValue() != null;
     double amountRemoved = NumUtil.toDouble(amountStockLive.getValue());
-    QuantityUnit qU = quantityUnitLive.getValue();
+    QuantityUnit qU = quantityUnitStockLive.getValue();
     StockLocation fromLocation = fromLocationLive.getValue();
     Location toLocation = toLocationLive.getValue();
     assert qU != null && fromLocation != null && toLocation != null;
@@ -577,6 +546,7 @@ public class FormDataTransfer {
     amountLive.setValue(null);
     quantityUnitLive.setValue(null);
     quantityUnitsFactorsLive.setValue(null);
+    quantityUnitStockLive.setValue(null);
     productDetailsLive.setValue(null);
     productNameLive.setValue(null);
     fromLocationLive.setValue(null);

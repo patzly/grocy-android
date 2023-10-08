@@ -20,22 +20,36 @@
 package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Html;
 import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -49,11 +63,11 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
-import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.repository.RecipeEditRepository;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PictureUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
 public class RecipeEditViewModel extends BaseViewModel {
@@ -74,6 +88,7 @@ public class RecipeEditViewModel extends BaseViewModel {
   private List<ProductBarcode> productBarcodes;
   private Recipe recipe;
 
+  private String currentFilePath;
   private final boolean debug;
   private final MutableLiveData<Boolean> actionEditLive;
   private final int maxDecimalPlacesAmount;
@@ -92,7 +107,7 @@ public class RecipeEditViewModel extends BaseViewModel {
     );
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(application, TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(application, TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(application);
     repository = new RecipeEditRepository(application);
     formData = new FormDataRecipeEdit(application, sharedPrefs, startupArgs);
@@ -113,72 +128,43 @@ public class RecipeEditViewModel extends BaseViewModel {
       this.productBarcodes = data.getProductBarcodes();
 
       formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
-      fillWithRecipeIfNecessary();
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
+      } else {
+        fillWithRecipeIfNecessary();
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData() {
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            fillWithRecipeIfNecessary();
+          }
+        },
         error -> onError(error, null),
+        forceUpdate,
+        false,
         Product.class,
         ProductBarcode.class
     );
   }
 
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-    editPrefs.apply();
-    downloadData();
-  }
-
-  public void setProduct(int productId, ProductBarcode barcode, String stockEntryId) {
-    Runnable onQueueEmptyListener = () -> {
-      ProductDetails productDetails = formData.getProductDetailsLive().getValue();
-      assert productDetails != null;
-      Product product = productDetails.getProduct();
-
-      if (productDetails.getStockAmountAggregated() == 0) {
-        String name = product.getName();
-        showMessageAndContinueScanning(getApplication().getString(R.string.msg_not_in_stock, name));
-        return;
-      }
-
-      formData.getProductDetailsLive().setValue(productDetails);
-      formData.getProductNameLive().setValue(product.getName());
-
-      formData.isFormValid();
-    };
-
-    dlHelper.newQueue(
-        onQueueEmptyListener,
-        error -> showMessageAndContinueScanning(getString(R.string.error_no_product_details))
-    ).append(
-        ProductDetails.getProductDetails(
-            dlHelper,
-            productId,
-            productDetails -> formData.getProductDetailsLive().setValue(productDetails)
-        )
-    ).start();
+  public void setProduct(Product product) {
+    formData.getProductProducedLive().setValue(product);
+    formData.getProductProducedNameLive().setValue(product.getName());
+    formData.isFormValid();
   }
 
   public void onBarcodeRecognized(String barcode) {
-    if (formData.getProductDetailsLive().getValue() != null) {
+    if (formData.getProductProducedLive().getValue() != null) {
       formData.getBarcodeLive().setValue(barcode);
       return;
     }
     Product product = null;
-    String stockEntryId = null;
     GrocycodeUtil.Grocycode grocycode = GrocycodeUtil.getGrocycode(barcode);
     if (grocycode != null && grocycode.isProduct()) {
       product = Product.getProductFromId(products, grocycode.getObjectId());
@@ -186,22 +172,19 @@ public class RecipeEditViewModel extends BaseViewModel {
         showMessageAndContinueScanning(R.string.msg_not_found);
         return;
       }
-      stockEntryId = grocycode.getProductStockEntryId();
     } else if (grocycode != null) {
       showMessageAndContinueScanning(R.string.error_wrong_grocycode_type);
       return;
     }
-    ProductBarcode productBarcode = null;
     if (product == null) {
       for (ProductBarcode code : productBarcodes) {
         if (code.getBarcode().equals(barcode)) {
-          productBarcode = code;
           product = Product.getProductFromId(products, code.getProductIdInt());
         }
       }
     }
     if (product != null) {
-      setProduct(product.getId(), productBarcode, stockEntryId);
+      setProduct(product);
     } else {
       Bundle bundle = new Bundle();
       bundle.putString(ARGUMENT.BARCODE, barcode);
@@ -211,7 +194,7 @@ public class RecipeEditViewModel extends BaseViewModel {
 
   public void checkProductInput() {
     formData.isProductNameValid();
-    String input = formData.getProductNameLive().getValue();
+    String input = formData.getProductProducedNameLive().getValue();
     if (input == null || input.isEmpty()) {
       return;
     }
@@ -229,28 +212,24 @@ public class RecipeEditViewModel extends BaseViewModel {
       return;
     }
     if (product == null) {
-      ProductBarcode productBarcode = null;
       for (ProductBarcode code : productBarcodes) {
         if (code.getBarcode().equals(input.trim())) {
-          productBarcode = code;
           product = Product.getProductFromId(products, code.getProductIdInt());
         }
       }
       if (product != null) {
-        setProduct(product.getId(), productBarcode, null);
+        setProduct(product);
         return;
       }
     }
 
-    ProductDetails currentProductDetails = formData.getProductDetailsLive().getValue();
-    Product currentProduct = currentProductDetails != null
-            ? currentProductDetails.getProduct() : null;
+    Product currentProduct = formData.getProductProducedLive().getValue();
     if (currentProduct != null && product != null && currentProduct.getId() == product.getId()) {
       return;
     }
 
     if (product != null) {
-      setProduct(product.getId(), null, null);
+      setProduct(product);
     } else {
       showInputProductBottomSheet(input);
     }
@@ -333,6 +312,7 @@ public class RecipeEditViewModel extends BaseViewModel {
     formData.getPreparationLive().setValue(recipe.getDescription());
     formData.getPreparationSpannedLive().setValue(recipe.getDescription() != null
         ? Html.fromHtml(recipe.getDescription()) : null);
+    formData.getPictureFilenameLive().setValue(recipe.getPictureFileName());
 
     formData.setFilledWithRecipe(true);
   }
@@ -349,6 +329,126 @@ public class RecipeEditViewModel extends BaseViewModel {
         response -> navigateUp(),
         this::showNetworkErrorMessage
     );
+  }
+
+  public void pasteFromClipboard() {
+    if (isDemoInstance()) {
+      showMessage(R.string.error_picture_uploads_forbidden);
+      return;
+    }
+    ClipboardManager clipboard = (ClipboardManager) getApplication()
+        .getSystemService(Context.CLIPBOARD_SERVICE);
+    if (clipboard == null) {
+      showMessage(R.string.error_clipboard_no_image);
+      return;
+    }
+    if (!clipboard.hasPrimaryClip()) {
+      showMessage(R.string.error_clipboard_no_image);
+      return;
+    }
+    ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
+    if (item.getUri() == null) {
+      showMessage(R.string.error_clipboard_no_image);
+      return;
+    }
+    try {
+      InputStream imageStream = getApplication().getContentResolver().openInputStream(item.getUri());
+      Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+      scaleAndUploadBitmap(null, bitmap);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      showMessage(R.string.error_clipboard_no_image);
+    }
+  }
+
+  public File createImageFile() throws IOException {
+    File storageDir = getApplication().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+    File image = PictureUtil.createImageFile(storageDir);
+    currentFilePath = image.getAbsolutePath();
+    return image;
+  }
+
+  public void scaleAndUploadBitmap(@Nullable String filePath, @Nullable Bitmap image) {
+    if (filePath == null && image == null) {
+      showErrorMessage();
+      return;
+    }
+    isLoadingLive.setValue(true);
+    ExecutorService executor = Executors.newSingleThreadExecutor();
+    executor.execute(() -> {
+      Bitmap scaledBitmap = filePath != null
+          ? PictureUtil.scaleBitmap(filePath)
+          : PictureUtil.scaleBitmap(image);
+      byte[] imageArray = PictureUtil.convertBitmapToByteArray(scaledBitmap);
+      new Handler(Looper.getMainLooper()).post(() -> {
+        uploadPicture(imageArray);
+        executor.shutdown();
+      });
+    });
+  }
+
+  public void uploadPicture(byte[] pictureData) {
+    if (pictureData == null) {
+      showErrorMessage();
+      isLoadingLive.setValue(false);
+      return;
+    }
+    String filename = PictureUtil.createImageFilename();
+    dlHelper.putFile(
+        grocyApi.getRecipePicture(filename),
+        pictureData,
+        () -> {
+          deleteCurrentPicture(filename);
+          formData.getPictureFilenameLive().setValue(filename);
+        },
+        error -> {
+          isLoadingLive.setValue(false);
+          showNetworkErrorMessage(error);
+        }
+    );
+  }
+
+  public void deleteCurrentPicture(String newFilename) {
+    if (isActionEdit()) {
+      JSONObject jsonObject = new JSONObject();
+      try {
+        jsonObject.put("picture_file_name", newFilename != null ? newFilename : "");
+        dlHelper.put(
+            grocyApi.getObject(ENTITY.RECIPES, args.getRecipe().getId()),
+            jsonObject,
+            response -> {},
+            volleyError -> {}
+        );
+      } catch (JSONException ignored) {}
+    }
+    String lastFilename = formData.getPictureFilenameLive().getValue();
+    if (lastFilename != null && !lastFilename.isBlank()) {
+      dlHelper.delete(
+          grocyApi.getRecipePicture(lastFilename),
+          response -> {
+            isLoadingLive.setValue(false);
+            formData.getPictureFilenameLive().setValue("");
+          },
+          volleyError -> {
+            isLoadingLive.setValue(false);
+            showNetworkErrorMessage(volleyError);
+            formData.getPictureFilenameLive().setValue(lastFilename);
+          }
+      );
+    } else if (lastFilename != null && lastFilename.isBlank()) {
+      isLoadingLive.setValue(false);
+      formData.getPictureFilenameLive().setValue("");
+    } else {
+      isLoadingLive.setValue(false);
+    }
+  }
+
+  public String getCurrentFilePath() {
+    return currentFilePath;
+  }
+
+  public void setCurrentFilePath(String currentFilePath) {
+    this.currentFilePath = currentFilePath;
   }
 
   public void showInputProductBottomSheet(@NonNull String input) {

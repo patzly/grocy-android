@@ -36,6 +36,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
+import xyz.zedler.patrick.grocy.model.Userfield;
 import xyz.zedler.patrick.grocy.model.VolatileItem;
 import xyz.zedler.patrick.grocy.util.RxJavaUtil;
 
@@ -65,6 +66,7 @@ public class StockOverviewRepository {
     private final List<StockLocation> stockCurrentLocations;
     private final List<VolatileItem> volatileItems;
     private final List<MissingItem> missingItems;
+    private final List<Userfield> userfields;
 
     public StockOverviewData(
         List<QuantityUnit> quantityUnits,
@@ -78,7 +80,8 @@ public class StockOverviewRepository {
         List<Location> locations,
         List<StockLocation> stockCurrentLocations,
         List<VolatileItem> volatileItems,
-        List<MissingItem> missingItems
+        List<MissingItem> missingItems,
+        List<Userfield> userfields
     ) {
       this.quantityUnits = quantityUnits;
       this.productGroups = productGroups;
@@ -92,6 +95,7 @@ public class StockOverviewRepository {
       this.stockCurrentLocations = stockCurrentLocations;
       this.volatileItems = volatileItems;
       this.missingItems = missingItems;
+      this.userfields = userfields;
     }
 
     public List<QuantityUnit> getQuantityUnits() {
@@ -141,6 +145,10 @@ public class StockOverviewRepository {
     public List<MissingItem> getMissingItems() {
       return missingItems;
     }
+
+    public List<Userfield> getUserfields() {
+      return userfields;
+    }
   }
 
   public void loadFromDatabase(StockOverviewDataListener onSuccess, Consumer<Throwable> onError) {
@@ -158,6 +166,7 @@ public class StockOverviewRepository {
             appDatabase.stockLocationDao().getStockLocations(),
             appDatabase.volatileItemDao().getVolatileItems(),
             appDatabase.missingItemDao().getMissingItems(),
+            appDatabase.userfieldDao().getUserfields(),
             StockOverviewData::new
         )
         .subscribeOn(Schedulers.io())

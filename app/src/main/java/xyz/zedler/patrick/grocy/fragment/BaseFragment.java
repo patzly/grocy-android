@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Spanned;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,12 +38,12 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.android.volley.VolleyError;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockEntry;
@@ -100,6 +101,10 @@ public class BaseFragment extends Fragment {
     return getString(R.string.error_undefined);
   }
 
+  public boolean dispatchTouchEvent(MotionEvent event) {
+    return false;
+  }
+
   public void getActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
   }
@@ -132,9 +137,6 @@ public class BaseFragment extends Fragment {
   public void copyProduct(Product product) {
   }
 
-  public void deleteObjectSafely(Object object) {
-  }
-
   public void deleteObject(int objectId) {
   }
 
@@ -156,13 +158,16 @@ public class BaseFragment extends Fragment {
   public void editItem(ShoppingListItem shoppingListItem) {
   }
 
-  public void trackChoreExecution(int choreId) {
+  public void trackNextChoreSchedule(ChoreEntry choreEntry) {
   }
 
-  public void skipNextChoreSchedule(int choreId) {
+  public void skipNextChoreSchedule(ChoreEntry choreEntry) {
   }
 
-  public void rescheduleNextExecution(int choreId) {
+  public void trackChoreExecutionNow(ChoreEntry choreEntry) {
+  }
+
+  public void rescheduleNextExecution(ChoreEntry choreEntry) {
   }
 
   public void toggleDoneStatus(Task task) {
@@ -174,25 +179,7 @@ public class BaseFragment extends Fragment {
   public void editTask(Task task) {
   }
 
-  public void consumeRecipe(int recipeId) {
-  }
-
-  public void addNotFulfilledProductsToCartForRecipe(int recipeId, int[] excludedProductIds) {
-  }
-
-  public void editRecipe(Recipe recipe) {
-  }
-
-  public void copyRecipe(int recipeId) {
-  }
-
-  public void deleteRecipe(int recipeId) {
-  }
-
   public void deleteRecipePosition(int recipePositionId) {
-  }
-
-  public void updateData() {
   }
 
   @Nullable
@@ -207,6 +194,9 @@ public class BaseFragment extends Fragment {
   }
 
   public void selectProduct(Product product) {
+  }
+
+  public void createQuantityUnit(Bundle argsBundle) {
   }
 
   public void selectQuantityUnit(QuantityUnit quantityUnit) {
@@ -227,7 +217,13 @@ public class BaseFragment extends Fragment {
   public void selectStockEntry(StockEntry stockEntry) {
   }
 
+  public void createProductGroup() {
+  }
+
   public void selectProductGroup(ProductGroup productGroup) {
+  }
+
+  public void createLocation(Bundle args) {
   }
 
   public void selectLocation(Location location) {
@@ -237,6 +233,9 @@ public class BaseFragment extends Fragment {
   }
 
   public void selectStore(Store store) {
+  }
+
+  public void selectStore(Store store, boolean pinClicked) {
   }
 
   public void selectTaskCategory(TaskCategory taskCategory) {

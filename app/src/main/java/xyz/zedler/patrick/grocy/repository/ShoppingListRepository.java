@@ -32,7 +32,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.Store;
@@ -56,7 +56,7 @@ public class ShoppingListRepository {
     private final List<ShoppingList> shoppingLists;
     private final List<ProductGroup> productGroups;
     private final List<QuantityUnit> quantityUnits;
-    private final List<QuantityUnitConversion> unitConversions;
+    private final List<QuantityUnitConversionResolved> unitConversions;
     private final List<Product> products;
     private final List<ProductLastPurchased> productsLastPurchased;
     private final List<Store> stores;
@@ -67,7 +67,7 @@ public class ShoppingListRepository {
         List<ShoppingList> shoppingLists,
         List<ProductGroup> productGroups,
         List<QuantityUnit> quantityUnits,
-        List<QuantityUnitConversion> unitConversions,
+        List<QuantityUnitConversionResolved> unitConversions,
         List<Product> products,
         List<ProductLastPurchased> productsLastPurchased,
         List<Store> stores,
@@ -100,7 +100,7 @@ public class ShoppingListRepository {
       return quantityUnits;
     }
 
-    public List<QuantityUnitConversion> getUnitConversions() {
+    public List<QuantityUnitConversionResolved> getUnitConversionsResolved() {
       return unitConversions;
     }
 
@@ -128,7 +128,7 @@ public class ShoppingListRepository {
             appDatabase.shoppingListDao().getShoppingLists(),
             appDatabase.productGroupDao().getProductGroups(),
             appDatabase.quantityUnitDao().getQuantityUnits(),
-            appDatabase.quantityUnitConversionDao().getConversions(),
+            appDatabase.quantityUnitConversionResolvedDao().getConversionsResolved(),
             appDatabase.productDao().getProducts(),
             appDatabase.productLastPurchasedDao().getProductsLastPurchased(),
             appDatabase.storeDao().getStores(),

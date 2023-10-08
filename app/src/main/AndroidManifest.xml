@@ -27,6 +27,7 @@
   <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
   <uses-permission android:name="android.permission.VIBRATE" />
   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.NFC" />
 
   <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
@@ -42,7 +43,7 @@
     android:icon="@mipmap/ic_launcher"
     android:theme="@style/Theme.Grocy"
     android:supportsRtl="true"
-    android:enableOnBackInvokedCallback="false"
+    android:enableOnBackInvokedCallback="true"
     android:hardwareAccelerated="true"
     android:localeConfig="@xml/locales_config"
     android:allowBackup="true"
@@ -89,8 +90,22 @@
         android:value="true" />
     </service>
 
+    <provider
+      android:name="androidx.core.content.FileProvider"
+      android:authorities="${applicationId}.fileprovider"
+      android:exported="false"
+      android:grantUriPermissions="true">
+      <meta-data
+        android:name="android.support.FILE_PROVIDER_PATHS"
+        android:resource="@xml/file_paths" />
+    </provider>
+
     <receiver
-      android:name=".notification.DueSoonNotificationReceiver"
+      android:name=".notification.StockNotificationReceiver"
+      android:enabled="true" />
+
+    <receiver
+      android:name=".notification.ChoresNotificationReceiver"
       android:enabled="true" />
 
     <receiver

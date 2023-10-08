@@ -114,12 +114,6 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
 
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
-      if (!isLoading) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
-
     viewModel.getOfflineLive().observe(getViewLifecycleOwner(), offline -> {
       InfoFullscreen infoFullscreen = offline ? new InfoFullscreen(
           InfoFullscreen.ERROR_OFFLINE,
@@ -208,11 +202,8 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
+    viewModel.downloadData(false);
     systemBarBehavior.refresh();
-    if (isOnline) {
-      viewModel.downloadData();
-    }
   }
 
   @NonNull

@@ -30,6 +30,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -46,6 +47,7 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
+import xyz.zedler.patrick.grocy.model.Userfield;
 
 public class SortUtil {
 
@@ -92,6 +94,69 @@ public class SortUtil {
           return DateUtil.getDate(bbd1).compareTo(DateUtil.getDate(bbd2));
         }
     );
+  }
+
+  public static void sortStockItemsByCreatedTimestamp(List<StockItem> stockItems, boolean ascending) {
+    if (stockItems == null) {
+      return;
+    }
+    Collections.sort(
+        stockItems,
+        (item1, item2) -> {
+          Product product1 = (ascending ? item1 : item2).getProduct();
+          Product product2 = (ascending ? item2 : item1).getProduct();
+          String ts1 = product1.getRowCreatedTimestamp();
+          String ts2 = product2.getRowCreatedTimestamp();
+          if (ts1 == null && ts2 == null) {
+            return 0;
+          } else if (ts1 == null) {
+            return -1;
+          } else if (ts2 == null) {
+            return 1;
+          }
+          return DateUtil.getDate(ts1).compareTo(DateUtil.getDate(ts2));
+        }
+    );
+  }
+
+  public static void sortStockItemsByUserfieldValue(
+      List<StockItem> stockItems,
+      Userfield userfield,
+      boolean ascending
+  ) {
+    if (stockItems == null) {
+      return;
+    }
+    Collections.sort(
+        stockItems,
+        (item1, item2) -> {
+          Product product1 = (ascending ? item1 : item2).getProduct();
+          Product product2 = (ascending ? item2 : item1).getProduct();
+          Map<String, String> userfieldMap1 = product1.getUserfields();
+          Map<String, String> userfieldMap2 = product2.getUserfields();
+          String value1 = userfieldMap1 != null ? userfieldMap1.get(userfield.getName()) : null;
+          String value2 = userfieldMap2 != null ? userfieldMap2.get(userfield.getName()) : null;
+          return compareUserfieldValues(value1, value2, userfield.getType());
+        }
+    );
+  }
+
+  private static int compareUserfieldValues(String value1, String value2, String userfieldType) {
+    if (value1 == null && value2 == null) {
+      return 0;
+    } else if (value1 == null) {
+      return -1;
+    } else if (value2 == null) {
+      return 1;
+    }
+    /*if (userfieldType.equals(Userfield.TYPE_NUMBER)) {
+      return Double.compare(NumUtil.toDouble(value1), NumUtil.toDouble(value2));
+    } else if (userfieldType.equals(Userfield.TYPE_DATE)) {
+      return DateUtil.getDate(value1).compareTo(DateUtil.getDate(value2));
+    } else {
+      return Collator.getInstance(LocaleUtil.getLocale()).compare(value1, value2);
+    }*/
+    return Collator.getInstance(LocaleUtil.getLocale()).compare(value1, value2);
   }
 
   public static void sortStockEntriesByDueDate(List<StockEntry> stockEntries, boolean ascending) {
@@ -206,6 +271,36 @@ public class SortUtil {
         (ascending ? item1 : item2).getName().toLowerCase(),
         (ascending ? item2 : item1).getName().toLowerCase()
     ));
+  }
+
+  public static void sortTasksByCategory(
+      List<Task> tasks,
+      HashMap<Integer, TaskCategory> taskCategoryHashMap,
+      boolean ascending
+  ) {
+    if (tasks == null || tasks.isEmpty()) {
+      return;
+    }
+    Collections.sort(
+        tasks,
+        (item1, item2) -> {
+          String cId1 = (ascending ? item1 : item2).getCategoryId();
+          String cId2 = (ascending ? item2 : item1).getCategoryId();
+          TaskCategory c1 = NumUtil.isStringInt(cId1)
+              ? taskCategoryHashMap.get(Integer.parseInt(cId1)) : null;
+          TaskCategory c2 = NumUtil.isStringInt(cId2)
+              ? taskCategoryHashMap.get(Integer.parseInt(cId2)) : null;
+
+          if (c1 == null && c2 == null) {
+            return 0;
+          } else if (c1 == null) {
+            return -1;
+          } else if (c2 == null) {
+            return 1;
+          }
+          return c1.getName().compareTo(c2.getName());
+        }
+    );
   }
 
   public static void sortChoreEntriesByNextExecution(
@@ -461,6 +556,84 @@ public class SortUtil {
       int recipe2DueScore = recipeFulfillment2 != null ? recipeFulfillment2.getDueScore() : 0;
 
       return (ascending ? recipe1DueScore : recipe2DueScore) - (ascending ? recipe2DueScore : recipe1DueScore);
+    });
+  }
+
+  public static void sortRecipesByUserfieldValue(
+      List<Recipe> recipes,
+      Userfield userfield,
+      boolean ascending
+  ) {
+    if (recipes == null) {
+      return;
+    }
+    Collections.sort(
+        recipes,
+        (item1, item2) -> {
+          Map<String, String> userfieldMap1 = (ascending ? item1 : item2).getUserfields();
+          Map<String, String> userfieldMap2 = (ascending ? item2 : item1).getUserfields();
+          String value1 = userfieldMap1 != null ? userfieldMap1.get(userfield.getName()) : null;
+          String value2 = userfieldMap2 != null ? userfieldMap2.get(userfield.getName()) : null;
+          return compareUserfieldValues(value1, value2, userfield.getType());
+        }
+    );
+  }
+
+  public static void sortObjectsByName(ArrayList<Object> objects, String entity, boolean isAscending) {
+    if (objects == null) {
+      return;
+    }
+    Locale locale = LocaleUtil.getLocale();
+    Collections.sort(objects, (item1, item2) -> {
+      String name1 = ObjectUtil.getObjectName(isAscending ? item1 : item2, entity);
+      String name2 = ObjectUtil.getObjectName(isAscending ? item2 : item1, entity);
+      if (name1 == null || name2 == null) {
+        return 0;
+      }
+      return Collator.getInstance(locale).compare(
+          name1.toLowerCase(locale),
+          name2.toLowerCase(locale)
+      );
+    });
+  }
+
+  public static void sortObjectsByCreatedTimestamp(
+      ArrayList<Object> objects,
+      String entity,
+      boolean isAscending
+  ) {
+    if (objects == null) {
+      return;
+    }
+    Collections.sort(objects, (item1, item2) -> {
+      String ts1 = ObjectUtil.getObjectCreatedTimestamp(isAscending ? item1 : item2, entity);
+      String ts2 = ObjectUtil.getObjectCreatedTimestamp(isAscending ? item2 : item1, entity);
+      if (ts1 == null && ts2 == null) {
+        return 0;
+      } else if (ts1 == null) {
+        return -1;
+      } else if (ts2 == null) {
+        return 1;
+      }
+      return DateUtil.getDate(ts1).compareTo(DateUtil.getDate(ts2));
+    });
+  }
+
+  public static void sortObjectsByUserfieldValue(
+      ArrayList<Object> objects,
+      String entity,
+      Userfield userfield,
+      boolean isAscending
+  ) {
+    if (objects == null || userfield == null) {
+      return;
+    }
+    Collections.sort(objects, (item1, item2) -> {
+      Map<String, String> uf1 = ObjectUtil.getObjectUserfields(isAscending ? item1 : item2, entity);
+      Map<String, String> uf2 = ObjectUtil.getObjectUserfields(isAscending ? item2 : item1, entity);
+      String value1 = uf1 != null ? uf1.get(userfield.getName()) : null;
+      String value2 = uf2 != null ? uf2.get(userfield.getName()) : null;
+      return compareUserfieldValues(value1, value2, userfield.getType());
     });
   }
 }

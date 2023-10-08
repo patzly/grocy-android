@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -134,7 +135,7 @@ public class MasterProductGroupFragment extends BaseFragment {
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.performOnBackPressed());
 
     // swipe refresh
     binding.swipeMasterProductGroup.setOnRefreshListener(this::refresh);
@@ -397,7 +398,21 @@ public class MasterProductGroupFragment extends BaseFragment {
       dlHelper.post(
           grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
           jsonObject,
-          response -> activity.navUtil.navigateUp(),
+          response -> {
+            int objectId = -1;
+            try {
+              objectId = response.getInt("created_object_id");
+              Log.i(TAG, "saveProductGroup: " + objectId);
+            } catch (JSONException e) {
+              if (debug) {
+                Log.e(TAG, "saveProductGroup: " + e);
+              }
+            }
+            if (objectId != -1) {
+              setForPreviousDestination(ARGUMENT.OBJECT_ID, objectId);
+            }
+            activity.navUtil.navigateUp();
+          },
           error -> {
             showErrorMessage(error);
             if (debug) {

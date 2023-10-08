@@ -123,7 +123,7 @@ public class MasterStoreFragment extends BaseFragment {
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.performOnBackPressed());
 
     // swipe refresh
     binding.swipeMasterStore.setOnRefreshListener(this::refresh);

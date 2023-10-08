@@ -24,7 +24,9 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -37,7 +39,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,7 +52,6 @@ import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MealPlanEntry;
 import xyz.zedler.patrick.grocy.model.MissingItem;
-import xyz.zedler.patrick.grocy.model.OpenFoodFactsProduct;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductAveragePrice;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
@@ -58,11 +59,14 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
+import xyz.zedler.patrick.grocy.model.RecipePositionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.ShoppingListItem.ShoppingListItemWithSync;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
@@ -70,13 +74,17 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
+import xyz.zedler.patrick.grocy.model.Userfield;
 import xyz.zedler.patrick.grocy.model.VolatileItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.web.CustomByteArrayRequest;
 import xyz.zedler.patrick.grocy.web.CustomJsonArrayRequest;
 import xyz.zedler.patrick.grocy.web.CustomJsonObjectRequest;
 import xyz.zedler.patrick.grocy.web.CustomStringRequest;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
+import xyz.zedler.patrick.grocy.web.NetworkQueue.OnQueueEmptyListener;
+import xyz.zedler.patrick.grocy.web.NetworkQueue.QueueItem;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 
 public class DownloadHelper {
@@ -89,6 +97,7 @@ public class DownloadHelper {
   public final Gson gson;
   private final String uuidHelper;
   private final OnLoadingListener onLoadingListener;
+  private final MutableLiveData<Boolean> offlineLive;
   public final SharedPreferences sharedPrefs;
   public final AppDatabase appDatabase;
 
@@ -102,7 +111,8 @@ public class DownloadHelper {
   public DownloadHelper(
       Application application,
       String tag,
-      OnLoadingListener onLoadingListener
+      OnLoadingListener onLoadingListener,
+      MutableLiveData<Boolean> offlineLive
   ) {
     this.application = application;
     this.tag = tag;
@@ -118,6 +128,7 @@ public class DownloadHelper {
     queueArrayList = new ArrayList<>();
     loadingRequests = 0;
     this.onLoadingListener = onLoadingListener;
+    this.offlineLive = offlineLive;
     timeoutSeconds = sharedPrefs.getInt(
         Constants.SETTINGS.NETWORK.LOADING_TIMEOUT,
         Constants.SETTINGS_DEFAULT.NETWORK.LOADING_TIMEOUT
@@ -145,6 +156,7 @@ public class DownloadHelper {
     queueArrayList = new ArrayList<>();
     loadingRequests = 0;
     this.onLoadingListener = onLoadingListener;
+    this.offlineLive = null;
     timeoutSeconds = sharedPrefs.getInt(
         Constants.SETTINGS.NETWORK.LOADING_TIMEOUT,
         Constants.SETTINGS_DEFAULT.NETWORK.LOADING_TIMEOUT
@@ -152,11 +164,11 @@ public class DownloadHelper {
   }
 
   public DownloadHelper(Activity activity, String tag) {
-    this(activity.getApplication(), tag, null);
+    this(activity.getApplication(), tag, null, null);
   }
 
   public DownloadHelper(Context context, String tag) {
-    this((Application) context.getApplicationContext(), tag, null);
+    this((Application) context.getApplicationContext(), tag, null, null);
   }
 
   // cancel all requests
@@ -165,20 +177,6 @@ public class DownloadHelper {
       queue.reset(true);
     }
     requestQueue.cancelAll(uuidHelper);
-  }
-
-  private void onRequestLoading() {
-    loadingRequests += 1;
-    if (onLoadingListener != null && loadingRequests == 1) {
-      onLoadingListener.onLoadingChanged(true);
-    }
-  }
-
-  private void onRequestFinished() {
-    loadingRequests -= 1;
-    if (onLoadingListener != null && loadingRequests == 0) {
-      onLoadingListener.onLoadingChanged(false);
-    }
   }
 
   public String getUuid() {
@@ -200,15 +198,13 @@ public class DownloadHelper {
         sessionKey,
         onResponse::onResponse,
         onError::onError,
-        this::onRequestFinished,
         timeoutSeconds,
         tag
     );
-    onRequestLoading();
     requestQueue.add(request);
   }
 
-  // for requests without loading progress (set noLoadingProgress=true)
+  // for requests without loading progress (set noLoadingProgress=true) TODO
   public void get(
       String url,
       String tag,
@@ -225,15 +221,11 @@ public class DownloadHelper {
         sessionKey,
         onResponse::onResponse,
         onError::onError,
-        this::onRequestFinished,
         timeoutSeconds,
         tag,
         noLoadingProgress,
         onLoadingListener
     );
-    if (!noLoadingProgress) {
-      onRequestLoading();
-    }
     requestQueue.add(request);
   }
 
@@ -262,12 +254,10 @@ public class DownloadHelper {
         sessionKey,
         onResponse::onResponse,
         onError::onError,
-        this::onRequestFinished,
         timeoutSeconds,
         uuidHelper,
         userAgent
     );
-    onRequestLoading();
     requestQueue.add(request);
   }
 
@@ -287,11 +277,9 @@ public class DownloadHelper {
         json,
         onResponse::onResponse,
         onError::onError,
-        this::onRequestFinished,
         timeoutSeconds,
         uuidHelper
     );
-    onRequestLoading();
     requestQueue.add(request);
   }
 
@@ -311,11 +299,9 @@ public class DownloadHelper {
         json,
         onResponse::onResponse,
         onError::onError,
-        this::onRequestFinished,
         timeoutSeconds,
         uuidHelper
     );
-    onRequestLoading();
     requestQueue.add(request);
   }
 
@@ -329,11 +315,9 @@ public class DownloadHelper {
         sessionKey,
         onResponse::onResponse,
         onError::onError,
-        this::onRequestFinished,
         timeoutSeconds,
         uuidHelper
     );
-    onRequestLoading();
     requestQueue.add(request);
   }
 
@@ -353,11 +337,31 @@ public class DownloadHelper {
         json,
         onResponse::onResponse,
         onError::onError,
-        this::onRequestFinished,
         timeoutSeconds,
         uuidHelper
     );
-    onRequestLoading();
+    requestQueue.add(request);
+  }
+
+  public void putFile(
+      String url,
+      byte[] fileContent,
+      Runnable onSuccess,
+      OnErrorListener onError
+  ) {
+    String sessionKey = sharedPrefs
+        .getString(Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY, null);
+    CustomByteArrayRequest request = new CustomByteArrayRequest(
+        Request.Method.PUT,
+        url,
+        apiKey,
+        sessionKey,
+        fileContent,
+        onSuccess,
+        onError::onError,
+        timeoutSeconds,
+        uuidHelper
+    );
     requestQueue.add(request);
   }
 
@@ -376,11 +380,9 @@ public class DownloadHelper {
         sessionKey,
         onResponse::onResponse,
         onError::onError,
-        this::onRequestFinished,
         timeoutSeconds,
         tag
     );
-    onRequestLoading();
     requestQueue.add(request);
   }
 
@@ -418,132 +420,160 @@ public class DownloadHelper {
   }
 
   public NetworkQueue newQueue(
-      Runnable onQueueEmptyListener,
+      OnQueueEmptyListener onQueueEmptyListener,
       OnMultiTypeErrorListener onErrorListener
   ) {
-    NetworkQueue queue = new NetworkQueue(onQueueEmptyListener, onErrorListener, requestQueue);
+    NetworkQueue queue = new NetworkQueue(
+        requestQueue,
+        onQueueEmptyListener,
+        onErrorListener,
+        onLoadingListener
+    );
     queueArrayList.add(queue);
     return queue;
   }
 
-  public abstract static class QueueItem {
-    public abstract void perform(
-        OnStringResponseListener responseListener,
-        OnMultiTypeErrorListener errorListener,
-        String uuid
+  public void updateData(
+      OnQueueEmptyListener onFinished,
+      OnMultiTypeErrorListener errorListener,
+      boolean forceUpdate,
+      boolean errorsOnlyWithForceUpdate,
+      Class<?>... types
+  ) {
+    updateData(
+        onFinished,
+        errorListener,
+        null,
+        forceUpdate,
+        errorsOnlyWithForceUpdate,
+        null,
+        types
     );
-
-    public void perform(String uuid) {
-      // UUID is for cancelling the requests; should be uuidHelper from above
-      perform(null, null, uuid);
-    }
-  }
-
-  public void updateData(Runnable onFinished, OnMultiTypeErrorListener errorListener, Class<?>... types) {
-    updateData(onFinished, errorListener, null, types);
   }
 
   public void updateData(
-      Runnable onFinished, OnMultiTypeErrorListener errorListener, String dbChangedTime, Class<?>... types
+      OnQueueEmptyListener onFinished,
+      OnMultiTypeErrorListener errorListener,
+      @Nullable String dbChangedTime,
+      // true if appropriate caching info for respective object lists should be deleted
+      // which results in updating even if info is not updated on server
+      boolean forceUpdate,
+      // true if page can display offline content and errors
+      // should not be displayed when user enters page, instead it can display an offline
+      // banner (live updated with offlineLive data)
+      boolean errorsOnlyWithForceUpdate,
+      @Nullable QueueItem extraQueueItem,
+      Class<?>... types
   ) {
     if (dbChangedTime == null) {
-      getTimeDbChanged(time -> updateData(onFinished, errorListener, time, types), errorListener);
+      getTimeDbChanged(
+          time -> updateData(
+              onFinished,
+              errorListener,
+              time,
+              forceUpdate,
+              errorsOnlyWithForceUpdate,
+              extraQueueItem,
+              types
+          ),
+          error -> {
+            if (offlineLive != null) offlineLive.setValue(true);
+            if (errorsOnlyWithForceUpdate && !forceUpdate) {
+              return;
+            }
+            errorListener.onError(error);
+          }
+      );
       return;
     }
-    NetworkQueue queue = newQueue(onFinished, errorListener);
+
+    NetworkQueue queue = newQueue(updated -> {
+      if (offlineLive != null) offlineLive.setValue(false);
+      onFinished.onQueueEmpty(updated);
+    }, error -> {
+      if (offlineLive != null) offlineLive.setValue(true);
+      if (errorsOnlyWithForceUpdate && !forceUpdate) {
+        return;
+      }
+      errorListener.onError(error);
+    });
+
     for (Class<?> type : types) {
-      if (type == ProductGroup.class) {
-        queue.append(ProductGroup.updateProductGroups(this, dbChangedTime, null));
+      if (type == Product.class) {
+        queue.append(Product.updateProducts(this, dbChangedTime, forceUpdate, null, false));
+      } else if (type == ProductGroup.class) {
+        queue.append(ProductGroup.updateProductGroups(this, dbChangedTime, forceUpdate, null));
       } else if (type == QuantityUnit.class) {
-        queue.append(QuantityUnit.updateQuantityUnits(this, dbChangedTime, null));
+        queue.append(QuantityUnit.updateQuantityUnits(this, dbChangedTime, forceUpdate, null));
       } else if (type == QuantityUnitConversion.class) {
-        queue.append(QuantityUnitConversion.updateQuantityUnitConversions(this, dbChangedTime, null));
+        queue.append(QuantityUnitConversion.updateQuantityUnitConversions(this, dbChangedTime, forceUpdate, null));
+      } else if (type == QuantityUnitConversionResolved.class) {
+        queue.append(QuantityUnitConversionResolved.updateQuantityUnitConversions(this, dbChangedTime, forceUpdate, false, null));
       } else if (type == Location.class) {
-        queue.append(Location.updateLocations(this, dbChangedTime, null));
+        queue.append(Location.updateLocations(this, dbChangedTime, forceUpdate, null));
       } else if (type == StockLocation.class) {
-        queue.append(StockLocation.updateStockCurrentLocations(this, dbChangedTime, null));
-      } else if (type == Product.class) {
-        queue.append(Product.updateProducts(this, dbChangedTime, null));
+        queue.append(StockLocation.updateStockCurrentLocations(this, dbChangedTime, forceUpdate, null));
       } else if (type == ProductLastPurchased.class) {
-        queue.append(ProductLastPurchased.updateProductsLastPurchased(this, dbChangedTime, null, true));
+        queue.append(ProductLastPurchased.updateProductsLastPurchased(this, dbChangedTime, forceUpdate, null, true));
       } else if (type == ProductAveragePrice.class) {
-        queue.append(ProductAveragePrice.updateProductsAveragePrice(this, dbChangedTime, null, true));
+        queue.append(ProductAveragePrice.updateProductsAveragePrice(this, dbChangedTime, forceUpdate, null, true));
       } else if (type == ProductBarcode.class) {
-        queue.append(ProductBarcode.updateProductBarcodes(this, dbChangedTime, null));
+        queue.append(ProductBarcode.updateProductBarcodes(this, dbChangedTime, forceUpdate, null));
       } else if (type == User.class) {
-        queue.append(User.updateUsers(this, dbChangedTime, null));
+        queue.append(User.updateUsers(this, dbChangedTime, forceUpdate, null));
       } else if (type == StockItem.class) {
-        queue.append(StockItem.updateStockItems(this, dbChangedTime, null));
+        queue.append(StockItem.updateStockItems(this, dbChangedTime, forceUpdate, null));
       } else if (type == StockEntry.class) {
-        queue.append(StockEntry.updateStockEntries(this, dbChangedTime, null));
+        queue.append(StockEntry.updateStockEntries(this, dbChangedTime, forceUpdate, null));
       } else if (type == VolatileItem.class) {
-        queue.append(VolatileItem.updateVolatile(this, dbChangedTime, null));
+        queue.append(VolatileItem.updateVolatile(this, dbChangedTime, forceUpdate, null));
       } else if (type == MissingItem.class) {
-        queue.append(MissingItem.updateMissingItems(this, dbChangedTime, null));
+        queue.append(MissingItem.updateMissingItems(this, dbChangedTime, forceUpdate, null));
       } else if (type == ShoppingListItem.class) {
-        queue.append(ShoppingListItem.updateShoppingListItems(this, dbChangedTime,
-            (OnObjectsResponseListener<ShoppingListItem>) null));
+        queue.append(ShoppingListItem.updateShoppingListItems(this, dbChangedTime, forceUpdate,
+            null));
+      } else if (type == ShoppingListItemWithSync.class) {
+        queue.append(ShoppingListItem.updateShoppingListItemsWithoutNotSyncedItems(this, dbChangedTime, forceUpdate,
+            null));
       } else if (type == ShoppingList.class) {
-        queue.append(ShoppingList.updateShoppingLists(this, dbChangedTime, null));
+        queue.append(ShoppingList.updateShoppingLists(this, dbChangedTime, forceUpdate, null));
       } else if (type == Store.class) {
-        queue.append(Store.updateStores(this, dbChangedTime, null));
+        queue.append(Store.updateStores(this, dbChangedTime, forceUpdate, null));
       } else if (type == Task.class) {
-        queue.append(Task.updateTasks(this, dbChangedTime, null));
+        queue.append(Task.updateTasks(this, dbChangedTime, forceUpdate, null));
       } else if (type == TaskCategory.class) {
-        queue.append(TaskCategory.updateTaskCategories(this, dbChangedTime, null));
+        queue.append(TaskCategory.updateTaskCategories(this, dbChangedTime, forceUpdate, null));
       } else if (type == Chore.class) {
-        queue.append(Chore.updateChores(this, dbChangedTime, null));
+        queue.append(Chore.updateChores(this, dbChangedTime, forceUpdate, null));
       } else if (type == ChoreEntry.class) {
-        queue.append(ChoreEntry.updateChoreEntries(this, dbChangedTime, null));
+        queue.append(ChoreEntry.updateChoreEntries(this, dbChangedTime, forceUpdate, null));
       } else if (type == Recipe.class) {
-        queue.append(Recipe.updateRecipes(this, dbChangedTime, null));
+        queue.append(Recipe.updateRecipes(this, dbChangedTime, forceUpdate, null));
       } else if (type == RecipeFulfillment.class) {
-        queue.append(RecipeFulfillment.updateRecipeFulfillments(this, dbChangedTime, null));
+        queue.append(RecipeFulfillment.updateRecipeFulfillments(this, dbChangedTime, forceUpdate, null));
       } else if (type == RecipePosition.class) {
-        queue.append(RecipePosition.updateRecipePositions(this, dbChangedTime, null));
+        queue.append(RecipePosition.updateRecipePositions(this, dbChangedTime, forceUpdate, null));
+      } else if (type == RecipePositionResolved.class) {
+        queue.append(RecipePositionResolved.updateRecipePositionsResolved(this, dbChangedTime, forceUpdate, null));
+      } else if (type == Userfield.class) {
+        queue.append(Userfield.updateUserfields(this, dbChangedTime, forceUpdate, null));
       } else if (type == MealPlanEntry.class) {
         queue.append(MealPlanEntry.updateMealPlanEntries(this, dbChangedTime, null));
       }
     }
-    if (queue.isEmpty()) {
-      onFinished.run();
-      return;
-    }
+
+    queue.append(extraQueueItem);
     queue.start();
-  }
-
-  public interface OnVolatileResponseListener {
-
-    void onResponse(
-        ArrayList<StockItem> due,
-        ArrayList<StockItem> overdue,
-        ArrayList<StockItem> expired,
-        ArrayList<MissingItem> missing
-    );
-  }
-
-  public interface OnShoppingListItemsWithSyncResponseListener {
-
-    void onResponse(
-        ArrayList<ShoppingListItem> shoppingListItems,
-        ArrayList<ShoppingListItem> itemsToSync,
-        HashMap<Integer, ShoppingListItem> serverItemHashMap
-    );
   }
 
   public interface OnObjectsResponseListener<T> {
 
-    void onResponse(ArrayList<T> objects);
+    void onResponse(List<T> objects);
   }
 
   public interface OnObjectResponseListener<T> {
 
     void onResponse(T object);
-  }
-
-  public interface OnOpenFoodFactsProductResponseListener {
-
-    void onResponse(OpenFoodFactsProduct product);
   }
 
   public interface OnStringResponseListener {

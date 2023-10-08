@@ -113,6 +113,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
     });
 
     setUpThemeSelection();
+    updateShortcuts();
 
     int id;
     switch (getSharedPrefs().getInt(
@@ -157,6 +158,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
         )
     );
     binding.partialOptionTransition.switchOtherTransition.setOnCheckedChangeListener(this);
+    binding.partialOptionTransition.switchOtherTransition.jumpDrawablesToCurrentState();
 
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(

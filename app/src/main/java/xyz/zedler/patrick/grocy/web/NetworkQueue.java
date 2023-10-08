@@ -22,42 +22,61 @@ package xyz.zedler.patrick.grocy.web;
 import com.android.volley.RequestQueue;
 import java.util.ArrayList;
 import java.util.UUID;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnLoadingListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
 
 public class NetworkQueue {
 
   private final ArrayList<QueueItem> queueItems;
-  private final Runnable onQueueEmptyListener;
+  private final OnQueueEmptyListener onQueueEmptyListener;
   private final OnMultiTypeErrorListener onErrorListener;
+  private final OnLoadingListener onLoadingListener;
   private final RequestQueue requestQueue;
   private final String uuidQueue;
-  private int queueSize;
-  private boolean isRunning;
+  private int requestsNotFinishedCount;
+  private boolean isRunning; // state of queue
+  private boolean isLoading; // state of "loading" circle
+  private boolean realRequestsMade; // true if any real requests were made (not only QueueItemWithoutLoading in queue)
 
   public NetworkQueue(
-      Runnable onQueueEmptyListener,
+      RequestQueue requestQueue,
+      OnQueueEmptyListener onQueueEmptyListener,
       OnMultiTypeErrorListener onErrorListener,
-      RequestQueue requestQueue
+      OnLoadingListener onLoadingListener
   ) {
     this.onQueueEmptyListener = onQueueEmptyListener;
     this.onErrorListener = onErrorListener;
+    this.onLoadingListener = onLoadingListener;
     this.requestQueue = requestQueue;
     queueItems = new ArrayList<>();
     uuidQueue = UUID.randomUUID().toString();
-    queueSize = 0;
+    requestsNotFinishedCount = 0;
     isRunning = false;
+    isLoading = false;
+    realRequestsMade = false;
   }
 
   public NetworkQueue append(QueueItem... queueItems) {
     for (QueueItem queueItem : queueItems) {
-      if (queueItem == null) {
-        continue;
-      }
+      if (queueItem == null) continue;
       this.queueItems.add(queueItem);
-      queueSize++;
+      requestsNotFinishedCount++;
+      if (!(queueItem instanceof QueueItemWithoutLoading) && !realRequestsMade) {
+        realRequestsMade = true;
+      }
     }
     return this;
+  }
+
+  public void appendWhileRunning(QueueItem queueItem) {
+    if (queueItem == null) return;
+    this.queueItems.add(queueItem);
+    requestsNotFinishedCount++;
+    if (!(queueItem instanceof QueueItemWithoutLoading) && !realRequestsMade) {
+      realRequestsMade = true;
+    }
+    executeQueueItems();
   }
 
   public void start() {
@@ -65,41 +84,71 @@ public class NetworkQueue {
       return;
     } else {
       isRunning = true;
+      isLoading = false;
     }
     if (queueItems.isEmpty()) {
+      if (onLoadingListener != null) {
+        onLoadingListener.onLoadingChanged(false);
+      }
       if (onQueueEmptyListener != null) {
-        onQueueEmptyListener.run();
+        onQueueEmptyListener.onQueueEmpty(false);
       }
       return;
     }
-    while (!queueItems.isEmpty()) {
-      QueueItem queueItem = queueItems.remove(0);
+    executeQueueItems();
+  }
+
+  private void executeQueueItems() {
+    if (queueItems.isEmpty() || requestsNotFinishedCount == 0) {
+      return;
+    }
+
+    for (QueueItem queueItem : queueItems) {
+      if (!(queueItem instanceof QueueItemWithoutLoading) && !isLoading
+          && onLoadingListener != null) {
+        // this prevents loading circle to appear when shopping mode updates data but nothing has
+        // changed on server. In this case, all QueueItems are null except for products because
+        // QuantityUnitConversions rely on it and are updated after products. So loading circle
+        // only appears if QueueItem is not QueueItemWithoutLoading, which is always the case
+        // except in the condition explained.
+        onLoadingListener.onLoadingChanged(true);
+        isLoading = true;
+      }
       queueItem.perform(response -> {
-        queueSize--;
-        if (queueSize > 0) {
+        requestsNotFinishedCount--;
+        if (requestsNotFinishedCount > 0) {
           return;
         }
         isRunning = false;
+        isLoading = false;
+        if (onLoadingListener != null) {
+          onLoadingListener.onLoadingChanged(false);
+        }
         if (onQueueEmptyListener != null) {
-          onQueueEmptyListener.run();
+          onQueueEmptyListener.onQueueEmpty(realRequestsMade); // TODO: Test it
         }
         reset(false);
       }, error -> {
         isRunning = false;
+        isLoading = false;
+        if (onLoadingListener != null) {
+          onLoadingListener.onLoadingChanged(false);
+        }
         if (onErrorListener != null) {
           onErrorListener.onError(error);
         }
         reset(true);
       }, uuidQueue);
     }
+    queueItems.clear();
   }
 
   public int getSize() {
-    return queueSize;
+    return requestsNotFinishedCount;
   }
 
   public boolean isEmpty() {
-    return queueSize == 0;
+    return requestsNotFinishedCount == 0;
   }
 
   public void reset(boolean cancelAll) {
@@ -107,6 +156,28 @@ public class NetworkQueue {
       requestQueue.cancelAll(uuidQueue);
     }
     queueItems.clear();
-    queueSize = 0;
+    requestsNotFinishedCount = 0;
+    realRequestsMade = false;
+  }
+
+  public abstract static class QueueItem {
+    public abstract void perform(
+        OnStringResponseListener responseListener,
+        OnMultiTypeErrorListener errorListener,
+        String uuid
+    );
+
+    public void perform(String uuid) {
+      // UUID is for cancelling the requests; should be uuidHelper from above
+      perform(null, null, uuid);
+    }
+  }
+
+  public abstract static class QueueItemWithoutLoading extends QueueItem {
+
+  }
+
+  public interface OnQueueEmptyListener {
+    void onQueueEmpty(boolean updated);
   }
 }

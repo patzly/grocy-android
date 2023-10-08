@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.model;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -36,18 +37,20 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
+import xyz.zedler.patrick.grocy.database.Converters;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnJSONResponseListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
+import xyz.zedler.patrick.grocy.web.NetworkQueue.QueueItem;
 
 @Entity(tableName = "recipe_table")
 public class Recipe implements Parcelable {
@@ -89,6 +92,10 @@ public class Recipe implements Parcelable {
   @SerializedName("not_check_shoppinglist")
   private int notCheckShoppingList;
 
+  @ColumnInfo(name = "userfields")
+  @SerializedName("userfields")
+  private Map<String, String> userfields;
+
   public Recipe() {
   }  // for Room
 
@@ -103,6 +110,7 @@ public class Recipe implements Parcelable {
     baseServings = parcel.readDouble();
     desiredServings = parcel.readDouble();
     notCheckShoppingList = parcel.readInt();
+    userfields = Converters.stringToMap(parcel.readString());
   }
 
   @Override
@@ -116,6 +124,7 @@ public class Recipe implements Parcelable {
     dest.writeDouble(baseServings);
     dest.writeDouble(desiredServings);
     dest.writeInt(notCheckShoppingList);
+    dest.writeString(Converters.mapToString(userfields));
   }
 
   public static final Creator<Recipe> CREATOR = new Creator<>() {
@@ -219,6 +228,14 @@ public class Recipe implements Parcelable {
     this.notCheckShoppingList = notCheckShoppingList ? 1 : 0;
   }
 
+  public Map<String, String> getUserfields() {
+    return userfields;
+  }
+
+  public void setUserfields(Map<String, String> userfields) {
+    this.userfields = userfields;
+  }
+
   public static JSONObject getJsonFromRecipe(Recipe recipe, boolean debug, String TAG) {
     JSONObject json = new JSONObject();
     try {
@@ -278,7 +295,8 @@ public class Recipe implements Parcelable {
         Objects.equals(pictureFileName, recipe.pictureFileName) &&
         Objects.equals(baseServings, recipe.baseServings) &&
         Objects.equals(desiredServings, recipe.desiredServings) &&
-        Objects.equals(notCheckShoppingList, recipe.notCheckShoppingList);
+        Objects.equals(notCheckShoppingList, recipe.notCheckShoppingList) &&
+        Objects.equals(userfields, recipe.userfields);
   }
 
   public boolean equalsForListDiff(Object o) {
@@ -296,7 +314,8 @@ public class Recipe implements Parcelable {
         Objects.equals(pictureFileName, recipe.pictureFileName) &&
         Objects.equals(baseServings, recipe.baseServings) &&
         Objects.equals(desiredServings, recipe.desiredServings) &&
-        Objects.equals(notCheckShoppingList, recipe.notCheckShoppingList);
+        Objects.equals(notCheckShoppingList, recipe.notCheckShoppingList) &&
+        Objects.equals(userfields, recipe.userfields);
   }
 
   @Override
@@ -311,14 +330,16 @@ public class Recipe implements Parcelable {
     return "Recipe(" + name + ")";
   }
 
+  @SuppressLint("CheckResult")
   public static QueueItem updateRecipes(
       DownloadHelper dlHelper,
       String dbChangedTime,
+      boolean forceUpdate,
       OnObjectsResponseListener<Recipe> onResponseListener
   ) {
-    String lastTime = dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
+    String lastTime = !forceUpdate ? dlHelper.sharedPrefs.getString(  // get last offline db-changed-time value
         PREF.DB_LAST_TIME_RECIPES, null
-    );
+    ) : null;
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
       return new QueueItem() {
         @Override
@@ -347,11 +368,6 @@ public class Recipe implements Parcelable {
                 })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError(throwable -> {
-                      if (errorListener != null) {
-                        errorListener.onError(throwable);
-                      }
-                    })
                     .doFinally(() -> {
                       if (onResponseListener != null) {
                         onResponseListener.onResponse(recipes);
@@ -359,7 +375,12 @@ public class Recipe implements Parcelable {
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
-                    }).subscribe();
+                    })
+                    .subscribe(ignored -> {}, throwable -> {
+                      if (errorListener != null) {
+                        errorListener.onError(throwable);
+                      }
+                    });
               },
               error -> {
                 if (errorListener != null) {

@@ -2,7 +2,7 @@
 
 # Grocy Android
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Release](https://img.shields.io/github/v/release/patzly/grocy-android?label=Release)](https://github.com/patzly/grocy-android/releases)  [![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads)](https://github.com/patzly/grocy-android/releases)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Release](https://img.shields.io/github/v/release/patzly/grocy-android?label=Release)](https://github.com/patzly/grocy-android/releases)  [![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads)](https://github.com/patzly/grocy-android/releases) [![Project Dashboard](https://sourcespy.com/shield.svg)](https://sourcespy.com/github/patzlygrocyandroid/)
 
 Grocy Android is an open-source Android client for [grocy](https://grocy.info/) ([source code](https://github.com/grocy/grocy)), a self-hosted grocery and household management solution for your home.
 
@@ -26,6 +26,7 @@ If you want to try new features right after development, you can download an uns
 <a href="https://raw.githubusercontent.com/patzly/grocy-android/master/assets/screen2.png"><img src="assets/screen2.png" width="150px"/></a>
 <a href="https://raw.githubusercontent.com/patzly/grocy-android/master/assets/screen3.png"><img src="assets/screen3.png" width="150px"/></a>
 <a href="https://raw.githubusercontent.com/patzly/grocy-android/master/assets/screen4.png"><img src="assets/screen4.png" width="150px"/></a>
+<a href="https://raw.githubusercontent.com/patzly/grocy-android/master/assets/screen5.png"><img src="assets/screen5.png" width="150px"/></a>
 
 ## Features
 
@@ -42,7 +43,7 @@ If you want to try new features right after development, you can download an uns
 
 Grocy Android requires at least Android 5.0 Lollipop and works properly on devices without any Google service installed.
 
-It is also possible to use the grocy Add-on on a [Hass.io](https://www.home-assistant.io/hassio/) server. Click [here](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq4) for instructions.
+It is also possible to use the grocy Add-on on an [Home Assistant](https://www.home-assistant.io/getting-started/) server. Click [here](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq4) for instructions.
 
 This app supports `https` encryption
 - if your server uses a certificate which is signed by a public and trusted [certificate authority (CA)](https://en.wikipedia.org/wiki/Certificate_authority). To meet this requirement, you can use a free certificate from [letsencrypt.org](https://letsencrypt.org/) for your server. Old Android devices can have problems with newer CAs because their internal list of trusted CAs can be outdated if they don't receive system updates anymore, therefore we've integrated [Conscrypt](https://github.com/google/conscrypt/#readme) into the app to support current CAs on all Android versions.
@@ -56,10 +57,12 @@ Please see the in-app help dialog or the [FAQ](https://github.com/patzly/grocy-a
 
 If you run into a bug or miss a feature, please [open an issue](https://github.com/patzly/grocy-android/issues) in this repository.
 
+For a quick repository overview please refer to [build, module, class and other diagrams](https://sourcespy.com/github/patzlygrocyandroid/). 
+
 Like the grocy project, Grocy Android can be translated, too. The main language is English, but we also maintain the German translation because it's our mother tongue.
 You can help translate this project at [Transifex](https://app.transifex.com/patzly/grocy-android), if your language is incomplete, contains typos or is not available yet. Translations which reached a completion level of 80% will be included in releases.  
 
-Translated languages (20): Catalan, Czech, German, Spanish, Estonian, French, Hungarian, Italian, Hebrew, Norwegian Bokmål, Dutch, Polish, Portuguese (Brazil), Portuguese (Portugal), Russian, Slovak, Swedish, Ukrainian, Chinese (China), Chinese (Taiwan)
+Translated languages (21): Catalan, Czech, German, Spanish, Estonian, French, Hungarian, Italian, Hebrew, Japanese, Norwegian Bokmål, Dutch, Polish, Portuguese (Brazil), Portuguese (Portugal), Russian, Slovak, Swedish, Ukrainian, Chinese (China), Chinese (Taiwan)
 
 Thanks for your contributions!
 

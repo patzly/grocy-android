@@ -41,15 +41,19 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.fragment.StockOverviewFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields.Field;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataLocation;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataProductGroup;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockExtraField;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockGrouping;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockSort;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataGroupingStock;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataSort;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataSort.SortOption;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStatusStock;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
@@ -63,6 +67,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
+import xyz.zedler.patrick.grocy.model.Userfield;
 import xyz.zedler.patrick.grocy.model.VolatileItem;
 import xyz.zedler.patrick.grocy.repository.StockOverviewRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
@@ -71,10 +76,25 @@ import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class StockOverviewViewModel extends BaseViewModel {
 
   private final static String TAG = ShoppingListViewModel.class.getSimpleName();
+  public final static String[] DISPLAYED_USERFIELD_ENTITIES = { ENTITY.PRODUCTS };
+
+  public final static String SORT_NAME = "sort_name";
+  public final static String SORT_DUE_DATE = "sort_due_date";
+  public final static String SORT_CREATED_TIMESTAMP = "sort_created_timestamp";
+
+  public final static String FIELD_AMOUNT = "field_amount";
+  public final static String FIELD_DUE_DATE = "field_due_date";
+  public final static String FIELD_VALUE = "field_value";
+  public final static String FIELD_CALORIES_UNIT = "field_calories_unit";
+  public final static String FIELD_CALORIES_TOTAL = "field_calories_total";
+  public final static String FIELD_AVERAGE_PRICE = "field_average_price";
+  public final static String FIELD_LAST_PRICE = "field_last_price";
+  public final static String FIELD_PICTURE = "field_picture";
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
@@ -86,12 +106,12 @@ public class StockOverviewViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<ArrayList<StockItem>> filteredStockItemsLive;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
-  private final FilterChipLiveDataStockStatus filterChipLiveDataStatus;
+  private final FilterChipLiveDataStatusStock filterChipLiveDataStatus;
   private final FilterChipLiveDataProductGroup filterChipLiveDataProductGroup;
   private final FilterChipLiveDataLocation filterChipLiveDataLocation;
-  private final FilterChipLiveDataStockSort filterChipLiveDataSort;
-  private final FilterChipLiveDataStockGrouping filterChipLiveDataGrouping;
-  private final FilterChipLiveDataStockExtraField filterChipLiveDataExtraField;
+  private final FilterChipLiveDataSort filterChipLiveDataSort;
+  private final FilterChipLiveDataGroupingStock filterChipLiveDataGrouping;
+  private final FilterChipLiveDataFields filterChipLiveDataFields;
 
   private List<StockItem> stockItems;
   private List<Product> products;
@@ -106,6 +126,7 @@ public class StockOverviewViewModel extends BaseViewModel {
   private HashMap<Integer, MissingItem> productIdsMissingItems;
   private HashMap<Integer, Location> locationHashMap;
   private HashMap<Integer, HashMap<Integer, StockLocation>> stockLocationsHashMap;
+  private HashMap<String, Userfield> userfieldHashMap;
 
   private String searchInput;
   private ArrayList<String> searchResultsFuzzy;
@@ -125,7 +146,7 @@ public class StockOverviewViewModel extends BaseViewModel {
     alreadyLoadedFromDatabase = false;
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new StockOverviewRepository(application);
     pluralUtil = new PluralUtil(application);
@@ -134,35 +155,52 @@ public class StockOverviewViewModel extends BaseViewModel {
     filteredStockItemsLive = new MutableLiveData<>();
     scannerVisibilityLive = new MutableLiveData<>(false);
 
-    filterChipLiveDataStatus = new FilterChipLiveDataStockStatus(
+    filterChipLiveDataStatus = new FilterChipLiveDataStatusStock(
         getApplication(),
-        this::updateFilteredStockItems
+        this::updateFilteredStockItemsWithTopScroll
     );
     if (NumUtil.isStringInt(args.getStatusFilterId())) {
       if (Integer.parseInt(args.getStatusFilterId())
-          == FilterChipLiveDataStockStatus.STATUS_NOT_FRESH) {
-        filterChipLiveDataStatus.setStatusNotFresh();
+          == FilterChipLiveDataStatusStock.STATUS_NOT_FRESH) {
+        filterChipLiveDataStatus
+            .setStatus(FilterChipLiveDataStatusStock.STATUS_NOT_FRESH, null);
       }
     }
     filterChipLiveDataProductGroup = new FilterChipLiveDataProductGroup(
         getApplication(),
-        this::updateFilteredStockItems
+        this::updateFilteredStockItemsWithTopScroll
     );
     filterChipLiveDataLocation = new FilterChipLiveDataLocation(
         getApplication(),
-        this::updateFilteredStockItems
+        this::updateFilteredStockItemsWithTopScroll
     );
-    filterChipLiveDataSort = new FilterChipLiveDataStockSort(
+    filterChipLiveDataSort = new FilterChipLiveDataSort(
         getApplication(),
-        this::updateFilteredStockItems
+        Constants.PREF.STOCK_SORT_MODE,
+        Constants.PREF.STOCK_SORT_ASCENDING,
+        this::updateFilteredStockItemsWithTopScroll,
+        SORT_NAME,
+        new SortOption(SORT_NAME, getString(R.string.property_name)),
+        sharedPrefs.getBoolean(PREF.FEATURE_STOCK_BBD_TRACKING, true) ?
+            new SortOption(SORT_DUE_DATE, getString(R.string.property_due_date_next)) : null,
+        new SortOption(SORT_CREATED_TIMESTAMP, getString(R.string.property_created_timestamp))
     );
-    filterChipLiveDataGrouping = new FilterChipLiveDataStockGrouping(
+    filterChipLiveDataGrouping = new FilterChipLiveDataGroupingStock(
         getApplication(),
-        this::updateFilteredStockItems
+        this::updateFilteredStockItemsWithTopScroll
     );
-    filterChipLiveDataExtraField = new FilterChipLiveDataStockExtraField(
+    filterChipLiveDataFields = new FilterChipLiveDataFields(
         getApplication(),
-        this::updateFilteredStockItems
+        PREF.STOCK_FIELDS,
+        this::updateFilteredStockItems,
+        new Field(FIELD_AMOUNT, getString(R.string.property_amount), true),
+        new Field(FIELD_DUE_DATE, getString(R.string.property_due_date_next), true),
+        new Field(FIELD_VALUE, getString(R.string.property_value), false),
+        new Field(FIELD_CALORIES_UNIT, getString(R.string.property_calories_unit), false),
+        new Field(FIELD_CALORIES_TOTAL, getString(R.string.property_calories_total), false),
+        new Field(FIELD_AVERAGE_PRICE, getString(R.string.property_price_average), false),
+        new Field(FIELD_LAST_PRICE, getString(R.string.property_last_price), false),
+        new Field(FIELD_PICTURE, getString(R.string.property_picture), true)
     );
   }
 
@@ -247,6 +285,11 @@ public class StockOverviewViewModel extends BaseViewModel {
         locationsForProductId.put(stockLocation.getLocationId(), stockLocation);
       }
 
+      filterChipLiveDataSort.setUserfields(data.getUserfields(), DISPLAYED_USERFIELD_ENTITIES);
+      filterChipLiveDataGrouping.setUserfields(data.getUserfields(), DISPLAYED_USERFIELD_ENTITIES);
+      filterChipLiveDataFields.setUserfields(data.getUserfields(), DISPLAYED_USERFIELD_ENTITIES);
+      userfieldHashMap = ArrayUtil.getUserfieldHashMap(data.getUserfields());
+
       filterChipLiveDataStatus
           .setNotFreshCount(itemsDueCount+itemsOverdueCount+itemsExpiredCount)
           .setDueSoonCount(itemsDueCount)
@@ -264,18 +307,14 @@ public class StockOverviewViewModel extends BaseViewModel {
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(boolean skipOfflineCheck) {
-    if (!skipOfflineCheck && isOffline()) { // skip downloading and update recyclerview
-      isLoadingLive.setValue(false);
-      updateFilteredStockItems();
-      return;
-    }
+  public void downloadData(boolean forceUpdate) {
     dlHelper.updateData(
-        () -> {
-          if (isOffline()) setOfflineLive(false);
-          loadFromDatabase(false);
+        updated -> {
+          if (updated) loadFromDatabase(false);
         },
         error -> onError(error, TAG),
+        forceUpdate,
+        true,
         QuantityUnit.class,
         ProductGroup.class,
         StockItem.class,
@@ -286,29 +325,9 @@ public class StockOverviewViewModel extends BaseViewModel {
         Location.class,
         ProductAveragePrice.class,
         ProductLastPurchased.class,
-        StockLocation.class
+        StockLocation.class,
+        Userfield.class
     );
-  }
-
-  public void downloadData() {
-    downloadData(false);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_STOCK_ITEMS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS_AVERAGE_PRICE, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS_LAST_PURCHASED, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_STOCK_LOCATIONS, null);
-    editPrefs.apply();
-    downloadData(true);
   }
 
   public void updateFilteredStockItems() {
@@ -381,20 +400,20 @@ public class StockOverviewViewModel extends BaseViewModel {
 
       MissingItem missingItem = productIdsMissingItems.get(item.getProductId());
       boolean hasOwnStock = !item.getProduct().getNoOwnStockBoolean();
-      if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_ALL
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_NOT_FRESH
+      if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusStock.STATUS_ALL
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusStock.STATUS_NOT_FRESH
           && (item.isItemDue() || item.isItemOverdue() || item.isItemExpired()) && hasOwnStock
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_DUE_SOON
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusStock.STATUS_DUE_SOON
           && item.isItemDue() && hasOwnStock
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_OVERDUE
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusStock.STATUS_OVERDUE
           && item.isItemOverdue() && hasOwnStock
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_EXPIRED
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusStock.STATUS_EXPIRED
           && item.isItemExpired() && hasOwnStock
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_BELOW_MIN
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusStock.STATUS_BELOW_MIN
           && missingItem != null
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_IN_STOCK
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusStock.STATUS_IN_STOCK
           && (missingItem == null || missingItem.getIsPartlyInStockBoolean())
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_OPENED
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusStock.STATUS_OPENED
           && item.getAmountOpenedDouble() > 0
       ) {
         filteredStockItems.add(item);
@@ -406,7 +425,7 @@ public class StockOverviewViewModel extends BaseViewModel {
       if (searchInput != null && !searchInput.isEmpty()) {
         info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
       } else if (filterChipLiveDataStatus.getStatus()
-          != FilterChipLiveDataStockStatus.STATUS_ALL
+          != FilterChipLiveDataStatusStock.STATUS_ALL
           || filterChipLiveDataProductGroup.getSelectedId()
           != FilterChipLiveDataProductGroup.NO_FILTER
           || filterChipLiveDataLocation.getSelectedId()
@@ -424,13 +443,22 @@ public class StockOverviewViewModel extends BaseViewModel {
     filteredStockItemsLive.setValue(filteredStockItems);
   }
 
+  public void updateFilteredStockItemsWithTopScroll() {
+    updateFilteredStockItems();
+    sendEvent(Event.SCROLL_UP);
+  }
+
   public void performAction(String action, StockItem stockItem) {
     switch (action) {
       case Constants.ACTION.CONSUME:
         consumeProduct(stockItem, stockItem.getProduct().getQuickConsumeAmountDouble(), false);
         break;
       case Constants.ACTION.OPEN:
-        openProduct(stockItem, stockItem.getProduct().getQuickConsumeAmountDouble());
+        if (VersionUtil.isGrocyServerMin400(sharedPrefs)) {
+          openProduct(stockItem, stockItem.getProduct().getQuickOpenAmountDouble());
+        } else {
+          openProduct(stockItem, stockItem.getProduct().getQuickConsumeAmountDouble());
+        }
         break;
       case Constants.ACTION.CONSUME_ALL:
         consumeProduct(
@@ -493,7 +521,7 @@ public class StockOverviewViewModel extends BaseViewModel {
             snackbarMsg.setAction(getString(R.string.action_undo), v -> dlHelper.post(
                 grocyApi.undoStockTransaction(finalTransactionId),
                 response1 -> {
-                  downloadData();
+                  downloadData(false);
                   showSnackbar(new SnackbarMessage(
                       getString(R.string.msg_undone_transaction),
                       Snackbar.LENGTH_SHORT
@@ -505,7 +533,7 @@ public class StockOverviewViewModel extends BaseViewModel {
                 this::showNetworkErrorMessage
             ));
           }
-          downloadData();
+          downloadData(false);
           showSnackbar(snackbarMsg);
           if (debug) {
             Log.i(
@@ -567,7 +595,7 @@ public class StockOverviewViewModel extends BaseViewModel {
             snackbarMsg.setAction(getString(R.string.action_undo), v -> dlHelper.post(
                 grocyApi.undoStockTransaction(finalTransactionId),
                 response1 -> {
-                  downloadData();
+                  downloadData(false);
                   showSnackbar(new SnackbarMessage(
                       getString(R.string.msg_undone_transaction),
                       Snackbar.LENGTH_SHORT
@@ -579,7 +607,7 @@ public class StockOverviewViewModel extends BaseViewModel {
                 this::showNetworkErrorMessage
             ));
           }
-          downloadData();
+          downloadData(false);
           showSnackbar(snackbarMsg);
           if (debug) {
             Log.i(
@@ -663,6 +691,10 @@ public class StockOverviewViewModel extends BaseViewModel {
     return quantityUnitHashMap.get(id);
   }
 
+  public HashMap<String, Userfield> getUserfieldHashMap() {
+    return userfieldHashMap;
+  }
+
   public FilterChipLiveData.Listener getFilterChipLiveDataStatus() {
     return () -> filterChipLiveDataStatus;
   }
@@ -695,12 +727,12 @@ public class StockOverviewViewModel extends BaseViewModel {
     return filterChipLiveDataGrouping.getGroupingMode();
   }
 
-  public FilterChipLiveData.Listener getFilterChipLiveDataExtraField() {
-    return () -> filterChipLiveDataExtraField;
+  public FilterChipLiveData.Listener getFilterChipLiveDataFields() {
+    return () -> filterChipLiveDataFields;
   }
 
-  public String getExtraField() {
-    return filterChipLiveDataExtraField.getExtraField();
+  public List<String> getActiveFields() {
+    return filterChipLiveDataFields.getActiveFields();
   }
 
   public MutableLiveData<Boolean> getScannerVisibilityLive() {

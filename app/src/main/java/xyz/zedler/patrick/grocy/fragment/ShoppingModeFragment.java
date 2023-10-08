@@ -31,7 +31,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
@@ -42,13 +42,13 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingModeItemAdapter;
-import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingModeBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
@@ -104,7 +104,6 @@ public class ShoppingModeFragment extends BaseFragment implements
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
     viewModel = new ViewModelProvider(this).get(ShoppingModeViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
     binding.setFragment(this);
@@ -119,8 +118,7 @@ public class ShoppingModeFragment extends BaseFragment implements
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
-    binding.toolbar.setOnMenuItemClickListener(getMenuItemClickListener());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.performOnBackPressed());
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();
@@ -135,13 +133,12 @@ public class ShoppingModeFragment extends BaseFragment implements
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
-    binding.recycler.setAdapter(new ShoppingPlaceholderAdapter());
-
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
-      if (!state) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
+    ShoppingModeItemAdapter adapter = new ShoppingModeItemAdapter(
+        requireContext(),
+        (LinearLayoutManager) binding.recycler.getLayoutManager(),
+        this
+    );
+    binding.recycler.setAdapter(adapter);
 
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
@@ -162,40 +159,23 @@ public class ShoppingModeFragment extends BaseFragment implements
       } else {
         viewModel.getInfoFullscreenLive().setValue(null);
       }
-      if (binding.recycler.getAdapter() instanceof ShoppingModeItemAdapter) {
-        ((ShoppingModeItemAdapter) binding.recycler.getAdapter()).updateData(
-            requireContext(),
-            items,
-            viewModel.getProductHashMap(),
-            viewModel.getProductNamesHashMap(),
-            viewModel.getQuantityUnitHashMap(),
-            viewModel.getProductGroupHashMap(),
-            viewModel.getStoreHashMap(),
-            viewModel.getShoppingListItemAmountsHashMap(),
-            viewModel.getMissingProductIds(),
-            viewModel.getShoppingListNotes(),
-            viewModel.getGroupingMode()
-        );
-      } else {
-        binding.recycler.setAdapter(
-            new ShoppingModeItemAdapter(
-                requireContext(),
-                (LinearLayoutManager) binding.recycler.getLayoutManager(),
-                items,
-                viewModel.getProductHashMap(),
-                viewModel.getProductNamesHashMap(),
-                viewModel.getQuantityUnitHashMap(),
-                viewModel.getProductGroupHashMap(),
-                viewModel.getStoreHashMap(),
-                viewModel.getShoppingListItemAmountsHashMap(),
-                viewModel.getMissingProductIds(),
-                this,
-                viewModel.getShoppingListNotes(),
-                viewModel.getGroupingMode()
-            )
-        );
-        binding.recycler.scheduleLayoutAnimation();
-      }
+      adapter.updateData(
+          requireContext(),
+          items,
+          viewModel.getProductHashMap(),
+          viewModel.getProductNamesHashMap(),
+          viewModel.getProductLastPurchasedHashMap(),
+          viewModel.getQuantityUnitHashMap(),
+          viewModel.getUnitConversions(),
+          viewModel.getProductGroupHashMap(),
+          viewModel.getStoreHashMap(),
+          viewModel.getShoppingListItemAmountsHashMap(),
+          viewModel.getMissingProductIds(),
+          viewModel.getShoppingListNotes(),
+          viewModel.getGroupingMode(),
+          viewModel.getActiveFields(),
+          () -> binding.recycler.scheduleLayoutAnimation()
+      );
     });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
@@ -203,6 +183,8 @@ public class ShoppingModeFragment extends BaseFragment implements
         activity.showSnackbar(
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
+      } else if (event.getType() == Event.SCROLL_UP) {
+        binding.recycler.scrollToPosition(0);
       }
     });
 
@@ -328,10 +310,7 @@ public class ShoppingModeFragment extends BaseFragment implements
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false, false);
   }
 
   private void hideDisabledFeatures() {
@@ -345,13 +324,34 @@ public class ShoppingModeFragment extends BaseFragment implements
     return !sharedPrefs.getBoolean(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true);
   }
 
-  public Toolbar.OnMenuItemClickListener getMenuItemClickListener() {
+  public void showShoppingModeMenu() {
+    PopupMenu popupMenu = new PopupMenu(requireContext(), binding.toolbarMenu);
+    popupMenu.inflate(R.menu.menu_shopping_mode);
+    MenuItem itemGrouping = popupMenu.getMenu().findItem(R.id.action_grouping_mode);
+    if (itemGrouping != null) {
+      FilterChipLiveData data = viewModel.getFilterChipLiveDataGrouping();
+      itemGrouping.setTitle(data.getText());
+    }
+    popupMenu.setOnMenuItemClickListener(getMenuItemClickListener());
+    popupMenu.show();
+  }
+
+  public PopupMenu.OnMenuItemClickListener getMenuItemClickListener() {
     return item -> {
       if (item.getItemId() == R.id.action_select) {
         showShoppingListsBottomSheet();
         return true;
-      }
-      if (item.getItemId() == R.id.action_options) {
+      } else if (item.getItemId() == R.id.action_grouping_mode) {
+        PopupMenu popupMenu = new PopupMenu(requireContext(), binding.toolbarMenu);
+        viewModel.getFilterChipLiveDataGrouping().populateMenu(popupMenu.getMenu());
+        popupMenu.show();
+        return true;
+      } else if (item.getItemId() == R.id.action_fields) {
+        PopupMenu popupMenu = new PopupMenu(requireContext(), binding.toolbarMenu);
+        viewModel.getFilterChipLiveDataFields().populateMenu(popupMenu.getMenu());
+        popupMenu.show();
+        return true;
+      } else if (item.getItemId() == R.id.action_options) {
         activity.navUtil.navigateFragment(ShoppingModeFragmentDirections
             .actionShoppingModeFragmentToShoppingModeOptionsFragment());
         return true;
@@ -370,7 +370,7 @@ public class ShoppingModeFragment extends BaseFragment implements
         if (debug) {
           Log.i(TAG, "auto sync shopping list (but may skip download)");
         }
-        handler.post(() -> viewModel.downloadData());
+        handler.post(() -> viewModel.downloadData(false, false));
       }
     };
   }

@@ -1,0 +1,4 @@
+• New: Compatibility for server version 4.0.2 and 4.0.3
+• Fixed: Network error when consuming or purchasing (and other actions), due to new rule for API requests which Grocy server 4.0.3 introduced
+• Fixed: Product information not saved when going back
+• Fixed: Missing delete confirmation in recipe edit mode

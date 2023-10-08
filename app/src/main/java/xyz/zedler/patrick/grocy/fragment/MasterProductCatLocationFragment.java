@@ -77,7 +77,7 @@ public class MasterProductCatLocationFragment extends BaseFragment {
   @Override
   public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    MasterProductFragmentArgs args = MasterProductFragmentArgs
+    MasterProductCatLocationFragmentArgs args = MasterProductCatLocationFragmentArgs
         .fromBundle(requireArguments());
     viewModel = new ViewModelProvider(this, new MasterProductCatLocationViewModel
         .MasterProductCatLocationViewModelFactory(activity.getApplication(), args)
@@ -116,17 +116,28 @@ public class MasterProductCatLocationFragment extends BaseFragment {
       }
     });
 
+    Object newLocationId = getFromThisDestinationNow(ARGUMENT.OBJECT_ID);
+    if (newLocationId != null) {  // if user created a new location and navigates back to this fragment this is the new locationId
+      removeForThisDestination(ARGUMENT.OBJECT_ID);
+      String idForValue = (String) getFromThisDestinationNow(ARGUMENT.OBJECT_NAME);
+      viewModel.setQueueEmptyAction(() -> {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(
+            IS_CONSUME_LOCATION,
+            idForValue != null && idForValue.equals(IS_CONSUME_LOCATION)
+        );
+        List<Location> locations = viewModel.getFormData().getLocationsLive().getValue();
+        if (locations == null) return;
+        Location location = Location.getFromId(locations, (Integer) newLocationId);
+        selectLocation(location, bundle);
+      });
+    }
+
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
-
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
-      if (!isLoading) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
 
     viewModel.getFormData().getLocationErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textLocation.setTextColor(
@@ -157,7 +168,7 @@ public class MasterProductCatLocationFragment extends BaseFragment {
                 Constants.ARGUMENT.ACTION,
                 Constants.ACTION.DELETE
             );
-            activity.onBackPressed();
+            activity.performOnBackPressed();
             return true;
           }
           if (menuItem.getItemId() == R.id.action_save) {
@@ -166,24 +177,25 @@ public class MasterProductCatLocationFragment extends BaseFragment {
                 Constants.ARGUMENT.ACTION,
                 ACTION.SAVE_CLOSE
             );
-            activity.onBackPressed();
+            activity.performOnBackPressed();
             return true;
           }
           return false;
         }
     );
+    boolean showSaveWithCloseButton = viewModel.isActionEdit() || args.getForceSaveWithClose();
     activity.updateFab(
-        viewModel.isActionEdit() ? R.drawable.ic_round_save : R.drawable.ic_round_save_as,
-        viewModel.isActionEdit() ? R.string.action_save : R.string.action_save_not_close,
-        viewModel.isActionEdit() ? Constants.FAB.TAG.SAVE : Constants.FAB.TAG.SAVE_NOT_CLOSE,
+        showSaveWithCloseButton ? R.drawable.ic_round_save : R.drawable.ic_round_save_as,
+        showSaveWithCloseButton ? R.string.action_save : R.string.action_save_not_close,
+        showSaveWithCloseButton ? Constants.FAB.TAG.SAVE : Constants.FAB.TAG.SAVE_NOT_CLOSE,
         savedInstanceState == null,
         () -> {
           setForDestination(
               R.id.masterProductFragment,
               Constants.ARGUMENT.ACTION,
-              viewModel.isActionEdit() ? ACTION.SAVE_CLOSE : ACTION.SAVE_NOT_CLOSE
+              showSaveWithCloseButton ? ACTION.SAVE_CLOSE : ACTION.SAVE_NOT_CLOSE
           );
-          activity.onBackPressed();
+          activity.performOnBackPressed();
         }
     );
   }
@@ -207,6 +219,7 @@ public class MasterProductCatLocationFragment extends BaseFragment {
     } else {
       location = viewModel.getFormData().getLocationLive().getValue();
     }
+    bundle.putBoolean(ARGUMENT.DISPLAY_NEW_OPTION, true);
     int locationId = location != null ? location.getId() : -1;
     bundle.putInt(Constants.ARGUMENT.SELECTED_ID, locationId);
     bundle.putBoolean(IS_CONSUME_LOCATION, consumeLocation);
@@ -240,6 +253,14 @@ public class MasterProductCatLocationFragment extends BaseFragment {
   }
 
   @Override
+  public void createLocation(Bundle args) {
+    activity.navUtil.navigateFragment(MasterProductCatLocationFragmentDirections
+        .actionMasterProductCatLocationFragmentToMasterLocationFragment()
+        .setIdForReturnValue(args.getBoolean(IS_CONSUME_LOCATION, false)
+            ? IS_CONSUME_LOCATION : null));
+  }
+
+  @Override
   public void selectStore(Store store) {
     viewModel.getFormData().getStoreLive().setValue(
         store == null || store.getId() == -1 ? null : store
@@ -261,10 +282,7 @@ public class MasterProductCatLocationFragment extends BaseFragment {
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
   }
 
   @NonNull

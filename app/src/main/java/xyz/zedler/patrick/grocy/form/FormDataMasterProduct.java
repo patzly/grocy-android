@@ -31,11 +31,14 @@ import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class FormDataMasterProduct {
 
   private final SharedPreferences sharedPrefs;
   private final MutableLiveData<Boolean> displayHelpLive;
+  private final MutableLiveData<Boolean> displayPictureWarningLive;
+  private final MutableLiveData<String> messageCopiedFromLive;
   private final MutableLiveData<String> nameLive;
   private final MediatorLiveData<Integer> nameErrorLive;
   private final LiveData<Boolean> catOptionalErrorLive;
@@ -49,8 +52,10 @@ public class FormDataMasterProduct {
   public FormDataMasterProduct(Application application, boolean beginnerMode) {
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);;
     displayHelpLive = new MutableLiveData<>(beginnerMode);
+    displayPictureWarningLive = new MutableLiveData<>(false);
     productLive = new MutableLiveData<>();
     productNamesLive = new MutableLiveData<>();
+    messageCopiedFromLive = new MutableLiveData<>();
     nameLive = (MutableLiveData<String>) Transformations.map(
         productLive,
         product -> product != null ? product.getName() : null
@@ -72,7 +77,8 @@ public class FormDataMasterProduct {
     );
     catQuErrorLive = Transformations.map(
         productLive,
-        FormDataMasterProductCatQuantityUnit::isFormInvalid
+        p -> FormDataMasterProductCatQuantityUnit
+            .isFormInvalid(p, VersionUtil.isGrocyServerMin400(sharedPrefs))
     );
     catAmountErrorLive = Transformations.map(
         productLive,
@@ -91,6 +97,10 @@ public class FormDataMasterProduct {
 
   public MutableLiveData<Product> getProductLive() {
     return productLive;
+  }
+
+  public MutableLiveData<String> getMessageCopiedFromLive() {
+    return messageCopiedFromLive;
   }
 
   public MutableLiveData<String> getNameLive() {
@@ -134,7 +144,7 @@ public class FormDataMasterProduct {
         && productNamesLive.getValue() != null
         && productNamesLive.getValue().contains(nameLive.getValue())
     ) {
-      nameErrorLive.setValue(R.string.error_name_exists);
+      nameErrorLive.setValue(R.string.error_already_exists);
       return false;
     }
     nameErrorLive.setValue(null);

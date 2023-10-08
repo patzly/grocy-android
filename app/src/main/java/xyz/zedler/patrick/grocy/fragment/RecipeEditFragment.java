@@ -19,22 +19,35 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.provider.MediaStore;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import java.io.File;
+import java.io.IOException;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentRecipeEditBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
@@ -42,22 +55,29 @@ import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
+import xyz.zedler.patrick.grocy.util.PictureUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditViewModel;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditViewModel.RecipeEditViewModelFactory;
+import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class RecipeEditFragment extends BaseFragment implements EmbeddedFragmentScanner.BarcodeListener {
 
   private final static String TAG = RecipeEditFragment.class.getSimpleName();
+
+  private static final String DIALOG_DELETE_SHOWING = "dialog_delete_showing";
 
   private MainActivity activity;
   private FragmentRecipeEditBinding binding;
   private RecipeEditViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
+  private AlertDialog dialogDelete;
+  private ActivityResultLauncher<Intent> mActivityResultLauncherTakePicture;
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup group, Bundle state) {
@@ -107,7 +127,7 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
                 .setRecipe(viewModel.getRecipe())
         );
       } else {
-        activity.showSnackbar(R.string.subtitle_recipe_not_on_server, true);
+        activity.showSnackbar(R.string.msg_save_recipe_first, true);
       }
     });
     binding.preparation.setOnClickListener(v -> {
@@ -190,6 +210,17 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
             viewModel.getFormData().getScannerVisibilityLive()
     );
 
+    viewModel.getFormData().getPictureFilenameLive().observe(getViewLifecycleOwner(),
+        this::loadRecipePicture);
+
+    mActivityResultLauncherTakePicture = registerForActivityResult(
+        new ActivityResultContracts.StartActivityForResult(),
+        result -> {
+          if (result.getResultCode() == Activity.RESULT_OK) {
+            viewModel.scaleAndUploadBitmap(viewModel.getCurrentFilePath(), null);
+          }
+        });
+
     viewModel.getActionEditLive().observe(getViewLifecycleOwner(), isEdit -> activity.updateBottomAppBar(
         true,
         isEdit
@@ -216,6 +247,12 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
 
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
+    } else {
+      if (savedInstanceState.getBoolean(DIALOG_DELETE_SHOWING)) {
+        new Handler(Looper.getMainLooper()).postDelayed(
+            this::showDeleteConfirmationDialog, 1
+        );
+      }
     }
 
     // UPDATE UI
@@ -231,7 +268,7 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
         viewModel.isActionEdit() ? Constants.FAB.TAG.SAVE : Constants.FAB.TAG.SAVE_NOT_CLOSE,
         savedInstanceState == null,
         () -> {
-          if (!viewModel.getFormData().isNameValid()) {
+          if (!viewModel.getFormData().isFormValid()) {
             clearInputFocus();
             activity.showKeyboard(binding.editTextName);
           } else {
@@ -240,6 +277,12 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
           }
         }
     );
+  }
+
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putBoolean(DIALOG_DELETE_SHOWING, dialogDelete != null && dialogDelete.isShowing());
   }
 
   public void clearInputFocus() {
@@ -261,7 +304,7 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     if (product == null) {
       return;
     }
-    viewModel.setProduct(product.getId(), null, null);
+    viewModel.setProduct(product);
   }
 
   public void clearFocusAndCheckProductInput() {
@@ -271,15 +314,15 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
 
   public void clearFocusAndCheckProductInputExternal() {
     clearInputFocus();
-    String input = viewModel.getFormData().getProductNameLive().getValue();
+    String input = viewModel.getFormData().getProductProducedNameLive().getValue();
     if (input == null || input.isEmpty()) return;
-    viewModel.onBarcodeRecognized(viewModel.getFormData().getProductNameLive().getValue());
+    viewModel.onBarcodeRecognized(viewModel.getFormData().getProductProducedNameLive().getValue());
   }
 
   private boolean onMenuItemClick(MenuItem item) {
     if (item.getItemId() == R.id.action_delete) {
       ViewUtil.startIcon(item);
-      viewModel.deleteEntry();
+      showDeleteConfirmationDialog();
       return true;
     } else if (item.getItemId() == R.id.action_clear_form) {
       clearInputFocus();
@@ -296,6 +339,45 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     viewModel.getFormData().toggleScannerVisibility();
     if (viewModel.getFormData().isScannerVisible()) {
       clearInputFocus();
+    }
+  }
+
+  private void loadRecipePicture(String filename) {
+    if (filename != null && !filename.isBlank()) {
+      GrocyApi grocyApi = new GrocyApi(activity.getApplication());
+      PictureUtil.loadPicture(
+          binding.picture,
+          null,
+          null,
+          grocyApi.getRecipePictureServeLarge(filename),
+          RequestHeaders.getGlideGrocyAuthHeaders(requireContext()),
+          true
+      );
+    } else {
+      binding.picture.setVisibility(View.GONE);
+    }
+  }
+
+  public void dispatchTakePictureIntent() {
+    if (viewModel.isDemoInstance()) {
+      viewModel.showMessage(R.string.error_picture_uploads_forbidden);
+      return;
+    }
+    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    // Create the File where the photo should go
+    File photoFile = null;
+    try {
+      photoFile = viewModel.createImageFile();
+    } catch (IOException ex) {
+      viewModel.showErrorMessage();
+      viewModel.setCurrentFilePath(null);
+    }
+    if (photoFile != null) {
+      Uri photoURI = FileProvider.getUriForFile(requireContext(),
+          requireContext().getPackageName() + ".fileprovider",
+          photoFile);
+      takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+      mActivityResultLauncherTakePicture.launch(takePictureIntent);
     }
   }
 
@@ -324,6 +406,27 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     viewModel.onBarcodeRecognized(rawValue);
   }
 
+  private void showDeleteConfirmationDialog() {
+    Recipe recipe = viewModel.getRecipe();
+    if (recipe == null) {
+      activity.showSnackbar(R.string.error_undefined, false);
+      return;
+    }
+    dialogDelete = new MaterialAlertDialogBuilder(
+        activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution
+    ).setTitle(R.string.title_confirmation)
+        .setMessage(getString(R.string.msg_master_delete, getString(R.string.title_recipe), recipe.getName()))
+        .setPositiveButton(R.string.action_delete, (dialog, which) -> {
+          performHapticClick();
+          viewModel.deleteEntry();
+          activity.navUtil.navigateUp();
+          activity.navUtil.navigateUp();
+        }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
+        .setOnCancelListener(dialog -> performHapticClick())
+        .create();
+    dialogDelete.show();
+  }
+
   public void toggleTorch() {
     embeddedFragmentScanner.toggleTorch();
   }
@@ -333,10 +436,7 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
   }
 
   @NonNull

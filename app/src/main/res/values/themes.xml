@@ -18,7 +18,7 @@
   ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
   <style name="Base.Grocy" parent="Theme.Material3.DayNight.NoActionBar">
     <item name="android:colorPrimaryDark">?android:attr/colorBackground</item>

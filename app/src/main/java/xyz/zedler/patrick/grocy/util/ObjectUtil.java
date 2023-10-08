@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.util;
 
 import androidx.annotation.Nullable;
+import java.util.Map;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -84,6 +85,46 @@ public class ObjectUtil {
         return ((Product) object).getDescription();
       case GrocyApi.ENTITY.TASK_CATEGORIES:
         return ((TaskCategory) object).getDescription();
+      default:
+        return null;
+    }
+  }
+
+  @Nullable
+  public static String getObjectCreatedTimestamp(Object object, String entity) {
+    switch (entity) {
+      case GrocyApi.ENTITY.QUANTITY_UNITS:
+        return ((QuantityUnit) object).getRowCreatedTimestamp();
+      case GrocyApi.ENTITY.LOCATIONS:
+        return ((Location) object).getRowCreatedTimestamp();
+      case GrocyApi.ENTITY.PRODUCT_GROUPS:
+        return ((ProductGroup) object).getRowCreatedTimestamp();
+      case GrocyApi.ENTITY.STORES:
+        return ((Store) object).getRowCreatedTimestamp();
+      case GrocyApi.ENTITY.PRODUCTS:
+        return ((Product) object).getRowCreatedTimestamp();
+      case GrocyApi.ENTITY.TASK_CATEGORIES:
+        return ((TaskCategory) object).getRowCreatedTimestamp();
+      default:
+        return null;
+    }
+  }
+
+  @Nullable
+  public static Map<String, String> getObjectUserfields(Object object, String entity) {
+    switch (entity) {
+      case GrocyApi.ENTITY.QUANTITY_UNITS:
+        return ((QuantityUnit) object).getUserfields();
+      case GrocyApi.ENTITY.LOCATIONS:
+        return ((Location) object).getUserfields();
+      case GrocyApi.ENTITY.PRODUCT_GROUPS:
+        return ((ProductGroup) object).getUserfields();
+      case GrocyApi.ENTITY.STORES:
+        return ((Store) object).getUserfields();
+      case GrocyApi.ENTITY.PRODUCTS:
+        return ((Product) object).getUserfields();
+      case GrocyApi.ENTITY.TASK_CATEGORIES:
+        return ((TaskCategory) object).getUserfields();
       default:
         return null;
     }

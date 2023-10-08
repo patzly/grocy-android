@@ -23,14 +23,19 @@ import android.app.Application;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.sqlite.SQLiteBlobTooBigException;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
@@ -40,6 +45,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import org.json.JSONException;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -96,6 +102,11 @@ public class BaseViewModel extends AndroidViewModel {
     return debug;
   }
 
+  public boolean isDemoInstance() {
+    String server = sharedPrefs.getString(PREF.SERVER_URL, null);
+    return server != null && server.contains("grocy.info");
+  }
+
   public boolean isOpenFoodFactsEnabled() {
     return sharedPrefs.getBoolean(
         SETTINGS.BEHAVIOR.FOOD_FACTS,
@@ -105,17 +116,14 @@ public class BaseViewModel extends AndroidViewModel {
 
   public void onError(Object error, String TAG) {
     if (error instanceof VolleyError) {
-      Log.e(TAG, "onError: VolleyError: " + (VolleyError) error);
-      if (!isOffline()) {
-        setOfflineLive(true);
-      }
+      Log.e(TAG, "onError: VolleyError: " + error);
       showNetworkErrorMessage((VolleyError) error);
     } else if (error instanceof JSONException) {
-      Log.e(TAG, "onError: JSONException: " + (JSONException) error);
+      Log.e(TAG, "onError: JSONException: " + error);
       showJSONErrorMessage((JSONException) error);
     } else if (error instanceof Throwable) {
-      Log.e(TAG, "onError: Throwable: " + (Throwable) error);
-      showDatabaseErrorMessage((Throwable) error);
+      Log.e(TAG, "onError: Throwable: " + error);
+      showThrowableErrorMessage((Throwable) error);
     }
   }
 
@@ -123,64 +131,122 @@ public class BaseViewModel extends AndroidViewModel {
     showMessage(getString(R.string.error_undefined));
   }
 
-  public void showDatabaseErrorMessage(Throwable error) {
-    String message;
-    if (error != null && error.getLocalizedMessage() != null) {
-      message = getApplication()
-          .getString(R.string.error_database_exact, error.getLocalizedMessage());
+  public void showThrowableErrorMessage(@Nullable Throwable error) {
+    String messageShort;
+    String messageLong;
+    if (error instanceof SQLiteBlobTooBigException) {
+      messageShort = getString(R.string.error_database);
+      messageLong = getString(R.string.error_pictures_size_exceeds_limit);
+    } else if (error != null && error.getLocalizedMessage() != null) {
+      messageShort = getString(R.string.error_undefined);
+      messageLong = getApplication()
+          .getString(R.string.error_insert, error.getLocalizedMessage());
     } else {
-      message = getString(R.string.error_database);
+      messageShort = getString(R.string.error_undefined);
+      messageLong = messageShort;
     }
-    SnackbarMessage snackbarMessage = new SnackbarMessage(message);
     if (error != null) {
       error.printStackTrace();
-
-      StringWriter sw = new StringWriter();
-      PrintWriter pw = new PrintWriter(sw);
-      error.printStackTrace(pw);
-      String stackTrace = sw.toString();
-      snackbarMessage.setAction(
-          getString(R.string.action_details),
-          v -> showErrorDetailsAlertDialog(v.getContext(), stackTrace)
-      );
-    }
-    snackbarMessage.setDurationSecs(5);
-    showSnackbar(snackbarMessage);
-  }
-
-  public void showNetworkErrorMessage(VolleyError volleyError) {
-    // similar method is also in BaseFragment
-    if (volleyError != null && volleyError.networkResponse != null
-        && volleyError.networkResponse.statusCode == 403) {
-      showMessage(getString(R.string.error_permission));
-    } else if (volleyError != null && volleyError.getLocalizedMessage() != null) {
-      showMessageLong(getApplication()
-          .getString(R.string.error_network_exact, volleyError.getLocalizedMessage()));
+      showSnackbarWithDetailsAction(error, messageShort, messageLong);
     } else {
-      showMessage(getString(R.string.error_network));
+      showMessageLongDuration(messageShort);
     }
   }
 
-  public void showJSONErrorMessage(JSONException jsonException) {
-    showMessageLong(getApplication()
-        .getString(R.string.error_network_exact, jsonException.getLocalizedMessage()));
+  public void showNetworkErrorMessage(VolleyError error) {
+    // similar method is also in BaseFragment
+    String messageShort;
+    String messageLong;
+    if (error != null && error.networkResponse != null
+        && error.networkResponse.statusCode == 403) {
+      messageShort = getString(R.string.error_permission);
+      messageLong = messageShort;
+    } else if (error != null && error.getLocalizedMessage() != null) {
+      messageShort = getString(R.string.error_network);
+      messageLong = getString(R.string.error_network_exact, error.getLocalizedMessage());
+    } else {
+      messageShort = getString(R.string.error_network);
+      messageLong = messageShort;
+    }
+    if (error != null) {
+      error.printStackTrace();
+      showSnackbarWithDetailsAction(error, messageShort, messageLong);
+    } else {
+      showMessageLongDuration(messageShort);
+    }
+  }
+
+  public void showJSONErrorMessage(JSONException error) {
+    String messageShort;
+    String messageLong;
+    if (error != null && error.getLocalizedMessage() != null) {
+      messageShort = getString(R.string.error_undefined);
+      messageLong = getApplication()
+          .getString(R.string.error_insert, error.getLocalizedMessage());
+    } else {
+      messageShort = getString(R.string.error_undefined);
+      messageLong = messageShort;
+    }
+    if (error != null) {
+      error.printStackTrace();
+      showSnackbarWithDetailsAction(error, messageShort, messageLong);
+    } else {
+      showMessageLongDuration(messageShort);
+    }
   }
 
   private void showErrorDetailsAlertDialog(Context context, String message) {
-    new MaterialAlertDialogBuilder(
+    AlertDialog alertDialog = new MaterialAlertDialogBuilder(
         context, R.style.ThemeOverlay_Grocy_AlertDialog
     ).setTitle(R.string.error_details)
         .setMessage(message)
         .setPositiveButton(R.string.action_close, (dialog, which) -> dialog.cancel())
-        .setNegativeButton(R.string.action_copy, (dialog, which) -> {
-          ClipboardManager clipboard = (ClipboardManager) context
-              .getSystemService(Context.CLIPBOARD_SERVICE);
-          ClipData clip = ClipData.newPlainText("Error details", message);
-          clipboard.setPrimaryClip(clip);
-        }).create().show();
+        .setNegativeButton(R.string.action_copy, (dialog, which) -> {}).create();
+    alertDialog.show();
+
+    Button negativeButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+    negativeButton.setOnClickListener(v -> {
+      ClipboardManager clipboard = (ClipboardManager) context
+          .getSystemService(Context.CLIPBOARD_SERVICE);
+      ClipData clip = ClipData.newPlainText("Error details", message);
+      clipboard.setPrimaryClip(clip);
+      Toast.makeText(context, getString(R.string.msg_copied_clipboard), Toast.LENGTH_SHORT).show();
+    });
   }
 
-  public void showMessageLong(@Nullable String message) {
+  private void showSnackbarWithDetailsAction(
+      @NonNull Throwable error,
+      String messageShort,
+      String messageLong
+  ) {
+    SnackbarMessage snackbarMessage = new SnackbarMessage(messageShort);
+    error.printStackTrace();
+
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    error.printStackTrace(pw);
+    String stackTrace = sw.toString();
+    snackbarMessage.setAction(
+        getString(R.string.action_details),
+        v -> showErrorDetailsAlertDialog(v.getContext(), messageLong + "\n\n" + stackTrace)
+    );
+    snackbarMessage.setDurationSecs(5);
+    showSnackbar(snackbarMessage);
+  }
+
+  public void showMessageWithAction(
+      @StringRes int message,
+      @StringRes int actionText,
+      Runnable action,
+      int durationSecs
+  ) {
+    SnackbarMessage snackbarMessage = new SnackbarMessage(getString(message));
+    snackbarMessage.setAction(getString(actionText), v -> action.run());
+    snackbarMessage.setDurationSecs(durationSecs);
+    showSnackbar(snackbarMessage);
+  }
+
+  public void showMessageLongDuration(@Nullable String message) {
     if (message == null) {
       return;
     }
@@ -256,12 +322,16 @@ public class BaseViewModel extends AndroidViewModel {
     return offlineLive.getValue();
   }
 
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
+  void setOfflineLive(boolean isOffline) {
+    if (isOffline() != isOffline) offlineLive.setValue(isOffline);
   }
 
   String getString(@StringRes int resId) {
     return resources.getString(resId);
+  }
+
+  String getString(@StringRes int resId, Object... formatArgs) {
+    return resources.getString(resId, formatArgs);
   }
 
   Resources getResources() {

@@ -97,6 +97,13 @@ public class SettingsCatStockFragment extends BaseFragment {
       }
     });
 
+    binding.switchTreatOpened.post(() -> {
+      binding.switchTreatOpened.jumpDrawablesToCurrentState();
+      binding.switchIndicator.jumpDrawablesToCurrentState();
+      binding.switchPurchaseDate.jumpDrawablesToCurrentState();
+      binding.switchQuickConsumeAmount.jumpDrawablesToCurrentState();
+    });
+
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, false

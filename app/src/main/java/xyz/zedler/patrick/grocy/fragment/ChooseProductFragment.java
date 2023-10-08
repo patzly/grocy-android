@@ -108,21 +108,12 @@ public class ChooseProductFragment extends BaseFragment
         .ChooseProductViewModelFactory(
                 activity.getApplication(), barcode, forbidCreateProduct, pendingProductsActive
     )).get(ChooseProductViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
 
     binding.setFragment(this);
     binding.setActivity(activity);
     binding.setViewModel(viewModel);
     binding.setLifecycleOwner(getViewLifecycleOwner());
     binding.setClickUtil(clickUtil);
-
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
-      binding.swipe.setRefreshing(state);
-      if (!state) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
-    binding.swipe.setOnRefreshListener(() -> viewModel.downloadDataForceUpdate());
 
     viewModel.getDisplayedItemsLive().observe(getViewLifecycleOwner(), products -> {
       if (products == null) {
@@ -132,7 +123,7 @@ public class ChooseProductFragment extends BaseFragment
         ((ChooseProductAdapter) binding.recycler.getAdapter()).updateData(products);
       } else {
         binding.recycler.setAdapter(new ChooseProductAdapter(
-            products, this
+            products, this, forbidCreateProduct
         ));
         binding.recycler.scheduleLayoutAnimation();
       }
@@ -153,7 +144,7 @@ public class ChooseProductFragment extends BaseFragment
 
     // INITIALIZE VIEWS
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.performOnBackPressed());
 
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
@@ -203,8 +194,16 @@ public class ChooseProductFragment extends BaseFragment
   }
 
   @Override
-  public void onItemRowClicked(Product product) {
+  public void onItemRowClicked(Product product, boolean copy) {
     if (clickUtil.isDisabled()) {
+      return;
+    }
+    if (copy) {
+      navigateDeepLinkHorizontally(R.string.deep_link_masterProductFragment,
+          new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE)
+              .setProductId(String.valueOf(product.getId()))
+              .setProductName(viewModel.getProductNameLive().getValue())
+              .build().toBundle());
       return;
     }
     if (product instanceof PendingProduct) {
@@ -246,8 +245,7 @@ public class ChooseProductFragment extends BaseFragment
     if (!online == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!online);
-    viewModel.downloadData();
+    viewModel.downloadData(false);
   }
 
   @NonNull

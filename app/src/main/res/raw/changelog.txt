@@ -1,18 +1,166 @@
+## 3.4.0
+
+- New: Initial support for viewing userfields (custom values) on stock overview, recipes overview
+  and recipe page; grouping and sorting by userfield is also possible (#601)
+- New: Added option to backup and restore settings with file (#437)
+- New: Edit and delete recipe pictures (upload new from camera or clipboard) (#741)
+- Improved: Added sort option "creation time" on stock overview and master data lists (#769)
+- Improved: Filter bar with product group and sort on master data pages (instead of old menu)
+- Improved: Scroll to top on all list pages after changing sort or filter
+- Improved: Consistent item animation (initial loading) for all list pages
+- Improved: Better picture mode on recipe page
+- Improved: Fullscreen viewer for recipe picture
+- Improved: Added grouping for recipe ingredients on recipe page
+- Improved: Keyboard directly shown when opening input bottom sheet for numbers
+- Fixed: On purchase page, decimal places for displaying prices were used for quantity unit
+  conversion instead of decimal places for input (#778)
+- Fixed: Form validation bug on inventory page when using quantity unit conversion
+- Fixed: Chores filter for due entries was not working (#760)
+- Fixed: Take chores 'due soon days' option into account when filtering (was always 5)
+- Fixed: Sort option of chores was saved to sort option of tasks
+- Fixed: Sort option 'due date' was not available for tasks and chores page if stock date tracking
+  feature was disabled
+
+## 3.3.2
+
+- New: Compatibility for server version 4.0.2 and 4.0.3 (#772)
+- Fixed: Network error when consuming or purchasing (and other actions), due to new rule for API
+  requests which Grocy server 4.0.3 introduced (#772)
+- Fixed: Product information not saved when going back (#765)
+- Fixed: Missing delete confirmation in recipe edit mode (#764)
+
+? Sorry for any inconvenience caused by the bugs above.
+Other bug fixes and new features will come soon, once the main developer of this app
+finishes his computer science studies in a few weeks.
+
+## 3.3.1
+
+- New: Compatibility for server version 4.0.1
+- New: Targeting Android 14
+- Improved: Changed that prices on the shopping list (extra fields) are now related to the selected
+  quantity unit (instead of to the product's QU stock as before) (change from server version 4.0.1)
+- Improved: Tasks can now be sorted by category (#753)
+- Fixed: Wrong title alignment in some list bottom sheets
+- Fixed: Crash when product overview dialog is called when shopping lists feature is disabled (#750)
+- Fixed: Grouping option in shopping mode was not saved (#754)
+- Fixed: Chore details not opening (#748)
+- Fixed: Quantity unit conversions were wrong in some cases (thanks @jrandiny) (#744, #745).
+  Please report any remaining bugs related to unit conversion as testing this is difficult
+- Fixed: Other conversion bug on shopping list item edit page which occurred when unit from
+  shopping list item was the product's default purchase unit (hopefully fixed)
+
 ## 3.3.0
 
-- New: Recipe details are now displayed on a separate page, not a bottom sheet anymore
-- New: Recipes page now has checkbox options for all additional fields
+Grocy server version 4.0.0 has some bigger changes with quantity units and unit conversions.
+Please read the server changelog carefully for longer explanations of the changes before or after
+your server update. We recommend installing the update as our app was mainly tested with it and
+recipe ingredient fulfillment information in our app are finally all correct and complete with it.
+Older supported versions still work but are not tested with every new change.
+
+We kindly ask you to give our app a good review on Google Play if you like it or a star for our
+GitHub repository. This helps us to spread the word about the app and will motivate us to
+implement new features.
+
+Specific changes for Grocy server 4.0.0 (other versions should behave the same way as before):
+
+- New: Compatibility for server version 4.0.0 (#644)
+- New: Quantity unit conversions can be transitive now (unlimited QU levels)
+- New: Product option "Factor purchase to stock unit" is disabled - Use normal product specific
+  QU conversions instead, if needed
+- New: Product option "Default quantity unit consume"
+- New: Product option "Quantity unit for prices"
+- New: Product option "Quick open amount" for quick open button on stock page
+- Improved: Load label for energy values from server (was fixed kcal before)
+- Improved: Show calories and prices on recipe ingredients list
+- Fixed: Network error when saving a new product (#642)
+- Fixed: Fulfillment info on recipe ingredients list was wrong with substituted products (#669)
+
+All other changes, divided into app sections:
+
+#### Stock
+
+- New: Stock overview page now has checkbox options for all additional fields (#663)
+- New: Product choose page after barcode scan now has really useful copy option for products (#636)
+- New: Product pictures now can be removed and added with camera and clipboard (#536)
+- New: On purchase page, store now can be pinned (always initially selected in session) (#525)
+- New: Product groups, locations & quantity units now can be created while creating product
+- Improved: Stock reminder is now for products which are not fresh anymore (expired, overdue
+  or due soon)
+- Improved: "Create product" page now uses "save and not close" buttons
+- Improved: Misleading error when trying to save duplicated barcode on product barcode edit (#724)
+- Improved: When clicking a product name on the products list in master data, the product info
+  will now be displayed (like on the stock overview page)
+- Improved: Message shown when product or recipe is not on server (#718)
+- Improved: "Factor purchase to stock unit" was moved to quantity units category in master product
+- Improved: When scanning a product barcode and the purchase or inventory page, the note will now
+  also be prefilled from the barcode (was option before, but server v4 has that behavior now) (#644)
+- Improved: Option for quick mode in behavior settings to return to overview after some time (#659)
+- Fixed: With server version below 3.3.0, stock quantity unit could not be set in new product (#678)
+- Fixed: Total product count on overview page in stock section also included products with
+  option "Never show on stock overview" enabled (#644)
+- Fixed: Wrong quantity units in confirmation dialog of quick mode (#732)
+- Fixed: Prevent crash when opening qu conversion page (#708)
+- Fixed: On product creation with prefilled name there was a plus instead of space character
+- Fixed: On product details sheet, description card was rendered with wrong height sometimes (#717)
+- Fixed: Product description popup animation doesn't have glitches anymore
+- Fixed: Saving QU conversion failed if conversion existed already in other product (#707, #682)
+
+#### Shopping list
+
+- New: Shopping pages now also has checkbox options for fields and picture (#663, #671, #710)
 - New: Shopping mode options are now reachable through shopping mode menu and removed from settings
+- Improved: Shopping mode grouping option now can be set separately from shopping list page
+- Fixed: Adding new item to shopping list reverts to previous shopping list (#731)
+
+#### Recipes
+
+- New: Recipes page now has checkbox options for all additional fields (#663)
+- New: Recipe details are now displayed on a separate page, not a bottom sheet anymore
+- Improved: Design for recipe page
+- Improved: New grid layout on recipe page is default now
+- Improved: "Create recipe" page now uses "save and not close" buttons
+- Improved: On recipe ingredient edit page, product overview sheet now can be displayed
+- Improved: Recipe ingredient price factor now can be set (#615)
+- Fixed: Glitch with large top margin on recipe grid layout (#696)
+- Fixed: Editing of recipe ingredient with broken quantity unit is possible now
+- Fixed: Recipe ingredient price factor is not saved wrong anymore when creating ingredient (#615)
+
+#### Chores
+
+- New: Daily reminder can now be set also for chores (#149)
+- New: Filter for all chores which are due, used by the reminder
+- Improved: Shortcut for chores available now (in settings, go to appearance page then shortcuts)
+- Improved: Changed the handling of the tracking buttons on chores overview page (play button
+  now tracks an execution on the next scheduled time, rather than for now/today, new menu
+  action "Track chore execution now" for action with old behavior) (same change on server)
+- Fixed: Unable to do multiple chores with swipe gestures (#686)
+
+#### General
+
+- New: Japanese translation (thanks daigoume!)
+- Improved: Better and unified network behavior across pages
 - Improved: Database exceptions are now caught and displayed (#698)
 - Improved: Pictures in recipe or product descriptions now can be up to 10MB large (#698)
-- Improved: Other design for recipe page
 - Improved: Keyboard is displayed more reliably and quickly
-- Improved: Form focus on master object pages & fixed plural field for English on QU page
-- Improved: "Create recipe" page and "Create product" page now use "save and not close" buttons
 - Improved: Description editor page now has bottom padding (still needs improvements with keyboard)
 - Improved: Language picker works more reliably with demo domain change
+- Improved: Form focus on master object pages & fixed plural field for English on QU page
+- Improved: Pictures optimized & added pictures to product bottom sheet and recipe page (#536)
+- Improved: It is now clearer which QR code is to be scanned when using Home Assistant (#627)
+- Improved: Horizontal actions layout on overview page for smaller screens
+- Improved: Clear caching related info after app update or database update for data refresh (#726)
+- Improved: Changed debug build variant config to allow installation of debug version alongside
+release variant (thanks @alfonso133)
+- Fixed: Amounts with conversions are consistent over all pages now (#612, #626)
+- Fixed: Long click on barcode button on overview page was broken on Android Nougat and lower
 - Fixed: Crash on startup with Android Lollipop (and maybe higher)
-- Fixed: Prevent crash when opening qu conversion page (#708)
+- Fixed: App was sometimes offline when opened from background (#722)
+- Fixed: Flickering of bottom messages when bottom bar was scrolled down (#719),
+  vertical position is now animated smoothly instead of jumping
+- Fixed: Disabled features with Home Assistant add-on were not disabled in app (#713)
+- Fixed: Shortcut for new task was not working anymore after first usage
+- Fixed: Swipe gestures accessed wrong item in list after first usage (#686)
+- Fixed: Never requested notification permission so reminders may have not worked on Android 13+
 
 ## 3.2.1
 
@@ -45,105 +193,3 @@
 - Fixed: Demo domain change with translation which has a specific region
 - Fixed: Focused input field covered by keyboard
 - Fixed: Crashes where parsing a wrong formatted decimal number was the reason (again #652)
-
-## 3.1.1
-
-- Fixed: Home Assistant core update broke session authentication, this fix can be a bit buggy (#670)
-- Fixed: Crashes where parsing a wrong formatted floating point number was the reason (#652)
-
-## 3.1.0
-
-- New: Fulfillment check for every ingredient on recipe page
-- New: Total price displayed on shopping list bottom (#645)
-- New: Stock overview page has new status filter "not fresh" for combined results (#661)
-- New: "Should not be frozen" toggle on master product page and warn user if appropriate (#638)
-- New: Inventory form can now be used to link unknown barcode to product without any action (#605)
-- Improved: Finally the floating action button stays visible when the keyboard is shown (#405)
-- Improved: Bottom bar not above keyboard anymore
-- Improved: Prevent status messages from covering elements like floating action button or bottom bar
-- Improved: Animated menu icons in bottom bar when navigating
-- Improved: Network and user interface behavior when offline (#492)
-- Improved: Info shown for action button on overview start page (#540)
-- Improved: On recipe page ingredients now can be added to shopping list with exclude option (#632)
-- Improved: App now supports disabled stock feature and hides stock parts, same with recipes (#647)
-- Improved: When adding an unknown barcode through purchase or inventory, note is saved (#644, #619)
-- Improved: When adding an unknown barcode through purchase, amount and unit is saved (#644)
-- Improved: Shopping list item page now also uses "Choose product" page for unknown barcodes
-- Improved: Bottom dialog behavior when keyboard is shown
-- Fixed: Recipe actions throwing errors (thanks @timhae!) (#646)
-- Fixed: Simultaneous display of recipe photos and placeholder images
-- Fixed: Behavior option "reduce app startup time" not working on Android 12+
-- Fixed: Crash on recipe page because server somehow returns wrong floating point format (#652)
-- Fixed: Floating action button not hidden in shopping mode
-- Fixed: Occasionally dark toolbar menu icons in dark mode (thanks @martin-braun!) (#631)
-- Fixed: Unintended length limit on bottom sheet for general text and number input (#657)
-- Fixed: Occasional crashes on stock journal and master product page
-- Fixed: Stores selection list not redesigned
-- Fixed: Recipe preparation not displayed in certain conditions
-- Fixed: Duplicate expired items on stock overview page with filters "expired" and "overdue"
-- Fixed: Products without own stock not hidden in filters on stock overview page (#660)
-- Fixed: Amount of products without own stock not hidden on stock overview page (#654)
-- Fixed: Navigation bar color on devices without gesture navigation
-- Fixed: Default due days after freezing applied on purchase when freezer location is set (#593)
-- Fixed: External scanner for adding items to shopping list didn't work (#656)
-- Fixed: Quick mode scanner started again just after navigating back from "choose product" page
-- Fixed: (not F-Droid) Crash with ML Kit scanner after barcode was scanned
-- Fixed: (not F-Droid) Crash with ML Kit scanner after transaction was successful (#639)
-
-## 3.0.0
-
-- New: Material You redesign with dynamic colors for Android 12+
-- New: Replaced HTML editor for recipe and product descriptions (same like on grocy server)
-- New: Support for more than two decimal places for amounts & prices, uses option from server (#459)
-- New: Product option "Move on open" (#569)
-- New: Option in behavior settings for copying barcode note to stock entry note field (#609)
-- New: Option on purchase page to print stock label and default option on master product page (#570)
-- Improved: Layout on large screens
-- Improved: (not F-Droid) ML Kit scanner now only recognises barcodes in preview field
-- Improved: Shopping mode page now can be opened with deeplink "grocy://shoppingmodepage" (#519)
-- Improved: Selection of child products in purchase form if parent product has no own stock (#508)
-- Improved: Master object lists now have fuzzy search (#610)
-- Improved: Consume quick mode confirmation page now has option to open instead of consume (#572)
-- Improved: Allow changing stock unit of product if no transaction was made since creation (#635)
-- Improved: Ingredients display available amount in stock if fulfilled
-- Fixed: F-Droid build should work again (#566)
-- Fixed: Crash when amount in recipe ingredient was NaN (thanks @Whhoesj for your fix) (#565)
-- Fixed: Wrong ingredient amount in the recipe view with base servings other than 1 (#584)
-- Fixed: Wrong ingredient amount on recipe pages related to unit conversions (#584, #585, #612)
-- Fixed: Wrong price calculation when last price was stored for barcode (#578)
-- Fixed: Crash on chores overview page with wrong rescheduled date format (#564)
-- Fixed: Rescheduling chore with time tracking enabled did not set chosen time
-- Fixed: Note field on purchase and inventory page was limited to 10 characters (#577)
-- Fixed: Crash when editing an ingredient of a recipe (#579)
-- Fixed: Allow negative keyboard input value (-1) for due dates when editing products (#576)
-- Fixed: Crash on shopping list item edit page when product contains deleted quantity units (#582)
-- Fixed: On shopping list item edit page the change of product prevented saving (#583)
-- Fixed: FAB displayed after rotation on pages where no FAB is used (#552)
-- Fixed: Use quick consume amount when option enabled in stock user settings (#604)
-- Fixed: Displaying of stock locations in product overview bottom sheet
-- Fixed: Wrong amount helper text on barcode edit page of master product (#611)
-- Fixed: Crash on stock journal page
-- Fixed: Crash on master product page when saving changes
-- Fixed: Crash on recipes page during search (#607)
-- Fixed: (not F-Droid) ML Kit scanner doesn't ask for contacts permission anymore
-
-## 2.3.0
-
-- New: Support for grocy server v3.3.1
-- New: Recipes feature (huge thanks @Tim-Otte for your great work!) (#148)
-- New: HTML viewer and editor for product description which can load pictures
-- New: Stock journal page (#140)
-- New: Server v3.3.0 feature "Notes for stock entries" (#511)
-- New: Stock quantity unit now can be changed with server v3.3.0 (#511)
-- New: Notification for due soon items in stock (thanks @igor-cali for the initial work) (#108)
-- New: Chores can now be rescheduled (server v3.3.0 feature) (#511)
-- Improved: Entries on stock entries page are colored if volatile
-- Improved: Price entered on inventory page is now related to selected quantity unit (#511)
-- Improved: On transaction pages adding of known barcode is prevented (#541)
-- Improved: On stock overview page you can search with grocy code (#547)
-- Improved: Chores page now displays time if necessary (#549)
-- Improved: (not F-Droid) Add explanation for contacts permission on devices with GPlay services
-- Fixed: Product 'purchase to stock' conversion is preferred to additional conversions (#490)
-- Fixed: Quantity units from default conversions are now selectable on transaction pages (#530)
-- Fixed: Location filter didn't work properly on stock overview page (#554)
-- Fixed: Skip scanner steps on login if no camera available (#553)

@@ -24,7 +24,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -38,7 +37,6 @@ import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.PREF;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -60,7 +58,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.InventoryRepository;
@@ -71,7 +69,7 @@ import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class InventoryViewModel extends BaseViewModel {
 
@@ -85,7 +83,7 @@ public class InventoryViewModel extends BaseViewModel {
   private final FormDataInventory formData;
 
   private List<Product> products;
-  private List<QuantityUnitConversion> unitConversions;
+  private List<QuantityUnitConversionResolved> unitConversions;
   private List<ProductBarcode> barcodes;
   private List<Store> stores;
   private List<Location> locations;
@@ -115,16 +113,14 @@ public class InventoryViewModel extends BaseViewModel {
     );
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new InventoryRepository(application);
     formData = new FormDataInventory(application, sharedPrefs, args);
 
     infoFullscreenLive = new MutableLiveData<>();
     boolean quickModeStart;
-    if (args.getStartWithScanner()) {
-      quickModeStart = true;
-    } else if (!args.getCloseWhenFinished()) {
+    if (!args.getCloseWhenFinished()) {
       quickModeStart = sharedPrefs.getBoolean(
           Constants.PREF.QUICK_MODE_ACTIVE_INVENTORY,
           false
@@ -146,72 +142,47 @@ public class InventoryViewModel extends BaseViewModel {
       this.products = data.getProducts();
       this.barcodes = data.getBarcodes();
       this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
-      this.unitConversions = data.getQuantityUnitConversions();
+      this.unitConversions = data.getQuantityUnitConversionsResolved();
       this.stores = data.getStores();
       this.locations = data.getLocations();
       formData.getProductsLive().setValue(Product.getActiveAndStockEnabledProductsOnly(products));
-        if (downloadAfterLoading) {
-            downloadData();
+      if (downloadAfterLoading) {
+        downloadData(false);
+      } else {
+        if (queueEmptyAction != null) {
+          queueEmptyAction.run();
+          queueEmptyAction = null;
         }
+      }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, TAG));
+  public void downloadData(boolean forceUpdate) {
+    if (isOffline()) { // skip downloading
+      isLoadingLive.setValue(false);
       return;
     }
-
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
-    queue.append(
-        Product.updateProducts(dlHelper, dbChangedTime, products -> {
-          this.products = products;
-          formData.getProductsLive().setValue(Product.getActiveAndStockEnabledProductsOnly(products));
-        }), QuantityUnitConversion.updateQuantityUnitConversions(
-            dlHelper, dbChangedTime, conversions -> this.unitConversions = conversions
-        ), ProductBarcode.updateProductBarcodes(
-            dlHelper, dbChangedTime, barcodes -> this.barcodes = barcodes
-        ), QuantityUnit.updateQuantityUnits(
-            dlHelper,
-            dbChangedTime,
-            quantityUnits -> quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits)
-        ), Store.updateStores(
-            dlHelper, dbChangedTime, stores -> this.stores = stores
-        ), Location.updateLocations(
-            dlHelper, dbChangedTime, locations -> this.locations = locations
-        )
+    dlHelper.updateData(
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            if (queueEmptyAction != null) {
+              queueEmptyAction.run();
+              queueEmptyAction = null;
+            }
+          }
+        },
+        error -> onError(error, TAG),
+        forceUpdate,
+        false,
+        Product.class,
+        QuantityUnit.class,
+        QuantityUnitConversionResolved.class,
+        ProductBarcode.class,
+        Store.class,
+        Location.class
     );
-    if (queue.isEmpty()) {
-      if (queueEmptyAction != null) {
-        queueEmptyAction.run();
-        queueEmptyAction = null;
-      }
-      return;
-    }
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.apply();
-    downloadData();
-  }
-
-  private void onQueueEmpty() {
-    if (queueEmptyAction != null) {
-      queueEmptyAction.run();
-      queueEmptyAction = null;
-    }
   }
 
   public void setProduct(int productId, ProductBarcode barcode) {
@@ -221,20 +192,16 @@ public class InventoryViewModel extends BaseViewModel {
       formData.getProductNameLive().setValue(updatedProduct.getName());
 
       // quantity unit
-      try {
-        HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
-            getApplication(),
-            quantityUnitHashMap,
-            unitConversions,
-            updatedProduct
-        );
-        formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
-        QuantityUnit stock = quantityUnitHashMap.get(updatedProduct.getQuIdStockInt());
-        formData.getQuantityUnitLive().setValue(stock);
-      } catch (IllegalArgumentException e) {
-        showMessageAndContinueScanning(e.getMessage());
-        return;
-      }
+      HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
+          quantityUnitHashMap,
+          unitConversions,
+          updatedProduct,
+          VersionUtil.isGrocyServerMin400(sharedPrefs)
+      );
+      formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+      QuantityUnit stock = quantityUnitHashMap.get(updatedProduct.getQuIdStockInt());
+      formData.getQuantityUnitLive().setValue(stock);
+      formData.getQuantityUnitStockLive().setValue(stock);
 
       // amount
       boolean isTareWeightEnabled = formData.isTareWeightEnabled();
@@ -287,11 +254,7 @@ public class InventoryViewModel extends BaseViewModel {
       }
 
       // note
-      if (barcode != null
-          && barcode.getNote() != null
-          && sharedPrefs.getBoolean(BEHAVIOR.COPY_BARCODE_NOTE,
-          SETTINGS_DEFAULT.BEHAVIOR.COPY_BARCODE_NOTE)
-      ) {
+      if (barcode != null && barcode.getNote() != null) {
         formData.getNoteLive().setValue(barcode.getNote());
       }
 

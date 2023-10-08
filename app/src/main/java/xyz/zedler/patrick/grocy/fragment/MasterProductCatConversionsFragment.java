@@ -26,13 +26,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.QuantityUnitConversionAdapter;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatConversionsBinding;
@@ -127,17 +125,14 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
 
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
-      if (!isLoading) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
-
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
-    binding.recycler.setItemAnimator(new DefaultItemAnimator());
-    binding.recycler.setAdapter(new MasterPlaceholderAdapter());
+    QuantityUnitConversionAdapter adapter = new QuantityUnitConversionAdapter(
+        requireContext(),
+        this
+    );
+    binding.recycler.setAdapter(adapter);
 
     viewModel.getQuantityUnitConversionsLive().observe(getViewLifecycleOwner(), conversions -> {
       if (conversions == null) {
@@ -149,16 +144,11 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
       } else {
         viewModel.getInfoFullscreenLive().setValue(null);
       }
-      if (binding.recycler.getAdapter() instanceof QuantityUnitConversionAdapter) {
-        ((QuantityUnitConversionAdapter) binding.recycler.getAdapter()).updateData(conversions);
-      } else {
-        binding.recycler.setAdapter(new QuantityUnitConversionAdapter(
-            requireContext(),
-            conversions,
-            this,
-            viewModel.getQuantityUnitHashMap()
-        ));
-      }
+      adapter.updateData(
+          conversions,
+          viewModel.getQuantityUnitHashMap(),
+          () -> binding.recycler.scheduleLayoutAnimation()
+      );
     });
 
     if (savedInstanceState == null) {
@@ -186,7 +176,7 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
                 Constants.ARGUMENT.ACTION,
                 ACTION.SAVE_CLOSE
             );
-            activity.onBackPressed();
+            activity.performOnBackPressed();
             return true;
           }
           return false;
@@ -219,10 +209,7 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
     if (systemBarBehavior != null) {
       systemBarBehavior.refresh();
     }

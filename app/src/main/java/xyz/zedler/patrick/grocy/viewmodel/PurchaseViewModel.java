@@ -65,7 +65,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
@@ -79,7 +79,7 @@ import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class PurchaseViewModel extends BaseViewModel {
 
@@ -97,8 +97,7 @@ public class PurchaseViewModel extends BaseViewModel {
   private List<PendingProduct> pendingProducts;
   private List<QuantityUnit> quantityUnits;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-  private List<QuantityUnitConversion> unitConversions;
-  private HashMap<Integer, ArrayList<QuantityUnitConversion>> unitConversionHashMap;
+  private List<QuantityUnitConversionResolved> unitConversions;
   private HashMap<Integer, Double> shoppingListItemAmountsHashMap;
   private List<ProductBarcode> barcodes;
   private List<PendingProductBarcode> pendingProductBarcodes;
@@ -134,7 +133,7 @@ public class PurchaseViewModel extends BaseViewModel {
     );
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new PurchaseRepository(application);
     formData = new FormDataPurchase(application, sharedPrefs, args);
@@ -152,10 +151,7 @@ public class PurchaseViewModel extends BaseViewModel {
     infoFullscreenLive = new MutableLiveData<>();
     boolean quickModeStart;
     if (args.getStartWithScanner()) {
-      quickModeStart = sharedPrefs.getBoolean(
-          BEHAVIOR.TURN_ON_QUICK_MODE,
-          Constants.SETTINGS_DEFAULT.BEHAVIOR.TURN_ON_QUICK_MODE
-      );
+      quickModeStart = isTurnOnQuickModeEnabled();
     } else if (!args.getCloseWhenFinished()) {
       quickModeStart = sharedPrefs.getBoolean(
           Constants.PREF.QUICK_MODE_ACTIVE_PURCHASE,
@@ -190,8 +186,7 @@ public class PurchaseViewModel extends BaseViewModel {
       this.barcodes = appendPendingProductBarcodes(data.getBarcodes(), pendingProductBarcodes);
       this.quantityUnits = data.getQuantityUnits();
       quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
-      this.unitConversions = data.getQuantityUnitConversions();
-      unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(unitConversions);
+      this.unitConversions = data.getQuantityUnitConversionsResolved();
       this.stores = data.getStores();
       this.locations = data.getLocations();
       this.shoppingListItems = data.getShoppingListItems();
@@ -201,81 +196,45 @@ public class PurchaseViewModel extends BaseViewModel {
         storedPurchase = StoredPurchase.getFromId(data.getStoredPurchases(), storedPurchaseId);
       }
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
+      } else {
+        if (queueEmptyAction != null) {
+          queueEmptyAction.run();
+          queueEmptyAction = null;
+        }
+        if (batchShoppingListItemIds != null) {
+          fillWithShoppingListItem();
+        }
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, error -> onError(error, null));
-      return;
-    }
-
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, null));
-    queue.append(
-        Product.updateProducts(dlHelper, dbChangedTime, products -> {
-          this.products = products;
-          productHashMap = ArrayUtil.getProductsHashMap(products);
-          formData.getProductsLive().setValue(
-                  appendPendingProducts(Product.getActiveProductsOnly(products), pendingProducts)
-          );
-        }), QuantityUnitConversion.updateQuantityUnitConversions(dlHelper, dbChangedTime,
-            conversions -> {
-          this.unitConversions = conversions;
-          unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(unitConversions);
-        }), ProductBarcode.updateProductBarcodes(dlHelper, dbChangedTime,
-            barcodes -> this.barcodes = appendPendingProductBarcodes(
-                barcodes, pendingProductBarcodes
-            )
-        ), QuantityUnit.updateQuantityUnits(dlHelper, dbChangedTime, quantityUnits -> {
-          this.quantityUnits = quantityUnits;
-          quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
-        }), Store.updateStores(
-            dlHelper, dbChangedTime, stores -> this.stores = stores
-        ), Location.updateLocations(
-            dlHelper, dbChangedTime, locations -> this.locations = locations
-        )
+  public void downloadData(boolean forceUpdate) {
+    dlHelper.updateData(
+        updated -> {
+          if (updated) {
+            loadFromDatabase(false);
+          } else {
+            if (queueEmptyAction != null) {
+              queueEmptyAction.run();
+              queueEmptyAction = null;
+            }
+            if (batchShoppingListItemIds != null) {
+              fillWithShoppingListItem();
+            }
+          }
+        },
+        error -> onError(error, TAG),
+        forceUpdate,
+        false,
+        Product.class,
+        ProductBarcode.class,
+        QuantityUnit.class,
+        QuantityUnitConversionResolved.class,
+        Store.class,
+        Location.class,
+        batchShoppingListItemIds != null ? ShoppingListItem.class : null
     );
-    if (batchShoppingListItemIds != null) {
-      ShoppingListItem.updateShoppingListItems(dlHelper, dbChangedTime, (items) -> {
-        this.shoppingListItems = items;
-        shoppingListItemHashMap = ArrayUtil.getShoppingListItemHashMap(shoppingListItems);
-      });
-    }
-    if (queue.isEmpty()) {
-      onQueueEmpty();
-      return;
-    }
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.apply();
-    downloadData();
-  }
-
-  private void onQueueEmpty() {
-    fillShoppingListItemAmountsHashMap();
-    if (queueEmptyAction != null) {
-      queueEmptyAction.run();
-      queueEmptyAction = null;
-      return;
-    }
-    if (batchShoppingListItemIds != null) {
-      fillWithShoppingListItem();
-    }
   }
 
   public void setProduct(
@@ -302,39 +261,36 @@ public class PurchaseViewModel extends BaseViewModel {
       formData.getProductNameLive().setValue(updatedProduct.getName());
 
       // quantity unit
-      double initialUnitFactor;
-      try {
-        Integer forcedQuId = null;
-        if (barcode != null && barcode.hasQuId()) {
-          forcedQuId = barcode.getQuIdInt();
-        } else if (shoppingListItem != null && shoppingListItem.hasQuId()) {
-          forcedQuId = shoppingListItem.getQuIdInt();
-        }
-        HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
-            getApplication(),
-            quantityUnitHashMap,
-            unitConversions,
-            updatedProduct
-        );
-        formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
-        QuantityUnit forcedUnit = null;
-        if (forcedQuId != null) {
-          forcedUnit = quantityUnitHashMap.get(forcedQuId);
-        }
-        Double factor;
-        if (forcedUnit != null && unitFactors.containsKey(forcedUnit)) {
-          formData.getQuantityUnitLive().setValue(forcedUnit);
-          factor = unitFactors.get(forcedUnit);
-        } else {
-          QuantityUnit purchase = quantityUnitHashMap.get(updatedProduct.getQuIdPurchaseInt());
-          formData.getQuantityUnitLive().setValue(purchase);
-          factor = unitFactors.get(purchase);
-        }
-        initialUnitFactor = factor != null && factor != -1 ? factor : 1;
-      } catch (IllegalArgumentException e) {
-        showMessageAndContinueScanning(e.getMessage());
-        return;
+      Integer forcedQuId = null;
+      if (barcode != null && barcode.hasQuId()) {
+        forcedQuId = barcode.getQuIdInt();
+      } else if (shoppingListItem != null && shoppingListItem.hasQuId()) {
+        forcedQuId = shoppingListItem.getQuIdInt();
       }
+      HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
+          quantityUnitHashMap,
+          unitConversions,
+          updatedProduct,
+          VersionUtil.isGrocyServerMin400(sharedPrefs)
+      );
+      formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+      formData.getQuantityUnitStockLive().setValue(
+          quantityUnitHashMap.get(updatedProduct.getQuIdStockInt())
+      );
+      QuantityUnit forcedUnit = null;
+      if (forcedQuId != null) {
+        forcedUnit = quantityUnitHashMap.get(forcedQuId);
+      }
+      Double factor;
+      if (forcedUnit != null && unitFactors.containsKey(forcedUnit)) {
+        formData.getQuantityUnitLive().setValue(forcedUnit);
+        factor = unitFactors.get(forcedUnit);
+      } else {
+        QuantityUnit purchase = quantityUnitHashMap.get(updatedProduct.getQuIdPurchaseInt());
+        formData.getQuantityUnitLive().setValue(purchase);
+        factor = unitFactors.get(purchase);
+      }
+      double initialUnitFactor = factor != null ? factor : 1;
 
       // amount
       boolean isTareWeightEnabled = formData.isTareWeightEnabled();
@@ -344,7 +300,8 @@ public class PurchaseViewModel extends BaseViewModel {
         formData.getAmountLive().setValue(NumUtil.trimAmount(barcode.getAmountDouble(), maxDecimalPlacesAmount));
       } else if (!isTareWeightEnabled && shoppingListItem != null) {
         Double amountInUnit = AmountUtil.getShoppingListItemAmount(
-            shoppingListItem, productHashMap, quantityUnitHashMap, unitConversionHashMap
+            shoppingListItem, productHashMap, quantityUnitHashMap, unitConversions,
+            VersionUtil.isGrocyServerMin400(sharedPrefs)
         );
         formData.getAmountLive().setValue(
             NumUtil.trimAmount(
@@ -404,7 +361,9 @@ public class PurchaseViewModel extends BaseViewModel {
 
       // store
       String storeId;
-      if (barcode != null && barcode.hasStoreId()) {
+      if (formData.getPinnedStoreIdLive().getValue() != null) {
+        storeId = String.valueOf(formData.getPinnedStoreIdLive().getValue());
+      } else if (barcode != null && barcode.hasStoreId()) {
         // if barcode contains store, take this
         storeId = barcode.getStoreId();
       } else {
@@ -430,11 +389,7 @@ public class PurchaseViewModel extends BaseViewModel {
       }
 
       // note
-      if (barcode != null
-          && barcode.getNote() != null
-          && sharedPrefs.getBoolean(BEHAVIOR.COPY_BARCODE_NOTE,
-          SETTINGS_DEFAULT.BEHAVIOR.COPY_BARCODE_NOTE)
-      ) {
+      if (barcode != null && barcode.getNote() != null) {
         formData.getNoteLive().setValue(barcode.getNote());
       }
 
@@ -490,7 +445,9 @@ public class PurchaseViewModel extends BaseViewModel {
 
     // store
     String storeId = null;
-    if (barcode != null && barcode.hasStoreId()) {
+    if (formData.getPinnedStoreIdLive().getValue() != null) {
+      storeId = String.valueOf(formData.getPinnedStoreIdLive().getValue());
+    } else if (barcode != null && barcode.hasStoreId()) {
       // if barcode contains store, take this
       storeId = barcode.getStoreId();
     }
@@ -881,9 +838,10 @@ public class PurchaseViewModel extends BaseViewModel {
     if (shoppingListItems == null) {
       return;
     }
+    boolean isGrocyServerMin400 = VersionUtil.isGrocyServerMin400(sharedPrefs);
     for (ShoppingListItem item : shoppingListItems) {
       Double amount = AmountUtil.getShoppingListItemAmount(
-          item, productHashMap, quantityUnitHashMap, unitConversionHashMap
+          item, productHashMap, quantityUnitHashMap, unitConversions, isGrocyServerMin400
       );
       if (amount != null) {
         shoppingListItemAmountsHashMap.put(item.getId(), amount);
@@ -952,7 +910,7 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public void showStoresBottomSheet() {
-    if (!formData.isProductNameValid() || stores == null || stores.isEmpty()) {
+    if (stores == null || stores.isEmpty()) {
       return;
     }
     Bundle bundle = new Bundle();
@@ -964,6 +922,10 @@ public class PurchaseViewModel extends BaseViewModel {
             : -1
     );
     bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
+    bundle.putBoolean(ARGUMENT.NONE_SELECTABLE, !formData.isProductNameValid(false));
+    bundle.putBoolean(ARGUMENT.DISPLAY_PIN_BUTTONS, true);
+    Integer pinId = formData.getPinnedStoreIdLive().getValue();
+    bundle.putInt(ARGUMENT.CURRENT_PIN_ID, pinId != null ? pinId : -1);
     showBottomSheet(new StoresBottomSheet(), bundle);
   }
 
@@ -1093,6 +1055,20 @@ public class PurchaseViewModel extends BaseViewModel {
         .putBoolean(Constants.PREF.QUICK_MODE_ACTIVE_PURCHASE, isQuickModeEnabled())
         .apply();
     return true;
+  }
+
+  public boolean isTurnOnQuickModeEnabled() {
+    return sharedPrefs.getBoolean(
+        BEHAVIOR.TURN_ON_QUICK_MODE,
+        SETTINGS_DEFAULT.BEHAVIOR.TURN_ON_QUICK_MODE
+    );
+  }
+
+  public boolean isQuickModeReturnEnabled() {
+    return sharedPrefs.getBoolean(
+        BEHAVIOR.QUICK_MODE_RETURN,
+        Constants.SETTINGS_DEFAULT.BEHAVIOR.QUICK_MODE_RETURN
+    );
   }
 
   @Override

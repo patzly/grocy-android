@@ -112,6 +112,11 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
+      } else if (event.getType() == Event.FOCUS_INVALID_VIEWS) {
+        if (binding.editTextBarcode.getText() == null
+            || binding.editTextBarcode.getText().length() == 0) {
+          activity.showKeyboard(binding.editTextBarcode);
+        }
       }
     });
 
@@ -120,12 +125,6 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
         getViewLifecycleOwner(),
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
-
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
-      if (!isLoading) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
 
     viewModel.getOfflineLive().observe(getViewLifecycleOwner(), offline -> {
       InfoFullscreen infoFullscreen = offline ? new InfoFullscreen(
@@ -254,11 +253,8 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
+    viewModel.downloadData(false);
     systemBarBehavior.refresh();
-    if (isOnline) {
-      viewModel.downloadData();
-    }
   }
 
   @NonNull

@@ -17,5 +17,22 @@
  * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
  */
 
-include ':app'
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://a8c-libs.s3.amazonaws.com/android" }
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://a8c-libs.s3.amazonaws.com/android" }
+    }
+}
+
 rootProject.name = "Grocy Android"
+include ':app'

@@ -26,20 +26,21 @@
   android:paddingStart="16dp"
   android:paddingEnd="16dp">
 
-  <ImageView
+  <xyz.zedler.patrick.grocy.view.RoundedCornerImageView
     android:id="@+id/picture"
     android:layout_width="56dp"
     android:layout_height="56dp"
     android:layout_marginEnd="16dp"
-    android:layout_gravity="center_vertical"
-    tools:ignore="ContentDescription" />
+    android:layout_gravity="top"
+    tools:ignore="ContentDescription"
+    app:radius="5dp"/>
 
   <com.google.android.material.card.MaterialCardView
     android:id="@+id/picture_placeholder"
     android:layout_width="56dp"
     android:layout_height="56dp"
     android:layout_marginEnd="16dp"
-    android:layout_gravity="center_vertical"
+    android:layout_gravity="top"
     android:visibility="gone"
     app:cardCornerRadius="12dp"
     app:cardElevation="0dp"

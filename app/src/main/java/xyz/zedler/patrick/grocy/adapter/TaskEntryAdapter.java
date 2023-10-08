@@ -62,21 +62,14 @@ public class TaskEntryAdapter extends
   public TaskEntryAdapter(
       Context context,
       LinearLayoutManager linearLayoutManager,
-      ArrayList<Task> tasks,
-      HashMap<Integer, TaskCategory> taskCategories,
-      HashMap<Integer, User> usersHashMap,
-      TasksItemAdapterListener listener,
-      String sortMode,
-      boolean sortAscending
+      TasksItemAdapterListener listener
   ) {
     this.context = context;
     this.linearLayoutManager = linearLayoutManager;
-    this.tasks = new ArrayList<>(tasks);
-    this.taskCategoriesHashMap = new HashMap<>(taskCategories);
-    this.usersHashMap = new HashMap<>(usersHashMap);
+    this.tasks = new ArrayList<>();
+    this.taskCategoriesHashMap = new HashMap<>();
+    this.usersHashMap = new HashMap<>();
     this.listener = listener;
-    this.sortMode = sortMode;
-    this.sortAscending = sortAscending;
   }
 
   @Override
@@ -226,14 +219,21 @@ public class TaskEntryAdapter extends
     void onItemRowClicked(Task task);
   }
 
+  public Task getTaskForPos(int position) {
+    if (position < 0 || position >= tasks.size()) {
+      return null;
+    }
+    return tasks.get(position);
+  }
+
   public void updateData(
       ArrayList<Task> newList,
       HashMap<Integer, TaskCategory> taskCategoriesHashMap,
       HashMap<Integer, User> usersHashMap,
       String sortMode,
-      boolean sortAscending
+      boolean sortAscending,
+      Runnable onListFilled
   ) {
-
     TaskEntryAdapter.DiffCallback diffCallback = new TaskEntryAdapter.DiffCallback(
         this.tasks,
         newList,
@@ -246,6 +246,11 @@ public class TaskEntryAdapter extends
         this.sortAscending,
         sortAscending
     );
+
+    if (onListFilled != null && !newList.isEmpty() && tasks.isEmpty()) {
+      onListFilled.run();
+    }
+
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.tasks.clear();
     this.tasks.addAll(newList);
@@ -318,13 +323,6 @@ public class TaskEntryAdapter extends
     private boolean compare(int oldItemPos, int newItemPos, boolean compareContent) {
       Task newItem = newItems.get(newItemPos);
       Task oldItem = oldItems.get(oldItemPos);
-
-      if (!sortModeOld.equals(sortModeNew)) {
-        return false;
-      }
-      if (sortAscendingOld != sortAscendingNew) {
-        return false;
-      }
 
       TaskCategory taskCategoryOld = NumUtil.isStringInt(oldItem.getCategoryId())
           ? taskCategoriesHashMapOld.get(Integer.parseInt(oldItem.getCategoryId())) : null;

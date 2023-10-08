@@ -28,21 +28,23 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import me.xdrop.fuzzywuzzy.model.BoundExtractedResult;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterProductBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
+import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataProductGroup;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataSort;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataSort.SortOption;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -50,16 +52,19 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
+import xyz.zedler.patrick.grocy.model.Userfield;
 import xyz.zedler.patrick.grocy.repository.MasterObjectListRepository;
-import xyz.zedler.patrick.grocy.util.LocaleUtil;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ObjectUtil;
-import xyz.zedler.patrick.grocy.util.PrefsUtil;
-import xyz.zedler.patrick.grocy.web.NetworkQueue;
+import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class MasterObjectListViewModel extends BaseViewModel {
 
   private static final String TAG = MasterObjectListViewModel.class.getSimpleName();
+
+  public final static String SORT_NAME = "sort_name";
+  public final static String SORT_CREATED_TIMESTAMP = "sort_created_timestamp";
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
@@ -69,17 +74,15 @@ public class MasterObjectListViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<ArrayList<Object>> displayedItemsLive;
+  private final FilterChipLiveDataProductGroup filterChipLiveDataProductGroup;
+  private final FilterChipLiveDataSort filterChipLiveDataSort;
 
   private List<?> objects;
-  private List<ProductGroup> productGroups;
   private List<QuantityUnit> quantityUnits;
   private List<Location> locations;
+  private HashMap<String, Userfield> userfieldHashMap = new HashMap<>();
 
-  private NetworkQueue currentQueueLoading;
-  private final HorizontalFilterBarMulti horizontalFilterBarMulti;
-  private boolean sortAscending;
   private String search;
-  private final boolean debug;
   private final String entity;
 
   public MasterObjectListViewModel(@NonNull Application application, String entity) {
@@ -87,20 +90,29 @@ public class MasterObjectListViewModel extends BaseViewModel {
 
     this.entity = entity;
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new MasterObjectListRepository(application);
 
     infoFullscreenLive = new MutableLiveData<>();
     displayedItemsLive = new MutableLiveData<>();
+    filterChipLiveDataProductGroup = new FilterChipLiveDataProductGroup(
+        getApplication(),
+        this::updateItemsWithTopScroll
+    );
+    filterChipLiveDataSort = new FilterChipLiveDataSort(
+        getApplication(),
+        Constants.PREF.MASTER_OBJECTS_SORT_MODE,
+        Constants.PREF.MASTER_OBJECTS_SORT_ASCENDING,
+        this::updateItemsWithTopScroll,
+        SORT_NAME,
+        new SortOption(SORT_NAME, getString(R.string.property_name)),
+        new SortOption(SORT_CREATED_TIMESTAMP, getString(R.string.property_created_timestamp))
+    );
 
     objects = new ArrayList<>();
-
-    horizontalFilterBarMulti = new HorizontalFilterBarMulti(this::displayItems);
-    sortAscending = true;
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
@@ -108,7 +120,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
       switch (entity) {
         case ENTITY.PRODUCTS:
           this.objects = data.getProducts();
-          this.productGroups = data.getProductGroups();
+          filterChipLiveDataProductGroup.setProductGroups(data.getProductGroups());
           this.quantityUnits = data.getQuantityUnits();
           this.locations = data.getLocations();
           break;
@@ -128,123 +140,34 @@ public class MasterObjectListViewModel extends BaseViewModel {
           this.objects = data.getStores();
           break;
       }
+      userfieldHashMap = ArrayUtil.getUserfieldHashMap(data.getUserfields());
+      filterChipLiveDataSort.setUserfields(data.getUserfields(), entity);
 
       displayItems();
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData(@Nullable String dbChangedTime, boolean skipOfflineCheck) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
-    if (!skipOfflineCheck && isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
-    }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(
-          time -> downloadData(time, skipOfflineCheck),
-          error -> onError(error, TAG)
-      );
-      return;
-    }
-
-    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, error -> onError(error, TAG));
-    if (entity.equals(GrocyApi.ENTITY.STORES)) {
-      queue.append(Store.updateStores(dlHelper, dbChangedTime, stores -> objects = stores));
-    }
-    if ((entity.equals(GrocyApi.ENTITY.LOCATIONS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))) {
-      queue.append(Location.updateLocations(dlHelper, dbChangedTime, locations -> {
-        if (entity.equals(GrocyApi.ENTITY.LOCATIONS)) {
-          objects = locations;
-        } else {
-          this.locations = locations;
-        }
-      }));
-    }
-    if ((entity.equals(GrocyApi.ENTITY.PRODUCT_GROUPS) || entity
-        .equals(GrocyApi.ENTITY.PRODUCTS))) {
-      queue.append(ProductGroup.updateProductGroups(dlHelper, dbChangedTime, productGroups -> {
-        if (entity.equals(GrocyApi.ENTITY.PRODUCT_GROUPS)) {
-          objects = productGroups;
-        } else {
-          this.productGroups = productGroups;
-        }
-      }));
-    }
-    if ((entity.equals(GrocyApi.ENTITY.QUANTITY_UNITS) || entity
-        .equals(GrocyApi.ENTITY.PRODUCTS))) {
-      queue.append(QuantityUnit.updateQuantityUnits(dlHelper, dbChangedTime, quantityUnits -> {
-        if (entity.equals(GrocyApi.ENTITY.QUANTITY_UNITS)) {
-          objects = quantityUnits;
-        } else {
-          this.quantityUnits = quantityUnits;
-        }
-      }));
-    }
-    if ((entity.equals(ENTITY.TASK_CATEGORIES))) {
-      queue.append(TaskCategory.updateTaskCategories(
-          dlHelper,
-          dbChangedTime,
-          taskCategories -> this.objects = taskCategories
-      ));
-    }
-    if (entity.equals(GrocyApi.ENTITY.PRODUCTS)) {
-      queue.append(Product.updateProducts(
-          dlHelper,
-          dbChangedTime,
-          products -> objects = products)
-      );
-    }
-
-    if (queue.isEmpty()) {
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null, false);
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    switch (entity) {
-      case GrocyApi.ENTITY.STORES:
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
-        break;
-      case GrocyApi.ENTITY.LOCATIONS:
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
-        break;
-      case GrocyApi.ENTITY.PRODUCT_GROUPS:
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
-        break;
-      case GrocyApi.ENTITY.QUANTITY_UNITS:
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-        break;
-      case GrocyApi.ENTITY.TASK_CATEGORIES:
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_TASK_CATEGORIES, null);
-        break;
-      default:  // products
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-        break;
-    }
-    editPrefs.apply();
-    downloadData(null, true);
-  }
-
-  private void onQueueEmpty() {
-    if (isOffline()) setOfflineLive(false);
-    displayItems();
+  public void downloadData(boolean forceUpdate) {
+    dlHelper.updateData(
+        updated -> {
+          if (updated) loadFromDatabase(false);
+        }, error -> onError(error, TAG),
+        forceUpdate,
+        true,
+        entity.equals(GrocyApi.ENTITY.STORES) ? Store.class : null,
+        (entity.equals(GrocyApi.ENTITY.LOCATIONS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))
+            ? Product.class : null,
+        (entity.equals(GrocyApi.ENTITY.PRODUCT_GROUPS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))
+            ? ProductGroup.class : null,
+        (entity.equals(GrocyApi.ENTITY.QUANTITY_UNITS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))
+            ? QuantityUnit.class : null,
+        entity.equals(ENTITY.TASK_CATEGORIES) ? TaskCategory.class : null,
+        entity.equals(GrocyApi.ENTITY.PRODUCTS) ? Product.class : null,
+        Userfield.class
+    );
   }
 
   public void displayItems() {
@@ -277,7 +200,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
         }
       }
 
-      sortObjectsByName(searchedItems);
+      sortObjects(searchedItems);
 
       for (Object object : searchResultsFuzzy) {
         if (objectIdsInList.contains(ObjectUtil.getObjectId(object, entity))) {
@@ -287,21 +210,19 @@ public class MasterObjectListViewModel extends BaseViewModel {
       }
     } else {
       searchedItems = new ArrayList<>(objects);
-      sortObjectsByName(searchedItems);
+      sortObjects(searchedItems);
     }
 
     // filter items
     ArrayList<Object> filteredItems;
-    if (entity.equals(GrocyApi.ENTITY.PRODUCTS) && horizontalFilterBarMulti.areFiltersActive()) {
+    if (entity.equals(GrocyApi.ENTITY.PRODUCTS) && filterChipLiveDataProductGroup.isActive()) {
       filteredItems = new ArrayList<>();
-      HorizontalFilterBarMulti.Filter filter = horizontalFilterBarMulti
-          .getFilter(HorizontalFilterBarMulti.PRODUCT_GROUP);
       for (Object object : searchedItems) {
         if (!NumUtil.isStringInt(((Product) object).getProductGroupId())) {
           continue;
         }
         int productGroupId = Integer.parseInt(((Product) object).getProductGroupId());
-        if (productGroupId == filter.getObjectId()) {
+        if (productGroupId == filterChipLiveDataProductGroup.getSelectedId()) {
           filteredItems.add(object);
         }
       }
@@ -312,124 +233,45 @@ public class MasterObjectListViewModel extends BaseViewModel {
     displayedItemsLive.setValue(filteredItems);
   }
 
-  public void sortObjectsByName(ArrayList<Object> objects) {
-    if (objects == null) {
-      return;
+  private void updateItemsWithTopScroll() {
+    displayItems();
+    sendEvent(Event.SCROLL_UP);
+  }
+
+  private void sortObjects(ArrayList<Object> objects) {
+    String sortMode = filterChipLiveDataSort.getSortMode();
+    boolean isAscending = filterChipLiveDataSort.isSortAscending();
+    if (sortMode.equals(SORT_NAME)) {
+      SortUtil.sortObjectsByName(objects, entity, isAscending);
+    } else if (sortMode.equals(SORT_CREATED_TIMESTAMP)) {
+      SortUtil.sortObjectsByCreatedTimestamp(objects, entity, isAscending);
+    } else if (sortMode.startsWith(Userfield.NAME_PREFIX)) {
+      String userfieldName = sortMode.substring(Userfield.NAME_PREFIX.length());
+      Userfield userfield = userfieldHashMap.get(userfieldName);
+      SortUtil.sortObjectsByUserfieldValue(objects, entity, userfield, isAscending);
     }
-
-    Locale locale = LocaleUtil.getLocale();
-
-    Collections.sort(objects, (item1, item2) -> {
-      String name1 = ObjectUtil.getObjectName(sortAscending ? item1 : item2, entity);
-      String name2 = ObjectUtil.getObjectName(sortAscending ? item2 : item1, entity);
-      if (name1 == null || name2 == null) {
-        return 0;
-      }
-
-      return Collator.getInstance(locale).compare(
-              name1.toLowerCase(locale),
-              name2.toLowerCase(locale));
-    });
   }
 
   public void showProductBottomSheet(Product product) {
     if (product == null) {
       return;
     }
-    Bundle bundle = new Bundle();
-    bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
-    bundle.putParcelable(
-        Constants.ARGUMENT.LOCATION,
-        getLocation(product.getLocationIdInt())
-    );
-    bundle.putParcelable(
-        Constants.ARGUMENT.QUANTITY_UNIT_PURCHASE,
-        getQuantityUnit(product.getQuIdPurchaseInt())
-    );
-    bundle.putParcelable(
-        Constants.ARGUMENT.QUANTITY_UNIT_STOCK,
-        getQuantityUnit(product.getQuIdStockInt())
-    );
-    ProductGroup productGroup = NumUtil.isStringInt(product.getProductGroupId())
-        ? getProductGroup(Integer.parseInt(product.getProductGroupId()))
-        : null;
-    bundle.putParcelable(Constants.ARGUMENT.PRODUCT_GROUP, productGroup);
-    showBottomSheet(new MasterProductBottomSheet(), bundle);
-  }
-
-  public void deleteObjectSafely(Object object) {
-    String objectName = ObjectUtil.getObjectName(object, entity);
-    int objectId = ObjectUtil.getObjectId(object, entity);
-    showMasterDeleteBottomSheet(entity, objectName, objectId);
+    Bundle bundle = new ProductOverviewBottomSheetArgs.Builder()
+        .setProduct(product)
+        .setLocation(Location.getFromId(locations, product.getLocationIdInt()))
+        .setQuantityUnitPurchase(QuantityUnit.getFromId(quantityUnits, product.getQuIdPurchaseInt()))
+        .setQuantityUnitStock(QuantityUnit.getFromId(quantityUnits, product.getQuIdStockInt()))
+        .setShowActions(false)
+        .build().toBundle();
+    showBottomSheet(new ProductOverviewBottomSheet(), bundle);
   }
 
   public void deleteObject(int objectId) {
     dlHelper.delete(
         grocyApi.getObject(entity, objectId),
-        response -> downloadData(),
+        response -> downloadData(false),
         error -> showMessage(getString(R.string.error_undefined))
     );
-  }
-
-  private void showMasterDeleteBottomSheet(String entity, String objectName, int objectId) {
-    Bundle argsBundle = new Bundle();
-    argsBundle.putString(Constants.ARGUMENT.ENTITY, entity);
-    argsBundle.putInt(Constants.ARGUMENT.OBJECT_ID, objectId);
-    argsBundle.putString(Constants.ARGUMENT.OBJECT_NAME, objectName);
-    showBottomSheet(new MasterDeleteBottomSheet(), argsBundle);
-  }
-
-  @Nullable
-  private Location getLocation(int id) {
-    if (locations == null) {
-      return null;
-    }
-    for (Location location : locations) {
-      if (location.getId() == id) {
-        return location;
-      }
-    }
-    return null;
-  }
-
-  @Nullable
-  private ProductGroup getProductGroup(int id) {
-    if (productGroups == null) {
-      return null;
-    }
-    for (ProductGroup productGroup : productGroups) {
-      if (productGroup.getId() == id) {
-        return productGroup;
-      }
-    }
-    return null;
-  }
-
-  @Nullable
-  private QuantityUnit getQuantityUnit(int id) {
-    if (quantityUnits == null) {
-      return null;
-    }
-    for (QuantityUnit quantityUnit : quantityUnits) {
-      if (quantityUnit.getId() == id) {
-        return quantityUnit;
-      }
-    }
-    return null;
-  }
-
-  @Nullable
-  public List<ProductGroup> getProductGroups() {
-    return productGroups;
-  }
-
-  public void setSortAscending(boolean ascending) {
-    this.sortAscending = ascending;
-    displayItems();
-  }
-
-  public boolean isSortAscending() {
-    return sortAscending;
   }
 
   public boolean isSearchActive() {
@@ -445,8 +287,12 @@ public class MasterObjectListViewModel extends BaseViewModel {
     search = null;
   }
 
-  public HorizontalFilterBarMulti getHorizontalFilterBarMulti() {
-    return horizontalFilterBarMulti;
+  public FilterChipLiveData.Listener getFilterChipLiveDataProductGroup() {
+    return () -> filterChipLiveDataProductGroup;
+  }
+
+  public FilterChipLiveData.Listener getFilterChipLiveDataSort() {
+    return () -> filterChipLiveDataSort;
   }
 
   @NonNull
@@ -462,10 +308,6 @@ public class MasterObjectListViewModel extends BaseViewModel {
   @NonNull
   public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
     return infoFullscreenLive;
-  }
-
-  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
-    currentQueueLoading = queueLoading;
   }
 
   public boolean isFeatureEnabled(String pref) {

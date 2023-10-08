@@ -29,7 +29,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.color.ColorRoles;
+import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -105,17 +107,29 @@ public class MasterProductCatConversionsEditFragment extends BaseFragment {
       }
     });
 
+    Object newQuId = getFromThisDestinationNow(ARGUMENT.OBJECT_ID);
+    if (newQuId != null) {  // if user created a new QU and navigates back to this fragment this is the new quId
+      removeForThisDestination(ARGUMENT.OBJECT_ID);
+      String idForValue = (String) getFromThisDestinationNow(ARGUMENT.OBJECT_NAME);
+      viewModel.setQueueEmptyAction(() -> {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(
+            MasterProductCatConversionsEditViewModel.QUANTITY_UNIT_IS_FROM,
+            idForValue != null && idForValue
+                .equals(MasterProductCatConversionsEditViewModel.QUANTITY_UNIT_IS_FROM)
+        );
+        List<QuantityUnit> qUs = viewModel.getFormData().getQuantityUnitsLive().getValue();
+        if (qUs == null) return;
+        QuantityUnit quantityUnit = QuantityUnit.getFromId(qUs, (Integer) newQuId);
+        selectQuantityUnit(quantityUnit, bundle);
+      });
+    }
+
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
-
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
-      if (!isLoading) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
 
     viewModel.getFormData().getQuantityUnitFromErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textQuantityUnitFrom.setTextColor(
@@ -182,6 +196,16 @@ public class MasterProductCatConversionsEditFragment extends BaseFragment {
   }
 
   @Override
+  public void createQuantityUnit(Bundle args) {
+    activity.navUtil.navigateFragment(MasterProductCatConversionsEditFragmentDirections
+        .actionMasterProductCatConversionsEditFragmentToMasterQuantityUnitFragment()
+        .setIdForReturnValue(args.getBoolean(
+            MasterProductCatConversionsEditViewModel.QUANTITY_UNIT_IS_FROM)
+            ? MasterProductCatConversionsEditViewModel.QUANTITY_UNIT_IS_FROM : null
+        ));
+  }
+
+  @Override
   public void selectQuantityUnit(QuantityUnit quantityUnit, Bundle args) {
     if (args.getBoolean(MasterProductCatConversionsEditViewModel.QUANTITY_UNIT_IS_FROM)) {
       if (quantityUnit != null && quantityUnit.getId() == -1) {
@@ -196,7 +220,7 @@ public class MasterProductCatConversionsEditFragment extends BaseFragment {
         viewModel.getFormData().getQuantityUnitToLive().setValue(quantityUnit);
       }
     }
-    viewModel.getFormData().isQuanityUnitValid();
+    viewModel.getFormData().isQuantityUnitValid();
   }
 
   private boolean onMenuItemClick(MenuItem item) {
@@ -213,10 +237,7 @@ public class MasterProductCatConversionsEditFragment extends BaseFragment {
     if (!isOnline == viewModel.isOffline()) {
       return;
     }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
+    viewModel.downloadData(false);
     if (systemBarBehavior != null) {
       systemBarBehavior.refresh();
     }

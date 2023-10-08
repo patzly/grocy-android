@@ -28,12 +28,14 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
+import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
 public class SettingsFragment extends BaseFragment {
 
@@ -42,6 +44,7 @@ public class SettingsFragment extends BaseFragment {
   private FragmentSettingsBinding binding;
   private MainActivity activity;
   private SettingsFragmentArgs args;
+  private PrefsUtil prefsUtil;
 
   @Override
   public View onCreateView(
@@ -82,7 +85,18 @@ public class SettingsFragment extends BaseFragment {
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(false, R.menu.menu_empty);
 
+    prefsUtil = new PrefsUtil(activity, this);
+
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
+  }
+
+  public void openBackupDialog() {
+    new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Grocy_AlertDialog)
+        .setTitle(R.string.action_settings_backup_restore)
+        .setMessage(R.string.msg_settings_backup_restore)
+        .setPositiveButton(R.string.action_backup, (dialog, which) -> prefsUtil.exportPrefs())
+        .setNegativeButton(R.string.action_restore, (dialog, which) -> prefsUtil.importPrefs())
+        .show();
   }
 
   public boolean shouldNavigateToBehavior() {

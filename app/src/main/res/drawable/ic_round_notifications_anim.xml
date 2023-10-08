@@ -1,0 +1,128 @@
+<!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
+  -->
+<animated-vector
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:aapt="http://schemas.android.com/aapt">
+  <aapt:attr name="android:drawable">
+    <vector
+      android:name="vector"
+      android:width="24dp"
+      android:height="24dp"
+      android:viewportWidth="24"
+      android:viewportHeight="24">
+      <group
+        android:name="group_bell"
+        android:pivotX="12"
+        android:pivotY="4">
+        <path
+          android:name="bell"
+          android:pathData="M 18 16 L 18 11 C 18 7.93 16.36 5.36 13.5 4.68 L 13.5 4 C 13.5 3.17 12.83 2.5 12 2.5 C 11.17 2.5 10.5 3.17 10.5 4 L 10.5 4.68 C 7.63 5.36 6 7.92 6 11 L 6 16 L 4.71 17.29 C 4.08 17.92 4.52 19 5.41 19 L 18.58 19 C 19.47 19 19.92 17.92 19.29 17.29 Z"
+          android:fillColor="#000000"
+          android:strokeWidth="1" />
+        <clip-path
+          android:name="mask"
+          android:pathData="M 3 20 L 21 20 L 21 23 L 3 23 Z" />
+        <group
+          android:name="group_mallet"
+          android:pivotX="12"
+          android:pivotY="7">
+          <path
+            android:name="mallet"
+            android:pathData="M 12 15 C 12.53 15 13.039 15.211 13.414 15.586 C 13.789 15.961 14 16.47 14 17 L 14 20 C 14 20.53 13.789 21.039 13.414 21.414 C 13.039 21.789 12.53 22 12 22 C 11.47 22 10.961 21.789 10.586 21.414 C 10.211 21.039 10 20.53 10 20 L 10 17 C 10 16.47 10.211 15.961 10.586 15.586 C 10.961 15.211 11.47 15 12 15"
+            android:fillColor="#000000"
+            android:strokeWidth="1" />
+        </group>
+      </group>
+    </vector>
+  </aapt:attr>
+  <target android:name="group_bell">
+    <aapt:attr name="android:animation">
+      <set>
+        <objectAnimator
+          android:propertyName="rotation"
+          android:duration="80"
+          android:valueFrom="0"
+          android:valueTo="20"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="80"
+          android:duration="80"
+          android:valueFrom="20"
+          android:valueTo="-15"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="160"
+          android:duration="70"
+          android:valueFrom="-15"
+          android:valueTo="8"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="230"
+          android:duration="70"
+          android:valueFrom="8"
+          android:valueTo="0"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+      </set>
+    </aapt:attr>
+  </target>
+  <target android:name="group_mallet">
+    <aapt:attr name="android:animation">
+      <set>
+        <objectAnimator
+          android:propertyName="rotation"
+          android:duration="80"
+          android:valueFrom="0"
+          android:valueTo="-15"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="80"
+          android:duration="80"
+          android:valueFrom="-15"
+          android:valueTo="10"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="160"
+          android:duration="70"
+          android:valueFrom="10"
+          android:valueTo="-5"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="230"
+          android:duration="70"
+          android:valueFrom="-5"
+          android:valueTo="0"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+      </set>
+    </aapt:attr>
+  </target>
+</animated-vector>

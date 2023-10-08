@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -98,6 +99,9 @@ public class InputBottomSheet extends BaseBottomSheetDialogFragment {
     if (requireArguments().containsKey(ARGUMENT.HINT)) {
       binding.textInput.setHint(requireArguments().getString(ARGUMENT.HINT));
     }
+
+    activity.showKeyboard(binding.editText);
+    new Handler().postDelayed(() -> binding.editText.selectAll(), 100);
   }
 
   @Override

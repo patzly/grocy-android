@@ -59,7 +59,7 @@
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never"
       app:setRefreshing="@{viewModel.isLoadingLive}"
-      app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
+      app:onRefreshListener="@{() -> viewModel.downloadData(true)}">
 
       <FrameLayout
         android:id="@+id/frame_container"
@@ -73,7 +73,8 @@
           android:clipToPadding="false"
           android:paddingTop="8dp"
           android:paddingBottom="@dimen/global_scroll_bottom_padding"
-          android:overScrollMode="never" />
+          android:overScrollMode="never"
+          android:layoutAnimation="@anim/recycler_layout" />
 
       </FrameLayout>
 

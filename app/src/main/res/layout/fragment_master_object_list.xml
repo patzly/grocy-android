@@ -107,6 +107,50 @@
 
       </LinearLayout>
 
+      <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:scrollbars="none"
+        android:overScrollMode="ifContentScrolls">
+
+        <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:paddingStart="12dp"
+          android:paddingEnd="12dp">
+
+          <LinearLayout
+            android:id="@+id/container_product_group_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <xyz.zedler.patrick.grocy.view.FilterChip
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              app:data="@{viewModel.filterChipLiveDataProductGroup}"/>
+
+            <View
+              android:layout_width="1dp"
+              android:layout_height="18dp"
+              android:layout_marginStart="4dp"
+              android:layout_marginEnd="4dp"
+              android:layout_gravity="center_vertical"
+              android:background="?attr/colorOutlineVariant"/>
+
+          </LinearLayout>
+
+          <xyz.zedler.patrick.grocy.view.FilterChip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:data="@{viewModel.filterChipLiveDataSort}"/>
+
+        </LinearLayout>
+
+      </HorizontalScrollView>
+
       <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -132,7 +176,9 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_below="@+id/app_bar"
-      android:overScrollMode="never">
+      android:overScrollMode="never"
+      app:setRefreshing="@{viewModel.isLoadingLive}"
+      app:onRefreshListener="@{() -> viewModel.downloadData(true)}">
 
       <FrameLayout
         android:id="@+id/frame_container"

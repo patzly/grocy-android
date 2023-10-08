@@ -35,6 +35,8 @@ public final class Constants {
     public final static String HOME_ASSISTANT_INGRESS_SESSION_KEY = "home_assistant_ingress_session_key";
     public final static String HOME_ASSISTANT_INGRESS_SESSION_KEY_TIME = "home_assistant_ingress_session_key_time";
     public final static String CURRENCY = "currency";
+    public final static String ENERGY_UNIT = "energy_unit";
+    public final static String ENERGY_UNIT_DEFAULT = "kcal";
     public final static String CALENDAR_FIRST_DAY_OF_WEEK = "calendar_first_day_of_week";
     public final static String MEAL_PLAN_FIRST_DAY_OF_WEEK = "mealplan_first_day_of_week";
     public final static String GROCY_VERSION = "grocy_version";
@@ -58,20 +60,28 @@ public final class Constants {
     public final static String STOCK_SORT_MODE = "stock_sort_mode";
     public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";
     public final static String STOCK_GROUPING_MODE = "stock_grouping_mode";
-    public final static String STOCK_EXTRA_FIELD = "stock_extra_field";
+    public final static String STOCK_FIELDS = "stock_fields";
     public final static String STOCK_ENTRIES_SORT_MODE = "stock_entries_sort_mode";
     public final static String STOCK_ENTRIES_SORT_ASCENDING = "stock_entries_sort_ascending";
     public final static String STOCK_ENTRIES_GROUPING_MODE = "stock_entries_grouping_mode";
     public final static String SHOPPING_LIST_GROUPING_MODE = "shopping_list_grouping_mode";
-    public final static String SHOPPING_LIST_EXTRA_FIELD = "shopping_list_extra_field";
+    public final static String SHOPPING_LIST_FIELDS = "shopping_list_fields";
     public final static String SHOPPING_LIST_LAST_ID = "shopping_list_last_id";
+    public final static String SHOPPING_MODE_GROUPING_MODE = "shopping_mode_grouping_mode";
+    public final static String SHOPPING_MODE_FIELDS = "shopping_mode_fields";
     public final static String TASKS_SORT_MODE = "tasks_sort_mode";
     public final static String TASKS_SORT_ASCENDING = "tasks_sort_ascending";
     public final static String TASKS_SHOW_DONE = "tasks_show_done";
+    public final static String CHORES_SORT_MODE = "chores_sort_mode";
+    public final static String CHORES_SORT_ASCENDING = "chores_sort_ascending";
     public final static String RECIPES_SORT_MODE = "recipes_sort_mode";
     public final static String RECIPES_SORT_ASCENDING = "recipes_sort_ascending";
     public final static String RECIPES_FIELDS = "recipes_fields";
     public final static String RECIPES_LIST_LAYOUT = "recipes_list_layout";
+    public final static String RECIPE_INFO_FIELDS = "recipe_info_fields";
+    public final static String RECIPE_INGREDIENT_FIELDS = "recipe_ingredient_fields";
+    public final static String MASTER_OBJECTS_SORT_MODE = "master_objects_sort_mode";
+    public final static String MASTER_OBJECTS_SORT_ASCENDING = "master_objects_sort_ascending";
 
     public final static String DB_LAST_TIME_STOCK_ITEMS = "db_last_time_stock_items";
     public final static String DB_LAST_TIME_STOCK_ENTRIES = "db_last_time_stock_entries";
@@ -83,6 +93,7 @@ public final class Constants {
     public final static String DB_LAST_TIME_PRODUCT_GROUPS = "db_last_time_product_groups";
     public final static String DB_LAST_TIME_QUANTITY_UNITS = "db_last_time_quantity_units";
     public final static String DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS = "db_last_time_quantity_unit_conversions";
+    public final static String DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS_RESOLVED = "db_last_time_quantity_unit_conversions_resolved";
     public final static String DB_LAST_TIME_PRODUCTS = "db_last_time_products";
     public final static String DB_LAST_TIME_PRODUCTS_LAST_PURCHASED = "db_last_time_products_last_purchased";
     public final static String DB_LAST_TIME_PRODUCTS_AVERAGE_PRICE = "db_last_time_products_average_price";
@@ -97,7 +108,12 @@ public final class Constants {
     public final static String DB_LAST_TIME_RECIPES = "db_last_time_recipes";
     public final static String DB_LAST_TIME_RECIPE_FULFILLMENTS = "db_last_time_recipe_fulfillments";
     public final static String DB_LAST_TIME_RECIPE_POSITIONS = "db_last_time_recipe_positions";
+    public final static String DB_LAST_TIME_RECIPE_POSITIONS_RESOLVED = "db_last_time_recipe_positions_resolved";
+    public final static String DB_LAST_TIME_RECIPE_NESTINGS = "db_last_time_recipe_nestings";
+    public final static String DB_LAST_TIME_USERFIELDS = "db_last_time_userfields";
     public final static String DB_LAST_TIME_MEAL_PLAN_ENTRIES = "db_last_time_meal_plan_entries";
+    // when adding new constant for DB, also add it to clearCachingRelatedSharedPreferences()
+    // in PrefsUtil
 
     public final static String QUICK_MODE_ACTIVE_CONSUME = "quick_mode_active_consume";
     public final static String QUICK_MODE_ACTIVE_PURCHASE = "quick_mode_active_purchase";
@@ -115,6 +131,7 @@ public final class Constants {
     public final static String VERSION_COMPATIBILITY_IGNORED = "version_ignored_compatibility";
     public final static String UPDATE_INFO_READ = "update_info_read";
     public final static String LAST_VERSION = "last_version";
+    public final static String LAST_VERSION_DATABASE = "last_version_database";
     public final static String OVERVIEW_FAB_INFO_SHOWN = "overview_fab_info_shown";
   }
 
@@ -150,10 +167,10 @@ public final class Constants {
       public final static String EXPAND_BOTTOM_SHEETS = "expand_bottom_sheets";
       public final static String SPEED_UP_START = "speed_up_start";
       public final static String TURN_ON_QUICK_MODE = "turn_on_quick_mode";
+      public final static String QUICK_MODE_RETURN = "quick_mode_return";
       public final static String DATE_KEYBOARD_INPUT = "date_keyboard_input";
       public final static String DATE_KEYBOARD_REVERSE = "date_keyboard_reverse";
       public final static String MESSAGE_DURATION = "message_duration";
-      public final static String COPY_BARCODE_NOTE = "copy_barcode_note";
     }
 
     public final static class SCANNER {
@@ -200,7 +217,6 @@ public final class Constants {
       public final static String KEEP_SCREEN_ON = "shopping_keep_screen_on";
       public final static String SHOW_DONE_ITEMS = "show_done_items";
       public final static String USE_SMALLER_FONT = "use_smaller_font";
-      public final static String SHOW_PRODUCT_DESCRIPTION = "show_product_description";
     }
 
     public final static class RECIPES {
@@ -215,10 +231,10 @@ public final class Constants {
 
     public final static class NOTIFICATIONS {
 
-      public final static String DUE_SOON_ENABLE = "notification_due_soon_enable";
-      public final static String DUE_SOON_TIME = "notification_due_soon_time";
-      public final static String DUE_SOON_CHANNEL = "xyz.zedler.patrick.grocy.due_soon";
-      public final static int DUE_SOON_ID = 1;
+      public final static String STOCK_ENABLE = "notification_stock_enable";
+      public final static String STOCK_TIME = "notification_stock_time";
+      public final static String STOCK_CHANNEL = "xyz.zedler.patrick.grocy.stock";
+      public final static int STOCK_ID = 1;
 
       public final static String CHORES_ENABLE = "notification_chores_enable";
       public final static String CHORES_TIME = "notification_chores_time";
@@ -255,10 +271,10 @@ public final class Constants {
       public final static boolean EXPAND_BOTTOM_SHEETS = false;
       public final static boolean SPEED_UP_START = false;
       public final static boolean TURN_ON_QUICK_MODE = true;
+      public final static boolean QUICK_MODE_RETURN = false;
       public final static boolean DATE_KEYBOARD_INPUT = false;
       public final static boolean DATE_KEYBOARD_REVERSE = false;
       public final static int MESSAGE_DURATION = 10;
-      public final static boolean COPY_BARCODE_NOTE = false;
     }
 
     public final static class SCANNER {
@@ -321,7 +337,6 @@ public final class Constants {
       public final static boolean KEEP_SCREEN_ON = true;
       public final static boolean SHOW_DONE_ITEMS = true;
       public final static boolean USE_SMALLER_FONT = false;
-      public final static boolean SHOW_PRODUCT_DESCRIPTION = false;
     }
 
     public final static class RECIPES {
@@ -335,8 +350,8 @@ public final class Constants {
     }
 
     public final static class NOTIFICATIONS {
-      public final static boolean DUE_SOON_ENABLE = false;
-      public final static String DUE_SOON_TIME = "12:00";
+      public final static boolean STOCK_ENABLE = false;
+      public final static String STOCK_TIME = "12:00";
 
       public final static boolean CHORES_ENABLE = false;
       public final static String CHORES_TIME = "12:00";
@@ -399,6 +414,7 @@ public final class Constants {
     public final static String STORE = "store";
     public final static String STORES = "stores";
     public final static String CHORE = "chore";
+    public final static String CHORE_ENTRY = "chore_entry";
     public final static String TASK = "task";
     public final static String TASK_CATEGORY = "task_category";
     public final static String TASK_CATEGORIES = "task_categories";
@@ -444,6 +460,10 @@ public final class Constants {
     public final static String SHOW_OFFLINE = "show_offline";
     public final static String BARCODE = "barcode";
     public final static String DISPLAY_EMPTY_OPTION = "display_empty_option";
+    public final static String DISPLAY_NEW_OPTION = "display_new_option";
+    public final static String DISPLAY_PIN_BUTTONS = "display_pin_buttons";
+    public final static String CURRENT_PIN_ID = "current_pin_id";
+    public final static String NONE_SELECTABLE = "none_selectable";
     public final static String PENDING_PRODUCT_ID = "pending_product_id";
     public final static String BACK_FROM_CHOOSE_PRODUCT_PAGE = "back_from_choose_product_page";
     public final static String USER = "user";

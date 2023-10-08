@@ -53,11 +53,11 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper.QueueItem;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.web.NetworkQueue.QueueItem;
 
 public class LoginRequestViewModel extends BaseViewModel {
 
@@ -137,7 +137,6 @@ public class LoginRequestViewModel extends BaseViewModel {
             loginErrorMsg.setValue(getString(R.string.error_not_grocy_instance));
             return;
           }
-          appendHassLog(" Success.\n");
           try {
             String grocyVersion = new JSONObject(response)
                 .getJSONObject("grocy_version")
@@ -146,12 +145,17 @@ public class LoginRequestViewModel extends BaseViewModel {
                 Arrays.asList(getResources()
                     .getStringArray(R.array.compatible_grocy_versions))
             );
+            appendHassLog(" Success.");
             if (checkVersion && !supportedVersions.contains(grocyVersion)) {
               showCompatibilityBottomSheet(supportedVersions, grocyVersion);
               return;
             }
           } catch (JSONException e) {
             Log.e(TAG, "requestLogin: " + e);
+            appendHassLog(" Error.\nFailed to parse system info response.\n");
+            loginErrorOccurred.setValue(true);
+            loginErrorMsg.setValue(getString(R.string.error_not_grocy_instance));
+            return;
           }
 
           if (debug) {

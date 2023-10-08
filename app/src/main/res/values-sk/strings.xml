@@ -458,7 +458,6 @@
   <string name="error_offline">Bez pripojenia</string>
   <string name="error_offline_subtitle">Táto stránka funguje len s prístupom na internet. Skontrolujte pripojenie.</string>
   <string name="error_no_done_items">Žiadne položky nie sú označené ako hotové</string>
-  <string name="error_name_exists">Taký názov už jestvuje</string>
   <string name="error_network">Chyba siete</string>
   <string name="error_network_subtitle">Požadované údaje sa nepodarilo úplne načítať</string>
   <string name="error_network_exact">Chyba siete: %1$s</string>
@@ -762,7 +761,6 @@
   <string name="property_not_opened">neotvorené</string>
   <string name="property_is_freezer">Je mraznička</string>
   <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">Energia (kcal) jednej jednotky výrobku</string>
   <string name="property_active">Aktívne</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Nezobrazovať v prehľade zásob</string>
@@ -975,7 +973,6 @@
   <string name="setting_show_done_items_description">Na spodku</string>
   <string name="setting_smaller_font">Použiť menšie písmo</string>
   <string name="setting_smaller_font_description">Aby bolo vidieť viac položiek naraz</string>
-  <string name="setting_show_product_description">Zobraziť popis výrobku</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Počet dní do blížiaceho sa konca záruky</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -1013,8 +1010,6 @@
   <string name="setting_date_keyboard_input_description">Namiesto valcov pre výber dátumu</string>
   <string name="setting_date_keyboard_reverse">Použiť obrátený formát dátumu pri vstupe</string>
   <string name="setting_date_keyboard_reverse_description">DDMMRR namiesto RRMMDD</string>
-  <string name="setting_copy_barcode_note">Skopírovať poznámku z čiarového kódu do poznámky v zozname zásob</string>
-  <string name="setting_copy_barcode_note_description">Pri kúpe produktu</string>
   <string name="setting_loading_circle">Zobraziť indikátor načítania pre všetky požiadavky</string>
   <string name="setting_loading_circle_description">Pomáha na pomalých sieťach</string>
   <string name="setting_tor">Použiť TOR</string>
@@ -1032,8 +1027,6 @@
   <string name="setting_notifications_enable">Povoliť upozornenia</string>
   <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
   few days and therefore should be consumed in the next few days. -->
-  <string name="setting_notifications_due_soon">Výrobky čoskoro po záruke</string>
-  <string name="setting_notifications_due_soon_description">Denne kontroluje zásoby a upozorní vás, keď budú výrobky čoskoro po záruke</string>
   <string name="setting_notifications_chores_description">Denne kontroluje povinnosti a upozorní vás, keď sa majú vykonať dnes</string>
   <string name="setting_notification_time">Čas upozornenia</string>
   <!-- the description of the notification time preference.
@@ -1042,9 +1035,6 @@
   <string name="setting_notification_time_description">Kedy je vykonaná kontrola</string>
   <string name="setting_keep_screen_on_recipes_description">Pri prezeraní receptu</string>
 
-  <string name="notification_due_soon_content">Spotrebujte ich v priebehu niekoľkých nasledujúcich dní, aby ste znížili množstvo potravinového odpadu.</string>
-
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
-  <string name="url_grocy_demo">https://sk.demo.grocy.info</string>
-  </resources>
+</resources>
