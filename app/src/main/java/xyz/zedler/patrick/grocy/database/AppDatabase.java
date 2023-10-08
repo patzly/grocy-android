@@ -132,6 +132,9 @@ import xyz.zedler.patrick.grocy.repository.MainRepository.OnVersionListener;
         MealPlanEntry.class,
         Userfield.class
     },
+    views = {
+        RecipeNestingResolved.class
+    },
     version = 53
 )
 @TypeConverters({Converters.class})

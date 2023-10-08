@@ -130,7 +130,7 @@
         android:animateLayoutChanges="true"
         app:transitionTypeChanging="@{true}"
         app:setRefreshing="@{viewModel.isLoadingLive}"
-        app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
+        app:onRefreshListener="@{() -> viewModel.downloadData(true)}">
 
         <androidx.viewpager2.widget.ViewPager2
           android:id="@+id/view_pager"

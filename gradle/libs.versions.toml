@@ -6,9 +6,11 @@ preference = "1.2.1"
 browser = "1.6.0"
 webkit = "1.8.0"
 lifecycle-viewmodel = "2.6.2"
+paging = "3.1.1"
 navigation = "2.7.3"
 room = "2.5.2"
 rxandroid = "3.0.2"
+calendar = "2.3.0"
 material = "1.10.0-rc01" # Change to stable 1.10.0 when it has been released
 flexbox = "3.0.0"
 volley = "1.2.1"
@@ -32,6 +34,7 @@ browser = { module = "androidx.browser:browser", version.ref = "browser" }
 webkit = { module = "androidx.webkit:webkit", version.ref = "webkit" }
 lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle-viewmodel" }
 lifecycle-viewmodel-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "lifecycle-viewmodel" }
+paging = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 # Navigation framework for easy navigation control using XML
 navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigation" }
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigation" }
@@ -42,6 +45,7 @@ room-rxjava3 = { module = "androidx.room:room-rxjava3", version.ref = "room" }
 rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
 # Material views
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+calendar = { module = "com.kizitonwose.calendar:view", version.ref = "calendar" }
 flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 # Volley for all general network requests and Glide for image loading
 volley = { module = "com.android.volley:volley", version.ref = "volley" }

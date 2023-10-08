@@ -221,7 +221,7 @@ public class MealPlanFragment extends BaseFragment {
     viewModel.setOfflineLive(!isOnline);
     systemBarBehavior.refresh();
     if (isOnline) {
-      viewModel.downloadData();
+      viewModel.downloadData(false);
     }
   }
 

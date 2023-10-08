@@ -101,7 +101,7 @@ public class MealPlanViewModel extends BaseViewModel {
     );
 
     isLoadingLive = new MutableLiveData<>(false);
-    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new MealPlanRepository(application);
     pluralUtil = new PluralUtil(application);
@@ -121,20 +121,24 @@ public class MealPlanViewModel extends BaseViewModel {
 
       updateFilteredStockItems();
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       }
     }, error -> onError(error, TAG));
   }
 
-  public void downloadData() {
+  public void downloadData(boolean forceUpdate) {
     if (isOffline()) { // skip downloading and update recyclerview
       isLoadingLive.setValue(false);
       updateFilteredStockItems();
       return;
     }
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        updated -> {
+          if (updated) loadFromDatabase(false);
+        },
         error -> onError(error, TAG),
+        forceUpdate,
+        true,
         QuantityUnit.class,
         ProductGroup.class,
         MealPlanEntry.class,
@@ -145,21 +149,6 @@ public class MealPlanViewModel extends BaseViewModel {
         Location.class,
         StockLocation.class
     );
-  }
-
-  public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_MEAL_PLAN_ENTRIES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_VOLATILE, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_LOCATIONS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_STOCK_LOCATIONS, null);
-    editPrefs.apply();
-    downloadData();
   }
 
   public void updateFilteredStockItems() {

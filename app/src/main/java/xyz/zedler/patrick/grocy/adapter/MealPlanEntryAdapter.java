@@ -30,7 +30,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,8 +45,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListBottomNotesBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListItemBinding;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListExtraField;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListGrouping;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataGroupingShoppingList;
 import xyz.zedler.patrick.grocy.model.GroupHeader;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -62,6 +60,7 @@ import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
+import xyz.zedler.patrick.grocy.viewmodel.ShoppingListViewModel;
 
 public class MealPlanEntryAdapter extends
     RecyclerView.Adapter<MealPlanEntryAdapter.ViewHolder> {
@@ -141,7 +140,7 @@ public class MealPlanEntryAdapter extends
       int decimalPlacesPriceDisplay,
       String currency
   ) {
-    if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_NONE)) {
+    if (groupingMode.equals(FilterChipLiveDataGroupingShoppingList.GROUPING_NONE)) {
       SortUtil.sortShoppingListItemsByName(shoppingListItems, productNamesHashMap, true);
       ArrayList<GroupedListItem> groupedListItems = new ArrayList<>(shoppingListItems);
       addBottomNotes(
@@ -210,7 +209,7 @@ public class MealPlanEntryAdapter extends
       String groupingMode
   ) {
     String groupName = null;
-    if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_PRODUCT_GROUP)
+    if (groupingMode.equals(FilterChipLiveDataGroupingShoppingList.GROUPING_PRODUCT_GROUP)
         && shoppingListItem.hasProduct()) {
       Product product = productHashMap.get(shoppingListItem.getProductIdInt());
       Integer productGroupId = product != null && NumUtil.isStringInt(product.getProductGroupId())
@@ -220,7 +219,7 @@ public class MealPlanEntryAdapter extends
           ? productGroupHashMap.get(productGroupId)
           : null;
       groupName = productGroup != null ? productGroup.getName() : null;
-    } else if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_STORE)
+    } else if (groupingMode.equals(FilterChipLiveDataGroupingShoppingList.GROUPING_STORE)
         && shoppingListItem.hasProduct()) {
       Product product = productHashMap.get(shoppingListItem.getProductIdInt());
       Integer storeId = product != null && NumUtil.isStringInt(product.getStoreId())
@@ -440,58 +439,6 @@ public class MealPlanEntryAdapter extends
 
     // AMOUNT
 
-    Double amountInQuUnit = shoppingListItemAmountsHashMap.get(item.getId());
-    if (product != null && amountInQuUnit != null) {
-      QuantityUnit quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
-      String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, amountInQuUnit);
-      if (quStr != null) {
-        binding.amount.setText(
-            binding.amount.getContext()
-                .getString(R.string.subtitle_amount, NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount), quStr)
-        );
-      } else {
-        binding.amount.setText(NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount));
-      }
-    } else if (product != null) {
-      QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
-      String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble());
-      if (quStr != null) {
-        binding.amount.setText(
-            binding.amount.getContext()
-                .getString(R.string.subtitle_amount, NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount), quStr)
-        );
-      } else {
-        binding.amount.setText(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
-      }
-    } else {
-      binding.amount.setText(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
-    }
-
-    if (item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {
-      binding.amount.setTypeface(
-          ResourcesCompat.getFont(binding.amount.getContext(), R.font.jost_medium)
-      );
-      binding.amount.setTextColor(colorBlue.getAccent());
-      binding.amount.setAlpha(1);
-    } else {
-      binding.amount.setTypeface(
-          ResourcesCompat.getFont(binding.amount.getContext(), R.font.jost_book)
-      );
-      binding.amount.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnBackground));
-      binding.amount.setAlpha(0.61f);
-    }
-    if (item.isUndone()) {
-      binding.amount.setPaintFlags(
-          binding.amount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
-      );
-      binding.amount.setAlpha(1);
-    } else {
-      binding.amount.setPaintFlags(
-          binding.amount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-      );
-      binding.amount.setAlpha(0.61f);
-    }
-
     // NOTE
 
     if (item.getNote() != null && !item.getNote().trim().isEmpty()) {
@@ -534,34 +481,6 @@ public class MealPlanEntryAdapter extends
         );
         binding.note.setAlpha(0.6f);
       }
-    }
-
-    if (extraField.equals(FilterChipLiveDataShoppingListExtraField.EXTRA_FIELD_LAST_PRICE_UNIT)
-        || extraField.equals(FilterChipLiveDataShoppingListExtraField.EXTRA_FIELD_LAST_PRICE_TOTAL)
-    ) {
-      ProductLastPurchased p = product != null
-          ? productLastPurchasedHashMap.get(product.getId()) : null;
-      if (p != null && p.getPrice() != null && !p.getPrice().isEmpty()) {
-        String price;
-        if (extraField
-            .equals(FilterChipLiveDataShoppingListExtraField.EXTRA_FIELD_LAST_PRICE_TOTAL)) {
-          double amount = amountInQuUnit != null ? amountInQuUnit : item.getAmountDouble();
-          price = NumUtil.isStringDouble(p.getPrice())
-              ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice()) * amount, decimalPlacesPriceDisplay) : p.getPrice();
-        } else {
-          price = NumUtil.isStringDouble(p.getPrice())
-              ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice()), decimalPlacesPriceDisplay) : p.getPrice();
-        }
-        binding.extraField.setText(price);
-        binding.extraFieldSubtitle.setText(currency);
-        binding.extraFieldSubtitle.setVisibility(currency != null && !currency.isBlank()
-            ? View.VISIBLE : View.GONE);
-        binding.extraFieldContainer.setVisibility(View.VISIBLE);
-      } else {
-        binding.extraFieldContainer.setVisibility(View.GONE);
-      }
-    } else {
-      binding.extraFieldContainer.setVisibility(View.GONE);
     }
 
     // CONTAINER
@@ -628,41 +547,6 @@ public class MealPlanEntryAdapter extends
     }
 
     // AMOUNT
-
-    Double amountInQuUnit = shoppingListItemAmountsHashMap.get(item.getId());
-    if (product != null && amountInQuUnit != null) {
-      QuantityUnit quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
-      String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, amountInQuUnit);
-      if (quStr != null) {
-        binding.amount.setText(
-            context.getString(R.string.subtitle_amount, NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount), quStr)
-        );
-      } else {
-        binding.amount.setText(NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount));
-      }
-    } else if (product != null) {
-      QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
-      String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble());
-      if (quStr != null) {
-        binding.amount.setText(
-            context.getString(R.string.subtitle_amount, NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount), quStr)
-        );
-      } else {
-        binding.amount.setText(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
-      }
-    } else {
-      binding.amount.setText(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
-    }
-
-    if (item.isUndone()) {
-      binding.amount.setPaintFlags(
-          binding.amount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
-      );
-    } else {
-      binding.amount.setPaintFlags(
-          binding.amount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-      );
-    }
 
     // NOTE
 
@@ -881,8 +765,8 @@ public class MealPlanEntryAdapter extends
         Boolean missingNew =
             productIdNew != null ? missingProductIdsNew.contains(productIdNew) : null;
 
-        if (extraFieldNew.equals(FilterChipLiveDataShoppingListExtraField.EXTRA_FIELD_LAST_PRICE_UNIT)
-            || extraFieldNew.equals(FilterChipLiveDataShoppingListExtraField.EXTRA_FIELD_LAST_PRICE_TOTAL)) {
+        if (extraFieldNew.equals(ShoppingListViewModel.FIELD_PRICE_LAST_UNIT)
+            || extraFieldNew.equals(ShoppingListViewModel.FIELD_PRICE_LAST_TOTAL)) {
           ProductLastPurchased purchasedOld = productIdOld != null
               ? productLastPurchasedHashMapOld.get(productIdOld) : null;
           ProductLastPurchased purchasedNew = productIdNew != null
