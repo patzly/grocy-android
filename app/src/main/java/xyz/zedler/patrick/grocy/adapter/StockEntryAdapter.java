@@ -40,9 +40,8 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowStockEntryBinding;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockEntriesGrouping;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockGrouping;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockSort;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataGroupingStockEntries;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataGroupingStock;
 import xyz.zedler.patrick.grocy.model.GroupHeader;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -57,6 +56,7 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.viewmodel.StockOverviewViewModel;
 
 public class StockEntryAdapter extends
     RecyclerView.Adapter<StockEntryAdapter.ViewHolder> {
@@ -123,7 +123,7 @@ public class StockEntryAdapter extends
       boolean sortAscending,
       String groupingMode
   ) {
-    if (groupingMode.equals(FilterChipLiveDataStockEntriesGrouping.GROUPING_NONE)) {
+    if (groupingMode.equals(FilterChipLiveDataGroupingStockEntries.GROUPING_NONE)) {
       sortStockEntries(context, stockEntries, productHashMap, sortMode, sortAscending);
       return new ArrayList<>(stockEntries);
     }
@@ -132,27 +132,27 @@ public class StockEntryAdapter extends
     for (StockEntry stockEntry : stockEntries) {
       String groupName = null;
       switch (groupingMode) {
-        case FilterChipLiveDataStockEntriesGrouping.GROUPING_PRODUCT:
+        case FilterChipLiveDataGroupingStockEntries.GROUPING_PRODUCT:
           Product product = productHashMap.get(stockEntry.getProductId());
           groupName = product != null ? product.getName() : null;
           break;
-        case FilterChipLiveDataStockEntriesGrouping.GROUPING_DUE_DATE:
+        case FilterChipLiveDataGroupingStockEntries.GROUPING_DUE_DATE:
           groupName = stockEntry.getBestBeforeDate();
           if (groupName != null && !groupName.isEmpty()) {
             groupName += "  " + dateUtil.getHumanForDaysFromNow(groupName);
           }
           break;
-        case FilterChipLiveDataStockEntriesGrouping.GROUPING_PURCHASED_DATE:
+        case FilterChipLiveDataGroupingStockEntries.GROUPING_PURCHASED_DATE:
           groupName = stockEntry.getPurchasedDate();
           if (groupName != null && !groupName.isEmpty()) {
             groupName += "  " + dateUtil.getHumanForDaysFromNow(groupName);
           }
           break;
-        case FilterChipLiveDataStockEntriesGrouping.GROUPING_LOCATION:
+        case FilterChipLiveDataGroupingStockEntries.GROUPING_LOCATION:
           Location location = locationHashMap.get(stockEntry.getLocationIdInt());
           groupName = location != null ? location.getName() : null;
           break;
-        case FilterChipLiveDataStockEntriesGrouping.GROUPING_STORE:
+        case FilterChipLiveDataGroupingStockEntries.GROUPING_STORE:
           Store store = storeHashMap.get(stockEntry.getShoppingLocationIdInt());
           groupName = store != null ? store.getName() : null;
           break;
@@ -180,7 +180,7 @@ public class StockEntryAdapter extends
       ArrayList<StockEntry> itemsFromGroup = stockEntriesGroupedHashMap.get(group);
       if (itemsFromGroup == null) continue;
       String groupString;
-      if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_VALUE)) {
+      if (groupingMode.equals(FilterChipLiveDataGroupingStock.GROUPING_VALUE)) {
         groupString = group + " " + currency;
       } else {
         groupString = group;
@@ -201,7 +201,7 @@ public class StockEntryAdapter extends
       String sortMode,
       boolean sortAscending
   ) {
-    if (sortMode.equals(FilterChipLiveDataStockSort.SORT_DUE_DATE)) {
+    if (sortMode.equals(StockOverviewViewModel.SORT_DUE_DATE)) {
       SortUtil.sortStockEntriesByDueDate(stockEntries, sortAscending);
     } else {
       SortUtil.sortStockEntriesByName(stockEntries, productHashMap, sortAscending);

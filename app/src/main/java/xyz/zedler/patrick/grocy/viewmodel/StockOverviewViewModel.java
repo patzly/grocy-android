@@ -50,9 +50,10 @@ import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields.Field;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataLocation;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataProductGroup;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockGrouping;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockSort;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataGroupingStock;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataSort;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataSort.SortOption;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStatusStock;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
@@ -80,8 +81,12 @@ import xyz.zedler.patrick.grocy.util.VersionUtil;
 public class StockOverviewViewModel extends BaseViewModel {
 
   private final static String TAG = ShoppingListViewModel.class.getSimpleName();
-
   public final static String[] DISPLAYED_USERFIELD_ENTITIES = { ENTITY.PRODUCTS };
+
+  public final static String SORT_NAME = "sort_name";
+  public final static String SORT_DUE_DATE = "sort_due_date";
+  public final static String SORT_CREATED_TIMESTAMP = "sort_created_timestamp";
+
   public final static String FIELD_AMOUNT = "field_amount";
   public final static String FIELD_DUE_DATE = "field_due_date";
   public final static String FIELD_VALUE = "field_value";
@@ -101,11 +106,11 @@ public class StockOverviewViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<ArrayList<StockItem>> filteredStockItemsLive;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
-  private final FilterChipLiveDataStockStatus filterChipLiveDataStatus;
+  private final FilterChipLiveDataStatusStock filterChipLiveDataStatus;
   private final FilterChipLiveDataProductGroup filterChipLiveDataProductGroup;
   private final FilterChipLiveDataLocation filterChipLiveDataLocation;
-  private final FilterChipLiveDataStockSort filterChipLiveDataSort;
-  private final FilterChipLiveDataStockGrouping filterChipLiveDataGrouping;
+  private final FilterChipLiveDataSort filterChipLiveDataSort;
+  private final FilterChipLiveDataGroupingStock filterChipLiveDataGrouping;
   private final FilterChipLiveDataFields filterChipLiveDataFields;
 
   private List<StockItem> stockItems;
@@ -150,15 +155,15 @@ public class StockOverviewViewModel extends BaseViewModel {
     filteredStockItemsLive = new MutableLiveData<>();
     scannerVisibilityLive = new MutableLiveData<>(false);
 
-    filterChipLiveDataStatus = new FilterChipLiveDataStockStatus(
+    filterChipLiveDataStatus = new FilterChipLiveDataStatusStock(
         getApplication(),
         this::updateFilteredStockItemsWithTopScroll
     );
     if (NumUtil.isStringInt(args.getStatusFilterId())) {
       if (Integer.parseInt(args.getStatusFilterId())
-          == FilterChipLiveDataStockStatus.STATUS_NOT_FRESH) {
+          == FilterChipLiveDataStatusStock.STATUS_NOT_FRESH) {
         filterChipLiveDataStatus
-            .setStatus(FilterChipLiveDataStockStatus.STATUS_NOT_FRESH, null);
+            .setStatus(FilterChipLiveDataStatusStock.STATUS_NOT_FRESH, null);
       }
     }
     filterChipLiveDataProductGroup = new FilterChipLiveDataProductGroup(
@@ -169,11 +174,18 @@ public class StockOverviewViewModel extends BaseViewModel {
         getApplication(),
         this::updateFilteredStockItemsWithTopScroll
     );
-    filterChipLiveDataSort = new FilterChipLiveDataStockSort(
+    filterChipLiveDataSort = new FilterChipLiveDataSort(
         getApplication(),
-        this::updateFilteredStockItemsWithTopScroll
+        Constants.PREF.STOCK_SORT_MODE,
+        Constants.PREF.STOCK_SORT_ASCENDING,
+        this::updateFilteredStockItemsWithTopScroll,
+        SORT_NAME,
+        new SortOption(SORT_NAME, getString(R.string.property_name)),
+        sharedPrefs.getBoolean(PREF.FEATURE_STOCK_BBD_TRACKING, true) ?
+            new SortOption(SORT_DUE_DATE, getString(R.string.property_due_date_next)) : null,
+        new SortOption(SORT_CREATED_TIMESTAMP, getString(R.string.property_created_timestamp))
     );
-    filterChipLiveDataGrouping = new FilterChipLiveDataStockGrouping(
+    filterChipLiveDataGrouping = new FilterChipLiveDataGroupingStock(
         getApplication(),
         this::updateFilteredStockItemsWithTopScroll
     );
@@ -388,20 +400,20 @@ public class StockOverviewViewModel extends BaseViewModel {
 
       MissingItem missingItem = productIdsMissingItems.get(item.getProductId());
       boolean hasOwnStock = !item.getProduct().getNoOwnStockBoolean();
-      if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_ALL
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_NOT_FRESH
+      if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusStock.STATUS_ALL
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusStock.STATUS_NOT_FRESH
           && (item.isItemDue() || item.isItemOverdue() || item.isItemExpired()) && hasOwnStock
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_DUE_SOON
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusStock.STATUS_DUE_SOON
           && item.isItemDue() && hasOwnStock
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_OVERDUE
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusStock.STATUS_OVERDUE
           && item.isItemOverdue() && hasOwnStock
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_EXPIRED
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusStock.STATUS_EXPIRED
           && item.isItemExpired() && hasOwnStock
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_BELOW_MIN
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusStock.STATUS_BELOW_MIN
           && missingItem != null
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_IN_STOCK
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusStock.STATUS_IN_STOCK
           && (missingItem == null || missingItem.getIsPartlyInStockBoolean())
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_OPENED
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStatusStock.STATUS_OPENED
           && item.getAmountOpenedDouble() > 0
       ) {
         filteredStockItems.add(item);
@@ -413,7 +425,7 @@ public class StockOverviewViewModel extends BaseViewModel {
       if (searchInput != null && !searchInput.isEmpty()) {
         info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
       } else if (filterChipLiveDataStatus.getStatus()
-          != FilterChipLiveDataStockStatus.STATUS_ALL
+          != FilterChipLiveDataStatusStock.STATUS_ALL
           || filterChipLiveDataProductGroup.getSelectedId()
           != FilterChipLiveDataProductGroup.NO_FILTER
           || filterChipLiveDataLocation.getSelectedId()

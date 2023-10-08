@@ -43,7 +43,7 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields.Field;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingModeGrouping;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataGroupingShoppingMode;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -84,7 +84,7 @@ public class ShoppingModeViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Integer> selectedShoppingListIdLive;
   private final MutableLiveData<ArrayList<ShoppingListItem>> filteredShoppingListItemsLive;
-  private final FilterChipLiveDataShoppingModeGrouping filterChipLiveDataGrouping;
+  private final FilterChipLiveDataGroupingShoppingMode filterChipLiveDataGrouping;
   private final FilterChipLiveDataFields filterChipLiveDataFields;
 
   private List<ShoppingListItem> shoppingListItems;
@@ -114,7 +114,7 @@ public class ShoppingModeViewModel extends BaseViewModel {
     infoFullscreenLive = new MutableLiveData<>();
     selectedShoppingListIdLive = new MutableLiveData<>(1);
     filteredShoppingListItemsLive = new MutableLiveData<>();
-    filterChipLiveDataGrouping = new FilterChipLiveDataShoppingModeGrouping(
+    filterChipLiveDataGrouping = new FilterChipLiveDataGroupingShoppingMode(
         getApplication(),
         this::updateFilteredShoppingListItemsWithTopScroll
     );

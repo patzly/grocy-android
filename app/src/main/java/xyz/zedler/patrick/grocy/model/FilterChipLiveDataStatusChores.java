@@ -20,33 +20,27 @@
 package xyz.zedler.patrick.grocy.model;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 import androidx.annotation.Nullable;
 import androidx.annotation.PluralsRes;
-import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 
-public class FilterChipLiveDataTasksStatus extends FilterChipLiveData {
+public class FilterChipLiveDataStatusChores extends FilterChipLiveData {
 
   public final static int STATUS_ALL = 0;
   public final static int STATUS_DUE_TODAY = 1;
   public final static int STATUS_DUE_SOON = 2;
   public final static int STATUS_OVERDUE = 3;
-  public final static int STATUS_DONE = 4;
+  public final static int STATUS_DUE = 4;
 
   private final Application application;
-  private final SharedPreferences sharedPrefs;
   private int dueTodayCount = 0;
   private int dueSoonCount = 0;
   private int overdueCount = 0;
-  private boolean showDoneTasks;
+  private int dueCount = 0;
 
-  public FilterChipLiveDataTasksStatus(Application application, Runnable clickListener) {
+  public FilterChipLiveDataStatusChores(Application application, Runnable clickListener) {
     this.application = application;
-    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
-    showDoneTasks = sharedPrefs.getBoolean(PREF.TASKS_SHOW_DONE, false);
 
     setStatus(STATUS_ALL, null);
     if (clickListener != null) {
@@ -63,41 +57,39 @@ public class FilterChipLiveDataTasksStatus extends FilterChipLiveData {
     return getItemIdChecked();
   }
 
-  public FilterChipLiveDataTasksStatus setStatus(int status, @Nullable String text) {
+  public void setStatus(int status, @Nullable String text) {
     if (status == STATUS_ALL) {
       setActive(false);
       setText(application.getString(R.string.property_status));
-    } else if (status == STATUS_DONE) {
-      showDoneTasks = !showDoneTasks;
-      sharedPrefs.edit().putBoolean(PREF.TASKS_SHOW_DONE, showDoneTasks).apply();
-      emitCounts();
-      return this;
+    } else if (status == STATUS_DUE) {
+      setActive(true);
+      setText(getQuString(R.plurals.msg_due_tasks_short, dueCount));
     } else {
       setActive(true);
       assert text != null;
       setText(text);
     }
     setItemIdChecked(status);
-    return this;
   }
 
-  public FilterChipLiveDataTasksStatus setDueTodayCount(int dueTodayCount) {
+  public FilterChipLiveDataStatusChores setDueTodayCount(int dueTodayCount) {
     this.dueTodayCount = dueTodayCount;
     return this;
   }
 
-  public FilterChipLiveDataTasksStatus setDueSoonCount(int dueSoonCount) {
+  public FilterChipLiveDataStatusChores setDueSoonCount(int dueSoonCount) {
     this.dueSoonCount = dueSoonCount;
     return this;
   }
 
-  public FilterChipLiveDataTasksStatus setOverdueCount(int overdueCount) {
+  public FilterChipLiveDataStatusChores setOverdueCount(int overdueCount) {
     this.overdueCount = overdueCount;
     return this;
   }
 
-  public boolean isShowDoneTasks() {
-    return showDoneTasks;
+  public FilterChipLiveDataStatusChores setDueCount(int dueCount) {
+    this.dueCount = dueCount;
+    return this;
   }
 
   public void emitCounts() {
@@ -108,36 +100,32 @@ public class FilterChipLiveDataTasksStatus extends FilterChipLiveData {
         application.getString(R.string.action_no_filter)
     ));
     menuItemDataList.add(new MenuItemData(
+        STATUS_DUE,
+        1,
+        getQuString(R.plurals.msg_due_tasks_long, dueCount)
+    ));
+    menuItemDataList.add(new MenuItemData(
         STATUS_OVERDUE,
-        0,
+        1,
         getQuString(R.plurals.msg_overdue_tasks, overdueCount)
     ));
     menuItemDataList.add(new MenuItemData(
         STATUS_DUE_TODAY,
-        0,
+        1,
         getQuString(R.plurals.msg_due_today_tasks, dueTodayCount)
     ));
     menuItemDataList.add(new MenuItemData(
         STATUS_DUE_SOON,
-        0,
+        2,
         getQuString(R.plurals.msg_due_tasks, dueSoonCount)
-    ));
-    menuItemDataList.add(new MenuItemData(
-        STATUS_DONE,
-        1,
-        application.getString(R.string.action_show_done_tasks),
-        showDoneTasks
     ));
     setMenuItemDataList(menuItemDataList);
     setMenuItemGroups(
         new MenuItemGroup(0, true, true),
-        new MenuItemGroup(1, true, false)
+        new MenuItemGroup(1, true, true),
+        new MenuItemGroup(2, true, true)
     );
-    for (MenuItemData menuItemData : menuItemDataList) {
-      if (getItemIdChecked() != STATUS_ALL && getItemIdChecked() == menuItemData.getItemId()) {
-        setText(menuItemData.getText());
-      }
-    }
+    setStatus(getStatus(), null);
     emitValue();
   }
 

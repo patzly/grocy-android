@@ -23,33 +23,45 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import xyz.zedler.patrick.grocy.Constants.PREF;
+import java.util.Objects;
 import xyz.zedler.patrick.grocy.R;
 
-public class FilterChipLiveDataMasterObjectsSort extends FilterChipLiveData {
+public class FilterChipLiveDataSort extends FilterChipLiveData {
 
-  public final static int ID_SORT_NAME = 0;
-  public final static int ID_SORT_CREATED_TIMESTAMP = 1;
-  public final static int ID_ASCENDING = 2;
-  public final static int ID_START_USERFIELDS = 3; // after the other IDs
-
-  public final static String SORT_NAME = "sort_name";
-  public final static String SORT_CREATED_TIMESTAMP = "sort_created_timestamp";
+  public final static int ID_ASCENDING = 0;
+  public final static int ID_START_OPTIONS = 1;
 
   private final Application application;
   private final SharedPreferences sharedPrefs;
+  private final List<SortOption> sortOptions;
   private List<Userfield> userfields;
+  private final String prefKey;
+  private final String prefKeyAscending;
+  private final String defaultOptionKey;
   private String sortMode;
   private boolean sortAscending;
+  private final int idStartUserfields;
 
-  public FilterChipLiveDataMasterObjectsSort(Application application, Runnable clickListener) {
+  public FilterChipLiveDataSort(
+      Application application,
+      String prefKey,
+      String prefKeyAscending,
+      Runnable clickListener,
+      String defaultOptionKey,
+      SortOption... sortOptions
+  ) {
     this.application = application;
-    setItemIdChecked(-1);
-
+    this.prefKey = prefKey;
+    this.prefKeyAscending = prefKeyAscending;
+    this.defaultOptionKey = defaultOptionKey;
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
-    sortMode = sharedPrefs.getString(PREF.MASTER_OBJECTS_SORT_MODE, SORT_NAME);
-    sortAscending = sharedPrefs.getBoolean(PREF.MASTER_OBJECTS_SORT_ASCENDING, true);
+    sortMode = sharedPrefs.getString(prefKey, defaultOptionKey);
+    sortAscending = sharedPrefs.getBoolean(prefKeyAscending, true);
+    this.sortOptions = new ArrayList<>(Arrays.asList(sortOptions));
+    idStartUserfields = ID_START_OPTIONS + sortOptions.length;
+    setItemIdChecked(-1);
     setFilterText();
     setItems();
     if (clickListener != null) {
@@ -72,14 +84,17 @@ public class FilterChipLiveDataMasterObjectsSort extends FilterChipLiveData {
   }
 
   private void setFilterText() {
-    String sortBy;
-    switch (sortMode) {
-      case SORT_CREATED_TIMESTAMP:
-        sortBy = application.getString(R.string.property_created_timestamp);
+    String sortBy = null;
+    String defaultOptionName = null;
+    for (SortOption sortOption : sortOptions) {
+      if (sortOption == null) continue;
+      if (sortMode.equals(sortOption.key)) {
+        sortBy = sortOption.name;
         break;
-      case SORT_NAME:
-      default:
-        sortBy = application.getString(R.string.property_name);
+      }
+      if (Objects.equals(sortOption.key, defaultOptionKey)) {
+        defaultOptionName = sortOption.name;
+      }
     }
     if (sortMode.startsWith(Userfield.NAME_PREFIX) && userfields != null) {
       for (Userfield userfield : userfields) {
@@ -90,12 +105,15 @@ public class FilterChipLiveDataMasterObjectsSort extends FilterChipLiveData {
         }
       }
     }
+    if (sortBy == null) {
+      sortBy = defaultOptionName;
+    }
     setText(application.getString(R.string.property_sort_mode, sortBy));
   }
 
   public void setUserfields(List<Userfield> userfields, String... displayedEntities) {
     this.userfields = new ArrayList<>();
-    int userfieldId = ID_START_USERFIELDS;
+    int userfieldId = idStartUserfields;
     for (Userfield userfield : userfields) {
       if (userfield == null) continue;
       if (displayedEntities.length > 0) {
@@ -119,38 +137,33 @@ public class FilterChipLiveDataMasterObjectsSort extends FilterChipLiveData {
   }
 
   public void setValues(int id) {
-    if (id == ID_SORT_NAME) {
-      sortMode = SORT_NAME;
-      setFilterText();
-      sharedPrefs.edit().putString(PREF.STOCK_SORT_MODE, sortMode).apply();
-    } else if (id == ID_SORT_CREATED_TIMESTAMP) {
-      sortMode = SORT_CREATED_TIMESTAMP;
-      setFilterText();
-      sharedPrefs.edit().putString(PREF.STOCK_SORT_MODE, sortMode).apply();
-    } else if (id == ID_ASCENDING) {
+    if (id == ID_ASCENDING) {
       sortAscending = !sortAscending;
-      sharedPrefs.edit().putBoolean(PREF.STOCK_SORT_ASCENDING, sortAscending).apply();
-    } else if (id >= ID_START_USERFIELDS) {
-      sortMode = Userfield.NAME_PREFIX + userfields.get(id-ID_START_USERFIELDS).getName();
+      sharedPrefs.edit().putBoolean(prefKeyAscending, sortAscending).apply();
+    } else if (id < idStartUserfields) {
+      SortOption sortOption = sortOptions.get(id-ID_START_OPTIONS);
+      if (sortOption == null) return;
+      sortMode = sortOption.key;
       setFilterText();
-      sharedPrefs.edit().putString(PREF.STOCK_SORT_MODE, sortMode).apply();
+      sharedPrefs.edit().putString(prefKey, sortMode).apply();
+    } else {
+      sortMode = Userfield.NAME_PREFIX + userfields.get(id-idStartUserfields).getName();
+      setFilterText();
+      sharedPrefs.edit().putString(prefKey, sortMode).apply();
     }
   }
 
   private void setItems() {
     ArrayList<MenuItemData> menuItemDataList = new ArrayList<>();
-    menuItemDataList.add(new MenuItemData(
-        ID_SORT_NAME,
-        0,
-        application.getString(R.string.property_name),
-        sortMode.equals(SORT_NAME)
-    ));
-    menuItemDataList.add(new MenuItemData(
-        ID_SORT_CREATED_TIMESTAMP,
-        0,
-        application.getString(R.string.property_created_timestamp),
-        sortMode.equals(SORT_CREATED_TIMESTAMP)
-    ));
+    for (int i=0; i<sortOptions.size(); i++) {
+      SortOption sortOption = sortOptions.get(i);
+      menuItemDataList.add(new MenuItemData(
+          ID_START_OPTIONS + i,
+          0,
+          sortOption.name,
+          sortMode.equals(sortOption.key)
+      ));
+    }
     if (userfields != null) {
       for (Userfield userfield : userfields) {
         if (userfield == null) continue;
@@ -175,5 +188,15 @@ public class FilterChipLiveDataMasterObjectsSort extends FilterChipLiveData {
         new MenuItemGroup(2, true, false)
     );
     emitValue();
+  }
+
+  public static class SortOption {
+    public final String key;
+    public final String name;
+
+    public SortOption(String key, String name) {
+      this.key = key;
+      this.name = name;
+    }
   }
 }

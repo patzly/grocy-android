@@ -46,8 +46,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowStockItemBinding;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockGrouping;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockSort;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataGroupingStock;
 import xyz.zedler.patrick.grocy.model.GroupHeader;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -150,7 +149,7 @@ public class StockOverviewItemAdapter extends
       int maxDecimalPlacesAmount,
       int decimalPlacesPriceDisplay
   ) {
-    if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_NONE)) {
+    if (groupingMode.equals(FilterChipLiveDataGroupingStock.GROUPING_NONE)) {
       sortStockItems(stockItems, userfieldHashMap, sortMode, sortAscending);
       return new ArrayList<>(stockItems);
     }
@@ -158,34 +157,34 @@ public class StockOverviewItemAdapter extends
     ArrayList<StockItem> ungroupedItems = new ArrayList<>();
     for (StockItem stockItem : stockItems) {
       String groupName = null;
-      if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_PRODUCT_GROUP)
+      if (groupingMode.equals(FilterChipLiveDataGroupingStock.GROUPING_PRODUCT_GROUP)
           && NumUtil.isStringInt(stockItem.getProduct().getProductGroupId())
       ) {
         int productGroupId = Integer.parseInt(stockItem.getProduct().getProductGroupId());
         ProductGroup productGroup = productGroupHashMap.get(productGroupId);
         groupName = productGroup != null ? productGroup.getName() : null;
-      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_VALUE)) {
+      } else if (groupingMode.equals(FilterChipLiveDataGroupingStock.GROUPING_VALUE)) {
         groupName = NumUtil.trimPrice(stockItem.getValueDouble(), decimalPlacesPriceDisplay);
-      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_CALORIES_PER_STOCK)) {
+      } else if (groupingMode.equals(FilterChipLiveDataGroupingStock.GROUPING_CALORIES_PER_STOCK)) {
         groupName = NumUtil.isStringDouble(stockItem.getProduct().getCalories())
             ? stockItem.getProduct().getCalories() : null;
-      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_CALORIES)) {
+      } else if (groupingMode.equals(FilterChipLiveDataGroupingStock.GROUPING_CALORIES)) {
         groupName = NumUtil.isStringDouble(stockItem.getProduct().getCalories())
             ? NumUtil.trimAmount(NumUtil.toDouble(stockItem.getProduct().getCalories())
             * stockItem.getAmountDouble(), maxDecimalPlacesAmount) : null;
-      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_DUE_DATE)) {
+      } else if (groupingMode.equals(FilterChipLiveDataGroupingStock.GROUPING_DUE_DATE)) {
         groupName = stockItem.getBestBeforeDate();
         if (groupName != null && !groupName.isEmpty()) {
           groupName += "  " + dateUtil.getHumanForDaysFromNow(groupName);
         }
-      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_MIN_STOCK_AMOUNT)) {
+      } else if (groupingMode.equals(FilterChipLiveDataGroupingStock.GROUPING_MIN_STOCK_AMOUNT)) {
         groupName = stockItem.getProduct().getMinStockAmount();
-      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_PARENT_PRODUCT)
+      } else if (groupingMode.equals(FilterChipLiveDataGroupingStock.GROUPING_PARENT_PRODUCT)
           && NumUtil.isStringInt(stockItem.getProduct().getParentProductId())) {
         int productId = Integer.parseInt(stockItem.getProduct().getParentProductId());
         Product product = productHashMap.get(productId);
         groupName = product != null ? product.getName() : null;
-      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_DEFAULT_LOCATION)
+      } else if (groupingMode.equals(FilterChipLiveDataGroupingStock.GROUPING_DEFAULT_LOCATION)
           && NumUtil.isStringInt(stockItem.getProduct().getLocationId())) {
         int locationId = Integer.parseInt(stockItem.getProduct().getLocationId());
         Location location = locationHashMap.get(locationId);
@@ -212,9 +211,9 @@ public class StockOverviewItemAdapter extends
     }
     ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
     ArrayList<String> groupsSorted = new ArrayList<>(stockItemsGroupedHashMap.keySet());
-    if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_VALUE)
-        || groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_CALORIES)
-        || groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_MIN_STOCK_AMOUNT)) {
+    if (groupingMode.equals(FilterChipLiveDataGroupingStock.GROUPING_VALUE)
+        || groupingMode.equals(FilterChipLiveDataGroupingStock.GROUPING_CALORIES)
+        || groupingMode.equals(FilterChipLiveDataGroupingStock.GROUPING_MIN_STOCK_AMOUNT)) {
       SortUtil.sortStringsByValue(groupsSorted);
     } else {
       SortUtil.sortStringsByName(groupsSorted, true);
@@ -228,7 +227,7 @@ public class StockOverviewItemAdapter extends
       ArrayList<StockItem> itemsFromGroup = stockItemsGroupedHashMap.get(group);
       if (itemsFromGroup == null) continue;
       String groupString;
-      if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_VALUE)) {
+      if (groupingMode.equals(FilterChipLiveDataGroupingStock.GROUPING_VALUE)) {
         groupString = group + " " + currency;
       } else {
         groupString = group;
@@ -250,9 +249,9 @@ public class StockOverviewItemAdapter extends
       String sortMode,
       boolean sortAscending
   ) {
-    if (sortMode.equals(FilterChipLiveDataStockSort.SORT_DUE_DATE)) {
+    if (sortMode.equals(StockOverviewViewModel.SORT_DUE_DATE)) {
       SortUtil.sortStockItemsByBBD(stockItems, sortAscending);
-    } else if (sortMode.equals(FilterChipLiveDataStockSort.SORT_CREATED_TIMESTAMP)) {
+    } else if (sortMode.equals(StockOverviewViewModel.SORT_CREATED_TIMESTAMP)) {
       SortUtil.sortStockItemsByCreatedTimestamp(stockItems, sortAscending);
     } else if (sortMode.startsWith(Userfield.NAME_PREFIX)) {
       String userfieldName = sortMode.substring(Userfield.NAME_PREFIX.length());
@@ -411,7 +410,7 @@ public class StockOverviewItemAdapter extends
     }
 
     if (activeFields.contains(StockOverviewViewModel.FIELD_DUE_DATE) && showDateTracking
-        && days != null && (sortMode.equals(FilterChipLiveDataStockSort.SORT_DUE_DATE)
+        && days != null && (sortMode.equals(StockOverviewViewModel.SORT_DUE_DATE)
         || Integer.parseInt(days) <= daysExpiringSoon
         && !date.equals(Constants.DATE.NEVER_OVERDUE))
     ) {

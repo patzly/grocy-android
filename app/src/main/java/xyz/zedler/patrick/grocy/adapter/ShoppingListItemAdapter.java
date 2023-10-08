@@ -51,7 +51,7 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListBottomNotesBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListItemBinding;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListGrouping;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataGroupingShoppingList;
 import xyz.zedler.patrick.grocy.model.GroupHeader;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -141,7 +141,7 @@ public class ShoppingListItemAdapter extends
       int decimalPlacesPriceDisplay,
       String currency
   ) {
-    if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_NONE)) {
+    if (groupingMode.equals(FilterChipLiveDataGroupingShoppingList.GROUPING_NONE)) {
       SortUtil.sortShoppingListItemsByName(shoppingListItems, productNamesHashMap, true);
       ArrayList<GroupedListItem> groupedListItems = new ArrayList<>(shoppingListItems);
       addBottomNotes(
@@ -210,7 +210,7 @@ public class ShoppingListItemAdapter extends
       String groupingMode
   ) {
     String groupName = null;
-    if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_PRODUCT_GROUP)
+    if (groupingMode.equals(FilterChipLiveDataGroupingShoppingList.GROUPING_PRODUCT_GROUP)
         && shoppingListItem.hasProduct()) {
       Product product = productHashMap.get(shoppingListItem.getProductIdInt());
       Integer productGroupId = product != null && NumUtil.isStringInt(product.getProductGroupId())
@@ -220,7 +220,7 @@ public class ShoppingListItemAdapter extends
           ? productGroupHashMap.get(productGroupId)
           : null;
       groupName = productGroup != null ? productGroup.getName() : null;
-    } else if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_STORE)
+    } else if (groupingMode.equals(FilterChipLiveDataGroupingShoppingList.GROUPING_STORE)
         && shoppingListItem.hasProduct()) {
       Product product = productHashMap.get(shoppingListItem.getProductIdInt());
       Integer storeId = product != null && NumUtil.isStringInt(product.getStoreId())

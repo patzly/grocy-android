@@ -16,6 +16,9 @@
 - Fixed: Form validation bug on inventory page when using quantity unit conversion
 - Fixed: Chores filter for due entries was not working (#760)
 - Fixed: Take chores 'due soon days' option into account when filtering (was always 5)
+- Fixed: Sort option of chores was saved to sort option of tasks
+- Fixed: Sort option 'due date' was not available for tasks and chores page if stock date tracking
+  feature was disabled
 
 ## 3.3.2
 

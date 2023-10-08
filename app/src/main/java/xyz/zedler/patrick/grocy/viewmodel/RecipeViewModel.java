@@ -66,6 +66,7 @@ import xyz.zedler.patrick.grocy.util.VersionUtil;
 public class RecipeViewModel extends BaseViewModel {
 
   private final static String TAG = RecipeViewModel.class.getSimpleName();
+  public final static String[] DISPLAYED_USERFIELD_ENTITIES = { ENTITY.RECIPES };
 
   public final static String FIELD_FULFILLMENT = "field_fulfillment";
   public final static String FIELD_NOTE = "field_note";
@@ -83,6 +84,8 @@ public class RecipeViewModel extends BaseViewModel {
   private final MutableLiveData<Recipe> recipeLive;
   private final MutableLiveData<String> servingsDesiredLive;
   private final MutableLiveData<Boolean> displayFulfillmentWrongInfo;
+  private final FilterChipLiveDataFields filterChipLiveDataRecipeInfoFields;
+  private final FilterChipLiveDataFields filterChipLiveDataIngredientFields;
 
   private List<Recipe> recipes;
   private List<RecipePosition> recipePositions;
@@ -94,8 +97,6 @@ public class RecipeViewModel extends BaseViewModel {
   private List<ShoppingListItem> shoppingListItems;
   private HashMap<String, Userfield> userfieldHashMap;
   private RecipeFulfillment recipeFulfillment;
-  private FilterChipLiveDataFields filterChipLiveDataRecipeInfoFields;
-  private FilterChipLiveDataFields filterChipLiveDataIngredientFields;
 
   private Timer timerUpdateData;
   private final int maxDecimalPlacesAmount;
@@ -168,7 +169,10 @@ public class RecipeViewModel extends BaseViewModel {
       stockItemHashMap = ArrayUtil.getStockItemHashMap(data.getStockItems());
       shoppingListItems = data.getShoppingListItems();
       userfieldHashMap = ArrayUtil.getUserfieldHashMap(data.getUserfields());
-      filterChipLiveDataRecipeInfoFields.setUserfields(data.getUserfields(), ENTITY.RECIPES);
+      filterChipLiveDataRecipeInfoFields.setUserfields(
+          data.getUserfields(),
+          DISPLAYED_USERFIELD_ENTITIES
+      );
 
       Recipe recipe = Recipe.getRecipeFromId(recipes, args.getRecipeId());
       recipeLive.setValue(recipe);

@@ -25,7 +25,7 @@ import androidx.annotation.PluralsRes;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 
-public class FilterChipLiveDataShoppingListStatus extends FilterChipLiveData {
+public class FilterChipLiveDataStatusShoppingList extends FilterChipLiveData {
 
   public final static int STATUS_ALL = 0;
   public final static int STATUS_BELOW_MIN = 1;
@@ -37,7 +37,7 @@ public class FilterChipLiveDataShoppingListStatus extends FilterChipLiveData {
   private int undoneCount = 0;
   private int doneCount = 0;
 
-  public FilterChipLiveDataShoppingListStatus(Application application, Runnable clickListener) {
+  public FilterChipLiveDataStatusShoppingList(Application application, Runnable clickListener) {
     this.application = application;
     setStatus(STATUS_ALL, null);
     if (clickListener != null) {
@@ -54,7 +54,7 @@ public class FilterChipLiveDataShoppingListStatus extends FilterChipLiveData {
     return getItemIdChecked();
   }
 
-  public FilterChipLiveDataShoppingListStatus setStatus(int status, @Nullable String text) {
+  public FilterChipLiveDataStatusShoppingList setStatus(int status, @Nullable String text) {
     if (status == STATUS_ALL) {
       setActive(false);
       setText(application.getString(R.string.property_status));
@@ -67,17 +67,17 @@ public class FilterChipLiveDataShoppingListStatus extends FilterChipLiveData {
     return this;
   }
 
-  public FilterChipLiveDataShoppingListStatus setBelowStockCount(int belowStockCount) {
+  public FilterChipLiveDataStatusShoppingList setBelowStockCount(int belowStockCount) {
     this.belowStockCount = belowStockCount;
     return this;
   }
 
-  public FilterChipLiveDataShoppingListStatus setUndoneCount(int undoneCount) {
+  public FilterChipLiveDataStatusShoppingList setUndoneCount(int undoneCount) {
     this.undoneCount = undoneCount;
     return this;
   }
 
-  public FilterChipLiveDataShoppingListStatus setDoneCount(int doneCount) {
+  public FilterChipLiveDataStatusShoppingList setDoneCount(int doneCount) {
     this.doneCount = doneCount;
     return this;
   }

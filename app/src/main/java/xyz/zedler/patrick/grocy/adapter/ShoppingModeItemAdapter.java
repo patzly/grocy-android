@@ -55,7 +55,7 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingModeBottomNotesBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingModeGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingModeItemBinding;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListGrouping;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataGroupingShoppingList;
 import xyz.zedler.patrick.grocy.model.GroupHeader;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -159,7 +159,7 @@ public class ShoppingModeItemAdapter extends
       String currency,
       boolean showDoneItems
   ) {
-    if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_NONE)) {
+    if (groupingMode.equals(FilterChipLiveDataGroupingShoppingList.GROUPING_NONE)) {
       SortUtil.sortShoppingListItemsByName(shoppingListItems, productNamesHashMap, true);
       ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
       ArrayList<ShoppingListItem> doneItems = new ArrayList<>();

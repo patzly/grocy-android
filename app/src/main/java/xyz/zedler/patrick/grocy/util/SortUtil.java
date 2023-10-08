@@ -559,6 +559,26 @@ public class SortUtil {
     });
   }
 
+  public static void sortRecipesByUserfieldValue(
+      List<Recipe> recipes,
+      Userfield userfield,
+      boolean ascending
+  ) {
+    if (recipes == null) {
+      return;
+    }
+    Collections.sort(
+        recipes,
+        (item1, item2) -> {
+          Map<String, String> userfieldMap1 = (ascending ? item1 : item2).getUserfields();
+          Map<String, String> userfieldMap2 = (ascending ? item2 : item1).getUserfields();
+          String value1 = userfieldMap1 != null ? userfieldMap1.get(userfield.getName()) : null;
+          String value2 = userfieldMap2 != null ? userfieldMap2.get(userfield.getName()) : null;
+          return compareUserfieldValues(value1, value2, userfield.getType());
+        }
+    );
+  }
+
   public static void sortObjectsByName(ArrayList<Object> objects, String entity, boolean isAscending) {
     if (objects == null) {
       return;

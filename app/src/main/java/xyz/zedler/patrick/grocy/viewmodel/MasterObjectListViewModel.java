@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import me.xdrop.fuzzywuzzy.model.BoundExtractedResult;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
@@ -41,8 +42,9 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottom
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataMasterObjectsSort;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataProductGroup;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataSort;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataSort.SortOption;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -61,6 +63,9 @@ public class MasterObjectListViewModel extends BaseViewModel {
 
   private static final String TAG = MasterObjectListViewModel.class.getSimpleName();
 
+  public final static String SORT_NAME = "sort_name";
+  public final static String SORT_CREATED_TIMESTAMP = "sort_created_timestamp";
+
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
@@ -70,7 +75,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<ArrayList<Object>> displayedItemsLive;
   private final FilterChipLiveDataProductGroup filterChipLiveDataProductGroup;
-  private final FilterChipLiveDataMasterObjectsSort filterChipLiveDataSort;
+  private final FilterChipLiveDataSort filterChipLiveDataSort;
 
   private List<?> objects;
   private List<QuantityUnit> quantityUnits;
@@ -97,9 +102,14 @@ public class MasterObjectListViewModel extends BaseViewModel {
         getApplication(),
         this::updateItemsWithTopScroll
     );
-    filterChipLiveDataSort = new FilterChipLiveDataMasterObjectsSort(
+    filterChipLiveDataSort = new FilterChipLiveDataSort(
         getApplication(),
-        this::updateItemsWithTopScroll
+        Constants.PREF.MASTER_OBJECTS_SORT_MODE,
+        Constants.PREF.MASTER_OBJECTS_SORT_ASCENDING,
+        this::updateItemsWithTopScroll,
+        SORT_NAME,
+        new SortOption(SORT_NAME, getString(R.string.property_name)),
+        new SortOption(SORT_CREATED_TIMESTAMP, getString(R.string.property_created_timestamp))
     );
 
     objects = new ArrayList<>();
@@ -231,9 +241,9 @@ public class MasterObjectListViewModel extends BaseViewModel {
   private void sortObjects(ArrayList<Object> objects) {
     String sortMode = filterChipLiveDataSort.getSortMode();
     boolean isAscending = filterChipLiveDataSort.isSortAscending();
-    if (sortMode.equals(FilterChipLiveDataMasterObjectsSort.SORT_NAME)) {
+    if (sortMode.equals(SORT_NAME)) {
       SortUtil.sortObjectsByName(objects, entity, isAscending);
-    } else if (sortMode.equals(FilterChipLiveDataMasterObjectsSort.SORT_CREATED_TIMESTAMP)) {
+    } else if (sortMode.equals(SORT_CREATED_TIMESTAMP)) {
       SortUtil.sortObjectsByCreatedTimestamp(objects, entity, isAscending);
     } else if (sortMode.startsWith(Userfield.NAME_PREFIX)) {
       String userfieldName = sortMode.substring(Userfield.NAME_PREFIX.length());

@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 
-public class FilterChipLiveDataRecipesStatus extends FilterChipLiveData {
+public class FilterChipLiveDataStatusRecipes extends FilterChipLiveData {
 
   public final static int STATUS_ALL = 0;
   public final static int STATUS_ENOUGH_IN_STOCK = 1;
@@ -45,7 +45,7 @@ public class FilterChipLiveDataRecipesStatus extends FilterChipLiveData {
   private int notEnoughCount = 0;
   private boolean showDoneTasks;
 
-  public FilterChipLiveDataRecipesStatus(Application application, Runnable clickListener) {
+  public FilterChipLiveDataStatusRecipes(Application application, Runnable clickListener) {
     this.application = application;
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
     showDoneTasks = sharedPrefs.getBoolean(PREF.TASKS_SHOW_DONE, false);
@@ -65,7 +65,7 @@ public class FilterChipLiveDataRecipesStatus extends FilterChipLiveData {
     return getItemIdChecked();
   }
 
-  public FilterChipLiveDataRecipesStatus setStatus(int status, @Nullable String text) {
+  public FilterChipLiveDataStatusRecipes setStatus(int status, @Nullable String text) {
     if (status == STATUS_ALL) {
       setActive(false);
       setText(application.getString(R.string.property_status));
@@ -78,17 +78,17 @@ public class FilterChipLiveDataRecipesStatus extends FilterChipLiveData {
     return this;
   }
 
-  public FilterChipLiveDataRecipesStatus setEnoughInStockCount(int enoughInStockCount) {
+  public FilterChipLiveDataStatusRecipes setEnoughInStockCount(int enoughInStockCount) {
     this.enoughInStockCount = enoughInStockCount;
     return this;
   }
 
-  public FilterChipLiveDataRecipesStatus setNotEnoughButInShoppingListCount(int notEnoughButInShoppingListCount) {
+  public FilterChipLiveDataStatusRecipes setNotEnoughButInShoppingListCount(int notEnoughButInShoppingListCount) {
     this.notEnoughButInShoppingListCount = notEnoughButInShoppingListCount;
     return this;
   }
 
-  public FilterChipLiveDataRecipesStatus setNotEnoughCount(int notEnoughCount) {
+  public FilterChipLiveDataStatusRecipes setNotEnoughCount(int notEnoughCount) {
     this.notEnoughCount = notEnoughCount;
     return this;
   }

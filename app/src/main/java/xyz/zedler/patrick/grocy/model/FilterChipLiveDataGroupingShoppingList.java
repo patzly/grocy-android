@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 
-public class FilterChipLiveDataShoppingListGrouping extends FilterChipLiveData {
+public class FilterChipLiveDataGroupingShoppingList extends FilterChipLiveData {
 
   public final static int ID_GROUPING_NONE = 0;
   public final static int ID_GROUPING_PRODUCT_GROUP = 1;
@@ -41,7 +41,7 @@ public class FilterChipLiveDataShoppingListGrouping extends FilterChipLiveData {
   private final SharedPreferences sharedPrefs;
   private String groupingMode;
 
-  public FilterChipLiveDataShoppingListGrouping(Application application, Runnable clickListener) {
+  public FilterChipLiveDataGroupingShoppingList(Application application, Runnable clickListener) {
     this.application = application;
     setItemIdChecked(-1);
 
