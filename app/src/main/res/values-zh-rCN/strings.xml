@@ -108,8 +108,8 @@
   <string name="action_change_layout">更改布局</string>
   <string name="action_edit_notes">编辑备注</string>
   <string name="action_add_missing">添加缺少的产品</string>
-  <string name="action_purchase_done_items">物品购买完成</string>
-  <string name="action_purchase_all_items">购买所有物品</string>
+  <string name="action_purchase_done_items">采购完成</string>
+  <string name="action_purchase_all_items">采购所有</string>
   <string name="action_skip_entry">跳过输入</string>
   <string name="action_toggle_flash">切换闪光灯</string>
   <string name="action_edit_recipe">编辑菜谱</string>
@@ -126,6 +126,7 @@
   <string name="action_demo_server">演示服务器</string>
   <string name="action_own_server">私有服务器</string>
   <string name="action_enter_data_manually">手动输入数据</string>
+  <string name="action_settings_backup_restore">备份和恢复设置</string>
   <string name="action_details">详细信息</string>
   <string name="action_perform">执行动作</string>
   <string name="action_share">分享</string>
@@ -141,6 +142,10 @@
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">重新安排下一次执行</string>
   <string name="action_put_missing_products_on_shopping_list">将缺少的产品加入购物清单</string>
+  <!-- This is the action part of "Backup to file" or "Backup data" -->
+  <string name="action_backup">备份</string>
+  <!-- This is the action part of "Restore from file" or "Restore data" -->
+  <string name="action_restore">恢复</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -180,6 +185,10 @@
   <string name="msg_consumed_spoiled">消耗变质的%1$s%2$s%3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">标记%1$s%2$s%3$s已开封</string>
+  <!-- %1$s is the number of servings of a recipe. -->
+  <plurals name="msg_servings">
+    <item quantity="other">%1$s份</item>
+  </plurals>
   <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
   <plurals name="msg_undone_items">
     <item quantity="other">%1$d条未完成</item>
@@ -331,9 +340,13 @@
   <string name="msg_point_at_barcode">请将摄像头对准条码</string>
   <string name="msg_save_product_first">请先保存产品</string>
   <string name="msg_save_recipe_first">请先保存菜谱</string>
+  <string name="msg_recipe_contains_nested_recipes">此食谱包含子食谱。</string>
   <string name="msg_press_hold_confirm">长按确认删除</string>
-  <string name="msg_recipe_consume_ask">您确定要消耗“%1$s”菜谱中需要的全部配料吗？（标有“仅检查是否有库存”的配料将被忽略）</string>
-  <string name="msg_recipe_shopping_list_ask">您确定将菜谱“%1$s”缺少的全部配料都加入购物清单吗？\n\n取消选中的配料不加入购物清单</string>
+  <string name="msg_recipe_consume_ask">您确定要消耗“%1$s”菜谱中需要的全部食材吗？（忽略标记“仅检查是否有库存”的食材）</string>
+  <string name="msg_recipe_shopping_list_ask">您确定将菜谱“%1$s”缺少的全部食材都加入购物清单吗？\n\n取消选中的食材不加入购物清单</string>
+  <string name="msg_settings_backup_restore">在这里您可以创建或恢复APP设置的备份，备份可以分享给其他的家庭成员（文件中包含API密钥等凭证信息）。\n\n恢复备份后，通知功能可能未按照预期正常工作，必须在这个APP的后台通过再次关闭并打开重新启用通知功能。\n\n如果正在恢复的文件中含有不正确数据，恢复数据后APP可能无法正常工作，那么必须清空APP的数据。</string>
+  <string name="msg_settings_backup_success">设置的备份创建成功</string>
+  <string name="msg_settings_restore_success">设置已恢复成功，2秒内重启APP</string>
   <string name="msg_welcome">欢迎使用Grocy安卓APP</string>
   <string name="msg_welcome_introduce">要高效地使用Grocy，您需要使用私有服务器或者基于HomeAssistant的Grocy add-on插件。\n 如果您只想试用APP，您可以使用Grocy创建者Bernd Bestel的演示服务器。</string>
   <string name="msg_choose_option_below">请从以下选项中选择一个</string>
@@ -345,7 +358,7 @@
   <string name="msg_not_implemented_yet">本功能即将实现，请暂时使用Web客户端。</string>
   <string name="msg_help_picture_changes">更改图片后会立即同步至服务器，而不是在保存的时候才同步。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_default_stock_label_type">这是在购买时会填入的预设值</string>
+  <string name="msg_help_default_stock_label_type">默认的库存条目标签类型，将在采购时预先填充</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">库存概述页面列出了所有库存产品或低于安全库存的产品。启用此选项可始终隐藏该产品。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -357,7 +370,7 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_own_stock">当启用时，相应的产品不能有自己的库存，意味着它将无法在购买时被选择(有用的父产品，仅用作子产品的汇总/总体视图)。  </string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_should_not_be_frozen">启用后，当移动这个物品到冰箱冷冻时，会显示一个警告。</string>
+  <string name="msg_help_should_not_be_frozen">启用后，当移动此产品到冷冻位置时（即冷冻时），将显示警告。</string>
   <string name="msg_help_due_date_type">根据所选的截止日期类型，库存概览页面上的突出显示会有所不同。 “保鲜期”是指产品在到期日过后仍可安全食用。 “保质期”是指产品在到期日之后不能安全食用。</string>
   <string name="msg_help_default_due_days_format">‎您可以长按下面的项目以输入日期而不是数字。‎</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -408,11 +421,11 @@
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">仅用于统计目的</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_not_check_shopping_list">在默认状态下，被加到购物清单中的数量为”所需数量 - 库存数量 -购物清单数量”。 启用此选项后，仅根据库存数量而不检查购物清单中已存在的数量。</string>
+  <string name="msg_help_not_check_shopping_list">默认情况下，要添加到购物清单的数量为“所需数量 - 库存数量 - 购物清单数量”。启用此选项后，仅核销库存数量，而不核销购物清单数量。</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_servings">全部食材可制作的份数</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_produces_product">被选中的产品，在消耗此菜谱时向库存中增加一份此产品（每份以库存数量为单位）</string>
+  <string name="msg_help_produces_product">消耗此菜谱时向库存中增加一份被选中的产品（每份以库存数量为单位）</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_only_check_any_amount">当任意数量的产品在库时即满足库存检查，可以在下面使用不同的数量/单位</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -523,6 +536,9 @@
   <string name="error_undefined">发生错误</string>
   <string name="error_invalid_base_servings">无效的份数</string>
   <string name="error_pictures_size_exceeds_limit">您服务器上的产品或菜谱描述中嵌入的图片，超出了此应用程序的解析限制。请删除相关条目描述中的高质量和大尺寸的图片，这也将提高数据加载速度。</string>
+  <string name="error_userfield_type_not_supported">不支持当前用户字段类型</string>
+  <string name="error_settings_backup">备份失败</string>
+  <string name="error_settings_restore">恢复失败</string>
 
   <string name="title_overview">概述</string>
   <string name="title_stock_overview">库存总览</string>
@@ -882,6 +898,7 @@
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">平均保质期</string>
   <string name="property_spoil_rate">变质率</string>
+  <string name="property_created_timestamp">创建时间</string>
   <string name="property_price_history">历史价格</string>
   <string name="property_product_group">产品组</string>
   <string name="property_product_groups">产品组</string>
@@ -890,8 +907,11 @@
   <string name="property_stock_value">库存价值</string>
   <string name="property_opened">已开封</string>
   <string name="property_not_opened">未开封</string>
-  <string name="property_is_freezer">冰箱</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
+  <string name="property_is_freezer">冷冻设备</string>
+  <!-- Means energy of an ingredient or product -->
+  <string name="property_energy_only">能量</string>
+  <!-- %1$s is a unit for energy, like kcal (kilo calories) -->
+  <string name="property_energy_insert">能量（%1$s）每库存数量单位</string>
   <string name="property_active">启用</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">从不显示库存概述</string>
@@ -936,6 +956,10 @@
   <string name="property_extra_field">‎额外字段‎：%1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">字段</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value">%1$s：%2$s</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value_without_space">%1$s：%2$s</string>
   <string name="property_task_category">任务分类</string>
   <string name="property_task_categories">任务分类</string>
   <string name="property_calories">卡路里</string>
