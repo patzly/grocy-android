@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
+  -->
+
+<layout
+  xmlns:aztec="http://schemas.android.com/tools">
+
+  <data>
+    <import type="android.view.View" />
+    <variable
+      name="activity"
+      type="xyz.zedler.patrick.grocy.activity.MainActivity" />
+  </data>
+
+  <RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
+
+    <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/app_bar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentTop="true">
+
+      <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.Grocy.Toolbar.Back"
+        app:title="@string/title_editor"
+        app:titleCentered="true" />
+
+      <org.wordpress.aztec.toolbar.AztecToolbar
+        android:id="@+id/aztec_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/aztec_format_bar_height"
+        android:layout_alignParentBottom="true">
+      </org.wordpress.aztec.toolbar.AztecToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+      android:id="@+id/container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/app_bar"
+      android:layout_alignParentBottom="true"
+      android:fillViewport="true">
+
+      <org.wordpress.aztec.AztecText
+        android:id="@+id/aztec_visual"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top|start"
+        android:hint="@string/msg_editor_hint"
+        android:inputType="textCapSentences|textMultiLine"
+        android:padding="16dp"
+        android:layout_marginBottom="?attr/actionBarSize"
+        android:scrollbars="vertical"
+        android:imeOptions="flagNoExtractUi"
+        aztec:historyEnable="true"
+        aztec:historySize="10"/>
+
+    </androidx.core.widget.NestedScrollView>
+
+  </RelativeLayout>
+
+</layout>

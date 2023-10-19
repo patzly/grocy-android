@@ -22,6 +22,7 @@ work = "2.8.1"
 #noinspection GradleDependency
 zxing-core = "3.3.0"
 zxing-android-embedded = "4.3.0"
+aztek = "v1.8.0"
 desugar = "2.0.3"
 
 [libraries]
@@ -59,6 +60,8 @@ work-runtime = { module = "androidx.work:work-runtime", version.ref = "work" }
 # ZXing for barcode scanning
 zxing-core = { module = "com.google.zxing:core", version.ref = "zxing-core" }
 zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxing-android-embedded" }
+# HTML editor
+aztek = { module = "org.wordpress:aztec", version.ref = "aztek" }
 # https://github.com/journeyapps/zxing-android-embedded#option-2-desugaring-advanced
 # prevents bug https://github.com/patzly/grocy-android/issues/425
 desugar = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar" }

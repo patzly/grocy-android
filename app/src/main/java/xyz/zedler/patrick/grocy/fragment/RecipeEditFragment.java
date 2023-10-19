@@ -133,13 +133,11 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     binding.preparation.setOnClickListener(v -> {
       if (viewModel.getFormData().getPreparationLive().getValue() != null) {
         activity.navUtil.navigateFragment(
-            RecipeEditFragmentDirections.actionRecipeEditFragmentToEditorHtmlFragment2().setText(
-                viewModel.getFormData().getPreparationLive().getValue()
-            )
+            RecipeEditFragmentDirections.actionRecipeEditFragmentToEditorHtmlFragment()
         );
       } else {
         activity.navUtil.navigateFragment(
-            RecipeEditFragmentDirections.actionRecipeEditFragmentToEditorHtmlFragment2()
+            RecipeEditFragmentDirections.actionRecipeEditFragmentToEditorHtmlFragment()
         );
       }
     });

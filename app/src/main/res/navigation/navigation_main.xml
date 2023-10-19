@@ -1332,8 +1332,8 @@
         app:popEnterAnim="@anim/slide_from_start"
         app:popExitAnim="@anim/slide_to_end" />
     <action
-      android:id="@+id/action_recipeEditFragment_to_editorHtmlFragment2"
-      app:destination="@id/editorHtmlFragment2"
+      android:id="@+id/action_recipeEditFragment_to_editorHtmlFragment"
+      app:destination="@id/editorHtmlFragment"
       app:enterAnim="@anim/slide_from_end"
       app:exitAnim="@anim/slide_to_start"
       app:popEnterAnim="@anim/slide_from_start"
@@ -1401,6 +1401,17 @@
     android:name="xyz.zedler.patrick.grocy.fragment.StockJournalFragment"
     android:label="StockJournalFragment"
     tools:layout="@layout/fragment_stock_journal"/>
+  <fragment
+    android:id="@+id/editorHtmlFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.EditorHtmlNewFragment"
+    android:label="EditorHtmlNewFragment"
+    tools:layout="@layout/fragment_editor_html_new">
+    <argument
+      android:name="text"
+      app:argType="string"
+      app:nullable="true"
+      android:defaultValue="@null" />
+  </fragment>
   <fragment
     android:id="@+id/editorHtmlFragment2"
     android:name="xyz.zedler.patrick.grocy.fragment.EditorHtmlFragment"
