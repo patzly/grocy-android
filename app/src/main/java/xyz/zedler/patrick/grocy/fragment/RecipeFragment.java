@@ -143,18 +143,17 @@ public class RecipeFragment extends BaseFragment implements
 
     Drawable navIcon = binding.toolbar.getNavigationIcon();
     assert navIcon != null;
-    int colorBlack = ResUtil.getColorAttr(activity, R.attr.colorOnBackground);
+    int colorOnBg = ResUtil.getColorAttr(activity, R.attr.colorOnBackground);
     binding.appBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
       if (binding.collapsingToolbarLayout.getHeight() + verticalOffset
           < binding.collapsingToolbarLayout.getScrimVisibleHeightTrigger()) {
-        navIcon.setColorFilter(colorBlack, Mode.SRC_ATOP);
+        navIcon.setTint(colorOnBg);
         binding.toolbar.setNavigationIcon(navIcon);
         UiUtil.setLightStatusBar(
-            activity.getWindow().getDecorView(),
-            !UiUtil.isDarkModeActive(requireContext())
+            activity.getWindow().getDecorView(), !UiUtil.isDarkModeActive(activity)
         );
       } else {
-        navIcon.setColorFilter(Color.WHITE, Mode.SRC_ATOP);
+        navIcon.setTint(Color.WHITE);
         binding.toolbar.setNavigationIcon(navIcon);
         UiUtil.setLightStatusBar(activity.getWindow().getDecorView(), false);
       }
