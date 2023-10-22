@@ -26,21 +26,38 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import xyz.zedler.patrick.grocy.adapter.MealPlanEntryAdapter;
+import xyz.zedler.patrick.grocy.adapter.MealPlanEntryAdapter.MoveToOtherPageListener;
+import xyz.zedler.patrick.grocy.adapter.MealPlanEntryAdapter.SimpleItemTouchHelperCallback;
 import xyz.zedler.patrick.grocy.databinding.FragmentMealPlanPagingBinding;
+import xyz.zedler.patrick.grocy.viewmodel.MealPlanViewModel;
 
 public class MealPlanPagingFragment extends Fragment {
 
   private static final String ARG_DATE = "date";
   private LocalDate date;
+  private DateTimeFormatter dateFormatter;
   private FragmentMealPlanPagingBinding binding;
+  private final MealPlanViewModel viewModel;
+  private final MoveToOtherPageListener movePageListener;
 
-  public MealPlanPagingFragment() {
-    // Required empty public constructor
+  public MealPlanPagingFragment(MealPlanViewModel viewModel, MoveToOtherPageListener listener) {
+    this.viewModel = viewModel;
+    this.movePageListener = listener;
   }
 
-  public static MealPlanPagingFragment newInstance(LocalDate date) {
-    MealPlanPagingFragment fragment = new MealPlanPagingFragment();
+  public static MealPlanPagingFragment newInstance(
+      Fragment parentFragment, LocalDate date, MoveToOtherPageListener movePageListener
+  ) {
+    MealPlanPagingFragment fragment = new MealPlanPagingFragment(
+        new ViewModelProvider(parentFragment).get(MealPlanViewModel.class),
+        movePageListener
+    );
     Bundle args = new Bundle();
     args.putSerializable(ARG_DATE, date);
     fragment.setArguments(args);
@@ -65,7 +82,28 @@ public class MealPlanPagingFragment extends Fragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    binding.text.setText(date.toString());
+    //binding.text.setText(date.toString());
+
+    dateFormatter = new DateTimeFormatterBuilder()
+        .appendPattern("yyyy-MM-dd")
+        .toFormatter();
+
+    MealPlanEntryAdapter adapter = new MealPlanEntryAdapter(requireContext());
+    binding.recycler.setAdapter(adapter);
+
+    ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(
+        adapter,
+        movePageListener
+    );
+    ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+    touchHelper.attachToRecyclerView(binding.recycler);
+
+    viewModel.getMealPlanEntriesLive().observe(getViewLifecycleOwner(), entries -> {
+      if (entries != null) {
+        String dateFormatted = date.format(dateFormatter);
+        adapter.updateData(entries.get(dateFormatted));
+      }
+    });
   }
 }
 

@@ -46,7 +46,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
 import xyz.zedler.patrick.grocy.web.NetworkQueue.QueueItem;
 
 @Entity(tableName = "meal_plan_entry_table")
-public class MealPlanEntry implements Parcelable {
+public class MealPlanEntry extends GroupedListItem implements Parcelable {
 
   public final static String TYPE_RECIPE = "recipe";
   public final static String TYPE_PRODUCT = "product";

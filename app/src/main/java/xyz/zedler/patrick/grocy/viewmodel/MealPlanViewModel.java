@@ -28,7 +28,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants.PREF;
@@ -38,22 +37,13 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.StockOverviewFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
-import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MealPlanEntry;
-import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.ShoppingListItem;
-import xyz.zedler.patrick.grocy.model.StockItem;
-import xyz.zedler.patrick.grocy.model.StockLocation;
-import xyz.zedler.patrick.grocy.model.VolatileItem;
 import xyz.zedler.patrick.grocy.repository.MealPlanRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.DateUtil;
-import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
-import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
@@ -71,22 +61,14 @@ public class MealPlanViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<LocalDate> selectedDateLive;
-  private final MutableLiveData<ArrayList<StockItem>> filteredStockItemsLive;
+  private final MutableLiveData<HashMap<String, List<MealPlanEntry>>> mealPlanEntriesLive;
 
   private List<MealPlanEntry> mealPlanEntries;
   private List<Product> products;
-  private HashMap<Integer, ProductGroup> productGroupHashMap;
-  private HashMap<String, ProductBarcode> productBarcodeHashMap;
   private HashMap<Integer, Product> productHashMap;
-  private List<ShoppingListItem> shoppingListItems;
-  private ArrayList<String> shoppingListItemsProductIds;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-  private HashMap<Integer, MissingItem> productIdsMissingItems;
-  private HashMap<Integer, Location> locationHashMap;
-  private HashMap<Integer, HashMap<Integer, StockLocation>> stockLocationsHashMap;
+  private boolean isSmoothScrolling;
 
-  private String searchInput;
-  private ArrayList<String> searchResultsFuzzy;
   private final int maxDecimalPlacesAmount;
   private boolean initialScrollDone;
   private final boolean debug;
@@ -111,7 +93,7 @@ public class MealPlanViewModel extends BaseViewModel {
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
     selectedDateLive = new MutableLiveData<>(LocalDate.now());
-    filteredStockItemsLive = new MutableLiveData<>();
+    mealPlanEntriesLive = new MutableLiveData<>();
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
@@ -120,8 +102,10 @@ public class MealPlanViewModel extends BaseViewModel {
       this.products = data.getProducts();
       productHashMap = ArrayUtil.getProductsHashMap(data.getProducts());
       this.mealPlanEntries = data.getMealPlanEntries();
+      mealPlanEntriesLive.setValue(ArrayUtil.getMealPlanEntriesForDayHashMap(
+          data.getMealPlanEntries()
+      ));
 
-      updateFilteredStockItems();
       if (downloadAfterLoading) {
         downloadData(false);
       }
@@ -131,7 +115,6 @@ public class MealPlanViewModel extends BaseViewModel {
   public void downloadData(boolean forceUpdate) {
     if (isOffline()) { // skip downloading and update recyclerview
       isLoadingLive.setValue(false);
-      updateFilteredStockItems();
       return;
     }
     dlHelper.updateData(
@@ -144,31 +127,8 @@ public class MealPlanViewModel extends BaseViewModel {
         QuantityUnit.class,
         ProductGroup.class,
         MealPlanEntry.class,
-        Product.class,
-        ProductBarcode.class,
-        VolatileItem.class,
-        ShoppingListItem.class,
-        Location.class,
-        StockLocation.class
+        Product.class
     );
-  }
-
-  public void updateFilteredStockItems() {
-    ArrayList<StockItem> filteredStockItems = new ArrayList<>();
-
-    Product productSearch = null;
-    ProductBarcode productBarcodeSearch = null;
-    if (searchInput != null && !searchInput.isEmpty()) {
-      Grocycode grocycode = GrocycodeUtil.getGrocycode(searchInput);
-      if (grocycode != null && grocycode.isProduct()) {
-        productSearch = productHashMap.get(grocycode.getObjectId());
-      }
-      if (productSearch == null) {
-        productBarcodeSearch = productBarcodeHashMap.get(searchInput);
-      }
-    }
-
-    filteredStockItemsLive.setValue(filteredStockItems);
   }
 
   public DayOfWeek getFirstDayOfWeek() {
@@ -183,36 +143,20 @@ public class MealPlanViewModel extends BaseViewModel {
     return selectedDateLive.getValue();
   }
 
-  public ArrayList<Integer> getProductIdsMissingItems() {
-    return new ArrayList<>(productIdsMissingItems.keySet());
+  public List<MealPlanEntry> getMealPlanEntries() {
+    return mealPlanEntries;
   }
 
-  public HashMap<Integer, ProductGroup> getProductGroupHashMap() {
-    return productGroupHashMap;
+  public MutableLiveData<HashMap<String, List<MealPlanEntry>>> getMealPlanEntriesLive() {
+    return mealPlanEntriesLive;
   }
 
   public HashMap<Integer, Product> getProductHashMap() {
     return productHashMap;
   }
 
-  public ArrayList<String> getShoppingListItemsProductIds() {
-    return shoppingListItemsProductIds;
-  }
-
-  public HashMap<Integer, Location> getLocationHashMap() {
-    return locationHashMap;
-  }
-
-  public Location getLocationFromId(int id) {
-    return locationHashMap.get(id);
-  }
-
   public HashMap<Integer, QuantityUnit> getQuantityUnitHashMap() {
     return quantityUnitHashMap;
-  }
-
-  public QuantityUnit getQuantityUnitFromId(int id) {
-    return quantityUnitHashMap.get(id);
   }
 
   public boolean isInitialScrollDone() {
@@ -221,6 +165,14 @@ public class MealPlanViewModel extends BaseViewModel {
 
   public void setInitialScrollDone(boolean initialScrollDone) {
     this.initialScrollDone = initialScrollDone;
+  }
+
+  public boolean isSmoothScrolling() {
+    return isSmoothScrolling;
+  }
+
+  public void setSmoothScrolling(boolean smoothScrolling) {
+    isSmoothScrolling = smoothScrolling;
   }
 
   @NonNull

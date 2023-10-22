@@ -26,6 +26,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,6 +50,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.Locale;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.adapter.MealPlanEntryAdapter.MoveToOtherPageListener;
 import xyz.zedler.patrick.grocy.adapter.MealPlanPagerAdapter;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMealPlanBinding;
@@ -178,8 +181,43 @@ public class MealPlanFragment extends BaseFragment {
       binding.calendarView.smoothScrollToWeek(date);
     });
 
-    MealPlanPagerAdapter adapter = new MealPlanPagerAdapter(activity, viewModel.getSelectedDate());
+    MealPlanPagerAdapter adapter = new MealPlanPagerAdapter(
+        activity,
+        this,
+        viewModel.getSelectedDate(),
+        new MoveToOtherPageListener() {
+          @Override
+          public void moveToNextPage() {
+            if (viewModel.isSmoothScrolling()) return;
+            viewModel.setSmoothScrolling(true);
+            binding.viewPager.setLayoutAnimationListener(new AnimationListener() {
+              @Override
+              public void onAnimationStart(Animation animation) {
+                viewModel.setSmoothScrolling(true);
+              }
+
+              @Override
+              public void onAnimationEnd(Animation animation) {
+
+              }
+
+              @Override
+              public void onAnimationRepeat(Animation animation) {
+
+              }
+            });
+            binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() + 1, true);
+
+          }
+
+          @Override
+          public void moveToPreviousPage() {
+
+          }
+        }
+    );
     binding.viewPager.setAdapter(adapter);
+
 
     binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
       @Override

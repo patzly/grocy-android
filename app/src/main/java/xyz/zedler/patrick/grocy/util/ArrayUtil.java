@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.MealPlanEntry;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductAveragePrice;
@@ -202,6 +203,23 @@ public class ArrayUtil {
       recipePositionHashMap.put(recipePosition.getId(), recipePosition);
     }
     return recipePositionHashMap;
+  }
+
+  public static HashMap<String, List<MealPlanEntry>> getMealPlanEntriesForDayHashMap(
+      List<MealPlanEntry> mealPlanEntries
+  ) {
+    HashMap<String, List<MealPlanEntry>> hashMap = new HashMap<>();
+    for (MealPlanEntry mealPlanEntry : mealPlanEntries) {
+      List<MealPlanEntry> mealPlanEntriesForDay = hashMap.get(mealPlanEntry.getDay());
+      if (mealPlanEntriesForDay != null) {
+        mealPlanEntriesForDay.add(mealPlanEntry);
+      } else {
+        mealPlanEntriesForDay = new ArrayList<>();
+        mealPlanEntriesForDay.add(mealPlanEntry);
+        hashMap.put(mealPlanEntry.getDay(), mealPlanEntriesForDay);
+      }
+    }
+    return hashMap;
   }
 
   public static boolean contains(String[] array, String value) {

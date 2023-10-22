@@ -22,58 +22,42 @@ package xyz.zedler.patrick.grocy.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Paint;
-import android.text.Html;
-import android.text.Spanned;
-import android.text.SpannedString;
+import android.graphics.Canvas;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.databinding.RowMealPlanEntryBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListBottomNotesBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
-import xyz.zedler.patrick.grocy.databinding.RowShoppingListItemBinding;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataGroupingShoppingList;
 import xyz.zedler.patrick.grocy.model.GroupHeader;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
+import xyz.zedler.patrick.grocy.model.MealPlanEntry;
 import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.ProductGroup;
-import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
-import xyz.zedler.patrick.grocy.model.ShoppingListItem;
-import xyz.zedler.patrick.grocy.model.Store;
-import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
-import xyz.zedler.patrick.grocy.util.SortUtil;
-import xyz.zedler.patrick.grocy.util.TextUtil;
-import xyz.zedler.patrick.grocy.viewmodel.ShoppingListViewModel;
 
 public class MealPlanEntryAdapter extends
     RecyclerView.Adapter<MealPlanEntryAdapter.ViewHolder> {
 
   private final static String TAG = MealPlanEntryAdapter.class.getSimpleName();
 
-  private final ArrayList<GroupedListItem> groupedListItems;
+  private final List<GroupedListItem> groupedListItems;
   private final HashMap<Integer, Product> productHashMap;
-  private final HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-  private final HashMap<Integer, Double> shoppingListItemAmountsHashMap;
-  private final ArrayList<Integer> missingProductIds;
-  private final ShoppingListItemAdapterListener listener;
   private final PluralUtil pluralUtil;
   private String groupingMode;
   private String extraField;
@@ -83,20 +67,7 @@ public class MealPlanEntryAdapter extends
   private final boolean priceTrackingEnabled;
 
   public MealPlanEntryAdapter(
-      Context context,
-      ArrayList<ShoppingListItem> shoppingListItems,
-      HashMap<Integer, Product> productHashMap,
-      HashMap<Integer, String> productNamesHashMap,
-      HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap,
-      HashMap<Integer, QuantityUnit> quantityUnitHashMap,
-      HashMap<Integer, ProductGroup> productGroupHashMap,
-      HashMap<Integer, Store> storeHashMap,
-      HashMap<Integer, Double> shoppingListItemAmountsHashMap,
-      ArrayList<Integer> missingProductIds,
-      ShoppingListItemAdapterListener listener,
-      String shoppingListNotes,
-      String groupingMode,
-      String extraField
+      Context context
   ) {
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     this.maxDecimalPlacesAmount = sharedPrefs.getInt(
@@ -110,179 +81,23 @@ public class MealPlanEntryAdapter extends
     this.currency = sharedPrefs.getString(PREF.CURRENCY, "");
     this.priceTrackingEnabled = sharedPrefs
         .getBoolean(PREF.FEATURE_STOCK_PRICE_TRACKING, true);
-    this.productHashMap = new HashMap<>(productHashMap);
-    this.productLastPurchasedHashMap = new HashMap<>(productLastPurchasedHashMap);
-    this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
-    this.shoppingListItemAmountsHashMap = new HashMap<>(shoppingListItemAmountsHashMap);
-    this.missingProductIds = new ArrayList<>(missingProductIds);
-    this.listener = listener;
+    this.productHashMap = new HashMap<>();
+    this.quantityUnitHashMap = new HashMap<>();
     this.pluralUtil = new PluralUtil(context);
     this.groupingMode = groupingMode;
     this.extraField = extraField;
-    this.groupedListItems = getGroupedListItems(context, shoppingListItems,
-        productGroupHashMap, productHashMap, productNamesHashMap, storeHashMap,
-        productLastPurchasedHashMap, shoppingListItemAmountsHashMap,
-        shoppingListNotes, groupingMode, priceTrackingEnabled, decimalPlacesPriceDisplay, currency);
+    this.groupedListItems = new ArrayList<>();
   }
 
   static ArrayList<GroupedListItem> getGroupedListItems(
-      Context context,
-      ArrayList<ShoppingListItem> shoppingListItems,
-      HashMap<Integer, ProductGroup> productGroupHashMap,
-      HashMap<Integer, Product> productHashMap,
-      HashMap<Integer, String> productNamesHashMap,
-      HashMap<Integer, Store> storeHashMap,
-      HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap,
-      HashMap<Integer, Double> shoppingListItemAmountsHashMap,
-      String shoppingListNotes,
-      String groupingMode,
-      boolean priceTrackingEnabled,
-      int decimalPlacesPriceDisplay,
-      String currency
+      List<MealPlanEntry> mealPlanEntries
   ) {
-    if (groupingMode.equals(FilterChipLiveDataGroupingShoppingList.GROUPING_NONE)) {
-      SortUtil.sortShoppingListItemsByName(shoppingListItems, productNamesHashMap, true);
-      ArrayList<GroupedListItem> groupedListItems = new ArrayList<>(shoppingListItems);
-      addBottomNotes(
-          context,
-          shoppingListNotes,
-          groupedListItems,
-          !shoppingListItems.isEmpty()
-      );
-      if (!shoppingListItems.isEmpty() && priceTrackingEnabled) {
-        addTotalPrice(context, shoppingListItems, groupedListItems, productLastPurchasedHashMap,
-            shoppingListItemAmountsHashMap, decimalPlacesPriceDisplay, currency);
-      }
+    ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
+    if (mealPlanEntries == null || mealPlanEntries.isEmpty()) {
       return groupedListItems;
     }
-    HashMap<String, ArrayList<ShoppingListItem>> shoppingListItemsGroupedHashMap = new HashMap<>();
-    ArrayList<ShoppingListItem> ungroupedItems = new ArrayList<>();
-    for (ShoppingListItem shoppingListItem : shoppingListItems) {
-      String groupName = getGroupName(shoppingListItem, productHashMap, productGroupHashMap,
-          storeHashMap, groupingMode);
-      if (groupName != null && !groupName.isEmpty()) {
-        ArrayList<ShoppingListItem> itemsFromGroup = shoppingListItemsGroupedHashMap.get(groupName);
-        if (itemsFromGroup == null) {
-          itemsFromGroup = new ArrayList<>();
-          shoppingListItemsGroupedHashMap.put(groupName, itemsFromGroup);
-        }
-        itemsFromGroup.add(shoppingListItem);
-      } else {
-        ungroupedItems.add(shoppingListItem);
-      }
-    }
-    ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
-    ArrayList<String> groupsSorted = new ArrayList<>(shoppingListItemsGroupedHashMap.keySet());
-    SortUtil.sortStringsByName(groupsSorted, true);
-    if (!ungroupedItems.isEmpty()) {
-      groupedListItems.add(new GroupHeader(context.getString(R.string.property_ungrouped)));
-      SortUtil.sortShoppingListItemsByName(ungroupedItems, productNamesHashMap, true);
-      groupedListItems.addAll(ungroupedItems);
-    }
-    for (String group : groupsSorted) {
-      ArrayList<ShoppingListItem> itemsFromGroup = shoppingListItemsGroupedHashMap.get(group);
-      if (itemsFromGroup == null) continue;
-      GroupHeader groupHeader = new GroupHeader(group);
-      groupHeader.setDisplayDivider(!ungroupedItems.isEmpty() || !groupsSorted.get(0).equals(group));
-      groupedListItems.add(groupHeader);
-      SortUtil.sortShoppingListItemsByName(itemsFromGroup, productNamesHashMap, true);
-      groupedListItems.addAll(itemsFromGroup);
-    }
-    addBottomNotes(
-        context,
-        shoppingListNotes,
-        groupedListItems,
-        !ungroupedItems.isEmpty() || !groupsSorted.isEmpty()
-    );
-    if ((!ungroupedItems.isEmpty() || !groupsSorted.isEmpty()) && priceTrackingEnabled) {
-      addTotalPrice(context, shoppingListItems, groupedListItems, productLastPurchasedHashMap,
-          shoppingListItemAmountsHashMap, decimalPlacesPriceDisplay, currency);
-    }
+    groupedListItems.addAll(mealPlanEntries);
     return groupedListItems;
-  }
-
-  public static String getGroupName(
-      ShoppingListItem shoppingListItem,
-      HashMap<Integer, Product> productHashMap,
-      HashMap<Integer, ProductGroup> productGroupHashMap,
-      HashMap<Integer, Store> storeHashMap,
-      String groupingMode
-  ) {
-    String groupName = null;
-    if (groupingMode.equals(FilterChipLiveDataGroupingShoppingList.GROUPING_PRODUCT_GROUP)
-        && shoppingListItem.hasProduct()) {
-      Product product = productHashMap.get(shoppingListItem.getProductIdInt());
-      Integer productGroupId = product != null && NumUtil.isStringInt(product.getProductGroupId())
-          ? Integer.parseInt(product.getProductGroupId())
-          : null;
-      ProductGroup productGroup = productGroupId != null
-          ? productGroupHashMap.get(productGroupId)
-          : null;
-      groupName = productGroup != null ? productGroup.getName() : null;
-    } else if (groupingMode.equals(FilterChipLiveDataGroupingShoppingList.GROUPING_STORE)
-        && shoppingListItem.hasProduct()) {
-      Product product = productHashMap.get(shoppingListItem.getProductIdInt());
-      Integer storeId = product != null && NumUtil.isStringInt(product.getStoreId())
-          ? Integer.parseInt(product.getStoreId())
-          : null;
-      Store store = storeId != null
-          ? storeHashMap.get(storeId)
-          : null;
-      groupName = store != null ? store.getName() : null;
-    }
-    return groupName;
-  }
-
-  private static void addBottomNotes(
-      Context context,
-      String shoppingListNotes,
-      ArrayList<GroupedListItem> groupedListItems,
-      boolean displayDivider
-  ) {
-    if (shoppingListNotes == null) {
-      return;
-    }
-    Spanned spanned = Html.fromHtml(shoppingListNotes.trim());
-    Spanned notes = (Spanned) TextUtil.trimCharSequence(spanned);
-    if (notes != null && !notes.toString().trim().isEmpty()) {
-      GroupHeader h = new GroupHeader(context.getString(R.string.property_notes));
-      h.setDisplayDivider(displayDivider);
-      groupedListItems.add(h);
-      groupedListItems.add(new ShoppingListBottomNotes(notes));
-    }
-  }
-
-  private static void addTotalPrice(
-      Context context,
-      List<ShoppingListItem> shoppingListItems,
-      ArrayList<GroupedListItem> groupedListItems,
-      HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap,
-      HashMap<Integer, Double> shoppingListItemAmountsHashMap,
-      int decimalPlacesPriceDisplay,
-      String currency
-  ) {
-    double priceTotal = 0;
-    for (ShoppingListItem shoppingListItem : shoppingListItems) {
-      ProductLastPurchased p = shoppingListItem.hasProduct()
-          ? productLastPurchasedHashMap.get(shoppingListItem.getProductIdInt()) : null;
-      if (p == null || p.getPrice() == null || p.getPrice().isEmpty()) continue;
-      Double amountInQuUnit = shoppingListItemAmountsHashMap.get(shoppingListItem.getId());
-      double amount = amountInQuUnit != null ? amountInQuUnit : shoppingListItem.getAmountDouble();
-      if (NumUtil.isStringDouble(p.getPrice())) priceTotal += NumUtil.toDouble(p.getPrice()) * amount;
-    }
-
-    GroupHeader h = new GroupHeader();
-    h.setDisplayDivider(true);
-    groupedListItems.add(h);
-    ShoppingListBottomNotes priceText = new ShoppingListBottomNotes(
-        new SpannedString(context.getString(
-            R.string.subtitle_total_price,
-            NumUtil.trimPrice(priceTotal, decimalPlacesPriceDisplay),
-            currency
-        ))
-    );
-    priceText.setClickable(false);
-    groupedListItems.add(priceText);
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -292,21 +107,21 @@ public class MealPlanEntryAdapter extends
     }
   }
 
-  public static class ShoppingListItemViewHolder extends ViewHolder {
+  public static class MealPlanEntryViewHolder extends ViewHolder {
 
-    private final RowShoppingListItemBinding binding;
+    private final RowMealPlanEntryBinding binding;
 
-    public ShoppingListItemViewHolder(RowShoppingListItemBinding binding) {
+    public MealPlanEntryViewHolder(RowMealPlanEntryBinding binding) {
       super(binding.getRoot());
       this.binding = binding;
     }
   }
 
-  public static class ShoppingListGroupViewHolder extends ViewHolder {
+  public static class MealPlanGroupViewHolder extends ViewHolder {
 
     private final RowShoppingListGroupBinding binding;
 
-    public ShoppingListGroupViewHolder(RowShoppingListGroupBinding binding) {
+    public MealPlanGroupViewHolder(RowShoppingListGroupBinding binding) {
       super(binding.getRoot());
       this.binding = binding;
     }
@@ -326,38 +141,20 @@ public class MealPlanEntryAdapter extends
   public int getItemViewType(int position) {
     return GroupedListItem.getType(
         groupedListItems.get(position),
-        GroupedListItem.CONTEXT_SHOPPING_LIST
+        GroupedListItem.CONTEXT_MEAL_PLAN
     );
   }
 
   @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    if (viewType == GroupedListItem.TYPE_HEADER) {
-      return new ShoppingListGroupViewHolder(
-          RowShoppingListGroupBinding.inflate(
-              LayoutInflater.from(parent.getContext()),
-              parent,
-              false
-          )
-      );
-    } else if (viewType == GroupedListItem.TYPE_ENTRY) {
-      return new ShoppingListItemViewHolder(
-          RowShoppingListItemBinding.inflate(
-              LayoutInflater.from(parent.getContext()),
-              parent,
-              false
-          )
-      );
-    } else {
-      return new ShoppingListNotesViewHolder(
-          RowShoppingListBottomNotesBinding.inflate(
-              LayoutInflater.from(parent.getContext()),
-              parent,
-              false
-          )
-      );
-    }
+    return new MealPlanEntryViewHolder(
+        RowMealPlanEntryBinding.inflate(
+            LayoutInflater.from(parent.getContext()),
+            parent,
+            false
+        )
+    );
   }
 
   @SuppressLint("ClickableViewAccessibility")
@@ -367,127 +164,15 @@ public class MealPlanEntryAdapter extends
     GroupedListItem groupedListItem = groupedListItems.get(viewHolder.getAdapterPosition());
 
     int type = getItemViewType(viewHolder.getAdapterPosition());
-    if (type == GroupedListItem.TYPE_HEADER) {
-      ShoppingListGroupViewHolder holder = (ShoppingListGroupViewHolder) viewHolder;
-      if (((GroupHeader) groupedListItem).getDisplayDivider() == 1) {
-        holder.binding.divider.setVisibility(View.VISIBLE);
-      } else {
-        holder.binding.divider.setVisibility(View.GONE);
-      }
-      if (((GroupHeader) groupedListItem).getGroupName() != null) {
-        holder.binding.name.setText(((GroupHeader) groupedListItem).getGroupName());
-        holder.binding.name.setVisibility(View.VISIBLE);
-      } else {
-        holder.binding.name.setVisibility(View.GONE);
-      }
-      return;
-    }
-    if (type == GroupedListItem.TYPE_BOTTOM_NOTES) {
-      ShoppingListNotesViewHolder holder = (ShoppingListNotesViewHolder) viewHolder;
-      holder.binding.notes.setText(
-          ((ShoppingListBottomNotes) groupedListItem).getNotes()
-      );
-      if (((ShoppingListBottomNotes) groupedListItem).isClickable()) {
-        holder.binding.container.setOnClickListener(
-            view -> listener.onItemRowClicked(groupedListItem)
-        );
-        holder.binding.container.setClickable(true);
-      } else {
-        holder.binding.container.setClickable(false);
-      }
-      return;
-    }
 
-    ShoppingListItem item = (ShoppingListItem) groupedListItem;
-    RowShoppingListItemBinding binding = ((ShoppingListItemViewHolder) viewHolder).binding;
+    MealPlanEntry entry = (MealPlanEntry) groupedListItem;
+    RowMealPlanEntryBinding binding = ((MealPlanEntryViewHolder) viewHolder).binding;
 
     Context context = binding.getRoot().getContext();
     ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
 
     // NAME
-
-    Product product = null;
-    if (item.hasProduct()) {
-      product = productHashMap.get(item.getProductIdInt());
-    }
-
-    if (product != null) {
-      binding.name.setText(product.getName());
-      binding.name.setVisibility(View.VISIBLE);
-    } else {
-      binding.name.setText(null);
-      binding.name.setVisibility(View.GONE);
-    }
-    if (item.isUndone()) {
-      binding.name.setPaintFlags(
-          binding.name.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
-      );
-      binding.name.setAlpha(1.0f);
-    } else {
-      binding.name.setPaintFlags(
-          binding.name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-      );
-      binding.name.setAlpha(0.6f);
-    }
-
-    // NOTE AS NAME
-
-    if (binding.name.getVisibility() == View.VISIBLE) {
-      binding.noteAsName.setVisibility(View.GONE);
-      binding.noteAsName.setText(null);
-    }
-
-    // AMOUNT
-
-    // NOTE
-
-    if (item.getNote() != null && !item.getNote().trim().isEmpty()) {
-      if (binding.name.getVisibility() == View.VISIBLE) {
-        binding.note.setVisibility(View.VISIBLE);
-        binding.note.setText(item.getNote().trim());
-      } else {
-        binding.noteAsName.setVisibility(View.VISIBLE);
-        binding.noteAsName.setText(item.getNote().trim());
-        binding.note.setVisibility(View.GONE);
-        binding.note.setText(null);
-      }
-    } else {
-      if (binding.name.getVisibility() == View.VISIBLE) {
-        binding.note.setVisibility(View.GONE);
-        binding.note.setText(null);
-      }
-    }
-    if (binding.noteAsName.getVisibility() == View.VISIBLE) {
-      if (item.isUndone()) {
-        binding.noteAsName.setPaintFlags(
-            binding.noteAsName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
-        );
-        binding.noteAsName.setAlpha(1.0f);
-      } else {
-        binding.noteAsName.setPaintFlags(
-            binding.noteAsName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-        );
-        binding.noteAsName.setAlpha(0.6f);
-      }
-    } else {
-      if (item.isUndone()) {
-        binding.note.setPaintFlags(
-            binding.note.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
-        );
-        binding.note.setAlpha(1.0f);
-      } else {
-        binding.note.setPaintFlags(
-            binding.note.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-        );
-        binding.note.setAlpha(0.6f);
-      }
-    }
-
-    // CONTAINER
-
-    binding.containerRow.setOnClickListener(
-        view -> listener.onItemRowClicked(groupedListItem)
-    );
+    binding.name.setText(entry.getType());
 
   }
 
@@ -496,205 +181,41 @@ public class MealPlanEntryAdapter extends
     return groupedListItems.size();
   }
 
-  public ArrayList<GroupedListItem> getGroupedListItems() {
+  public List<GroupedListItem> getGroupedListItems() {
     return groupedListItems;
   }
 
-  public interface ShoppingListItemAdapterListener {
-
-    void onItemRowClicked(GroupedListItem groupedListItem);
-  }
-
-  // Only for PurchaseFragment
-  public static void fillShoppingListItem(
-      Context context,
-      ShoppingListItem item,
-      RowShoppingListItemBinding binding,
-      HashMap<Integer, Product> productHashMap,
-      HashMap<Integer, QuantityUnit> quantityUnitHashMap,
-      HashMap<Integer, Double> shoppingListItemAmountsHashMap,
-      int maxDecimalPlacesAmount,
-      PluralUtil pluralUtil
-  ) {
-
-    // NAME
-
-    Product product = null;
-    if(item.hasProduct()) product = productHashMap.get(item.getProductIdInt());
-
-    if (product != null) {
-      binding.name.setText(product.getName());
-      binding.name.setVisibility(View.VISIBLE);
-    } else {
-      binding.name.setText(null);
-      binding.name.setVisibility(View.GONE);
-    }
-    if (item.isUndone()) {
-      binding.name.setPaintFlags(
-          binding.name.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
-      );
-    } else {
-      binding.name.setPaintFlags(
-          binding.name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-      );
-    }
-
-    // NOTE AS NAME
-
-    if (binding.name.getVisibility() == View.VISIBLE) {
-      binding.noteAsName.setVisibility(View.GONE);
-      binding.noteAsName.setText(null);
-    }
-
-    // AMOUNT
-
-    // NOTE
-
-    if (item.getNote() != null && !item.getNote().isEmpty()) {
-      if (binding.name.getVisibility() == View.VISIBLE) {
-        binding.note.setVisibility(View.VISIBLE);
-        binding.note.setText(item.getNote().trim());
-      } else {
-        binding.noteAsName.setVisibility(View.VISIBLE);
-        binding.noteAsName.setText(item.getNote().trim());
-      }
-    } else {
-      if (binding.name.getVisibility() == View.VISIBLE) {
-        binding.note.setVisibility(View.GONE);
-        binding.note.setText(null);
-      }
-    }
-    if (binding.noteAsName.getVisibility() == View.VISIBLE) {
-      if (item.isUndone()) {
-        binding.noteAsName.setPaintFlags(
-            binding.noteAsName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
-        );
-      } else {
-        binding.noteAsName.setPaintFlags(
-            binding.noteAsName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-        );
-      }
-    } else {
-      if (item.isUndone()) {
-        binding.note.setPaintFlags(
-            binding.note.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
-        );
-      } else {
-        binding.note.setPaintFlags(
-            binding.note.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-        );
-      }
-    }
+  public void onItemMove(int fromPosition, int toPosition) {
+    // Collections.swap(mData, fromPosition, toPosition);
+    notifyItemMoved(fromPosition, toPosition);
   }
 
   public void updateData(
-      Context context,
-      ArrayList<ShoppingListItem> shoppingListItems,
-      HashMap<Integer, Product> productHashMap,
-      HashMap<Integer, String> productNamesHashMap,
-      HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap,
-      HashMap<Integer, QuantityUnit> quantityUnitHashMap,
-      HashMap<Integer, ProductGroup> productGroupHashMap,
-      HashMap<Integer, Store> storeHashMap,
-      HashMap<Integer, Double> shoppingListItemAmountsHashMap,
-      ArrayList<Integer> missingProductIds,
-      String shoppingListNotes,
-      String groupingMode,
-      String extraField
+      List<MealPlanEntry> mealPlanEntries
   ) {
-    ArrayList<GroupedListItem> newGroupedListItems = getGroupedListItems(context, shoppingListItems,
-        productGroupHashMap, productHashMap, productNamesHashMap, storeHashMap,
-        productLastPurchasedHashMap, shoppingListItemAmountsHashMap,
-        shoppingListNotes, groupingMode, priceTrackingEnabled, decimalPlacesPriceDisplay, currency);
-    MealPlanEntryAdapter.DiffCallback diffCallback = new MealPlanEntryAdapter.DiffCallback(
+    List<GroupedListItem> newGroupedListItems = getGroupedListItems(mealPlanEntries);
+    DiffCallback diffCallback = new DiffCallback(
         this.groupedListItems,
-        newGroupedListItems,
-        this.productHashMap,
-        productHashMap,
-        this.productLastPurchasedHashMap,
-        productLastPurchasedHashMap,
-        this.quantityUnitHashMap,
-        quantityUnitHashMap,
-        this.shoppingListItemAmountsHashMap,
-        shoppingListItemAmountsHashMap,
-        this.missingProductIds,
-        missingProductIds,
-        this.groupingMode,
-        groupingMode,
-        this.extraField,
-        extraField
+        newGroupedListItems
     );
+
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.groupedListItems.clear();
     this.groupedListItems.addAll(newGroupedListItems);
-    this.productHashMap.clear();
-    this.productHashMap.putAll(productHashMap);
-    this.quantityUnitHashMap.clear();
-    this.quantityUnitHashMap.putAll(quantityUnitHashMap);
-    this.productLastPurchasedHashMap.clear();
-    this.productLastPurchasedHashMap.putAll(productLastPurchasedHashMap);
-    this.shoppingListItemAmountsHashMap.clear();
-    this.shoppingListItemAmountsHashMap.putAll(shoppingListItemAmountsHashMap);
-    this.missingProductIds.clear();
-    this.missingProductIds.addAll(missingProductIds);
-    this.groupingMode = groupingMode;
-    this.extraField = extraField;
     diffResult.dispatchUpdatesTo(this);
   }
 
   static class DiffCallback extends DiffUtil.Callback {
 
-    ArrayList<GroupedListItem> oldItems;
-    ArrayList<GroupedListItem> newItems;
-    HashMap<Integer, Product> productHashMapOld;
-    HashMap<Integer, Product> productHashMapNew;
-    HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapOld;
-    HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapNew;
-    HashMap<Integer, QuantityUnit> quantityUnitHashMapOld;
-    HashMap<Integer, QuantityUnit> quantityUnitHashMapNew;
-    HashMap<Integer, Double> shoppingListItemAmountsHashMapOld;
-    HashMap<Integer, Double> shoppingListItemAmountsHashMapNew;
-    ArrayList<Integer> missingProductIdsOld;
-    ArrayList<Integer> missingProductIdsNew;
-    String groupingModeOld;
-    String groupingModeNew;
-    String extraFieldOld;
-    String extraFieldNew;
+    List<GroupedListItem> oldItems;
+    List<GroupedListItem> newItems;
 
     public DiffCallback(
-        ArrayList<GroupedListItem> oldItems,
-        ArrayList<GroupedListItem> newItems,
-        HashMap<Integer, Product> productHashMapOld,
-        HashMap<Integer, Product> productHashMapNew,
-        HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapOld,
-        HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapNew,
-        HashMap<Integer, QuantityUnit> quantityUnitHashMapOld,
-        HashMap<Integer, QuantityUnit> quantityUnitHashMapNew,
-        HashMap<Integer, Double> shoppingListItemAmountsHashMapOld,
-        HashMap<Integer, Double> shoppingListItemAmountsHashMapNew,
-        ArrayList<Integer> missingProductIdsOld,
-        ArrayList<Integer> missingProductIdsNew,
-        String groupingModeOld,
-        String groupingModeNew,
-        String extraFieldOld,
-        String extraFieldNew
+        List<GroupedListItem> oldItems,
+        List<GroupedListItem> newItems
     ) {
       this.oldItems = oldItems;
       this.newItems = newItems;
-      this.productHashMapOld = productHashMapOld;
-      this.productHashMapNew = productHashMapNew;
-      this.productLastPurchasedHashMapOld = productLastPurchasedHashMapOld;
-      this.productLastPurchasedHashMapNew = productLastPurchasedHashMapNew;
-      this.quantityUnitHashMapOld = quantityUnitHashMapOld;
-      this.quantityUnitHashMapNew = quantityUnitHashMapNew;
-      this.shoppingListItemAmountsHashMapOld = shoppingListItemAmountsHashMapOld;
-      this.shoppingListItemAmountsHashMapNew = shoppingListItemAmountsHashMapNew;
-      this.missingProductIdsOld = missingProductIdsOld;
-      this.missingProductIdsNew = missingProductIdsNew;
-      this.groupingModeOld = groupingModeOld;
-      this.groupingModeNew = groupingModeNew;
-      this.extraFieldOld = extraFieldOld;
-      this.extraFieldNew = extraFieldNew;
     }
 
     @Override
@@ -720,84 +241,91 @@ public class MealPlanEntryAdapter extends
     private boolean compare(int oldItemPos, int newItemPos, boolean compareContent) {
       int oldItemType = GroupedListItem.getType(
           oldItems.get(oldItemPos),
-          GroupedListItem.CONTEXT_SHOPPING_LIST
+          GroupedListItem.CONTEXT_MEAL_PLAN
       );
       int newItemType = GroupedListItem.getType(
           newItems.get(newItemPos),
-          GroupedListItem.CONTEXT_SHOPPING_LIST
+          GroupedListItem.CONTEXT_MEAL_PLAN
       );
       if (oldItemType != newItemType) {
         return false;
       }
-      if (!groupingModeOld.equals(groupingModeNew) || !extraFieldOld.equals(extraFieldNew)) {
-        return false;
-      }
       if (oldItemType == GroupedListItem.TYPE_ENTRY) {
-        ShoppingListItem newItem = (ShoppingListItem) newItems.get(newItemPos);
-        ShoppingListItem oldItem = (ShoppingListItem) oldItems.get(oldItemPos);
+        MealPlanEntry newItem = (MealPlanEntry) newItems.get(newItemPos);
+        MealPlanEntry oldItem = (MealPlanEntry) oldItems.get(oldItemPos);
         if (!compareContent) {
           return newItem.getId() == oldItem.getId();
         }
 
-        Integer productIdOld =
-            NumUtil.isStringInt(oldItem.getProductId()) ? Integer.parseInt(oldItem.getProductId())
-                : null;
-        Product productOld = productIdOld != null ? productHashMapOld.get(productIdOld) : null;
-
-        Integer productIdNew =
-            NumUtil.isStringInt(newItem.getProductId()) ? Integer.parseInt(newItem.getProductId())
-                : null;
-        Product productNew = productIdNew != null ? productHashMapNew.get(productIdNew) : null;
-
-        Integer quIdOld =
-            NumUtil.isStringInt(oldItem.getQuId()) ? Integer.parseInt(oldItem.getQuId()) : null;
-        QuantityUnit quOld = quIdOld != null ? quantityUnitHashMapOld.get(quIdOld) : null;
-
-        Integer quIdNew =
-            NumUtil.isStringInt(newItem.getQuId()) ? Integer.parseInt(newItem.getQuId()) : null;
-        QuantityUnit quNew = quIdNew != null ? quantityUnitHashMapNew.get(quIdNew) : null;
-
-        Double amountOld = shoppingListItemAmountsHashMapOld.get(oldItem.getId());
-        Double amountNew = shoppingListItemAmountsHashMapNew.get(newItem.getId());
-
-        Boolean missingOld =
-            productIdOld != null ? missingProductIdsOld.contains(productIdOld) : null;
-        Boolean missingNew =
-            productIdNew != null ? missingProductIdsNew.contains(productIdNew) : null;
-
-        if (extraFieldNew.equals(ShoppingListViewModel.FIELD_PRICE_LAST_UNIT)
-            || extraFieldNew.equals(ShoppingListViewModel.FIELD_PRICE_LAST_TOTAL)) {
-          ProductLastPurchased purchasedOld = productIdOld != null
-              ? productLastPurchasedHashMapOld.get(productIdOld) : null;
-          ProductLastPurchased purchasedNew = productIdNew != null
-              ? productLastPurchasedHashMapNew.get(productIdNew) : null;
-          if (purchasedOld == null && purchasedNew != null
-              || purchasedOld != null && purchasedNew != null && !purchasedOld.equals(purchasedNew)) {
-            return false;
-          }
-        }
-
-        if (productOld == null && productNew != null
-            || productOld != null && productNew != null && productOld.getId() != productNew.getId()
-            || quOld == null && quNew != null
-            || quOld != null && quNew != null && quOld.getId() != quNew.getId()
-            || !Objects.equals(amountOld, amountNew)
-            || missingOld == null && missingNew != null
-            || missingOld != null && missingNew != null && missingOld != missingNew
-        ) {
-          return false;
-        }
-
         return newItem.equals(oldItem);
-      } else if (oldItemType == GroupedListItem.TYPE_HEADER) {
+      } else {
         GroupHeader newGroup = (GroupHeader) newItems.get(newItemPos);
         GroupHeader oldGroup = (GroupHeader) oldItems.get(oldItemPos);
         return newGroup.equals(oldGroup);
-      } else { // Type: Bottom notes
-        ShoppingListBottomNotes newNotes = (ShoppingListBottomNotes) newItems.get(newItemPos);
-        ShoppingListBottomNotes oldNotes = (ShoppingListBottomNotes) oldItems.get(oldItemPos);
-        return newNotes.equals(oldNotes);
       }
     }
   }
+
+  public static class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
+
+    private final MealPlanEntryAdapter adapter;
+    private final MoveToOtherPageListener movePageListener;
+
+    public SimpleItemTouchHelperCallback(
+        MealPlanEntryAdapter adapter,
+        MoveToOtherPageListener movePageListener
+    ) {
+      this.adapter = adapter;
+      this.movePageListener = movePageListener;
+    }
+
+    @Override
+    public boolean isLongPressDragEnabled() {
+      return true;
+    }
+
+    @Override
+    public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+      int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN
+          | ItemTouchHelper.START | ItemTouchHelper.END;
+      return makeMovementFlags(dragFlags, 0);
+    }
+
+    @Override
+    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+      adapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+      return true;
+    }
+
+    @Override
+    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+    }
+
+    @Override
+    public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+      super.clearView(recyclerView, viewHolder);
+    }
+
+    @Override
+    public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+      super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+      if (actionState == ItemTouchHelper.ACTION_STATE_DRAG && isCurrentlyActive) {
+        float itemCenterX = viewHolder.itemView.getX() + viewHolder.itemView.getWidth() / 2 + dX;
+        float threshold = 0.8f; // 80% des Bildschirms, anpassen wie benötigt
+
+        if (itemCenterX >= recyclerView.getWidth() * threshold) {
+          movePageListener.moveToNextPage();
+        } else if (itemCenterX <= recyclerView.getWidth() * (1 - threshold)) {
+          movePageListener.moveToPreviousPage();
+        }
+      }
+    }
+  }
+
+  public interface MoveToOtherPageListener {
+    void moveToNextPage();
+    void moveToPreviousPage();
+  }
+
 }
