@@ -22,17 +22,18 @@ package xyz.zedler.patrick.grocy.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Canvas;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants.PREF;
@@ -40,15 +41,17 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowMealPlanEntryBinding;
-import xyz.zedler.patrick.grocy.databinding.RowShoppingListBottomNotesBinding;
-import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
+import xyz.zedler.patrick.grocy.databinding.RowMealPlanEntryConnectionBinding;
+import xyz.zedler.patrick.grocy.databinding.RowMealPlanSectionHeaderBinding;
 import xyz.zedler.patrick.grocy.model.GroupHeader;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.MealPlanEntry;
+import xyz.zedler.patrick.grocy.model.MealPlanEntryConnection;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
+import xyz.zedler.patrick.grocy.view.MaterialTimelineView;
 
 public class MealPlanEntryAdapter extends
     RecyclerView.Adapter<MealPlanEntryAdapter.ViewHolder> {
@@ -96,7 +99,26 @@ public class MealPlanEntryAdapter extends
     if (mealPlanEntries == null || mealPlanEntries.isEmpty()) {
       return groupedListItems;
     }
-    groupedListItems.addAll(mealPlanEntries);
+    GroupHeader groupHeader = new GroupHeader("Frühstück");
+    groupHeader.setDisplayDivider(false);
+    groupedListItems.add(groupHeader);
+    groupedListItems.add(new MealPlanEntryConnection());
+    for (MealPlanEntry entry : mealPlanEntries) {
+      groupedListItems.add(entry);
+
+      if (mealPlanEntries.size() > 1
+          && mealPlanEntries.indexOf(entry) < mealPlanEntries.size()-1) {
+        groupedListItems.add(new MealPlanEntryConnection());
+      }
+      int index = groupedListItems.indexOf(entry);
+      if (index == 0) {
+        entry.setItemPosition(MaterialTimelineView.POSITION_FIRST);
+      } else if (index == groupedListItems.size()-1) {
+        entry.setItemPosition(MaterialTimelineView.POSITION_LAST);
+      } else {
+        entry.setItemPosition(MaterialTimelineView.POSITION_MIDDLE);
+      }
+    }
     return groupedListItems;
   }
 
@@ -117,21 +139,21 @@ public class MealPlanEntryAdapter extends
     }
   }
 
-  public static class MealPlanGroupViewHolder extends ViewHolder {
+  public static class MealPlanEntryConnectionViewHolder extends ViewHolder {
 
-    private final RowShoppingListGroupBinding binding;
+    private final RowMealPlanEntryConnectionBinding binding;
 
-    public MealPlanGroupViewHolder(RowShoppingListGroupBinding binding) {
+    public MealPlanEntryConnectionViewHolder(RowMealPlanEntryConnectionBinding binding) {
       super(binding.getRoot());
       this.binding = binding;
     }
   }
 
-  public static class ShoppingListNotesViewHolder extends ViewHolder {
+  public static class MealPlanGroupViewHolder extends ViewHolder {
 
-    private final RowShoppingListBottomNotesBinding binding;
+    private final RowMealPlanSectionHeaderBinding binding;
 
-    public ShoppingListNotesViewHolder(RowShoppingListBottomNotesBinding binding) {
+    public MealPlanGroupViewHolder(RowMealPlanSectionHeaderBinding binding) {
       super(binding.getRoot());
       this.binding = binding;
     }
@@ -148,6 +170,23 @@ public class MealPlanEntryAdapter extends
   @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    if (viewType == GroupedListItem.TYPE_CONNECTION) {
+      return new MealPlanEntryConnectionViewHolder(
+          RowMealPlanEntryConnectionBinding.inflate(
+              LayoutInflater.from(parent.getContext()),
+              parent,
+              false
+          )
+      );
+    } else if (viewType == GroupedListItem.TYPE_HEADER) {
+      return new MealPlanGroupViewHolder(
+          RowMealPlanSectionHeaderBinding.inflate(
+              LayoutInflater.from(parent.getContext()),
+              parent,
+              false
+          )
+      );
+    }
     return new MealPlanEntryViewHolder(
         RowMealPlanEntryBinding.inflate(
             LayoutInflater.from(parent.getContext()),
@@ -165,8 +204,25 @@ public class MealPlanEntryAdapter extends
 
     int type = getItemViewType(viewHolder.getAdapterPosition());
 
+    if (type == GroupedListItem.TYPE_CONNECTION) {
+      return;
+    } else if (type == GroupedListItem.TYPE_HEADER) {
+      GroupHeader groupHeader = (GroupHeader) groupedListItem;
+      RowMealPlanSectionHeaderBinding binding = ((MealPlanGroupViewHolder) viewHolder).binding;
+
+      Context context = binding.getRoot().getContext();
+      ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
+      binding.timelineView.setBackgroundColor(colorBlue.getAccentContainer());
+      binding.timelineView.setPosition(groupHeader.getDisplayDivider() == 1
+          ? MaterialTimelineView.POSITION_MIDDLE : MaterialTimelineView.POSITION_FIRST);
+      binding.name.setTextColor(colorBlue.getOnAccentContainer());
+      binding.name.setText(groupHeader.getGroupName());
+      return;
+    }
+
     MealPlanEntry entry = (MealPlanEntry) groupedListItem;
     RowMealPlanEntryBinding binding = ((MealPlanEntryViewHolder) viewHolder).binding;
+    binding.timelineView.setPosition(entry.getItemPosition());
 
     Context context = binding.getRoot().getContext();
     ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
@@ -185,9 +241,24 @@ public class MealPlanEntryAdapter extends
     return groupedListItems;
   }
 
-  public void onItemMove(int fromPosition, int toPosition) {
-    // Collections.swap(mData, fromPosition, toPosition);
-    notifyItemMoved(fromPosition, toPosition);
+  private void showOrHideAllConnections(RecyclerView recyclerView, boolean show) {
+    for (int i = 0; i < recyclerView.getChildCount(); i++) {
+      View child = recyclerView.getChildAt(i);
+      RecyclerView.ViewHolder viewHolder = recyclerView.getChildViewHolder(child);
+      if (viewHolder instanceof MealPlanEntryConnectionViewHolder) {
+        ((MealPlanEntryConnectionViewHolder) viewHolder).binding.timelineView
+            .setShowLineAndRadio(show);
+        ((MealPlanEntryConnectionViewHolder) viewHolder).binding.timelineView.invalidate();
+      } else if (viewHolder instanceof MealPlanEntryViewHolder) {
+        ((MealPlanEntryViewHolder) viewHolder).binding.timelineView
+            .setShowLineAndRadio(show);
+        ((MealPlanEntryViewHolder) viewHolder).binding.timelineView.invalidate();
+      } else if (viewHolder instanceof MealPlanGroupViewHolder) {
+        ((MealPlanGroupViewHolder) viewHolder).binding.timelineView
+            .setShowLineAndRadio(show);
+        ((MealPlanGroupViewHolder) viewHolder).binding.timelineView.invalidate();
+      }
+    }
   }
 
   public void updateData(
@@ -256,8 +327,11 @@ public class MealPlanEntryAdapter extends
         if (!compareContent) {
           return newItem.getId() == oldItem.getId();
         }
-
         return newItem.equals(oldItem);
+      } else if (oldItemType == GroupedListItem.TYPE_CONNECTION) {
+        MealPlanEntryConnection newConnection = (MealPlanEntryConnection) newItems.get(newItemPos);
+        MealPlanEntryConnection oldConnection = (MealPlanEntryConnection) oldItems.get(oldItemPos);
+        return newConnection.equals(oldConnection);
       } else {
         GroupHeader newGroup = (GroupHeader) newItems.get(newItemPos);
         GroupHeader oldGroup = (GroupHeader) oldItems.get(oldItemPos);
@@ -269,14 +343,11 @@ public class MealPlanEntryAdapter extends
   public static class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     private final MealPlanEntryAdapter adapter;
-    private final MoveToOtherPageListener movePageListener;
+    private final RecyclerView recyclerView;
 
-    public SimpleItemTouchHelperCallback(
-        MealPlanEntryAdapter adapter,
-        MoveToOtherPageListener movePageListener
-    ) {
+    public SimpleItemTouchHelperCallback(MealPlanEntryAdapter adapter, RecyclerView recyclerView) {
       this.adapter = adapter;
-      this.movePageListener = movePageListener;
+      this.recyclerView = recyclerView;
     }
 
     @Override
@@ -286,15 +357,20 @@ public class MealPlanEntryAdapter extends
 
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-      int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN
-          | ItemTouchHelper.START | ItemTouchHelper.END;
+      if (viewHolder instanceof MealPlanGroupViewHolder
+          || viewHolder instanceof MealPlanEntryConnectionViewHolder) return 0;
+      int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
       return makeMovementFlags(dragFlags, 0);
     }
 
     @Override
-    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-      adapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-      return true;
+    public boolean onMove(@NonNull RecyclerView recyclerView,
+        @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+      int fromPosition = viewHolder.getAdapterPosition();
+      int toPosition = target.getAdapterPosition();
+      Collections.swap(adapter.getGroupedListItems(), fromPosition, toPosition);
+      adapter.notifyItemMoved(fromPosition, toPosition);
+      return false;
     }
 
     @Override
@@ -302,30 +378,20 @@ public class MealPlanEntryAdapter extends
     }
 
     @Override
-    public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-      super.clearView(recyclerView, viewHolder);
+    public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
+      super.onSelectedChanged(viewHolder, actionState);
+
+      if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
+        adapter.showOrHideAllConnections(recyclerView, false);
+      } else if (actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
+        adapter.showOrHideAllConnections(recyclerView, true);
+      }
     }
 
     @Override
-    public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-      super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-
-      if (actionState == ItemTouchHelper.ACTION_STATE_DRAG && isCurrentlyActive) {
-        float itemCenterX = viewHolder.itemView.getX() + viewHolder.itemView.getWidth() / 2 + dX;
-        float threshold = 0.8f; // 80% des Bildschirms, anpassen wie benötigt
-
-        if (itemCenterX >= recyclerView.getWidth() * threshold) {
-          movePageListener.moveToNextPage();
-        } else if (itemCenterX <= recyclerView.getWidth() * (1 - threshold)) {
-          movePageListener.moveToPreviousPage();
-        }
-      }
+    public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+      super.clearView(recyclerView, viewHolder);
     }
-  }
-
-  public interface MoveToOtherPageListener {
-    void moveToNextPage();
-    void moveToPreviousPage();
   }
 
 }

@@ -19,16 +19,11 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.content.res.Resources.Theme;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -50,7 +45,6 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.Locale;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.adapter.MealPlanEntryAdapter.MoveToOtherPageListener;
 import xyz.zedler.patrick.grocy.adapter.MealPlanPagerAdapter;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMealPlanBinding;
@@ -92,9 +86,8 @@ public class MealPlanFragment extends BaseFragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    StockOverviewFragmentArgs args = StockOverviewFragmentArgs.fromBundle(requireArguments());
     viewModel = new ViewModelProvider(this, new MealPlanViewModel
-        .MealPlanViewModelFactory(activity.getApplication(), args)
+        .MealPlanViewModelFactory(activity.getApplication())
     ).get(MealPlanViewModel.class);
     viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
@@ -127,17 +120,13 @@ public class MealPlanFragment extends BaseFragment {
         );
         container.binding.day.setText(String.valueOf(data.getDate().getDayOfMonth()));
 
+        int colorOutline = ResUtil.getColorAttr(activity, R.attr.colorOutline);
         if (viewModel.getSelectedDate().isEqual(data.getDate())) {
-          container.binding.card.setStrokeColor(ContextCompat.getColor(requireContext(), R.color.material_dynamic_secondary50));
-          container.binding.card.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.material_dynamic_secondary50));
+          container.binding.card.setStrokeColor(colorOutline);
+          container.binding.card.setCardBackgroundColor(colorOutline);
           container.binding.weekday.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
           container.binding.day.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
         } else {
-          TypedValue typedValue = new TypedValue();
-          Theme theme = requireContext().getTheme();
-          theme.resolveAttribute(R.attr.colorOutline, typedValue, true);
-          @ColorInt int colorOutline = typedValue.data;
-
           container.binding.card.setStrokeColor(colorOutline);
           container.binding.card.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent));
           int textColor = ResUtil.getColorAttr(activity, R.attr.colorOnBackground);
@@ -182,39 +171,8 @@ public class MealPlanFragment extends BaseFragment {
     });
 
     MealPlanPagerAdapter adapter = new MealPlanPagerAdapter(
-        activity,
         this,
-        viewModel.getSelectedDate(),
-        new MoveToOtherPageListener() {
-          @Override
-          public void moveToNextPage() {
-            if (viewModel.isSmoothScrolling()) return;
-            viewModel.setSmoothScrolling(true);
-            binding.viewPager.setLayoutAnimationListener(new AnimationListener() {
-              @Override
-              public void onAnimationStart(Animation animation) {
-                viewModel.setSmoothScrolling(true);
-              }
-
-              @Override
-              public void onAnimationEnd(Animation animation) {
-
-              }
-
-              @Override
-              public void onAnimationRepeat(Animation animation) {
-
-              }
-            });
-            binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() + 1, true);
-
-          }
-
-          @Override
-          public void moveToPreviousPage() {
-
-          }
-        }
+        viewModel.getSelectedDate()
     );
     binding.viewPager.setAdapter(adapter);
 

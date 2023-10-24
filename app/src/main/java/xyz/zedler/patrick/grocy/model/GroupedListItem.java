@@ -25,6 +25,7 @@ public abstract class GroupedListItem {
   public static final int TYPE_ENTRY = 1;
   public static final int TYPE_BOTTOM_NOTES = 2;
   public static final int TYPE_INFO = 3;
+  public static final int TYPE_CONNECTION = 4;
 
   public static final String CONTEXT_SHOPPING_LIST = "shopping_list";
   public static final String CONTEXT_STOCK_OVERVIEW = "stock_overview";
@@ -73,6 +74,8 @@ public abstract class GroupedListItem {
       case CONTEXT_MEAL_PLAN:
         if (groupedListItem instanceof MealPlanEntry) {
           return GroupedListItem.TYPE_ENTRY;
+        } else if (groupedListItem instanceof MealPlanEntryConnection) {
+          return GroupedListItem.TYPE_CONNECTION;
         } else {
           return GroupedListItem.TYPE_HEADER;
         }

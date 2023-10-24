@@ -32,21 +32,15 @@
     android:id="@+id/timeline_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@macro/m3_comp_filled_card_container_color"
+    android:background="@android:color/transparent"
     android:padding="16dp"
     app:timeline_margin_start="32dp"
     app:timeline_position="middle"
-    app:timeline_type="item"
+    app:timeline_type="line"
     app:timeline_bottom_radio_color="?attr/colorOutline"
-    app:timeline_top_radio_color="?attr/colorOutline">
+    app:timeline_top_radio_color="?attr/colorOutline"
+    app:timeline_line_color="?attr/colorOutline">
 
-    <TextView
-      android:id="@+id/name"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textColor="?attr/colorOnSecondaryFixedVariant"
-      android:textSize="18sp"
-      android:textStyle="bold"/>
 
   </xyz.zedler.patrick.grocy.view.MaterialTimelineView>
 

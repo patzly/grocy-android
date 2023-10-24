@@ -40,11 +40,11 @@
     app:timeline_bottom_radio_color="?attr/colorOutline"
     app:timeline_top_radio_color="?attr/colorOutline">
 
+
     <TextView
       android:id="@+id/name"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textColor="?attr/colorOnSecondaryFixedVariant"
       android:textSize="18sp"
       android:textStyle="bold"/>
 

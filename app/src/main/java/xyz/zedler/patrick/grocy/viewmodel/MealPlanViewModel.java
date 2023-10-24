@@ -34,7 +34,6 @@ import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.fragment.StockOverviewFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.MealPlanEntry;
@@ -73,7 +72,7 @@ public class MealPlanViewModel extends BaseViewModel {
   private boolean initialScrollDone;
   private final boolean debug;
 
-  public MealPlanViewModel(@NonNull Application application, StockOverviewFragmentArgs args) {
+  public MealPlanViewModel(@NonNull Application application) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
@@ -221,21 +220,16 @@ public class MealPlanViewModel extends BaseViewModel {
   public static class MealPlanViewModelFactory implements ViewModelProvider.Factory {
 
     private final Application application;
-    private final StockOverviewFragmentArgs args;
 
-    public MealPlanViewModelFactory(
-        Application application,
-        StockOverviewFragmentArgs args
-    ) {
+    public MealPlanViewModelFactory(Application application) {
       this.application = application;
-      this.args = args;
     }
 
     @NonNull
     @Override
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-      return (T) new MealPlanViewModel(application, args);
+      return (T) new MealPlanViewModel(application);
     }
   }
 }

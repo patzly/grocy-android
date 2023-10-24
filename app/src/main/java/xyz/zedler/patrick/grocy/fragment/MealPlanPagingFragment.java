@@ -32,7 +32,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import xyz.zedler.patrick.grocy.adapter.MealPlanEntryAdapter;
-import xyz.zedler.patrick.grocy.adapter.MealPlanEntryAdapter.MoveToOtherPageListener;
 import xyz.zedler.patrick.grocy.adapter.MealPlanEntryAdapter.SimpleItemTouchHelperCallback;
 import xyz.zedler.patrick.grocy.databinding.FragmentMealPlanPagingBinding;
 import xyz.zedler.patrick.grocy.viewmodel.MealPlanViewModel;
@@ -43,21 +42,14 @@ public class MealPlanPagingFragment extends Fragment {
   private LocalDate date;
   private DateTimeFormatter dateFormatter;
   private FragmentMealPlanPagingBinding binding;
-  private final MealPlanViewModel viewModel;
-  private final MoveToOtherPageListener movePageListener;
+  private MealPlanViewModel viewModel;
 
-  public MealPlanPagingFragment(MealPlanViewModel viewModel, MoveToOtherPageListener listener) {
-    this.viewModel = viewModel;
-    this.movePageListener = listener;
+  // required empty constructor
+  public MealPlanPagingFragment() {
   }
 
-  public static MealPlanPagingFragment newInstance(
-      Fragment parentFragment, LocalDate date, MoveToOtherPageListener movePageListener
-  ) {
-    MealPlanPagingFragment fragment = new MealPlanPagingFragment(
-        new ViewModelProvider(parentFragment).get(MealPlanViewModel.class),
-        movePageListener
-    );
+  public static MealPlanPagingFragment newInstance(LocalDate date) {
+    MealPlanPagingFragment fragment = new MealPlanPagingFragment();
     Bundle args = new Bundle();
     args.putSerializable(ARG_DATE, date);
     fragment.setArguments(args);
@@ -73,7 +65,7 @@ public class MealPlanPagingFragment extends Fragment {
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     binding = FragmentMealPlanPagingBinding.inflate(inflater, container, false);
     return binding.getRoot();
@@ -81,8 +73,9 @@ public class MealPlanPagingFragment extends Fragment {
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    //binding.text.setText(date.toString());
+    viewModel = new ViewModelProvider(requireParentFragment(), new MealPlanViewModel
+        .MealPlanViewModelFactory(requireActivity().getApplication())
+    ).get(MealPlanViewModel.class);
 
     dateFormatter = new DateTimeFormatterBuilder()
         .appendPattern("yyyy-MM-dd")
@@ -91,10 +84,7 @@ public class MealPlanPagingFragment extends Fragment {
     MealPlanEntryAdapter adapter = new MealPlanEntryAdapter(requireContext());
     binding.recycler.setAdapter(adapter);
 
-    ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(
-        adapter,
-        movePageListener
-    );
+    ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter, binding.recycler);
     ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
     touchHelper.attachToRecyclerView(binding.recycler);
 

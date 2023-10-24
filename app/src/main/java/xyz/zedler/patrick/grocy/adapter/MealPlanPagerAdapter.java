@@ -21,35 +21,27 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import java.time.LocalDate;
-import xyz.zedler.patrick.grocy.adapter.MealPlanEntryAdapter.MoveToOtherPageListener;
 import xyz.zedler.patrick.grocy.fragment.MealPlanPagingFragment;
 
 public class MealPlanPagerAdapter extends FragmentStateAdapter {
 
-  private final Fragment parentFragment;
   private final LocalDate startDate;
-  private final MoveToOtherPageListener movePageListener;
 
   public MealPlanPagerAdapter(
-      @NonNull FragmentActivity fragmentActivity,
-      Fragment parentFragment,
-      LocalDate startDate,
-      MoveToOtherPageListener movePageListener
+      @NonNull Fragment parentFragment,
+      LocalDate startDate
   ) {
-    super(fragmentActivity);
+    super(parentFragment);
     this.startDate = startDate;
-    this.parentFragment = parentFragment;
-    this.movePageListener = movePageListener;
   }
 
   @NonNull
   @Override
   public Fragment createFragment(int position) {
     LocalDate date = LocalDate.now().plusDays(position - Integer.MAX_VALUE / 2);
-    return MealPlanPagingFragment.newInstance(parentFragment, date, movePageListener);
+    return MealPlanPagingFragment.newInstance(date);
   }
 
   @Override

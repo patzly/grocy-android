@@ -26,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
@@ -97,6 +98,10 @@ public class MealPlanEntry extends GroupedListItem implements Parcelable {
   @SerializedName("section_id")
   private String sectionId;
 
+  @Ignore
+  @SerializedName("item_position")
+  private int itemPosition;
+
   public MealPlanEntry() {
   }
 
@@ -112,6 +117,7 @@ public class MealPlanEntry extends GroupedListItem implements Parcelable {
     productQuId = parcel.readString();
     done = parcel.readString();
     sectionId = parcel.readString();
+    itemPosition = parcel.readInt();
   }
 
   @Override
@@ -127,6 +133,7 @@ public class MealPlanEntry extends GroupedListItem implements Parcelable {
     dest.writeString(productQuId);
     dest.writeString(done);
     dest.writeString(sectionId);
+    dest.writeInt(itemPosition);
   }
 
   public static final Creator<MealPlanEntry> CREATOR = new Creator<>() {
@@ -230,6 +237,14 @@ public class MealPlanEntry extends GroupedListItem implements Parcelable {
     this.sectionId = sectionId;
   }
 
+  public int getItemPosition() {
+    return itemPosition;
+  }
+
+  public void setItemPosition(int itemPosition) {
+    this.itemPosition = itemPosition;
+  }
+
   @Override
   public int describeContents() {
     return 0;
@@ -250,13 +265,13 @@ public class MealPlanEntry extends GroupedListItem implements Parcelable {
         && Objects.equals(productId, that.productId) && Objects.equals(
         productAmount, that.productAmount) && Objects.equals(productQuId, that.productQuId)
         && Objects.equals(done, that.done) && Objects.equals(sectionId,
-        that.sectionId);
+        that.sectionId) && Objects.equals(itemPosition, that.itemPosition);
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(id, day, type, recipeId, recipeServings, note, productId, productAmount,
-        productQuId, done, sectionId);
+        productQuId, done, sectionId, itemPosition);
   }
 
   public static MealPlanEntry getFromId(List<MealPlanEntry> entries, int id) {

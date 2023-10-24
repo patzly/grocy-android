@@ -32,4 +32,22 @@
     <attr name="showBottomShadow" format="boolean" />
   </declare-styleable>
 
+  <declare-styleable name="MaterialTimelineView" parent="">
+    <attr name="timeline_position">
+      <enum name="first" value="0"/>
+      <enum name="middle" value="1"/>
+      <enum name="last" value="2"/>
+    </attr>
+    <attr name="timeline_type">
+      <enum name="line" value="0"/>
+      <enum name="item" value="1"/>
+    </attr>
+    <attr name="timeline_radio_radius" format="dimension"/>
+    <attr name="timeline_radio_outline_radius" format="dimension"/>
+    <attr name="timeline_margin_start" format="dimension"/>
+    <attr name="timeline_top_radio_color" format="color"/>
+    <attr name="timeline_bottom_radio_color" format="color"/>
+    <attr name="timeline_line_color" format="color"/>
+  </declare-styleable>
+
 </resources>

@@ -519,6 +519,11 @@ public class UiUtil {
     return Math.round(dp * r.getDisplayMetrics().density);
   }
 
+  public static float dpToPxFloat(@NonNull Context context, @Dimension(unit = Dimension.DP) float dp) {
+    Resources r = context.getResources();
+    return dp * r.getDisplayMetrics().density;
+  }
+
   public static int spToPx(@NonNull Context context, @Dimension(unit = Dimension.SP) float sp) {
     Resources r = context.getResources();
     return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, r.getDisplayMetrics());

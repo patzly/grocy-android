@@ -116,6 +116,7 @@
         app:cv_dayViewResource="@layout/view_calendar_day_layout"
         app:cv_daySize="rectangle"
         android:paddingHorizontal="8dp"
+        android:layout_marginBottom="8dp"
         android:clipToPadding="false"/>
 
       <com.google.android.material.divider.MaterialDivider
