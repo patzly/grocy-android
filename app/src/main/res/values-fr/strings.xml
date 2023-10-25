@@ -630,6 +630,7 @@
   <string name="title_chores">Corvées</string>
   <string name="title_chore">Corvée</string>
   <string name="title_recipes">Recettes</string>
+  <string name="title_meal_plan">Plan de repas</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Éditeur</string>
   <string name="title_task_new">Nouvelle tâche</string>
@@ -1105,6 +1106,8 @@
   <string name="date_unlimited">Illimitée</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Jamais</string>
+  <!-- %1$s is 'from' date, %2$s is 'to' date -->
+  <string name="date_timespan">%1$s - %2$s</string>
 
   <plurals name="date_days">
     <item quantity="one">%d jour</item>
