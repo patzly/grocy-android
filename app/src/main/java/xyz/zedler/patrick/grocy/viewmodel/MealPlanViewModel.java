@@ -26,6 +26,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
+import com.bumptech.glide.load.model.LazyHeaders;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -37,22 +38,31 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.MealPlanEntry;
+import xyz.zedler.patrick.grocy.model.MealPlanSection;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.repository.MealPlanRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class MealPlanViewModel extends BaseViewModel {
 
   private final static String TAG = ShoppingListViewModel.class.getSimpleName();
 
+  public final static String FIELD_FULFILLMENT = "field_fulfillment";
+  public final static String FIELD_CALORIES = "field_calories";
+  public final static String FIELD_PICTURE = "field_picture";
+
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
+  private final LazyHeaders grocyAuthHeaders;
   private final MealPlanRepository repository;
   private final PluralUtil pluralUtil;
 
@@ -63,7 +73,9 @@ public class MealPlanViewModel extends BaseViewModel {
   private final MutableLiveData<HashMap<String, List<MealPlanEntry>>> mealPlanEntriesLive;
 
   private List<MealPlanEntry> mealPlanEntries;
+  private List<MealPlanSection> mealPlanSections;
   private List<Product> products;
+  private HashMap<Integer, Recipe> recipeHashMap;
   private HashMap<Integer, Product> productHashMap;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
   private boolean isSmoothScrolling;
@@ -86,6 +98,7 @@ public class MealPlanViewModel extends BaseViewModel {
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
+    grocyAuthHeaders = RequestHeaders.getGlideGrocyAuthHeaders(getApplication());
     repository = new MealPlanRepository(application);
     pluralUtil = new PluralUtil(application);
 
@@ -100,6 +113,9 @@ public class MealPlanViewModel extends BaseViewModel {
       quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
       this.products = data.getProducts();
       productHashMap = ArrayUtil.getProductsHashMap(data.getProducts());
+      recipeHashMap = ArrayUtil.getRecipesHashMap(data.getRecipes());
+      this.mealPlanSections = data.getMealPlanSections();
+      SortUtil.sortMealPlanSections(this.mealPlanSections);
       this.mealPlanEntries = data.getMealPlanEntries();
       mealPlanEntriesLive.setValue(ArrayUtil.getMealPlanEntriesForDayHashMap(
           data.getMealPlanEntries()
@@ -126,6 +142,8 @@ public class MealPlanViewModel extends BaseViewModel {
         QuantityUnit.class,
         ProductGroup.class,
         MealPlanEntry.class,
+        MealPlanSection.class,
+        Recipe.class,
         Product.class
     );
   }
@@ -148,6 +166,14 @@ public class MealPlanViewModel extends BaseViewModel {
 
   public MutableLiveData<HashMap<String, List<MealPlanEntry>>> getMealPlanEntriesLive() {
     return mealPlanEntriesLive;
+  }
+
+  public List<MealPlanSection> getMealPlanSections() {
+    return mealPlanSections;
+  }
+
+  public HashMap<Integer, Recipe> getRecipeHashMap() {
+    return recipeHashMap;
   }
 
   public HashMap<Integer, Product> getProductHashMap() {
@@ -195,6 +221,14 @@ public class MealPlanViewModel extends BaseViewModel {
   @NonNull
   public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
     return infoFullscreenLive;
+  }
+
+  public GrocyApi getGrocyApi() {
+    return grocyApi;
+  }
+
+  public LazyHeaders getGrocyAuthHeaders() {
+    return grocyAuthHeaders;
   }
 
   public boolean isFeatureEnabled(String pref) {

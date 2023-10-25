@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -24,9 +23,9 @@ public class MaterialTimelineView extends ConstraintLayout {
   public static final int POSITION_FIRST = 0;
   public static final int POSITION_MIDDLE = 1;
   public static final int POSITION_LAST = 2;
-  private static final int DEFAULT_RADIO_RADIUS_DP = 12;
-  private static final int DEFAULT_RADIO_OUTLINE_RADIUS_DP = 16;
-  private static final int DEFAULT_RADIO_MARGIN_START_DP = 32;
+  private static final int DEFAULT_RADIO_RADIUS_DP = 5;
+  private static final int DEFAULT_RADIO_OUTLINE_RADIUS_DP = 8;
+  private static final int DEFAULT_RADIO_MARGIN_START_DP = 44;
 
   private int position = POSITION_FIRST;
   private int timelineType = TIMELINE_TYPE_LINE;
@@ -151,15 +150,12 @@ public class MaterialTimelineView extends ConstraintLayout {
   private void initAttrs(TypedArray typedArray) {
     this.position = typedArray.getInteger(R.styleable.MaterialTimelineView_timeline_position, POSITION_FIRST);
     this.timelineType = typedArray.getInteger(R.styleable.MaterialTimelineView_timeline_type, TIMELINE_TYPE_LINE);
-    this.radioRadius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX,
-        typedArray.getDimension(R.styleable.MaterialTimelineView_timeline_radio_radius, DEFAULT_RADIO_RADIUS_DP),
-        getResources().getDisplayMetrics());
-    this.radioOutlineRadius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX,
-        typedArray.getDimension(R.styleable.MaterialTimelineView_timeline_radio_outline_radius, DEFAULT_RADIO_OUTLINE_RADIUS_DP),
-        getResources().getDisplayMetrics());
-    this.radioMarginStart = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX,
-        typedArray.getDimension(R.styleable.MaterialTimelineView_timeline_margin_start, DEFAULT_RADIO_MARGIN_START_DP),
-        getResources().getDisplayMetrics());
+    this.radioRadius = UiUtil.dpToPxFloat(getContext(),
+        typedArray.getDimension(R.styleable.MaterialTimelineView_timeline_radio_radius, DEFAULT_RADIO_RADIUS_DP));
+    this.radioOutlineRadius = UiUtil.dpToPxFloat(getContext(),
+        typedArray.getDimension(R.styleable.MaterialTimelineView_timeline_radio_outline_radius, DEFAULT_RADIO_OUTLINE_RADIUS_DP));
+    this.radioMarginStart = UiUtil.dpToPxFloat(getContext(), typedArray.getDimension(
+        R.styleable.MaterialTimelineView_timeline_margin_start, DEFAULT_RADIO_MARGIN_START_DP));
     this.topRadioColor = typedArray.getColor(R.styleable.MaterialTimelineView_timeline_top_radio_color, Color.WHITE);
     this.bottomRadioColor = typedArray.getColor(R.styleable.MaterialTimelineView_timeline_bottom_radio_color, Color.WHITE);
     this.lineColor = typedArray.getColor(R.styleable.MaterialTimelineView_timeline_line_color, Color.WHITE);

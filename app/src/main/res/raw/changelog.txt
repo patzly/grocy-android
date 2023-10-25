@@ -1,5 +1,6 @@
 ## 3.4.0
 
+- New: Display meal plan (#524)
 - New: Initial support for viewing userfields (custom values) on stock overview, recipes overview
   and recipe page; grouping and sorting by userfield is also possible (#601)
 - New: Added option to backup and restore settings with file (#437)

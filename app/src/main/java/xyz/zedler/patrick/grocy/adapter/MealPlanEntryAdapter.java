@@ -27,31 +27,40 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.load.model.LazyHeaders;
 import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.RowMealPlanEntryBinding;
 import xyz.zedler.patrick.grocy.databinding.RowMealPlanEntryConnectionBinding;
 import xyz.zedler.patrick.grocy.databinding.RowMealPlanSectionHeaderBinding;
-import xyz.zedler.patrick.grocy.model.GroupHeader;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.MealPlanEntry;
 import xyz.zedler.patrick.grocy.model.MealPlanEntryConnection;
+import xyz.zedler.patrick.grocy.model.MealPlanSection;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.Recipe;
+import xyz.zedler.patrick.grocy.util.ChipUtil;
+import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PictureUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.view.MaterialTimelineView;
+import xyz.zedler.patrick.grocy.viewmodel.MealPlanViewModel;
 
 public class MealPlanEntryAdapter extends
     RecyclerView.Adapter<MealPlanEntryAdapter.ViewHolder> {
@@ -59,19 +68,19 @@ public class MealPlanEntryAdapter extends
   private final static String TAG = MealPlanEntryAdapter.class.getSimpleName();
 
   private final List<GroupedListItem> groupedListItems;
+  private final HashMap<Integer, Recipe> recipeHashMap;
   private final HashMap<Integer, Product> productHashMap;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+  private final List<String> activeFields;
   private final PluralUtil pluralUtil;
-  private String groupingMode;
-  private String extraField;
+  private final GrocyApi grocyApi;
+  private final LazyHeaders grocyAuthHeaders;
   private final int maxDecimalPlacesAmount;
   private final int decimalPlacesPriceDisplay;
   private final String currency;
   private final boolean priceTrackingEnabled;
 
-  public MealPlanEntryAdapter(
-      Context context
-  ) {
+  public MealPlanEntryAdapter(Context context, GrocyApi grocyApi, LazyHeaders grocyAuthHeaders) {
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     this.maxDecimalPlacesAmount = sharedPrefs.getInt(
         STOCK.DECIMAL_PLACES_AMOUNT,
@@ -84,39 +93,69 @@ public class MealPlanEntryAdapter extends
     this.currency = sharedPrefs.getString(PREF.CURRENCY, "");
     this.priceTrackingEnabled = sharedPrefs
         .getBoolean(PREF.FEATURE_STOCK_PRICE_TRACKING, true);
+    this.recipeHashMap = new HashMap<>();
     this.productHashMap = new HashMap<>();
     this.quantityUnitHashMap = new HashMap<>();
+    this.activeFields = new ArrayList<>();
+    this.activeFields.add(MealPlanViewModel.FIELD_PICTURE);
     this.pluralUtil = new PluralUtil(context);
-    this.groupingMode = groupingMode;
-    this.extraField = extraField;
+    this.grocyApi = grocyApi;
+    this.grocyAuthHeaders = grocyAuthHeaders;
     this.groupedListItems = new ArrayList<>();
   }
 
   static ArrayList<GroupedListItem> getGroupedListItems(
-      List<MealPlanEntry> mealPlanEntries
+      List<MealPlanEntry> mealPlanEntries,
+      List<MealPlanSection> mealPlanSections
   ) {
     ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
     if (mealPlanEntries == null || mealPlanEntries.isEmpty()) {
       return groupedListItems;
     }
-    GroupHeader groupHeader = new GroupHeader("Frühstück");
-    groupHeader.setDisplayDivider(false);
-    groupedListItems.add(groupHeader);
-    groupedListItems.add(new MealPlanEntryConnection());
+    HashMap<Integer, List<MealPlanEntry>> mealPlanEntriesGrouped = new HashMap<>();
     for (MealPlanEntry entry : mealPlanEntries) {
-      groupedListItems.add(entry);
-
-      if (mealPlanEntries.size() > 1
-          && mealPlanEntries.indexOf(entry) < mealPlanEntries.size()-1) {
+      int sectionId = NumUtil.isStringInt(entry.getSectionId())
+          ? Integer.parseInt(entry.getSectionId()) : -1;
+      List<MealPlanEntry> list = mealPlanEntriesGrouped.get(sectionId);
+      if (list == null) {
+        list = new ArrayList<>();
+        mealPlanEntriesGrouped.put(sectionId, list);
+      }
+      list.add(entry);
+    }
+    for (MealPlanSection section : mealPlanSections) {
+      List<MealPlanEntry> list = mealPlanEntriesGrouped.get(section.getId());
+      if (list == null || list.isEmpty()) {
+        continue;
+      }
+      if (section.getName() != null && !section.getName().isBlank()) {
+        if (!groupedListItems.isEmpty()) {
+          GroupedListItem lastItem = groupedListItems.get(groupedListItems.size()-1);
+          if (lastItem instanceof MealPlanEntry) {
+            ((MealPlanEntry) lastItem).setItemPosition(groupedListItems.size() > 1
+                ? MaterialTimelineView.POSITION_MIDDLE : MaterialTimelineView.POSITION_FIRST);
+          }
+          groupedListItems.add(new MealPlanEntryConnection());
+        }
+        groupedListItems.add(section);
+        section.setTopItem(groupedListItems.indexOf(section) == 0);
         groupedListItems.add(new MealPlanEntryConnection());
       }
-      int index = groupedListItems.indexOf(entry);
-      if (index == 0) {
-        entry.setItemPosition(MaterialTimelineView.POSITION_FIRST);
-      } else if (index == groupedListItems.size()-1) {
-        entry.setItemPosition(MaterialTimelineView.POSITION_LAST);
-      } else {
-        entry.setItemPosition(MaterialTimelineView.POSITION_MIDDLE);
+
+      for (MealPlanEntry entry : list) {
+        groupedListItems.add(entry);
+
+        if (list.size() > 1 && list.indexOf(entry) < list.size()-1) {
+          groupedListItems.add(new MealPlanEntryConnection());
+        }
+        int index = groupedListItems.indexOf(entry);
+        if (index == 0) {
+          entry.setItemPosition(MaterialTimelineView.POSITION_FIRST);
+        } else if (index == groupedListItems.size()-1) {
+          entry.setItemPosition(MaterialTimelineView.POSITION_LAST);
+        } else {
+          entry.setItemPosition(MaterialTimelineView.POSITION_MIDDLE);
+        }
       }
     }
     return groupedListItems;
@@ -207,16 +246,16 @@ public class MealPlanEntryAdapter extends
     if (type == GroupedListItem.TYPE_CONNECTION) {
       return;
     } else if (type == GroupedListItem.TYPE_HEADER) {
-      GroupHeader groupHeader = (GroupHeader) groupedListItem;
+      MealPlanSection section = (MealPlanSection) groupedListItem;
       RowMealPlanSectionHeaderBinding binding = ((MealPlanGroupViewHolder) viewHolder).binding;
 
       Context context = binding.getRoot().getContext();
       ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
       binding.timelineView.setBackgroundColor(colorBlue.getAccentContainer());
-      binding.timelineView.setPosition(groupHeader.getDisplayDivider() == 1
-          ? MaterialTimelineView.POSITION_MIDDLE : MaterialTimelineView.POSITION_FIRST);
+      binding.timelineView.setPosition(section.isTopItem()
+          ? MaterialTimelineView.POSITION_FIRST : MaterialTimelineView.POSITION_MIDDLE);
       binding.name.setTextColor(colorBlue.getOnAccentContainer());
-      binding.name.setText(groupHeader.getGroupName());
+      binding.name.setText(section.getName());
       return;
     }
 
@@ -227,8 +266,140 @@ public class MealPlanEntryAdapter extends
     Context context = binding.getRoot().getContext();
     ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
 
-    // NAME
-    binding.name.setText(entry.getType());
+    binding.title.setText(entry.getType());
+    binding.subtitle.setVisibility(View.GONE);
+    binding.picture.setVisibility(View.GONE);
+    binding.picturePlaceholder.setVisibility(View.GONE);
+    binding.flexboxLayout.setVisibility(View.GONE);
+
+    if (entry.getType().equals(MealPlanEntry.TYPE_RECIPE)) {
+      if (!NumUtil.isStringInt(entry.getRecipeId())) {
+        binding.title.setText(entry.getType());
+        return;
+      }
+      Recipe recipe = recipeHashMap.get(Integer.parseInt(entry.getRecipeId()));
+      if (recipe == null) {
+        binding.title.setText(entry.getType());
+        return;
+      }
+      binding.title.setText(recipe.getName());
+
+      double servings = NumUtil.isStringDouble(entry.getRecipeServings()) ? Double.parseDouble(
+          entry.getRecipeServings()) : 1;
+      binding.subtitle.setText(
+          pluralUtil.getQuantityString(R.plurals.msg_servings, servings, maxDecimalPlacesAmount)
+      );
+      binding.subtitle.setVisibility(View.VISIBLE);
+
+      ChipUtil chipUtil = new ChipUtil(context);
+      binding.flexboxLayout.removeAllViews();
+
+      /*if (activeFields.contains(MealPlanViewModel.FIELD_DUE_SCORE)
+          && recipeFulfillment != null) {
+        binding.flexboxLayout.addView(chipUtil.createRecipeDueScoreChip(recipeFulfillment.getDueScore()));
+      }
+      if (activeFields.contains(MealPlanViewModel.FIELD_FULFILLMENT)
+          && recipeFulfillment != null) {
+        binding.flexboxLayout.addView(chipUtil.createRecipeFulfillmentChip(recipeFulfillment));
+      }
+      if (activeFields.contains(MealPlanViewModel.FIELD_CALORIES)
+          && recipeFulfillment != null) {
+        binding.flexboxLayout.addView(chipUtil.createTextChip(NumUtil.trimAmount(
+            recipeFulfillment.getCalories(), maxDecimalPlacesAmount
+        ) + " " + energyUnit));
+      }
+      for (String activeField : activeFields) {
+        if (activeField.startsWith(Userfield.NAME_PREFIX)) {
+          String userfieldName = activeField.substring(
+              Userfield.NAME_PREFIX.length()
+          );
+          Userfield userfield = userfieldHashMap.get(userfieldName);
+          if (userfield == null) continue;
+          Chip chipUserfield = chipUtil.createUserfieldChip(
+              userfield,
+              recipe.getUserfields().get(userfieldName)
+          );
+          if (chipUserfield != null) binding.flexboxLayout.addView(chipUserfield);
+        }
+      }*/
+
+      binding.flexboxLayout.setVisibility(binding.flexboxLayout.getChildCount() > 0 ? View.VISIBLE : View.GONE);
+
+      String pictureFileName = recipe.getPictureFileName();
+      binding.picturePlaceholderIcon.setImageDrawable(ResourcesCompat.getDrawable(
+          context.getResources(),
+          R.drawable.ic_round_image,
+          null
+      ));
+      if (activeFields.contains(MealPlanViewModel.FIELD_PICTURE)
+          && pictureFileName != null && !pictureFileName.isEmpty()) {
+        binding.picture.layout(0, 0, 0, 0);
+
+        PictureUtil.loadPicture(
+            binding.picture,
+            null,
+            binding.picturePlaceholder,
+            grocyApi.getRecipePictureServeSmall(pictureFileName),
+            grocyAuthHeaders,
+            false
+        );
+      } else if (activeFields.contains(MealPlanViewModel.FIELD_PICTURE)) {
+        binding.picture.setVisibility(View.GONE);
+        binding.picturePlaceholder.setVisibility(View.VISIBLE);
+      } else {
+        binding.picture.setVisibility(View.GONE);
+        binding.picturePlaceholder.setVisibility(View.GONE);
+      }
+    } else if (entry.getType().equals(MealPlanEntry.TYPE_NOTE)) {
+      binding.title.setText(entry.getNote());
+      if (activeFields.contains(MealPlanViewModel.FIELD_PICTURE)) {
+        binding.picturePlaceholderIcon.setImageDrawable(ResourcesCompat.getDrawable(
+            context.getResources(),
+            R.drawable.ic_round_short_text,
+            null
+        ));
+        binding.picturePlaceholder.setVisibility(View.VISIBLE);
+      } else {
+        binding.picturePlaceholder.setVisibility(View.GONE);
+      }
+    } else if (entry.getType().equals(MealPlanEntry.TYPE_PRODUCT)) {
+      if (!NumUtil.isStringInt(entry.getProductId())) {
+        binding.title.setText(entry.getType());
+        return;
+      }
+      Product product = productHashMap.get(Integer.parseInt(entry.getProductId()));
+      if (product == null) {
+        binding.title.setText(entry.getType());
+        return;
+      }
+      binding.title.setText(product.getName());
+
+      String pictureFileName = product.getPictureFileName();
+      binding.picturePlaceholderIcon.setImageDrawable(ResourcesCompat.getDrawable(
+          context.getResources(),
+          R.drawable.ic_round_image,
+          null
+      ));
+      if (activeFields.contains(MealPlanViewModel.FIELD_PICTURE)
+          && pictureFileName != null && !pictureFileName.isEmpty()) {
+        binding.picture.layout(0, 0, 0, 0);
+
+        PictureUtil.loadPicture(
+            binding.picture,
+            null,
+            binding.picturePlaceholder,
+            grocyApi.getProductPictureServeSmall(pictureFileName),
+            grocyAuthHeaders,
+            false
+        );
+      } else if (activeFields.contains(MealPlanViewModel.FIELD_PICTURE)) {
+        binding.picture.setVisibility(View.GONE);
+        binding.picturePlaceholder.setVisibility(View.VISIBLE);
+      } else {
+        binding.picture.setVisibility(View.GONE);
+        binding.picturePlaceholder.setVisibility(View.GONE);
+      }
+    }
 
   }
 
@@ -262,17 +433,30 @@ public class MealPlanEntryAdapter extends
   }
 
   public void updateData(
-      List<MealPlanEntry> mealPlanEntries
+      List<MealPlanEntry> mealPlanEntries,
+      List<MealPlanSection> mealPlanSections,
+      HashMap<Integer, Recipe> recipeHashMap,
+      HashMap<Integer, Product> productHashMap
   ) {
-    List<GroupedListItem> newGroupedListItems = getGroupedListItems(mealPlanEntries);
+    List<GroupedListItem> newGroupedListItems = getGroupedListItems(
+        mealPlanEntries, mealPlanSections
+    );
     DiffCallback diffCallback = new DiffCallback(
         this.groupedListItems,
-        newGroupedListItems
+        newGroupedListItems,
+        this.recipeHashMap,
+        recipeHashMap,
+        this.productHashMap,
+        productHashMap
     );
 
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.groupedListItems.clear();
     this.groupedListItems.addAll(newGroupedListItems);
+    this.recipeHashMap.clear();
+    this.recipeHashMap.putAll(recipeHashMap);
+    this.productHashMap.clear();
+    this.productHashMap.putAll(productHashMap);
     diffResult.dispatchUpdatesTo(this);
   }
 
@@ -280,13 +464,25 @@ public class MealPlanEntryAdapter extends
 
     List<GroupedListItem> oldItems;
     List<GroupedListItem> newItems;
+    HashMap<Integer, Recipe> oldRecipeHashMap;
+    HashMap<Integer, Recipe> newRecipeHashMap;
+    HashMap<Integer, Product> oldProductHashMap;
+    HashMap<Integer, Product> newProductHashMap;
 
     public DiffCallback(
         List<GroupedListItem> oldItems,
-        List<GroupedListItem> newItems
+        List<GroupedListItem> newItems,
+        HashMap<Integer, Recipe> oldRecipeHashMap,
+        HashMap<Integer, Recipe> newRecipeHashMap,
+        HashMap<Integer, Product> oldProductHashMap,
+        HashMap<Integer, Product> newProductHashMap
     ) {
       this.oldItems = oldItems;
       this.newItems = newItems;
+      this.oldRecipeHashMap = oldRecipeHashMap;
+      this.newRecipeHashMap = newRecipeHashMap;
+      this.oldProductHashMap = oldProductHashMap;
+      this.newProductHashMap = newProductHashMap;
     }
 
     @Override
@@ -324,18 +520,58 @@ public class MealPlanEntryAdapter extends
       if (oldItemType == GroupedListItem.TYPE_ENTRY) {
         MealPlanEntry newItem = (MealPlanEntry) newItems.get(newItemPos);
         MealPlanEntry oldItem = (MealPlanEntry) oldItems.get(oldItemPos);
+
         if (!compareContent) {
           return newItem.getId() == oldItem.getId();
         }
+
+        if (newItem.getType() != null && !newItem.getType().equals(oldItem.getType())) {
+          return false;
+        }
+        if (newItem.getType().equals(MealPlanEntry.TYPE_RECIPE)) {
+          if (!Objects.equals(newItem.getRecipeId(), oldItem.getRecipeId())) {
+            return false;
+          }
+          if (NumUtil.isStringInt(newItem.getRecipeId())
+              && NumUtil.isStringInt(oldItem.getRecipeId())) {
+            Recipe newRecipe = newRecipeHashMap.get(Integer.parseInt(newItem.getRecipeId()));
+            Recipe oldRecipe = oldRecipeHashMap.get(Integer.parseInt(oldItem.getRecipeId()));
+            if (newRecipe == null || oldRecipe == null) {
+              return false;
+            }
+            if (!newRecipe.equals(oldRecipe)) {
+              return false;
+            }
+          }
+        } else if (newItem.getType().equals(MealPlanEntry.TYPE_PRODUCT)) {
+          if (!Objects.equals(newItem.getProductId(), oldItem.getProductId())) {
+            return false;
+          }
+          if (NumUtil.isStringInt(newItem.getRecipeId())
+              && NumUtil.isStringInt(oldItem.getRecipeId())) {
+            Product newItemProduct = newProductHashMap.get(Integer.parseInt(newItem.getProductId()));
+            Product oldItemProduct = oldProductHashMap.get(Integer.parseInt(oldItem.getProductId()));
+            if (newItemProduct == null || oldItemProduct == null) {
+              return false;
+            }
+            if (!newItemProduct.equals(oldItemProduct)) {
+              return false;
+            }
+          }
+        }
+
         return newItem.equals(oldItem);
       } else if (oldItemType == GroupedListItem.TYPE_CONNECTION) {
         MealPlanEntryConnection newConnection = (MealPlanEntryConnection) newItems.get(newItemPos);
         MealPlanEntryConnection oldConnection = (MealPlanEntryConnection) oldItems.get(oldItemPos);
         return newConnection.equals(oldConnection);
       } else {
-        GroupHeader newGroup = (GroupHeader) newItems.get(newItemPos);
-        GroupHeader oldGroup = (GroupHeader) oldItems.get(oldItemPos);
-        return newGroup.equals(oldGroup);
+        MealPlanSection newItem = (MealPlanSection) newItems.get(newItemPos);
+        MealPlanSection oldItem = (MealPlanSection) oldItems.get(oldItemPos);
+        if (!compareContent) {
+          return newItem.getId() == oldItem.getId();
+        }
+        return newItem.equals(oldItem);
       }
     }
   }

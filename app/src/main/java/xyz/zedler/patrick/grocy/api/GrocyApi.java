@@ -59,6 +59,7 @@ public class GrocyApi {
     public final static String RECIPES_NESTINGS = "recipes_nestings";
     public final static String PRODUCT_GROUPS = "product_groups";
     public final static String MEAL_PLAN = "meal_plan";
+    public final static String MEAL_PLAN_SECTIONS = "meal_plan_sections";
     public final static String TASKS = "tasks";
     public final static String TASK_CATEGORIES = "task_categories";
     public final static String CHORES = "chores";

@@ -34,7 +34,6 @@
     android:layout_height="wrap_content"
     android:background="@macro/m3_comp_filled_card_container_color"
     android:padding="16dp"
-    app:timeline_margin_start="32dp"
     app:timeline_position="middle"
     app:timeline_type="item"
     app:timeline_bottom_radio_color="?attr/colorOutline"

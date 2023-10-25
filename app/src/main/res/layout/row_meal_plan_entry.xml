@@ -20,6 +20,7 @@
 <androidx.cardview.widget.CardView
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   style="@style/Widget.Material3.CardView.Filled"
@@ -34,19 +35,85 @@
     android:layout_height="wrap_content"
     android:background="@macro/m3_comp_filled_card_container_color"
     android:padding="16dp"
-    app:timeline_margin_start="32dp"
     app:timeline_position="middle"
     app:timeline_type="item"
     app:timeline_bottom_radio_color="?attr/colorOutline"
     app:timeline_top_radio_color="?attr/colorOutline">
 
-    <TextView
-      android:id="@+id/name"
-      android:layout_width="wrap_content"
+    <LinearLayout
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:textColor="?attr/colorOnSecondaryFixedVariant"
-      android:textSize="18sp"
-      android:textStyle="bold"/>
+      android:orientation="vertical">
+
+      <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="horizontal">
+
+        <xyz.zedler.patrick.grocy.view.RoundedCornerImageView
+          android:id="@+id/picture"
+          android:layout_width="56dp"
+          android:layout_height="56dp"
+          android:layout_marginEnd="16dp"
+          android:layout_gravity="top"
+          tools:ignore="ContentDescription"
+          app:radius="5dp"/>
+
+        <com.google.android.material.card.MaterialCardView
+          android:id="@+id/picture_placeholder"
+          android:layout_width="56dp"
+          android:layout_height="56dp"
+          android:layout_marginEnd="16dp"
+          android:layout_gravity="top"
+          android:visibility="gone"
+          app:cardCornerRadius="12dp"
+          app:cardElevation="0dp"
+          app:strokeWidth="0dp"
+          app:cardBackgroundColor="?attr/colorSurfaceVariant">
+
+          <ImageView
+            android:id="@+id/picture_placeholder_icon"
+            style="@style/Widget.Grocy.ImageView.Icon"
+            android:src="@drawable/ic_round_image"
+            android:layout_gravity="center"
+            tools:ignore="ContentDescription" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+          android:id="@+id/linear_text_container"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch"
+          android:layout_gravity="center_vertical">
+
+          <TextView
+            android:id="@+id/title"
+            style="@style/Widget.Grocy.TextView.ListItem.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+          <TextView
+            android:id="@+id/subtitle"
+            android:visibility="gone"
+            style="@style/Widget.Grocy.TextView.ListItem.Description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+      </LinearLayout>
+
+      <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/flexbox_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:flexWrap="wrap"
+        app:alignItems="stretch"
+        app:alignContent="stretch"
+        app:showDivider="middle"
+        app:dividerDrawable="@drawable/shape_flex_layout_divider"/>
+
+    </LinearLayout>
 
   </xyz.zedler.patrick.grocy.view.MaterialTimelineView>
 

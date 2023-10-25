@@ -81,7 +81,9 @@ public class MealPlanPagingFragment extends Fragment {
         .appendPattern("yyyy-MM-dd")
         .toFormatter();
 
-    MealPlanEntryAdapter adapter = new MealPlanEntryAdapter(requireContext());
+    MealPlanEntryAdapter adapter = new MealPlanEntryAdapter(
+        requireContext(), viewModel.getGrocyApi(), viewModel.getGrocyAuthHeaders()
+    );
     binding.recycler.setAdapter(adapter);
 
     ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter, binding.recycler);
@@ -91,7 +93,12 @@ public class MealPlanPagingFragment extends Fragment {
     viewModel.getMealPlanEntriesLive().observe(getViewLifecycleOwner(), entries -> {
       if (entries != null) {
         String dateFormatted = date.format(dateFormatter);
-        adapter.updateData(entries.get(dateFormatted));
+        adapter.updateData(
+            entries.get(dateFormatted),
+            viewModel.getMealPlanSections(),
+            viewModel.getRecipeHashMap(),
+            viewModel.getProductHashMap()
+        );
       }
     });
   }

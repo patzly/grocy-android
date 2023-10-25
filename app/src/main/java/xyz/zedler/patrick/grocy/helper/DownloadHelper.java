@@ -51,6 +51,7 @@ import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MealPlanEntry;
+import xyz.zedler.patrick.grocy.model.MealPlanSection;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductAveragePrice;
@@ -559,6 +560,8 @@ public class DownloadHelper {
         queue.append(Userfield.updateUserfields(this, dbChangedTime, forceUpdate, null));
       } else if (type == MealPlanEntry.class) {
         queue.append(MealPlanEntry.updateMealPlanEntries(this, dbChangedTime, null));
+      } else if (type == MealPlanSection.class) {
+        queue.append(MealPlanSection.updateMealPlanSections(this, dbChangedTime, null));
       }
     }
 

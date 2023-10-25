@@ -27,13 +27,13 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.MealPlanEntry;
+import xyz.zedler.patrick.grocy.model.MealPlanSection;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
-import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 
 public class MealPlanRepository {
 
@@ -43,12 +43,12 @@ public class MealPlanRepository {
     this.appDatabase = AppDatabase.getAppDatabase(application);
   }
 
-  public interface RecipesDataListener {
+  public interface MealPlanDataListener {
 
-    void actionFinished(RecipesData data);
+    void actionFinished(MealPlanData data);
   }
 
-  public static class RecipesData {
+  public static class MealPlanData {
 
     private final List<Recipe> recipes;
     private final List<RecipeFulfillment> recipeFulfillments;
@@ -57,9 +57,9 @@ public class MealPlanRepository {
     private final List<QuantityUnit> quantityUnits;
     private final List<QuantityUnitConversion> quantityUnitConversions;
     private final List<MealPlanEntry> mealPlanEntries;
-    private final List<ShoppingListItem> shoppingListItems;
+    private final List<MealPlanSection> mealPlanSections;
 
-    public RecipesData(
+    public MealPlanData(
         List<Recipe> recipes,
         List<RecipeFulfillment> recipeFulfillments,
         List<RecipePosition> recipePositions,
@@ -67,7 +67,8 @@ public class MealPlanRepository {
         List<QuantityUnit> quantityUnits,
         List<QuantityUnitConversion> quantityUnitConversions,
         List<MealPlanEntry> mealPlanEntries,
-        List<ShoppingListItem> shoppingListItems) {
+        List<MealPlanSection> mealPlanSections
+    ) {
       this.recipes = recipes;
       this.recipeFulfillments = recipeFulfillments;
       this.recipePositions = recipePositions;
@@ -75,7 +76,7 @@ public class MealPlanRepository {
       this.quantityUnits = quantityUnits;
       this.quantityUnitConversions = quantityUnitConversions;
       this.mealPlanEntries = mealPlanEntries;
-      this.shoppingListItems = shoppingListItems;
+      this.mealPlanSections = mealPlanSections;
     }
 
     public List<Recipe> getRecipes() {
@@ -106,12 +107,12 @@ public class MealPlanRepository {
       return mealPlanEntries;
     }
 
-    public List<ShoppingListItem> getShoppingListItems() {
-      return shoppingListItems;
+    public List<MealPlanSection> getMealPlanSections() {
+      return mealPlanSections;
     }
   }
 
-  public void loadFromDatabase(RecipesDataListener onSuccess, Consumer<Throwable> onError) {
+  public void loadFromDatabase(MealPlanDataListener onSuccess, Consumer<Throwable> onError) {
     Single
         .zip(
             appDatabase.recipeDao().getRecipes(),
@@ -121,8 +122,8 @@ public class MealPlanRepository {
             appDatabase.quantityUnitDao().getQuantityUnits(),
             appDatabase.quantityUnitConversionDao().getConversions(),
             appDatabase.mealPlanEntryDao().getMealPlanEntries(),
-            appDatabase.shoppingListItemDao().getShoppingListItems(),
-            RecipesData::new
+            appDatabase.mealPlanSectionDao().getMealPlanSections(),
+            MealPlanData::new
         )
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())

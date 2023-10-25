@@ -34,6 +34,7 @@ import java.util.Map;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.MealPlanSection;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -491,6 +492,16 @@ public class SortUtil {
         (ascending ? item1 : item2).getUserName().toLowerCase(),
         (ascending ? item2 : item1).getUserName().toLowerCase()
     ));
+  }
+
+  public static void sortMealPlanSections(List<MealPlanSection> mealPlanSections) {
+    if (mealPlanSections == null || mealPlanSections.isEmpty()) {
+      return;
+    }
+    Collections.sort(
+        mealPlanSections,
+        Comparator.comparingInt(MealPlanSection::getSortNumber)
+    );
   }
 
   public static void sortLanguagesByName(List<Language> languages) {

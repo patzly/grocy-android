@@ -31,6 +31,7 @@ import xyz.zedler.patrick.grocy.dao.ChoreDao;
 import xyz.zedler.patrick.grocy.dao.ChoreEntryDao;
 import xyz.zedler.patrick.grocy.dao.LocationDao;
 import xyz.zedler.patrick.grocy.dao.MealPlanEntryDao;
+import xyz.zedler.patrick.grocy.dao.MealPlanSectionDao;
 import xyz.zedler.patrick.grocy.dao.MissingItemDao;
 import xyz.zedler.patrick.grocy.dao.PendingProductBarcodeDao;
 import xyz.zedler.patrick.grocy.dao.PendingProductDao;
@@ -64,6 +65,7 @@ import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MealPlanEntry;
+import xyz.zedler.patrick.grocy.model.MealPlanSection;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
@@ -130,12 +132,13 @@ import xyz.zedler.patrick.grocy.repository.MainRepository.OnVersionListener;
         RecipePositionResolved.class,
         RecipeNesting.class,
         MealPlanEntry.class,
+        MealPlanSection.class,
         Userfield.class
     },
     views = {
         RecipeNestingResolved.class
     },
-    version = 53
+    version = 54
 )
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
@@ -201,6 +204,8 @@ public abstract class AppDatabase extends RoomDatabase {
   public abstract RecipeNestingDao recipeNestingDao();
 
   public abstract MealPlanEntryDao mealPlanEntryDao();
+
+  public abstract MealPlanSectionDao mealPlanSectionDao();
 
   public abstract StockEntryDao stockEntryDao();
 

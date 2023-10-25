@@ -34,6 +34,7 @@ import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
@@ -193,6 +194,14 @@ public class ArrayUtil {
       stockItemHashMap.put(stockItem.getProductId(), stockItem);
     }
     return stockItemHashMap;
+  }
+
+  public static HashMap<Integer, Recipe> getRecipesHashMap(List<Recipe> recipes) {
+    HashMap<Integer, Recipe> recipeHashMap = new HashMap<>();
+    for (Recipe recipe : recipes) {
+      recipeHashMap.put(recipe.getId(), recipe);
+    }
+    return recipeHashMap;
   }
 
   public static HashMap<Integer, RecipePosition> getRecipePositionHashMap(

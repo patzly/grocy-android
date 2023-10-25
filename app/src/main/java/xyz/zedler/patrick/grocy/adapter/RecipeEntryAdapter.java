@@ -179,7 +179,6 @@ public class RecipeEntryAdapter extends
     ImageView picture;
     MaterialCardView picturePlaceholder = null;
     FlexboxLayout chips;
-    String textFulfillment;
 
     if (viewHolder instanceof RecipeViewHolder) {
       container = ((RecipeViewHolder) viewHolder).binding.container;
