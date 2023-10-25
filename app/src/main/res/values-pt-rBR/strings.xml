@@ -201,6 +201,12 @@
   <string name="msg_consumed_spoiled">Definir %1$s %2$s de %3$s como estragado</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Marcado %1$s %2$s de %3$s como aberto</string>
+  <!-- %1$s is the number of servings of a recipe. -->
+  <plurals name="msg_servings">
+    <item quantity="one">%1$s porçao</item>
+    <item quantity="many">%1$s porçoes</item>
+    <item quantity="other">%1$s porçoes</item>
+  </plurals>
   <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
   <plurals name="msg_undone_items">
     <item quantity="one">%1$d não selecionado</item>
@@ -380,10 +386,11 @@
   <string name="msg_point_at_barcode">Aponte sua câmera ao código de barras</string>
   <string name="msg_save_product_first">Por favor, salve o produto primeiro</string>
   <string name="msg_save_recipe_first">Por favor, salve a receita primeiro</string>
+  <string name="msg_recipe_contains_nested_recipes">Esta receita contém receitas agregadas.</string>
   <string name="msg_press_hold_confirm">Pressione e segure para confirmar a exclusão</string>
   <string name="msg_recipe_consume_ask">Tem certeza de que deseja consumir todos os ingredientes necessários para a receita \"%1$s\"? (ingredientes marcados com \"Apenas verificar se tem quantidade em estoque\" serão ignorados)</string>
   <string name="msg_recipe_shopping_list_ask">Tem certeza de que deseja colocar todos os ingredientes que faltam na receita \"%1$s\" na lista de compras?\n\nDesmarque os ingredientes para não colocá-los na lista de compras:</string>
-  <string name="msg_settings_backup_restore">Aqui você pode criar ou restaurar um backup das configurações do aplicativo, por exemplo, para compartilhá-lo com outros membros da família (o arquivo contém credenciais como chave de API).\n\nApós a restauração, as notificações podem não funcionar como desejado e precisam ser reiniciadas em segundo plano neste aplicativo, desligando e ligando os interruptores novamente.\ n\nSe houver dados incorretos no arquivo que está sendo restaurado, o aplicativo poderá não funcionar depois disso e os dados do aplicativo terão que ser excluídos</string>
+  <string name="msg_settings_backup_restore">Aqui você pode criar ou restaurar um backup das configurações do aplicativo, por exemplo. para compartilhá-lo com outros membros da família (o arquivo contém credenciais como chave de API).\n\nApós a restauração, as notificações podem não funcionar como desejado e precisam ser reiniciadas em segundo plano neste aplicativo, desligando e ligando os opções novamente.\ n\nSe houver dados incorretos no arquivo que está sendo restaurado, o aplicativo poderá não funcionar depois disso e os dados do aplicativo terão que ser excluídos.</string>
   <string name="msg_settings_backup_success">Backup de configurações criado com sucesso</string>
   <string name="msg_settings_restore_success">Configurações restauradas com sucesso. Reiniciando o aplicativo em 2 segundos</string>
   <string name="msg_welcome">Bem-vindo ao Grocy Android!</string>
@@ -987,7 +994,10 @@
   <string name="property_opened">aberto</string>
   <string name="property_not_opened">não aberto</string>
   <string name="property_is_freezer">É de freezer</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
+  <!-- Means energy of an ingredient or product -->
+  <string name="property_energy_only">Calorias</string>
+  <!-- %1$s is a unit for energy, like kcal (kilo calories) -->
+  <string name="property_energy_insert">Calorias (%1$s) por unidade no estoque</string>
   <string name="property_active">Ativo</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Nunca mostrar na visão geral do estoque</string>

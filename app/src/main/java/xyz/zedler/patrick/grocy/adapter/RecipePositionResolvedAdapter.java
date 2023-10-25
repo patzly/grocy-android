@@ -252,11 +252,6 @@ public class RecipePositionResolvedAdapter extends
     int type = getItemViewType(viewHolder.getAdapterPosition());
     if (type == GroupedListItem.TYPE_HEADER) {
       IngredientGroupViewHolder holder = (IngredientGroupViewHolder) viewHolder;
-      if (((GroupHeader) groupedListItem).getDisplayDivider() == 1) {
-        holder.binding.divider.setVisibility(View.VISIBLE);
-      } else {
-        holder.binding.divider.setVisibility(View.GONE);
-      }
       if (((GroupHeader) groupedListItem).getGroupName() != null) {
         holder.binding.name.setText(((GroupHeader) groupedListItem).getGroupName());
         holder.binding.name.setVisibility(View.VISIBLE);
@@ -383,17 +378,22 @@ public class RecipePositionResolvedAdapter extends
 
     // CALORIES & PRICE
     holder.binding.flexboxLayout.removeAllViews();
-    Chip chipCalories = createChip(context,
-        NumUtil.trimAmount(recipePosition.getCalories(), maxDecimalPlacesAmount)
-            + " " + energyUnit, -1);
+    Chip chipCalories = createChip(
+        context,
+        NumUtil.trimAmount(
+            recipePosition.getCalories(), maxDecimalPlacesAmount
+        ) + " " + energyUnit
+    );
     if (activeFields.contains(RecipeViewModel.FIELD_ENERGY)) {
       holder.binding.flexboxLayout.addView(chipCalories);
     }
-    Chip chipPrice = createChip(context, context.getString(
-        R.string.property_price_with_currency,
-        NumUtil.trimPrice(recipePosition.getCosts(), maxDecimalPlacesPrice),
-        currency
-    ), -1);
+    Chip chipPrice = createChip(
+        context, context.getString(
+            R.string.property_price_with_currency,
+            NumUtil.trimPrice(recipePosition.getCosts(), maxDecimalPlacesPrice),
+            currency
+        )
+    );
     if (activeFields.contains(RecipeViewModel.FIELD_PRICE)) {
       holder.binding.flexboxLayout.addView(chipPrice);
     }
@@ -422,15 +422,15 @@ public class RecipePositionResolvedAdapter extends
     );
   }
 
-  private static Chip createChip(Context ctx, String text, int textColor) {
+  private static Chip createChip(Context context, String text) {
     @SuppressLint("InflateParams")
-    Chip chip = (Chip) LayoutInflater.from(ctx)
-        .inflate(R.layout.view_info_chip, null, false);
-    chip.setChipBackgroundColor(ColorStateList.valueOf(SurfaceColors.SURFACE_4.getColor(ctx)));
+    Chip chip = (Chip) LayoutInflater.from(context).inflate(
+        R.layout.view_info_chip, null, false
+    );
+    chip.setChipBackgroundColor(ColorStateList.valueOf(SurfaceColors.SURFACE_4.getColor(context)));
     chip.setText(text);
-    if (textColor != -1) {
-      chip.setTextColor(textColor);
-    }
+    chip.setTextColor(ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorOnSurface)));
+    chip.setEnabled(false);
     return chip;
   }
 
