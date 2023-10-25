@@ -630,7 +630,7 @@
   <string name="title_chores">Corvées</string>
   <string name="title_chore">Corvée</string>
   <string name="title_recipes">Recettes</string>
-  <string name="title_meal_plan">Plan de repas</string>
+  <string name="title_meal_plan">Prévisions des menus</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Éditeur</string>
   <string name="title_task_new">Nouvelle tâche</string>
