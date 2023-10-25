@@ -126,6 +126,7 @@
   <string name="action_demo_server">Demo-Server</string>
   <string name="action_own_server">Eigener Server</string>
   <string name="action_enter_data_manually">Daten manuell eingeben</string>
+  <string name="action_settings_backup_restore">Einstellungen sichern oder wiederherstellen</string>
   <string name="action_details">Details</string>
   <string name="action_perform">Aktion ausführen</string>
   <string name="action_share">Teilen</string>
@@ -141,6 +142,10 @@
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Nächste Ausführung umplanen</string>
   <string name="action_put_missing_products_on_shopping_list">Fehlende Produkte auf den Einkaufszettel setzen</string>
+  <!-- This is the action part of "Backup to file" or "Backup data" -->
+  <string name="action_backup">Sichern</string>
+  <!-- This is the action part of "Restore from file" or "Restore data" -->
+  <string name="action_restore">Wiederherstellen</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -188,6 +193,11 @@
   <string name="msg_consumed_spoiled">%1$s %2$s %3$s als verdorben aus dem Bestand entfernt</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">%1$s %2$s %3$s als geöffnet markiert</string>
+  <!-- %1$s is the number of servings of a recipe. -->
+  <plurals name="msg_servings">
+    <item quantity="one">%1$s Portion</item>
+    <item quantity="other">%1$s Portionen</item>
+  </plurals>
   <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
   <plurals name="msg_undone_items">
     <item quantity="one">%1$d unerledigt</item>
@@ -353,9 +363,13 @@
   <string name="msg_point_at_barcode">Richten Sie die Kamera auf einen Barcode</string>
   <string name="msg_save_product_first">Bitte speichern Sie das Produkt zuerst</string>
   <string name="msg_save_recipe_first">Bitte speichern Sie das Rezept zuerst</string>
+  <string name="msg_recipe_contains_nested_recipes">In diesem Rezept sind andere Rezepte enthalten.</string>
   <string name="msg_press_hold_confirm">Drücken und halten, um das Löschen zu bestätigen</string>
   <string name="msg_recipe_consume_ask">Sicher, dass alle Zutaten, die vom Rezept für \"%1$s\" benötigt werden, aus dem Bestand entfernt werden sollen? (Zutaten markiert mit \"Nur prüfen, ob eine beliebige Menge im Bestand verfügbar ist\" werden ignoriert)</string>
   <string name="msg_recipe_shopping_list_ask">Alle fehlenden Zutaten vom Rezept für \"%1$s\" wirklich auf den Einkaufszettel setzen?\n\nEntfernen Sie den Haken einer Zutat, um diese nicht auf den Einkaufszettel zu übernehmen:</string>
+  <string name="msg_settings_backup_restore">Hier können Sie ein Backup der App-Einstellungen erstellen oder wiederherstellen, z. B. um sie mit anderen Familienmitgliedern zu teilen (die Datei enthält Anmeldeinformationen wie den API-Key).\n\nNach der Wiederherstellung funktionieren die Benachrichtigungen in dieser App möglicherweise nicht wie gewünscht und müssen im Hintergrund neu gestartet werden, indem Sie die Schalter aus- und wieder einschalten.\n\nWenn die Datei, die wiederhergestellt wird, falsche Daten enthält, funktioniert die App danach möglicherweise nicht mehr und die App-Daten müssen gelöscht werden.</string>
+  <string name="msg_settings_backup_success">Sicherung der Einstellungen erfolgreich erstellt</string>
+  <string name="msg_settings_restore_success">Einstellungen erfolgreich wiederhergestellt, App wird in 2 Sekunden neu gestartet</string>
   <string name="msg_welcome">Willkommen bei Grocy Android!</string>
   <string name="msg_welcome_introduce">Um Grocy produktiv nutzen zu können, brauchen Sie Ihren eigenen Server oder das Grocy Add-on für Home Assistant.\nWenn Sie diese App nur ausprobieren möchten, können Sie den Demo-Server von Bernd Bestel benutzen, dem Entwickler von Grocy.</string>
   <string name="msg_choose_option_below">Bitte wählen Sie eine der Optionen unten aus.</string>
@@ -545,6 +559,9 @@
   <string name="error_undefined">Ein Fehler ist aufgetreten</string>
   <string name="error_invalid_base_servings">Portionen ungültig</string>
   <string name="error_pictures_size_exceeds_limit">Es gibt eingebettete Bilder in Produkt- oder Rezeptbeschreibungen auf Ihrem Server, welche das Lese-Limit dieser App überschreiten. Bitte entfernen Sie Bilder mit hoher Qualität oder Größe von Ihren Beschreibungen, das wird auch das Laden der Daten beschleunigen.</string>
+  <string name="error_userfield_type_not_supported">Typ von Benutzerfeld aktuell nicht unterstützt</string>
+  <string name="error_settings_backup">Sicherung fehlgeschlagen</string>
+  <string name="error_settings_restore">Wiederherstellen gescheitert</string>
 
   <string name="title_overview">Übersicht</string>
   <string name="title_stock_overview">Bestand</string>
@@ -590,6 +607,7 @@
   <string name="title_chores">Hausarbeiten</string>
   <string name="title_chore">Hausarbeit</string>
   <string name="title_recipes">Rezepte</string>
+  <string name="title_meal_plan">Speiseplan</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Editor</string>
   <string name="title_task_new">Neue Aufgabe</string>
@@ -924,6 +942,7 @@
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Durchschnittliche Haltbarkeit</string>
   <string name="property_spoil_rate">Verderblichkeitsrate</string>
+  <string name="property_created_timestamp">Erstellungszeit</string>
   <string name="property_price_history">Preisentwicklung</string>
   <string name="property_product_group">Produktgruppe</string>
   <string name="property_product_groups">Produktgruppen</string>
@@ -933,7 +952,10 @@
   <string name="property_opened">geöffnet</string>
   <string name="property_not_opened">nicht geöffnet</string>
   <string name="property_is_freezer">Ist ein Gefrier-Standort</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
+  <!-- Means energy of an ingredient or product -->
+  <string name="property_energy_only">Energie</string>
+  <!-- %1$s is a unit for energy, like kcal (kilo calories) -->
+  <string name="property_energy_insert">Energie (%1$s) pro Bestandsmengeneinheit</string>
   <string name="property_active">Aktiv</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Nie auf der Bestand-Seite anzeigen</string>
@@ -978,6 +1000,10 @@
   <string name="property_extra_field">Extrafeld: %1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">Felder</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value">%1$s: %2$s</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value_without_space">%1$s:%2$s</string>
   <string name="property_task_category">Aufgabenkategorie</string>
   <string name="property_task_categories">Aufgabenkategorien</string>
   <string name="property_calories">Kalorien</string>
@@ -1037,6 +1063,8 @@
   <string name="date_unlimited">Unbegrenzt</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Nie</string>
+  <!-- %1$s is 'from' date, %2$s is 'to' date -->
+  <string name="date_timespan">%1$s - %2$s</string>
 
   <plurals name="date_days">
     <item quantity="one">%d Tag</item>
