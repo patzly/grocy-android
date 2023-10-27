@@ -45,11 +45,9 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.RowMealPlanEntryBinding;
-import xyz.zedler.patrick.grocy.databinding.RowMealPlanEntryConnectionBinding;
 import xyz.zedler.patrick.grocy.databinding.RowMealPlanSectionHeaderBinding;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.MealPlanEntry;
-import xyz.zedler.patrick.grocy.model.MealPlanEntryConnection;
 import xyz.zedler.patrick.grocy.model.MealPlanSection;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -135,28 +133,25 @@ public class MealPlanEntryAdapter extends
             ((MealPlanEntry) lastItem).setItemPosition(groupedListItems.size() > 1
                 ? MaterialTimelineView.POSITION_MIDDLE : MaterialTimelineView.POSITION_FIRST);
           }
-          groupedListItems.add(new MealPlanEntryConnection());
         }
         groupedListItems.add(section);
         section.setTopItem(groupedListItems.indexOf(section) == 0);
-        groupedListItems.add(new MealPlanEntryConnection());
       }
 
       for (MealPlanEntry entry : list) {
         groupedListItems.add(entry);
-
-        if (list.size() > 1 && list.indexOf(entry) < list.size()-1) {
-          groupedListItems.add(new MealPlanEntryConnection());
-        }
         int index = groupedListItems.indexOf(entry);
         if (index == 0) {
           entry.setItemPosition(MaterialTimelineView.POSITION_FIRST);
-        } else if (index == groupedListItems.size()-1) {
-          entry.setItemPosition(MaterialTimelineView.POSITION_LAST);
         } else {
           entry.setItemPosition(MaterialTimelineView.POSITION_MIDDLE);
         }
       }
+    }
+    GroupedListItem lastItem = groupedListItems.get(groupedListItems.size()-1);
+    if (lastItem instanceof MealPlanEntry) {
+      ((MealPlanEntry) lastItem).setItemPosition(groupedListItems.size() > 1
+          ? MaterialTimelineView.POSITION_LAST : MaterialTimelineView.POSITION_SINGLE);
     }
     return groupedListItems;
   }
@@ -173,16 +168,6 @@ public class MealPlanEntryAdapter extends
     private final RowMealPlanEntryBinding binding;
 
     public MealPlanEntryViewHolder(RowMealPlanEntryBinding binding) {
-      super(binding.getRoot());
-      this.binding = binding;
-    }
-  }
-
-  public static class MealPlanEntryConnectionViewHolder extends ViewHolder {
-
-    private final RowMealPlanEntryConnectionBinding binding;
-
-    public MealPlanEntryConnectionViewHolder(RowMealPlanEntryConnectionBinding binding) {
       super(binding.getRoot());
       this.binding = binding;
     }
@@ -209,15 +194,7 @@ public class MealPlanEntryAdapter extends
   @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    if (viewType == GroupedListItem.TYPE_CONNECTION) {
-      return new MealPlanEntryConnectionViewHolder(
-          RowMealPlanEntryConnectionBinding.inflate(
-              LayoutInflater.from(parent.getContext()),
-              parent,
-              false
-          )
-      );
-    } else if (viewType == GroupedListItem.TYPE_HEADER) {
+    if (viewType == GroupedListItem.TYPE_HEADER) {
       return new MealPlanGroupViewHolder(
           RowMealPlanSectionHeaderBinding.inflate(
               LayoutInflater.from(parent.getContext()),
@@ -243,18 +220,14 @@ public class MealPlanEntryAdapter extends
 
     int type = getItemViewType(viewHolder.getAdapterPosition());
 
-    if (type == GroupedListItem.TYPE_CONNECTION) {
-      return;
-    } else if (type == GroupedListItem.TYPE_HEADER) {
+    if (type == GroupedListItem.TYPE_HEADER) {
       MealPlanSection section = (MealPlanSection) groupedListItem;
       RowMealPlanSectionHeaderBinding binding = ((MealPlanGroupViewHolder) viewHolder).binding;
 
       Context context = binding.getRoot().getContext();
       ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
-      binding.timelineView.setBackgroundColor(colorBlue.getAccentContainer());
       binding.timelineView.setPosition(section.isTopItem()
           ? MaterialTimelineView.POSITION_FIRST : MaterialTimelineView.POSITION_MIDDLE);
-      binding.name.setTextColor(colorBlue.getOnAccentContainer());
       binding.name.setText(section.getName());
       return;
     }
@@ -416,11 +389,7 @@ public class MealPlanEntryAdapter extends
     for (int i = 0; i < recyclerView.getChildCount(); i++) {
       View child = recyclerView.getChildAt(i);
       RecyclerView.ViewHolder viewHolder = recyclerView.getChildViewHolder(child);
-      if (viewHolder instanceof MealPlanEntryConnectionViewHolder) {
-        ((MealPlanEntryConnectionViewHolder) viewHolder).binding.timelineView
-            .setShowLineAndRadio(show);
-        ((MealPlanEntryConnectionViewHolder) viewHolder).binding.timelineView.invalidate();
-      } else if (viewHolder instanceof MealPlanEntryViewHolder) {
+      if (viewHolder instanceof MealPlanEntryViewHolder) {
         ((MealPlanEntryViewHolder) viewHolder).binding.timelineView
             .setShowLineAndRadio(show);
         ((MealPlanEntryViewHolder) viewHolder).binding.timelineView.invalidate();
@@ -561,10 +530,6 @@ public class MealPlanEntryAdapter extends
         }
 
         return newItem.equals(oldItem);
-      } else if (oldItemType == GroupedListItem.TYPE_CONNECTION) {
-        MealPlanEntryConnection newConnection = (MealPlanEntryConnection) newItems.get(newItemPos);
-        MealPlanEntryConnection oldConnection = (MealPlanEntryConnection) oldItems.get(oldItemPos);
-        return newConnection.equals(oldConnection);
       } else {
         MealPlanSection newItem = (MealPlanSection) newItems.get(newItemPos);
         MealPlanSection oldItem = (MealPlanSection) oldItems.get(oldItemPos);
@@ -593,8 +558,7 @@ public class MealPlanEntryAdapter extends
 
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-      if (viewHolder instanceof MealPlanGroupViewHolder
-          || viewHolder instanceof MealPlanEntryConnectionViewHolder) return 0;
+      if (viewHolder instanceof MealPlanGroupViewHolder) return 0;
       int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
       return makeMovementFlags(dragFlags, 0);
     }

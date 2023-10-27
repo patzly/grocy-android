@@ -17,28 +17,25 @@
   ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
-<androidx.cardview.widget.CardView
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
+<xyz.zedler.patrick.grocy.view.MaterialTimelineView
+  android:id="@+id/timeline_view"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  style="@style/Widget.Material3.CardView.Filled"
-  app:cardBackgroundColor="@android:color/transparent"
-  app:cardCornerRadius="12dp"
-  app:cardElevation="0dp"
-  android:layout_marginHorizontal="16dp">
+  android:background="@color/transparent"
+  android:paddingHorizontal="16dp"
+  app:timeline_position="middle"
+  app:timeline_type="header"
+  app:timeline_line_color="?attr/colorOutline"
+  app:timeline_radio_color="?attr/colorOutline"
+  app:timeline_margin_start="8dp"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
-  <xyz.zedler.patrick.grocy.view.MaterialTimelineView
-    android:id="@+id/timeline_view"
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@macro/m3_comp_filled_card_container_color"
-    android:padding="16dp"
-    app:timeline_position="middle"
-    app:timeline_type="item"
-    app:timeline_bottom_radio_color="?attr/colorOutline"
-    app:timeline_top_radio_color="?attr/colorOutline">
-
+    android:orientation="vertical"
+    android:layout_marginStart="32dp">
 
     <TextView
       android:id="@+id/name"
@@ -47,6 +44,6 @@
       android:textSize="18sp"
       android:textStyle="bold"/>
 
-  </xyz.zedler.patrick.grocy.view.MaterialTimelineView>
+  </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</xyz.zedler.patrick.grocy.view.MaterialTimelineView>
