@@ -1043,6 +1043,10 @@
   <string name="property_extra_field">Champ supplémentaire : %1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">Champs</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_header">Champs (en-tête)</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_entries">Champs (entrées)</string>
   <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
   <string name="property_userfield_value">%1$s: %2$s</string>
   <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
