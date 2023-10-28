@@ -48,7 +48,7 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginEnd="16dp"
-        android:layout_gravity="top"
+        android:layout_gravity="center_vertical"
         tools:ignore="ContentDescription"
         app:radius="5dp"/>
 
@@ -57,7 +57,7 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginEnd="16dp"
-        android:layout_gravity="top"
+        android:layout_gravity="center_vertical"
         android:visibility="gone"
         app:cardCornerRadius="12dp"
         app:cardElevation="0dp"
@@ -84,27 +84,20 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"/>
 
-        <TextView
-          android:id="@+id/subtitle"
-          android:visibility="gone"
-          style="@style/Widget.Grocy.TextView.ListItem.Description"
+        <com.google.android.flexbox.FlexboxLayout
+          android:id="@+id/flexbox_layout"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"/>
+          android:layout_height="wrap_content"
+          android:layout_marginTop="4dp"
+          app:flexWrap="wrap"
+          app:alignItems="stretch"
+          app:alignContent="stretch"
+          app:showDivider="middle"
+          app:dividerDrawable="@drawable/shape_flex_layout_divider"/>
 
       </LinearLayout>
 
     </LinearLayout>
-
-    <com.google.android.flexbox.FlexboxLayout
-      android:id="@+id/flexbox_layout"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="4dp"
-      app:flexWrap="wrap"
-      app:alignItems="stretch"
-      app:alignContent="stretch"
-      app:showDivider="middle"
-      app:dividerDrawable="@drawable/shape_flex_layout_divider"/>
 
   </LinearLayout>
 

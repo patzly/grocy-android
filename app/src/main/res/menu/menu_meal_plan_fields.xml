@@ -24,6 +24,13 @@
   tools:ignore="AlwaysShowAction">
 
   <item
+    android:id="@+id/action_configure_sections"
+    android:title="@string/action_configure_sections"
+    app:showAsAction="never">
+
+  </item>
+
+  <item
     android:id="@+id/action_fields_header"
     android:title="@string/property_fields_header"
     app:showAsAction="never">

@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
@@ -34,7 +33,9 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
+import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.Userfield;
+import xyz.zedler.patrick.grocy.util.RxJavaUtil;
 
 public class MealPlanRepository {
 
@@ -59,6 +60,7 @@ public class MealPlanRepository {
     private final List<QuantityUnitConversion> quantityUnitConversions;
     private final List<MealPlanEntry> mealPlanEntries;
     private final List<MealPlanSection> mealPlanSections;
+    private final List<StockItem> stockItems;
     private final List<Userfield> userfields;
 
     public MealPlanData(
@@ -70,6 +72,7 @@ public class MealPlanRepository {
         List<QuantityUnitConversion> quantityUnitConversions,
         List<MealPlanEntry> mealPlanEntries,
         List<MealPlanSection> mealPlanSections,
+        List<StockItem> stockItems,
         List<Userfield> userfields
     ) {
       this.recipes = recipes;
@@ -80,6 +83,7 @@ public class MealPlanRepository {
       this.quantityUnitConversions = quantityUnitConversions;
       this.mealPlanEntries = mealPlanEntries;
       this.mealPlanSections = mealPlanSections;
+      this.stockItems = stockItems;
       this.userfields = userfields;
     }
 
@@ -115,13 +119,17 @@ public class MealPlanRepository {
       return mealPlanSections;
     }
 
+    public List<StockItem> getStockItems() {
+      return stockItems;
+    }
+
     public List<Userfield> getUserfields() {
       return userfields;
     }
   }
 
   public void loadFromDatabase(MealPlanDataListener onSuccess, Consumer<Throwable> onError) {
-    Single
+    RxJavaUtil
         .zip(
             appDatabase.recipeDao().getRecipes(),
             appDatabase.recipeFulfillmentDao().getRecipeFulfillments(),
@@ -131,6 +139,7 @@ public class MealPlanRepository {
             appDatabase.quantityUnitConversionDao().getConversions(),
             appDatabase.mealPlanEntryDao().getMealPlanEntries(),
             appDatabase.mealPlanSectionDao().getMealPlanSections(),
+            appDatabase.stockItemDao().getStockItems(),
             appDatabase.userfieldDao().getUserfields(),
             MealPlanData::new
         )

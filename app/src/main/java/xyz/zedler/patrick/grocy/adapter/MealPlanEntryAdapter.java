@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.load.model.LazyHeaders;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,6 +53,10 @@ import xyz.zedler.patrick.grocy.model.MealPlanSection;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Recipe;
+import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
+import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.Userfield;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.ChipUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PictureUtil;
@@ -69,10 +74,14 @@ public class MealPlanEntryAdapter extends
   private final HashMap<Integer, Recipe> recipeHashMap;
   private final HashMap<Integer, Product> productHashMap;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+  private final HashMap<Integer, RecipeFulfillment> recipeFulfillmentHashMap;
+  private final HashMap<Integer, StockItem> stockItemHashMap;
+  private final HashMap<String, Userfield> userfieldHashMap;
   private final List<String> activeFields;
   private final PluralUtil pluralUtil;
   private final GrocyApi grocyApi;
   private final LazyHeaders grocyAuthHeaders;
+  private final String energyUnit;
   private final int maxDecimalPlacesAmount;
   private final int decimalPlacesPriceDisplay;
   private final String currency;
@@ -89,13 +98,16 @@ public class MealPlanEntryAdapter extends
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_DISPLAY
     );
     this.currency = sharedPrefs.getString(PREF.CURRENCY, "");
+    this.energyUnit = sharedPrefs.getString(PREF.ENERGY_UNIT, PREF.ENERGY_UNIT_DEFAULT);
     this.priceTrackingEnabled = sharedPrefs
         .getBoolean(PREF.FEATURE_STOCK_PRICE_TRACKING, true);
     this.recipeHashMap = new HashMap<>();
     this.productHashMap = new HashMap<>();
     this.quantityUnitHashMap = new HashMap<>();
+    this.recipeFulfillmentHashMap = new HashMap<>();
+    this.stockItemHashMap = new HashMap<>();
+    this.userfieldHashMap = new HashMap<>();
     this.activeFields = new ArrayList<>();
-    this.activeFields.add(MealPlanViewModel.FIELD_PICTURE);
     this.pluralUtil = new PluralUtil(context);
     this.grocyApi = grocyApi;
     this.grocyAuthHeaders = grocyAuthHeaders;
@@ -244,154 +256,180 @@ public class MealPlanEntryAdapter extends
     ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
 
     binding.title.setText(entry.getType());
-    binding.subtitle.setVisibility(View.GONE);
     binding.picture.setVisibility(View.GONE);
     binding.picturePlaceholder.setVisibility(View.GONE);
     binding.flexboxLayout.setVisibility(View.GONE);
+    ChipUtil chipUtil = new ChipUtil(context);
+    binding.flexboxLayout.removeAllViews();
 
-    if (entry.getType().equals(MealPlanEntry.TYPE_RECIPE)) {
-      if (!NumUtil.isStringInt(entry.getRecipeId())) {
-        binding.title.setText(entry.getType());
-        return;
-      }
-      Recipe recipe = recipeHashMap.get(Integer.parseInt(entry.getRecipeId()));
-      if (recipe == null) {
-        binding.title.setText(entry.getType());
-        return;
-      }
-      binding.title.setText(recipe.getName());
-
-      double servings = NumUtil.isStringDouble(entry.getRecipeServings()) ? Double.parseDouble(
-          entry.getRecipeServings()) : 1;
-      binding.subtitle.setText(
-          pluralUtil.getQuantityString(R.plurals.msg_servings, servings, maxDecimalPlacesAmount)
-      );
-      binding.subtitle.setVisibility(View.VISIBLE);
-
-      ChipUtil chipUtil = new ChipUtil(context);
-      binding.flexboxLayout.removeAllViews();
-
-      /*if (activeFields.contains(MealPlanViewModel.FIELD_DUE_SCORE)
-          && recipeFulfillment != null) {
-        binding.flexboxLayout.addView(chipUtil.createRecipeDueScoreChip(recipeFulfillment.getDueScore()));
-      }
-      if (activeFields.contains(MealPlanViewModel.FIELD_FULFILLMENT)
-          && recipeFulfillment != null) {
-        binding.flexboxLayout.addView(chipUtil.createRecipeFulfillmentChip(recipeFulfillment));
-      }
-      if (activeFields.contains(MealPlanViewModel.FIELD_CALORIES)
-          && recipeFulfillment != null) {
-        binding.flexboxLayout.addView(chipUtil.createTextChip(NumUtil.trimAmount(
-            recipeFulfillment.getCalories(), maxDecimalPlacesAmount
-        ) + " " + energyUnit));
-      }
-      for (String activeField : activeFields) {
-        if (activeField.startsWith(Userfield.NAME_PREFIX)) {
-          String userfieldName = activeField.substring(
-              Userfield.NAME_PREFIX.length()
-          );
-          Userfield userfield = userfieldHashMap.get(userfieldName);
-          if (userfield == null) continue;
-          Chip chipUserfield = chipUtil.createUserfieldChip(
-              userfield,
-              recipe.getUserfields().get(userfieldName)
-          );
-          if (chipUserfield != null) binding.flexboxLayout.addView(chipUserfield);
+    switch (entry.getType()) {
+      case MealPlanEntry.TYPE_RECIPE: {
+        if (!NumUtil.isStringInt(entry.getRecipeId())) {
+          binding.title.setText(entry.getType());
+          return;
         }
-      }*/
+        Recipe recipe = recipeHashMap.get(Integer.parseInt(entry.getRecipeId()));
+        if (recipe == null) {
+          binding.title.setText(entry.getType());
+          return;
+        }
+        binding.title.setText(recipe.getName());
 
-      binding.flexboxLayout.setVisibility(binding.flexboxLayout.getChildCount() > 0 ? View.VISIBLE : View.GONE);
+        if (activeFields.contains(MealPlanViewModel.FIELD_AMOUNT)) {
+          double servings = NumUtil.isStringDouble(entry.getRecipeServings()) ? Double.parseDouble(
+              entry.getRecipeServings()) : 1;
+          String amount = pluralUtil
+              .getQuantityString(R.plurals.msg_servings, servings, maxDecimalPlacesAmount);
+          binding.flexboxLayout.addView(chipUtil.createTextChip(amount));
+        }
+        RecipeFulfillment recipeFulfillment = recipeFulfillmentHashMap.get(recipe.getId());
+        if (activeFields.contains(MealPlanViewModel.FIELD_FULFILLMENT)
+            && recipeFulfillment != null) {
+          binding.flexboxLayout.addView(chipUtil.createRecipeFulfillmentChip(recipeFulfillment));
+        }
+        if (activeFields.contains(MealPlanViewModel.FIELD_ENERGY)
+            && recipeFulfillment != null) {
+          binding.flexboxLayout.addView(chipUtil.createTextChip(NumUtil.trimAmount(
+              recipeFulfillment.getCalories(), maxDecimalPlacesAmount
+          ) + " " + energyUnit));
+        }
+        for (String activeField : activeFields) {
+          if (activeField.startsWith(Userfield.NAME_PREFIX)) {
+            String userfieldName = activeField.substring(
+                Userfield.NAME_PREFIX.length()
+            );
+            Userfield userfield = userfieldHashMap.get(userfieldName);
+            if (userfield == null)
+              continue;
+            Chip chipUserfield = chipUtil.createUserfieldChip(
+                userfield,
+                recipe.getUserfields().get(userfieldName)
+            );
+            if (chipUserfield != null)
+              binding.flexboxLayout.addView(chipUserfield);
+          }
+        }
 
-      String pictureFileName = recipe.getPictureFileName();
-      binding.picturePlaceholderIcon.setImageDrawable(ResourcesCompat.getDrawable(
-          context.getResources(),
-          R.drawable.ic_round_image,
-          null
-      ));
-      if (activeFields.contains(MealPlanViewModel.FIELD_PICTURE)
-          && pictureFileName != null && !pictureFileName.isEmpty()) {
-        binding.picture.layout(0, 0, 0, 0);
-
-        PictureUtil.loadPicture(
-            binding.picture,
-            null,
-            binding.picturePlaceholder,
-            grocyApi.getRecipePictureServeSmall(pictureFileName),
-            grocyAuthHeaders,
-            false
-        );
-      } else if (activeFields.contains(MealPlanViewModel.FIELD_PICTURE)) {
-        binding.picture.setVisibility(View.GONE);
-        binding.picturePlaceholder.setVisibility(View.VISIBLE);
-      } else {
-        binding.picture.setVisibility(View.GONE);
-        binding.picturePlaceholder.setVisibility(View.GONE);
-      }
-    } else if (entry.getType().equals(MealPlanEntry.TYPE_NOTE)) {
-      binding.title.setText(entry.getNote());
-      if (activeFields.contains(MealPlanViewModel.FIELD_PICTURE)) {
+        String pictureFileName = recipe.getPictureFileName();
         binding.picturePlaceholderIcon.setImageDrawable(ResourcesCompat.getDrawable(
             context.getResources(),
-            R.drawable.ic_round_short_text,
+            R.drawable.ic_round_image,
             null
         ));
-        binding.picturePlaceholder.setVisibility(View.VISIBLE);
-      } else {
-        binding.picturePlaceholder.setVisibility(View.GONE);
+        if (activeFields.contains(MealPlanViewModel.FIELD_PICTURE)
+            && pictureFileName != null && !pictureFileName.isEmpty()) {
+          binding.picture.layout(0, 0, 0, 0);
+
+          PictureUtil.loadPicture(
+              binding.picture,
+              null,
+              binding.picturePlaceholder,
+              grocyApi.getRecipePictureServeSmall(pictureFileName),
+              grocyAuthHeaders,
+              false
+          );
+        } else if (activeFields.contains(MealPlanViewModel.FIELD_PICTURE)) {
+          binding.picture.setVisibility(View.GONE);
+          binding.picturePlaceholder.setVisibility(View.VISIBLE);
+        } else {
+          binding.picture.setVisibility(View.GONE);
+          binding.picturePlaceholder.setVisibility(View.GONE);
+        }
+        break;
       }
-    } else if (entry.getType().equals(MealPlanEntry.TYPE_PRODUCT)) {
-      if (!NumUtil.isStringInt(entry.getProductId())) {
-        binding.title.setText(entry.getType());
-        return;
-      }
-      Product product = productHashMap.get(Integer.parseInt(entry.getProductId()));
-      if (product == null) {
-        binding.title.setText(entry.getType());
-        return;
-      }
-      binding.title.setText(product.getName());
-      double amount = NumUtil.isStringDouble(entry.getProductAmount()) ? Double.parseDouble(
-          entry.getProductAmount()) : 1;
-      int quId = NumUtil.isStringInt(entry.getProductQuId())
-          ? Integer.parseInt(entry.getProductQuId()) : -1;
-      QuantityUnit quantityUnit = quId != -1 ? quantityUnitHashMap.get(quId) : null;
-      if (quantityUnit != null) {
-        binding.subtitle.setText(context.getString(
-            R.string.subtitle_amount,
-            NumUtil.trimAmount(amount, maxDecimalPlacesAmount),
-            pluralUtil.getQuantityUnitPlural(quantityUnit, amount)
+      case MealPlanEntry.TYPE_NOTE:
+        binding.title.setText(entry.getNote());
+        if (activeFields.contains(MealPlanViewModel.FIELD_PICTURE)) {
+          binding.picturePlaceholderIcon.setImageDrawable(ResourcesCompat.getDrawable(
+              context.getResources(),
+              R.drawable.ic_round_short_text,
+              null
+          ));
+          binding.picturePlaceholder.setVisibility(View.VISIBLE);
+        } else {
+          binding.picturePlaceholder.setVisibility(View.GONE);
+        }
+        break;
+      case MealPlanEntry.TYPE_PRODUCT: {
+        if (!NumUtil.isStringInt(entry.getProductId())) {
+          binding.title.setText(entry.getType());
+          return;
+        }
+        Product product = productHashMap.get(Integer.parseInt(entry.getProductId()));
+        if (product == null) {
+          binding.title.setText(entry.getType());
+          return;
+        }
+        binding.title.setText(product.getName());
+
+        if (activeFields.contains(MealPlanViewModel.FIELD_AMOUNT)) {
+          double amount = NumUtil.isStringDouble(entry.getProductAmount()) ? Double.parseDouble(
+              entry.getProductAmount()) : 1;
+          int quId = NumUtil.isStringInt(entry.getProductQuId())
+              ? Integer.parseInt(entry.getProductQuId()) : -1;
+          if (quId == -1 && NumUtil.isStringInt(product.getQuIdStock())) {
+            quId = Integer.parseInt(product.getQuIdStock());
+          }
+          QuantityUnit quantityUnit = quId != -1 ? quantityUnitHashMap.get(quId) : null;
+          String amountText;
+          if (quantityUnit != null) {
+            amountText = context.getString(
+                R.string.subtitle_amount,
+                NumUtil.trimAmount(amount, maxDecimalPlacesAmount),
+                pluralUtil.getQuantityUnitPlural(quantityUnit, amount)
+            );
+          } else {
+            amountText = NumUtil.trimAmount(amount, maxDecimalPlacesAmount);
+          }
+          binding.flexboxLayout.addView(chipUtil.createTextChip(amountText));
+        }
+        for (String activeField : activeFields) {
+          if (activeField.startsWith(Userfield.NAME_PREFIX)) {
+            String userfieldName = activeField.substring(
+                Userfield.NAME_PREFIX.length()
+            );
+            Userfield userfield = userfieldHashMap.get(userfieldName);
+            if (userfield == null)
+              continue;
+            Chip chipUserfield = chipUtil.createUserfieldChip(
+                userfield,
+                product.getUserfields().get(userfieldName)
+            );
+            if (chipUserfield != null)
+              binding.flexboxLayout.addView(chipUserfield);
+          }
+        }
+
+        String pictureFileName = product.getPictureFileName();
+        binding.picturePlaceholderIcon.setImageDrawable(ResourcesCompat.getDrawable(
+            context.getResources(),
+            R.drawable.ic_round_image,
+            null
         ));
-      } else {
-        binding.subtitle.setText(NumUtil.trimAmount(amount, maxDecimalPlacesAmount));
-      }
-      binding.subtitle.setVisibility(View.VISIBLE);
+        if (activeFields.contains(MealPlanViewModel.FIELD_PICTURE)
+            && pictureFileName != null && !pictureFileName.isEmpty()) {
+          binding.picture.layout(0, 0, 0, 0);
 
-      String pictureFileName = product.getPictureFileName();
-      binding.picturePlaceholderIcon.setImageDrawable(ResourcesCompat.getDrawable(
-          context.getResources(),
-          R.drawable.ic_round_image,
-          null
-      ));
-      if (activeFields.contains(MealPlanViewModel.FIELD_PICTURE)
-          && pictureFileName != null && !pictureFileName.isEmpty()) {
-        binding.picture.layout(0, 0, 0, 0);
-
-        PictureUtil.loadPicture(
-            binding.picture,
-            null,
-            binding.picturePlaceholder,
-            grocyApi.getProductPictureServeSmall(pictureFileName),
-            grocyAuthHeaders,
-            false
-        );
-      } else if (activeFields.contains(MealPlanViewModel.FIELD_PICTURE)) {
-        binding.picture.setVisibility(View.GONE);
-        binding.picturePlaceholder.setVisibility(View.VISIBLE);
-      } else {
-        binding.picture.setVisibility(View.GONE);
-        binding.picturePlaceholder.setVisibility(View.GONE);
+          PictureUtil.loadPicture(
+              binding.picture,
+              null,
+              binding.picturePlaceholder,
+              grocyApi.getProductPictureServeSmall(pictureFileName),
+              grocyAuthHeaders,
+              false
+          );
+        } else if (activeFields.contains(MealPlanViewModel.FIELD_PICTURE)) {
+          binding.picture.setVisibility(View.GONE);
+          binding.picturePlaceholder.setVisibility(View.VISIBLE);
+        } else {
+          binding.picture.setVisibility(View.GONE);
+          binding.picturePlaceholder.setVisibility(View.GONE);
+        }
+        break;
       }
     }
+
+    binding.flexboxLayout.setVisibility(binding.flexboxLayout.getChildCount() > 0 ? View.VISIBLE : View.GONE);
 
   }
 
@@ -425,7 +463,11 @@ public class MealPlanEntryAdapter extends
       List<MealPlanSection> mealPlanSections,
       HashMap<Integer, Recipe> recipeHashMap,
       HashMap<Integer, Product> productHashMap,
-      HashMap<Integer, QuantityUnit> quantityUnitHashMap
+      HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      HashMap<Integer, RecipeFulfillment> recipeFulfillmentHashMap,
+      HashMap<Integer, StockItem> stockItemHashMap,
+      HashMap<String, Userfield> userfieldHashMap,
+      List<String> activeFields
   ) {
     List<GroupedListItem> newGroupedListItems = getGroupedListItems(
         mealPlanEntries, mealPlanSections
@@ -438,7 +480,15 @@ public class MealPlanEntryAdapter extends
         this.productHashMap,
         productHashMap,
         this.quantityUnitHashMap,
-        quantityUnitHashMap
+        quantityUnitHashMap,
+        this.recipeFulfillmentHashMap,
+        recipeFulfillmentHashMap,
+        this.stockItemHashMap,
+        stockItemHashMap,
+        this.userfieldHashMap,
+        userfieldHashMap,
+        this.activeFields,
+        activeFields
     );
 
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
@@ -450,6 +500,14 @@ public class MealPlanEntryAdapter extends
     this.productHashMap.putAll(productHashMap);
     this.quantityUnitHashMap.clear();
     this.quantityUnitHashMap.putAll(quantityUnitHashMap);
+    this.recipeFulfillmentHashMap.clear();
+    this.recipeFulfillmentHashMap.putAll(recipeFulfillmentHashMap);
+    this.stockItemHashMap.clear();
+    this.stockItemHashMap.putAll(stockItemHashMap);
+    this.userfieldHashMap.clear();
+    this.userfieldHashMap.putAll(userfieldHashMap);
+    this.activeFields.clear();
+    this.activeFields.addAll(activeFields);
     diffResult.dispatchUpdatesTo(this);
   }
 
@@ -463,6 +521,14 @@ public class MealPlanEntryAdapter extends
     HashMap<Integer, Product> newProductHashMap;
     HashMap<Integer, QuantityUnit> oldQuantityUnitHashMap;
     HashMap<Integer, QuantityUnit> newQuantityUnitHashMap;
+    HashMap<Integer, RecipeFulfillment> oldRecipeFulfillmentHashMap;
+    HashMap<Integer, RecipeFulfillment> newRecipeFulfillmentHashMap;
+    HashMap<Integer, StockItem> oldStockItemHashMap;
+    HashMap<Integer, StockItem> newStockItemHashMap;
+    HashMap<String, Userfield> oldUserfieldHashMap;
+    HashMap<String, Userfield> newUserfieldHashMap;
+    List<String> activeFieldsOld;
+    List<String> activeFieldsNew;
 
     public DiffCallback(
         List<GroupedListItem> oldItems,
@@ -472,7 +538,15 @@ public class MealPlanEntryAdapter extends
         HashMap<Integer, Product> oldProductHashMap,
         HashMap<Integer, Product> newProductHashMap,
         HashMap<Integer, QuantityUnit> oldQuantityUnitHashMap,
-        HashMap<Integer, QuantityUnit> newQuantityUnitHashMap
+        HashMap<Integer, QuantityUnit> newQuantityUnitHashMap,
+        HashMap<Integer, RecipeFulfillment> oldRecipeFulfillmentHashMap,
+        HashMap<Integer, RecipeFulfillment> newRecipeFulfillmentHashMap,
+        HashMap<Integer, StockItem> oldStockItemHashMap,
+        HashMap<Integer, StockItem> newStockItemHashMap,
+        HashMap<String, Userfield> oldUserfieldHashMap,
+        HashMap<String, Userfield> newUserfieldHashMap,
+        List<String> activeFieldsOld,
+        List<String> activeFieldsNew
     ) {
       this.oldItems = oldItems;
       this.newItems = newItems;
@@ -482,6 +556,14 @@ public class MealPlanEntryAdapter extends
       this.newProductHashMap = newProductHashMap;
       this.oldQuantityUnitHashMap = oldQuantityUnitHashMap;
       this.newQuantityUnitHashMap = newQuantityUnitHashMap;
+      this.oldRecipeFulfillmentHashMap = oldRecipeFulfillmentHashMap;
+      this.newRecipeFulfillmentHashMap = newRecipeFulfillmentHashMap;
+      this.oldStockItemHashMap = oldStockItemHashMap;
+      this.newStockItemHashMap = newStockItemHashMap;
+      this.oldUserfieldHashMap = oldUserfieldHashMap;
+      this.newUserfieldHashMap = newUserfieldHashMap;
+      this.activeFieldsOld = activeFieldsOld;
+      this.activeFieldsNew = activeFieldsNew;
     }
 
     @Override
@@ -523,6 +605,12 @@ public class MealPlanEntryAdapter extends
         if (!compareContent) {
           return newItem.getId() == oldItem.getId();
         }
+        if (!ArrayUtil.areListsEqualIgnoreOrder(activeFieldsOld, activeFieldsNew)) {
+          return false;
+        }
+        if (!oldUserfieldHashMap.equals(newUserfieldHashMap)) {
+          return false;
+        }
 
         if (newItem.getType() != null && !newItem.getType().equals(oldItem.getType())) {
           return false;
@@ -536,6 +624,13 @@ public class MealPlanEntryAdapter extends
             Recipe newRecipe = newRecipeHashMap.get(Integer.parseInt(newItem.getRecipeId()));
             Recipe oldRecipe = oldRecipeHashMap.get(Integer.parseInt(oldItem.getRecipeId()));
             if (newRecipe == null || oldRecipe == null) {
+              return false;
+            }
+            RecipeFulfillment recipeFulfillmentOld = oldRecipeFulfillmentHashMap.get(oldItem.getId());
+            RecipeFulfillment recipeFulfillmentNew = newRecipeFulfillmentHashMap.get(newItem.getId());
+            if (recipeFulfillmentOld == null && recipeFulfillmentNew != null
+                || recipeFulfillmentOld != null && recipeFulfillmentNew == null
+                || recipeFulfillmentOld != null && !recipeFulfillmentOld.equals(recipeFulfillmentNew)) {
               return false;
             }
             if (!newRecipe.equals(oldRecipe)) {
@@ -556,15 +651,22 @@ public class MealPlanEntryAdapter extends
             if (!newItemProduct.equals(oldItemProduct)) {
               return false;
             }
-          }
-          if (NumUtil.isStringInt(newItem.getProductQuId())
-              && NumUtil.isStringInt(oldItem.getProductQuId())) {
+
             QuantityUnit newItemQu = newQuantityUnitHashMap.get(Integer.parseInt(newItem.getProductQuId()));
             QuantityUnit oldItemQu = oldQuantityUnitHashMap.get(Integer.parseInt(oldItem.getProductQuId()));
             if (newItemQu == null || oldItemQu == null) {
               return false;
             }
             if (!newItemQu.equals(oldItemQu)) {
+              return false;
+            }
+
+            StockItem newStockItem = newStockItemHashMap.get(Integer.parseInt(newItem.getProductId()));
+            StockItem oldStockItem = oldStockItemHashMap.get(Integer.parseInt(oldItem.getProductId()));
+            if (newStockItem == null || oldStockItem == null) {
+              return false;
+            }
+            if (!newStockItem.equals(oldStockItem)) {
               return false;
             }
           }

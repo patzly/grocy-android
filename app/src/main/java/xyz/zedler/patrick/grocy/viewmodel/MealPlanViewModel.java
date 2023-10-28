@@ -44,9 +44,10 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.MealPlanEntry;
 import xyz.zedler.patrick.grocy.model.MealPlanSection;
 import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Recipe;
+import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
+import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.Userfield;
 import xyz.zedler.patrick.grocy.repository.MealPlanRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
@@ -61,9 +62,11 @@ public class MealPlanViewModel extends BaseViewModel {
   private final static String TAG = ShoppingListViewModel.class.getSimpleName();
   public final static String[] DISPLAYED_USERFIELD_ENTITIES = { ENTITY.RECIPES, ENTITY.PRODUCTS };
 
+  public final static String FIELD_WEEK_COSTS = "field_week_costs";
   public final static String FIELD_FULFILLMENT = "field_fulfillment";
   public final static String FIELD_ENERGY = "field_energy";
   public final static String FIELD_PICTURE = "field_picture";
+  public final static String FIELD_AMOUNT = "field_amount";
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
@@ -82,10 +85,12 @@ public class MealPlanViewModel extends BaseViewModel {
 
   private List<MealPlanEntry> mealPlanEntries;
   private List<MealPlanSection> mealPlanSections;
-  private List<Product> products;
   private HashMap<Integer, Recipe> recipeHashMap;
   private HashMap<Integer, Product> productHashMap;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+  private HashMap<Integer, RecipeFulfillment> recipeFulfillmentHashMap;
+  private HashMap<Integer, StockItem> stockItemHashMap;
+  private HashMap<String, Userfield> userfieldHashMap;
 
   private final int maxDecimalPlacesAmount;
   private boolean initialScrollDone;
@@ -116,25 +121,28 @@ public class MealPlanViewModel extends BaseViewModel {
     filterChipLiveDataHeaderFields = new FilterChipLiveDataFields(
         getApplication(),
         PREF.MEAL_PLAN_HEADER_FIELDS,
-        () -> loadFromDatabase(false),
-        new Field(FIELD_FULFILLMENT, getString(R.string.property_requirements_fulfilled), true),
-        new Field(FIELD_ENERGY, getString(R.string.property_energy_only), true)
+        () -> {},
+        new Field(FIELD_WEEK_COSTS, getString(R.string.property_week_costs), true)
     );
     filterChipLiveDataEntriesFields = new FilterChipLiveDataFields(
         getApplication(),
         PREF.MEAL_PLAN_ENTRIES_FIELDS,
         () -> loadFromDatabase(false),
+        new Field(FIELD_AMOUNT, getString(R.string.property_amount), true),
         new Field(FIELD_FULFILLMENT, getString(R.string.property_requirements_fulfilled), true),
-        new Field(FIELD_ENERGY, getString(R.string.property_energy_only), true)
+        new Field(FIELD_ENERGY, getString(R.string.property_energy_only), true),
+        new Field(FIELD_PICTURE, getString(R.string.property_picture), true)
     );
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
       quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
-      this.products = data.getProducts();
       productHashMap = ArrayUtil.getProductsHashMap(data.getProducts());
       recipeHashMap = ArrayUtil.getRecipesHashMap(data.getRecipes());
+      recipeFulfillmentHashMap = ArrayUtil.getRecipeFulfillmentHashMap(data.getRecipeFulfillments());
+      stockItemHashMap = ArrayUtil.getStockItemHashMap(data.getStockItems());
+      userfieldHashMap = ArrayUtil.getUserfieldHashMap(data.getUserfields());
       this.mealPlanSections = data.getMealPlanSections();
       SortUtil.sortMealPlanSections(this.mealPlanSections);
       this.mealPlanEntries = data.getMealPlanEntries();
@@ -165,11 +173,12 @@ public class MealPlanViewModel extends BaseViewModel {
         forceUpdate,
         true,
         QuantityUnit.class,
-        ProductGroup.class,
         MealPlanEntry.class,
         MealPlanSection.class,
         Recipe.class,
+        RecipeFulfillment.class,
         Product.class,
+        StockItem.class,
         Userfield.class
     );
   }
@@ -186,10 +195,6 @@ public class MealPlanViewModel extends BaseViewModel {
     return selectedDateLive.getValue();
   }
 
-  public List<MealPlanEntry> getMealPlanEntries() {
-    return mealPlanEntries;
-  }
-
   public MutableLiveData<HashMap<String, List<MealPlanEntry>>> getMealPlanEntriesLive() {
     return mealPlanEntriesLive;
   }
@@ -202,12 +207,24 @@ public class MealPlanViewModel extends BaseViewModel {
     return recipeHashMap;
   }
 
+  public HashMap<Integer, RecipeFulfillment> getRecipeFulfillmentHashMap() {
+    return recipeFulfillmentHashMap;
+  }
+
   public HashMap<Integer, Product> getProductHashMap() {
     return productHashMap;
   }
 
+  public HashMap<Integer, StockItem> getStockItemHashMap() {
+    return stockItemHashMap;
+  }
+
   public HashMap<Integer, QuantityUnit> getQuantityUnitHashMap() {
     return quantityUnitHashMap;
+  }
+
+  public HashMap<String, Userfield> getUserFieldHashMap() {
+    return userfieldHashMap;
   }
 
   public FilterChipLiveDataFields getFilterChipLiveDataHeaderFields() {

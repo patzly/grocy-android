@@ -94,7 +94,8 @@
       android:layout_below="@id/app_bar"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:orientation="vertical">
+      android:orientation="vertical"
+      android:animateLayoutChanges="true">
 
       <FrameLayout
         android:layout_width="match_parent"
@@ -126,6 +127,13 @@
         android:paddingHorizontal="8dp"
         android:layout_marginBottom="8dp"
         android:clipToPadding="false"/>
+
+      <TextView
+        android:id="@+id/week_costs"
+        style="@style/Widget.Grocy.TextView.Paragraph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"/>
 
       <com.google.android.material.divider.MaterialDivider
         style="@style/Widget.Grocy.Divider.Margin"

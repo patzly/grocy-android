@@ -98,7 +98,11 @@ public class MealPlanPagingFragment extends Fragment {
             viewModel.getMealPlanSections(),
             viewModel.getRecipeHashMap(),
             viewModel.getProductHashMap(),
-            viewModel.getQuantityUnitHashMap()
+            viewModel.getQuantityUnitHashMap(),
+            viewModel.getRecipeFulfillmentHashMap(),
+            viewModel.getStockItemHashMap(),
+            viewModel.getUserFieldHashMap(),
+            viewModel.getFilterChipLiveDataEntriesFields().getActiveFields()
         );
       }
     });

@@ -43,6 +43,7 @@ import java.time.format.FormatStyle;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
+import java.util.List;
 import java.util.Locale;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -193,6 +194,15 @@ public class MealPlanFragment extends BaseFragment {
       if (!viewModel.isInitialScrollDone()) viewModel.setInitialScrollDone(true);
     });
 
+    viewModel.getFilterChipLiveDataHeaderFields().observe(getViewLifecycleOwner(), data -> {
+      List<String> activeFields = viewModel.getFilterChipLiveDataHeaderFields().getActiveFields();
+      if (activeFields.contains(MealPlanViewModel.FIELD_WEEK_COSTS)) {
+        binding.weekCosts.setVisibility(View.VISIBLE);
+      } else {
+        binding.weekCosts.setVisibility(View.GONE);
+      }
+    });
+
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
@@ -227,13 +237,15 @@ public class MealPlanFragment extends BaseFragment {
 
   public PopupMenu.OnMenuItemClickListener getFieldsMenuItemClickListener() {
     return item -> {
-      if (item.getItemId() == R.id.action_fields_header) {
+      if (item.getItemId() == R.id.action_configure_sections) {
+        viewModel.showMessage(R.string.msg_not_implemented_yet);
+        return true;
+      } else if (item.getItemId() == R.id.action_fields_header) {
         PopupMenu popupMenu = new PopupMenu(requireContext(), binding.fieldsMenuButton);
         viewModel.getFilterChipLiveDataHeaderFields().populateMenu(popupMenu.getMenu());
         popupMenu.show();
         return true;
-      }
-      if (item.getItemId() == R.id.action_fields_entries) {
+      } else if (item.getItemId() == R.id.action_fields_entries) {
         PopupMenu popupMenu = new PopupMenu(requireContext(), binding.fieldsMenuButton);
         viewModel.getFilterChipLiveDataEntriesFields().populateMenu(popupMenu.getMenu());
         popupMenu.show();

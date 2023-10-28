@@ -153,6 +153,7 @@
   <string name="action_backup">Backup</string>
   <!-- This is the action part of "Restore from file" or "Restore data" -->
   <string name="action_restore">Restore</string>
+  <string name="action_configure_sections">Configure sections</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -1062,6 +1063,10 @@
   <string name="property_preparation">Preparation</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">Costs</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs">Week costs</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs_insert">Week costs: %1$s</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="property_due_score">Due score</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
