@@ -206,10 +206,14 @@ public class MealPlanFragment extends BaseFragment {
 
     activity.getScrollBehavior().setUpScroll(binding.appBar, false, null);
     activity.getScrollBehavior().setBottomBarVisibility(true);
-    activity.updateBottomAppBar(false, R.menu.menu_empty, this::onMenuItemClick);
+    activity.updateBottomAppBar(false, R.menu.menu_meal_plan, this::onMenuItemClick);
   }
 
   private boolean onMenuItemClick(MenuItem item) {
+    if (item.getItemId() == R.id.action_refresh) {
+      viewModel.downloadData(true);
+      return true;
+    }
     return false;
   }
 
