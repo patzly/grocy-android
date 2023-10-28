@@ -34,8 +34,12 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataFields.Field;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.MealPlanEntry;
 import xyz.zedler.patrick.grocy.model.MealPlanSection;
@@ -43,6 +47,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Recipe;
+import xyz.zedler.patrick.grocy.model.Userfield;
 import xyz.zedler.patrick.grocy.repository.MealPlanRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.DateUtil;
@@ -54,9 +59,10 @@ import xyz.zedler.patrick.grocy.web.RequestHeaders;
 public class MealPlanViewModel extends BaseViewModel {
 
   private final static String TAG = ShoppingListViewModel.class.getSimpleName();
+  public final static String[] DISPLAYED_USERFIELD_ENTITIES = { ENTITY.RECIPES, ENTITY.PRODUCTS };
 
   public final static String FIELD_FULFILLMENT = "field_fulfillment";
-  public final static String FIELD_CALORIES = "field_calories";
+  public final static String FIELD_ENERGY = "field_energy";
   public final static String FIELD_PICTURE = "field_picture";
 
   private final SharedPreferences sharedPrefs;
@@ -69,6 +75,8 @@ public class MealPlanViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
+  private final FilterChipLiveDataFields filterChipLiveDataHeaderFields;
+  private final FilterChipLiveDataFields filterChipLiveDataEntriesFields;
   private final MutableLiveData<LocalDate> selectedDateLive;
   private final MutableLiveData<HashMap<String, List<MealPlanEntry>>> mealPlanEntriesLive;
 
@@ -78,7 +86,6 @@ public class MealPlanViewModel extends BaseViewModel {
   private HashMap<Integer, Recipe> recipeHashMap;
   private HashMap<Integer, Product> productHashMap;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-  private boolean isSmoothScrolling;
 
   private final int maxDecimalPlacesAmount;
   private boolean initialScrollDone;
@@ -106,6 +113,20 @@ public class MealPlanViewModel extends BaseViewModel {
     offlineLive = new MutableLiveData<>(false);
     selectedDateLive = new MutableLiveData<>(LocalDate.now());
     mealPlanEntriesLive = new MutableLiveData<>();
+    filterChipLiveDataHeaderFields = new FilterChipLiveDataFields(
+        getApplication(),
+        PREF.MEAL_PLAN_HEADER_FIELDS,
+        () -> loadFromDatabase(false),
+        new Field(FIELD_FULFILLMENT, getString(R.string.property_requirements_fulfilled), true),
+        new Field(FIELD_ENERGY, getString(R.string.property_energy_only), true)
+    );
+    filterChipLiveDataEntriesFields = new FilterChipLiveDataFields(
+        getApplication(),
+        PREF.MEAL_PLAN_ENTRIES_FIELDS,
+        () -> loadFromDatabase(false),
+        new Field(FIELD_FULFILLMENT, getString(R.string.property_requirements_fulfilled), true),
+        new Field(FIELD_ENERGY, getString(R.string.property_energy_only), true)
+    );
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
@@ -120,6 +141,10 @@ public class MealPlanViewModel extends BaseViewModel {
       mealPlanEntriesLive.setValue(ArrayUtil.getMealPlanEntriesForDayHashMap(
           data.getMealPlanEntries()
       ));
+      filterChipLiveDataEntriesFields.setUserfields(
+          data.getUserfields(),
+          DISPLAYED_USERFIELD_ENTITIES
+      );
 
       if (downloadAfterLoading) {
         downloadData(false);
@@ -144,7 +169,8 @@ public class MealPlanViewModel extends BaseViewModel {
         MealPlanEntry.class,
         MealPlanSection.class,
         Recipe.class,
-        Product.class
+        Product.class,
+        Userfield.class
     );
   }
 
@@ -184,20 +210,20 @@ public class MealPlanViewModel extends BaseViewModel {
     return quantityUnitHashMap;
   }
 
+  public FilterChipLiveDataFields getFilterChipLiveDataHeaderFields() {
+    return filterChipLiveDataHeaderFields;
+  }
+
+  public FilterChipLiveDataFields getFilterChipLiveDataEntriesFields() {
+    return filterChipLiveDataEntriesFields;
+  }
+
   public boolean isInitialScrollDone() {
     return initialScrollDone;
   }
 
   public void setInitialScrollDone(boolean initialScrollDone) {
     this.initialScrollDone = initialScrollDone;
-  }
-
-  public boolean isSmoothScrolling() {
-    return isSmoothScrolling;
-  }
-
-  public void setSmoothScrolling(boolean smoothScrolling) {
-    isSmoothScrolling = smoothScrolling;
   }
 
   @NonNull

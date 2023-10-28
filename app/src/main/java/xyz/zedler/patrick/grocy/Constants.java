@@ -80,6 +80,8 @@ public final class Constants {
     public final static String RECIPES_LIST_LAYOUT = "recipes_list_layout";
     public final static String RECIPE_INFO_FIELDS = "recipe_info_fields";
     public final static String RECIPE_INGREDIENT_FIELDS = "recipe_ingredient_fields";
+    public final static String MEAL_PLAN_HEADER_FIELDS = "meal_plan_header_fields";
+    public final static String MEAL_PLAN_ENTRIES_FIELDS = "meal_plan_entries_fields";
     public final static String MASTER_OBJECTS_SORT_MODE = "master_objects_sort_mode";
     public final static String MASTER_OBJECTS_SORT_ASCENDING = "master_objects_sort_ascending";
 

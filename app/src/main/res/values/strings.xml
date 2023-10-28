@@ -1014,6 +1014,10 @@
   <string name="property_extra_field">Extra field: %1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">Fields</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_header">Fields (header)</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_entries">Fields (entries)</string>
   <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
   <string name="property_userfield_value">%1$s: %2$s</string>
   <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->

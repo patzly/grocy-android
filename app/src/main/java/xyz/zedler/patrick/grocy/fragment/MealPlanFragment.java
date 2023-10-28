@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
@@ -215,6 +216,31 @@ public class MealPlanFragment extends BaseFragment {
       return true;
     }
     return false;
+  }
+
+  public void showFieldsMenu() {
+    PopupMenu popupMenu = new PopupMenu(requireContext(), binding.fieldsMenuButton);
+    popupMenu.inflate(R.menu.menu_meal_plan_fields);
+    popupMenu.setOnMenuItemClickListener(getFieldsMenuItemClickListener());
+    popupMenu.show();
+  }
+
+  public PopupMenu.OnMenuItemClickListener getFieldsMenuItemClickListener() {
+    return item -> {
+      if (item.getItemId() == R.id.action_fields_header) {
+        PopupMenu popupMenu = new PopupMenu(requireContext(), binding.fieldsMenuButton);
+        viewModel.getFilterChipLiveDataHeaderFields().populateMenu(popupMenu.getMenu());
+        popupMenu.show();
+        return true;
+      }
+      if (item.getItemId() == R.id.action_fields_entries) {
+        PopupMenu popupMenu = new PopupMenu(requireContext(), binding.fieldsMenuButton);
+        viewModel.getFilterChipLiveDataEntriesFields().populateMenu(popupMenu.getMenu());
+        popupMenu.show();
+        return true;
+      }
+      return false;
+    };
   }
 
   private void selectDate(WeekDay data) {

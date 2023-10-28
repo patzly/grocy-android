@@ -34,6 +34,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
+import xyz.zedler.patrick.grocy.model.Userfield;
 
 public class MealPlanRepository {
 
@@ -58,6 +59,7 @@ public class MealPlanRepository {
     private final List<QuantityUnitConversion> quantityUnitConversions;
     private final List<MealPlanEntry> mealPlanEntries;
     private final List<MealPlanSection> mealPlanSections;
+    private final List<Userfield> userfields;
 
     public MealPlanData(
         List<Recipe> recipes,
@@ -67,7 +69,8 @@ public class MealPlanRepository {
         List<QuantityUnit> quantityUnits,
         List<QuantityUnitConversion> quantityUnitConversions,
         List<MealPlanEntry> mealPlanEntries,
-        List<MealPlanSection> mealPlanSections
+        List<MealPlanSection> mealPlanSections,
+        List<Userfield> userfields
     ) {
       this.recipes = recipes;
       this.recipeFulfillments = recipeFulfillments;
@@ -77,6 +80,7 @@ public class MealPlanRepository {
       this.quantityUnitConversions = quantityUnitConversions;
       this.mealPlanEntries = mealPlanEntries;
       this.mealPlanSections = mealPlanSections;
+      this.userfields = userfields;
     }
 
     public List<Recipe> getRecipes() {
@@ -110,6 +114,10 @@ public class MealPlanRepository {
     public List<MealPlanSection> getMealPlanSections() {
       return mealPlanSections;
     }
+
+    public List<Userfield> getUserfields() {
+      return userfields;
+    }
   }
 
   public void loadFromDatabase(MealPlanDataListener onSuccess, Consumer<Throwable> onError) {
@@ -123,6 +131,7 @@ public class MealPlanRepository {
             appDatabase.quantityUnitConversionDao().getConversions(),
             appDatabase.mealPlanEntryDao().getMealPlanEntries(),
             appDatabase.mealPlanSectionDao().getMealPlanSections(),
+            appDatabase.userfieldDao().getUserfields(),
             MealPlanData::new
         )
         .subscribeOn(Schedulers.io())

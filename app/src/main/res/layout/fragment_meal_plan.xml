@@ -61,6 +61,14 @@
           app:title="@string/title_meal_plan"
           app:titleCentered="true" />
 
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/fields_menu_button"
+          style="@style/Widget.Grocy.Button.IconButton"
+          android:layout_marginStart="12dp"
+          android:layout_gravity="end|center_vertical"
+          android:onClick="@{() -> fragment.showFieldsMenu()}"
+          app:icon="@drawable/ic_round_more_vert" />
+
       </FrameLayout>
 
       <LinearLayout
