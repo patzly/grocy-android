@@ -350,6 +350,21 @@ public class MealPlanEntryAdapter extends
         return;
       }
       binding.title.setText(product.getName());
+      double amount = NumUtil.isStringDouble(entry.getProductAmount()) ? Double.parseDouble(
+          entry.getProductAmount()) : 1;
+      int quId = NumUtil.isStringInt(entry.getProductQuId())
+          ? Integer.parseInt(entry.getProductQuId()) : -1;
+      QuantityUnit quantityUnit = quId != -1 ? quantityUnitHashMap.get(quId) : null;
+      if (quantityUnit != null) {
+        binding.subtitle.setText(context.getString(
+            R.string.subtitle_amount,
+            NumUtil.trimAmount(amount, maxDecimalPlacesAmount),
+            pluralUtil.getQuantityUnitPlural(quantityUnit, amount)
+        ));
+      } else {
+        binding.subtitle.setText(NumUtil.trimAmount(amount, maxDecimalPlacesAmount));
+      }
+      binding.subtitle.setVisibility(View.VISIBLE);
 
       String pictureFileName = product.getPictureFileName();
       binding.picturePlaceholderIcon.setImageDrawable(ResourcesCompat.getDrawable(
@@ -409,7 +424,8 @@ public class MealPlanEntryAdapter extends
       List<MealPlanEntry> mealPlanEntries,
       List<MealPlanSection> mealPlanSections,
       HashMap<Integer, Recipe> recipeHashMap,
-      HashMap<Integer, Product> productHashMap
+      HashMap<Integer, Product> productHashMap,
+      HashMap<Integer, QuantityUnit> quantityUnitHashMap
   ) {
     List<GroupedListItem> newGroupedListItems = getGroupedListItems(
         mealPlanEntries, mealPlanSections
@@ -420,7 +436,9 @@ public class MealPlanEntryAdapter extends
         this.recipeHashMap,
         recipeHashMap,
         this.productHashMap,
-        productHashMap
+        productHashMap,
+        this.quantityUnitHashMap,
+        quantityUnitHashMap
     );
 
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
@@ -430,6 +448,8 @@ public class MealPlanEntryAdapter extends
     this.recipeHashMap.putAll(recipeHashMap);
     this.productHashMap.clear();
     this.productHashMap.putAll(productHashMap);
+    this.quantityUnitHashMap.clear();
+    this.quantityUnitHashMap.putAll(quantityUnitHashMap);
     diffResult.dispatchUpdatesTo(this);
   }
 
@@ -441,6 +461,8 @@ public class MealPlanEntryAdapter extends
     HashMap<Integer, Recipe> newRecipeHashMap;
     HashMap<Integer, Product> oldProductHashMap;
     HashMap<Integer, Product> newProductHashMap;
+    HashMap<Integer, QuantityUnit> oldQuantityUnitHashMap;
+    HashMap<Integer, QuantityUnit> newQuantityUnitHashMap;
 
     public DiffCallback(
         List<GroupedListItem> oldItems,
@@ -448,7 +470,9 @@ public class MealPlanEntryAdapter extends
         HashMap<Integer, Recipe> oldRecipeHashMap,
         HashMap<Integer, Recipe> newRecipeHashMap,
         HashMap<Integer, Product> oldProductHashMap,
-        HashMap<Integer, Product> newProductHashMap
+        HashMap<Integer, Product> newProductHashMap,
+        HashMap<Integer, QuantityUnit> oldQuantityUnitHashMap,
+        HashMap<Integer, QuantityUnit> newQuantityUnitHashMap
     ) {
       this.oldItems = oldItems;
       this.newItems = newItems;
@@ -456,6 +480,8 @@ public class MealPlanEntryAdapter extends
       this.newRecipeHashMap = newRecipeHashMap;
       this.oldProductHashMap = oldProductHashMap;
       this.newProductHashMap = newProductHashMap;
+      this.oldQuantityUnitHashMap = oldQuantityUnitHashMap;
+      this.newQuantityUnitHashMap = newQuantityUnitHashMap;
     }
 
     @Override
@@ -520,14 +546,25 @@ public class MealPlanEntryAdapter extends
           if (!Objects.equals(newItem.getProductId(), oldItem.getProductId())) {
             return false;
           }
-          if (NumUtil.isStringInt(newItem.getRecipeId())
-              && NumUtil.isStringInt(oldItem.getRecipeId())) {
+          if (NumUtil.isStringInt(newItem.getProductId())
+              && NumUtil.isStringInt(oldItem.getProductId())) {
             Product newItemProduct = newProductHashMap.get(Integer.parseInt(newItem.getProductId()));
             Product oldItemProduct = oldProductHashMap.get(Integer.parseInt(oldItem.getProductId()));
             if (newItemProduct == null || oldItemProduct == null) {
               return false;
             }
             if (!newItemProduct.equals(oldItemProduct)) {
+              return false;
+            }
+          }
+          if (NumUtil.isStringInt(newItem.getProductQuId())
+              && NumUtil.isStringInt(oldItem.getProductQuId())) {
+            QuantityUnit newItemQu = newQuantityUnitHashMap.get(Integer.parseInt(newItem.getProductQuId()));
+            QuantityUnit oldItemQu = oldQuantityUnitHashMap.get(Integer.parseInt(oldItem.getProductQuId()));
+            if (newItemQu == null || oldItemQu == null) {
+              return false;
+            }
+            if (!newItemQu.equals(oldItemQu)) {
               return false;
             }
           }

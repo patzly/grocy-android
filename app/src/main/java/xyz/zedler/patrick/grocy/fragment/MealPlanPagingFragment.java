@@ -97,7 +97,8 @@ public class MealPlanPagingFragment extends Fragment {
             entries.get(dateFormatted),
             viewModel.getMealPlanSections(),
             viewModel.getRecipeHashMap(),
-            viewModel.getProductHashMap()
+            viewModel.getProductHashMap(),
+            viewModel.getQuantityUnitHashMap()
         );
       }
     });
