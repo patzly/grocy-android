@@ -112,6 +112,7 @@ public class MaterialTimelineView extends ConstraintLayout {
     drawRadio(canvas, radioColor, x, yRadio);
 
     if (timelineType == TIMELINE_TYPE_HEADER) {
+      drawLine(canvas, x, yRadio - radioRadius * LINE_WIDTH_MODIFIER, x + radioRadius * 2, yRadio + radioRadius * LINE_WIDTH_MODIFIER);
       drawRadioOutline(canvas, x, yRadio);
       setPadding(getPaddingLeft(), headerContentPaddingTop, getPaddingRight(), headerContentPaddingBottom);
     }

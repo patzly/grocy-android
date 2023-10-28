@@ -224,11 +224,15 @@ public class MealPlanEntryAdapter extends
       MealPlanSection section = (MealPlanSection) groupedListItem;
       RowMealPlanSectionHeaderBinding binding = ((MealPlanGroupViewHolder) viewHolder).binding;
 
-      Context context = binding.getRoot().getContext();
-      ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
       binding.timelineView.setPosition(section.isTopItem()
           ? MaterialTimelineView.POSITION_FIRST : MaterialTimelineView.POSITION_MIDDLE);
       binding.name.setText(section.getName());
+      if (section.getTimeInfo() != null && !section.getTimeInfo().isEmpty()) {
+        binding.time.setText(section.getTimeInfo());
+        binding.time.setVisibility(View.VISIBLE);
+      } else {
+        binding.time.setVisibility(View.GONE);
+      }
       return;
     }
 

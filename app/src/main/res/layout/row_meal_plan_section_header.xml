@@ -38,11 +38,18 @@
     android:layout_marginStart="32dp">
 
     <TextView
-      android:id="@+id/name"
-      android:layout_width="wrap_content"
+      style="@style/Widget.Grocy.TextView.TitleMedium"
       android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
       android:textSize="18sp"
-      android:textStyle="bold"/>
+      android:textStyle="bold"
+      android:id="@+id/name"/>
+
+    <TextView
+      style="@style/Widget.Grocy.TextView.LabelSmall"
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:id="@+id/time"/>
 
   </LinearLayout>
 
