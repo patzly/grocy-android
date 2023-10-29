@@ -27,7 +27,8 @@ public class MaterialTimelineView extends ConstraintLayout {
   private static final int DEFAULT_RADIO_RADIUS_DP = 8;
   private static final int DEFAULT_RADIO_INLINE_RADIUS_DP = 4;
   private static final int DEFAULT_RADIO_MARGIN_START_DP = 44;
-  private static final int DEFAULT_HEADER_CONTENT_PADDING = 32;
+  private static final int DEFAULT_HEADER_CONTENT_PADDING_DP = 32;
+  private static final int DEFAULT_ENTRY_CONTENT_PADDING_DP = 16;
   private static final float LINE_WIDTH_MODIFIER = 0.3f;
 
   private int position = POSITION_FIRST;
@@ -36,6 +37,7 @@ public class MaterialTimelineView extends ConstraintLayout {
   private float radioInlineRadius;
   private float radioMarginStart;
   private int headerContentPadding;
+  private int entryContentPadding;
   private int radioColor = Color.WHITE;
   private int lineColor = Color.WHITE;
   private boolean showLineAndRadio = true;
@@ -57,7 +59,8 @@ public class MaterialTimelineView extends ConstraintLayout {
     radioRadius = UiUtil.dpToPxFloat(context, DEFAULT_RADIO_RADIUS_DP);
     radioInlineRadius = UiUtil.dpToPxFloat(context, DEFAULT_RADIO_INLINE_RADIUS_DP);
     radioMarginStart = UiUtil.dpToPxFloat(context, DEFAULT_RADIO_MARGIN_START_DP);
-    headerContentPadding = UiUtil.dpToPx(context, DEFAULT_HEADER_CONTENT_PADDING);
+    headerContentPadding = UiUtil.dpToPx(context, DEFAULT_HEADER_CONTENT_PADDING_DP);
+    entryContentPadding = UiUtil.dpToPx(context, DEFAULT_ENTRY_CONTENT_PADDING_DP);
 
     setLayerType(View.LAYER_TYPE_HARDWARE, null);
     setWillNotDraw(false);
@@ -85,12 +88,15 @@ public class MaterialTimelineView extends ConstraintLayout {
     float yLine;
     int headerContentPaddingTop = 0;
     int headerContentPaddingBottom = 0;
+    int entryContentPaddingTop = 0;
 
     switch (position) {
       case POSITION_FIRST:
         yLine = getHeight();
         if (timelineType == TIMELINE_TYPE_HEADER) {
           yRadio = getHeight() / 2f - headerContentPadding / 2f;
+        } else {
+          yRadio = getHeight() / 2f - entryContentPadding / 2f;
         }
         drawLine(canvas, x - radioRadius * LINE_WIDTH_MODIFIER, yRadio, x + radioRadius * LINE_WIDTH_MODIFIER, yLine);
         headerContentPaddingBottom = headerContentPadding;
@@ -100,6 +106,7 @@ public class MaterialTimelineView extends ConstraintLayout {
         drawLine(canvas, x - radioRadius * LINE_WIDTH_MODIFIER, 0, x + radioRadius * LINE_WIDTH_MODIFIER, yLine);
         headerContentPaddingTop = headerContentPadding;
         headerContentPaddingBottom = headerContentPadding;
+        entryContentPaddingTop = entryContentPadding;
         break;
       case POSITION_LAST:
         if (timelineType == TIMELINE_TYPE_HEADER) {
@@ -107,6 +114,7 @@ public class MaterialTimelineView extends ConstraintLayout {
         }
         drawLine(canvas, x - radioRadius * LINE_WIDTH_MODIFIER, 0, x + radioRadius * LINE_WIDTH_MODIFIER, yRadio);
         headerContentPaddingTop = headerContentPadding;
+        entryContentPaddingTop = entryContentPadding;
         break;
     }
     drawRadio(canvas, radioColor, x, yRadio);
@@ -115,6 +123,8 @@ public class MaterialTimelineView extends ConstraintLayout {
       drawLine(canvas, x, yRadio - radioRadius * LINE_WIDTH_MODIFIER, x + radioRadius * 2, yRadio + radioRadius * LINE_WIDTH_MODIFIER);
       drawRadioOutline(canvas, x, yRadio);
       setPadding(getPaddingLeft(), headerContentPaddingTop, getPaddingRight(), headerContentPaddingBottom);
+    } else {
+      setPadding(getPaddingLeft(), entryContentPaddingTop, getPaddingRight(), entryContentPadding);
     }
   }
 

@@ -383,6 +383,17 @@ public class MealPlanEntryAdapter extends
           }
           binding.flexboxLayout.addView(chipUtil.createTextChip(amountText));
         }
+        if (activeFields.contains(MealPlanViewModel.FIELD_FULFILLMENT)) {
+          StockItem stockItem = stockItemHashMap.get(product.getId());
+          //binding.flexboxLayout.addView(chipUtil.createRecipeFulfillmentChip());
+        }
+        if (activeFields.contains(MealPlanViewModel.FIELD_ENERGY)
+            && NumUtil.isStringDouble(product.getCalories())) {
+          double calories = Double.parseDouble(product.getCalories());
+          //binding.flexboxLayout.addView(chipUtil.createTextChip(NumUtil.trimAmount(
+          //    calories, maxDecimalPlacesAmount
+          //) + " " + energyUnit));
+        }
         for (String activeField : activeFields) {
           if (activeField.startsWith(Userfield.NAME_PREFIX)) {
             String userfieldName = activeField.substring(
@@ -619,8 +630,7 @@ public class MealPlanEntryAdapter extends
           if (!Objects.equals(newItem.getRecipeId(), oldItem.getRecipeId())) {
             return false;
           }
-          if (NumUtil.isStringInt(newItem.getRecipeId())
-              && NumUtil.isStringInt(oldItem.getRecipeId())) {
+          if (NumUtil.isStringInt(newItem.getRecipeId())) {
             Recipe newRecipe = newRecipeHashMap.get(Integer.parseInt(newItem.getRecipeId()));
             Recipe oldRecipe = oldRecipeHashMap.get(Integer.parseInt(oldItem.getRecipeId()));
             if (newRecipe == null || oldRecipe == null) {
@@ -641,8 +651,7 @@ public class MealPlanEntryAdapter extends
           if (!Objects.equals(newItem.getProductId(), oldItem.getProductId())) {
             return false;
           }
-          if (NumUtil.isStringInt(newItem.getProductId())
-              && NumUtil.isStringInt(oldItem.getProductId())) {
+          if (NumUtil.isStringInt(newItem.getProductId())) {
             Product newItemProduct = newProductHashMap.get(Integer.parseInt(newItem.getProductId()));
             Product oldItemProduct = oldProductHashMap.get(Integer.parseInt(oldItem.getProductId()));
             if (newItemProduct == null || oldItemProduct == null) {
@@ -652,21 +661,22 @@ public class MealPlanEntryAdapter extends
               return false;
             }
 
-            QuantityUnit newItemQu = newQuantityUnitHashMap.get(Integer.parseInt(newItem.getProductQuId()));
-            QuantityUnit oldItemQu = oldQuantityUnitHashMap.get(Integer.parseInt(oldItem.getProductQuId()));
-            if (newItemQu == null || oldItemQu == null) {
-              return false;
-            }
-            if (!newItemQu.equals(oldItemQu)) {
-              return false;
-            }
-
             StockItem newStockItem = newStockItemHashMap.get(Integer.parseInt(newItem.getProductId()));
             StockItem oldStockItem = oldStockItemHashMap.get(Integer.parseInt(oldItem.getProductId()));
             if (newStockItem == null || oldStockItem == null) {
               return false;
             }
             if (!newStockItem.equals(oldStockItem)) {
+              return false;
+            }
+          }
+          if (NumUtil.isStringInt(newItem.getProductQuId())) {
+            QuantityUnit newItemQu = newQuantityUnitHashMap.get(Integer.parseInt(newItem.getProductQuId()));
+            QuantityUnit oldItemQu = oldQuantityUnitHashMap.get(Integer.parseInt(oldItem.getProductQuId()));
+            if (newItemQu == null || oldItemQu == null) {
+              return false;
+            }
+            if (!newItemQu.equals(oldItemQu)) {
               return false;
             }
           }
