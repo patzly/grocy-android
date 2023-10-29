@@ -146,6 +146,7 @@
   <string name="action_backup">Sichern</string>
   <!-- This is the action part of "Restore from file" or "Restore data" -->
   <string name="action_restore">Wiederherstellen</string>
+  <string name="action_configure_sections">Abschnitte konfigurieren</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -1000,6 +1001,10 @@
   <string name="property_extra_field">Extrafeld: %1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">Felder</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_header">Felder (Kopfzeile)</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_entries">Felder (Einträge)</string>
   <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
   <string name="property_userfield_value">%1$s: %2$s</string>
   <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
@@ -1044,6 +1049,10 @@
   <string name="property_preparation">Zubereitung</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">Kosten</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs">Wochenkosten</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs_insert">Wochenkosten: %1$s</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="property_due_score">Fällig.-Punkte</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
