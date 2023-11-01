@@ -251,9 +251,9 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
           && !isQuantityUnitStockChangeableLive.getValue()) {
         showMessage(getString(R.string.msg_help_qu_stock));
         return quantityUnitsAllowed;
-      } else if (quantityUnitsAllowed == null || quantityUnitsAllowed.isEmpty()) {
+      } else if (quantityUnitsAllowed == null) {
         showErrorMessage();
-        return quantityUnitsAllowed;
+        return null;
       }
     } else {
       return quantityUnitsAllowed;
