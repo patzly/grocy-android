@@ -899,7 +899,7 @@
     <item quantity="many">%1$d secondes</item>
     <item quantity="other">%1$d secondes</item>
   </plurals>
-  <string name="property_amount_min_stock">Min. montant du stock</string>
+  <string name="property_amount_min_stock">Quantité minimale du stock</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Quantité en %1$s</string>
   <string name="property_price">Prix</string>
