@@ -1261,7 +1261,7 @@
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Seuil de péremption</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="setting_default_amount_purchase">Montant par défaut pour l\'achat</string>
+  <string name="setting_default_amount_purchase">Quantité par défaut lors de l\'achat</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">Montant par défaut pour consommer</string>
   <string name="setting_treat_opened_as_out_of_stock">Considérer ouvert comme en rupture de stock</string>
