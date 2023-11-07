@@ -733,7 +733,7 @@
   <string name="subtitle_barcode_unit">Unité de quantité : %1$s</string>
   <string name="subtitle_barcode">Code-barres : %1$s</string>
   <string name="subtitle_feature_disabled">Fonctionnalité désactivée</string>
-  <string name="subtitle_date_from_input">Date de saisie :\n%1$s</string>
+  <string name="subtitle_date_from_input">Date saisie :\n%1$s</string>
   <string name="subtitle_product_amount">Stock min., Consommation rapide, Facteur, Tarage</string>
   <string name="subtitle_product_default_location">Emplacement, Magasin</string>
   <string name="subtitle_product_due_date">Type, Date par défaut (après ouverture, congélation, décongélation)</string>
