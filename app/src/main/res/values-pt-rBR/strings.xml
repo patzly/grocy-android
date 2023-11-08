@@ -146,6 +146,7 @@
   <string name="action_backup">Backup</string>
   <!-- This is the action part of "Restore from file" or "Restore data" -->
   <string name="action_restore">Recuperação</string>
+  <string name="action_configure_sections">Configurar seções</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -630,6 +631,7 @@
   <string name="title_chores">Tarefas domésticas</string>
   <string name="title_chore">Tarefa doméstica</string>
   <string name="title_recipes">Receitas</string>
+  <string name="title_meal_plan">Plano alimentar</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Editor</string>
   <string name="title_task_new">Nova tarefa</string>
@@ -1042,6 +1044,10 @@
   <string name="property_extra_field">Campo extra: %1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">Colunas</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_header">Campos (cabeçalho)</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_entries">Campos (entradas)</string>
   <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
   <string name="property_userfield_value">%1$s: %2$s</string>
   <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
@@ -1086,6 +1092,10 @@
   <string name="property_preparation">Preparo</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">Custos</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs">Custos da semana</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs_insert">Custos da semana: %1$s</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="property_due_score">Pontuação</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
@@ -1105,6 +1115,8 @@
   <string name="date_unlimited">Ilimitado</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Nunca</string>
+  <!-- %1$s is 'from' date, %2$s is 'to' date -->
+  <string name="date_timespan">%1$s - %2$s</string>
 
   <plurals name="date_days">
     <item quantity="one">%d dia</item>
