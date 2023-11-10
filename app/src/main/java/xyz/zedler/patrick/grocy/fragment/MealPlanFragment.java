@@ -192,11 +192,13 @@ public class MealPlanFragment extends BaseFragment {
       int position = (int) ChronoUnit.DAYS.between(LocalDate.now(), date) + Integer.MAX_VALUE / 2;
       binding.viewPager.setCurrentItem(position, viewModel.isInitialScrollDone());
       if (!viewModel.isInitialScrollDone()) viewModel.setInitialScrollDone(true);
+      viewModel.getWeekCostsTextLive().setValue(viewModel.getWeekCostsText());
     });
 
     viewModel.getFilterChipLiveDataHeaderFields().observe(getViewLifecycleOwner(), data -> {
       List<String> activeFields = viewModel.getFilterChipLiveDataHeaderFields().getActiveFields();
       if (activeFields.contains(MealPlanViewModel.FIELD_WEEK_COSTS)) {
+        viewModel.getWeekCostsTextLive().setValue(viewModel.getWeekCostsText());
         binding.weekCosts.setVisibility(View.VISIBLE);
       } else {
         binding.weekCosts.setVisibility(View.GONE);

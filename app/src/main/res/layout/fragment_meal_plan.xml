@@ -133,7 +133,8 @@
         style="@style/Widget.Grocy.TextView.Paragraph"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        android:text="@{viewModel.weekCostsTextLive}"/>
 
       <com.google.android.material.divider.MaterialDivider
         style="@style/Widget.Grocy.Divider.Margin"

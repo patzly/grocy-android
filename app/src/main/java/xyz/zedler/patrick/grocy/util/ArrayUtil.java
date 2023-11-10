@@ -205,6 +205,16 @@ public class ArrayUtil {
     return recipeHashMap;
   }
 
+  public static List<Recipe> getShadowRecipes(List<Recipe> allRecipes) {
+    List<Recipe> shadowRecipes = new ArrayList<>();
+    for (Recipe recipe : allRecipes) {
+      if (recipe.getId() < 0) {
+        shadowRecipes.add(recipe);
+      }
+    }
+    return shadowRecipes;
+  }
+
   public static HashMap<Integer, RecipePosition> getRecipePositionHashMap(
       List<RecipePosition> recipePositions
   ) {

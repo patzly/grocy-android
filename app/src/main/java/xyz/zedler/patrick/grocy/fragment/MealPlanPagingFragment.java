@@ -29,8 +29,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import xyz.zedler.patrick.grocy.adapter.MealPlanEntryAdapter;
 import xyz.zedler.patrick.grocy.adapter.MealPlanEntryAdapter.SimpleItemTouchHelperCallback;
 import xyz.zedler.patrick.grocy.databinding.FragmentMealPlanPagingBinding;
@@ -40,7 +38,6 @@ public class MealPlanPagingFragment extends Fragment {
 
   private static final String ARG_DATE = "date";
   private LocalDate date;
-  private DateTimeFormatter dateFormatter;
   private FragmentMealPlanPagingBinding binding;
   private MealPlanViewModel viewModel;
 
@@ -77,10 +74,6 @@ public class MealPlanPagingFragment extends Fragment {
         .MealPlanViewModelFactory(requireActivity().getApplication())
     ).get(MealPlanViewModel.class);
 
-    dateFormatter = new DateTimeFormatterBuilder()
-        .appendPattern("yyyy-MM-dd")
-        .toFormatter();
-
     MealPlanEntryAdapter adapter = new MealPlanEntryAdapter(
         requireContext(), viewModel.getGrocyApi(), viewModel.getGrocyAuthHeaders()
     );
@@ -92,7 +85,7 @@ public class MealPlanPagingFragment extends Fragment {
 
     viewModel.getMealPlanEntriesLive().observe(getViewLifecycleOwner(), entries -> {
       if (entries != null) {
-        String dateFormatted = date.format(dateFormatter);
+        String dateFormatted = date.format(viewModel.getDateFormatter());
         adapter.updateData(
             entries.get(dateFormatted),
             viewModel.getMealPlanSections(),

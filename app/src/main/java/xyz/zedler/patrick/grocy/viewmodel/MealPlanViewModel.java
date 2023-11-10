@@ -29,6 +29,8 @@ import androidx.preference.PreferenceManager;
 import com.bumptech.glide.load.model.LazyHeaders;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.HashMap;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants.PREF;
@@ -52,6 +54,7 @@ import xyz.zedler.patrick.grocy.model.Userfield;
 import xyz.zedler.patrick.grocy.repository.MealPlanRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -74,6 +77,8 @@ public class MealPlanViewModel extends BaseViewModel {
   private final LazyHeaders grocyAuthHeaders;
   private final MealPlanRepository repository;
   private final PluralUtil pluralUtil;
+  private final DateTimeFormatter dateFormatter;
+  private final DateTimeFormatter weekFormatter;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -81,10 +86,12 @@ public class MealPlanViewModel extends BaseViewModel {
   private final FilterChipLiveDataFields filterChipLiveDataHeaderFields;
   private final FilterChipLiveDataFields filterChipLiveDataEntriesFields;
   private final MutableLiveData<LocalDate> selectedDateLive;
+  private final MutableLiveData<String> weekCostsTextLive;
   private final MutableLiveData<HashMap<String, List<MealPlanEntry>>> mealPlanEntriesLive;
 
   private List<MealPlanEntry> mealPlanEntries;
   private List<MealPlanSection> mealPlanSections;
+  private List<Recipe> shadowRecipes;
   private HashMap<Integer, Recipe> recipeHashMap;
   private HashMap<Integer, Product> productHashMap;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
@@ -93,6 +100,8 @@ public class MealPlanViewModel extends BaseViewModel {
   private HashMap<String, Userfield> userfieldHashMap;
 
   private final int maxDecimalPlacesAmount;
+  private final int decimalPlacesPriceDisplay;
+  private final String currency;
   private boolean initialScrollDone;
   private final boolean debug;
 
@@ -105,7 +114,14 @@ public class MealPlanViewModel extends BaseViewModel {
         STOCK.DECIMAL_PLACES_AMOUNT,
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
     );
+    this.decimalPlacesPriceDisplay = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_PRICES_DISPLAY,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_DISPLAY
+    );
+    this.currency = sharedPrefs.getString(PREF.CURRENCY, "");
     initialScrollDone = false;
+    dateFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd").toFormatter();
+    weekFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-ww").toFormatter();
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
@@ -117,6 +133,7 @@ public class MealPlanViewModel extends BaseViewModel {
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
     selectedDateLive = new MutableLiveData<>(LocalDate.now());
+    weekCostsTextLive = new MutableLiveData<>();
     mealPlanEntriesLive = new MutableLiveData<>();
     filterChipLiveDataHeaderFields = new FilterChipLiveDataFields(
         getApplication(),
@@ -139,8 +156,10 @@ public class MealPlanViewModel extends BaseViewModel {
     repository.loadFromDatabase(data -> {
       quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
       productHashMap = ArrayUtil.getProductsHashMap(data.getProducts());
+      shadowRecipes = ArrayUtil.getShadowRecipes(data.getRecipes());
       recipeHashMap = ArrayUtil.getRecipesHashMap(data.getRecipes());
       recipeFulfillmentHashMap = ArrayUtil.getRecipeFulfillmentHashMap(data.getRecipeFulfillments());
+      weekCostsTextLive.setValue(getWeekCostsText());
       stockItemHashMap = ArrayUtil.getStockItemHashMap(data.getStockItems());
       userfieldHashMap = ArrayUtil.getUserfieldHashMap(data.getUserfields());
       this.mealPlanSections = data.getMealPlanSections();
@@ -195,12 +214,47 @@ public class MealPlanViewModel extends BaseViewModel {
     return selectedDateLive.getValue();
   }
 
+  public DateTimeFormatter getDateFormatter() {
+    return dateFormatter;
+  }
+
+  public String getWeekCostsText() {
+    if (shadowRecipes == null || !filterChipLiveDataHeaderFields.getActiveFields()
+        .contains(MealPlanViewModel.FIELD_WEEK_COSTS)) {
+      return getString(R.string.property_week_costs_insert, getString(R.string.subtitle_unknown));
+    };
+    LocalDate selectedDate = getSelectedDate();
+    String weekFormatted = selectedDate.format(weekFormatter);
+    for (Recipe shadowRecipe : shadowRecipes) {
+      if (shadowRecipe.getName().equals(weekFormatted)) {
+        RecipeFulfillment recipeFulfillment = recipeFulfillmentHashMap.get(shadowRecipe.getId());
+        if (recipeFulfillment == null) {
+          return getString(R.string.property_week_costs_insert, getString(R.string.subtitle_unknown));
+        }
+        return getString(R.string.property_week_costs_insert, getString(
+            R.string.property_price_with_currency,
+            NumUtil.trimPrice(recipeFulfillment.getCosts(), decimalPlacesPriceDisplay),
+            currency
+        ));
+      }
+    }
+    return getString(R.string.property_week_costs_insert, getString(
+        R.string.property_price_with_currency,
+        NumUtil.trimPrice(0, decimalPlacesPriceDisplay),
+        currency
+    ));
+  }
+
   public MutableLiveData<HashMap<String, List<MealPlanEntry>>> getMealPlanEntriesLive() {
     return mealPlanEntriesLive;
   }
 
   public List<MealPlanSection> getMealPlanSections() {
     return mealPlanSections;
+  }
+
+  public MutableLiveData<String> getWeekCostsTextLive() {
+    return weekCostsTextLive;
   }
 
   public HashMap<Integer, Recipe> getRecipeHashMap() {

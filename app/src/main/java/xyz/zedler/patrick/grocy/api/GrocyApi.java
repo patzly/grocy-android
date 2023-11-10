@@ -429,20 +429,19 @@ public class GrocyApi {
   // RECIPES
 
   /**
-   * Returns all recipes
+   * Returns all recipes, including shadow recipes for meal plan which can be used for looking up
+   * resolved costs, calories etc.
    */
   public String getRecipes() {
-    return getObjects(
-        ENTITY.RECIPES,
-        new COMPARISON("id", COMPARISON_OPERATOR.GREATER, "0")
-    );
+    return getObjects(ENTITY.RECIPES);
   }
 
+  /**
+   * Returns all resolved recipes, including resolved shadow recipes for meal plan
+   * resolved costs, calories etc.
+   */
   public String getRecipeFulfillments() {
-    return getUrl(
-        "/recipes/fulfillment",
-        new COMPARISON("recipe_id", COMPARISON_OPERATOR.GREATER, "0")
-    );
+    return getUrl("/recipes/fulfillment");
   }
 
   public String getRecipePositions() {
