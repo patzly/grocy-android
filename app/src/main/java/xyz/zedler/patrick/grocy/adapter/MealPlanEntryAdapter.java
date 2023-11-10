@@ -74,20 +74,26 @@ public class MealPlanEntryAdapter extends
   private final HashMap<Integer, Recipe> recipeHashMap;
   private final HashMap<Integer, Product> productHashMap;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-  private final HashMap<Integer, RecipeFulfillment> recipeFulfillmentHashMap;
+  private final HashMap<String, RecipeFulfillment> recipeResolvedFulfillmentHashMap;
   private final HashMap<Integer, StockItem> stockItemHashMap;
   private final HashMap<String, Userfield> userfieldHashMap;
   private final List<String> activeFields;
   private final PluralUtil pluralUtil;
   private final GrocyApi grocyApi;
   private final LazyHeaders grocyAuthHeaders;
+  private final String date;
   private final String energyUnit;
   private final int maxDecimalPlacesAmount;
   private final int decimalPlacesPriceDisplay;
   private final String currency;
   private final boolean priceTrackingEnabled;
 
-  public MealPlanEntryAdapter(Context context, GrocyApi grocyApi, LazyHeaders grocyAuthHeaders) {
+  public MealPlanEntryAdapter(
+      Context context,
+      GrocyApi grocyApi,
+      LazyHeaders grocyAuthHeaders,
+      String date
+  ) {
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     this.maxDecimalPlacesAmount = sharedPrefs.getInt(
         STOCK.DECIMAL_PLACES_AMOUNT,
@@ -101,10 +107,11 @@ public class MealPlanEntryAdapter extends
     this.energyUnit = sharedPrefs.getString(PREF.ENERGY_UNIT, PREF.ENERGY_UNIT_DEFAULT);
     this.priceTrackingEnabled = sharedPrefs
         .getBoolean(PREF.FEATURE_STOCK_PRICE_TRACKING, true);
+    this.date = date;
     this.recipeHashMap = new HashMap<>();
     this.productHashMap = new HashMap<>();
     this.quantityUnitHashMap = new HashMap<>();
-    this.recipeFulfillmentHashMap = new HashMap<>();
+    this.recipeResolvedFulfillmentHashMap = new HashMap<>();
     this.stockItemHashMap = new HashMap<>();
     this.userfieldHashMap = new HashMap<>();
     this.activeFields = new ArrayList<>();
@@ -282,7 +289,8 @@ public class MealPlanEntryAdapter extends
               .getQuantityString(R.plurals.msg_servings, servings, maxDecimalPlacesAmount);
           binding.flexboxLayout.addView(chipUtil.createTextChip(amount));
         }
-        RecipeFulfillment recipeFulfillment = recipeFulfillmentHashMap.get(recipe.getId());
+        RecipeFulfillment recipeFulfillment = recipeResolvedFulfillmentHashMap
+            .get(date + "#" + entry.getId());
         if (activeFields.contains(MealPlanViewModel.FIELD_FULFILLMENT)
             && recipeFulfillment != null) {
           binding.flexboxLayout.addView(chipUtil.createRecipeFulfillmentChip(recipeFulfillment));
@@ -292,6 +300,14 @@ public class MealPlanEntryAdapter extends
           binding.flexboxLayout.addView(chipUtil.createTextChip(NumUtil.trimAmount(
               recipeFulfillment.getCalories(), maxDecimalPlacesAmount
           ) + " " + energyUnit));
+        }
+        if (activeFields.contains(MealPlanViewModel.FIELD_PRICE)
+            && recipeFulfillment != null) {
+          binding.flexboxLayout.addView(chipUtil.createTextChip(context.getString(
+              R.string.property_price_with_currency,
+              NumUtil.trimPrice(recipeFulfillment.getCostsPerServing(), decimalPlacesPriceDisplay),
+              currency
+          )));
         }
         for (String activeField : activeFields) {
           if (activeField.startsWith(Userfield.NAME_PREFIX)) {
@@ -475,7 +491,7 @@ public class MealPlanEntryAdapter extends
       HashMap<Integer, Recipe> recipeHashMap,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
-      HashMap<Integer, RecipeFulfillment> recipeFulfillmentHashMap,
+      HashMap<String, RecipeFulfillment> recipeResolvedFulfillmentHashMap,
       HashMap<Integer, StockItem> stockItemHashMap,
       HashMap<String, Userfield> userfieldHashMap,
       List<String> activeFields
@@ -492,14 +508,15 @@ public class MealPlanEntryAdapter extends
         productHashMap,
         this.quantityUnitHashMap,
         quantityUnitHashMap,
-        this.recipeFulfillmentHashMap,
-        recipeFulfillmentHashMap,
+        this.recipeResolvedFulfillmentHashMap,
+        recipeResolvedFulfillmentHashMap,
         this.stockItemHashMap,
         stockItemHashMap,
         this.userfieldHashMap,
         userfieldHashMap,
         this.activeFields,
-        activeFields
+        activeFields,
+        date
     );
 
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
@@ -511,8 +528,8 @@ public class MealPlanEntryAdapter extends
     this.productHashMap.putAll(productHashMap);
     this.quantityUnitHashMap.clear();
     this.quantityUnitHashMap.putAll(quantityUnitHashMap);
-    this.recipeFulfillmentHashMap.clear();
-    this.recipeFulfillmentHashMap.putAll(recipeFulfillmentHashMap);
+    this.recipeResolvedFulfillmentHashMap.clear();
+    this.recipeResolvedFulfillmentHashMap.putAll(recipeResolvedFulfillmentHashMap);
     this.stockItemHashMap.clear();
     this.stockItemHashMap.putAll(stockItemHashMap);
     this.userfieldHashMap.clear();
@@ -532,14 +549,15 @@ public class MealPlanEntryAdapter extends
     HashMap<Integer, Product> newProductHashMap;
     HashMap<Integer, QuantityUnit> oldQuantityUnitHashMap;
     HashMap<Integer, QuantityUnit> newQuantityUnitHashMap;
-    HashMap<Integer, RecipeFulfillment> oldRecipeFulfillmentHashMap;
-    HashMap<Integer, RecipeFulfillment> newRecipeFulfillmentHashMap;
+    HashMap<String, RecipeFulfillment> oldRecipeResolvedFulfillmentHashMap;
+    HashMap<String, RecipeFulfillment> newRecipeResolvedFulfillmentHashMap;
     HashMap<Integer, StockItem> oldStockItemHashMap;
     HashMap<Integer, StockItem> newStockItemHashMap;
     HashMap<String, Userfield> oldUserfieldHashMap;
     HashMap<String, Userfield> newUserfieldHashMap;
     List<String> activeFieldsOld;
     List<String> activeFieldsNew;
+    String date;
 
     public DiffCallback(
         List<GroupedListItem> oldItems,
@@ -550,14 +568,15 @@ public class MealPlanEntryAdapter extends
         HashMap<Integer, Product> newProductHashMap,
         HashMap<Integer, QuantityUnit> oldQuantityUnitHashMap,
         HashMap<Integer, QuantityUnit> newQuantityUnitHashMap,
-        HashMap<Integer, RecipeFulfillment> oldRecipeFulfillmentHashMap,
-        HashMap<Integer, RecipeFulfillment> newRecipeFulfillmentHashMap,
+        HashMap<String, RecipeFulfillment> oldRecipeResolvedFulfillmentHashMap,
+        HashMap<String, RecipeFulfillment> newRecipeResolvedFulfillmentHashMap,
         HashMap<Integer, StockItem> oldStockItemHashMap,
         HashMap<Integer, StockItem> newStockItemHashMap,
         HashMap<String, Userfield> oldUserfieldHashMap,
         HashMap<String, Userfield> newUserfieldHashMap,
         List<String> activeFieldsOld,
-        List<String> activeFieldsNew
+        List<String> activeFieldsNew,
+        String date
     ) {
       this.oldItems = oldItems;
       this.newItems = newItems;
@@ -567,14 +586,15 @@ public class MealPlanEntryAdapter extends
       this.newProductHashMap = newProductHashMap;
       this.oldQuantityUnitHashMap = oldQuantityUnitHashMap;
       this.newQuantityUnitHashMap = newQuantityUnitHashMap;
-      this.oldRecipeFulfillmentHashMap = oldRecipeFulfillmentHashMap;
-      this.newRecipeFulfillmentHashMap = newRecipeFulfillmentHashMap;
+      this.oldRecipeResolvedFulfillmentHashMap = oldRecipeResolvedFulfillmentHashMap;
+      this.newRecipeResolvedFulfillmentHashMap = newRecipeResolvedFulfillmentHashMap;
       this.oldStockItemHashMap = oldStockItemHashMap;
       this.newStockItemHashMap = newStockItemHashMap;
       this.oldUserfieldHashMap = oldUserfieldHashMap;
       this.newUserfieldHashMap = newUserfieldHashMap;
       this.activeFieldsOld = activeFieldsOld;
       this.activeFieldsNew = activeFieldsNew;
+      this.date = date;
     }
 
     @Override
@@ -636,8 +656,8 @@ public class MealPlanEntryAdapter extends
             if (newRecipe == null || oldRecipe == null) {
               return false;
             }
-            RecipeFulfillment recipeFulfillmentOld = oldRecipeFulfillmentHashMap.get(oldItem.getId());
-            RecipeFulfillment recipeFulfillmentNew = newRecipeFulfillmentHashMap.get(newItem.getId());
+            RecipeFulfillment recipeFulfillmentOld = oldRecipeResolvedFulfillmentHashMap.get(date + "#" + oldItem.getId());
+            RecipeFulfillment recipeFulfillmentNew = newRecipeResolvedFulfillmentHashMap.get(date + "#" + newItem.getId());
             if (recipeFulfillmentOld == null && recipeFulfillmentNew != null
                 || recipeFulfillmentOld != null && recipeFulfillmentNew == null
                 || recipeFulfillmentOld != null && !recipeFulfillmentOld.equals(recipeFulfillmentNew)) {

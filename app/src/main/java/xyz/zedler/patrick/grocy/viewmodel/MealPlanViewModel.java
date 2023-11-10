@@ -68,6 +68,7 @@ public class MealPlanViewModel extends BaseViewModel {
   public final static String FIELD_WEEK_COSTS = "field_week_costs";
   public final static String FIELD_FULFILLMENT = "field_fulfillment";
   public final static String FIELD_ENERGY = "field_energy";
+  public final static String FIELD_PRICE = "field_price";
   public final static String FIELD_PICTURE = "field_picture";
   public final static String FIELD_AMOUNT = "field_amount";
 
@@ -95,7 +96,7 @@ public class MealPlanViewModel extends BaseViewModel {
   private HashMap<Integer, Recipe> recipeHashMap;
   private HashMap<Integer, Product> productHashMap;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-  private HashMap<Integer, RecipeFulfillment> recipeFulfillmentHashMap;
+  private HashMap<String, RecipeFulfillment> recipeResolvedFulfillmentHashMap;
   private HashMap<Integer, StockItem> stockItemHashMap;
   private HashMap<String, Userfield> userfieldHashMap;
 
@@ -139,7 +140,7 @@ public class MealPlanViewModel extends BaseViewModel {
         getApplication(),
         PREF.MEAL_PLAN_HEADER_FIELDS,
         () -> {},
-        new Field(FIELD_WEEK_COSTS, getString(R.string.property_week_costs), true)
+        new Field(FIELD_WEEK_COSTS, getString(R.string.property_week_costs), isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING))
     );
     filterChipLiveDataEntriesFields = new FilterChipLiveDataFields(
         getApplication(),
@@ -148,6 +149,7 @@ public class MealPlanViewModel extends BaseViewModel {
         new Field(FIELD_AMOUNT, getString(R.string.property_amount), true),
         new Field(FIELD_FULFILLMENT, getString(R.string.property_requirements_fulfilled), true),
         new Field(FIELD_ENERGY, getString(R.string.property_energy_only), true),
+        new Field(FIELD_PRICE, getString(R.string.property_price), true),
         new Field(FIELD_PICTURE, getString(R.string.property_picture), true)
     );
   }
@@ -158,7 +160,9 @@ public class MealPlanViewModel extends BaseViewModel {
       productHashMap = ArrayUtil.getProductsHashMap(data.getProducts());
       shadowRecipes = ArrayUtil.getShadowRecipes(data.getRecipes());
       recipeHashMap = ArrayUtil.getRecipesHashMap(data.getRecipes());
-      recipeFulfillmentHashMap = ArrayUtil.getRecipeFulfillmentHashMap(data.getRecipeFulfillments());
+      recipeResolvedFulfillmentHashMap = ArrayUtil.getRecipeResolvedFulfillmentForMealplanHashMap(
+          ArrayUtil.getRecipeFulfillmentHashMap(data.getRecipeFulfillments()), data.getRecipes()
+      );
       weekCostsTextLive.setValue(getWeekCostsText());
       stockItemHashMap = ArrayUtil.getStockItemHashMap(data.getStockItems());
       userfieldHashMap = ArrayUtil.getUserfieldHashMap(data.getUserfields());
@@ -225,22 +229,13 @@ public class MealPlanViewModel extends BaseViewModel {
     };
     LocalDate selectedDate = getSelectedDate();
     String weekFormatted = selectedDate.format(weekFormatter);
-    for (Recipe shadowRecipe : shadowRecipes) {
-      if (shadowRecipe.getName().equals(weekFormatted)) {
-        RecipeFulfillment recipeFulfillment = recipeFulfillmentHashMap.get(shadowRecipe.getId());
-        if (recipeFulfillment == null) {
-          return getString(R.string.property_week_costs_insert, getString(R.string.subtitle_unknown));
-        }
-        return getString(R.string.property_week_costs_insert, getString(
-            R.string.property_price_with_currency,
-            NumUtil.trimPrice(recipeFulfillment.getCosts(), decimalPlacesPriceDisplay),
-            currency
-        ));
-      }
+    RecipeFulfillment recipeFulfillment = recipeResolvedFulfillmentHashMap.get(weekFormatted);
+    if (recipeFulfillment == null) {
+      return getString(R.string.property_week_costs_insert, getString(R.string.subtitle_unknown));
     }
     return getString(R.string.property_week_costs_insert, getString(
         R.string.property_price_with_currency,
-        NumUtil.trimPrice(0, decimalPlacesPriceDisplay),
+        NumUtil.trimPrice(recipeFulfillment.getCosts(), decimalPlacesPriceDisplay),
         currency
     ));
   }
@@ -261,8 +256,8 @@ public class MealPlanViewModel extends BaseViewModel {
     return recipeHashMap;
   }
 
-  public HashMap<Integer, RecipeFulfillment> getRecipeFulfillmentHashMap() {
-    return recipeFulfillmentHashMap;
+  public HashMap<String, RecipeFulfillment> getRecipeResolvedFulfillmentHashMap() {
+    return recipeResolvedFulfillmentHashMap;
   }
 
   public HashMap<Integer, Product> getProductHashMap() {

@@ -75,7 +75,10 @@ public class MealPlanPagingFragment extends Fragment {
     ).get(MealPlanViewModel.class);
 
     MealPlanEntryAdapter adapter = new MealPlanEntryAdapter(
-        requireContext(), viewModel.getGrocyApi(), viewModel.getGrocyAuthHeaders()
+        requireContext(),
+        viewModel.getGrocyApi(),
+        viewModel.getGrocyAuthHeaders(),
+        date.format(viewModel.getDateFormatter())
     );
     binding.recycler.setAdapter(adapter);
 
@@ -92,7 +95,7 @@ public class MealPlanPagingFragment extends Fragment {
             viewModel.getRecipeHashMap(),
             viewModel.getProductHashMap(),
             viewModel.getQuantityUnitHashMap(),
-            viewModel.getRecipeFulfillmentHashMap(),
+            viewModel.getRecipeResolvedFulfillmentHashMap(),
             viewModel.getStockItemHashMap(),
             viewModel.getUserFieldHashMap(),
             viewModel.getFilterChipLiveDataEntriesFields().getActiveFields()

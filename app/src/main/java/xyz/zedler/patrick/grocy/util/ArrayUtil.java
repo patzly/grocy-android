@@ -235,6 +235,21 @@ public class ArrayUtil {
     return recipeFulfillmentHashMap;
   }
 
+  public static HashMap<String, RecipeFulfillment> getRecipeResolvedFulfillmentForMealplanHashMap(
+      HashMap<Integer, RecipeFulfillment> recipeFulfillmentHashMap,
+      List<Recipe> recipes
+  ) {
+    HashMap<String, RecipeFulfillment> resolvedFulfillments = new HashMap<>();
+    for (Recipe recipe : recipes) {
+      if (recipe.getId() >= 0) {
+        continue;
+      }
+      RecipeFulfillment recipeFulfillment = recipeFulfillmentHashMap.get(recipe.getId());
+      resolvedFulfillments.put(recipe.getName(), recipeFulfillment);
+    }
+    return resolvedFulfillments;
+  }
+
   public static HashMap<String, List<MealPlanEntry>> getMealPlanEntriesForDayHashMap(
       List<MealPlanEntry> mealPlanEntries
   ) {
