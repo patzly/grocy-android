@@ -733,7 +733,7 @@
   <string name="subtitle_barcode_unit">Unité de quantité : %1$s</string>
   <string name="subtitle_barcode">Code-barres : %1$s</string>
   <string name="subtitle_feature_disabled">Fonctionnalité désactivée</string>
-  <string name="subtitle_date_from_input">Date de saisie :\n%1$s</string>
+  <string name="subtitle_date_from_input">Date saisie :\n%1$s</string>
   <string name="subtitle_product_amount">Stock min., Consommation rapide, Facteur, Tarage</string>
   <string name="subtitle_product_default_location">Emplacement, Magasin</string>
   <string name="subtitle_product_due_date">Type, Date par défaut (après ouverture, congélation, décongélation)</string>
@@ -890,7 +890,7 @@
   <string name="property_note">Note</string>
   <string name="property_status">Statut</string>
   <string name="property_status_insert">Statut :</string>
-  <string name="property_amount">Montant</string>
+  <string name="property_amount">Quantité</string>
   <string name="property_amount_insert">Quantité : %1$s</string>
   <string name="property_seconds">Secondes</string>
   <!-- %1$s is a number (amount of seconds) -->
@@ -899,7 +899,7 @@
     <item quantity="many">%1$d secondes</item>
     <item quantity="other">%1$d secondes</item>
   </plurals>
-  <string name="property_amount_min_stock">Min. montant du stock</string>
+  <string name="property_amount_min_stock">Quantité minimale du stock</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Quantité en %1$s</string>
   <string name="property_price">Prix</string>
@@ -1261,9 +1261,9 @@
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Seuil de péremption</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="setting_default_amount_purchase">Montant par défaut pour l\'achat</string>
+  <string name="setting_default_amount_purchase">Quantité par défaut lors de l\'achat</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="setting_default_amount_consume">Montant par défaut pour consommer</string>
+  <string name="setting_default_amount_consume">Quantité par défaut lors de la consommation</string>
   <string name="setting_treat_opened_as_out_of_stock">Considérer ouvert comme en rupture de stock</string>
   <string name="setting_purchased_date">Demander la date d\'achat</string>
   <string name="setting_purchased_date_description">Sur les pages d\'achat et d\'inventaire</string>
