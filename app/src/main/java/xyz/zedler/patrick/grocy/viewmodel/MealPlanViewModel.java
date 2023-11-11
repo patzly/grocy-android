@@ -72,6 +72,7 @@ public class MealPlanViewModel extends BaseViewModel {
   public final static String FIELD_PRICE = "field_price";
   public final static String FIELD_PICTURE = "field_picture";
   public final static String FIELD_AMOUNT = "field_amount";
+  public final static String FIELD_DAY_SUMMARY = "field_day_summary";
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
@@ -148,6 +149,7 @@ public class MealPlanViewModel extends BaseViewModel {
         getApplication(),
         PREF.MEAL_PLAN_ENTRIES_FIELDS,
         () -> loadFromDatabase(false),
+        new Field(FIELD_DAY_SUMMARY, getString(R.string.property_day_summary), true),
         new Field(FIELD_AMOUNT, getString(R.string.property_amount), true),
         new Field(FIELD_FULFILLMENT, getString(R.string.property_requirements_fulfilled), true),
         new Field(FIELD_ENERGY, getString(R.string.property_energy_only), true),

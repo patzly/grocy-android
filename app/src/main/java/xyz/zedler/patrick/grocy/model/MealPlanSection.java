@@ -73,6 +73,10 @@ public class MealPlanSection extends GroupedListItem implements Parcelable {
   @SerializedName("is_top_item")
   private boolean isTopItem;
 
+  @Ignore
+  @SerializedName("is_info_item")
+  private boolean isInfoItem;
+
   public MealPlanSection() {
   }
 
@@ -157,6 +161,14 @@ public class MealPlanSection extends GroupedListItem implements Parcelable {
 
   public void setTopItem(boolean topItem) {
     isTopItem = topItem;
+  }
+
+  public boolean isInfoItem() {
+    return isInfoItem;
+  }
+
+  public void setInfoItem(boolean infoItem) {
+    isInfoItem = infoItem;
   }
 
   @Override

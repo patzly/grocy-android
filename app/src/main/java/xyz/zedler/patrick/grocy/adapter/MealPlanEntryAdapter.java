@@ -123,7 +123,8 @@ public class MealPlanEntryAdapter extends
 
   static ArrayList<GroupedListItem> getGroupedListItems(
       List<MealPlanEntry> mealPlanEntries,
-      List<MealPlanSection> mealPlanSections
+      List<MealPlanSection> mealPlanSections,
+      boolean showDaySummary
   ) {
     ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
     if (mealPlanEntries == null || mealPlanEntries.isEmpty()) {
@@ -139,6 +140,12 @@ public class MealPlanEntryAdapter extends
         mealPlanEntriesGrouped.put(sectionId, list);
       }
       list.add(entry);
+    }
+    if (showDaySummary) {
+      MealPlanEntry dayInfo = new MealPlanEntry();
+      dayInfo.setId(-1);
+      dayInfo.setType(MealPlanEntry.TYPE_DAY_INFO);
+      groupedListItems.add(dayInfo);
     }
     for (MealPlanSection section : mealPlanSections) {
       List<MealPlanEntry> list = mealPlanEntriesGrouped.get(section.getId());
@@ -366,6 +373,39 @@ public class MealPlanEntryAdapter extends
           binding.picturePlaceholder.setVisibility(View.GONE);
         }
         break;
+      case MealPlanEntry.TYPE_DAY_INFO:
+        binding.title.setText(entry.getNote());
+        RecipeFulfillment recipeFulfillment = recipeResolvedFulfillmentHashMap.get(date);
+        if (activeFields.contains(MealPlanViewModel.FIELD_FULFILLMENT)
+            && recipeFulfillment != null) {
+          binding.flexboxLayout.addView(chipUtil.createRecipeFulfillmentChip(recipeFulfillment));
+        }
+        if (activeFields.contains(MealPlanViewModel.FIELD_ENERGY)
+            && recipeFulfillment != null) {
+          binding.flexboxLayout.addView(chipUtil.createTextChip(NumUtil.trimAmount(
+              recipeFulfillment.getCalories(), maxDecimalPlacesAmount
+          ) + " " + energyUnit));
+        }
+        if (activeFields.contains(MealPlanViewModel.FIELD_PRICE)
+            && recipeFulfillment != null) {
+          binding.flexboxLayout.addView(chipUtil.createTextChip(context.getString(
+              R.string.property_price_with_currency,
+              NumUtil.trimPrice(recipeFulfillment.getCostsPerServing(), decimalPlacesPriceDisplay),
+              currency
+          ), context.getString(R.string.title_total_price)));
+        }
+        if (activeFields.contains(MealPlanViewModel.FIELD_PICTURE)) {
+          binding.title.setText(R.string.property_day_summary);
+          binding.picturePlaceholderIcon.setImageDrawable(ResourcesCompat.getDrawable(
+              context.getResources(),
+              R.drawable.ic_round_summarize,
+              null
+          ));
+          binding.picturePlaceholder.setVisibility(View.VISIBLE);
+        } else {
+          binding.picturePlaceholder.setVisibility(View.GONE);
+        }
+        break;
       case MealPlanEntry.TYPE_PRODUCT: {
         if (!NumUtil.isStringInt(entry.getProductId())) {
           binding.title.setText(entry.getType());
@@ -515,7 +555,12 @@ public class MealPlanEntryAdapter extends
       List<String> activeFields
   ) {
     List<GroupedListItem> newGroupedListItems = getGroupedListItems(
-        mealPlanEntries, mealPlanSections
+        mealPlanEntries,
+        mealPlanSections,
+        activeFields.contains(MealPlanViewModel.FIELD_DAY_SUMMARY)
+            && (activeFields.contains(MealPlanViewModel.FIELD_PRICE)
+            || activeFields.contains(MealPlanViewModel.FIELD_ENERGY)
+            || activeFields.contains(MealPlanViewModel.FIELD_FULFILLMENT))
     );
     DiffCallback diffCallback = new DiffCallback(
         this.groupedListItems,

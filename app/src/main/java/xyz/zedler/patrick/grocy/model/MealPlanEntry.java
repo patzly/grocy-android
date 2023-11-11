@@ -52,6 +52,7 @@ public class MealPlanEntry extends GroupedListItem implements Parcelable {
   public final static String TYPE_RECIPE = "recipe";
   public final static String TYPE_PRODUCT = "product";
   public final static String TYPE_NOTE = "note";
+  public final static String TYPE_DAY_INFO = "day_info";
 
   @PrimaryKey
   @ColumnInfo(name = "id")
