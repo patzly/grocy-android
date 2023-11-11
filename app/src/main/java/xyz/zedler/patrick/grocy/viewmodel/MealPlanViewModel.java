@@ -234,12 +234,10 @@ public class MealPlanViewModel extends BaseViewModel {
     LocalDate selectedDate = getSelectedDate();
     String weekFormatted = selectedDate.format(weekFormatter);
     RecipeFulfillment recipeFulfillment = recipeResolvedFulfillmentHashMap.get(weekFormatted);
-    if (recipeFulfillment == null) {
-      return getString(R.string.property_week_costs_insert, getString(R.string.subtitle_unknown));
-    }
+    double costs = recipeFulfillment != null ? recipeFulfillment.getCosts() : 0;
     return getString(R.string.property_week_costs_insert, getString(
         R.string.property_price_with_currency,
-        NumUtil.trimPrice(recipeFulfillment.getCosts(), decimalPlacesPriceDisplay),
+        NumUtil.trimPrice(costs, decimalPlacesPriceDisplay),
         currency
     ));
   }

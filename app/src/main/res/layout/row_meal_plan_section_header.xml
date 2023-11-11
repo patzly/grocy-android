@@ -38,11 +38,10 @@
     android:layout_marginStart="32dp">
 
     <TextView
-      style="@style/Widget.Grocy.TextView.TitleMedium"
+      style="@style/Widget.Grocy.TextView.TitleLarge"
       android:layout_height="wrap_content"
       android:layout_width="wrap_content"
-      android:textSize="18sp"
-      android:textStyle="bold"
+      android:textSize="22sp"
       android:id="@+id/name"/>
 
     <TextView
