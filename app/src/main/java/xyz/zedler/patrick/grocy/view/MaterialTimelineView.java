@@ -27,8 +27,8 @@ public class MaterialTimelineView extends ConstraintLayout {
   private static final int DEFAULT_RADIO_RADIUS_DP = 8;
   private static final int DEFAULT_RADIO_INLINE_RADIUS_DP = 4;
   private static final int DEFAULT_RADIO_MARGIN_START_DP = 44;
-  private static final int DEFAULT_HEADER_CONTENT_PADDING_DP = 32;
-  private static final int DEFAULT_ENTRY_CONTENT_PADDING_DP = 16;
+  private static final int DEFAULT_HEADER_CONTENT_PADDING_DP = 18;
+  private static final int DEFAULT_ENTRY_CONTENT_PADDING_DP = 8;
   private static final float LINE_WIDTH_MODIFIER = 0.3f;
 
   private int position = POSITION_FIRST;

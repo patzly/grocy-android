@@ -821,7 +821,7 @@ public class MealPlanEntryAdapter extends
 
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-      if (viewHolder instanceof MealPlanGroupViewHolder) return 0;
+      if (viewHolder instanceof MealPlanGroupViewHolder || true) return 0; // TODO: drag storing is not implementing
       int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
       return makeMovementFlags(dragFlags, 0);
     }

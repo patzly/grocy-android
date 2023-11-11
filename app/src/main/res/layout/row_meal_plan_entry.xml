@@ -22,7 +22,6 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:background="@color/transparent"
-  android:padding="16dp"
   app:timeline_position="middle"
   app:timeline_type="item"
   app:timeline_line_color="?attr/colorOutline"
@@ -41,7 +40,9 @@
     <LinearLayout
       android:layout_height="wrap_content"
       android:layout_width="match_parent"
-      android:orientation="horizontal">
+      android:orientation="horizontal"
+      style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+      android:background="@drawable/ripple_list_item_swipeable">
 
       <xyz.zedler.patrick.grocy.view.RoundedCornerImageView
         android:id="@+id/picture"
