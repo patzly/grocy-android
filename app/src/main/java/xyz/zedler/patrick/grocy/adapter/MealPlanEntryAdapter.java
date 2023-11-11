@@ -51,6 +51,7 @@ import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.MealPlanEntry;
 import xyz.zedler.patrick.grocy.model.MealPlanSection;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
@@ -74,6 +75,7 @@ public class MealPlanEntryAdapter extends
   private final HashMap<Integer, Recipe> recipeHashMap;
   private final HashMap<Integer, Product> productHashMap;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+  private final HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap;
   private final HashMap<String, RecipeFulfillment> recipeResolvedFulfillmentHashMap;
   private final HashMap<Integer, StockItem> stockItemHashMap;
   private final HashMap<String, Userfield> userfieldHashMap;
@@ -86,7 +88,6 @@ public class MealPlanEntryAdapter extends
   private final int maxDecimalPlacesAmount;
   private final int decimalPlacesPriceDisplay;
   private final String currency;
-  private final boolean priceTrackingEnabled;
 
   public MealPlanEntryAdapter(
       Context context,
@@ -105,12 +106,11 @@ public class MealPlanEntryAdapter extends
     );
     this.currency = sharedPrefs.getString(PREF.CURRENCY, "");
     this.energyUnit = sharedPrefs.getString(PREF.ENERGY_UNIT, PREF.ENERGY_UNIT_DEFAULT);
-    this.priceTrackingEnabled = sharedPrefs
-        .getBoolean(PREF.FEATURE_STOCK_PRICE_TRACKING, true);
     this.date = date;
     this.recipeHashMap = new HashMap<>();
     this.productHashMap = new HashMap<>();
     this.quantityUnitHashMap = new HashMap<>();
+    this.productLastPurchasedHashMap = new HashMap<>();
     this.recipeResolvedFulfillmentHashMap = new HashMap<>();
     this.stockItemHashMap = new HashMap<>();
     this.userfieldHashMap = new HashMap<>();
@@ -299,7 +299,7 @@ public class MealPlanEntryAdapter extends
             && recipeFulfillment != null) {
           binding.flexboxLayout.addView(chipUtil.createTextChip(NumUtil.trimAmount(
               recipeFulfillment.getCalories(), maxDecimalPlacesAmount
-          ) + " " + energyUnit));
+          ) + " " + energyUnit, context.getString(R.string.subtitle_per_serving)));
         }
         if (activeFields.contains(MealPlanViewModel.FIELD_PRICE)
             && recipeFulfillment != null) {
@@ -307,7 +307,7 @@ public class MealPlanEntryAdapter extends
               R.string.property_price_with_currency,
               NumUtil.trimPrice(recipeFulfillment.getCostsPerServing(), decimalPlacesPriceDisplay),
               currency
-          )));
+          ), context.getString(R.string.title_total_price)));
         }
         for (String activeField : activeFields) {
           if (activeField.startsWith(Userfield.NAME_PREFIX)) {
@@ -401,14 +401,31 @@ public class MealPlanEntryAdapter extends
         }
         if (activeFields.contains(MealPlanViewModel.FIELD_FULFILLMENT)) {
           StockItem stockItem = stockItemHashMap.get(product.getId());
-          //binding.flexboxLayout.addView(chipUtil.createRecipeFulfillmentChip());
+          binding.flexboxLayout.addView(chipUtil.createProductFulfillmentChip(
+              stockItem != null
+                  && NumUtil.isStringDouble(entry.getProductAmount())
+                  && stockItem.getAmountAggregatedDouble()
+                  >= Double.parseDouble(entry.getProductAmount()))
+          );
         }
         if (activeFields.contains(MealPlanViewModel.FIELD_ENERGY)
             && NumUtil.isStringDouble(product.getCalories())) {
           double calories = Double.parseDouble(product.getCalories());
-          //binding.flexboxLayout.addView(chipUtil.createTextChip(NumUtil.trimAmount(
-          //    calories, maxDecimalPlacesAmount
-          //) + " " + energyUnit));
+          binding.flexboxLayout.addView(chipUtil.createTextChip(NumUtil.trimAmount(
+              calories, maxDecimalPlacesAmount
+          ) + " " + energyUnit, context.getString(R.string.subtitle_per_serving)));
+        }
+        if (activeFields.contains(MealPlanViewModel.FIELD_PRICE)) {
+          ProductLastPurchased p = productLastPurchasedHashMap.get(product.getId());
+          if (p != null && NumUtil.isStringDouble(p.getPrice())
+              && NumUtil.isStringDouble(entry.getProductAmount())) {
+            binding.flexboxLayout.addView(chipUtil.createTextChip(context.getString(
+                R.string.property_price_with_currency,
+                NumUtil.trimPrice(Double.parseDouble(p.getPrice())
+                    * Double.parseDouble(entry.getProductAmount()), decimalPlacesPriceDisplay),
+                currency
+            ), context.getString(R.string.title_total_price)));
+          }
         }
         for (String activeField : activeFields) {
           if (activeField.startsWith(Userfield.NAME_PREFIX)) {
@@ -491,6 +508,7 @@ public class MealPlanEntryAdapter extends
       HashMap<Integer, Recipe> recipeHashMap,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap,
       HashMap<String, RecipeFulfillment> recipeResolvedFulfillmentHashMap,
       HashMap<Integer, StockItem> stockItemHashMap,
       HashMap<String, Userfield> userfieldHashMap,
@@ -508,6 +526,8 @@ public class MealPlanEntryAdapter extends
         productHashMap,
         this.quantityUnitHashMap,
         quantityUnitHashMap,
+        this.productLastPurchasedHashMap,
+        productLastPurchasedHashMap,
         this.recipeResolvedFulfillmentHashMap,
         recipeResolvedFulfillmentHashMap,
         this.stockItemHashMap,
@@ -528,6 +548,8 @@ public class MealPlanEntryAdapter extends
     this.productHashMap.putAll(productHashMap);
     this.quantityUnitHashMap.clear();
     this.quantityUnitHashMap.putAll(quantityUnitHashMap);
+    this.productLastPurchasedHashMap.clear();
+    this.productLastPurchasedHashMap.putAll(productLastPurchasedHashMap);
     this.recipeResolvedFulfillmentHashMap.clear();
     this.recipeResolvedFulfillmentHashMap.putAll(recipeResolvedFulfillmentHashMap);
     this.stockItemHashMap.clear();
@@ -549,6 +571,8 @@ public class MealPlanEntryAdapter extends
     HashMap<Integer, Product> newProductHashMap;
     HashMap<Integer, QuantityUnit> oldQuantityUnitHashMap;
     HashMap<Integer, QuantityUnit> newQuantityUnitHashMap;
+    HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapOld;
+    HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapNew;
     HashMap<String, RecipeFulfillment> oldRecipeResolvedFulfillmentHashMap;
     HashMap<String, RecipeFulfillment> newRecipeResolvedFulfillmentHashMap;
     HashMap<Integer, StockItem> oldStockItemHashMap;
@@ -568,6 +592,8 @@ public class MealPlanEntryAdapter extends
         HashMap<Integer, Product> newProductHashMap,
         HashMap<Integer, QuantityUnit> oldQuantityUnitHashMap,
         HashMap<Integer, QuantityUnit> newQuantityUnitHashMap,
+        HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapOld,
+        HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapNew,
         HashMap<String, RecipeFulfillment> oldRecipeResolvedFulfillmentHashMap,
         HashMap<String, RecipeFulfillment> newRecipeResolvedFulfillmentHashMap,
         HashMap<Integer, StockItem> oldStockItemHashMap,
@@ -586,6 +612,8 @@ public class MealPlanEntryAdapter extends
       this.newProductHashMap = newProductHashMap;
       this.oldQuantityUnitHashMap = oldQuantityUnitHashMap;
       this.newQuantityUnitHashMap = newQuantityUnitHashMap;
+      this.productLastPurchasedHashMapOld = productLastPurchasedHashMapOld;
+      this.productLastPurchasedHashMapNew = productLastPurchasedHashMapNew;
       this.oldRecipeResolvedFulfillmentHashMap = oldRecipeResolvedFulfillmentHashMap;
       this.newRecipeResolvedFulfillmentHashMap = newRecipeResolvedFulfillmentHashMap;
       this.oldStockItemHashMap = oldStockItemHashMap;
@@ -672,8 +700,14 @@ public class MealPlanEntryAdapter extends
             return false;
           }
           if (NumUtil.isStringInt(newItem.getProductId())) {
+            Integer productIdOld = NumUtil.isStringInt(oldItem.getProductId())
+                ? Integer.parseInt(oldItem.getProductId()) : null;
+            if (productIdOld == null) {
+              return false;
+            }
+            int productIdNew = Integer.parseInt(newItem.getProductId());
             Product newItemProduct = newProductHashMap.get(Integer.parseInt(newItem.getProductId()));
-            Product oldItemProduct = oldProductHashMap.get(Integer.parseInt(oldItem.getProductId()));
+            Product oldItemProduct = oldProductHashMap.get(productIdOld);
             if (newItemProduct == null || oldItemProduct == null) {
               return false;
             }
@@ -682,17 +716,28 @@ public class MealPlanEntryAdapter extends
             }
 
             StockItem newStockItem = newStockItemHashMap.get(Integer.parseInt(newItem.getProductId()));
-            StockItem oldStockItem = oldStockItemHashMap.get(Integer.parseInt(oldItem.getProductId()));
+            StockItem oldStockItem = oldStockItemHashMap.get(productIdOld);
             if (newStockItem == null || oldStockItem == null) {
               return false;
             }
             if (!newStockItem.equals(oldStockItem)) {
               return false;
             }
+
+            if (activeFieldsNew.contains(MealPlanViewModel.FIELD_PRICE)) {
+              ProductLastPurchased purchasedOld = productLastPurchasedHashMapOld.get(productIdOld);
+              ProductLastPurchased purchasedNew = productLastPurchasedHashMapNew.get(productIdNew);
+              if (purchasedOld == null && purchasedNew != null
+                  || purchasedOld != null && purchasedNew != null && !purchasedOld.equals(
+                  purchasedNew)) {
+                return false;
+              }
+            }
           }
           if (NumUtil.isStringInt(newItem.getProductQuId())) {
             QuantityUnit newItemQu = newQuantityUnitHashMap.get(Integer.parseInt(newItem.getProductQuId()));
-            QuantityUnit oldItemQu = oldQuantityUnitHashMap.get(Integer.parseInt(oldItem.getProductQuId()));
+            QuantityUnit oldItemQu = NumUtil.isStringInt(oldItem.getProductQuId())
+                ? oldQuantityUnitHashMap.get(Integer.parseInt(oldItem.getProductQuId())) : null;
             if (newItemQu == null || oldItemQu == null) {
               return false;
             }

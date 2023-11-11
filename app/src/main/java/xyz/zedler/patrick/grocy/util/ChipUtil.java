@@ -66,7 +66,18 @@ public class ChipUtil {
     return createChip(context, text, -1);
   }
 
-  public Chip createRecipeFulfillmentChip(RecipeFulfillment recipeFulfillment) {
+  public Chip createTextChip(String text, String textOnClick) {
+    Chip chip = createChip(context, text, -1);
+    chip.setOnClickListener(v -> {
+      new MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_Grocy_AlertDialog)
+          .setMessage(textOnClick)
+          .setPositiveButton(R.string.action_close, (dialog, which) -> dialog.dismiss())
+          .create().show();
+    });
+    return chip;
+  }
+
+  public Chip createRecipeFulfillmentChip(RecipeFulfillment recipeFulfillment, boolean showYellow) {
     Chip chipFulfillment;
     String textFulfillment;
     if (recipeFulfillment.isNeedFulfilled()) {
@@ -77,7 +88,7 @@ public class ChipUtil {
       );
       chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorGreen.getOnAccentContainer()));
       chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorGreen.getAccentContainer()));
-    } else if (recipeFulfillment.isNeedFulfilledWithShoppingList()) {
+    } else if (recipeFulfillment.isNeedFulfilledWithShoppingList() && showYellow) {
       textFulfillment = context.getString(R.string.msg_recipes_not_enough) + "\n"
           + context.getResources()
           .getQuantityString(R.plurals.msg_recipes_ingredients_missing_but_on_shopping_list,
@@ -95,6 +106,43 @@ public class ChipUtil {
           .getQuantityString(R.plurals.msg_recipes_ingredients_missing,
               recipeFulfillment.getMissingProductsCount(),
               recipeFulfillment.getMissingProductsCount());
+      chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorRed.getOnAccentContainer());
+      chipFulfillment.setCloseIcon(
+          ContextCompat.getDrawable(context, R.drawable.ic_round_highlight_off)
+      );
+      chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorRed.getOnAccentContainer()));
+      chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getAccentContainer()));
+    }
+    chipFulfillment.setCloseIconStartPadding(UiUtil.dpToPx(context, 4));
+    chipFulfillment.setCloseIconVisible(true);
+    String finalTextFulfillment = textFulfillment;
+    chipFulfillment.setOnClickListener(v -> {
+      new MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_Grocy_AlertDialog)
+          .setTitle(R.string.property_requirements_fulfilled)
+          .setMessage(finalTextFulfillment)
+          .setPositiveButton(R.string.action_close, (dialog, which) -> dialog.dismiss())
+          .create().show();
+    });
+    return chipFulfillment;
+  }
+
+  public Chip createRecipeFulfillmentChip(RecipeFulfillment recipeFulfillment) {
+    return createRecipeFulfillmentChip(recipeFulfillment, true);
+  }
+
+  public Chip createProductFulfillmentChip(boolean needFulfilled) {
+    Chip chipFulfillment;
+    String textFulfillment;
+    if (needFulfilled) {
+      textFulfillment = context.getString(R.string.msg_recipes_enough_in_stock);
+      chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorGreen.getOnAccentContainer());
+      chipFulfillment.setCloseIcon(
+          ContextCompat.getDrawable(context, R.drawable.ic_round_check_circle_outline)
+      );
+      chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorGreen.getOnAccentContainer()));
+      chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorGreen.getAccentContainer()));
+    } else {
+      textFulfillment = context.getString(R.string.msg_recipes_not_enough);
       chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorRed.getOnAccentContainer());
       chipFulfillment.setCloseIcon(
           ContextCompat.getDrawable(context, R.drawable.ic_round_highlight_off)

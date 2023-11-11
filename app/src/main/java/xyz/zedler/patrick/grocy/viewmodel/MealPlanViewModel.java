@@ -46,6 +46,7 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.MealPlanEntry;
 import xyz.zedler.patrick.grocy.model.MealPlanSection;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
@@ -96,6 +97,7 @@ public class MealPlanViewModel extends BaseViewModel {
   private HashMap<Integer, Recipe> recipeHashMap;
   private HashMap<Integer, Product> productHashMap;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+  private HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap;
   private HashMap<String, RecipeFulfillment> recipeResolvedFulfillmentHashMap;
   private HashMap<Integer, StockItem> stockItemHashMap;
   private HashMap<String, Userfield> userfieldHashMap;
@@ -158,6 +160,8 @@ public class MealPlanViewModel extends BaseViewModel {
     repository.loadFromDatabase(data -> {
       quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
       productHashMap = ArrayUtil.getProductsHashMap(data.getProducts());
+      productLastPurchasedHashMap = ArrayUtil
+          .getProductLastPurchasedHashMap(data.getProductsLastPurchased());
       shadowRecipes = ArrayUtil.getShadowRecipes(data.getRecipes());
       recipeHashMap = ArrayUtil.getRecipesHashMap(data.getRecipes());
       recipeResolvedFulfillmentHashMap = ArrayUtil.getRecipeResolvedFulfillmentForMealplanHashMap(
@@ -270,6 +274,10 @@ public class MealPlanViewModel extends BaseViewModel {
 
   public HashMap<Integer, QuantityUnit> getQuantityUnitHashMap() {
     return quantityUnitHashMap;
+  }
+
+  public HashMap<Integer, ProductLastPurchased> getProductLastPurchasedHashMap() {
+    return productLastPurchasedHashMap;
   }
 
   public HashMap<String, Userfield> getUserFieldHashMap() {

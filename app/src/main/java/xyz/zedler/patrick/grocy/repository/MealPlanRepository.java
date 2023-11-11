@@ -28,8 +28,8 @@ import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.MealPlanEntry;
 import xyz.zedler.patrick.grocy.model.MealPlanSection;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
@@ -57,7 +57,7 @@ public class MealPlanRepository {
     private final List<RecipePosition> recipePositions;
     private final List<Product> products;
     private final List<QuantityUnit> quantityUnits;
-    private final List<QuantityUnitConversion> quantityUnitConversions;
+    private final List<ProductLastPurchased> productsLastPurchased;
     private final List<MealPlanEntry> mealPlanEntries;
     private final List<MealPlanSection> mealPlanSections;
     private final List<StockItem> stockItems;
@@ -69,7 +69,7 @@ public class MealPlanRepository {
         List<RecipePosition> recipePositions,
         List<Product> products,
         List<QuantityUnit> quantityUnits,
-        List<QuantityUnitConversion> quantityUnitConversions,
+        List<ProductLastPurchased> productsLastPurchased,
         List<MealPlanEntry> mealPlanEntries,
         List<MealPlanSection> mealPlanSections,
         List<StockItem> stockItems,
@@ -80,7 +80,7 @@ public class MealPlanRepository {
       this.recipePositions = recipePositions;
       this.products = products;
       this.quantityUnits = quantityUnits;
-      this.quantityUnitConversions = quantityUnitConversions;
+      this.productsLastPurchased = productsLastPurchased;
       this.mealPlanEntries = mealPlanEntries;
       this.mealPlanSections = mealPlanSections;
       this.stockItems = stockItems;
@@ -107,8 +107,8 @@ public class MealPlanRepository {
       return quantityUnits;
     }
 
-    public List<QuantityUnitConversion> getQuantityUnitConversions() {
-      return quantityUnitConversions;
+    public List<ProductLastPurchased> getProductsLastPurchased() {
+      return productsLastPurchased;
     }
 
     public List<MealPlanEntry> getMealPlanEntries() {
@@ -136,7 +136,7 @@ public class MealPlanRepository {
             appDatabase.recipePositionDao().getRecipePositions(),
             appDatabase.productDao().getProducts(),
             appDatabase.quantityUnitDao().getQuantityUnits(),
-            appDatabase.quantityUnitConversionDao().getConversions(),
+            appDatabase.productLastPurchasedDao().getProductsLastPurchased(),
             appDatabase.mealPlanEntryDao().getMealPlanEntries(),
             appDatabase.mealPlanSectionDao().getMealPlanSections(),
             appDatabase.stockItemDao().getStockItems(),

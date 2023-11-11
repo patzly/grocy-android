@@ -95,6 +95,7 @@ public class MealPlanPagingFragment extends Fragment {
             viewModel.getRecipeHashMap(),
             viewModel.getProductHashMap(),
             viewModel.getQuantityUnitHashMap(),
+            viewModel.getProductLastPurchasedHashMap(),
             viewModel.getRecipeResolvedFulfillmentHashMap(),
             viewModel.getStockItemHashMap(),
             viewModel.getUserFieldHashMap(),
