@@ -959,6 +959,7 @@
   <string name="property_due_days_default_freezing">Date de péremption par défaut après congélation</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">Date de péremption par défaut après décongélation</string>
+  <string name="property_day_summary">Résumé du jour</string>
   <string name="property_location">Emplacement</string>
   <string name="property_location_insert">Emplacement : %1$s</string>
   <string name="property_location_default">Emplacement par défaut</string>
