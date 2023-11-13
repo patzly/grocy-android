@@ -959,6 +959,7 @@
   <string name="property_due_days_default_freezing">Dias de validade após o congelamento (padrão)</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">Dias de vencimento pré-definido após o descongelamento</string>
+  <string name="property_day_summary">Resumo do dia</string>
   <string name="property_location">Localização</string>
   <string name="property_location_insert">Localização: %1$s</string>
   <string name="property_location_default">Localização pré-definida</string>
