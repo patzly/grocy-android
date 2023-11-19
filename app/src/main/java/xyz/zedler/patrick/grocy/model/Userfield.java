@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -32,8 +31,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
@@ -51,7 +48,6 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnObjectsResponseListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnStringResponseListener;
-import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue.QueueItem;
 
 @Entity(tableName = "userfield_table")
@@ -155,21 +151,23 @@ public class Userfield implements Parcelable {
     }
   };
 
-  public static Chip fillChipWithUserfield(Chip chip, Userfield userfield, String value) {
-    Context context = chip.getContext();
-
+  public static ChipData fillChipDataWithUserfield(
+      Context context,
+      ChipData chipData,
+      Userfield userfield,
+      String value
+  ) {
     if (userfield.getType().equals(Userfield.TYPE_CHECKBOX)) {
-      chip.setText(context.getString(R.string.property_userfield_value_without_space,
+      chipData.setText(context.getString(R.string.property_userfield_value_without_space,
           userfield.getCaption(), ""));
-      ColorRoles colorGreen = ResUtil.getHarmonizedRoles(context, R.color.green);
       if (value != null && value.equals("1")) {
-        chip.setCloseIcon(
+        chipData.setCloseIcon(
             ContextCompat.getDrawable(context, R.drawable.ic_round_check_circle_outline)
         );
-        chip.setCloseIconTint(ColorStateList.valueOf(colorGreen.getOnAccentContainer()));
-        chip.setChipBackgroundColor(ColorStateList.valueOf(colorGreen.getAccentContainer()));
-        chip.setCloseIconVisible(true);
-        return chip;
+        chipData.setCloseIconTint(ChipData.COLOR_ROLES_GREEN);
+        chipData.setChipBackgroundColor(ChipData.COLOR_ROLES_GREEN);
+        chipData.setCloseIconVisible(true);
+        return chipData;
       } else {
         return null;
       }
@@ -179,7 +177,7 @@ public class Userfield implements Parcelable {
         return null;
       }
       boolean valueTooLong = value.length() > 20;
-      chip.setText(context.getString(
+      chipData.setText(context.getString(
           R.string.property_userfield_value,
           userfield.getCaption(),
           valueTooLong
@@ -187,38 +185,34 @@ public class Userfield implements Parcelable {
               : value
       ));
       if (valueTooLong) {
-        chip.setCloseIcon(ContextCompat.getDrawable(context, R.drawable.ic_round_expand_more));
-        chip.setCloseIconVisible(true);
-        chip.setEnabled(true);
-        chip.setClickable(true);
-        chip.setFocusable(true);
-        chip.setOnClickListener(v -> showInfoDialog(context, userfield.getCaption(), value));
+        chipData.setCloseIcon(ContextCompat.getDrawable(context, R.drawable.ic_round_expand_more));
+        chipData.setCloseIconVisible(true);
+        chipData.setEnabled(true);
+        chipData.setOnClickListener(v -> showInfoDialog(context, userfield.getCaption(), value));
       }
-      return chip;
+      return chipData;
     } else {
       if (value == null) {
         return null;
       }
-      chip.setChipIcon(ContextCompat.getDrawable(context, R.drawable.ic_round_error_outline));
-      chip.setChipIconTint(chip.getCloseIconTint());
-      chip.setTextStartPadding(12);
+      chipData.setChipIcon(ContextCompat.getDrawable(context, R.drawable.ic_round_error_outline));
+      chipData.setChipIconTint(chipData.getCloseIconTint());
+      chipData.setTextStartPadding(12);
       boolean valueTooLong = value.length() > 20;
-      chip.setText(context.getString(
+      chipData.setText(context.getString(
           R.string.property_userfield_value,
           userfield.getCaption(),
           valueTooLong
               ? value.replace("\n", " ").substring(0, 20) + "..."
               : value
       ));
-      chip.setCloseIcon(ContextCompat.getDrawable(context, R.drawable.ic_round_expand_more));
-      chip.setCloseIconVisible(true);
-      chip.setEnabled(true);
-      chip.setClickable(true);
-      chip.setFocusable(true);
-      chip.setOnClickListener(v -> showInfoDialog(
+      chipData.setCloseIcon(ContextCompat.getDrawable(context, R.drawable.ic_round_expand_more));
+      chipData.setCloseIconVisible(true);
+      chipData.setEnabled(true);
+      chipData.setOnClickListener(v -> showInfoDialog(
           context, null, context.getString(R.string.error_userfield_type_not_supported))
       );
-      return chip;
+      return chipData;
     }
   }
 

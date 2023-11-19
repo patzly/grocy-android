@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.model;
 
+import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -102,6 +103,9 @@ public class MealPlanEntry extends GroupedListItem implements Parcelable {
   @Ignore
   @SerializedName("item_position")
   private int itemPosition;
+
+  @Ignore
+  private ViewData viewData;
 
   public MealPlanEntry() {
   }
@@ -246,6 +250,14 @@ public class MealPlanEntry extends GroupedListItem implements Parcelable {
     this.itemPosition = itemPosition;
   }
 
+  public ViewData getViewData() {
+    return viewData;
+  }
+
+  public void setViewData(ViewData viewData) {
+    this.viewData = viewData;
+  }
+
   @Override
   public int describeContents() {
     return 0;
@@ -266,13 +278,14 @@ public class MealPlanEntry extends GroupedListItem implements Parcelable {
         && Objects.equals(productId, that.productId) && Objects.equals(
         productAmount, that.productAmount) && Objects.equals(productQuId, that.productQuId)
         && Objects.equals(done, that.done) && Objects.equals(sectionId,
-        that.sectionId) && Objects.equals(itemPosition, that.itemPosition);
+        that.sectionId) && Objects.equals(itemPosition, that.itemPosition) && Objects.equals(
+        viewData, that.viewData);
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(id, day, type, recipeId, recipeServings, note, productId, productAmount,
-        productQuId, done, sectionId, itemPosition);
+        productQuId, done, sectionId, itemPosition, viewData);
   }
 
   public static MealPlanEntry getFromId(List<MealPlanEntry> entries, int id) {
@@ -356,5 +369,16 @@ public class MealPlanEntry extends GroupedListItem implements Parcelable {
       }
       return null;
     }
+  }
+
+  public static class ViewData {
+
+      public String name;
+      public Drawable placeholderIcon;
+      public boolean placeholderVisibility;
+      public List<ChipData> chipDataList;
+
+      public ViewData() {
+      }
   }
 }

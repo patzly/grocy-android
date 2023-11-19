@@ -25,14 +25,11 @@ import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import androidx.core.content.ContextCompat;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.elevation.SurfaceColors;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
-import xyz.zedler.patrick.grocy.model.Userfield;
+import xyz.zedler.patrick.grocy.model.ChipData;
 
 public class ChipUtil {
 
@@ -62,137 +59,82 @@ public class ChipUtil {
     return chip;
   }
 
-  public Chip createTextChip(String text) {
-    return createChip(context, text, -1);
-  }
-
-  public Chip createTextChip(String text, String textOnClick) {
-    Chip chip = createChip(context, text, -1);
-    chip.setOnClickListener(v -> {
-      new MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_Grocy_AlertDialog)
-          .setMessage(textOnClick)
-          .setPositiveButton(R.string.action_close, (dialog, which) -> dialog.dismiss())
-          .create().show();
-    });
+  public Chip createChipFromData(ChipData chipData) {
+    Chip chip = createChip(context, chipData.getText(), -1);
+    switch (chipData.getChipBackgroundColor()) {
+      case ChipData.COLOR_ROLES_BLUE:
+        chip.setChipBackgroundColor(ColorStateList.valueOf(colorBlue.getAccentContainer()));
+        break;
+      case ChipData.COLOR_ROLES_GREEN:
+        chip.setChipBackgroundColor(ColorStateList.valueOf(colorGreen.getAccentContainer()));
+        break;
+      case ChipData.COLOR_ROLES_YELLOW:
+        chip.setChipBackgroundColor(ColorStateList.valueOf(colorYellow.getAccentContainer()));
+        break;
+      case ChipData.COLOR_ROLES_RED:
+        chip.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getAccentContainer()));
+        break;
+    }
+    switch (chipData.getTextColor()) {
+      case ChipData.COLOR_ROLES_BLUE:
+        chip.setChipBackgroundColor(ColorStateList.valueOf(colorBlue.getOnAccentContainer()));
+        break;
+      case ChipData.COLOR_ROLES_GREEN:
+        chip.setChipBackgroundColor(ColorStateList.valueOf(colorGreen.getOnAccentContainer()));
+        break;
+      case ChipData.COLOR_ROLES_YELLOW:
+        chip.setChipBackgroundColor(ColorStateList.valueOf(colorYellow.getOnAccentContainer()));
+        break;
+      case ChipData.COLOR_ROLES_RED:
+        chip.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getOnAccentContainer()));
+        break;
+    }
+    chip.setOnClickListener(chipData.getOnClickListener());
+    if (chipData.getChipIcon() != null) {
+      chip.setChipIcon(chipData.getChipIcon());
+    }
+    switch (chipData.getChipIconTint()) {
+      case ChipData.COLOR_ROLES_BLUE:
+        chip.setChipIconTint(ColorStateList.valueOf(colorBlue.getOnAccentContainer()));
+        break;
+      case ChipData.COLOR_ROLES_GREEN:
+        chip.setChipIconTint(ColorStateList.valueOf(colorGreen.getOnAccentContainer()));
+        break;
+      case ChipData.COLOR_ROLES_YELLOW:
+        chip.setChipIconTint(ColorStateList.valueOf(colorYellow.getOnAccentContainer()));
+        break;
+      case ChipData.COLOR_ROLES_RED:
+        chip.setChipIconTint(ColorStateList.valueOf(colorRed.getOnAccentContainer()));
+        break;
+    }
+    if (chipData.getTextStartPadding() != -1) {
+      chip.setTextStartPadding(chipData.getTextStartPadding());
+    }
+    if (chipData.getCloseIcon() != null) {
+      chip.setCloseIcon(chipData.getCloseIcon());
+    }
+    switch (chipData.getCloseIconTint()) {
+      case ChipData.COLOR_ROLES_BLUE:
+        chip.setCloseIconTint(ColorStateList.valueOf(colorBlue.getOnAccentContainer()));
+        break;
+      case ChipData.COLOR_ROLES_GREEN:
+        chip.setCloseIconTint(ColorStateList.valueOf(colorGreen.getOnAccentContainer()));
+        break;
+      case ChipData.COLOR_ROLES_YELLOW:
+        chip.setCloseIconTint(ColorStateList.valueOf(colorYellow.getOnAccentContainer()));
+        break;
+      case ChipData.COLOR_ROLES_RED:
+        chip.setCloseIconTint(ColorStateList.valueOf(colorRed.getOnAccentContainer()));
+        break;
+    }
+    if (chipData.getCloseIconStartPadding() != -1 ) {
+      chip.setCloseIconStartPadding(chipData.getCloseIconStartPadding());
+    }
+    chip.setCloseIconVisible(chipData.isCloseIconVisible());
+    chip.setEnabled(chipData.isEnabled());
+    chip.setFocusable(chipData.isEnabled());
+    chip.setClickable(chipData.isEnabled());
     return chip;
-  }
-
-  public Chip createRecipeFulfillmentChip(RecipeFulfillment recipeFulfillment, boolean showYellow) {
-    Chip chipFulfillment;
-    String textFulfillment;
-    if (recipeFulfillment.isNeedFulfilled()) {
-      textFulfillment = context.getString(R.string.msg_recipes_enough_in_stock);
-      chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorGreen.getOnAccentContainer());
-      chipFulfillment.setCloseIcon(
-          ContextCompat.getDrawable(context, R.drawable.ic_round_check_circle_outline)
-      );
-      chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorGreen.getOnAccentContainer()));
-      chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorGreen.getAccentContainer()));
-    } else if (recipeFulfillment.isNeedFulfilledWithShoppingList() && showYellow) {
-      textFulfillment = context.getString(R.string.msg_recipes_not_enough) + "\n"
-          + context.getResources()
-          .getQuantityString(R.plurals.msg_recipes_ingredients_missing_but_on_shopping_list,
-              recipeFulfillment.getMissingProductsCount(),
-              recipeFulfillment.getMissingProductsCount());
-      chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorYellow.getOnAccentContainer());
-      chipFulfillment.setCloseIcon(
-          ContextCompat.getDrawable(context, R.drawable.ic_round_error_outline)
-      );
-      chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorYellow.getOnAccentContainer()));
-      chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorYellow.getAccentContainer()));
-    } else {
-      textFulfillment = context.getString(R.string.msg_recipes_not_enough) + "\n"
-          + context.getResources()
-          .getQuantityString(R.plurals.msg_recipes_ingredients_missing,
-              recipeFulfillment.getMissingProductsCount(),
-              recipeFulfillment.getMissingProductsCount());
-      chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorRed.getOnAccentContainer());
-      chipFulfillment.setCloseIcon(
-          ContextCompat.getDrawable(context, R.drawable.ic_round_highlight_off)
-      );
-      chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorRed.getOnAccentContainer()));
-      chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getAccentContainer()));
-    }
-    chipFulfillment.setCloseIconStartPadding(UiUtil.dpToPx(context, 4));
-    chipFulfillment.setCloseIconVisible(true);
-    String finalTextFulfillment = textFulfillment;
-    chipFulfillment.setOnClickListener(v -> {
-      new MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_Grocy_AlertDialog)
-          .setTitle(R.string.property_requirements_fulfilled)
-          .setMessage(finalTextFulfillment)
-          .setPositiveButton(R.string.action_close, (dialog, which) -> dialog.dismiss())
-          .create().show();
-    });
-    return chipFulfillment;
-  }
-
-  public Chip createRecipeFulfillmentChip(RecipeFulfillment recipeFulfillment) {
-    return createRecipeFulfillmentChip(recipeFulfillment, true);
-  }
-
-  public Chip createProductFulfillmentChip(boolean needFulfilled) {
-    Chip chipFulfillment;
-    String textFulfillment;
-    if (needFulfilled) {
-      textFulfillment = context.getString(R.string.msg_recipes_enough_in_stock);
-      chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorGreen.getOnAccentContainer());
-      chipFulfillment.setCloseIcon(
-          ContextCompat.getDrawable(context, R.drawable.ic_round_check_circle_outline)
-      );
-      chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorGreen.getOnAccentContainer()));
-      chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorGreen.getAccentContainer()));
-    } else {
-      textFulfillment = context.getString(R.string.msg_recipes_not_enough);
-      chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorRed.getOnAccentContainer());
-      chipFulfillment.setCloseIcon(
-          ContextCompat.getDrawable(context, R.drawable.ic_round_highlight_off)
-      );
-      chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorRed.getOnAccentContainer()));
-      chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getAccentContainer()));
-    }
-    chipFulfillment.setCloseIconStartPadding(UiUtil.dpToPx(context, 4));
-    chipFulfillment.setCloseIconVisible(true);
-    String finalTextFulfillment = textFulfillment;
-    chipFulfillment.setOnClickListener(v -> {
-      new MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_Grocy_AlertDialog)
-          .setTitle(R.string.property_requirements_fulfilled)
-          .setMessage(finalTextFulfillment)
-          .setPositiveButton(R.string.action_close, (dialog, which) -> dialog.dismiss())
-          .create().show();
-    });
-    return chipFulfillment;
-  }
-
-  public Chip createRecipeDueScoreChip(int dueScore) {
-    Chip dueScoreChip;
-    if (dueScore == 0) {
-      dueScoreChip = createChip(context, context.getString(
-          R.string.subtitle_recipe_due_score,
-          String.valueOf(dueScore)
-      ), -1);
-    } else if (dueScore <= 10) {
-      dueScoreChip = createChip(context, context.getString(
-          R.string.subtitle_recipe_due_score,
-          String.valueOf(dueScore)
-      ), colorYellow.getOnAccentContainer());
-      dueScoreChip.setChipBackgroundColor(
-          ColorStateList.valueOf(colorYellow.getAccentContainer()));
-    } else {
-      dueScoreChip = createChip(context, context.getString(
-          R.string.subtitle_recipe_due_score,
-          String.valueOf(dueScore)
-      ), colorRed.getOnAccentContainer());
-      dueScoreChip.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getAccentContainer()));
-    }
-    dueScoreChip.setEnabled(false);
-    dueScoreChip.setClickable(false);
-    dueScoreChip.setFocusable(false);
-    return dueScoreChip;
-  }
-
-  public Chip createUserfieldChip(Userfield userfield, String value) {
-    Chip chipUserfield = createTextChip(null);
-    return Userfield.fillChipWithUserfield(chipUserfield, userfield, value);
   }
 
   public View createSeparator() {
