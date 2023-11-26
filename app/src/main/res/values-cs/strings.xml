@@ -1006,6 +1006,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_due_days_default_freezing">Výchozí počet dní do spotřeby po zamražení</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">Výchozí počet dní min. trvanlivosti po rozmrznutí</string>
+  <string name="property_day_summary">Denní shrnutí</string>
   <string name="property_location">Umístění</string>
   <string name="property_location_insert">Umístění: %1$s</string>
   <string name="property_location_default">Výchozí umístění</string>
