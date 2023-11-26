@@ -19,6 +19,13 @@
 
 <resources>
 
+  <fraction name="sliding_start_fraction">-100%p</fraction>
+  <fraction name="sliding_end_fraction">100%p</fraction>
+  <fraction name="fading_start_fraction">-7.5%p</fraction>
+  <fraction name="fading_end_fraction">7.5%p</fraction>
+  <dimen name="fading_start">-32dp</dimen>
+  <dimen name="fading_end">32dp</dimen>
+
   <dimen name="max_content_width">640dp</dimen>
 
   <dimen name="global_scroll_bottom_padding">144dp</dimen>

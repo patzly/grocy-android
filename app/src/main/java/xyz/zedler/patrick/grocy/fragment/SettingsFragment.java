@@ -19,12 +19,17 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -114,30 +119,64 @@ public class SettingsFragment extends BaseFragment {
     if (nextAnim == 0) {
       return null;
     }
-    Animation anim = AnimationUtils.loadAnimation(getActivity(), nextAnim);
-    anim.setAnimationListener(new Animation.AnimationListener() {
+    try {
+      Animation animation = AnimationUtils.loadAnimation(getActivity(), nextAnim);
+      animation.setAnimationListener(new Animation.AnimationListener() {
+
+        @Override
+        public void onAnimationStart(Animation animation) {}
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {}
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+          if (enter) {
+            navigateToSubpage();
+          }
+        }
+      });
+      return animation;
+    } catch (InflateException e) {
+      return null;
+    }
+  }
+
+  @Nullable
+  @Override
+  public Animator onCreateAnimator(int transit, boolean enter, int nextAnim) {
+    if (nextAnim == 0) {
+      return null;
+    }
+    Animator animator = AnimatorInflater.loadAnimator(getActivity(), nextAnim);
+    animator.addListener(new AnimatorListenerAdapter() {
       @Override
-      public void onAnimationStart(Animation animation) {
-      }
-      @Override
-      public void onAnimationRepeat(Animation animation) {
-      }
-      @Override
-      public void onAnimationEnd(Animation animation) {
-        if (!enter) return;
-        if (shouldNavigateToBehavior()) {
-          setArguments(new SettingsFragmentArgs.Builder(args)
-              .setShowCategory(null).build().toBundle());
-          new Handler().postDelayed(() -> activity.navUtil.navigateFragment(SettingsFragmentDirections
-              .actionSettingsFragmentToSettingsCatBehaviorFragment()), 200);
-        } else if (shouldNavigateToServer()) {
-          setArguments(new SettingsFragmentArgs.Builder(args)
-              .setShowCategory(null).build().toBundle());
-          new Handler().postDelayed(() -> activity.navUtil.navigateFragment(SettingsFragmentDirections
-              .actionSettingsFragmentToSettingsCatServerFragment()), 200);
+      public void onAnimationEnd(Animator animation) {
+        if (enter) {
+          navigateToSubpage();
         }
       }
     });
-    return anim;
+    return animator;
+  }
+
+  private void navigateToSubpage() {
+    if (shouldNavigateToBehavior()) {
+      setArguments(
+          new SettingsFragmentArgs.Builder(args).setShowCategory(null).build().toBundle()
+      );
+      new Handler().postDelayed(() -> activity.navUtil.navigateFragment(
+              SettingsFragmentDirections.actionSettingsFragmentToSettingsCatBehaviorFragment()),
+          200
+      );
+    } else if (shouldNavigateToServer()) {
+      setArguments(
+          new SettingsFragmentArgs.Builder(args).setShowCategory(null).build().toBundle()
+      );
+      new Handler().postDelayed(() -> activity.navUtil.navigateFragment(
+              SettingsFragmentDirections.actionSettingsFragmentToSettingsCatServerFragment()),
+          200
+      );
+    }
   }
 }

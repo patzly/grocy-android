@@ -295,7 +295,7 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
   }
 
   private void navigateCustom(NavDirections directions) {
-    NavOptions.Builder builder = activity.navUtil.getNavOptionsBuilderFragmentFadeOrSlide(true);
+    NavOptions.Builder builder = activity.navUtil.getNavOptionsBuilderFragmentFadeOrSlide();
     builder.setPopUpTo(R.id.overviewStartFragment, false);
     if (activity.getCurrentFragment() instanceof OverviewStartFragment) {
       builder.setExitAnim(R.anim.slide_no);

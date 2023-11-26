@@ -110,9 +110,7 @@ public class LoginRequestFragment extends BaseFragment {
 
   private void navigateToStartDestination() {
     activity.navUtil.updateStartDestination();
-    NavOptions.Builder builder = activity.navUtil.getNavOptionsBuilderFragmentFadeOrSlide(
-        false
-    );
+    NavOptions.Builder builder = activity.navUtil.getNavOptionsBuilderFragmentFadeOrSlide();
     builder.setPopUpTo(R.id.navigation_main, true);
     activity.navUtil.navigateFragment(
         findNavController().getGraph().getStartDestinationId(), builder.build()

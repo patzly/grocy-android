@@ -253,26 +253,4 @@ public class NetUtil {
       webSocketClient.close(0, 0, reason);
     }
   }
-
-  public static boolean openURL(MainActivity activity, String url) {
-    boolean useSliding = activity.getSharedPrefs().getBoolean(
-        Constants.SETTINGS.APPEARANCE.USE_SLIDING,
-        Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
-    );
-    CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-    if (useSliding) {
-      builder.setStartAnimations(activity, R.anim.slide_from_end, R.anim.slide_to_start);
-      builder.setExitAnimations(activity, R.anim.slide_from_start, R.anim.slide_to_end);
-    } else {
-      builder.setStartAnimations(activity, R.anim.enter_end_fade, R.anim.exit_start_fade);
-      builder.setExitAnimations(activity, R.anim.enter_start_fade, R.anim.exit_end_fade);
-    }
-    CustomTabsIntent customTabsIntent = builder.build();
-    try {
-      customTabsIntent.launchUrl(activity, Uri.parse(url));
-      return true;
-    } catch (ActivityNotFoundException ex) {
-      return false;
-    }
-  }
 }
