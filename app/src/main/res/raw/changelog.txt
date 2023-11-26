@@ -1,6 +1,7 @@
 ## 3.4.1
 
 - Fixed: Crash when navigating to settings (#805)
+- Fixed: Crash on login page
 
 ## 3.4.0
 

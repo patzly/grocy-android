@@ -19,6 +19,9 @@
 
 package xyz.zedler.patrick.grocy.util;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -46,6 +49,8 @@ import android.view.Window;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.view.WindowMetrics;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import androidx.annotation.Dimension;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
@@ -577,5 +582,53 @@ public class UiUtil {
         context.getContentResolver(), Global.WINDOW_ANIMATION_SCALE, 1
     ) != 0;
     return duration && transition && window;
+  }
+
+  // Animation and animator
+
+  public static Animation runOnAnimationEnd(
+      @NonNull Context context, boolean enter, int nextAnim, @NonNull Runnable action
+  ) {
+    Animation animation = null;
+    if (nextAnim != 0) {
+      try {
+        animation = AnimationUtils.loadAnimation(context, nextAnim);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+          @Override
+          public void onAnimationStart(Animation animation) {}
+
+          @Override
+          public void onAnimationRepeat(Animation animation) {}
+
+          @Override
+          public void onAnimationEnd(Animation animation) {
+            if (enter) {
+              action.run();
+            }
+          }
+        });
+      } catch (Exception ignored) {}
+    }
+    return animation;
+  }
+
+  public static Animator runOnAnimatorEnd(
+      @NonNull Context context, boolean enter, int nextAnim, @NonNull Runnable action
+  ) {
+    Animator animator = null;
+    if (nextAnim != 0) {
+      try {
+        animator = AnimatorInflater.loadAnimator(context, nextAnim);
+        animator.addListener(new AnimatorListenerAdapter() {
+          @Override
+          public void onAnimationEnd(Animator animation) {
+            if (enter) {
+              action.run();
+            }
+          }
+        });
+      } catch (Exception ignored) {}
+    }
+    return animator;
   }
 }

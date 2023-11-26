@@ -41,6 +41,7 @@ import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class SettingsFragment extends BaseFragment {
 
@@ -116,47 +117,13 @@ public class SettingsFragment extends BaseFragment {
 
   @Override
   public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    Animation animation = null;
-    if (nextAnim != 0) {
-      try {
-        animation = AnimationUtils.loadAnimation(getActivity(), nextAnim);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-          @Override
-          public void onAnimationStart(Animation animation) {}
-
-          @Override
-          public void onAnimationRepeat(Animation animation) {}
-
-          @Override
-          public void onAnimationEnd(Animation animation) {
-            if (enter) {
-              navigateToSubpage();
-            }
-          }
-        });
-      } catch (Exception ignored) {}
-    }
-    return animation;
+    return UiUtil.runOnAnimationEnd(requireContext(), enter, nextAnim, this::navigateToSubpage);
   }
 
   @Nullable
   @Override
   public Animator onCreateAnimator(int transit, boolean enter, int nextAnim) {
-    Animator animator = null;
-    if (nextAnim != 0) {
-      try {
-        animator = AnimatorInflater.loadAnimator(getActivity(), nextAnim);
-        animator.addListener(new AnimatorListenerAdapter() {
-          @Override
-          public void onAnimationEnd(Animator animation) {
-            if (enter) {
-              navigateToSubpage();
-            }
-          }
-        });
-      } catch (Exception ignored) {}
-    }
-    return animator;
+    return UiUtil.runOnAnimatorEnd(requireContext(), enter, nextAnim, this::navigateToSubpage);
   }
 
   private void navigateToSubpage() {
