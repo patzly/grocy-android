@@ -157,7 +157,7 @@ public class OverviewStartFragment extends BaseFragment {
         int containerWidthStock = binding.scrollHorizActionsStockOverview.getWidth();
         int buttonWidthStock = binding.linearStockActionsContainer.getWidth();
         boolean isScrollableStock
-            = buttonWidthStock >= containerWidthStock - UiUtil.dpToPx(activity, 16);
+            = buttonWidthStock >= containerWidthStock - UiUtil.dpToPx(activity, 32);
         if (isScrollableStock) {
           binding.buttonInventoryText.setVisibility(View.GONE);
           binding.buttonInventoryIcon.setVisibility(View.VISIBLE);
@@ -173,7 +173,7 @@ public class OverviewStartFragment extends BaseFragment {
         int containerWidthShopping = binding.scrollHorizActionsShoppingList.getWidth();
         int buttonWidthShopping = binding.linearShoppingListActionsContainer.getWidth();
         boolean isScrollableShopping
-            = buttonWidthShopping >= containerWidthShopping - UiUtil.dpToPx(activity, 16);
+            = buttonWidthShopping >= containerWidthShopping - UiUtil.dpToPx(activity, 32);
         if (isScrollableShopping) {
           binding.buttonShoppingText.setVisibility(View.GONE);
           binding.buttonShoppingIcon.setVisibility(View.VISIBLE);
