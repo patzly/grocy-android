@@ -1,0 +1,5 @@
+• Meal plan (view only)
+• Initial support for viewing and grouping/sorting by userfields (custom values) on stock overview, recipes overview and recipe page
+• Option to backup and restore settings with file
+• Edit and delete recipe pictures (upload new from camera or clipboard)
+• Many other improvements and bug fixes
