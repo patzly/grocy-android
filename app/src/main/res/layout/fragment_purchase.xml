@@ -243,23 +243,6 @@
 
               </com.google.android.material.card.MaterialCardView>
 
-              <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Grocy.Card.Text"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:visibility="gone">
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.Paragraph"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:textColor="?attr/colorOnSurfaceVariant"
-                  android:text="You can choose an existing product from the list or write a new product name and press done. If the name doesn\'t exist, the purchase will be saved for later." />
-
-              </com.google.android.material.card.MaterialCardView>
-
               <View
                 android:id="@+id/dummy_focus_view"
                 android:layout_width="0dp"
@@ -296,7 +279,12 @@
                     android:completionThreshold="1"
                     android:popupBackground="@drawable/bg_auto_complete"
                     android:text="@={formData.productNameLive}"
-                    app:productList="@{formData.productsLive}" />
+                    android:onItemClick="@{(parent, view, pos, id) -> fragment.onItemAutoCompleteClick(parent, pos)}"
+                    android:afterTextChanged="@{() -> formData.isProductNameValid()}"
+                    app:productList="@{formData.productsLive}"
+                    app:onNextClickInSoftKeyboard="@{() -> fragment.clearFocusAndCheckProductInput()}"
+                    app:onTabPressListener="@{() -> fragment.clearFocusAndCheckProductInputExternal()}"
+                    app:onEnterPressListener="@{() -> fragment.clearFocusAndCheckProductInputExternal()}"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 

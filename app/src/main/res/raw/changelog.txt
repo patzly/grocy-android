@@ -1,7 +1,8 @@
 ## 3.4.1
 
 - Fixed: Crash when navigating to settings (#805)
-- Fixed: Crash on login page
+- Fixed: Crash on login page (#806)
+- Fixed: Broken input handling on purchase page (#806)
 
 ## 3.4.0
 
