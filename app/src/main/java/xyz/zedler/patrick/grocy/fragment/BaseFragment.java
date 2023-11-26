@@ -296,7 +296,7 @@ public class BaseFragment extends Fragment {
   }
 
   public void navigateDeepLinkHorizontally(@StringRes int uri, @NonNull Bundle args) {
-    activity.navUtil.navigateDeepLink(NavUtil.getUriWithArgs(getString(uri), args), false);
+    activity.navUtil.navigateDeepLink(NavUtil.getUriWithArgs(getString(uri), args));
   }
 
   /**

@@ -243,6 +243,8 @@ public class PrefsUtil {
     editPrefs.remove(PREF.DB_LAST_TIME_RECIPE_POSITIONS_RESOLVED);
     editPrefs.remove(PREF.DB_LAST_TIME_RECIPE_NESTINGS);
     editPrefs.remove(PREF.DB_LAST_TIME_USERFIELDS);
+    editPrefs.remove(PREF.DB_LAST_TIME_MEAL_PLAN_ENTRIES);
+    editPrefs.remove(PREF.DB_LAST_TIME_MEAL_PLAN_SECTIONS);
     editPrefs.apply();
   }
 

@@ -153,6 +153,7 @@
   <string name="action_backup">Backup</string>
   <!-- This is the action part of "Restore from file" or "Restore data" -->
   <string name="action_restore">Restore</string>
+  <string name="action_configure_sections">Configure sections</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -615,6 +616,7 @@
   <string name="title_chores">Chores</string>
   <string name="title_chore">Chore</string>
   <string name="title_recipes">Recipes</string>
+  <string name="title_meal_plan">Meal plan</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Editor</string>
   <string name="title_task_new">New task</string>
@@ -928,6 +930,7 @@
   <string name="property_due_days_default_freezing">Default due days after freezing</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">Default due days after thawing</string>
+  <string name="property_day_summary">Summary for day</string>
   <string name="property_location">Location</string>
   <string name="property_location_insert">Location: %1$s</string>
   <string name="property_location_default">Default location</string>
@@ -1013,6 +1016,10 @@
   <string name="property_extra_field">Extra field: %1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">Fields</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_header">Fields (header)</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_entries">Fields (entries)</string>
   <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
   <string name="property_userfield_value">%1$s: %2$s</string>
   <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
@@ -1057,6 +1064,10 @@
   <string name="property_preparation">Preparation</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">Costs</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs">Week costs</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs_insert">Week costs: %1$s</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="property_due_score">Due score</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
@@ -1076,6 +1087,8 @@
   <string name="date_unlimited">Unlimited</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Never</string>
+  <!-- %1$s is 'from' date, %2$s is 'to' date -->
+  <string name="date_timespan">%1$s - %2$s</string>
 
   <plurals name="date_days">
     <item quantity="one">%d day</item>

@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.view;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import androidx.annotation.NonNull;
@@ -33,6 +34,9 @@ public class CustomAutoCompleteTextView extends MaterialAutoCompleteTextView {
 
   public CustomAutoCompleteTextView(@NonNull Context context, @Nullable AttributeSet attrs) {
     super(context, attrs);
+    // Workaround for bug which causes the back press gesture to be ignored
+    // after the dropdown is dismissed
+    new Handler().postDelayed(() -> setOnDismissListener(() -> {}), 50);
   }
 
   @Override

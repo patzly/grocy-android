@@ -146,6 +146,7 @@
   <string name="action_backup">Sauvegarder</string>
   <!-- This is the action part of "Restore from file" or "Restore data" -->
   <string name="action_restore">Restaurer</string>
+  <string name="action_configure_sections">Configurer les sections</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -630,6 +631,7 @@
   <string name="title_chores">Corvées</string>
   <string name="title_chore">Corvée</string>
   <string name="title_recipes">Recettes</string>
+  <string name="title_meal_plan">Prévisions des menus</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Éditeur</string>
   <string name="title_task_new">Nouvelle tâche</string>
@@ -731,7 +733,7 @@
   <string name="subtitle_barcode_unit">Unité de quantité : %1$s</string>
   <string name="subtitle_barcode">Code-barres : %1$s</string>
   <string name="subtitle_feature_disabled">Fonctionnalité désactivée</string>
-  <string name="subtitle_date_from_input">Date de saisie :\n%1$s</string>
+  <string name="subtitle_date_from_input">Date saisie :\n%1$s</string>
   <string name="subtitle_product_amount">Stock min., Consommation rapide, Facteur, Tarage</string>
   <string name="subtitle_product_default_location">Emplacement, Magasin</string>
   <string name="subtitle_product_due_date">Type, Date par défaut (après ouverture, congélation, décongélation)</string>
@@ -888,7 +890,7 @@
   <string name="property_note">Note</string>
   <string name="property_status">Statut</string>
   <string name="property_status_insert">Statut :</string>
-  <string name="property_amount">Montant</string>
+  <string name="property_amount">Quantité</string>
   <string name="property_amount_insert">Quantité : %1$s</string>
   <string name="property_seconds">Secondes</string>
   <!-- %1$s is a number (amount of seconds) -->
@@ -897,7 +899,7 @@
     <item quantity="many">%1$d secondes</item>
     <item quantity="other">%1$d secondes</item>
   </plurals>
-  <string name="property_amount_min_stock">Min. montant du stock</string>
+  <string name="property_amount_min_stock">Quantité minimale du stock</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Quantité en %1$s</string>
   <string name="property_price">Prix</string>
@@ -957,6 +959,7 @@
   <string name="property_due_days_default_freezing">Date de péremption par défaut après congélation</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">Date de péremption par défaut après décongélation</string>
+  <string name="property_day_summary">Résumé du jour</string>
   <string name="property_location">Emplacement</string>
   <string name="property_location_insert">Emplacement : %1$s</string>
   <string name="property_location_default">Emplacement par défaut</string>
@@ -1042,6 +1045,10 @@
   <string name="property_extra_field">Champ supplémentaire : %1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">Champs</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_header">Champs (en-tête)</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_entries">Champs (entrées)</string>
   <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
   <string name="property_userfield_value">%1$s: %2$s</string>
   <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
@@ -1086,6 +1093,10 @@
   <string name="property_preparation">Préparation</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">Coûts</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs">Coûts hebdomadaires</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs_insert">Coûts de la semaine : %1$s</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="property_due_score">Indice de péremption</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
@@ -1105,6 +1116,8 @@
   <string name="date_unlimited">Illimitée</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Jamais</string>
+  <!-- %1$s is 'from' date, %2$s is 'to' date -->
+  <string name="date_timespan">%1$s - %2$s</string>
 
   <plurals name="date_days">
     <item quantity="one">%d jour</item>
@@ -1249,9 +1262,9 @@
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Seuil de péremption</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="setting_default_amount_purchase">Montant par défaut pour l\'achat</string>
+  <string name="setting_default_amount_purchase">Quantité par défaut lors de l\'achat</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="setting_default_amount_consume">Montant par défaut pour consommer</string>
+  <string name="setting_default_amount_consume">Quantité par défaut lors de la consommation</string>
   <string name="setting_treat_opened_as_out_of_stock">Considérer ouvert comme en rupture de stock</string>
   <string name="setting_purchased_date">Demander la date d\'achat</string>
   <string name="setting_purchased_date_description">Sur les pages d\'achat et d\'inventaire</string>

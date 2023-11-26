@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -16,18 +17,19 @@
   ~
   ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
-
 <set xmlns:android="http://schemas.android.com/apk/res/android">
-  <translate
-    android:duration="300"
-    android:startOffset="100"
-    android:interpolator="@android:interpolator/fast_out_slow_in"
-    android:fromXDelta="7.5%p"
-    android:toXDelta="0" />
-  <alpha
+  <set android:ordering="sequentially">
+    <objectAnimator
+      android:duration="300"
+      android:interpolator="@android:interpolator/fast_out_slow_in"
+      android:propertyName="translationX"
+      android:valueFrom="0"
+      android:valueTo="@dimen/fading_start" />
+  </set>
+  <objectAnimator
     android:duration="200"
-    android:startOffset="200"
     android:interpolator="@android:interpolator/fast_out_slow_in"
-    android:fromAlpha="0"
-    android:toAlpha="1" />
+    android:propertyName="alpha"
+    android:valueFrom="1"
+    android:valueTo="0" />
 </set>

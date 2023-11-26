@@ -46,6 +46,7 @@ import xyz.zedler.patrick.grocy.fragment.ChoresFragment;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.fragment.InventoryFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterObjectListFragment;
+import xyz.zedler.patrick.grocy.fragment.MealPlanFragment;
 import xyz.zedler.patrick.grocy.fragment.OverviewStartFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.fragment.RecipesFragment;
@@ -103,6 +104,9 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
         ViewUtil.getRippleBgListItemSurface(requireContext())
     );
     binding.linearDrawerRecipes.setBackground(
+        ViewUtil.getRippleBgListItemSurface(requireContext())
+    );
+    binding.linearDrawerMealPlan.setBackground(
         ViewUtil.getRippleBgListItemSurface(requireContext())
     );
     binding.linearDrawerChores.setBackground(
@@ -181,6 +185,7 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
         binding.linearDrawerChores,
         binding.linearDrawerTasks,
         binding.linearDrawerRecipes,
+        binding.linearDrawerMealPlan,
         binding.linearDrawerMasterData,
         binding.linearDrawerSettings,
         binding.linearDrawerFeedback,
@@ -214,6 +219,8 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
       select(binding.linearDrawerTasks, binding.textDrawerTasks, binding.imageDrawerTasks);
     } else if (currentFragment instanceof RecipesFragment) {
       select(binding.linearDrawerRecipes, binding.textDrawerRecipes, binding.imageDrawerRecipes);
+    } else if (currentFragment instanceof MealPlanFragment) {
+      select(binding.linearDrawerMealPlan, binding.textDrawerMealPlan, binding.imageDrawerMealPlan);
     } else if (currentFragment instanceof MasterObjectListFragment) {
       select(
           binding.linearDrawerMasterData,
@@ -281,11 +288,14 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
     } else if (id == R.id.linear_drawer_recipes) {
       navigateCustom(DrawerBottomSheetDirections
               .actionDrawerBottomSheetDialogFragmentToRecipesFragment());
+    } else if (v.getId() == R.id.linear_drawer_meal_plan) {
+      navigateCustom(DrawerBottomSheetDirections
+          .actionDrawerBottomSheetDialogFragmentToMealPlanFragment());
     }
   }
 
   private void navigateCustom(NavDirections directions) {
-    NavOptions.Builder builder = activity.navUtil.getNavOptionsBuilderFragmentFadeOrSlide(true);
+    NavOptions.Builder builder = activity.navUtil.getNavOptionsBuilderFragmentFadeOrSlide();
     builder.setPopUpTo(R.id.overviewStartFragment, false);
     if (activity.getCurrentFragment() instanceof OverviewStartFragment) {
       builder.setExitAnim(R.anim.slide_no);

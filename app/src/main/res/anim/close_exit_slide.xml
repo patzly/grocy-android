@@ -19,8 +19,8 @@
 
 <set xmlns:android="http://schemas.android.com/apk/res/android">
   <translate
-    android:fromXDelta="-100%p"
-    android:toXDelta="0"
-    android:interpolator="@android:anim/accelerate_decelerate_interpolator"
-    android:duration="300" />
+    android:fromXDelta="0"
+    android:toXDelta="@fraction/sliding_end_fraction"
+    android:interpolator="@android:interpolator/fast_out_slow_in"
+    android:duration="@integer/navigation_slide_duration" />
 </set>

@@ -96,6 +96,7 @@ dependencies {
     implementation libs.webkit
     implementation libs.lifecycle.viewmodel.savedstate
     implementation libs.lifecycle.viewmodel.ktx
+    implementation libs.paging
     // Navigation framework for easy navigation control using XML
     implementation libs.navigation.fragment
     implementation libs.navigation.ui
@@ -106,6 +107,7 @@ dependencies {
     implementation libs.rxandroid
     // Material views
     implementation libs.material
+    implementation libs.calendar
     implementation libs.flexbox
     // Volley for all general network requests and Glide for image loading
     // Netcipher for Tor support and Conscrypt for new TLS support on old Android devices

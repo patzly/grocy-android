@@ -143,18 +143,17 @@ public class RecipeFragment extends BaseFragment implements
 
     Drawable navIcon = binding.toolbar.getNavigationIcon();
     assert navIcon != null;
-    int colorBlack = ResUtil.getColorAttr(activity, R.attr.colorOnBackground);
+    int colorOnBg = ResUtil.getColorAttr(activity, R.attr.colorOnBackground);
     binding.appBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
       if (binding.collapsingToolbarLayout.getHeight() + verticalOffset
           < binding.collapsingToolbarLayout.getScrimVisibleHeightTrigger()) {
-        navIcon.setColorFilter(colorBlack, Mode.SRC_ATOP);
+        navIcon.setTint(colorOnBg);
         binding.toolbar.setNavigationIcon(navIcon);
         UiUtil.setLightStatusBar(
-            activity.getWindow().getDecorView(),
-            !UiUtil.isDarkModeActive(requireContext())
+            activity.getWindow().getDecorView(), !UiUtil.isDarkModeActive(activity)
         );
       } else {
-        navIcon.setColorFilter(Color.WHITE, Mode.SRC_ATOP);
+        navIcon.setTint(Color.WHITE);
         binding.toolbar.setNavigationIcon(navIcon);
         UiUtil.setLightStatusBar(activity.getWindow().getDecorView(), false);
       }
@@ -409,7 +408,6 @@ public class RecipeFragment extends BaseFragment implements
             )
         );
       }
-      binding.ingredientDivider.setVisibility(View.VISIBLE);
       binding.ingredientContainer.setVisibility(View.VISIBLE);
     } else if (!recipePositions.isEmpty()) {
       if (binding.recycler.getAdapter() instanceof RecipePositionAdapter) {
@@ -438,21 +436,17 @@ public class RecipeFragment extends BaseFragment implements
             )
         );
       }
-      binding.ingredientDivider.setVisibility(View.VISIBLE);
       binding.ingredientContainer.setVisibility(View.VISIBLE);
     } else {
-      binding.ingredientDivider.setVisibility(View.GONE);
       binding.ingredientContainer.setVisibility(View.GONE);
     }
 
     CharSequence trimmedDescription = TextUtil.trimCharSequence(recipe.getDescription());
     String description = trimmedDescription != null ? trimmedDescription.toString() : null;
     if (description == null || description.isEmpty()) {
-      binding.preparationDivider.setVisibility(View.GONE);
       binding.preparationTitle.setVisibility(View.GONE);
       binding.preparation.setVisibility(View.GONE);
     } else {
-      binding.preparationDivider.setVisibility(View.VISIBLE);
       binding.preparationTitle.setVisibility(View.VISIBLE);
       binding.preparation.setHtml(description);
     }

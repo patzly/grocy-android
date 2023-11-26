@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.MealPlanEntry;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductAveragePrice;
@@ -33,6 +34,8 @@ import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.Recipe;
+import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
@@ -194,6 +197,24 @@ public class ArrayUtil {
     return stockItemHashMap;
   }
 
+  public static HashMap<Integer, Recipe> getRecipesHashMap(List<Recipe> recipes) {
+    HashMap<Integer, Recipe> recipeHashMap = new HashMap<>();
+    for (Recipe recipe : recipes) {
+      recipeHashMap.put(recipe.getId(), recipe);
+    }
+    return recipeHashMap;
+  }
+
+  public static List<Recipe> getShadowRecipes(List<Recipe> allRecipes) {
+    List<Recipe> shadowRecipes = new ArrayList<>();
+    for (Recipe recipe : allRecipes) {
+      if (recipe.getId() < 0) {
+        shadowRecipes.add(recipe);
+      }
+    }
+    return shadowRecipes;
+  }
+
   public static HashMap<Integer, RecipePosition> getRecipePositionHashMap(
       List<RecipePosition> recipePositions
   ) {
@@ -202,6 +223,48 @@ public class ArrayUtil {
       recipePositionHashMap.put(recipePosition.getId(), recipePosition);
     }
     return recipePositionHashMap;
+  }
+
+  public static HashMap<Integer, RecipeFulfillment> getRecipeFulfillmentHashMap(
+      List<RecipeFulfillment> recipeFulfillments
+  ) {
+    HashMap<Integer, RecipeFulfillment> recipeFulfillmentHashMap = new HashMap<>();
+    for (RecipeFulfillment recipeFulfillment : recipeFulfillments) {
+      recipeFulfillmentHashMap.put(recipeFulfillment.getRecipeId(), recipeFulfillment);
+    }
+    return recipeFulfillmentHashMap;
+  }
+
+  public static HashMap<String, RecipeFulfillment> getRecipeResolvedFulfillmentForMealplanHashMap(
+      HashMap<Integer, RecipeFulfillment> recipeFulfillmentHashMap,
+      List<Recipe> recipes
+  ) {
+    HashMap<String, RecipeFulfillment> resolvedFulfillments = new HashMap<>();
+    for (Recipe recipe : recipes) {
+      if (recipe.getId() >= 0) {
+        continue;
+      }
+      RecipeFulfillment recipeFulfillment = recipeFulfillmentHashMap.get(recipe.getId());
+      resolvedFulfillments.put(recipe.getName(), recipeFulfillment);
+    }
+    return resolvedFulfillments;
+  }
+
+  public static HashMap<String, List<MealPlanEntry>> getMealPlanEntriesForDayHashMap(
+      List<MealPlanEntry> mealPlanEntries
+  ) {
+    HashMap<String, List<MealPlanEntry>> hashMap = new HashMap<>();
+    for (MealPlanEntry mealPlanEntry : mealPlanEntries) {
+      List<MealPlanEntry> mealPlanEntriesForDay = hashMap.get(mealPlanEntry.getDay());
+      if (mealPlanEntriesForDay != null) {
+        mealPlanEntriesForDay.add(mealPlanEntry);
+      } else {
+        mealPlanEntriesForDay = new ArrayList<>();
+        mealPlanEntriesForDay.add(mealPlanEntry);
+        hashMap.put(mealPlanEntry.getDay(), mealPlanEntriesForDay);
+      }
+    }
+    return hashMap;
   }
 
   public static boolean contains(String[] array, String value) {

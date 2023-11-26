@@ -126,6 +126,7 @@
   <string name="action_demo_server">Server s demoverzí</string>
   <string name="action_own_server">Můj server s Grocy</string>
   <string name="action_enter_data_manually">Ruční vložení údajů o serveru</string>
+  <string name="action_settings_backup_restore">Záloha nebo obnovení nastavení</string>
   <string name="action_details">Podrobnosti</string>
   <string name="action_perform">Provést akci</string>
   <string name="action_share">Sdílet</string>
@@ -141,6 +142,11 @@
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Změna data příštího plnění povinnosti</string>
   <string name="action_put_missing_products_on_shopping_list">Vložit produkty pod min. stavem zásoby</string>
+  <!-- This is the action part of "Backup to file" or "Backup data" -->
+  <string name="action_backup">Zálohovat nastavení</string>
+  <!-- This is the action part of "Restore from file" or "Restore data" -->
+  <string name="action_restore">Obnovit nastavení</string>
+  <string name="action_configure_sections">Upravit jednotlivé agendy</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -204,6 +210,13 @@
   <string name="msg_consumed_spoiled">%1$s %2$s produkty %3$s jsou zkažené</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Označit %1$s %2$s produktu %3$s jako otevřené</string>
+  <!-- %1$s is the number of servings of a recipe. -->
+  <plurals name="msg_servings">
+    <item quantity="one">%1$s porce</item>
+    <item quantity="few">%1$s porce</item>
+    <item quantity="many">%1$s porcí</item>
+    <item quantity="other">%1$s porcí</item>
+  </plurals>
   <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
   <plurals name="msg_undone_items">
     <item quantity="one">%1$d vrácený</item>
@@ -397,9 +410,13 @@
   <string name="msg_point_at_barcode">Namiřte kameru na čárový kód</string>
   <string name="msg_save_product_first">Nejprve produkt uložte</string>
   <string name="msg_save_recipe_first">Nejprve recept uložte</string>
+  <string name="msg_recipe_contains_nested_recipes">Tento recept se skládá z dílčích receptů</string>
   <string name="msg_press_hold_confirm">Podržením potvrdíte odstranění</string>
   <string name="msg_recipe_consume_ask">Opravdu si přejete spotřebovat všechny ingredience receptu „%1$s“? Suroviny označené „Zkontrolovat pouze zda je v zásobě jakékoliv množství“ budou ignorovány.</string>
   <string name="msg_recipe_shopping_list_ask">Chcete přidat všechny chybějící ingredience z receptu „%1$s“ do nákupního seznamu?\nOdškrtněte ty, které v nákupním seznamu nechcete.</string>
+  <string name="msg_settings_backup_restore">Tady si můžete nastavení aplikace uložit do souboru abyste ho mohli např. sdílet s ostatními (soubor obsahuje přihlašovací údaje). A si tu můžete nastavení ze souboru obnovit.\n\nPo obnovení ze souboru nemusí na některých přístrojích správně fungovat upozorňovaní. Stačí upozornění vypnout a zapnout.\n\nPokud by byl soubor s konfigurací chybný (např. z příliš staré verze nebo po ruční úpravě) aplikace nebude fungovat správně. Ve správci aplikací stačí smazat všechna její data a opět bude ve výchozím stavu.</string>
+  <string name="msg_settings_backup_success">Nastavení bylo úspěšně uloženo</string>
+  <string name="msg_settings_restore_success">Nastavení bylo obnoveno ze souboru. Aplikace se za 2s restartuje.</string>
   <string name="msg_welcome">Grocy pro Android vás vítá</string>
   <string name="msg_welcome_introduce">Chcete-li Grocy používat, musíte si ji nejprve nainstalovat na svůj server nebo jako Grocy add-on pro Home Assistant.\nPokud si jen chcete aplikaci vyzkoušet, můžete použít demo server od Bernda Bestela, tvůrce Grocy.</string>
   <string name="msg_choose_option_below">Vyberte si jednu z možností</string>
@@ -593,6 +610,9 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="error_undefined">Došlo k chybě</string>
   <string name="error_invalid_base_servings">Počet porcí je nesprávný</string>
   <string name="error_pictures_size_exceeds_limit">Některé obrázky produktů nebo jídel jsou příliš velké a proto je aplikace nezobrazí. Zmenšete, prosím, velké obrázky. Zrychlí se tím načítání dat.</string>
+  <string name="error_userfield_type_not_supported">Uživatelská pole a tabulky zatím nejsou v mobilní aplikaci podporována.</string>
+  <string name="error_settings_backup">Soubor se zálohou se nepodařilo vytvořit</string>
+  <string name="error_settings_restore">Nastavení se nepodařilo obnovit ze souboru</string>
 
   <string name="title_overview">Přehled</string>
   <string name="title_stock_overview">Přehled zásob</string>
@@ -638,6 +658,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="title_chores">Povinnosti</string>
   <string name="title_chore">Povinnost</string>
   <string name="title_recipes">Recepty</string>
+  <string name="title_meal_plan">Jídelníček</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Úpravy</string>
   <string name="title_task_new">Přidat úkol</string>
@@ -1012,6 +1033,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Průměrná doba uskladnění</string>
   <string name="property_spoil_rate">Kazivost</string>
+  <string name="property_created_timestamp">Datum vytvoření</string>
   <string name="property_price_history">Historie cen</string>
   <string name="property_product_group">Skupina produktů</string>
   <string name="property_product_groups">Skupiny produktů</string>
@@ -1021,7 +1043,10 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_opened">otevřeno</string>
   <string name="property_not_opened">neotevřeno</string>
   <string name="property_is_freezer">Místo je mrazící box</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
+  <!-- Means energy of an ingredient or product -->
+  <string name="property_energy_only">Energetická hodnota</string>
+  <!-- %1$s is a unit for energy, like kcal (kilo calories) -->
+  <string name="property_energy_insert">Energetický hodnota (%1$s) na jednotku množství produktu</string>
   <string name="property_active">Aktivní</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Nezobrazovat v Přehledu zásob</string>
@@ -1066,6 +1091,14 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_extra_field">Další sloupec: %1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">Položky</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_header">Sloupce tabulky – hlavička</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_entries">Sloupce tabulky – data</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value">%1$s: %2$s</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value_without_space">%1$s:%2$s</string>
   <string name="property_task_category">Kategorie úkolu</string>
   <string name="property_task_categories">Kategorie úkolů</string>
   <string name="property_calories">Kalorie</string>
@@ -1106,6 +1139,10 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_preparation">Postup přípravy</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">Náklady</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs">Týdenní náklady</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs_insert">Týdenní náklady: %1$s</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="property_due_score">Index min. trvanlivosti</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
@@ -1125,6 +1162,8 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="date_unlimited">Neomezený</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Nikdy</string>
+  <!-- %1$s is 'from' date, %2$s is 'to' date -->
+  <string name="date_timespan">od: %1$s do: %2$s</string>
 
   <plurals name="date_days">
     <item quantity="one">%d den</item>

@@ -296,12 +296,7 @@
                     android:completionThreshold="1"
                     android:popupBackground="@drawable/bg_auto_complete"
                     android:text="@={formData.productNameLive}"
-                    android:onItemClick="@{(parent, view, pos, id) -> fragment.onItemAutoCompleteClick(parent, pos)}"
-                    android:afterTextChanged="@{() -> formData.isProductNameValid()}"
-                    app:productList="@{formData.productsLive}"
-                    app:onNextClickInSoftKeyboard="@{() -> fragment.clearFocusAndCheckProductInput()}"
-                    app:onTabPressListener="@{() -> fragment.clearFocusAndCheckProductInputExternal()}"
-                    app:onEnterPressListener="@{() -> fragment.clearFocusAndCheckProductInputExternal()}" />
+                    app:productList="@{formData.productsLive}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

@@ -17,17 +17,15 @@
   ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
-<set xmlns:android="http://schemas.android.com/apk/res/android">
-  <translate
-    android:duration="300"
-    android:startOffset="100"
-    android:interpolator="@android:interpolator/fast_out_slow_in"
-    android:fromXDelta="-7.5%p"
-    android:toXDelta="0" />
-  <alpha
-    android:duration="200"
-    android:startOffset="200"
-    android:interpolator="@android:interpolator/fast_out_slow_in"
-    android:fromAlpha="0"
-    android:toAlpha="1" />
-</set>
+<menu
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  tools:ignore="AlwaysShowAction">
+
+  <item
+    android:id="@+id/action_refresh"
+    android:title="@string/action_reload"
+    app:showAsAction="never" />
+
+</menu>

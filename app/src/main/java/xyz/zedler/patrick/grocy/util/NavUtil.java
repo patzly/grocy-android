@@ -83,38 +83,31 @@ public class NavUtil {
     navController.setGraph(graph);
   }
 
-  public NavOptions.Builder getNavOptionsBuilderFragmentFadeOrSlide(boolean slideVertically) {
+  public NavOptions.Builder getNavOptionsBuilderFragmentFadeOrSlide() {
     if (UiUtil.areAnimationsEnabled(activity)) {
       boolean useSliding = sharedPrefs.getBoolean(
           Constants.SETTINGS.APPEARANCE.USE_SLIDING,
           Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
       );
       if (useSliding) {
-        if (slideVertically) {
-          return new NavOptions.Builder()
-              .setEnterAnim(R.anim.slide_in_up)
-              .setPopExitAnim(R.anim.slide_out_down)
-              .setExitAnim(R.anim.slide_no);
-        } else {
-          return new NavOptions.Builder()
-              .setEnterAnim(R.anim.slide_from_end)
-              .setPopExitAnim(R.anim.slide_to_end)
-              .setPopEnterAnim(R.anim.slide_from_start)
-              .setExitAnim(R.anim.slide_to_start);
-        }
+        return new NavOptions.Builder()
+            .setEnterAnim(R.anim.open_enter_slide)
+            .setExitAnim(R.anim.open_exit_slide)
+            .setPopEnterAnim(R.anim.close_enter_slide)
+            .setPopExitAnim(R.anim.close_exit_slide);
       } else {
         return new NavOptions.Builder()
-            .setEnterAnim(R.anim.enter_end_fade)
-            .setExitAnim(R.anim.exit_start_fade)
-            .setPopEnterAnim(R.anim.enter_start_fade)
-            .setPopExitAnim(R.anim.exit_end_fade);
+            .setEnterAnim(R.animator.open_enter)
+            .setExitAnim(R.animator.open_exit)
+            .setPopEnterAnim(R.animator.close_enter)
+            .setPopExitAnim(R.animator.close_exit);
       }
     } else {
       return new NavOptions.Builder()
-          .setEnterAnim(R.anim.fade_in_a11y)
-          .setExitAnim(R.anim.fade_out_a11y)
-          .setPopEnterAnim(R.anim.fade_in_a11y)
-          .setPopExitAnim(R.anim.fade_out_a11y);
+          .setEnterAnim(-1)
+          .setExitAnim(-1)
+          .setPopEnterAnim(-1)
+          .setPopExitAnim(-1);
     }
   }
 
@@ -178,7 +171,7 @@ public class NavUtil {
     }
     try {
       navController.navigate(
-          destination, arguments, getNavOptionsBuilderFragmentFadeOrSlide(true).build()
+          destination, arguments, getNavOptionsBuilderFragmentFadeOrSlide().build()
       );
     } catch (IllegalArgumentException e) {
       Log.e(TAG, "navigateFragment: ", e);
@@ -192,7 +185,7 @@ public class NavUtil {
     }
     try {
       navController.navigate(
-          directions, getNavOptionsBuilderFragmentFadeOrSlide(true).build()
+          directions, getNavOptionsBuilderFragmentFadeOrSlide().build()
       );
     } catch (IllegalArgumentException e) {
       Log.e(TAG, "navigateFragment: " + directions, e);
@@ -211,13 +204,13 @@ public class NavUtil {
     }
   }
 
-  public void navigateDeepLink(@NonNull Uri uri, boolean slideVertically) {
+  public void navigateDeepLink(@NonNull Uri uri) {
     if (navController == null ) {
       Log.e(TAG, "navigateDeepLink: controller is null");
       return;
     }
     try {
-      navController.navigate(uri, getNavOptionsBuilderFragmentFadeOrSlide(slideVertically).build());
+      navController.navigate(uri, getNavOptionsBuilderFragmentFadeOrSlide().build());
     } catch (IllegalArgumentException e) {
       Log.e(TAG, "navigateDeepLink: ", e);
     }
@@ -236,15 +229,15 @@ public class NavUtil {
   }
 
   public void navigateDeepLink(String uri) {
-    navigateDeepLink(Uri.parse(uri), true);
+    navigateDeepLink(Uri.parse(uri));
   }
 
   public void navigateDeepLink(@StringRes int uri) {
-    navigateDeepLink(Uri.parse(activity.getString(uri)), true);
+    navigateDeepLink(Uri.parse(activity.getString(uri)));
   }
 
   public void navigateDeepLink(@StringRes int uri, @NonNull Bundle args) {
-    navigateDeepLink(getUriWithArgs(activity.getString(uri), args), true);
+    navigateDeepLink(getUriWithArgs(activity.getString(uri), args));
   }
 
   public static Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
