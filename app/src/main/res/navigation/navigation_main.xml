@@ -581,11 +581,7 @@
         app:uri="@string/deep_link_settingsCatScannerFragment" />
       <action
         android:id="@+id/action_settingsCatScannerFragment_to_settingsCatScannerToolFragment"
-        app:destination="@id/settingsCatScannerToolFragment"
-        app:enterAnim="@anim/slide_from_end"
-        app:exitAnim="@anim/slide_to_start"
-        app:popEnterAnim="@anim/slide_from_start"
-        app:popExitAnim="@anim/slide_to_end"/>
+        app:destination="@id/settingsCatScannerToolFragment" />
     </fragment>
     <fragment
       android:id="@+id/settingsCatStockFragment"
