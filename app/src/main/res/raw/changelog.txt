@@ -1,3 +1,7 @@
+## 3.4.1
+
+- Fixed: Crash when navigating to settings (#805)
+
 ## 3.4.0
 
 - New: Display meal plan (#524)

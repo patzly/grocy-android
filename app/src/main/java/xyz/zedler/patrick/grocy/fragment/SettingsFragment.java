@@ -116,65 +116,60 @@ public class SettingsFragment extends BaseFragment {
 
   @Override
   public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    if (nextAnim == 0) {
-      return null;
-    }
-    try {
-      Animation animation = AnimationUtils.loadAnimation(getActivity(), nextAnim);
-      animation.setAnimationListener(new Animation.AnimationListener() {
+    Animation animation = null;
+    if (nextAnim != 0) {
+      try {
+        animation = AnimationUtils.loadAnimation(getActivity(), nextAnim);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+          @Override
+          public void onAnimationStart(Animation animation) {}
 
-        @Override
-        public void onAnimationStart(Animation animation) {}
+          @Override
+          public void onAnimationRepeat(Animation animation) {}
 
-        @Override
-        public void onAnimationRepeat(Animation animation) {}
-
-        @Override
-        public void onAnimationEnd(Animation animation) {
-          if (enter) {
-            navigateToSubpage();
+          @Override
+          public void onAnimationEnd(Animation animation) {
+            if (enter) {
+              navigateToSubpage();
+            }
           }
-        }
-      });
-      return animation;
-    } catch (InflateException e) {
-      return null;
+        });
+      } catch (Exception ignored) {}
     }
+    return animation;
   }
 
   @Nullable
   @Override
   public Animator onCreateAnimator(int transit, boolean enter, int nextAnim) {
-    if (nextAnim == 0) {
-      return null;
+    Animator animator = null;
+    if (nextAnim != 0) {
+      try {
+        animator = AnimatorInflater.loadAnimator(getActivity(), nextAnim);
+        animator.addListener(new AnimatorListenerAdapter() {
+          @Override
+          public void onAnimationEnd(Animator animation) {
+            if (enter) {
+              navigateToSubpage();
+            }
+          }
+        });
+      } catch (Exception ignored) {}
     }
-    Animator animator = AnimatorInflater.loadAnimator(getActivity(), nextAnim);
-    animator.addListener(new AnimatorListenerAdapter() {
-      @Override
-      public void onAnimationEnd(Animator animation) {
-        if (enter) {
-          navigateToSubpage();
-        }
-      }
-    });
     return animator;
   }
 
   private void navigateToSubpage() {
     if (shouldNavigateToBehavior()) {
-      setArguments(
-          new SettingsFragmentArgs.Builder(args).setShowCategory(null).build().toBundle()
-      );
+      setArguments(new SettingsFragmentArgs.Builder(args).setShowCategory(null).build().toBundle());
       new Handler().postDelayed(() -> activity.navUtil.navigateFragment(
-              SettingsFragmentDirections.actionSettingsFragmentToSettingsCatBehaviorFragment()),
+          SettingsFragmentDirections.actionSettingsFragmentToSettingsCatBehaviorFragment()),
           200
       );
     } else if (shouldNavigateToServer()) {
-      setArguments(
-          new SettingsFragmentArgs.Builder(args).setShowCategory(null).build().toBundle()
-      );
+      setArguments(new SettingsFragmentArgs.Builder(args).setShowCategory(null).build().toBundle());
       new Handler().postDelayed(() -> activity.navUtil.navigateFragment(
-              SettingsFragmentDirections.actionSettingsFragmentToSettingsCatServerFragment()),
+          SettingsFragmentDirections.actionSettingsFragmentToSettingsCatServerFragment()),
           200
       );
     }
