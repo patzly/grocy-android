@@ -313,12 +313,10 @@ public class FormDataMasterProductCatOptional {
     if (!isFormValid()) {
       return product;
     }
-    assert isActiveLive.getValue() != null;
-    assert neverShowOnStockLive.getValue() != null;
-    assert noOwnStockLive.getValue() != null;
-    assert shouldNotBeFrozenLive.getValue() != null;
     ProductGroup pGroup = productGroupLive.getValue();
-    product.setActive(isActiveLive.getValue());
+    if (isActiveLive.getValue() != null) {
+      product.setActive(isActiveLive.getValue());
+    }
     product.setParentProductId(parentProductLive.getValue() != null
         ? String.valueOf(parentProductLive.getValue().getId()) : null);
     product.setDescription(descriptionLive.getValue() != null
@@ -330,9 +328,15 @@ public class FormDataMasterProductCatOptional {
     } else {
       product.setDefaultStockLabelType(String.valueOf(0));
     }
-    product.setHideOnStockOverviewBoolean(neverShowOnStockLive.getValue());
-    product.setNoOwnStockBoolean(noOwnStockLive.getValue());
-    product.setShouldNotBeFrozenBoolean(shouldNotBeFrozenLive.getValue());
+    if (neverShowOnStockLive.getValue() != null) {
+      product.setHideOnStockOverviewBoolean(neverShowOnStockLive.getValue());
+    }
+    if (noOwnStockLive.getValue() != null) {
+      product.setNoOwnStockBoolean(noOwnStockLive.getValue());
+    }
+    if (shouldNotBeFrozenLive.getValue() != null) {
+      product.setShouldNotBeFrozenBoolean(shouldNotBeFrozenLive.getValue());
+    }
     product.setPictureFileName(pictureFilenameLive.getValue());
     return product;
   }

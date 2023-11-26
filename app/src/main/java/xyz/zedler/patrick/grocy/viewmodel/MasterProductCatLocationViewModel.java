@@ -91,7 +91,7 @@ public class MasterProductCatLocationViewModel extends BaseViewModel {
   }
 
   public Product getFilledProduct() {
-    return formData.fillProduct(args.getProduct());
+    return args.getProduct() != null ? formData.fillProduct(args.getProduct()) : null;
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
