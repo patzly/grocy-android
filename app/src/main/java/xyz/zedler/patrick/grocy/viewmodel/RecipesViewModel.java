@@ -132,7 +132,7 @@ public class RecipesViewModel extends BaseViewModel {
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
-      recipes = data.getRecipes();
+      recipes = ArrayUtil.getRecipesWithoutShadowRecipes(data.getRecipes());
       recipeFulfillments = data.getRecipeFulfillments();
       recipePositions = data.getRecipePositions();
       products = data.getProducts();

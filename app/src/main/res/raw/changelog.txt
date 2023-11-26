@@ -1,3 +1,7 @@
+## 3.4.2
+
+- Fixed: Hide internal meal plan recipes on recipes list
+
 ## 3.4.1
 
 - Fixed: Crash when navigating to settings (#805)
