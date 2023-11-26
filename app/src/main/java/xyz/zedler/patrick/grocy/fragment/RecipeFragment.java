@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.PorterDuff.Mode;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -31,7 +30,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -630,11 +628,6 @@ public class RecipeFragment extends BaseFragment implements
       if (product != null) excludedIds.add(product.getId());
     }
     return excludedIds.stream().mapToInt(i -> i).toArray();
-  }
-
-  private void setMenuButtonState(Button button, boolean enabled) {
-    button.setEnabled(enabled);
-    button.setAlpha(enabled ? 1f : 0.5f);
   }
 
   private static boolean[] toPrimitiveBooleanArray(Boolean... booleanList) {
