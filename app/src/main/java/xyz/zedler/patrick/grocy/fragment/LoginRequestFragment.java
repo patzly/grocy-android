@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.animation.Animator;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -38,6 +39,7 @@ import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.LoginRequestViewModel;
 
@@ -121,27 +123,20 @@ public class LoginRequestFragment extends BaseFragment {
   public void login(boolean checkVersion) {
     viewModel.clearHassData();
     new Handler().postDelayed(() -> viewModel.login(checkVersion), 500);
-    ;
   }
 
   @Override
   public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    if (nextAnim == 0) {
-      return null;
-    }
-    Animation anim = AnimationUtils.loadAnimation(getActivity(), nextAnim);
-    anim.setAnimationListener(new Animation.AnimationListener() {
-      @Override
-      public void onAnimationStart(Animation animation) {
-      }
-      @Override
-      public void onAnimationRepeat(Animation animation) {
-      }
-      @Override
-      public void onAnimationEnd(Animation animation) {
-        if (enter) login(true);
-      }
-    });
-    return anim;
+    return UiUtil.runOnAnimationEnd(
+        requireContext(), enter, nextAnim, () -> login(true)
+    );
+  }
+
+  @Nullable
+  @Override
+  public Animator onCreateAnimator(int transit, boolean enter, int nextAnim) {
+    return UiUtil.runOnAnimatorEnd(
+        requireContext(), enter, nextAnim, () -> login(true)
+    );
   }
 }
