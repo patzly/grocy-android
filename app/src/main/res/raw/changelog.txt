@@ -3,6 +3,7 @@
 - Fixed: Hide internal meal plan recipes on recipes list
 - Fixed: Amounts on recipe page were wrong with other base servings count than 1 and
   price & energy fields were not updated when changing quantity desired servings (#784)
+- Fixed crash with Android 14 and Tor enabled (#789)
 
 ## 3.4.1
 
