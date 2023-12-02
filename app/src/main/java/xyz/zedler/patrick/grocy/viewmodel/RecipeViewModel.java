@@ -198,8 +198,8 @@ public class RecipeViewModel extends BaseViewModel {
         true,
         Recipe.class,
         RecipeFulfillment.class,
-        VersionUtil.isGrocyServerMin400(sharedPrefs)
-            ? RecipePositionResolved.class : RecipePosition.class,
+        RecipePosition.class,
+        VersionUtil.isGrocyServerMin400(sharedPrefs) ? RecipePositionResolved.class : null,
         Product.class,
         QuantityUnit.class,
         QuantityUnitConversionResolved.class,
@@ -272,7 +272,8 @@ public class RecipeViewModel extends BaseViewModel {
             false,
             Recipe.class,
             RecipeFulfillment.class,
-            RecipePosition.class
+            RecipePosition.class,
+            VersionUtil.isGrocyServerMin400(sharedPrefs) ? RecipePositionResolved.class : null
         ),
         error -> onError(error, TAG)
     ).perform(dlHelper.getUuid());

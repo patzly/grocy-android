@@ -15,7 +15,6 @@ material = "1.10.0"
 flexbox = "3.0.0"
 volley = "1.2.1"
 glide = "4.16.0"
-netcipher = "2.1.0"
 conscrypt = "2.5.2"
 websocket-client = "2.0.2"
 gson = "2.10.1"
@@ -53,8 +52,7 @@ flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbo
 # Volley for all general network requests and Glide for image loading
 volley = { module = "com.android.volley:volley", version.ref = "volley" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
-# Netcipher for Tor support and Conscrypt for new TLS support on old Android devices
-netcipher = { module = "info.guardianproject.netcipher:netcipher", version.ref = "netcipher" }
+# Conscrypt for new TLS support on old Android devices
 conscrypt = { module = "org.conscrypt:conscrypt-android", version.ref = "conscrypt" }
 websocket-client = { module = "dev.gustavoavila:java-android-websocket-client", version.ref = "websocket-client" }
 # GSON for converting JSON responses to Java objects

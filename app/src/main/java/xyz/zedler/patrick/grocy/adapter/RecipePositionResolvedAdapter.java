@@ -278,8 +278,7 @@ public class RecipePositionResolvedAdapter extends
         ) : null;
 
     // AMOUNT
-    double amountRecipeUnit = recipePosition.getRecipeAmount() /
-        recipe.getBaseServings() * recipe.getDesiredServings(); // stock unit
+    double amountRecipeUnit = recipePosition.getRecipeAmount(); // stock unit
     if (conversion != null && !recipePosition.isOnlyCheckSingleUnitInStock()) {
       amountRecipeUnit *= conversion.getFactor();
     }
@@ -366,6 +365,7 @@ public class RecipePositionResolvedAdapter extends
         holder.binding.missing.setVisibility(View.VISIBLE);
       }
     }
+    holder.binding.fulfilled.requestLayout();
 
     // NOTE
     if (recipePosition.getNote() == null || recipePosition.getNote().trim().isEmpty()

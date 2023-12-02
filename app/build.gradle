@@ -41,8 +41,8 @@ android {
         minSdk 21
         targetSdk 34
         compileSdk 34
-        versionCode 52
-        versionName "3.4.1"
+        versionCode 53
+        versionName "3.4.2"
         resourceConfigurations += ['ca', 'cs', 'de', 'en', 'es', 'et', 'fr', 'hu', 'it', 'iw', 'ja', 'nb', 'nl', 'pl', 'pt-rBR', 'pt-rPT', 'ru', 'sk', 'sv', 'uk', 'zh-rCN', 'zh-rTW']
 
         javaCompileOptions {
@@ -110,10 +110,9 @@ dependencies {
     implementation libs.calendar
     implementation libs.flexbox
     // Volley for all general network requests and Glide for image loading
-    // Netcipher for Tor support and Conscrypt for new TLS support on old Android devices
+    // Conscrypt for new TLS support on old Android devices
     implementation libs.volley
     implementation libs.glide
-    implementation libs.netcipher
     implementation libs.conscrypt
     implementation libs.websocket.client
     // GSON for converting JSON responses to Java objects

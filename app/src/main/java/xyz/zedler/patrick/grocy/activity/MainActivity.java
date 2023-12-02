@@ -66,7 +66,6 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
-import info.guardianproject.netcipher.proxy.OrbotHelper;
 import java.lang.reflect.Field;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
@@ -96,6 +95,7 @@ import xyz.zedler.patrick.grocy.util.ShortcutUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
+import xyz.zedler.patrick.grocy.web.OrbotHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -187,9 +187,11 @@ public class MainActivity extends AppCompatActivity {
         getCurrentFragment().updateConnectivity(netUtil.isOnline());
       }
     };
-    registerReceiver(
+    ContextCompat.registerReceiver(
+        this,
         networkReceiver,
-        new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION),
+        ContextCompat.RECEIVER_EXPORTED
     );
 
     boolean useTor = sharedPrefs.getBoolean(NETWORK.TOR, SETTINGS_DEFAULT.NETWORK.TOR);

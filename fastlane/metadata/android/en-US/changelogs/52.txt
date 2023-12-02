@@ -1,0 +1,4 @@
+This release contains multiple bug fixes:
+• Fixed: Crash when navigating to settings
+• Fixed: Crash on login page
+• Fixed: Broken input handling on purchase page
