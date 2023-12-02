@@ -162,6 +162,7 @@ public class StockOverviewFragment extends BaseFragment implements
           items,
           viewModel.getShoppingListItemsProductIds(),
           viewModel.getQuantityUnitHashMap(),
+          viewModel.getQuantityUnitConversions(),
           viewModel.getProductAveragePriceHashMap(),
           viewModel.getProductLastPurchasedHashMap(),
           viewModel.getProductGroupHashMap(),
