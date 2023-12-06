@@ -134,7 +134,6 @@
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Przeplanuj następne wykonanie obowiązków domowych</string>
   <string name="action_put_missing_products_on_shopping_list">Dodaj brakujące produkty do listy zakupów</string>
-
   <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
   <plurals name="msg_expired_products">
     <item quantity="one">%1$d przeterminowany</item>
@@ -845,7 +844,6 @@
   <string name="property_opened">otwarte</string>
   <string name="property_not_opened">nie otwarte</string>
   <string name="property_is_freezer">Jest mrożonką</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
   <string name="property_active">Aktywne</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Nie pokazuj w przeglądzie zapasów</string>
@@ -932,7 +930,6 @@
   <string name="date_unlimited">Nielimitowane</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Nigdy</string>
-
   <plurals name="date_days">
     <item quantity="one">%d dzień</item>
     <item quantity="few">%d dni</item>
