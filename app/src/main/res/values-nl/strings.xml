@@ -130,7 +130,6 @@
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Herplan de volgende uitvoering</string>
   <string name="action_put_missing_products_on_shopping_list">Zet ontbrekende producten op het boodschappenlijstje</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d vervalt binnenkort</item>
@@ -785,7 +784,6 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="property_opened">geopend</string>
   <string name="property_not_opened">niet geopend</string>
   <string name="property_is_freezer">Is een vriezer</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
   <string name="property_active">Actief</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Niet weergeven op voorraadoverzicht</string>
@@ -858,7 +856,6 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="date_unlimited">Onbeperkt</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Nooit</string>
-
   <plurals name="date_days">
     <item quantity="one">%d dag</item>
     <item quantity="other">%d dagen</item>
