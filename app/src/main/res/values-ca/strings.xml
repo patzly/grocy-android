@@ -129,7 +129,6 @@
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Reprogramar següent execució</string>
   <string name="action_put_missing_products_on_shopping_list">Afegir productes faltants a la llista de la compra</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d venceran aviat</item>
@@ -820,7 +819,6 @@
   <string name="property_opened">obert</string>
   <string name="property_not_opened">sense obrir</string>
   <string name="property_is_freezer">És congelador</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
   <string name="property_active">Actiu</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">No mostrar mai al resum d\'existències</string>
@@ -905,7 +903,6 @@
   <string name="date_unlimited">Il·limitat</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Mai</string>
-
   <plurals name="date_days">
     <item quantity="one">%ddia</item>
     <item quantity="other">%ddies</item>
