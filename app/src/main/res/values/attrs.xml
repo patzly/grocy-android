@@ -43,10 +43,7 @@
       <enum name="item" value="1"/>
     </attr>
     <attr name="timeline_radio_radius" format="dimension"/>
-    <attr name="timeline_radio_inline_radius" format="dimension"/>
     <attr name="timeline_margin_start" format="dimension"/>
-    <attr name="timeline_radio_color" format="color"/>
-    <attr name="timeline_line_color" format="color"/>
   </declare-styleable>
 
 </resources>
