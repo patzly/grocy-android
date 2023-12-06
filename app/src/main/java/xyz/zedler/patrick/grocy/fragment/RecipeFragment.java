@@ -21,8 +21,8 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -139,20 +139,20 @@ public class RecipeFragment extends BaseFragment implements
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    Drawable navIcon = binding.toolbar.getNavigationIcon();
-    assert navIcon != null;
     int colorOnBg = ResUtil.getColorAttr(activity, R.attr.colorOnBackground);
     binding.appBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
       if (binding.collapsingToolbarLayout.getHeight() + verticalOffset
           < binding.collapsingToolbarLayout.getScrimVisibleHeightTrigger()) {
-        navIcon.setTint(colorOnBg);
-        binding.toolbar.setNavigationIcon(navIcon);
+        if (binding.toolbar.getNavigationIcon() != null) {
+          binding.toolbar.getNavigationIcon().setColorFilter(colorOnBg, PorterDuff.Mode.SRC_IN);
+        }
         UiUtil.setLightStatusBar(
             activity.getWindow().getDecorView(), !UiUtil.isDarkModeActive(activity)
         );
       } else {
-        navIcon.setTint(Color.WHITE);
-        binding.toolbar.setNavigationIcon(navIcon);
+        if (binding.toolbar.getNavigationIcon() != null) {
+          binding.toolbar.getNavigationIcon().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+        }
         UiUtil.setLightStatusBar(activity.getWindow().getDecorView(), false);
       }
     });

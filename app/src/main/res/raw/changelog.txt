@@ -6,6 +6,7 @@
 - Fixed: Crash with Android 14 and Tor enabled (#789)
 - Fixed: Crashes on master product edit subpages in offline mode (#729)
 - Fixed: Image placeholders not displayed on recipes page
+- Fixed: Wrong color of navigation icon on recipe page
 
 ## 3.4.1
 
