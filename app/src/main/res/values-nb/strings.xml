@@ -141,7 +141,6 @@
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Endre dato for neste utførelse</string>
   <string name="action_put_missing_products_on_shopping_list">Legg manglende produkter på handlelisten</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d går ut snart</item>
@@ -545,7 +544,6 @@
   <string name="error_undefined">En feil oppstod</string>
   <string name="error_invalid_base_servings">Ugyldige porsjoner</string>
   <string name="error_pictures_size_exceeds_limit">Der er bilder i produkter eller oppskrifter på serveren som er større enn det denne appen kan tolke. Fjern høyoppløste og store bilder, dette vil også øke hastigheten i appen.</string>
-
   <string name="title_overview">Oversikt</string>
   <string name="title_stock_overview">Lageroversikt</string>
   <string name="title_purchase">Kjøp</string>
@@ -933,7 +931,6 @@
   <string name="property_opened">åpnet</string>
   <string name="property_not_opened">ikke åpnet</string>
   <string name="property_is_freezer">Er fryser</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
   <string name="property_active">Aktiv</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Aldri vis på lageroversikt</string>
@@ -1037,7 +1034,6 @@
   <string name="date_unlimited">Ubegrenset</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Aldri</string>
-
   <plurals name="date_days">
     <item quantity="one">%d dag</item>
     <item quantity="other">%d dager</item>

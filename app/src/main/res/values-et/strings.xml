@@ -139,7 +139,6 @@
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Kavanda ümber järgmine täitmine</string>
   <string name="action_put_missing_products_on_shopping_list">Pane puuduvad tooted poenimekirja</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$dpeatselt möödas</item>
@@ -516,7 +515,6 @@
   <string name="error_undefined">Tekkis viga</string>
   <string name="error_invalid_base_servings">Portsjonid kehtetud</string>
   <string name="error_pictures_size_exceeds_limit">Teie serveri toote- või retseptikirjeldustesse on manustatud pilte, mis ületavad selle rakenduse sõelumislimiiti. Palun eemaldage oma kirjeldustest kõrgekvaliteetsed ja suure suurusega pildid, see kiirendab ka andmete laadimist.</string>
-
   <string name="title_overview">Ülevaade</string>
   <string name="title_stock_overview">Varude ülevaade</string>
   <string name="title_purchase">Osta</string>
@@ -900,7 +898,6 @@
   <string name="property_opened">avatud</string>
   <string name="property_not_opened">ei ole avatud</string>
   <string name="property_is_freezer">On sügavkülmik</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
   <string name="property_active">Aktiivne</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Ära näita kunagi varude ülevaates</string>
@@ -1000,7 +997,6 @@
   <string name="date_unlimited">Lõputu</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Mitte kunagi</string>
-
   <plurals name="date_days">
     <item quantity="one">%d päev</item>
     <item quantity="other">%d päeva</item>

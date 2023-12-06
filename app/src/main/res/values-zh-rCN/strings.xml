@@ -146,7 +146,6 @@
   <string name="action_backup">备份</string>
   <!-- This is the action part of "Restore from file" or "Restore data" -->
   <string name="action_restore">恢复</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="other">%1$d款临期</item>
@@ -1019,7 +1018,6 @@
   <string name="date_unlimited">无限</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">从不</string>
-
   <plurals name="date_days">
     <item quantity="other">%d天</item>
   </plurals>

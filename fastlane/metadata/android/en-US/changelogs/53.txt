@@ -3,3 +3,5 @@ This release contains multiple bug fixes:
 • Fixed: Amounts on recipe page were wrong with other base servings count than 1 and price & energy fields were not updated when changing quantity desired servings
 • Fixed: Crash with Android 14 and Tor enabled
 • Fixed: Crashes on master product edit subpages in offline mode
+• Fixed: Image placeholders not displayed on recipes page
+• Fixed: Wrong color of navigation icon on recipe page

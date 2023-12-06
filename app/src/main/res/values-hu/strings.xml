@@ -141,7 +141,6 @@
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Következő végrehajtás átütemezése</string>
   <string name="action_put_missing_products_on_shopping_list">Hiányzó termékek hozzáadása a bevásárlólistához</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d hamarosan lejár</item>
@@ -188,6 +187,11 @@
   <string name="msg_consumed_spoiled">%1$s %2$s %3$s romlottan felhasználva</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">%1$s %2$s %3$s felbontva</string>
+  <!-- %1$s is the number of servings of a recipe. -->
+  <plurals name="msg_servings">
+    <item quantity="one">%1$s adag</item>
+    <item quantity="other">%1$s adag</item>
+  </plurals>
   <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
   <plurals name="msg_undone_items">
     <item quantity="one">%1$d visszavonva</item>
@@ -545,7 +549,6 @@
   <string name="error_undefined">Hiba történt</string>
   <string name="error_invalid_base_servings">Érvénytelen adagok</string>
   <string name="error_pictures_size_exceeds_limit">A szerveren található termék- vagy receptleírásokban olyan beágyazott képek vannak, amelyek meghaladják az alkalmazás elemzési határértékét. Kérjük, távolítsd el a jó minőségű és nagy méretű képeket a leírásokból, ez az adatok betöltését is felgyorsítja.</string>
-
   <string name="title_overview">Áttekintés</string>
   <string name="title_stock_overview">Készlet áttekintés</string>
   <string name="title_purchase">Vásárlás</string>
@@ -933,7 +936,6 @@
   <string name="property_opened">felbontott</string>
   <string name="property_not_opened">felbontatlan</string>
   <string name="property_is_freezer">Fagyasztószekrény</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
   <string name="property_active">Aktív</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Ne mutassa a készlet áttekintésnél</string>
@@ -1037,7 +1039,6 @@
   <string name="date_unlimited">Korlátlan</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Soha</string>
-
   <plurals name="date_days">
     <item quantity="one">%d nap</item>
     <item quantity="other">%d nap</item>

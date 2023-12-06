@@ -121,7 +121,6 @@
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">重新安排下次執行的時間</string>
   <string name="action_put_missing_products_on_shopping_list">將缺少的物品加入購物清單</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="other">%1$d即將到期 </item>
@@ -748,7 +747,6 @@
   <string name="property_opened">已開封</string>
   <string name="property_not_opened">未開封</string>
   <string name="property_is_freezer">是否冷凍</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
   <string name="property_active">有效</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">永不顯示在庫存總覽</string>
@@ -831,7 +829,6 @@
   <string name="date_unlimited">無限制</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">從未</string>
-
   <plurals name="date_days">
     <item quantity="other">%d 天</item>
   </plurals>

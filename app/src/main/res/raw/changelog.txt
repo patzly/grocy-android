@@ -1,10 +1,12 @@
 ## 3.4.2
 
-- Fixed: Hide internal meal plan recipes on recipes list
+- Fixed: Hide internal meal plan recipes on recipes list (#808)
 - Fixed: Amounts on recipe page were wrong with other base servings count than 1 and
   price & energy fields were not updated when changing quantity desired servings (#784)
 - Fixed: Crash with Android 14 and Tor enabled (#789)
 - Fixed: Crashes on master product edit subpages in offline mode (#729)
+- Fixed: Image placeholders not displayed on recipes page
+- Fixed: Wrong color of navigation icon on recipe page
 
 ## 3.4.1
 

@@ -23,6 +23,7 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,14 +101,6 @@ public class RecipeEntryAdapter extends
         SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
     );
     energyUnit = sharedPrefs.getString(PREF.ENERGY_UNIT, PREF.ENERGY_UNIT_DEFAULT);
-    containsPictures = false;
-    for (Recipe recipe : recipes) {
-      String pictureFileName = recipe.getPictureFileName();
-      if (pictureFileName != null && !pictureFileName.isEmpty()) {
-        containsPictures = true;
-        break;
-      }
-    }
   }
 
   @Override
@@ -166,8 +159,7 @@ public class RecipeEntryAdapter extends
   @SuppressLint({"ClickableViewAccessibility", "RestrictedApi"})
   @Override
   public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int positionDoNotUse) {
-
-    int position = viewHolder.getAdapterPosition();
+    int position = viewHolder.getAbsoluteAdapterPosition();
 
     Recipe recipe = recipes.get(position);
     RecipeFulfillment recipeFulfillment = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(
@@ -287,7 +279,6 @@ public class RecipeEntryAdapter extends
       List<String> activeFields,
       Runnable onListFilled
   ) {
-
     RecipeEntryAdapter.DiffCallback diffCallback = new RecipeEntryAdapter.DiffCallback(
         this.recipes,
         newList,
@@ -319,6 +310,15 @@ public class RecipeEntryAdapter extends
     this.activeFields.clear();
     this.activeFields.addAll(activeFields);
     diffResult.dispatchUpdatesTo(this);
+
+    containsPictures = false;
+    for (Recipe recipe : recipes) {
+      String pictureFileName = recipe.getPictureFileName();
+      if (pictureFileName != null && !pictureFileName.isEmpty()) {
+        containsPictures = true;
+        break;
+      }
+    }
   }
 
   static class DiffCallback extends DiffUtil.Callback {

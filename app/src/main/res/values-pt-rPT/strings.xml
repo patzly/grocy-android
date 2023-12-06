@@ -128,7 +128,6 @@
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Reagendar próxima execução</string>
   <string name="action_put_missing_products_on_shopping_list">Colocar produtos em falta na lista de compras</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d a expirar</item>
@@ -911,7 +910,6 @@
   <string name="date_unlimited">Ilimitado</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Nunca</string>
-
   <plurals name="date_days">
     <item quantity="one">%d dia</item>
     <item quantity="many">%d dias</item>

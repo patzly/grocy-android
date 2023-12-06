@@ -126,18 +126,24 @@
   <string name="action_demo_server">Server demo</string>
   <string name="action_own_server">Server personale</string>
   <string name="action_enter_data_manually">Inserisci dati manualmente</string>
+  <string name="action_settings_backup_restore">Backup o ripristino impostazioni</string>
   <string name="action_details">Dettagli</string>
   <string name="action_perform">Esegui azione</string>
   <string name="action_share">Condividi</string>
   <string name="action_share_description">Condividi Grocy Android con un amico</string>
   <string name="action_no_filter">Nessun filtro</string>
   <string name="action_show_done_tasks">Mostra attività completate</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_chore_execution">Traccia ora l\'esecuzione della faccenda</string>
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_skip_next_chore_schedule">Saltare il prossimo programma di lavoro</string>
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Ripianifica la prossima esecuzione</string>
   <string name="action_put_missing_products_on_shopping_list">Aggiungi i prodotti mancanti nella lista della spesa</string>
-
+  <!-- This is the action part of "Backup to file" or "Backup data" -->
+  <string name="action_backup">Backup</string>
+  <!-- This is the action part of "Restore from file" or "Restore data" -->
+  <string name="action_restore">Ripristina</string>
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d presto in ritardo</item>
@@ -155,6 +161,18 @@
     <item quantity="one">%1$d scaduto</item>
     <item quantity="many">%1$d scaduti</item>
     <item quantity="other">%1$d scaduti</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_short">
+    <item quantity="one">%1$d non fresco</item>
+    <item quantity="many">%1$d non freschi</item>
+    <item quantity="other">%1$d non freschi</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_long">
+    <item quantity="one">%1$d non fresco (tutti al di sotto)</item>
+    <item quantity="many">%1$d non freschi (tutti al di sotto)</item>
+    <item quantity="other">%1$d non freschi (tutti al di sotto)</item>
   </plurals>
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
   <plurals name="msg_missing_products">
@@ -300,6 +318,7 @@
   <string name="msg_item_marked_as_undone">Segna da fare</string>
   <string name="option_synced_success">Impostazioni sincronizzate correttamente</string>
   <string name="option_synced_error">Impossibile sincronizzare impostazioni</string>
+  <string name="msg_data_copied_from_product">Sono stati copiati i dati del prodotto \"%1$s\".</string>
   <string name="msg_recipe_added_to_cart">Aggiungi gli ingredienti della ricetta al carrello</string>
   <string name="msg_recipe_consumed">Rimuovi tutti gli ingredienti della ricetta \"%1$s\" dall\'assortimento</string>
   <string name="msg_stored_purchases_overview">Questi sono acquisti presenti sul cellulare che non sono ancora stati trasferiti al server. Clicca qui per dettagli.</string>
@@ -324,6 +343,7 @@
   <string name="msg_quick_mode_confirm_transfer">La transazione sarà eseguita:\n\nSpostamento %1$s %2$sdi %3$s\nDalla posizione: %4$s\nAlla posizione: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">La transazione verrà eseguita:\n\nImposta la quantità di %1$s a %2$s %3$s\nApplica per gli elementi aggiunti:\nData di scadenza: %4$s\nPrezzo: %5$s\nNegozio: %6$s\nPosizione: %7$s</string>
+  <string name="msg_compatibility">Questa versione dell\'app non è compatibile con la versione Grocy del server.\n\nVersione attuale del server:%1$s\n\nVersioni supportate dal server:\n%2$s\nSe la versione corrente del server ha il numero \"major\" (la prima cifra) maggiore e ignori questo avviso, potrebbero avvenire perdite di dati (improbabili) o crash dell\'applicazione (probabili)\nSe c\'è solo una differenza nel numero \"minor\" (terza cifra) è probabile che tu possa ignorare questo avviso</string>
   <string name="msg_logout">Nulla sul tuo server sarà cambiato. Sarai reindirizzato alla pagina di accesso.</string>
   <string name="msg_logout_demo">Stai utilizzando l\'istanza di prova di grocy su <u>https://grocy.info</u>.\n\n<b>Nessun cambiamento verrà salvato!\n Questi rimangono pubblichi finché il server non li sovrascrive automaticamente.</b>\n\nNella schermata di accesso puoi inserire l\'indirizzo del tuo server.</string>
   <string name="msg_logout_demo_short">Server demo pubblico. Premi per dettagli.</string>
@@ -392,6 +412,7 @@
   <string name="msg_help_produces_product">Quando un prodotto è selezionato, una unità (per porzione nella quantità della dispensa) verrà aggiunta alla dispensa consumando questa ricetta.</string>
   <string name="msg_help_date_chooser">È possibile modificare l\'input della tastiera nelle impostazioni, in modo da aumentare la velocità di input.</string>
   <string name="msg_help_date_chooser_keyboard">Puoi attivare il formato invertito per la data nelle impostazioni se GGMMAA è il predefinito nel tuo paese.\nPer applicare e chiudere la pagina puoi usare il tasto \"Fatto\" sulla tua tastiera.</string>
+  <string name="msg_help_notifications_tap">Tocca qui se non ricevi notifiche o le ricevi in modo inaffidabile.</string>
   <string name="msg_help_quick_mode">Tieni premuto sul titolo sopra per attivare la modalità rapida. In questa modalità verrà eseguita subito una transazione appena un prodotto verrà inserito o scansionato e tutti i campi potrebbero essere automaticamente compilati (in base ai valori preimpostati dal prodotto e/o barcode)</string>
   <string name="msg_help_loading_circle_settings">Su ogni pagina, l\'app invia una richiesta al server per trovare eventuali cambiamenti nel database. Abilita questa opzione se vuoi visualizzare il cerchio di caricamento anche per questa richiesta.</string>
   <string name="msg_help_start">Modalità principiante attivata: I messaggi di aiuto verranno visualizzati su ogni pagina disponibile. Fai tap per cambiare.</string>
@@ -401,6 +422,7 @@
   <string name="msg_help_home_assistant_login_server">Nel campo sottostante puoi anche inserire l\'indirizzo web del tuo spazio Nabu Casa se stai utilizzando quel servizio. Premi questo riquadro per visitare il sito web di Nabu Casa.</string>
   <string name="msg_help_home_assistant_login_token">È possibile creare un token di accesso a lunga durata nelle impostazioni del profilo di Home Assistant (ultima sezione). Toccare qui per aprire l\'URL di cui sopra.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Torna indietro o premi questo riquadro per scannerizzare il codice QR che riempirà i campi qui sotto.</string>
+  <string name="msg_help_fab_overview_start">Il pulsante rapido in questa pagina di panoramica ha due azioni:\n\n- Tocco rapido: consuma con scansione di codice a barre\n- Tocco lungo: acquista con scansione di codice a barre\n\nCon questo pulsante la modalità rapida nelle rispettive pagine viene attivata in modo predefinito. È possibile modificare questo comportamento nelle impostazioni.</string>
   <string name="error_api_not_working">La chiave API non funziona</string>
   <string name="error_orbot_not_installed">Orbot non è installato</string>
   <string name="error_select_product">Seleziona un prodotto</string>
@@ -454,7 +476,12 @@
   <string name="error_already_exists">Già esistente</string>
   <string name="error_network">Errore di rete</string>
   <string name="error_network_subtitle">Non è stato possibile caricare completamente i dati richiesti</string>
+  <string name="error_network_exact">Errore di rete: %1$s</string>
+  <string name="error_database">Errore del database</string>
+  <string name="error_insert">Errore: %1$s</string>
+  <string name="error_details">Dettagli dell\'errore</string>
   <string name="error_unknown">Oops!</string>
+  <string name="error_not_grocy_instance">Istanza di Grocy non valida</string>
   <string name="error_timeout">Tempo di connessione scaduto</string>
   <string name="error_no_product_selected">Nessun prodotto selezionato</string>
   <string name="error_failed_to_connect_to">Connessione al server non riuscita</string>
@@ -492,6 +519,7 @@
   <string name="title_shopping_list">Lista della spesa</string>
   <string name="title_feedback">Feedback</string>
   <string name="title_settings">Impostazioni</string>
+  <string name="title_options">Opzioni</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="title_barcode_scanner">Scanner di codici a barre</string>
   <!-- Context: About this app -->
@@ -517,6 +545,11 @@
   <string name="title_recipes">Ricette</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Editor</string>
+  <string name="title_task_new">Nuovo compito</string>
+  <string name="title_task_edit">Modifica compito</string>
+  <string name="title_ingredient_new">Nuovo ingrediente</string>
+  <string name="title_ingredient_edit">Modifica ingrediente</string>
+  <string name="title_recipe_create">Nuova ricetta</string>
   <string name="title_recipe_edit">Modifica ricetta</string>
 
   <string name="title_spoiled">Avariato</string>
@@ -558,6 +591,9 @@
   <string name="title_product_cat_qu_conversions">Conversione UM</string>
   <string name="title_unknown_input">Input sconosciuto</string>
   <string name="title_presets_new_products">Impostazioni predefinite per nuovi prodotti</string>
+  <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
+  <string name="title_ingredient_with_amount">%1$s %2$s di %3$s</string>
+
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
   <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
@@ -617,6 +653,9 @@
   <string name="subtitle_recipe_due_score">Punteggio scadenza: %1$s</string>
   <string name="subtitle_per_serving">per porzione</string>
   <string name="subtitle_tap_preparation_mode">Premi qui per la modalità preparazione</string>
+  <!-- %1$s is a price and %2$s is a currency -->
+  <string name="subtitle_total_price">Prezzo totale: %1$s %2$s</string>
+
   <string name="description_input_product_part1">Il campo prodotto contiene:</string>
   <string name="description_input_product_part2">Per favore scegli come procedere:</string>
   <string name="description_input_product_option1">Crea nuovo prodotto e usa il dato inserito come nome</string>
@@ -743,8 +782,10 @@
   <string name="property_product_name">Nome prodotto</string>
   <string name="property_parent_product">Prodotto genitore</string>
   <string name="property_description">Descrizione</string>
+  <string name="property_product_description">Descrizione del prodotto</string>
   <string name="property_note">Note</string>
   <string name="property_status">Stato</string>
+  <string name="property_status_insert">Stato:</string>
   <string name="property_amount">Quantità</string>
   <string name="property_amount_insert">Importo: %1$s</string>
   <string name="property_seconds">Secondi</string>
@@ -842,7 +883,6 @@
   <string name="property_opened">aperto</string>
   <string name="property_not_opened">non aperto</string>
   <string name="property_is_freezer">È congelato</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
   <string name="property_active">Attiva</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Non mostrare mai nel riepilogo della dispensa</string>
@@ -879,11 +919,21 @@
   <string name="property_ungrouped">Non raggruppato</string>
   <!-- %1$s is a property like "product group" or "due date" -->
   <string name="property_extra_field">Campi extra: %1$s</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields">Campi</string>
   <string name="property_task_category">Categoria dell\'attività</string>
   <string name="property_task_categories">Categorie dell\'attività</string>
   <string name="property_calories">Calorie</string>
   <string name="property_calories_unit">Calorie (unità)</string>
   <string name="property_calories_total">Calorie (totale)</string>
+  <!-- %1$s is a value like energy or price, unit means value of items per unit -->
+  <string name="property_insert_per_unit">%1$s (unità)</string>
+  <!-- %1$s is a value like energy or price, total means value of many items in total -->
+  <string name="property_insert_total">%1$s (totale)</string>
+  <!-- %1$s is a value like price, average means average price -->
+  <string name="property_insert_average">%1$s (media)</string>
+  <!-- %1$s is a value like price, "last" is like for example in "last price" -->
+  <string name="property_insert_last">%1$s (ultimo)</string>
   <string name="property_category">Categoria</string>
   <string name="property_assigned_to">Assegnato a</string>
   <string name="property_users">Utenti</string>
@@ -927,7 +977,6 @@
   <string name="date_unlimited">Senza limiti</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Mai</string>
-
   <plurals name="date_days">
     <item quantity="one">%d giorno</item>
     <item quantity="many">%d giorni</item>
@@ -980,6 +1029,7 @@
     <item quantity="other">%d anni da oggi</item>
   </plurals>
 
+  <string name="info_acknowledgement">Vogliamo ringraziare lo sviluppatore di Grocy, Bernd Bestel, senza il cui ottimo lavoro questa app non sarebbe stata possibile.</string>
   <string name="info_intro">Rivedi l\'introduzione</string>
   <string name="info_intro_description">Dimostra funzionalità</string>
   <string name="info_dev_beginning">In sviluppo</string>
@@ -1012,6 +1062,10 @@
   <string name="category_network">Rete</string>
   <string name="category_network_proxy">Proxy</string>
   <string name="category_behavior">Comportamento</string>
+  <string name="category_display_behavior">Comportamento schermo</string>
+  <string name="category_input_behavior">Comportamento dei comandi</string>
+  <string name="category_additional_services">Servizi aggiuntivi</string>
+  <string name="category_other_behavior">Altri comportamenti</string>
   <string name="category_debugging">Debugging</string>
   <string name="category_new_product">Nuovo prodotto</string>
   <string name="category_existing_products">Prodotto esistente</string>
@@ -1089,9 +1143,16 @@
   <string name="setting_timeout_descriptions">Dopo il quale il caricamento è annullato</string>
   <string name="setting_beginner_mode">Modalità principiante</string>
   <string name="setting_beginner_mode_description">Mostra testi guida in modo predefinito</string>
+  <string name="setting_haptic">Effetti aptici</string>
+  <string name="setting_haptic_description">Un\'esperienza immersiva</string>
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
-  <string name="setting_expand_bottom_sheets">Espandi bottom sheets</string>
+  <string name="setting_expand_bottom_sheets">Espandi pannelli inferiori</string>
   <string name="setting_expand_bottom_sheets_description">Con modalità panorama</string>
+  <string name="setting_bottom_menu_button">Mostra pulsante menu principale</string>
+  <string name="setting_bottom_menu_button_description">Nella barra inferiore dell\'app</string>
+  <string name="setting_turn_on_quick_mode">Attiva modalità rapida in modo predefinito</string>
+  <string name="setting_turn_on_quick_mode_description">Quando utilizzato il pulsante di scansione nella pagina di panoramica</string>
+  <string name="setting_quick_mode_return_description">Quando utilizzato il pulsante di scansione nella pagina di panoramica e la modalità rapida non è attiva</string>
   <string name="setting_speed_up_start">Riduce il tempo di avvio app</string>
   <string name="setting_speed_up_start_description">Ha effetto solo su dispositivi veloci</string>
   <string name="setting_date_keyboard_input">Inserisci le date con la tastiera</string>
@@ -1110,11 +1171,30 @@
   <string name="setting_proxy_port_description">Il numero di porta del tuo proxy</string>
   <string name="setting_synchronized">L\'impostazione sottostante è stata sincronizzata con il server</string>
   <string name="settings_synchronized">Queste impostazioni sono sincronizzate sul tuo server.</string>
-  <string name="setting_message_duration">Mostra l\'ora per i messagg</string>
+  <string name="setting_message_duration">Mostra l\'ora per i messaggi</string>
+  <string name="setting_message_duration_description">Si applica solo ai messaggi di transazione</string>
   <string name="setting_notifications_enable">Abilita notifiche</string>
+  <!-- The string belongs to the stock overview (stock items can be expired, overdue or due soon). -->
+  <string name="setting_notifications_stock_description">Controlla quotidianamente l\'inventario e ti notifica in caso di prodotti non freschi (scaduti, in ritardo o presto in ritardo)</string>
+  <string name="setting_notifications_chores_description">Controlla quotidianamente le le faccende e ti notifica quando ce ne sono in scadenza</string>
   <string name="setting_notification_time">Orario della notifica</string>
   <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">Quando viene effettuato il controllo</string>
   <string name="setting_keep_screen_on_recipes_description">Durante la visualizzazione di una ricetta</string>
+
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="notification_stock_not_fresh_title">
+    <item quantity="one">%1$d prodotto nel tuo inventario non è più fresco.</item>
+    <item quantity="many">%1$d prodotti nel tuo inventario non sono più freschi.</item>
+    <item quantity="other">%1$d prodotti nel tuo inventario non sono più freschi.</item>
+  </plurals>
+  <string name="notification_stock_content">Consumali nei prossimi giorni per aiutare a ridurre gli sprechi di cibo. Tocca per aprire la lista.</string>
+  <!-- %1$s is a number -->
+  <plurals name="notification_chores_due_title">
+    <item quantity="one">%1$d faccenda è in scadenza.</item>
+    <item quantity="many">%1$d faccende sono in scadenza.</item>
+    <item quantity="other">%1$d faccende sono in scadenza.</item>
+  </plurals>
+  <string name="notification_chores_content">Procastinare è inutile. Tocca per aprire la lista.</string>
 
   </resources>
