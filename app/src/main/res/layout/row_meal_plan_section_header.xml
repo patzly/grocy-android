@@ -25,8 +25,6 @@
   android:paddingHorizontal="16dp"
   app:timeline_position="middle"
   app:timeline_type="header"
-  app:timeline_line_color="?attr/colorOutline"
-  app:timeline_radio_color="?attr/colorOutline"
   app:timeline_margin_start="8dp"
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">

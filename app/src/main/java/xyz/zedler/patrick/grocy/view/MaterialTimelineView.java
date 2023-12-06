@@ -5,6 +5,8 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Cap;
+import android.graphics.Paint.Style;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
@@ -12,6 +14,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class MaterialTimelineView extends ConstraintLayout {
@@ -24,26 +27,26 @@ public class MaterialTimelineView extends ConstraintLayout {
   public static final int POSITION_MIDDLE = 1;
   public static final int POSITION_LAST = 2;
   public static final int POSITION_SINGLE = 3;
-  private static final int DEFAULT_RADIO_RADIUS_DP = 8;
-  private static final int DEFAULT_RADIO_INLINE_RADIUS_DP = 4;
+  private static final int DEFAULT_RADIO_RADIUS_DP = 5;
   private static final int DEFAULT_RADIO_MARGIN_START_DP = 44;
   private static final int DEFAULT_HEADER_CONTENT_PADDING_DP = 18;
   private static final int DEFAULT_ENTRY_CONTENT_PADDING_DP = 8;
-  private static final float LINE_WIDTH_MODIFIER = 0.3f;
+  private static final int LINE_WIDTH_DP = 2;
+  private static final int LINE_LENGTH_DP = 12;
 
   private int position = POSITION_FIRST;
   private int timelineType = TIMELINE_TYPE_ITEM;
   private float radioRadius;
-  private float radioInlineRadius;
   private float radioMarginStart;
   private final int headerContentPadding;
   private final int entryContentPadding;
-  private int radioColor = Color.WHITE;
-  private int lineColor = Color.WHITE;
+  private final int lineWidth;
+  private final int lineLength;
+  private final int radioColor;
+  private final int lineColor;
   private boolean showLineAndRadio = true;
 
   private final Paint paint = new Paint();
-  private final PorterDuffXfermode xfermodeClear = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
 
   public MaterialTimelineView(Context context) {
     this(context, null);
@@ -57,10 +60,13 @@ public class MaterialTimelineView extends ConstraintLayout {
     super(context, attrs, defStyleAttr);
 
     radioRadius = UiUtil.dpToPxFloat(context, DEFAULT_RADIO_RADIUS_DP);
-    radioInlineRadius = UiUtil.dpToPxFloat(context, DEFAULT_RADIO_INLINE_RADIUS_DP);
     radioMarginStart = UiUtil.dpToPxFloat(context, DEFAULT_RADIO_MARGIN_START_DP);
     headerContentPadding = UiUtil.dpToPx(context, DEFAULT_HEADER_CONTENT_PADDING_DP);
     entryContentPadding = UiUtil.dpToPx(context, DEFAULT_ENTRY_CONTENT_PADDING_DP);
+    lineWidth = UiUtil.dpToPx(context, LINE_WIDTH_DP);
+    lineLength = UiUtil.dpToPx(context, LINE_LENGTH_DP);
+    radioColor = ResUtil.getColorAttr(context, R.attr.colorOutline);
+    lineColor = ResUtil.getColorAttr(context, R.attr.colorOutline);
 
     setLayerType(View.LAYER_TYPE_HARDWARE, null);
     setWillNotDraw(false);
@@ -98,12 +104,12 @@ public class MaterialTimelineView extends ConstraintLayout {
         } else {
           yRadio = getHeight() / 2f - entryContentPadding / 2f;
         }
-        drawLine(canvas, x - radioRadius * LINE_WIDTH_MODIFIER, yRadio, x + radioRadius * LINE_WIDTH_MODIFIER, yLine);
+        drawLine(canvas, x, yRadio + radioRadius, x, yLine);
         headerContentPaddingBottom = headerContentPadding;
         break;
       case POSITION_MIDDLE:
-        yLine = getHeight();
-        drawLine(canvas, x - radioRadius * LINE_WIDTH_MODIFIER, 0, x + radioRadius * LINE_WIDTH_MODIFIER, yLine);
+        drawLine(canvas, x, 0, x, yRadio - radioRadius);
+        drawLine(canvas, x, yRadio + radioRadius, x, getHeight());
         headerContentPaddingTop = headerContentPadding;
         headerContentPaddingBottom = headerContentPadding;
         entryContentPaddingTop = entryContentPadding;
@@ -112,37 +118,34 @@ public class MaterialTimelineView extends ConstraintLayout {
         if (timelineType == TIMELINE_TYPE_HEADER) {
           yRadio = getHeight() / 2f + headerContentPadding / 2f;
         }
-        drawLine(canvas, x - radioRadius * LINE_WIDTH_MODIFIER, 0, x + radioRadius * LINE_WIDTH_MODIFIER, yRadio);
+        drawLine(canvas, x, 0, x, yRadio - radioRadius);
         headerContentPaddingTop = headerContentPadding;
         entryContentPaddingTop = entryContentPadding;
         break;
     }
-    drawRadio(canvas, radioColor, x, yRadio, radioRadius);
 
     if (timelineType == TIMELINE_TYPE_HEADER) {
-      drawLine(canvas, x, yRadio - radioRadius * LINE_WIDTH_MODIFIER, x + radioRadius * 2, yRadio + radioRadius * LINE_WIDTH_MODIFIER);
-      drawRadioOutline(canvas, x, yRadio);
-      drawRadio(canvas, radioColor, x + radioRadius * 2, yRadio, radioRadius * LINE_WIDTH_MODIFIER);
+      drawLine(canvas, x + radioRadius, yRadio, x + radioRadius + lineLength, yRadio);
+      drawRadio(canvas, x, yRadio, radioRadius, true);
       setPadding(getPaddingLeft(), headerContentPaddingTop, getPaddingRight(), headerContentPaddingBottom);
     } else {
+      drawRadio(canvas, x, yRadio, radioRadius, false);
       setPadding(getPaddingLeft(), entryContentPaddingTop, getPaddingRight(), entryContentPadding);
     }
   }
 
-  private void drawRadioOutline(Canvas canvas, float x, float y) {
-    paint.setXfermode(xfermodeClear);
-    canvas.drawCircle(x, y, radioInlineRadius, paint);
-    paint.setXfermode(null);
+  private void drawRadio(Canvas canvas, float x, float y, float radius, boolean outline) {
+    paint.setColor(radioColor);
+    paint.setStyle(outline ? Style.STROKE : Style.FILL);
+    canvas.drawCircle(x, y, outline ? radius - lineWidth / 2f : radius, paint);
   }
 
-  private void drawRadio(Canvas canvas, int color, float x, float y, float radius) {
-    paint.setColor(color);
-    canvas.drawCircle(x, y, radius, paint);
-  }
-
-  private void drawLine(Canvas canvas, float left, float top, float right, float bottom) {
+  private void drawLine(Canvas canvas, float startX, float startY, float stopX, float stopY) {
     paint.setColor(lineColor);
-    canvas.drawRect(left, top, right, bottom, paint);
+    paint.setStyle(Style.STROKE);
+    paint.setStrokeWidth(lineWidth);
+    paint.setStrokeCap(Cap.ROUND);
+    canvas.drawLine(startX, startY, stopX, stopY, paint);
   }
 
   private void initAttrs(TypedArray typedArray) {
@@ -150,12 +153,8 @@ public class MaterialTimelineView extends ConstraintLayout {
     this.timelineType = typedArray.getInteger(R.styleable.MaterialTimelineView_timeline_type, TIMELINE_TYPE_HEADER);
     this.radioRadius = UiUtil.dpToPxFloat(getContext(),
         typedArray.getDimension(R.styleable.MaterialTimelineView_timeline_radio_radius, DEFAULT_RADIO_RADIUS_DP));
-    this.radioInlineRadius = UiUtil.dpToPxFloat(getContext(),
-        typedArray.getDimension(R.styleable.MaterialTimelineView_timeline_radio_inline_radius, DEFAULT_RADIO_INLINE_RADIUS_DP));
     this.radioMarginStart = UiUtil.dpToPxFloat(getContext(), typedArray.getDimension(
         R.styleable.MaterialTimelineView_timeline_margin_start, DEFAULT_RADIO_MARGIN_START_DP));
-    this.radioColor = typedArray.getColor(R.styleable.MaterialTimelineView_timeline_radio_color, Color.WHITE);
-    this.lineColor = typedArray.getColor(R.styleable.MaterialTimelineView_timeline_line_color, Color.WHITE);
   }
 
   public void setPosition(int position) {
