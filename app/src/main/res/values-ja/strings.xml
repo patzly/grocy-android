@@ -137,7 +137,6 @@
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">次回実行をリスケジュール</string>
   <string name="action_put_missing_products_on_shopping_list">不足商品を買い物リストに追加</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="other">%1$dがもうすぐ賞味期限切れ</item>
@@ -494,7 +493,6 @@
   <string name="error_undefined">エラーが発生しました</string>
   <string name="error_invalid_base_servings">無効な提供数</string>
   <string name="error_pictures_size_exceeds_limit">サーバー上の製品またはレシピの説明に埋め込まれた画像があり、このアプリで処理できる限界を超えています。 説明から高品質で大きなサイズの写真を削除してください。これにより、データの読み込みも高速化されます。</string>
-
   <string name="title_overview">概要</string>
   <string name="title_stock_overview">在庫の概要</string>
   <string name="title_purchase">購入</string>
@@ -858,7 +856,6 @@
   <string name="property_opened">開封済</string>
   <string name="property_not_opened">未開封</string>
   <string name="property_is_freezer">冷凍庫です</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
   <string name="property_active">有効</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">ストック概要に表示しない</string>
@@ -958,7 +955,6 @@
   <string name="date_unlimited">無制限</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">しない</string>
-
   <plurals name="date_days">
     <item quantity="other">%d日</item>
   </plurals>
