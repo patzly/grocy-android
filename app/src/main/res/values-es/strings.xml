@@ -141,7 +141,6 @@
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Reprogramar siguiente ejecución</string>
   <string name="action_put_missing_products_on_shopping_list">Introducir productos que faltan a la lista de la compra</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d se vence pronto</item>
@@ -597,7 +596,6 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <string name="error_undefined">Sucedió un error</string>
   <string name="error_invalid_base_servings">Porciones inválidas</string>
   <string name="error_pictures_size_exceeds_limit">Hay imágenes incrustadas en las descripciones de los productos o recetas en tu servidor que exceden el límite de análisis de esta aplicación. Por favor, remueve las imágenes pesadas o de gran calidad de tus descripciones. Esto también aumentará la velocidad de carga de información.</string>
-
   <string name="title_overview">Vista general</string>
   <string name="title_stock_overview">Resumen de inventario</string>
   <string name="title_purchase">Comprar</string>
@@ -1006,7 +1004,6 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <string name="property_opened">abierto</string>
   <string name="property_not_opened">cerrado</string>
   <string name="property_is_freezer">Está en el congelador</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
   <string name="property_active">Activo</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show"> Nunca mostrar en el resumen de inventario</string>
@@ -1110,7 +1107,6 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <string name="date_unlimited">Ilimitado</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Nunca</string>
-
   <plurals name="date_days">
     <item quantity="one">%d dia</item>
     <item quantity="many">%d dias</item>
