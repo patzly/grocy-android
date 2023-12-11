@@ -220,16 +220,16 @@ public class ShoppingModeItemAdapter extends
       SortUtil.sortShoppingListItemsByName(itemsFromGroup, productNamesHashMap, true);
       groupedListItems.addAll(itemsFromGroup);
     }
-    if (showDoneItems && !doneItems.isEmpty()) {
-      groupedListItems.add(new GroupHeader(context.getString(R.string.subtitle_done)));
-      groupedListItems.addAll(doneItems);
-    }
     ShoppingListItemAdapter.addBottomNotes(
         context,
         shoppingListNotes,
         groupedListItems,
         !ungroupedItems.isEmpty() || !groupsSorted.isEmpty()
     );
+    if (showDoneItems && !doneItems.isEmpty()) {
+      groupedListItems.add(new GroupHeader(context.getString(R.string.subtitle_done)));
+      groupedListItems.addAll(doneItems);
+    }
     if ((!ungroupedItems.isEmpty() || !groupsSorted.isEmpty()) && priceTrackingEnabled) {
       ShoppingListItemAdapter.addTotalPrice(context, shoppingListItems, groupedListItems,
           productLastPurchasedHashMap, shoppingListItemAmountsHashMap,

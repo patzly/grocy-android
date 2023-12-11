@@ -1,5 +1,6 @@
 ## 3.4.3
 
+- Improved: Swap order of "done" items and shopping notes on shopping mode page (#812)
 - Fixed: Crash on stock overview and recipes page when due date tracking was disabled (#811)
 
 ## 3.4.2
