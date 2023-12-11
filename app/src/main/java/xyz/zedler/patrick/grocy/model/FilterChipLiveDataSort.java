@@ -23,7 +23,6 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import xyz.zedler.patrick.grocy.R;
@@ -59,8 +58,8 @@ public class FilterChipLiveDataSort extends FilterChipLiveData {
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
     sortMode = sharedPrefs.getString(prefKey, defaultOptionKey);
     sortAscending = sharedPrefs.getBoolean(prefKeyAscending, true);
-    this.sortOptions = new ArrayList<>(Arrays.asList(sortOptions));
-    idStartUserfields = ID_START_OPTIONS + sortOptions.length;
+    this.sortOptions = filterNullElements(sortOptions);
+    idStartUserfields = ID_START_OPTIONS + this.sortOptions.size();
     setItemIdChecked(-1);
     setFilterText();
     setItems();
@@ -73,6 +72,16 @@ public class FilterChipLiveDataSort extends FilterChipLiveData {
         return true;
       });
     }
+  }
+
+  private static <T> ArrayList<T> filterNullElements(T[] objects) {
+    ArrayList<T> arrayList = new ArrayList<>();
+    for (T obj : objects) {
+      if (obj != null) {
+        arrayList.add(obj);
+      }
+    }
+    return arrayList;
   }
 
   public String getSortMode() {
