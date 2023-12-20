@@ -166,6 +166,7 @@ public class FilterChipLiveDataSort extends FilterChipLiveData {
     ArrayList<MenuItemData> menuItemDataList = new ArrayList<>();
     for (int i=0; i<sortOptions.size(); i++) {
       SortOption sortOption = sortOptions.get(i);
+      if (sortOption == null) return;
       menuItemDataList.add(new MenuItemData(
           ID_START_OPTIONS + i,
           0,
