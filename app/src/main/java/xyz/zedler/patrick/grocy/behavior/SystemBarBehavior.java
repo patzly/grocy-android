@@ -35,7 +35,7 @@ import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.elevation.SurfaceColors;
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 
@@ -382,7 +382,7 @@ public class SystemBarBehavior {
     boolean isOrientationPortrait = UiUtil.isOrientationPortrait(activity);
     boolean isDarkModeActive = UiUtil.isDarkModeActive(activity);
     int colorScrim = ColorUtils.setAlphaComponent(
-        SurfaceColors.SURFACE_2.getColor(activity), 1
+        ResUtil.getColorAttr(activity, R.attr.colorSurfaceContainer), 1
     );
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // 29

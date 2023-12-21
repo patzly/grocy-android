@@ -34,7 +34,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
-import com.google.android.material.elevation.SurfaceColors;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -550,7 +549,9 @@ public class StockOverviewItemAdapter extends
     @SuppressLint("InflateParams")
     Chip chip = (Chip) LayoutInflater.from(ctx)
         .inflate(R.layout.view_info_chip, null, false);
-    chip.setChipBackgroundColor(ColorStateList.valueOf(SurfaceColors.SURFACE_4.getColor(ctx)));
+    chip.setChipBackgroundColor(
+        ColorStateList.valueOf(ResUtil.getColorAttr(ctx, R.attr.colorSurfaceContainerHighest))
+    );
     chip.setText(text);
     chip.setEnabled(false);
     chip.setClickable(false);

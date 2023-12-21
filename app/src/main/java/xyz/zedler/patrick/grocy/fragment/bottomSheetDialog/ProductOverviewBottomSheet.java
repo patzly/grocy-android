@@ -39,7 +39,6 @@ import androidx.core.view.MenuCompat;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.elevation.SurfaceColors;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
@@ -241,7 +240,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     ResUtil.tintMenuItemIcons(activity, binding.toolbar.getMenu());
 
     ColorStateList colorSurface3 = ColorStateList.valueOf(
-        SurfaceColors.SURFACE_3.getColor(activity)
+        ResUtil.getColorAttr(activity, R.attr.colorSurfaceContainerLow)
     );
     binding.chipConsume.setChipBackgroundColor(colorSurface3);
     binding.chipConsume.setVisibility(isInStock ? View.VISIBLE : View.GONE);

@@ -29,7 +29,6 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.elevation.SurfaceColors;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.Userfield;
@@ -54,7 +53,9 @@ public class ChipUtil {
     @SuppressLint("InflateParams")
     Chip chip = (Chip) LayoutInflater.from(ctx)
         .inflate(R.layout.view_info_chip, null, false);
-    chip.setChipBackgroundColor(ColorStateList.valueOf(SurfaceColors.SURFACE_4.getColor(ctx)));
+    chip.setChipBackgroundColor(
+        ColorStateList.valueOf(ResUtil.getColorAttr(ctx, R.attr.colorSurfaceContainerHighest))
+    );
     chip.setText(text);
     if (textColor != -1) {
       chip.setTextColor(textColor);

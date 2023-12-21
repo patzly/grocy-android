@@ -46,19 +46,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 import androidx.core.graphics.ColorUtils;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
-import com.google.android.material.elevation.SurfaceColors;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Objects;
+import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 
 public class CircularProgressDrawable extends Drawable implements Animatable {
 
   private static final Interpolator LINEAR_INTERPOLATOR = new LinearInterpolator();
   private static final Interpolator MATERIAL_INTERPOLATOR = new FastOutSlowInInterpolator();
 
-  /**
-   * @hide
-   */
   @RestrictTo(LIBRARY_GROUP_PREFIX)
   @Retention(RetentionPolicy.SOURCE)
   @IntDef({LARGE, DEFAULT})
@@ -151,7 +149,7 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
     mRing = new Ring();
     mRing.setColors(COLORS);
 
-    setBackgroundColor(SurfaceColors.SURFACE_1.getColor(context));
+    setBackgroundColor(ResUtil.getColorAttr(context, R.attr.colorSurfaceContainer));
 
     setStrokeWidth(STROKE_WIDTH);
     setupAnimators();

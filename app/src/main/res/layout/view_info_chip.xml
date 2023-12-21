@@ -25,7 +25,7 @@
   android:textSize="12sp"
   android:textAppearance="@style/TextAppearance.Grocy.LabelMedium"
   android:textColor="?attr/colorOnSurface"
-  app:chipBackgroundColor="?attr/colorSurfaceContainerHigh"
+  app:chipBackgroundColor="?attr/colorSurfaceContainerHighest"
   app:chipStrokeWidth="0dp"
   app:chipMinHeight="28dp"
   app:textStartPadding="1dp"

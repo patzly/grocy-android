@@ -55,6 +55,7 @@ import androidx.annotation.Dimension;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StyleRes;
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.ViewCompat;
@@ -69,11 +70,12 @@ import com.google.android.material.color.DynamicColors;
 import com.google.android.material.color.DynamicColorsOptions;
 import com.google.android.material.color.HarmonizedColors;
 import com.google.android.material.color.HarmonizedColorsOptions;
-import com.google.android.material.elevation.SurfaceColors;
 import com.google.android.material.math.MathUtils;
 import java.lang.reflect.Field;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants.CONTRAST;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.APPEARANCE;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.Constants.THEME;
 import xyz.zedler.patrick.grocy.R;
@@ -95,28 +97,36 @@ public class UiUtil {
   public static void setTheme(Activity activity, SharedPreferences sharedPrefs) {
     switch (sharedPrefs.getString(SETTINGS.APPEARANCE.THEME, SETTINGS_DEFAULT.APPEARANCE.THEME)) {
       case THEME.RED:
-        activity.setTheme(R.style.Theme_Grocy_Red);
+        setContrastTheme(
+            activity, sharedPrefs,
+            R.style.Theme_Grocy_Red,
+            R.style.ThemeOverlay_Grocy_Red_MediumContrast,
+            R.style.ThemeOverlay_Grocy_Red_HighContrast
+        );
         break;
       case THEME.YELLOW:
-        activity.setTheme(R.style.Theme_Grocy_Yellow);
-        break;
-      case THEME.LIME:
-        activity.setTheme(R.style.Theme_Grocy_Lime);
+        setContrastTheme(
+            activity, sharedPrefs,
+            R.style.Theme_Grocy_Yellow,
+            R.style.ThemeOverlay_Grocy_Yellow_MediumContrast,
+            R.style.ThemeOverlay_Grocy_Yellow_HighContrast
+        );
         break;
       case THEME.GREEN:
-        activity.setTheme(R.style.Theme_Grocy_Green);
-        break;
-      case THEME.TURQUOISE:
-        activity.setTheme(R.style.Theme_Grocy_Turquoise);
-        break;
-      case THEME.TEAL:
-        activity.setTheme(R.style.Theme_Grocy_Teal);
+        setContrastTheme(
+            activity, sharedPrefs,
+            R.style.Theme_Grocy_Green,
+            R.style.ThemeOverlay_Grocy_Green_MediumContrast,
+            R.style.ThemeOverlay_Grocy_Green_HighContrast
+        );
         break;
       case THEME.BLUE:
-        activity.setTheme(R.style.Theme_Grocy_Blue);
-        break;
-      case THEME.PURPLE:
-        activity.setTheme(R.style.Theme_Grocy_Purple);
+        setContrastTheme(
+            activity, sharedPrefs,
+            R.style.Theme_Grocy_Blue,
+            R.style.ThemeOverlay_Grocy_Blue_MediumContrast,
+            R.style.ThemeOverlay_Grocy_Blue_HighContrast
+        );
         break;
       default:
         if (DynamicColors.isDynamicColorAvailable()) {
@@ -129,9 +139,34 @@ public class UiUtil {
               ).build()
           );
         } else {
-          activity.setTheme(R.style.Theme_Grocy_Green);
+          setContrastTheme(
+              activity, sharedPrefs,
+              R.style.Theme_Grocy_Green,
+              R.style.ThemeOverlay_Grocy_Green_MediumContrast,
+              R.style.ThemeOverlay_Grocy_Green_HighContrast
+          );
         }
         break;
+    }
+  }
+
+  private static void setContrastTheme(
+      Activity activity,
+      SharedPreferences sharedPrefs,
+      @StyleRes int resIdStandard,
+      @StyleRes int resIdMedium,
+      @StyleRes int resIdHigh
+  ) {
+    switch (sharedPrefs.getString(
+        APPEARANCE.UI_CONTRAST, SETTINGS_DEFAULT.APPEARANCE.UI_CONTRAST)) {
+      case CONTRAST.MEDIUM:
+        activity.setTheme(resIdMedium);
+        break;
+      case CONTRAST.HIGH:
+        activity.setTheme(resIdHigh);
+        break;
+      default:
+        activity.setTheme(resIdStandard);
     }
   }
 
@@ -216,10 +251,9 @@ public class UiUtil {
       fabBaseY = bottom - bottomInset - (babHeight / 2f) - (fabHeight / 2f);
       return insets;
     });
-    binding.bottomAppBar.setBackgroundColor(SurfaceColors.SURFACE_2.getColor(context));
-    binding.fabMainScroll.setBackgroundTintList(
-        ColorStateList.valueOf(SurfaceColors.SURFACE_2.getColor(context))
-    );
+    int color = ResUtil.getColorAttr(context, R.attr.colorSurfaceContainer);
+    binding.bottomAppBar.setBackgroundColor(color);
+    binding.fabMainScroll.setBackgroundTintList(ColorStateList.valueOf(color));
     ViewUtil.setTooltipText(binding.fabMainScroll, R.string.action_top_scroll);
   }
 
