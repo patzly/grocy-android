@@ -339,11 +339,11 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
         refreshButtonStates();
         refreshItems();
         loadStockLocations();
-        loadPriceHistory((float) details.getProduct().getQuFactorPurchaseToStockDouble());
+        loadPriceHistory((float) details.getQuFactorPriceToStock());
       }).perform(dlHelper.getUuid());
     } else if (activity.isOnline() && hasDetails()) {
       loadStockLocations();
-      loadPriceHistory((float) productDetails.getProduct().getQuFactorPurchaseToStockDouble());
+      loadPriceHistory((float) productDetails.getQuFactorPriceToStock());
     }
 
     if (product.getPictureFileName() != null && !product.getPictureFileName().isBlank()) {
@@ -488,7 +488,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
             activity.getString(
                 R.string.property_price_unit_insert,
                 NumUtil.trimPrice(NumUtil.toDouble(lastPrice)
-                    * productDetails.getProduct().getQuFactorPurchaseToStockDouble(), decimalPlacesPriceDisplay)
+                    * productDetails.getQuFactorPriceToStock(), decimalPlacesPriceDisplay)
                     + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
                 quantityUnitPurchase.getName()
             ),
@@ -510,7 +510,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
             activity.getString(
                 R.string.property_price_unit_insert,
                 NumUtil.trimPrice(NumUtil.toDouble(averagePrice)
-                    * productDetails.getProduct().getQuFactorPurchaseToStockDouble(), decimalPlacesPriceDisplay)
+                    * productDetails.getQuFactorPriceToStock(), decimalPlacesPriceDisplay)
                     + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
                 quantityUnitPurchase.getName()
             ),
