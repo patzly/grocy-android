@@ -159,7 +159,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
         true,
         entity.equals(GrocyApi.ENTITY.STORES) ? Store.class : null,
         (entity.equals(GrocyApi.ENTITY.LOCATIONS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))
-            ? Product.class : null,
+            ? Location.class : null,
         (entity.equals(GrocyApi.ENTITY.PRODUCT_GROUPS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))
             ? ProductGroup.class : null,
         (entity.equals(GrocyApi.ENTITY.QUANTITY_UNITS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))
