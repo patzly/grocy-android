@@ -11,6 +11,8 @@
 - Fixed: Stock overview last and avg. prices were not calculated properly (thanks @Alkuzman) (#757)
 - Fixed: Refreshing of master locations page was broken
 - Fixed: "Mark as open" was not working in some cases when quick mode was enabled
+- Fixed: Transactions on purchase and inventory page in quick mode were not possible if due date
+  tracking was disabled on server
 
 ## 3.4.2
 

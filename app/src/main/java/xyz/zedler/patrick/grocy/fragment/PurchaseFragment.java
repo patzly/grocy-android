@@ -37,6 +37,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
@@ -497,7 +498,8 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
       nextView = binding.autoCompletePurchaseProduct;
     } else if (!viewModel.getFormData().isAmountValid()) {
       nextView = binding.editTextAmount;
-    } else if (!viewModel.getFormData().isDueDateValid()) {
+    } else if (!viewModel.getFormData().isDueDateValid()
+        && viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_BBD_TRACKING)) {
       nextView = binding.linearDueDate;
     }
     if (nextView == null) {
