@@ -484,6 +484,7 @@
   <string name="msg_help_home_assistant_login_token">You can create a long-lived access token in your Home Assistant profile settings (last section). Tap here to open the URL from above.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Navigate back or tap this card to scan a QR code which fills the fields below.</string>
   <string name="msg_help_fab_overview_start">The action button on this overview page has two actions:\n\n- Short tap: consume with barcode scanner\n- Long tap: purchase with barcode scanner\n\nWith this button the quick mode on the respective pages is turned on by default. You can change this in behavior settings.</string>
+  <string name="msg_help_fab_consume_start">The action button on this page consumes the product with the given values. To mark the product as open instead, use the button at the bottom left of the menu bar.</string>
   <string name="msg_share">Check out this Android client for the awesome Grocy project: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">API key not working</string>
@@ -569,6 +570,7 @@
   <string name="error_invalid_base_servings">Servings invalid</string>
   <string name="error_pictures_size_exceeds_limit">There are embedded pictures in product or recipe descriptions on your server, which exceed the parsing limit of this app. Please remove high quality and large sized pictures from your descriptions, this will also speed up data loading.</string>
   <string name="error_userfield_type_not_supported">Userfield type currently not supported</string>
+  <string name="error_open_product_not_supported">Mark product as open is not supported for this product</string>
   <string name="error_settings_backup">Backup failed</string>
   <string name="error_settings_restore">Restore failed</string>
 

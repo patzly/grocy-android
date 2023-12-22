@@ -95,7 +95,7 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
       dismiss();
     });
     binding.buttonProceed.setOnClickListener(v -> {
-      activity.getCurrentFragment().startTransaction();
+      activity.getCurrentFragment().startTransaction(openAction);
       dismiss();
     });
 
@@ -173,10 +173,7 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
         if (binding.progressTimeout.getProgress() != binding.progressTimeout.getMax()) {
           return;
         }
-        if (binding.toggleGroupConsumeType.getVisibility() == View.VISIBLE) {
-          activity.getCurrentFragment().setMarkAsOpenToggle(openAction);
-        }
-        activity.getCurrentFragment().startTransaction();
+        activity.getCurrentFragment().startTransaction(openAction);
         dismiss();
       }
     });

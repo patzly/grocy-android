@@ -425,33 +425,6 @@
 
               <LinearLayout
                 style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
-                android:onClick="@{() -> checkboxOpen.setChecked(!checkboxOpen.isChecked())}"
-                android:visibility="@{formData.openVisibilityLive &amp;&amp; viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING) ? View.VISIBLE : View.GONE}"
-                android:paddingStart="16dp"
-                android:paddingEnd="9dp">
-
-                <ImageView
-                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                  android:src="@drawable/ic_round_open"
-                  tools:ignore="ContentDescription" />
-
-                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-                  <TextView
-                    style="@style/Widget.Grocy.TextView.ListItem.Title"
-                    android:text="@string/action_open" />
-
-                </LinearLayout>
-
-                <com.google.android.material.checkbox.MaterialCheckBox
-                  android:id="@+id/checkbox_open"
-                  style="@style/Widget.Grocy.CheckBox.Dense"
-                  android:checked="@={formData.openLive}" />
-
-              </LinearLayout>
-
-              <LinearLayout
-                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
                 android:onClick="@{() -> checkboxSpecific.setChecked(!checkboxSpecific.isChecked())}"
                 android:paddingStart="16dp"
                 android:paddingEnd="9dp">

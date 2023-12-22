@@ -21,6 +21,8 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -30,9 +32,11 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.color.ColorRoles;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
@@ -57,11 +61,13 @@ import xyz.zedler.patrick.grocy.util.ClickUtil.InactivityUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
+import xyz.zedler.patrick.grocy.view.FormattedTextView;
 import xyz.zedler.patrick.grocy.viewmodel.ConsumeViewModel;
 
 public class ConsumeFragment extends BaseFragment implements BarcodeListener {
 
   private final static String TAG = ConsumeFragment.class.getSimpleName();
+  private static final String DIALOG_FAB_INFO = "dialog_fab_info";
 
   private MainActivity activity;
   private FragmentConsumeBinding binding;
@@ -70,6 +76,7 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
   private EmbeddedFragmentScanner embeddedFragmentScanner;
   private Boolean backFromChooseProductPage;
   private InactivityUtil inactivityUtil;
+  private AlertDialog dialogFabInfo;
 
   @Override
   public View onCreateView(
@@ -232,23 +239,25 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
     activity.getScrollBehavior().setBottomBarVisibility(true);
-    activity.updateBottomAppBar(true, R.menu.menu_consume, this::onMenuItemClick);
+    activity.updateBottomAppBar(
+        true,
+        viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)
+            ? R.menu.menu_consume_with_open
+            : R.menu.menu_consume,
+        this::onMenuItemClick
+    );
     activity.updateFab(
         R.drawable.ic_round_consume_product,
         R.string.action_consume,
         Constants.FAB.TAG.CONSUME,
         args.getAnimateStart() && savedInstanceState == null,
-        () -> {
-          if (viewModel.isQuickModeEnabled()
-              && viewModel.getFormData().isCurrentProductFlowNotInterrupted()) {
-            focusNextInvalidView();
-          } else if (!viewModel.getFormData().isProductNameValid()) {
-            clearFocusAndCheckProductInput();
-          } else {
-            viewModel.consumeProduct();
-          }
-        }
+        () -> onActionButtonClick(false)
     );
+    if (savedInstanceState != null && savedInstanceState.getBoolean(DIALOG_FAB_INFO)) {
+      new Handler(Looper.getMainLooper()).postDelayed(
+          this::showFabInfoDialogIfAppropriate, 1
+      );
+    }
   }
 
   @Override
@@ -276,12 +285,35 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
   }
 
   @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    boolean isShowing = dialogFabInfo != null && dialogFabInfo.isShowing();
+    outState.putBoolean(DIALOG_FAB_INFO, isShowing);
+  }
+
+  @Override
   public boolean dispatchTouchEvent(MotionEvent event) {
     if (inactivityUtil != null && (event.getAction() == MotionEvent.ACTION_DOWN
         || event.getAction() == MotionEvent.ACTION_UP)) {
       inactivityUtil.resetTimer();
     }
     return false;
+  }
+
+  public void onActionButtonClick(boolean open) {
+    if (viewModel.isQuickModeEnabled()
+        && viewModel.getFormData().isCurrentProductFlowNotInterrupted()) {
+      focusNextInvalidView();
+    } else if (!viewModel.getFormData().isProductNameValid()) {
+      clearFocusAndCheckProductInput();
+    } else if (open || !showFabInfoDialogIfAppropriate()) {
+      ProductDetails productDetails = viewModel.getFormData().getProductDetailsLive().getValue();
+      if (open && productDetails != null
+          && productDetails.getProduct().getEnableTareWeightHandlingBoolean()) {
+        viewModel.showMessage(R.string.error_open_product_not_supported);
+        return;
+      }
+      viewModel.consumeProduct(open);
+    }
   }
 
   @Override
@@ -416,14 +448,36 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
     }
   }
 
-  @Override
-  public void setMarkAsOpenToggle(boolean markAsOpen) {
-    viewModel.getFormData().getOpenLive().setValue(markAsOpen);
+  public boolean showFabInfoDialogIfAppropriate() {
+    if (viewModel.getConsumeFabInfoShown()) {
+      return false;
+    }
+    FormattedTextView textView = new FormattedTextView(activity);
+    textView.setTextColor(ResUtil.getColorAttr(activity, R.attr.colorOnSurfaceVariant));
+    textView.setTextSizeParagraph(14);
+    textView.setBlockDistance(8);
+    textView.setSideMargin(24);
+    textView.setLastBlockWithBottomMargin(false);
+    textView.setText(getString(R.string.msg_help_fab_consume_start));
+    dialogFabInfo = new MaterialAlertDialogBuilder(
+        activity, R.style.ThemeOverlay_Grocy_AlertDialog
+    ).setTitle(R.string.title_help)
+        .setView(textView)
+        .setPositiveButton(R.string.action_proceed, (dialog, which) -> {
+          performHapticClick();
+          viewModel.setConsumeFabInfoShown();
+          viewModel.consumeProduct(false);
+        }).setNegativeButton(R.string.action_cancel, (dialog, which) -> {
+          performHapticClick();
+          viewModel.setConsumeFabInfoShown();
+        }).setOnCancelListener(dialog -> performHapticClick()).create();
+    dialogFabInfo.show();
+    return true;
   }
 
   @Override
-  public void startTransaction() {
-    viewModel.consumeProduct();
+  public void startTransaction(boolean open) {
+    viewModel.consumeProduct(open);
   }
 
   @Override
@@ -453,6 +507,9 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
       clearInputFocus();
       viewModel.getFormData().clearForm();
       embeddedFragmentScanner.startScannerIfVisible();
+      return true;
+    } else if (item.getItemId() == R.id.action_open) {
+      onActionButtonClick(true);
       return true;
     }
     return false;

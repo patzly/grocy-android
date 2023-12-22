@@ -136,6 +136,7 @@ public final class Constants {
     public final static String LAST_VERSION = "last_version";
     public final static String LAST_VERSION_DATABASE = "last_version_database";
     public final static String OVERVIEW_FAB_INFO_SHOWN = "overview_fab_info_shown";
+    public final static String CONSUME_FAB_INFO_SHOWN = "consume_fab_info_shown";
   }
 
   public final static class SETTINGS {
