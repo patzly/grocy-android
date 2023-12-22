@@ -224,6 +224,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     cameraController.unbind();
     if (barcodeScanner != null) {
       barcodeScanner.close();
+      barcodeScanner = null;
     }
   }
 
@@ -239,6 +240,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
 
     if (barcodeScanner != null) {
       barcodeScanner.close();
+      barcodeScanner = null;
     }
     barcodeScanner = BarcodeScanning.getClient(barcodeScannerOptions);
 
