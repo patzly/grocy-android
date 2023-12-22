@@ -499,6 +499,7 @@
   <string name="msg_help_home_assistant_login_token">Vous pouvez créer un jeton d\'accès de longue durée dans les paramètres de votre profil Home Assistant (dernière section). Appuyez ici pour ouvrir l\'URL ci-dessus.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Appuyez ici pour scanner un code QR afin de remplir les champs ci-dessous.</string>
   <string name="msg_help_fab_overview_start">Le bouton d\'action sur cette page d\'aperçu a deux actions :\n\n- Appui court : consommer avec le lecteur de code-barres\n- Appui long : acheter avec le lecteur de code-barres\n\nAvec ce bouton, le mode rapide sur les pages respectives est activé par défaut. Vous pouvez modifier cela dans les paramètres de comportement.</string>
+  <string name="msg_help_fab_consume_start">Le bouton d\'action sur cette page consomme le produit avec les valeurs données. Pour marquer le produit comme ouvert, utilisez le bouton en bas à gauche de la barre de menu.</string>
   <string name="msg_share">Découvrez ce client Android pour le super projet Grocy : \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">La clé API ne fonctionne pas</string>
@@ -584,6 +585,7 @@
   <string name="error_invalid_base_servings">Portions invalides</string>
   <string name="error_pictures_size_exceeds_limit">Il y a des images intégrées dans les descriptions de produits ou de recettes sur votre serveur, qui dépassent la limite d\'analyse de cette application. Veuillez supprimer les images de haute qualité et de grande taille de vos descriptions, cela accélérera également le chargement des données.</string>
   <string name="error_userfield_type_not_supported">Type de champ utilisateur actuellement non pris en charge</string>
+  <string name="error_open_product_not_supported">Marquer le produit comme ouvert n\'est pas pris en charge pour ce produit</string>
   <string name="error_settings_backup">La sauvegarde a échoué</string>
   <string name="error_settings_restore">La restauration a échoué</string>
 
