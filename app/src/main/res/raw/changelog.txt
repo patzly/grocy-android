@@ -13,6 +13,9 @@
 - Fixed: "Mark as open" was not working in some cases when quick mode was enabled
 - Fixed: Transactions on purchase and inventory page in quick mode were not possible if due date
   tracking was disabled on server
+- Fixed: Crash when opening page with ML Kit scanner in some cases (hopefully fixed) (#690, #688)
+- Fixed: ML Kit scanner could not start again after going to "choose product" page in
+  normal mode (not quick mode)
 
 ## 3.4.2
 

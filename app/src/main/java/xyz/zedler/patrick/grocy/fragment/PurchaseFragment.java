@@ -259,10 +259,9 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     }
     embeddedFragmentScanner.setScannerVisibilityLive(
         viewModel.getFormData().getScannerVisibilityLive(),
-        backFromChooseProductPage != null
+        backFromChooseProductPage != null && backFromChooseProductPage
             && (viewModel.getFormData().getProductDetailsLive().getValue() != null
-            || viewModel.isProductWillBeFilled())
-            ? backFromChooseProductPage : false
+            || viewModel.isProductWillBeFilled()) && viewModel.getFormData().isScannerVisible()
     );
 
     ColorRoles roles = ResUtil.getHarmonizedRoles(activity, R.color.blue);
