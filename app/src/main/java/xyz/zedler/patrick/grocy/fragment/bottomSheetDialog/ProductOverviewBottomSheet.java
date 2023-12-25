@@ -239,10 +239,6 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     }
     ResUtil.tintMenuItemIcons(activity, binding.toolbar.getMenu());
 
-    ColorStateList colorSurface3 = ColorStateList.valueOf(
-        ResUtil.getColorAttr(activity, R.attr.colorSurfaceContainerLow)
-    );
-    binding.chipConsume.setChipBackgroundColor(colorSurface3);
     binding.chipConsume.setVisibility(isInStock ? View.VISIBLE : View.GONE);
     binding.chipConsume.setOnClickListener(v -> {
       NavHostFragment.findNavController(this).navigate(
@@ -254,7 +250,6 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       dismiss();
     });
 
-    binding.chipPurchase.setChipBackgroundColor(colorSurface3);
     binding.chipPurchase.setOnClickListener(v -> {
       NavHostFragment.findNavController(this).navigate(
           ProductOverviewBottomSheetDirections
@@ -265,7 +260,6 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       dismiss();
     });
 
-    binding.chipTransfer.setChipBackgroundColor(colorSurface3);
     binding.chipTransfer.setVisibility(isInStock && product.getEnableTareWeightHandlingInt() == 0
         ? View.VISIBLE : View.GONE);
     binding.chipTransfer.setOnClickListener(v -> {
@@ -278,7 +272,6 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       dismiss();
     });
 
-    binding.chipInventory.setChipBackgroundColor(colorSurface3);
     binding.chipInventory.setOnClickListener(v -> {
       NavHostFragment.findNavController(this).navigate(
           ProductOverviewBottomSheetDirections

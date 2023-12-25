@@ -382,7 +382,10 @@ public class SystemBarBehavior {
     boolean isOrientationPortrait = UiUtil.isOrientationPortrait(activity);
     boolean isDarkModeActive = UiUtil.isDarkModeActive(activity);
     int colorScrim = ColorUtils.setAlphaComponent(
-        ResUtil.getColorAttr(activity, R.attr.colorSurfaceContainer), 1
+        // TODO: replace with attribute when fixed in MDC
+        //ResUtil.getColorAttr(activity, R.attr.colorSurfaceContainer),
+        ResUtil.getColorSurfaceContainer(activity),
+        1
     );
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // 29

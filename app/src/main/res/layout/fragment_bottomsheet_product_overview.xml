@@ -99,25 +99,29 @@
             android:id="@+id/chip_consume"
             style="@style/Widget.Grocy.Chip.Assist"
             android:text="@string/title_consume"
-            app:chipIcon="@drawable/ic_round_consume_product"/>
+            app:chipIcon="@drawable/ic_round_consume_product"
+            app:chipBackgroundColor="?attr/colorSurfaceContainerLow" />
 
           <com.google.android.material.chip.Chip
             android:id="@+id/chip_purchase"
             style="@style/Widget.Grocy.Chip.Assist"
             android:text="@string/title_purchase"
-            app:chipIcon="@drawable/ic_round_local_grocery_store"/>
+            app:chipIcon="@drawable/ic_round_local_grocery_store"
+            app:chipBackgroundColor="?attr/colorSurfaceContainerLow" />
 
           <com.google.android.material.chip.Chip
             android:id="@+id/chip_transfer"
             style="@style/Widget.Grocy.Chip.Assist"
             android:text="@string/title_transfer"
-            app:chipIcon="@drawable/ic_round_swap_horiz"/>
+            app:chipIcon="@drawable/ic_round_swap_horiz"
+            app:chipBackgroundColor="?attr/colorSurfaceContainerLow" />
 
           <com.google.android.material.chip.Chip
             android:id="@+id/chip_inventory"
             style="@style/Widget.Grocy.Chip.Assist"
             android:text="@string/title_inventory"
-            app:chipIcon="@drawable/ic_round_inventory"/>
+            app:chipIcon="@drawable/ic_round_inventory"
+            app:chipBackgroundColor="?attr/colorSurfaceContainerLow" />
 
         </com.google.android.material.chip.ChipGroup>
 

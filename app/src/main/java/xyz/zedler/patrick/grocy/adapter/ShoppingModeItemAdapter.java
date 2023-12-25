@@ -586,10 +586,8 @@ public class ShoppingModeItemAdapter extends
 
   private Chip createChip(Context ctx, String text) {
     @SuppressLint("InflateParams")
-    Chip chip = (Chip) LayoutInflater.from(ctx)
-        .inflate(R.layout.view_info_chip, null, false);
-    chip.setChipBackgroundColor(
-        ColorStateList.valueOf(ResUtil.getColorAttr(ctx, R.attr.colorSurfaceContainerHighest))
+    Chip chip = (Chip) LayoutInflater.from(ctx).inflate(
+        R.layout.view_info_chip, null, false
     );
     chip.setText(text);
     chip.setEnabled(false);

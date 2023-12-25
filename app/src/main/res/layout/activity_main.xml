@@ -62,7 +62,7 @@
     android:src="@drawable/ic_round_expand_less"
     android:tooltipText="@string/action_top_scroll"
     android:contentDescription="@string/action_top_scroll"
-    app:backgroundTint="?attr/colorSurface"
+    app:backgroundTint="?attr/colorSurfaceContainer"
     app:tint="?attr/colorOnSurface"
     app:rippleColor="?attr/colorSecondaryContainer"
     app:fabCustomSize="40dp"

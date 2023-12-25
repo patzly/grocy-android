@@ -251,9 +251,6 @@ public class UiUtil {
       fabBaseY = bottom - bottomInset - (babHeight / 2f) - (fabHeight / 2f);
       return insets;
     });
-    int color = ResUtil.getColorAttr(context, R.attr.colorSurfaceContainer);
-    binding.bottomAppBar.setBackgroundColor(color);
-    binding.fabMainScroll.setBackgroundTintList(ColorStateList.valueOf(color));
     ViewUtil.setTooltipText(binding.fabMainScroll, R.string.action_top_scroll);
   }
 

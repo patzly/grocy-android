@@ -426,9 +426,6 @@ public class RecipePositionResolvedAdapter extends
     Chip chip = (Chip) LayoutInflater.from(context).inflate(
         R.layout.view_info_chip, null, false
     );
-    chip.setChipBackgroundColor(
-        ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorSurfaceContainerHighest))
-    );
     chip.setText(text);
     chip.setTextColor(ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorOnSurface)));
     chip.setEnabled(false);
