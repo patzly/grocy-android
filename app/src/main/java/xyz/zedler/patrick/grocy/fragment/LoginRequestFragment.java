@@ -26,7 +26,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -108,6 +107,10 @@ public class LoginRequestFragment extends BaseFragment {
     activity.getScrollBehavior().setProvideTopScroll(false);
     activity.getScrollBehavior().setCanBottomAppBarBeVisible(false);
     activity.getScrollBehavior().setBottomBarVisibility(false, true, false);
+
+    if (!UiUtil.areAnimationsEnabled(activity)) {
+      login(true);
+    }
   }
 
   private void navigateToStartDestination() {

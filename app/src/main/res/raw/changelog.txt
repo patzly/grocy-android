@@ -16,6 +16,7 @@
 - Fixed: Crash when opening page with ML Kit scanner in some cases (hopefully fixed) (#690, #688)
 - Fixed: ML Kit scanner could not start again after going to "choose product" page in
   normal mode (not quick mode)
+- Fixed: Impossible login due to disabled animations (#814)
 
 ## 3.4.2
 
