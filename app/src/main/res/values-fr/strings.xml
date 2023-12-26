@@ -1186,6 +1186,9 @@
   <string name="info_github">Grocy Android sur GitHub</string>
   <string name="info_github_description">Code source</string>
   <string name="info_website">Ouvrir le site web de Grocy</string>
+  <string name="info_translation_description">Aidez à traduire Grocy Android</string>
+  <string name="info_privacy">Politique de confidentialité</string>
+  <string name="info_privacy_description">Comment vos données sont-elles traitées ?</string>
 
   <string name="feature_1_title">Grocy pour Android</string>
   <string name="feature_1_description">Gestion d\'épicerie auto-hébergée pour votre maison</string>
