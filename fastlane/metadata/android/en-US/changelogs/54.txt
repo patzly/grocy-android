@@ -1,0 +1,15 @@
+This release contains multiple important changes:
+• New: Removed support for Grocy server versions below 4.0.0. Please update your server to the latest Grocy version!
+• New: Dynamic contrast options in appearance settings for visual accessibility
+• Improved: Swapped order of "done" items and shopping notes on shopping mode page
+• Improved: Moved option for "mark as open" on consume page to bottom menu and added help
+• Fixed: Crash on stock overview and recipes page when due date tracking was disabled
+• Fixed: Total prices on shopping list page with units other than stock unit were wrong
+• Fixed: Stock overview last and avg. prices were not calculated properly
+• Fixed: Refreshing of master locations page was broken
+• Fixed: "Mark as open" was not working in some cases when quick mode was enabled
+• Fixed: Transactions on purchase and inventory page in quick mode were not possible if due date tracking was disabled on server
+• Fixed: Crash when opening page with ML Kit scanner in some cases (hopefully fixed)
+• Fixed: ML Kit scanner could not start again after going to "choose product" page in normal mode (not quick mode)
+• Fixed: Impossible login due to disabled animations
+• Fixed: Privacy policy link missing

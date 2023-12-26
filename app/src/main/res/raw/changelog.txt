@@ -1,8 +1,8 @@
 ## 3.5.0
 
-- New: Dynamic contrast options in appearance settings for visual accessibility
 - New: Removed support for Grocy server versions below 4.0.0 (following versions will be unsupported
-  now: 3.1.3, 3.2.0, 3.3.0, 3.3.1, 3.3.2). Please update your server to the latest Grocy version.
+  now: 3.1.3, 3.2.0, 3.3.0, 3.3.1, 3.3.2). Please update your server to the latest Grocy version!
+- New: Dynamic contrast options in appearance settings for visual accessibility
 - Improved: Swapped order of "done" items and shopping notes on shopping mode page (#812)
 - Improved: Moved option for "mark as open" on consume page to bottom menu and added help (#768)
 - Fixed: Crash on stock overview and recipes page when due date tracking was disabled (#811)
