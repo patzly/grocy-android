@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
-import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
@@ -37,7 +36,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.view.ContextThemeWrapper;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.divider.MaterialDivider;
@@ -59,11 +57,10 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
-import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
-import xyz.zedler.patrick.grocy.view.SelectionCardView;
+import xyz.zedler.patrick.grocy.view.ThemeSelectionCardView;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SettingsCatAppearanceFragment extends BaseFragment implements OnCheckedChangeListener {
@@ -283,32 +280,19 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
           break;
       }
 
-      SelectionCardView card = new SelectionCardView(activity);
-      card.setEnsureContrast(false);
-      int color;
-      if (i == -1 && VERSION.SDK_INT >= VERSION_CODES.S) {
-        int resIdLight = VERSION.SDK_INT >= VERSION_CODES.UPSIDE_DOWN_CAKE
-            ? android.R.color.system_primary_container_light
-            : android.R.color.system_accent1_100;
-        int resIdDark = VERSION.SDK_INT >= VERSION_CODES.UPSIDE_DOWN_CAKE
-            ? android.R.color.system_primary_container_dark
-            : android.R.color.system_accent1_700;
-        color = ContextCompat.getColor(
-            activity, UiUtil.isDarkModeActive(activity) ? resIdDark : resIdLight
-        );
-      } else {
-        color = ResUtil.getColorAttr(
-            new ContextThemeWrapper(activity, resId), R.attr.colorPrimaryContainer
-        );
-      }
-      card.setCardBackgroundColor(color);
+      ThemeSelectionCardView card = new ThemeSelectionCardView(activity);
+      card.setNestedContext(
+          i == -1 && VERSION.SDK_INT >= VERSION_CODES.S
+              ? DynamicColors.wrapContextIfAvailable(activity)
+              : new ContextThemeWrapper(activity, resId)
+      );
       card.setOnClickListener(v -> {
         if (!card.isChecked()) {
+          ViewUtil.uncheckAllChildren(container);
+          card.setChecked(true);
           card.startCheckedIcon();
           ViewUtil.startIcon(binding.imageOtherTheme);
           performHapticClick();
-          ViewUtil.uncheckAllChildren(container);
-          card.setChecked(true);
           getSharedPrefs().edit().putString(SETTINGS.APPEARANCE.THEME, name).apply();
           RestartUtil.restartToApply(activity, 100, getInstanceState());
         }

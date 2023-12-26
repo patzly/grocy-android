@@ -24,26 +24,23 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.LayerDrawable;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.color.ColorRoles;
-import com.google.android.material.color.MaterialColors;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
-public class SelectionCardView extends MaterialCardView {
+public class ThemeSelectionCardView extends MaterialCardView {
 
-  private final MaterialCardView innerCard;
+  private final int innerSize;
 
-  public SelectionCardView(Context context) {
+  public ThemeSelectionCardView(Context context) {
     super(context);
 
     final int outerRadius = UiUtil.dpToPx(context, 16);
     final int outerPadding = UiUtil.dpToPx(context, 16);
-    final int innerSize = UiUtil.dpToPx(context, 48);
+    innerSize = UiUtil.dpToPx(context, 48);
 
     // OUTER CARD (this)
 
@@ -69,37 +66,28 @@ public class SelectionCardView extends MaterialCardView {
     setStrokeWidth(0);
     setCheckable(true);
     setCheckedIconResource(R.drawable.shape_selection_check);
-    setCheckedIconTint(null);
     setCheckedIconSize(innerSize);
     setCheckedIconMargin(outerPadding);
+  }
 
-    // INNER CARD
+  @Override
+  @Deprecated
+  public void setCardBackgroundColor(int color) {}
 
+  public void setNestedContext(Context context) {
+    removeAllViews();
     ViewGroup.LayoutParams innerParams = new ViewGroup.LayoutParams(innerSize, innerSize);
-    innerCard = new MaterialCardView(context);
+    MaterialCardView innerCard = new MaterialCardView(context);
     innerCard.setLayoutParams(innerParams);
     innerCard.setRadius(innerSize / 2f);
     innerCard.setStrokeWidth(UiUtil.dpToPx(context, 1));
     innerCard.setStrokeColor(ResUtil.getColorAttr(context, R.attr.colorOutline));
+    innerCard.setCardBackgroundColor(ResUtil.getColorAttr(context, R.attr.colorPrimaryContainer));
     innerCard.setCheckable(false);
     addView(innerCard);
-  }
-
-  @Override
-  public void setCardBackgroundColor(int color) {
-    if (innerCard != null) {
-      innerCard.setCardBackgroundColor(color);
-    }
-  }
-
-  @NonNull
-  @Override
-  public ColorStateList getCardBackgroundColor() {
-    if (innerCard != null) {
-      return innerCard.getCardBackgroundColor();
-    } else {
-      return super.getCardBackgroundColor();
-    }
+    setCheckedIconTint(
+        ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorOnPrimaryContainer))
+    );
   }
 
   public void startCheckedIcon() {
@@ -110,18 +98,6 @@ public class SelectionCardView extends MaterialCardView {
       }
     } catch (ClassCastException ignored) {
       // For API 21 it will be a androidx.core.graphics.drawable.WrappedDrawableApi21
-    }
-  }
-
-  public void setEnsureContrast(boolean ensureContrast) {
-    if (ensureContrast) {
-      int bg = getCardBackgroundColor().getDefaultColor();
-      ColorRoles roles = MaterialColors.getColorRoles(bg, MaterialColors.isColorLight(bg));
-      setCheckedIconTint(ColorStateList.valueOf(roles.getOnAccentContainer()));
-    } else {
-      setCheckedIconTint(
-          ColorStateList.valueOf(ResUtil.getColorAttr(getContext(), R.attr.colorOnPrimaryContainer))
-      );
     }
   }
 }
