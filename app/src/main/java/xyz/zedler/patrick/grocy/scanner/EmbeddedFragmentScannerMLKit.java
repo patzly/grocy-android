@@ -23,6 +23,7 @@ import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -94,19 +95,19 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     this.barcodeListener = barcodeListener;
     this.qrCodeFormat = qrCodeFormat;
     this.qrCodeFilter = qrCodeFilter;
-    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(fragment.requireContext());
+    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
     // set container size
     int width, height;
     if (qrCodeFormat && !takeSmallQrCodeFormat) {
-      width = UiUtil.dpToPx(fragment.requireContext(), 200);
-      height = UiUtil.dpToPx(fragment.requireContext(), 200);
+      width = UiUtil.dpToPx(activity, 200);
+      height = UiUtil.dpToPx(activity, 200);
     } else if (qrCodeFormat) {
-      width = UiUtil.dpToPx(fragment.requireContext(), 180);
-      height = UiUtil.dpToPx(fragment.requireContext(), 180);
+      width = UiUtil.dpToPx(activity, 180);
+      height = UiUtil.dpToPx(activity, 180);
     } else {
       width = ViewGroup.LayoutParams.MATCH_PARENT;
-      height = UiUtil.dpToPx(fragment.requireContext(), 140);
+      height = UiUtil.dpToPx(activity, 140);
     }
     if (containerScanner.getParent() instanceof LinearLayout) {
       LinearLayout.LayoutParams layoutParamsContainer = new LinearLayout.LayoutParams(
@@ -125,17 +126,17 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
 
     // fill container with necessary views
     int matchParent = ViewGroup.LayoutParams.MATCH_PARENT;
-    previewView = new PreviewView(fragment.requireContext());
+    previewView = new PreviewView(activity);
     previewView.setLayoutParams(new LayoutParams(matchParent, matchParent));
     previewView.setImplementationMode(ImplementationMode.COMPATIBLE);
     previewView.setOnClickListener(v -> toggleTorch());
-    MaterialCardView cardView = new MaterialCardView(fragment.requireContext());
+    MaterialCardView cardView = new MaterialCardView(activity);
     cardView.setLayoutParams(new LayoutParams(matchParent, matchParent));
     cardView.setCardElevation(0);
-    strokeWidth = UiUtil.dpToPx(fragment.requireContext(), 1);
+    strokeWidth = UiUtil.dpToPx(activity, 1);
     cardView.setStrokeWidth(strokeWidth);
-    cardView.setStrokeColor(ResUtil.getColorAttr(fragment.requireContext(), R.attr.colorOutline));
-    cardView.setRadius(UiUtil.dpToPx(fragment.requireContext(), 16));
+    cardView.setStrokeColor(ResUtil.getColorAttr(activity, R.attr.colorOutline));
+    cardView.setRadius(UiUtil.dpToPx(activity, 16));
     cardView.addView(previewView);
     containerScanner.addView(cardView);
 
@@ -157,7 +158,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
           }
         });
 
-    cameraController = new LifecycleCameraController(fragment.requireContext());
+    cameraController = new LifecycleCameraController(activity);
     CameraSelector cameraSelector = sharedPrefs
         .getBoolean(SCANNER.FRONT_CAM, SETTINGS_DEFAULT.SCANNER.FRONT_CAM)
         ? CameraSelector.DEFAULT_FRONT_CAMERA
@@ -170,7 +171,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
             cameraController.setCameraSelector(cameraSelector);
           }
         },
-        ContextCompat.getMainExecutor(fragment.requireContext())
+        ContextCompat.getMainExecutor(activity)
     );
   }
 
@@ -230,7 +231,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
 
   public void startScannerIfVisible() {
     if (!isScannerVisible) return;
-    if (ContextCompat.checkSelfPermission(fragment.requireContext(), Manifest.permission.CAMERA)
+    if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA)
         == PackageManager.PERMISSION_DENIED) {
       ActivityCompat.requestPermissions(
           activity, new String[] {Manifest.permission.CAMERA}, PERMISSION_REQUESTS
@@ -246,12 +247,20 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
 
     cameraController.clearImageAnalysisAnalyzer();
     cameraController.setImageAnalysisAnalyzer(
-        ContextCompat.getMainExecutor(fragment.requireContext()),
+        ContextCompat.getMainExecutor(activity),
         new MlKitAnalyzer(
             List.of(barcodeScanner),
             CameraController.COORDINATE_SYSTEM_VIEW_REFERENCED,
-            ContextCompat.getMainExecutor(fragment.requireContext()),
-            result -> onScanSuccess(result.getValue(barcodeScanner))
+            ContextCompat.getMainExecutor(activity),
+            result -> {
+              try {
+                if (barcodeScanner != null) {
+                  onScanSuccess(result.getValue(barcodeScanner));
+                }
+              } catch (Exception e) {
+                Log.e(TAG, "startScannerIfVisible: ", e);
+              }
+            }
         )
     );
 
@@ -272,16 +281,16 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
 
     int pointsOutsidePreview = 0;
     for (Point point : cornerPoints) {
-      if (point.x < strokeWidth*2 || point.y < strokeWidth*2
-          || point.x > previewView.getWidth()-strokeWidth*2
-          || point.y > previewView.getHeight()-strokeWidth*2
+      if (point.x < strokeWidth * 2 || point.y < strokeWidth * 2
+          || point.x > previewView.getWidth() - strokeWidth * 2
+          || point.y > previewView.getHeight() - strokeWidth * 2
       ) {
         pointsOutsidePreview++;
         if (pointsOutsidePreview > 2) return;
       }
     }
 
-    new HapticUtil(fragment.requireContext()).tick();
+    new HapticUtil(activity).tick();
     stopScanner();
 
     if (barcodeListener != null) {
