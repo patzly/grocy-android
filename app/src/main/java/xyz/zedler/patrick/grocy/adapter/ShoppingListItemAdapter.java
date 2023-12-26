@@ -38,7 +38,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
-import com.google.android.material.elevation.SurfaceColors;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -267,8 +266,7 @@ public class ShoppingListItemAdapter extends
       ProductLastPurchased p = shoppingListItem.hasProduct()
           ? productLastPurchasedHashMap.get(shoppingListItem.getProductIdInt()) : null;
       if (p == null || p.getPrice() == null || p.getPrice().isEmpty()) continue;
-      Double amountInQuUnit = shoppingListItemAmountsHashMap.get(shoppingListItem.getId());
-      double amount = amountInQuUnit != null ? amountInQuUnit : shoppingListItem.getAmountDouble();
+      double amount = shoppingListItem.getAmountDouble();
       if (NumUtil.isStringDouble(p.getPrice())) priceTotal += NumUtil.toDouble(p.getPrice()) * amount;
     }
 
@@ -442,20 +440,20 @@ public class ShoppingListItemAdapter extends
 
     // AMOUNT
 
-    Double amountInQuUnit = shoppingListItemAmountsHashMap.get(item.getId());
+    Double amountInItemUnit = shoppingListItemAmountsHashMap.get(item.getId());
     if (activeFields.contains(ShoppingListViewModel.FIELD_AMOUNT)) {
       StringBuilder stringBuilderAmount = new StringBuilder();
-      if (product != null && amountInQuUnit != null) {
+      if (product != null && amountInItemUnit != null) {
         QuantityUnit quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
-        String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, amountInQuUnit);
+        String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, amountInItemUnit);
         if (quStr != null) {
           stringBuilderAmount.append(context.getString(
               R.string.subtitle_amount,
-              NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount),
+              NumUtil.trimAmount(amountInItemUnit, maxDecimalPlacesAmount),
               quStr
           ));
         } else {
-          stringBuilderAmount.append(NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount));
+          stringBuilderAmount.append(NumUtil.trimAmount(amountInItemUnit, maxDecimalPlacesAmount));
         }
       } else if (product != null) {
         QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
@@ -552,7 +550,7 @@ public class ShoppingListItemAdapter extends
       ProductLastPurchased p = product != null
           ? productLastPurchasedHashMap.get(product.getId()) : null;
       if (p != null && p.getPrice() != null && !p.getPrice().isEmpty()) {
-        double amount = amountInQuUnit != null ? amountInQuUnit : item.getAmountDouble();
+        double amount = item.getAmountDouble();
         String price = NumUtil.isStringDouble(p.getPrice())
             ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice()) * amount,
             decimalPlacesPriceDisplay)
@@ -611,9 +609,9 @@ public class ShoppingListItemAdapter extends
 
   private static Chip createChip(Context ctx, String text) {
     @SuppressLint("InflateParams")
-    Chip chip = (Chip) LayoutInflater.from(ctx)
-        .inflate(R.layout.view_info_chip, null, false);
-    chip.setChipBackgroundColor(ColorStateList.valueOf(SurfaceColors.SURFACE_4.getColor(ctx)));
+    Chip chip = (Chip) LayoutInflater.from(ctx).inflate(
+        R.layout.view_info_chip, null, false
+    );
     chip.setText(text);
     chip.setEnabled(false);
     chip.setClickable(false);

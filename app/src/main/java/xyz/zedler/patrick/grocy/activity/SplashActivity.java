@@ -33,6 +33,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
@@ -44,6 +45,7 @@ import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.Constants.THEME;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class SplashActivity extends MainActivity {
@@ -75,7 +77,7 @@ public class SplashActivity extends MainActivity {
         set.setStartDelay(speedUpStart ? 0 : 550);
         set.addListener(new AnimatorListenerAdapter() {
           @Override
-          public void onAnimationEnd(Animator animation, boolean isReverse) {
+          public void onAnimationEnd(@NonNull Animator animation, boolean isReverse) {
             view.remove();
           }
         });
@@ -109,39 +111,7 @@ public class SplashActivity extends MainActivity {
 
       // THEME
 
-      switch (sharedPrefs.getString(SETTINGS.APPEARANCE.THEME, SETTINGS_DEFAULT.APPEARANCE.THEME)) {
-        case THEME.RED:
-          setTheme(R.style.Theme_Grocy_Red);
-          break;
-        case THEME.YELLOW:
-          setTheme(R.style.Theme_Grocy_Yellow);
-          break;
-        case THEME.LIME:
-          setTheme(R.style.Theme_Grocy_Lime);
-          break;
-        case THEME.GREEN:
-          setTheme(R.style.Theme_Grocy_Green);
-          break;
-        case THEME.TURQUOISE:
-          setTheme(R.style.Theme_Grocy_Turquoise);
-          break;
-        case THEME.TEAL:
-          setTheme(R.style.Theme_Grocy_Teal);
-          break;
-        case THEME.BLUE:
-          setTheme(R.style.Theme_Grocy_Blue);
-          break;
-        case THEME.PURPLE:
-          setTheme(R.style.Theme_Grocy_Purple);
-          break;
-        default:
-          if (DynamicColors.isDynamicColorAvailable()) {
-            DynamicColors.applyToActivityIfAvailable(this);
-          } else {
-            setTheme(R.style.Theme_Grocy_Green);
-          }
-          break;
-      }
+      UiUtil.setTheme(this, sharedPrefs);
 
       if (bundle == null) {
         bundle = new Bundle();

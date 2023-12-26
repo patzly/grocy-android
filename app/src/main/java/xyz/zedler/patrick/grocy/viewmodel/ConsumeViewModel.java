@@ -265,14 +265,6 @@ public class ConsumeViewModel extends BaseViewModel {
         formData.getStockLocationLive().setValue(stockLocation);
       }
 
-      // open
-      if (productDetails.getProduct().getEnableTareWeightHandlingBoolean()) {
-        formData.getOpenVisibilityLive().setValue(false);
-      } else {
-        formData.getOpenVisibilityLive().setValue(true);
-        formData.getOpenLive().setValue(false);
-      }
-
       // stock entry
       StockEntry stockEntry = null;
       if (stockEntryId != null) {
@@ -405,20 +397,16 @@ public class ConsumeViewModel extends BaseViewModel {
     formData.getProductNameLive().setValue(null);
   }
 
-  public void consumeProduct() {
+  public void consumeProduct(boolean isActionOpen) {
     if (!formData.isFormValid()) {
       showMessage(R.string.error_missing_information);
       return;
     }
     if (formData.getBarcodeLive().getValue() != null) {
-      uploadProductBarcode(this::consumeProduct);
+      uploadProductBarcode(() -> consumeProduct(isActionOpen));
       return;
     }
-    assert formData.getOpenLive().getValue() != null
-        && formData.getOpenVisibilityLive().getValue() != null
-        && formData.getProductDetailsLive().getValue() != null;
-    boolean isActionOpen = formData.getOpenLive().getValue()
-        && formData.getOpenVisibilityLive().getValue();
+    assert formData.getProductDetailsLive().getValue() != null;
     Product product = formData.getProductDetailsLive().getValue().getProduct();
     JSONObject body = formData.getFilledJSONObject(isActionOpen);
     dlHelper.postWithArray(
@@ -574,15 +562,11 @@ public class ConsumeViewModel extends BaseViewModel {
   public void showConfirmationBottomSheet() {
     Bundle bundle = new Bundle();
     bundle.putString(Constants.ARGUMENT.TEXT, formData.getConfirmationText(false));
-    if (formData.getOpenVisibilityLive().getValue() != null
-        && formData.getOpenVisibilityLive().getValue()) {
-      bundle.putString(ARGUMENT.TEXT_ALTERNATIVE, formData.getConfirmationText(true));
-      bundle.putString(
-          Constants.ARGUMENT.ACTION,
-          formData.getOpenLive().getValue() != null && formData.getOpenLive().getValue()
-              ? ACTION.OPEN : ACTION.CONSUME
-      );
-    }
+    boolean openEnabled = formData.getProductDetailsLive().getValue() != null
+        && !formData.getProductDetailsLive().getValue().getProduct()
+        .getEnableTareWeightHandlingBoolean();
+    if (openEnabled) bundle.putString(ARGUMENT.TEXT_ALTERNATIVE, formData.getConfirmationText(true));
+    bundle.putString(Constants.ARGUMENT.ACTION, ACTION.CONSUME);
     showBottomSheet(new QuickModeConfirmBottomSheet(), bundle);
   }
 
@@ -650,6 +634,14 @@ public class ConsumeViewModel extends BaseViewModel {
         BEHAVIOR.QUICK_MODE_RETURN,
         Constants.SETTINGS_DEFAULT.BEHAVIOR.QUICK_MODE_RETURN
     );
+  }
+
+  public boolean getConsumeFabInfoShown() {
+    return sharedPrefs.getBoolean(PREF.CONSUME_FAB_INFO_SHOWN, false);
+  }
+
+  public void setConsumeFabInfoShown() {
+    sharedPrefs.edit().putBoolean(PREF.CONSUME_FAB_INFO_SHOWN, true).apply();
   }
 
   @Override

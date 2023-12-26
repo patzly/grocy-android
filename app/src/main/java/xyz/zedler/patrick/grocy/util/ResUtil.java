@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -153,6 +154,44 @@ public class ResUtil {
         .setColorResourceIds(resIds)
         .build();
     HarmonizedColors.applyToContextIfAvailable(context, options);
+  }
+
+  // TODO: replace with attributes when fixed in MDC and remove below methods
+
+  public static ColorStateList getColorSurfaceContainerLowest(Context context) {
+    return ContextCompat.getColorStateList(context, R.color.selector_fix_surface_container_lowest);
+  }
+
+  public static int getColorSurfaceContainerLow(Context context) {
+    ColorStateList list = ContextCompat.getColorStateList(
+        context, R.color.selector_fix_surface_container_low
+    );
+    assert list != null;
+    return list.getDefaultColor();
+  }
+
+  public static int getColorSurfaceContainer(Context context) {
+    ColorStateList list = ContextCompat.getColorStateList(
+        context, R.color.selector_fix_surface_container
+    );
+    assert list != null;
+    return list.getDefaultColor();
+  }
+
+  public static int getColorSurfaceContainerHigh(Context context) {
+    ColorStateList list = ContextCompat.getColorStateList(
+        context, R.color.selector_fix_surface_container_high
+    );
+    assert list != null;
+    return list.getDefaultColor();
+  }
+
+  public static int getColorSurfaceContainerHighest(Context context) {
+    ColorStateList list = ContextCompat.getColorStateList(
+        context, R.color.selector_fix_surface_container_highest
+    );
+    assert list != null;
+    return list.getDefaultColor();
   }
 
   public static ColorRoles getHarmonizedRoles(Context context, @ColorRes int resId) {

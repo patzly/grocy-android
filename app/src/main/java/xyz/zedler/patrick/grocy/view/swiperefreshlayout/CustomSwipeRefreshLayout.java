@@ -56,7 +56,6 @@ import androidx.core.view.NestedScrollingParent3;
 import androidx.core.view.NestedScrollingParentHelper;
 import androidx.core.view.ViewCompat;
 import androidx.core.widget.ListViewCompat;
-import com.google.android.material.elevation.SurfaceColors;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 
@@ -424,7 +423,11 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
 
     // M3 CUSTOMIZATIONS
 
-    setProgressBackgroundColorSchemeColor(SurfaceColors.SURFACE_1.getColor(context));
+    setProgressBackgroundColorSchemeColor(
+        // TODO: replace with attribute when fixed in MDC
+        //ResUtil.getColorAttr(context, R.attr.colorSurfaceContainer)
+        ResUtil.getColorSurfaceContainer(context)
+    );
     setColorSchemeColors(ResUtil.getColorAttr(context, R.attr.colorPrimary));
     setSize(LARGE);
   }

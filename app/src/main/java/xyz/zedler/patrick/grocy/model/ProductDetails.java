@@ -100,6 +100,12 @@ public class ProductDetails implements Parcelable {
   @SerializedName("has_childs")
   private final String hasChilds;
 
+  @SerializedName("qu_conversion_factor_price_to_stock")
+  private final String quFactorPriceToStock; // quantity unit
+
+  @SerializedName("qu_conversion_factor_purchase_to_stock")
+  private final String quFactorPurchaseToStock; // quantity unit
+
   public ProductDetails(Parcel parcel) {
     product = parcel.readParcelable(Product.class.getClassLoader());
     lastPurchased = parcel.readString();
@@ -122,6 +128,8 @@ public class ProductDetails implements Parcelable {
     spoilRatePercent = parcel.readString();
     isAggregatedAmount = parcel.readString();
     hasChilds = parcel.readString();
+    quFactorPriceToStock = parcel.readString();
+    quFactorPurchaseToStock = parcel.readString();
   }
 
   @Override
@@ -147,6 +155,8 @@ public class ProductDetails implements Parcelable {
     dest.writeString(spoilRatePercent);
     dest.writeString(isAggregatedAmount);
     dest.writeString(hasChilds);
+    dest.writeString(quFactorPriceToStock);
+    dest.writeString(quFactorPurchaseToStock);
   }
 
   public static final Creator<ProductDetails> CREATOR = new Creator<>() {
@@ -248,6 +258,14 @@ public class ProductDetails implements Parcelable {
 
   public String getCurrentPrice() {
     return currentPrice;
+  }
+
+  public double getQuFactorPriceToStock() {
+    return NumUtil.isStringDouble(quFactorPriceToStock) ? NumUtil.toDouble(quFactorPriceToStock) : 0;
+  }
+
+  public double getQuFactorPurchaseToStock() {
+    return NumUtil.isStringDouble(quFactorPurchaseToStock) ? NumUtil.toDouble(quFactorPurchaseToStock) : 0;
   }
 
   public String getHasChilds() {

@@ -36,7 +36,6 @@ import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
-import com.google.android.material.elevation.SurfaceColors;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -427,7 +426,6 @@ public class RecipePositionResolvedAdapter extends
     Chip chip = (Chip) LayoutInflater.from(context).inflate(
         R.layout.view_info_chip, null, false
     );
-    chip.setChipBackgroundColor(ColorStateList.valueOf(SurfaceColors.SURFACE_4.getColor(context)));
     chip.setText(text);
     chip.setTextColor(ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorOnSurface)));
     chip.setEnabled(false);

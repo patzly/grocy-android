@@ -25,10 +25,10 @@ import android.graphics.drawable.LayerDrawable;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.color.ColorRoles;
 import com.google.android.material.color.MaterialColors;
-import com.google.android.material.elevation.SurfaceColors;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
@@ -60,7 +60,11 @@ public class SelectionCardView extends MaterialCardView {
     setRadius(outerRadius);
     setCardElevation(0);
     setCardForegroundColor(null);
-    super.setCardBackgroundColor(SurfaceColors.SURFACE_1.getColor(context));
+    // TODO: replace with attribute when fixed in MDC
+    //super.setCardBackgroundColor(ResUtil.getColorAttr(context, R.attr.colorSurfaceContainer));
+    super.setCardBackgroundColor(
+        ContextCompat.getColorStateList(context, R.color.selector_fix_surface_container)
+    );
     setRippleColor(ColorStateList.valueOf(ResUtil.getColorHighlight(context)));
     setStrokeWidth(0);
     setCheckable(true);

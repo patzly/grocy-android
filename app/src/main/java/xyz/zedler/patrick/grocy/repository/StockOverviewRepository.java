@@ -33,6 +33,7 @@ import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
@@ -55,6 +56,7 @@ public class StockOverviewRepository {
   public static class StockOverviewData {
 
     private final List<QuantityUnit> quantityUnits;
+    private final List<QuantityUnitConversionResolved> quantityUnitConversions;
     private final List<ProductGroup> productGroups;
     private final List<StockItem> stockItems;
     private final List<Product> products;
@@ -70,6 +72,7 @@ public class StockOverviewRepository {
 
     public StockOverviewData(
         List<QuantityUnit> quantityUnits,
+        List<QuantityUnitConversionResolved> quantityUnitConversions,
         List<ProductGroup> productGroups,
         List<StockItem> stockItems,
         List<Product> products,
@@ -84,6 +87,7 @@ public class StockOverviewRepository {
         List<Userfield> userfields
     ) {
       this.quantityUnits = quantityUnits;
+      this.quantityUnitConversions = quantityUnitConversions;
       this.productGroups = productGroups;
       this.stockItems = stockItems;
       this.products = products;
@@ -100,6 +104,10 @@ public class StockOverviewRepository {
 
     public List<QuantityUnit> getQuantityUnits() {
       return quantityUnits;
+    }
+
+    public List<QuantityUnitConversionResolved> getQuantityUnitConversions() {
+      return quantityUnitConversions;
     }
 
     public List<ProductGroup> getProductGroups() {
@@ -155,6 +163,7 @@ public class StockOverviewRepository {
     RxJavaUtil
         .zip(
             appDatabase.quantityUnitDao().getQuantityUnits(),
+            appDatabase.quantityUnitConversionResolvedDao().getConversionsResolved(),
             appDatabase.productGroupDao().getProductGroups(),
             appDatabase.stockItemDao().getStockItems(),
             appDatabase.productDao().getProducts(),

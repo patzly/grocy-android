@@ -41,7 +41,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.color.ColorRoles;
-import com.google.android.material.elevation.SurfaceColors;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -220,16 +219,16 @@ public class ShoppingModeItemAdapter extends
       SortUtil.sortShoppingListItemsByName(itemsFromGroup, productNamesHashMap, true);
       groupedListItems.addAll(itemsFromGroup);
     }
-    if (showDoneItems && !doneItems.isEmpty()) {
-      groupedListItems.add(new GroupHeader(context.getString(R.string.subtitle_done)));
-      groupedListItems.addAll(doneItems);
-    }
     ShoppingListItemAdapter.addBottomNotes(
         context,
         shoppingListNotes,
         groupedListItems,
         !ungroupedItems.isEmpty() || !groupsSorted.isEmpty()
     );
+    if (showDoneItems && !doneItems.isEmpty()) {
+      groupedListItems.add(new GroupHeader(context.getString(R.string.subtitle_done)));
+      groupedListItems.addAll(doneItems);
+    }
     if ((!ungroupedItems.isEmpty() || !groupsSorted.isEmpty()) && priceTrackingEnabled) {
       ShoppingListItemAdapter.addTotalPrice(context, shoppingListItems, groupedListItems,
           productLastPurchasedHashMap, shoppingListItemAmountsHashMap,
@@ -408,20 +407,20 @@ public class ShoppingModeItemAdapter extends
 
     // AMOUNT
 
-    Double amountInQuUnit = shoppingListItemAmountsHashMap.get(item.getId());
+    Double amountInItemUnit = shoppingListItemAmountsHashMap.get(item.getId());
     if (activeFields.contains(ShoppingListViewModel.FIELD_AMOUNT)) {
       StringBuilder stringBuilderAmount = new StringBuilder();
-      if (product != null && amountInQuUnit != null) {
+      if (product != null && amountInItemUnit != null) {
         QuantityUnit quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
-        String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, amountInQuUnit);
+        String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, amountInItemUnit);
         if (quStr != null) {
           stringBuilderAmount.append(context.getString(
               R.string.subtitle_amount,
-              NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount),
+              NumUtil.trimAmount(amountInItemUnit, maxDecimalPlacesAmount),
               quStr
           ));
         } else {
-          stringBuilderAmount.append(NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount));
+          stringBuilderAmount.append(NumUtil.trimAmount(amountInItemUnit, maxDecimalPlacesAmount));
         }
       } else if (product != null) {
         QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
@@ -548,7 +547,7 @@ public class ShoppingModeItemAdapter extends
       ProductLastPurchased p = product != null
           ? productLastPurchasedHashMap.get(product.getId()) : null;
       if (p != null && p.getPrice() != null && !p.getPrice().isEmpty()) {
-        double amount = amountInQuUnit != null ? amountInQuUnit : item.getAmountDouble();
+        double amount = item.getAmountDouble();
         String price = NumUtil.isStringDouble(p.getPrice())
             ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice()) * amount,
             decimalPlacesPriceDisplay) : p.getPrice();
@@ -564,7 +563,7 @@ public class ShoppingModeItemAdapter extends
           ? productLastPurchasedHashMap.get(product.getId()) : null;
       if (p != null && p.getPrice() != null && !p.getPrice().isEmpty()) {
         String price = NumUtil.isStringDouble(p.getPrice())
-            ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice()),
+            ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice()) * conversionFactor,
             decimalPlacesPriceDisplay) : p.getPrice();
         Chip chipValue = createChip(context, context.getString(
             R.string.property_insert_per_unit,
@@ -587,9 +586,9 @@ public class ShoppingModeItemAdapter extends
 
   private Chip createChip(Context ctx, String text) {
     @SuppressLint("InflateParams")
-    Chip chip = (Chip) LayoutInflater.from(ctx)
-        .inflate(R.layout.view_info_chip, null, false);
-    chip.setChipBackgroundColor(ColorStateList.valueOf(SurfaceColors.SURFACE_4.getColor(ctx)));
+    Chip chip = (Chip) LayoutInflater.from(ctx).inflate(
+        R.layout.view_info_chip, null, false
+    );
     chip.setText(text);
     chip.setEnabled(false);
     chip.setClickable(false);

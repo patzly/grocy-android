@@ -205,6 +205,83 @@
 
           </LinearLayout>
 
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
+            android:paddingTop="12dp"
+            android:paddingBottom="0dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="0dp"
+            android:minHeight="64dp">
+
+            <ImageView
+              android:id="@+id/image_settings_contrast"
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_contrast_anim"
+              android:layout_gravity="center"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/setting_contrast"
+                android:paddingStart="0dp"
+                android:paddingEnd="16dp"/>
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Description"
+                android:text="@string/setting_contrast_description"
+                android:paddingStart="0dp"
+                android:paddingEnd="16dp"/>
+
+              <TextView
+                android:id="@+id/text_settings_contrast_dynamic"
+                style="@style/Widget.Grocy.TextView.ListItem.Description"
+                android:text="@string/setting_contrast_dynamic"
+                android:textColor="?attr/colorError"
+                android:paddingStart="0dp"
+                android:paddingEnd="16dp" />
+
+            </LinearLayout>
+
+          </LinearLayout>
+
+          <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="56dp"
+            android:scrollbars="none"
+            android:overScrollMode="ifContentScrolls">
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+              android:id="@+id/toggle_other_contrast"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginEnd="16dp"
+              app:singleSelection="true"
+              app:selectionRequired="true">
+
+              <Button
+                android:id="@+id/button_other_contrast_standard"
+                style="@style/Widget.Grocy.Button.OutlinedButton"
+                android:text="@string/setting_contrast_standard" />
+
+              <Button
+                android:id="@+id/button_other_contrast_medium"
+                style="@style/Widget.Grocy.Button.OutlinedButton"
+                android:text="@string/setting_contrast_medium" />
+
+              <Button
+                android:id="@+id/button_other_contrast_high"
+                style="@style/Widget.Grocy.Button.OutlinedButton"
+                android:text="@string/setting_contrast_high" />
+
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+          </HorizontalScrollView>
+
           <include
             android:id="@+id/partial_option_transition"
             layout="@layout/partial_option_transition" />

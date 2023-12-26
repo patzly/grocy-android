@@ -63,6 +63,7 @@ import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockItem;
@@ -123,6 +124,7 @@ public class StockOverviewViewModel extends BaseViewModel {
   private List<ShoppingListItem> shoppingListItems;
   private ArrayList<String> shoppingListItemsProductIds;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+  private List<QuantityUnitConversionResolved> quantityUnitConversions;
   private HashMap<Integer, MissingItem> productIdsMissingItems;
   private HashMap<Integer, Location> locationHashMap;
   private HashMap<Integer, HashMap<Integer, StockLocation>> stockLocationsHashMap;
@@ -207,6 +209,7 @@ public class StockOverviewViewModel extends BaseViewModel {
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
       quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
+      quantityUnitConversions = data.getQuantityUnitConversions();
       productGroupHashMap = ArrayUtil.getProductGroupsHashMap(data.getProductGroups());
       filterChipLiveDataProductGroup.setProductGroups(data.getProductGroups());
       this.products = data.getProducts();
@@ -685,6 +688,10 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   public HashMap<Integer, QuantityUnit> getQuantityUnitHashMap() {
     return quantityUnitHashMap;
+  }
+
+  public List<QuantityUnitConversionResolved> getQuantityUnitConversions() {
+    return quantityUnitConversions;
   }
 
   public QuantityUnit getQuantityUnitFromId(int id) {

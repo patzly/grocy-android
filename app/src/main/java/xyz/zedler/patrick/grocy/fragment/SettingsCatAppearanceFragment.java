@@ -22,6 +22,8 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,6 +34,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.content.ContextCompat;
@@ -41,7 +44,9 @@ import com.google.android.material.divider.MaterialDivider;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.CONTRAST;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.APPEARANCE;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.Constants.THEME;
 import xyz.zedler.patrick.grocy.R;
@@ -147,6 +152,48 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
       RestartUtil.restartToApply(activity, 0, getInstanceState());
     });
 
+    int idContrast;
+    switch (getSharedPrefs().getString(
+        APPEARANCE.UI_CONTRAST, SETTINGS_DEFAULT.APPEARANCE.UI_CONTRAST)) {
+      case CONTRAST.MEDIUM:
+        idContrast = R.id.button_other_contrast_medium;
+        break;
+      case CONTRAST.HIGH:
+        idContrast = R.id.button_other_contrast_high;
+        break;
+      default:
+        idContrast = R.id.button_other_contrast_standard;
+        break;
+    }
+    binding.toggleOtherContrast.check(idContrast);
+    binding.toggleOtherContrast.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+      if (!isChecked) {
+        return;
+      }
+      String pref;
+      if (checkedId == R.id.button_other_contrast_medium) {
+        pref = CONTRAST.MEDIUM;
+      } else if (checkedId == R.id.button_other_contrast_high) {
+        pref = CONTRAST.HIGH;
+      } else {
+        pref = CONTRAST.STANDARD;
+      }
+      getSharedPrefs().edit().putString(APPEARANCE.UI_CONTRAST, pref).apply();
+      performHapticClick();
+      ViewUtil.startIcon(binding.imageSettingsContrast);
+      RestartUtil.restartToApply(activity, 0, getInstanceState());
+    });
+    boolean enabled = !getSharedPrefs().getString(
+        APPEARANCE.THEME, SETTINGS_DEFAULT.APPEARANCE.THEME
+    ).equals(THEME.DYNAMIC);
+    binding.toggleOtherContrast.setEnabled(enabled);
+    binding.textSettingsContrastDynamic.setVisibility(enabled ? View.GONE : View.VISIBLE);
+    binding.textSettingsContrastDynamic.setText(
+        VERSION.SDK_INT >= VERSION_CODES.UPSIDE_DOWN_CAKE
+            ? R.string.setting_contrast_dynamic
+            : R.string.setting_contrast_dynamic_unsupported
+    );
+
     binding.partialOptionTransition.linearOtherTransition.setOnClickListener(
         v -> binding.partialOptionTransition.switchOtherTransition.setChecked(
             !binding.partialOptionTransition.switchOtherTransition.isChecked()
@@ -194,8 +241,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
   private void setUpThemeSelection() {
     boolean hasDynamic = DynamicColors.isDynamicColorAvailable();
     ViewGroup container = binding.linearOtherThemeContainer;
-    int colorsCount = 7;
-    for (int i = hasDynamic ? -1 : 0; i <= colorsCount; i++) {
+    for (int i = hasDynamic ? -1 : 0; i < 4; i++) {
       String name;
       int resId;
       switch (i) {
@@ -205,57 +251,56 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
           break;
         case 0:
           name = THEME.RED;
-          resId = R.style.Theme_Grocy_Red;
+          resId = getContrastThemeResId(
+              R.style.Theme_Grocy_Red,
+              R.style.ThemeOverlay_Grocy_Red_MediumContrast,
+              R.style.ThemeOverlay_Grocy_Red_HighContrast
+          );
           break;
         case 1:
           name = THEME.YELLOW;
-          resId = R.style.Theme_Grocy_Yellow;
+          resId = getContrastThemeResId(
+              R.style.Theme_Grocy_Yellow,
+              R.style.ThemeOverlay_Grocy_Yellow_MediumContrast,
+              R.style.ThemeOverlay_Grocy_Yellow_HighContrast
+          );
           break;
-        case 2:
-          name = THEME.LIME;
-          resId = R.style.Theme_Grocy_Lime;
-          break;
-        /*case 3:
-          name = THEME.GREEN;
-          resId = R.style.Theme_Grocy_Green;
-          break;*/
-        case 4:
-          name = THEME.TURQUOISE;
-          resId = R.style.Theme_Grocy_Turquoise;
-          break;
-        case 5:
-          name = THEME.TEAL;
-          resId = R.style.Theme_Grocy_Teal;
-          break;
-        case 6:
+        case 3:
           name = THEME.BLUE;
-          resId = R.style.Theme_Grocy_Blue;
-          break;
-        case 7:
-          name = THEME.PURPLE;
-          resId = R.style.Theme_Grocy_Purple;
+          resId = getContrastThemeResId(
+              R.style.Theme_Grocy_Blue,
+              R.style.ThemeOverlay_Grocy_Blue_MediumContrast,
+              R.style.ThemeOverlay_Grocy_Blue_HighContrast
+          );
           break;
         default:
           name = THEME.GREEN;
-          resId = R.style.Theme_Grocy_Green;
+          resId = getContrastThemeResId(
+              R.style.Theme_Grocy_Green,
+              R.style.ThemeOverlay_Grocy_Green_MediumContrast,
+              R.style.ThemeOverlay_Grocy_Green_HighContrast
+          );
           break;
       }
 
       SelectionCardView card = new SelectionCardView(activity);
+      card.setEnsureContrast(false);
       int color;
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && i == -1) {
+      if (i == -1 && VERSION.SDK_INT >= VERSION_CODES.S) {
+        int resIdLight = VERSION.SDK_INT >= VERSION_CODES.UPSIDE_DOWN_CAKE
+            ? android.R.color.system_primary_container_light
+            : android.R.color.system_accent1_100;
+        int resIdDark = VERSION.SDK_INT >= VERSION_CODES.UPSIDE_DOWN_CAKE
+            ? android.R.color.system_primary_container_dark
+            : android.R.color.system_accent1_700;
         color = ContextCompat.getColor(
-            activity,
-            UiUtil.isDarkModeActive(activity)
-                ? android.R.color.system_accent1_700
-                : android.R.color.system_accent1_100
+            activity, UiUtil.isDarkModeActive(activity) ? resIdDark : resIdLight
         );
       } else {
         color = ResUtil.getColorAttr(
             new ContextThemeWrapper(activity, resId), R.attr.colorPrimaryContainer
         );
       }
-      card.setEnsureContrast(false);
       card.setCardBackgroundColor(color);
       card.setOnClickListener(v -> {
         if (!card.isChecked()) {
@@ -339,5 +384,20 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
       subtitleShortcuts = getString(R.string.subtitle_not_supported);
     }
     binding.subtitleShortcuts.setText(subtitleShortcuts);
+  }
+
+  private int getContrastThemeResId(
+      @StyleRes int resIdStandard,
+      @StyleRes int resIdMedium,
+      @StyleRes int resIdHigh
+  ) {
+    switch (getSharedPrefs().getString(APPEARANCE.UI_CONTRAST, SETTINGS_DEFAULT.APPEARANCE.UI_CONTRAST)) {
+      case CONTRAST.MEDIUM:
+        return resIdMedium;
+      case CONTRAST.HIGH:
+        return resIdHigh;
+      default:
+        return resIdStandard;
+    }
   }
 }

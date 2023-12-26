@@ -39,7 +39,6 @@ import androidx.core.view.MenuCompat;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.elevation.SurfaceColors;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
@@ -240,10 +239,6 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     }
     ResUtil.tintMenuItemIcons(activity, binding.toolbar.getMenu());
 
-    ColorStateList colorSurface3 = ColorStateList.valueOf(
-        SurfaceColors.SURFACE_3.getColor(activity)
-    );
-    binding.chipConsume.setChipBackgroundColor(colorSurface3);
     binding.chipConsume.setVisibility(isInStock ? View.VISIBLE : View.GONE);
     binding.chipConsume.setOnClickListener(v -> {
       NavHostFragment.findNavController(this).navigate(
@@ -255,7 +250,6 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       dismiss();
     });
 
-    binding.chipPurchase.setChipBackgroundColor(colorSurface3);
     binding.chipPurchase.setOnClickListener(v -> {
       NavHostFragment.findNavController(this).navigate(
           ProductOverviewBottomSheetDirections
@@ -266,7 +260,6 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       dismiss();
     });
 
-    binding.chipTransfer.setChipBackgroundColor(colorSurface3);
     binding.chipTransfer.setVisibility(isInStock && product.getEnableTareWeightHandlingInt() == 0
         ? View.VISIBLE : View.GONE);
     binding.chipTransfer.setOnClickListener(v -> {
@@ -279,7 +272,6 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       dismiss();
     });
 
-    binding.chipInventory.setChipBackgroundColor(colorSurface3);
     binding.chipInventory.setOnClickListener(v -> {
       NavHostFragment.findNavController(this).navigate(
           ProductOverviewBottomSheetDirections
@@ -339,11 +331,11 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
         refreshButtonStates();
         refreshItems();
         loadStockLocations();
-        loadPriceHistory((float) details.getProduct().getQuFactorPurchaseToStockDouble());
+        loadPriceHistory((float) details.getQuFactorPriceToStock());
       }).perform(dlHelper.getUuid());
     } else if (activity.isOnline() && hasDetails()) {
       loadStockLocations();
-      loadPriceHistory((float) productDetails.getProduct().getQuFactorPurchaseToStockDouble());
+      loadPriceHistory((float) productDetails.getQuFactorPriceToStock());
     }
 
     if (product.getPictureFileName() != null && !product.getPictureFileName().isBlank()) {
@@ -488,7 +480,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
             activity.getString(
                 R.string.property_price_unit_insert,
                 NumUtil.trimPrice(NumUtil.toDouble(lastPrice)
-                    * productDetails.getProduct().getQuFactorPurchaseToStockDouble(), decimalPlacesPriceDisplay)
+                    * productDetails.getQuFactorPriceToStock(), decimalPlacesPriceDisplay)
                     + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
                 quantityUnitPurchase.getName()
             ),
@@ -510,7 +502,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
             activity.getString(
                 R.string.property_price_unit_insert,
                 NumUtil.trimPrice(NumUtil.toDouble(averagePrice)
-                    * productDetails.getProduct().getQuFactorPurchaseToStockDouble(), decimalPlacesPriceDisplay)
+                    * productDetails.getQuFactorPriceToStock(), decimalPlacesPriceDisplay)
                     + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
                 quantityUnitPurchase.getName()
             ),

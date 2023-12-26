@@ -260,23 +260,11 @@ public class ReminderUtil {
       case THEME.YELLOW:
         themeResId = R.style.Theme_Grocy_Yellow;
         break;
-      case THEME.LIME:
-        themeResId = R.style.Theme_Grocy_Lime;
-        break;
       case THEME.GREEN:
         themeResId = R.style.Theme_Grocy_Green;
         break;
-      case THEME.TURQUOISE:
-        themeResId = R.style.Theme_Grocy_Turquoise;
-        break;
-      case THEME.TEAL:
-        themeResId = R.style.Theme_Grocy_Teal;
-        break;
       case THEME.BLUE:
         themeResId = R.style.Theme_Grocy_Blue;
-        break;
-      case THEME.PURPLE:
-        themeResId = R.style.Theme_Grocy_Purple;
         break;
       default:
         if (DynamicColors.isDynamicColorAvailable()) {

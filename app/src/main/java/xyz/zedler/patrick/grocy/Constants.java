@@ -137,6 +137,7 @@ public final class Constants {
     public final static String LAST_VERSION_DATABASE = "last_version_database";
     public final static String ZXING_PROMPT = "zxing_prompt";
     public final static String OVERVIEW_FAB_INFO_SHOWN = "overview_fab_info_shown";
+    public final static String CONSUME_FAB_INFO_SHOWN = "consume_fab_info_shown";
   }
 
   public final static class SETTINGS {
@@ -149,6 +150,7 @@ public final class Constants {
 
       public final static String THEME = "app_theme"; // theme identifier is already used
       public final static String DARK_MODE = "dark_mode";
+      public static final String UI_CONTRAST = "contrast";
       public static final String USE_SLIDING = "use_sliding_transition";
     }
 
@@ -254,6 +256,7 @@ public final class Constants {
 
       public final static String THEME = "";
       public final static int DARK_MODE = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+      public static final String UI_CONTRAST = CONTRAST.STANDARD;
       public static final boolean USE_SLIDING = false;
     }
 
@@ -507,11 +510,14 @@ public final class Constants {
     public static final String DYNAMIC = "dynamic";
     public static final String RED = "red";
     public static final String YELLOW = "yellow";
-    public static final String LIME = "lime";
     public static final String GREEN = "green";
-    public static final String TURQUOISE = "turquoise";
-    public static final String TEAL = "teal";
     public static final String BLUE = "blue";
-    public static final String PURPLE = "purple";
+  }
+
+  public static final class CONTRAST {
+
+    public static final String STANDARD = "standard";
+    public static final String MEDIUM = "medium";
+    public static final String HIGH = "high";
   }
 }
