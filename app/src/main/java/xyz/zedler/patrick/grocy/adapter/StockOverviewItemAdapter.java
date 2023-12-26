@@ -352,7 +352,6 @@ public class StockOverviewItemAdapter extends
     ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
     ColorRoles colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
     ColorRoles colorOrange = ResUtil.getHarmonizedRoles(context, R.color.orange);
-    ColorRoles colorRed = ResUtil.getHarmonizedRoles(context, R.color.red);
 
     holder.binding.flexboxLayout.removeAllViews();
 
@@ -426,8 +425,10 @@ public class StockOverviewItemAdapter extends
           chipDate.setTextColor(colorOrange.getOnAccentContainer());
           chipDate.setChipBackgroundColor(ColorStateList.valueOf(colorOrange.getAccentContainer())); // formally DIRT
         } else {
-          chipDate.setTextColor(colorRed.getOnAccentContainer());
-          chipDate.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getAccentContainer()));
+          chipDate.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnErrorContainer));
+          chipDate.setChipBackgroundColor(
+              ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorErrorContainer))
+          );
         }
       }
       holder.binding.flexboxLayout.addView(chipDate);

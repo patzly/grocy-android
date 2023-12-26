@@ -82,7 +82,7 @@ public class RecipePositionResolvedAdapter extends
   private final int maxDecimalPlacesPrice;
   private final ColorRoles colorGreen;
   private final ColorRoles colorYellow;
-  private final ColorRoles colorRed;
+  private final int colorRed;
   private final String energyUnit;
   private final String currency;
 
@@ -121,7 +121,7 @@ public class RecipePositionResolvedAdapter extends
 
     colorGreen = ResUtil.getHarmonizedRoles(context, R.color.green);
     colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
-    colorRed = ResUtil.getHarmonizedRoles(context, R.color.red);
+    colorRed = ResUtil.getColorAttr(context, R.attr.colorError);
   }
 
   @Override
@@ -351,7 +351,7 @@ public class RecipePositionResolvedAdapter extends
         ));
         holder.binding.imageFulfillment.setImageTintList(
             ColorStateList.valueOf(
-                amountShoppingList >= amountMissing ? colorYellow.getAccent() : colorRed.getAccent()
+                amountShoppingList >= amountMissing ? colorYellow.getAccent() : colorRed
             )
         );
         holder.binding.missing.setText(

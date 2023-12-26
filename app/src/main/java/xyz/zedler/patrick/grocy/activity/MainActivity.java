@@ -138,7 +138,10 @@ public class MainActivity extends AppCompatActivity {
     AppCompatDelegate.setDefaultNightMode(modeNight);
     ResUtil.applyConfigToResources(this, modeNight);
 
+    // COLOR
+
     UiUtil.setTheme(this, sharedPrefs);
+    UiUtil.applyColorHarmonization(this);
 
     Bundle bundleInstanceState = getIntent().getBundleExtra(ARGUMENT.INSTANCE_STATE);
     super.onCreate(bundleInstanceState != null ? bundleInstanceState : savedInstanceState);
@@ -157,17 +160,13 @@ public class MainActivity extends AppCompatActivity {
     LocaleUtil.setLocalizedGrocyDemoInstance(this, sharedPrefs);  // set localized demo instance
     ShortcutUtil.refreshShortcuts(this);  // refresh shortcut language
 
-    // COLOR
-
-    ResUtil.applyColorHarmonization(this);
-
     // DATABASE
 
     // Workaround for issue #698
     // https://github.com/andpor/react-native-sqlite-storage/issues/364#issuecomment-526423153
     try {
-      @SuppressLint("PrivateApi") Field field = CursorWindow.class
-          .getDeclaredField("sCursorWindowSize");
+      @SuppressLint("PrivateApi")
+      Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
       field.setAccessible(true);
       field.set(null, 10 * 1024 * 1024); // 10MB is the new size
     } catch (Exception e) {

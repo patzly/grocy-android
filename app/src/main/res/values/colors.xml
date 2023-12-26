@@ -19,8 +19,6 @@
 
 <resources>
 
-  <color name="black">@android:color/black</color>
-  <color name="white">@android:color/white</color>
   <color name="transparent">@android:color/transparent</color>
   <color name="blue">#3a608d</color>
   <color name="green">#4c662d</color>
@@ -28,7 +26,6 @@
   <color name="orange">#885122</color>
   <color name="red">#8f4b49</color>
 
-  <color name="shortcut_bg">#f5f5f5</color>
   <color name="green_neutral_99">#FDFDF6</color>
 
   <color name="logo_yellow">@color/custom_yellow_80</color>

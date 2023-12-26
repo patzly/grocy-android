@@ -68,6 +68,7 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.color.DynamicColorsOptions;
+import com.google.android.material.color.HarmonizedColorAttributes;
 import com.google.android.material.color.HarmonizedColors;
 import com.google.android.material.color.HarmonizedColorsOptions;
 import com.google.android.material.math.MathUtils;
@@ -168,6 +169,55 @@ public class UiUtil {
       default:
         activity.setTheme(resIdStandard);
     }
+  }
+
+  public static void applyColorHarmonization(Context context) {
+    int[] resIds = new int[] {
+        R.color.logo_yellow,
+        R.color.logo_green,
+        R.color.logo_red,
+
+        R.color.custom_yellow_80,
+        R.color.custom_yellow_50,
+        R.color.custom_yellow_30,
+
+        R.color.custom_green_80,
+        R.color.custom_green_50,
+
+        R.color.custom_red_60,
+        R.color.custom_red_50,
+        R.color.custom_red_35,
+        R.color.custom_red_30,
+
+        R.color.custom_brown_90,
+        R.color.custom_brown_70,
+        R.color.custom_brown_50,
+        R.color.custom_brown_30,
+
+        R.color.custom_dirt_95,
+        R.color.custom_dirt_90,
+        R.color.custom_dirt_80,
+        R.color.custom_dirt_60,
+        R.color.custom_dirt_40,
+        R.color.custom_dirt_30,
+
+        R.color.custom_blue_90,
+        R.color.custom_blue_70,
+        R.color.custom_blue_60,
+        R.color.custom_blue_40,
+        R.color.custom_blue_10,
+
+        R.color.custom_grey_95,
+        R.color.custom_grey_90,
+        R.color.custom_grey_80,
+        R.color.custom_grey_60,
+        R.color.custom_grey_10,
+    };
+    HarmonizedColorsOptions options = new HarmonizedColorsOptions.Builder()
+        .setColorResourceIds(resIds)
+        .setColorAttributes(HarmonizedColorAttributes.createMaterialDefaults())
+        .build();
+    HarmonizedColors.applyToContextIfAvailable(context, options);
   }
 
   public static void layoutEdgeToEdge(Window window) {

@@ -48,8 +48,6 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.databinding.BindingAdapter;
 import com.google.android.material.color.ColorRoles;
-import com.google.android.material.color.HarmonizedColors;
-import com.google.android.material.color.HarmonizedColorsOptions;
 import com.google.android.material.color.MaterialColors;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -106,54 +104,6 @@ public class ResUtil {
     intent.putExtra(Intent.EXTRA_TEXT, context.getString(resId));
     intent.setType("text/plain");
     context.startActivity(Intent.createChooser(intent, null));
-  }
-
-  public static void applyColorHarmonization(Context context) {
-    int[] resIds = new int[] {
-        R.color.logo_yellow,
-        R.color.logo_green,
-        R.color.logo_red,
-
-        R.color.custom_yellow_80,
-        R.color.custom_yellow_50,
-        R.color.custom_yellow_30,
-
-        R.color.custom_green_80,
-        R.color.custom_green_50,
-
-        R.color.custom_red_60,
-        R.color.custom_red_50,
-        R.color.custom_red_35,
-        R.color.custom_red_30,
-
-        R.color.custom_brown_90,
-        R.color.custom_brown_70,
-        R.color.custom_brown_50,
-        R.color.custom_brown_30,
-
-        R.color.custom_dirt_95,
-        R.color.custom_dirt_90,
-        R.color.custom_dirt_80,
-        R.color.custom_dirt_60,
-        R.color.custom_dirt_40,
-        R.color.custom_dirt_30,
-
-        R.color.custom_blue_90,
-        R.color.custom_blue_70,
-        R.color.custom_blue_60,
-        R.color.custom_blue_40,
-        R.color.custom_blue_10,
-
-        R.color.custom_grey_95,
-        R.color.custom_grey_90,
-        R.color.custom_grey_80,
-        R.color.custom_grey_60,
-        R.color.custom_grey_10,
-    };
-    HarmonizedColorsOptions options = new HarmonizedColorsOptions.Builder()
-        .setColorResourceIds(resIds)
-        .build();
-    HarmonizedColors.applyToContextIfAvailable(context, options);
   }
 
   // TODO: replace with attributes when fixed in MDC and remove below methods
