@@ -182,6 +182,53 @@
           </LinearLayout>
 
           <LinearLayout
+            android:id="@+id/linear_translation"
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_translate"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                android:text="@string/info_translation" />
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/info_translation_description" />
+
+            </LinearLayout>
+
+          </LinearLayout>
+
+          <LinearLayout
+            android:id="@+id/linear_privacy"
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
+
+            <ImageView
+              android:id="@+id/image_privacy"
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon.Colored"
+              android:src="@drawable/ic_round_policy_anim"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                android:text="@string/info_privacy" />
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/info_privacy_description" />
+
+            </LinearLayout>
+
+          </LinearLayout>
+
+          <LinearLayout
             android:id="@+id/linear_intro"
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
 

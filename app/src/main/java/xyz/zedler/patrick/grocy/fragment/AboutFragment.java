@@ -82,6 +82,8 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         R.id.linear_changelog,
         R.id.linear_developers,
         R.id.linear_github,
+        R.id.linear_translation,
+        R.id.linear_privacy,
         R.id.linear_license_conscrypt,
         R.id.linear_license_fuzzywuzzy,
         R.id.linear_license_gson,
@@ -132,6 +134,17 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
       startActivity(new Intent(
           Intent.ACTION_VIEW,
           Uri.parse(getString(R.string.url_github))
+      ));
+    } else if (v.getId() == R.id.linear_translation) {
+      startActivity(new Intent(
+          Intent.ACTION_VIEW,
+          Uri.parse(getString(R.string.url_translate))
+      ));
+    } else if (v.getId() == R.id.linear_privacy) {
+      ViewUtil.startIcon(binding.imagePrivacy);
+      startActivity(new Intent(
+          Intent.ACTION_VIEW,
+          Uri.parse(getString(R.string.url_privacy))
       ));
     } else if (v.getId() == R.id.linear_license_conscrypt) {
       ViewUtil.startIcon(binding.imageLicenseConscrypt);

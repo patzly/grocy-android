@@ -1,0 +1,104 @@
+<!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
+  -->
+
+<animated-vector
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:aapt="http://schemas.android.com/aapt">
+  <aapt:attr name="android:drawable">
+    <vector
+      android:name="vector"
+      android:width="24dp"
+      android:height="24dp"
+      android:viewportWidth="24"
+      android:viewportHeight="24">
+      <clip-path
+        android:name="mask"
+        android:pathData="M 11.996 1.188 C 11.72 1.188 11.444 1.244 11.189 1.359 L 4.189 4.471 C 3.469 4.791 3 5.511 3 6.301 L 3 11 C 3 16.55 6.84 21.74 12 23 C 17.106 21.719 21 16.576 21 11 L 21 6.301 C 21 5.511 20.531 4.791 19.811 4.471 L 12.811 1.359 C 12.551 1.244 12.272 1.188 11.996 1.188 Z" />
+      <group
+        android:name="group"
+        android:pivotX="18"
+        android:pivotY="18">
+        <path
+          android:name="path"
+          android:pathData="M -5 -5 L -5 29 L 27.586 29 L 14.754 16.168 C 13.937 16.709 12.98 16.998 12 17 C 10.674 17 9.402 16.473 8.464 15.536 C 7.527 14.598 7 13.326 7 12 C 7 10.674 7.527 9.402 8.464 8.464 C 9.402 7.527 10.674 7 12 7 C 13.326 7 14.598 7.527 15.536 8.464 C 16.473 9.402 17 10.674 17 12 C 16.998 12.98 16.709 13.937 16.168 14.754 L 29 27.586 L 29 -5 L -5 -5 Z M 12 9 C 11.205 9 10.441 9.316 9.879 9.879 C 9.316 10.441 9 11.205 9 12 C 9 12.795 9.316 13.559 9.879 14.121 C 10.441 14.684 11.205 15 12 15 C 12.795 15 13.559 14.684 14.121 14.121 C 14.684 13.559 15 12.795 15 12 C 15 11.205 14.684 10.441 14.121 9.879 C 13.559 9.316 12.795 9 12 9 Z"
+          android:fillColor="?attr/colorOnSurfaceVariant"
+          android:strokeWidth="1" />
+      </group>
+    </vector>
+  </aapt:attr>
+  <target android:name="group">
+    <aapt:attr name="android:animation">
+      <set>
+        <objectAnimator
+          android:propertyName="rotation"
+          android:duration="120"
+          android:valueFrom="0"
+          android:valueTo="20"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="translateX"
+          android:duration="100"
+          android:valueFrom="0"
+          android:valueTo="-4"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="120"
+          android:duration="180"
+          android:valueFrom="20"
+          android:valueTo="0"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="translateX"
+          android:startOffset="100"
+          android:duration="100"
+          android:valueFrom="-4"
+          android:valueTo="1"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="translateY"
+          android:duration="120"
+          android:valueFrom="0"
+          android:valueTo="4"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="translateY"
+          android:startOffset="120"
+          android:duration="100"
+          android:valueFrom="4"
+          android:valueTo="0"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="translateX"
+          android:startOffset="200"
+          android:duration="100"
+          android:valueFrom="1"
+          android:valueTo="0"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+      </set>
+    </aapt:attr>
+  </target>
+</animated-vector>

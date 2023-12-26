@@ -1148,6 +1148,10 @@
   <string name="info_github">Grocy Android on GitHub</string>
   <string name="info_github_description">Source code</string>
   <string name="info_website">Open Grocy website</string>
+  <string name="info_translation" translatable="false">Transifex</string>
+  <string name="info_translation_description">Help translate Grocy Android</string>
+  <string name="info_privacy">Privacy policy</string>
+  <string name="info_privacy_description">How is your data processed?</string>
 
   <string name="feature_1_title">Grocy for Android</string>
   <string name="feature_1_description">Self-hosted grocery management for your home</string>
@@ -1348,6 +1352,8 @@
   <string name="url_developer" translatable="false">http://play.google.com/store/apps/dev?id=5870283381366287608</string>
   <string name="url_github" translatable="false">https://github.com/patzly/grocy-android/</string>
   <string name="url_github_issues" translatable="false">https://github.com/patzly/grocy-android/issues/</string>
+  <string name="url_translate" translatable="false">https://app.transifex.com/patzly/grocy-android/</string>
+  <string name="url_privacy" translatable="false">https://patrickzedler.com/grocy/privacy-policy-grocy/</string>
 
   <string name="url_conscrypt" translatable="false">https://github.com/google/conscrypt/</string>
   <string name="url_fuzzywuzzy" translatable="false">https://github.com/xdrop/fuzzywuzzy</string>

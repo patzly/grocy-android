@@ -17,6 +17,7 @@
 - Fixed: ML Kit scanner could not start again after going to "choose product" page in
   normal mode (not quick mode)
 - Fixed: Impossible login due to disabled animations (#814)
+- Fixed: Privacy policy link missing (#813)
 
 ## 3.4.2
 
