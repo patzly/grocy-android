@@ -1238,7 +1238,7 @@
   <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
   <string name="setting_contrast_high">Alto</string>
   <string name="setting_contrast_dynamic">O contraste do tema do dispositivo deve ser definido nas configurações do sistema</string>
-  <string name="setting_contrast_dynamic_unsupported">O contraste dinâmico para o tema do dispositivo está disponível apenas no Android 14+</string>
+  <string name="setting_contrast_dynamic_unsupported">O contraste dinâmico para o tema do dispositivo está disponível apenas no Android 14 ou superior</string>
   <string name="setting_language">Idioma</string>
   <string name="setting_language_description">Selecione idioma</string>
   <string name="setting_language_info">Muito obrigado a todos os tradutores voluntários da Transifex!\nVisite-nos no GitHub para saber como você pode ajudar a tornar o Grocy Android disponível para o seu idioma.</string>
