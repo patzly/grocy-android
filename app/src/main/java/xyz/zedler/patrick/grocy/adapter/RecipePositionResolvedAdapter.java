@@ -80,9 +80,7 @@ public class RecipePositionResolvedAdapter extends
   private final PluralUtil pluralUtil;
   private final int maxDecimalPlacesAmount;
   private final int maxDecimalPlacesPrice;
-  private final ColorRoles colorGreen;
-  private final ColorRoles colorYellow;
-  private final int colorRed;
+  private final int colorGreen, colorYellow, colorRed;
   private final String energyUnit;
   private final String currency;
 
@@ -119,8 +117,8 @@ public class RecipePositionResolvedAdapter extends
     this.listener = listener;
     this.pluralUtil = new PluralUtil(context);
 
-    colorGreen = ResUtil.getHarmonizedRoles(context, R.color.green);
-    colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
+    colorGreen = ResUtil.getColorAttr(context, R.attr.colorCustomGreen);
+    colorYellow = ResUtil.getColorAttr(context, R.attr.colorCustomYellow);
     colorRed = ResUtil.getColorAttr(context, R.attr.colorError);
   }
 
@@ -329,9 +327,7 @@ public class RecipePositionResolvedAdapter extends
             R.drawable.ic_round_check_circle_outline,
             null
         ));
-        holder.binding.imageFulfillment.setImageTintList(
-            ColorStateList.valueOf(colorGreen.getAccent())
-        );
+        holder.binding.imageFulfillment.setImageTintList(ColorStateList.valueOf(colorGreen));
         holder.binding.missing.setVisibility(View.GONE);
       } else {
         double amountMissing = conversion != null
@@ -350,9 +346,7 @@ public class RecipePositionResolvedAdapter extends
             null
         ));
         holder.binding.imageFulfillment.setImageTintList(
-            ColorStateList.valueOf(
-                amountShoppingList >= amountMissing ? colorYellow.getAccent() : colorRed
-            )
+            ColorStateList.valueOf(amountShoppingList >= amountMissing ? colorYellow : colorRed)
         );
         holder.binding.missing.setText(
             context.getString(

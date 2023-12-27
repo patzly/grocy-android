@@ -66,6 +66,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.color.ColorContrast;
+import com.google.android.material.color.ColorContrastOptions;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.color.DynamicColorsOptions;
 import com.google.android.material.color.HarmonizedColorAttributes;
@@ -131,13 +133,13 @@ public class UiUtil {
         break;
       default:
         if (DynamicColors.isDynamicColorAvailable()) {
-          DynamicColors.applyToActivityIfAvailable(
+          DynamicColors.applyToActivityIfAvailable(activity);
+          ColorContrast.applyToActivityIfAvailable(
               activity,
-              new DynamicColorsOptions.Builder().setOnAppliedCallback(
-                  activityCallback -> HarmonizedColors.applyToContextIfAvailable(
-                      activity, HarmonizedColorsOptions.createMaterialDefaults()
-                  )
-              ).build()
+              new ColorContrastOptions.Builder()
+                  .setMediumContrastThemeOverlay(R.style.ThemeOverlay_Grocy_MediumContrast)
+                  .setHighContrastThemeOverlay(R.style.ThemeOverlay_Grocy_HighContrast)
+                  .build()
           );
         } else {
           setContrastTheme(
@@ -172,6 +174,32 @@ public class UiUtil {
   }
 
   public static void applyColorHarmonization(Context context) {
+    int[] attrIds = new int[] {
+        R.attr.colorError,
+        R.attr.colorOnError,
+        R.attr.colorErrorContainer,
+        R.attr.colorOnErrorContainer,
+
+        R.attr.colorCustomBlue,
+        R.attr.colorOnCustomBlue,
+        R.attr.colorCustomBlueContainer,
+        R.attr.colorOnCustomBlueContainer,
+
+        R.attr.colorCustomGreen,
+        R.attr.colorOnCustomGreen,
+        R.attr.colorCustomGreenContainer,
+        R.attr.colorOnCustomGreenContainer,
+
+        R.attr.colorCustomYellow,
+        R.attr.colorOnCustomYellow,
+        R.attr.colorCustomYellowContainer,
+        R.attr.colorOnCustomYellowContainer,
+
+        R.attr.colorCustomOrange,
+        R.attr.colorOnCustomOrange,
+        R.attr.colorCustomOrangeContainer,
+        R.attr.colorOnCustomOrangeContainer
+    };
     int[] resIds = new int[] {
         R.color.logo_yellow,
         R.color.logo_green,
@@ -215,7 +243,7 @@ public class UiUtil {
     };
     HarmonizedColorsOptions options = new HarmonizedColorsOptions.Builder()
         .setColorResourceIds(resIds)
-        .setColorAttributes(HarmonizedColorAttributes.createMaterialDefaults())
+        .setColorAttributes(HarmonizedColorAttributes.create(attrIds))
         .build();
     HarmonizedColors.applyToContextIfAvailable(context, options);
   }

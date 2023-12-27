@@ -355,8 +355,6 @@ public class ShoppingModeItemAdapter extends
     ShoppingListItem item = (ShoppingListItem) groupedListItem;
     RowShoppingModeItemBinding binding = ((ShoppingItemViewHolder) viewHolder).binding;
 
-    ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
-
     if (useSmallerFonts) {
       int dp8 = UiUtil.dpToPx(binding.name.getContext(), 8);
       binding.card.setContentPadding(dp8, 0, dp8, 0);
@@ -439,8 +437,10 @@ public class ShoppingModeItemAdapter extends
       }
       Chip chipAmount = createChip(context, stringBuilderAmount.toString());
       if (item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {
-        chipAmount.setTextColor(colorBlue.getOnAccentContainer());
-        chipAmount.setChipBackgroundColor(ColorStateList.valueOf(colorBlue.getAccentContainer()));
+        chipAmount.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnCustomBlueContainer));
+        chipAmount.setChipBackgroundColor(ColorStateList.valueOf(
+            ResUtil.getColorAttr(context, R.attr.colorCustomBlueContainer)
+        ));
       }
       if (item.isUndone()) {
         chipAmount.setPaintFlags(chipAmount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));

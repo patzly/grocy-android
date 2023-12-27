@@ -150,15 +150,13 @@ public class ChoreEntryAdapter extends
           ResourcesCompat.getFont(context, R.font.jost_medium)
       );
 
-      ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
-      ColorRoles colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
       int color;
       if (days < 0) {
         color = ResUtil.getColorAttr(context, R.attr.colorError);
       } else if (days == 0) {
-        color = colorBlue.getAccent();
+        color = ResUtil.getColorAttr(context, R.attr.colorCustomBlue);
       } else {
-        color = colorYellow.getAccent();
+        color = ResUtil.getColorAttr(context, R.attr.colorCustomYellow);
       }
       holder.binding.days.setTextColor(color);
       holder.binding.daysHuman.setTextColor(color);

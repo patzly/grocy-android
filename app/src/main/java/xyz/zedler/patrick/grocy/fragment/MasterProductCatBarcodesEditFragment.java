@@ -134,8 +134,9 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
       viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
     });
 
-    ColorRoles roles = ResUtil.getHarmonizedRoles(activity, R.color.blue);
-    binding.textInputAmount.setHelperTextColor(ColorStateList.valueOf(roles.getAccent()));
+    binding.textInputAmount.setHelperTextColor(ColorStateList.valueOf(
+        ResUtil.getColorAttr(activity, R.attr.colorCustomBlue)
+    ));
 
     embeddedFragmentScanner.setScannerVisibilityLive(
         viewModel.getFormData().getScannerVisibilityLive()

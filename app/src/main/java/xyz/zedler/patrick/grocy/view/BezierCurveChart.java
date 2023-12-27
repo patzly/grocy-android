@@ -85,7 +85,7 @@ public class BezierCurveChart extends View {
   private final RectF rectBadge = new RectF();
   private final Rect rectMeasure = new Rect();
   private final Rect rectDrawing = new Rect();
-  private final List<ColorRoles> curveColors = new ArrayList<>();
+  private final int[] colorsAccent, colorsOnAccent, colorsAccentContainer, colorsOnAccentContainer;
   private ArrayList<String> labels;
   private HashMap<String, ArrayList<Point>> curveLists;
   private final HashMap<String, ArrayList<Point>> adjustedCurveLists = new HashMap<>();
@@ -121,11 +121,34 @@ public class BezierCurveChart extends View {
     paintCurve.setStyle(Paint.Style.STROKE);
     paintCurve.setStrokeWidth(UiUtil.dpToPx(context, 2));
 
-    curveColors.add(ResUtil.getHarmonizedRoles(context, R.color.green));
-    curveColors.add(ResUtil.getHarmonizedRoles(context, R.color.yellow));
-    curveColors.add(ResUtil.getHarmonizedRoles(context, R.color.orange));
-    curveColors.add(ResUtil.getHarmonizedRoles(context, R.color.red));
-    curveColors.add(ResUtil.getHarmonizedRoles(context, R.color.blue));
+    colorsAccent = new int[] {
+        ResUtil.getColorAttr(context, R.attr.colorCustomBlue),
+        ResUtil.getColorAttr(context, R.attr.colorCustomGreen),
+        ResUtil.getColorAttr(context, R.attr.colorCustomYellow),
+        ResUtil.getColorAttr(context, R.attr.colorCustomOrange),
+        ResUtil.getColorAttr(context, R.attr.colorError)
+    };
+    colorsOnAccent = new int[] {
+        ResUtil.getColorAttr(context, R.attr.colorOnCustomBlue),
+        ResUtil.getColorAttr(context, R.attr.colorOnCustomGreen),
+        ResUtil.getColorAttr(context, R.attr.colorOnCustomYellow),
+        ResUtil.getColorAttr(context, R.attr.colorOnCustomOrange),
+        ResUtil.getColorAttr(context, R.attr.colorOnError)
+    };
+    colorsAccentContainer = new int[] {
+        ResUtil.getColorAttr(context, R.attr.colorCustomBlueContainer),
+        ResUtil.getColorAttr(context, R.attr.colorCustomGreenContainer),
+        ResUtil.getColorAttr(context, R.attr.colorCustomYellowContainer),
+        ResUtil.getColorAttr(context, R.attr.colorCustomOrangeContainer),
+        ResUtil.getColorAttr(context, R.attr.colorErrorContainer)
+    };
+    colorsOnAccentContainer = new int[] {
+        ResUtil.getColorAttr(context, R.attr.colorOnCustomBlueContainer),
+        ResUtil.getColorAttr(context, R.attr.colorOnCustomGreenContainer),
+        ResUtil.getColorAttr(context, R.attr.colorOnCustomYellowContainer),
+        ResUtil.getColorAttr(context, R.attr.colorOnCustomOrangeContainer),
+        ResUtil.getColorAttr(context, R.attr.colorOnErrorContainer)
+    };
 
     paintDot.setStyle(Paint.Style.FILL);
     paintDot.setAntiAlias(true);
@@ -138,9 +161,7 @@ public class BezierCurveChart extends View {
     paintChartBg.setAntiAlias(true);
 
     paintGrid.setStyle(Paint.Style.STROKE);
-    // TODO: use colorOutlineVariant when it's available
-    paintGrid.setColor(ResUtil.getColorAttr(context, R.attr.colorOutline));
-    paintGrid.setAlpha(100);
+    paintGrid.setColor(ResUtil.getColorAttr(context, R.attr.colorOutlineVariant));
     paintGrid.setAntiAlias(true);
     paintGrid.setStrokeWidth(UiUtil.dpToPx(context, 1));
 
@@ -368,9 +389,9 @@ public class BezierCurveChart extends View {
       pathFill.lineTo(curveList.get(0).x, curveList.get(0).y);
       pathFill.close();
       pathFill.op(pathFillMask, Op.INTERSECT);
-      int curveColor = curveColors.get(colorIndex).getAccentContainer();
+      int curveColor = colorsAccentContainer[colorIndex];
       colorIndex++;
-      if (colorIndex > curveColors.size() - 1) {
+      if (colorIndex > colorsAccentContainer.length - 1) {
         colorIndex = 0;
       }
       paintFill.setColor(curveColor);
@@ -403,17 +424,17 @@ public class BezierCurveChart extends View {
     for (String curveLabel : adjustedCurveLists.keySet()) {
       ArrayList<Point> curveList = adjustedCurveLists.get(curveLabel);
       assert curveList != null;
-      int curveColor = curveColors.get(colorIndex).getAccent();
-      if (colorIndex > curveColors.size() - 1) {
+      if (colorIndex > colorsAccent.length - 1) {
         colorIndex = 0;
       }
+      int curveColor = colorsAccent[colorIndex];
 
       buildPath(pathCurve, curveList);
       paintCurve.setColor(curveColor);
       canvas.drawPath(pathCurve, paintCurve);
 
       drawDots(canvas, curveList, curveColor);
-      drawBadge(canvas, curveLabel, curveColors.get(colorIndex));
+      drawBadge(canvas, curveLabel, colorIndex);
 
       colorIndex++;
     }
@@ -426,7 +447,7 @@ public class BezierCurveChart extends View {
     }
   }
 
-  private void drawBadge(Canvas canvas, String text, ColorRoles colorRoles) {
+  private void drawBadge(Canvas canvas, String text, int colorIndex) {
     Rect textBounds = new Rect();
     paintBadgeText.getTextBounds(text, 0, text.length(), textBounds);
     textBounds.inset(-badgePadding, 0);
@@ -444,9 +465,9 @@ public class BezierCurveChart extends View {
     float textX = rectBadge.left + badgePadding;
     float textY = rectBadge.centerY() + textBounds.height() / 2f;
 
-    paintBadge.setColor(colorRoles.getAccent());
+    paintBadge.setColor(colorsAccent[colorIndex]);
     canvas.drawRoundRect(rectBadge, cornerRadiusBadge, cornerRadiusBadge, paintBadge);
-    paintBadgeText.setColor(colorRoles.getOnAccent());
+    paintBadgeText.setColor(colorsOnAccent[colorIndex]);
     canvas.drawText(text, textX, textY, paintBadgeText);
   }
 

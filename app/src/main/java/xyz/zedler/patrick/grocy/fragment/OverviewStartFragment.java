@@ -189,9 +189,12 @@ public class OverviewStartFragment extends BaseFragment {
     // DEBUG LABEL
 
     if (BuildConfig.DEBUG) {
-      ColorRoles roles = ResUtil.getHarmonizedRoles(activity, R.color.yellow);
-      binding.imageLabelDebug.setColorFilter(roles.getOnAccent());
-      binding.imageLabelDebugBg.setColorFilter(roles.getAccent());
+      binding.imageLabelDebug.setColorFilter(
+          ResUtil.getColorAttr(activity, R.attr.colorOnCustomYellow)
+      );
+      binding.imageLabelDebugBg.setColorFilter(
+          ResUtil.getColorAttr(activity, R.attr.colorCustomYellow)
+      );
     }
 
     // UPDATE UI

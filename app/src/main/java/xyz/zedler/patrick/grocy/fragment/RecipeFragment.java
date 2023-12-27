@@ -175,8 +175,9 @@ public class RecipeFragment extends BaseFragment implements
       activity.navUtil.navigateFragment(R.id.photoViewerFragment, argsPhotoViewer);
     });
 
-    ColorRoles colorYellow = ResUtil.getHarmonizedRoles(requireContext(), R.color.yellow);
-    binding.buttonFulfillmentInfo.setIconTint(ColorStateList.valueOf(colorYellow.getAccent()));
+    binding.buttonFulfillmentInfo.setIconTint(ColorStateList.valueOf(
+        ResUtil.getColorAttr(activity, R.attr.colorCustomYellow)
+    ));
 
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)

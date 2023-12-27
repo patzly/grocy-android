@@ -401,7 +401,6 @@ public class ShoppingListItemAdapter extends
     RowShoppingListItemBinding binding = ((ShoppingListItemViewHolder) viewHolder).binding;
 
     Context context = binding.getRoot().getContext();
-    ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
 
     // NAME
 
@@ -472,8 +471,10 @@ public class ShoppingListItemAdapter extends
       }
       Chip chipAmount = createChip(context, stringBuilderAmount.toString());
       if (item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {
-        chipAmount.setTextColor(colorBlue.getOnAccentContainer());
-        chipAmount.setChipBackgroundColor(ColorStateList.valueOf(colorBlue.getAccentContainer()));
+        chipAmount.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnCustomBlueContainer));
+        chipAmount.setChipBackgroundColor(ColorStateList.valueOf(
+            ResUtil.getColorAttr(context, R.attr.colorCustomBlueContainer)
+        ));
       }
       if (item.isUndone()) {
         chipAmount.setPaintFlags(chipAmount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));

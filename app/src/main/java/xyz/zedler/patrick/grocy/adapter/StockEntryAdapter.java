@@ -328,16 +328,13 @@ public class StockEntryAdapter extends
           ResourcesCompat.getFont(context, R.font.jost_medium)
       );
 
-      ColorRoles colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
-      ColorRoles colorOrange = ResUtil.getHarmonizedRoles(context, R.color.orange);
-
       int color;
       if (Integer.parseInt(days) >= 0) {
-        color = colorYellow.getAccent();
+        color = ResUtil.getColorAttr(context, R.attr.colorCustomYellow);
       } else if (product != null && product.getDueDateTypeInt() == StockItem.DUE_TYPE_EXPIRATION) {
         color = ResUtil.getColorAttr(context, R.attr.colorError);
       } else {
-        color = colorOrange.getAccent(); // formally DIRT
+        color = ResUtil.getColorAttr(context, R.attr.colorCustomOrange);
       }
       holder.binding.dueDate.setTextColor(color);
     } else {

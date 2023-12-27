@@ -19,11 +19,25 @@
 
 <resources>
 
-  <declare-styleable name="ActionButton">
-    <attr name="icon" format="reference" />
-    <attr name="tint" format="color" />
-    <attr name="dense" format="boolean" />
-  </declare-styleable>
+  <attr name="colorCustomBlue" format="color" />
+  <attr name="colorOnCustomBlue" format="color" />
+  <attr name="colorCustomBlueContainer" format="color" />
+  <attr name="colorOnCustomBlueContainer" format="color" />
+
+  <attr name="colorCustomGreen" format="color" />
+  <attr name="colorOnCustomGreen" format="color" />
+  <attr name="colorCustomGreenContainer" format="color" />
+  <attr name="colorOnCustomGreenContainer" format="color" />
+
+  <attr name="colorCustomYellow" format="color" />
+  <attr name="colorOnCustomYellow" format="color" />
+  <attr name="colorCustomYellowContainer" format="color" />
+  <attr name="colorOnCustomYellowContainer" format="color" />
+
+  <attr name="colorCustomOrange" format="color" />
+  <attr name="colorOnCustomOrange" format="color" />
+  <attr name="colorCustomOrangeContainer" format="color" />
+  <attr name="colorOnCustomOrangeContainer" format="color" />
 
   <declare-styleable name="RoundedCornerImageView">
     <attr name="radius" format="dimension" />

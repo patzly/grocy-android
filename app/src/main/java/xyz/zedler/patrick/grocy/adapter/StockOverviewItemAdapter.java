@@ -349,10 +349,6 @@ public class StockOverviewItemAdapter extends
 
     Context context = holder.binding.getRoot().getContext();
 
-    ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
-    ColorRoles colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
-    ColorRoles colorOrange = ResUtil.getHarmonizedRoles(context, R.color.orange);
-
     holder.binding.flexboxLayout.removeAllViews();
 
     // NAME
@@ -365,7 +361,7 @@ public class StockOverviewItemAdapter extends
         && shoppingListFeatureEnabled) {
       holder.binding.viewOnShoppingList.setVisibility(View.VISIBLE);
       holder.binding.viewOnShoppingList.setBackgroundTintList(
-          ColorStateList.valueOf(colorBlue.getAccent())
+          ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorCustomBlue))
       );
     } else {
       holder.binding.viewOnShoppingList.setVisibility(View.GONE);
@@ -378,14 +374,16 @@ public class StockOverviewItemAdapter extends
     );
 
     if (activeFields.contains(StockOverviewViewModel.FIELD_AMOUNT)) {
+      int colorBlueContainer = ResUtil.getColorAttr(context, R.attr.colorCustomBlueContainer);
+      int colorOnBlueContainer = ResUtil.getColorAttr(context, R.attr.colorOnCustomBlueContainer);
       StringBuilder stringBuilderAmount = new StringBuilder();
       if (!stockItem.getProduct().getNoOwnStockBoolean()) {
         AmountUtil.addStockAmountNormalInfo(context, pluralUtil, stringBuilderAmount, stockItem,
             quantityUnitStock, maxDecimalPlacesAmount);
         Chip chipAmount = createChip(context, stringBuilderAmount.toString());
         if (missingItemsProductIds.contains(stockItem.getProductId())) {
-          chipAmount.setTextColor(colorBlue.getOnAccentContainer());
-          chipAmount.setChipBackgroundColor(ColorStateList.valueOf(colorBlue.getAccentContainer()));
+          chipAmount.setTextColor(colorOnBlueContainer);
+          chipAmount.setChipBackgroundColor(ColorStateList.valueOf(colorBlueContainer));
         }
         holder.binding.flexboxLayout.addView(chipAmount);
       }
@@ -395,8 +393,8 @@ public class StockOverviewItemAdapter extends
       if (!stringBuilderAmountAggregated.toString().isBlank()) {
         Chip chipAmountAggregated = createChip(context, stringBuilderAmountAggregated.toString());
         if (missingItemsProductIds.contains(stockItem.getProductId())) {
-          chipAmountAggregated.setTextColor(colorBlue.getOnAccentContainer());
-          chipAmountAggregated.setChipBackgroundColor(ColorStateList.valueOf(colorBlue.getAccentContainer()));
+          chipAmountAggregated.setTextColor(colorOnBlueContainer);
+          chipAmountAggregated.setChipBackgroundColor(ColorStateList.valueOf(colorBlueContainer));
         }
         holder.binding.flexboxLayout.addView(chipAmountAggregated);
       }
@@ -419,11 +417,15 @@ public class StockOverviewItemAdapter extends
       if (Integer.parseInt(days) <= daysExpiringSoon
           && !stockItem.getProduct().getNoOwnStockBoolean()) {  // don't color days text if product has no own stock (children will be colored)
         if (Integer.parseInt(days) >= 0) {
-          chipDate.setTextColor(colorYellow.getOnAccentContainer());
-          chipDate.setChipBackgroundColor(ColorStateList.valueOf(colorYellow.getAccentContainer()));
+          chipDate.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnCustomYellowContainer));
+          chipDate.setChipBackgroundColor(ColorStateList.valueOf(
+              ResUtil.getColorAttr(context, R.attr.colorCustomYellowContainer)
+          ));
         } else if (stockItem.getDueTypeInt() == StockItem.DUE_TYPE_BEST_BEFORE) {
-          chipDate.setTextColor(colorOrange.getOnAccentContainer());
-          chipDate.setChipBackgroundColor(ColorStateList.valueOf(colorOrange.getAccentContainer())); // formally DIRT
+          chipDate.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnCustomOrangeContainer));
+          chipDate.setChipBackgroundColor(ColorStateList.valueOf(
+              ResUtil.getColorAttr(context, R.attr.colorCustomOrangeContainer)
+          ));
         } else {
           chipDate.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnErrorContainer));
           chipDate.setChipBackgroundColor(

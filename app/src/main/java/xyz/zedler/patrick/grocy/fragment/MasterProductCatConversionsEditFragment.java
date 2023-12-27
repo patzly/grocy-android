@@ -150,8 +150,9 @@ public class MasterProductCatConversionsEditFragment extends BaseFragment {
       viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
     });
 
-    ColorRoles roles = ResUtil.getHarmonizedRoles(activity, R.color.blue);
-    binding.textInputFactor.setHelperTextColor(ColorStateList.valueOf(roles.getAccent()));
+    binding.textInputFactor.setHelperTextColor(ColorStateList.valueOf(
+        ResUtil.getColorAttr(activity, R.attr.colorCustomBlue)
+    ));
 
     // necessary because else getValue() doesn't give current value (?)
     viewModel.getFormData().getQuantityUnitsLive().observe(getViewLifecycleOwner(), qUs -> {

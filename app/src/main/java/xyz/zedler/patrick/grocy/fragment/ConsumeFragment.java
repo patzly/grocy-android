@@ -210,13 +210,13 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
             || viewModel.isProductWillBeFilled()) && viewModel.getFormData().isScannerVisible()
     );
 
-    ColorRoles roles = ResUtil.getHarmonizedRoles(activity, R.color.blue);
+    int colorBlue = ResUtil.getColorAttr(activity, R.attr.colorCustomBlue);
     viewModel.getQuickModeEnabled().observe(
         getViewLifecycleOwner(), value -> binding.toolbar.setTitleTextColor(
-            value ? roles.getAccent() : ResUtil.getColorAttr(activity, R.attr.colorOnSurface)
+            value ? colorBlue : ResUtil.getColorAttr(activity, R.attr.colorOnSurface)
         )
     );
-    binding.textInputAmount.setHelperTextColor(ColorStateList.valueOf(roles.getAccent()));
+    binding.textInputAmount.setHelperTextColor(ColorStateList.valueOf(colorBlue));
     viewModel.getFormData().getQuantityUnitErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textQuantityUnit.setTextColor(
             ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)

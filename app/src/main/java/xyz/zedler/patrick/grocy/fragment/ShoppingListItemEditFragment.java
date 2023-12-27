@@ -174,8 +174,9 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
       }
     }
 
-    ColorRoles roles = ResUtil.getHarmonizedRoles(activity, R.color.blue);
-    binding.textInputAmount.setHelperTextColor(ColorStateList.valueOf(roles.getAccent()));
+    binding.textInputAmount.setHelperTextColor(ColorStateList.valueOf(
+        ResUtil.getColorAttr(activity, R.attr.colorCustomBlue)
+    ));
     viewModel.getFormData().getQuantityUnitErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textQuantityUnit.setTextColor(
             ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
