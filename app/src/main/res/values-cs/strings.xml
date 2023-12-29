@@ -526,6 +526,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="msg_help_home_assistant_login_token">Můžete si vytvořit přístupový kód s dlouhou životností ve svém profilu aplikace Home Assistant. Klepnutím otevřete výše uvedenou adresu</string>
   <string name="msg_help_home_assistant_login_proxy_id">Vraťte se zpět nebo klikněte na tuto kartu pro naskenování QR kódu, který vyplní všechny údaje.</string>
   <string name="msg_help_fab_overview_start">V tomto přehledu má tlačítko dvě funkce:\n\n– sejmutím čárového kódu a klepnutím produkt spotřebujete\n– sejmutím čárového kódu a podržením produkt nakoupíte\n\nTtoto tlačítko je vždy aktivní a můžete jím produkty spotřebovat nebo nakoupit. V nastavení aplikace to můžete změnit.</string>
+  <string name="msg_help_fab_consume_start">Tímto tlačítkem spotřebujete dané množství produktu. Chcete-li produkt označit jako otevřený, použijte tlačítko v levém dolním rohu menu.</string>
   <string name="msg_share">Tato aplikace je klient projektu Grocy: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">Tento API klíč nefunguje</string>
@@ -611,6 +612,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="error_invalid_base_servings">Počet porcí je nesprávný</string>
   <string name="error_pictures_size_exceeds_limit">Některé obrázky produktů nebo jídel jsou příliš velké a proto je aplikace nezobrazí. Zmenšete, prosím, velké obrázky. Zrychlí se tím načítání dat.</string>
   <string name="error_userfield_type_not_supported">Uživatelská pole a tabulky zatím nejsou v mobilní aplikaci podporována.</string>
+  <string name="error_open_product_not_supported">Tento produkt nelze označit jako otevřený</string>
   <string name="error_settings_backup">Soubor se zálohou se nepodařilo vytvořit</string>
   <string name="error_settings_restore">Nastavení se nepodařilo obnovit ze souboru</string>
 
@@ -1240,6 +1242,9 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="info_github">Grocy Android na GitHubu</string>
   <string name="info_github_description">Zdrojový kód</string>
   <string name="info_website">Otevřít stránku Grocy</string>
+  <string name="info_translation_description">Pomozte nám s překladem Grocy pro Android</string>
+  <string name="info_privacy">Ochrana vašich dat</string>
+  <string name="info_privacy_description">Jak se s vašimi daty pracuje</string>
 
   <string name="feature_1_title">Grocy pro Android</string>
   <string name="feature_1_description">Správa potravin pro váš domov na vlastním serveru</string>
@@ -1280,6 +1285,16 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="setting_theme_dark">Tmavý</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_light">Světlý</string>
+  <string name="setting_contrast">Kontrast</string>
+  <string name="setting_contrast_description">Přizpůsobení vzhledu vašemu zraku</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast. The button width should be as dense as possible. -->
+  <string name="setting_contrast_standard">Standardní</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_medium">Střední</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_high">Vysoký</string>
+  <string name="setting_contrast_dynamic">Kontrast barevného rozvržení je v nastavení operačního systému</string>
+  <string name="setting_contrast_dynamic_unsupported">Dynamický kontrast je na Androidu verze 14 a vyšší</string>
   <string name="setting_language">Jazyk</string>
   <string name="setting_language_description">Vyberte jazyk</string>
   <string name="setting_language_info">Děkujeme všem dobrovolným překladatelům na Transifexu!\nPodívejte se, prosím, na náš GitHub, kde najdete, jak můžete pomoci s překladem grocy i do vašeho jazyka</string>
