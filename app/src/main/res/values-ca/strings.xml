@@ -804,8 +804,8 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_overdue">
-    <item quantity="one">%1$d feina està pendent.</item>
-    <item quantity="other">%1$d feines estan pendents.</item>
+    <item quantity="one">Hi ha %1$d feina que s\'hauria d\'haver completat.</item>
+    <item quantity="other">Hi ha %1$d feines que s\'haurien d\'haver completat.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_due_today">
