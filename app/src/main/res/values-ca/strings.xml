@@ -498,7 +498,7 @@
   <string name="error_empty_tasks">Sense tasques</string>
   <string name="error_empty_task_categories">Sense categories de tasca</string>
   <string name="error_empty_unit_conversions">Cap conversió d\'unitats</string>
-  <string name="error_empty_chores">Sense feines</string>
+  <string name="error_empty_chores">No hi ha feina</string>
   <string name="error_empty_chores_sub">Anar a les dades mestres per crear alguns</string>
   <string name="error_empty_recipes">Cap recepta</string>
   <string name="error_empty_ingredients">Sense ingredients</string>
