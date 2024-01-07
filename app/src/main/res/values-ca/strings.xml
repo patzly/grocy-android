@@ -809,8 +809,8 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_due_today">
-    <item quantity="one">%1$d feina venç avui.</item>
-    <item quantity="other">%1$d feines vencen avui.</item>
+    <item quantity="one">Avui hi ha %1$d feina a completar.</item>
+    <item quantity="other">Avui hi ha %1$d feines a completar.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_assigned">
