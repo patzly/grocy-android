@@ -799,8 +799,8 @@
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_chores_due_soon">
-    <item quantity="one">%1$d feina s\'ha de realitzar en els següents %2$d dies.</item>
-    <item quantity="other">%1$d feines s\'han de realitzar en els següents %2$d dies.</item>
+    <item quantity="one">Hi ha %1$d feina a completar en els següents %2$d dies.</item>
+    <item quantity="other">Hi ha %1$d feines a completar en els següents %2$d dies.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_overdue">
