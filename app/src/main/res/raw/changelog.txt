@@ -1,3 +1,7 @@
+## 3.5.1
+
+- Fixed: Crash on purchase page with scanner on some devices (#820)
+
 ## 3.5.0
 
 - New: Removed support for Grocy server versions below 4.0.0 (following versions will be unsupported

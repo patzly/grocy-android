@@ -32,7 +32,6 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import xyz.zedler.patrick.grocy.Constants;
@@ -436,6 +435,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
 
   public void clearInputFocus() {
     new Handler().postDelayed(() -> {
+      if (binding == null) return;
       activity.hideKeyboard();
       binding.dummyFocusView.requestFocus();
       binding.autoCompletePurchaseProduct.clearFocus();
