@@ -32,7 +32,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
@@ -156,11 +155,11 @@ public class TaskEntryAdapter extends
 
       int color;
       if (days < 0) {
-        color = ResUtil.getColorAttr(context, R.attr.colorError);
+        color = ResUtil.getColor(context, R.attr.colorError);
       } else if (days == 0) {
-        color = ResUtil.getColorAttr(context, R.attr.colorCustomBlue);
+        color = ResUtil.getColor(context, R.attr.colorCustomBlue);
       } else {
-        color = ResUtil.getColorAttr(context, R.attr.colorCustomYellow);
+        color = ResUtil.getColor(context, R.attr.colorCustomYellow);
       }
       holder.binding.days.setTextColor(color);
     } else {
@@ -168,7 +167,7 @@ public class TaskEntryAdapter extends
           ResourcesCompat.getFont(context, R.font.jost_book)
       );
       holder.binding.days.setTextColor(
-          ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant)
+          ResUtil.getColor(context, R.attr.colorOnSurfaceVariant)
       );
     }
 

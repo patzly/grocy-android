@@ -263,22 +263,22 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
             || viewModel.isProductWillBeFilled()) && viewModel.getFormData().isScannerVisible()
     );
 
-    int colorBlue = ResUtil.getColorAttr(activity, R.attr.colorCustomBlue);
+    int colorBlue = ResUtil.getColor(activity, R.attr.colorCustomBlue);
     viewModel.getQuickModeEnabled().observe(
         getViewLifecycleOwner(), value -> binding.toolbar.setTitleTextColor(
-            value ? colorBlue : ResUtil.getColorAttr(activity, R.attr.colorOnSurface)
+            value ? colorBlue : ResUtil.getColor(activity, R.attr.colorOnSurface)
         )
     );
     binding.textInputAmount.setHelperTextColor(ColorStateList.valueOf(colorBlue));
     binding.textInputPurchasePrice.setHelperTextColor(ColorStateList.valueOf(colorBlue));
     viewModel.getFormData().getDueDateErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textDueDate.setTextColor(
-            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
         )
     );
     viewModel.getFormData().getQuantityUnitErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textQuantityUnit.setTextColor(
-            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
         )
     );
 

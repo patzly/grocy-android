@@ -35,7 +35,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
-import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
@@ -210,16 +209,16 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
             || viewModel.isProductWillBeFilled()) && viewModel.getFormData().isScannerVisible()
     );
 
-    int colorBlue = ResUtil.getColorAttr(activity, R.attr.colorCustomBlue);
+    int colorBlue = ResUtil.getColor(activity, R.attr.colorCustomBlue);
     viewModel.getQuickModeEnabled().observe(
         getViewLifecycleOwner(), value -> binding.toolbar.setTitleTextColor(
-            value ? colorBlue : ResUtil.getColorAttr(activity, R.attr.colorOnSurface)
+            value ? colorBlue : ResUtil.getColor(activity, R.attr.colorOnSurface)
         )
     );
     binding.textInputAmount.setHelperTextColor(ColorStateList.valueOf(colorBlue));
     viewModel.getFormData().getQuantityUnitErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textQuantityUnit.setTextColor(
-            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
         )
     );
 
@@ -452,7 +451,7 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
       return false;
     }
     FormattedTextView textView = new FormattedTextView(activity);
-    textView.setTextColor(ResUtil.getColorAttr(activity, R.attr.colorOnSurfaceVariant));
+    textView.setTextColor(ResUtil.getColor(activity, R.attr.colorOnSurfaceVariant));
     textView.setTextSizeParagraph(14);
     textView.setBlockDistance(8);
     textView.setSideMargin(24);

@@ -119,7 +119,7 @@ public class MasterProductCatDueDateFragment extends BaseFragment {
 
     viewModel.getFormData().getDueDateTypeErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textDueDateType.setTextColor(
-            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
         )
     );
 

@@ -23,11 +23,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
 import androidx.core.content.ContextCompat;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
@@ -41,10 +38,10 @@ public class ChipUtil {
 
   public ChipUtil(Context context) {
     this.context = context;
-    colorGreenContainer = ResUtil.getColorAttr(context, R.attr.colorCustomGreenContainer);
-    colorOnGreenContainer = ResUtil.getColorAttr(context, R.attr.colorOnCustomGreenContainer);
-    colorYellowContainer = ResUtil.getColorAttr(context, R.attr.colorCustomYellowContainer);
-    colorOnYellowContainer = ResUtil.getColorAttr(context, R.attr.colorOnCustomYellowContainer);
+    colorGreenContainer = ResUtil.getColor(context, R.attr.colorCustomGreenContainer);
+    colorOnGreenContainer = ResUtil.getColor(context, R.attr.colorOnCustomGreenContainer);
+    colorYellowContainer = ResUtil.getColor(context, R.attr.colorCustomYellowContainer);
+    colorOnYellowContainer = ResUtil.getColor(context, R.attr.colorOnCustomYellowContainer);
   }
 
   private static Chip createChip(Context ctx, String text) {
@@ -102,7 +99,7 @@ public class ChipUtil {
           .getQuantityString(R.plurals.msg_recipes_ingredients_missing,
               recipeFulfillment.getMissingProductsCount(),
               recipeFulfillment.getMissingProductsCount());
-      int colorOnErrorContainer = ResUtil.getColorAttr(context, R.attr.colorOnErrorContainer);
+      int colorOnErrorContainer = ResUtil.getColor(context, R.attr.colorOnErrorContainer);
       chipFulfillment = createChip(context, context.getString(R.string.property_status_insert));
       chipFulfillment.setTextColor(colorOnErrorContainer);
       chipFulfillment.setCloseIcon(
@@ -110,7 +107,7 @@ public class ChipUtil {
       );
       chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorOnErrorContainer));
       chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(
-          ResUtil.getColorAttr(context, R.attr.colorErrorContainer)
+          ResUtil.getColor(context, R.attr.colorErrorContainer)
       ));
     }
     chipFulfillment.setCloseIconStartPadding(UiUtil.dpToPx(context, 4));
@@ -144,7 +141,7 @@ public class ChipUtil {
       chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorGreenContainer));
     } else {
       textFulfillment = context.getString(R.string.msg_recipes_not_enough);
-      int colorOnErrorContainer = ResUtil.getColorAttr(context, R.attr.colorOnErrorContainer);
+      int colorOnErrorContainer = ResUtil.getColor(context, R.attr.colorOnErrorContainer);
       chipFulfillment = createChip(context, context.getString(R.string.property_status_insert));
       chipFulfillment.setTextColor(colorOnErrorContainer);
       chipFulfillment.setCloseIcon(
@@ -152,7 +149,7 @@ public class ChipUtil {
       );
       chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorOnErrorContainer));
       chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(
-          ResUtil.getColorAttr(context, R.attr.colorErrorContainer)
+          ResUtil.getColor(context, R.attr.colorErrorContainer)
       ));
     }
     chipFulfillment.setCloseIconStartPadding(UiUtil.dpToPx(context, 4));
@@ -186,9 +183,9 @@ public class ChipUtil {
       dueScoreChip = createChip(
           context, context.getString(R.string.subtitle_recipe_due_score, String.valueOf(dueScore))
       );
-      dueScoreChip.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnErrorContainer));
+      dueScoreChip.setTextColor(ResUtil.getColor(context, R.attr.colorOnErrorContainer));
       dueScoreChip.setChipBackgroundColor(ColorStateList.valueOf(
-          ResUtil.getColorAttr(context, R.attr.colorErrorContainer)
+          ResUtil.getColor(context, R.attr.colorErrorContainer)
       ));
     }
     dueScoreChip.setEnabled(false);

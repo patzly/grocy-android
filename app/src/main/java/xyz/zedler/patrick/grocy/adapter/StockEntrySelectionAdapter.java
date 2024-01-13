@@ -109,11 +109,11 @@ public class StockEntrySelectionAdapter
       if (selectedId == null || selectedId.isEmpty()) {
         holder.binding.selected.setVisibility(View.VISIBLE);
         holder.binding.name.setTextColor(
-            ResUtil.getColorAttr(context, R.attr.colorOnSecondaryContainer)
+            ResUtil.getColor(context, R.attr.colorOnSecondaryContainer)
         );
       } else {
         holder.binding.selected.setVisibility(View.INVISIBLE);
-        holder.binding.name.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnSurface));
+        holder.binding.name.setTextColor(ResUtil.getColor(context, R.attr.colorOnSurface));
       }
       holder.binding.note.setVisibility(View.GONE);
     } else {
@@ -155,11 +155,11 @@ public class StockEntrySelectionAdapter
       if (stockEntry.getStockId().equals(selectedId)) {
         holder.binding.selected.setVisibility(View.VISIBLE);
         holder.binding.name.setTextColor(
-            ResUtil.getColorAttr(context, R.attr.colorOnSecondaryContainer)
+            ResUtil.getColor(context, R.attr.colorOnSecondaryContainer)
         );
       } else {
         holder.binding.selected.setVisibility(View.INVISIBLE);
-        holder.binding.name.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnSurface));
+        holder.binding.name.setTextColor(ResUtil.getColor(context, R.attr.colorOnSurface));
       }
     }
 

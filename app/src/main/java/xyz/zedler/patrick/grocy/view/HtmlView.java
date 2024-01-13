@@ -85,8 +85,8 @@ public class HtmlView extends LinearLayout {
   }
 
   private String getFormattedHtml(String html) {
-    int textColor = ResUtil.getColorAttr(context, R.attr.colorOnSurface);
-    int linkColor = ResUtil.getColorAttr(context, R.attr.colorPrimary);
+    int textColor = ResUtil.getColor(context, R.attr.colorOnSurface);
+    int linkColor = ResUtil.getColor(context, R.attr.colorPrimary);
     return  "<!DOCTYPE html><html><head><meta charset='UTF-8'><style type='text/css'>"
         + "@font-face{font-family: Jost; src: url('fonts/jost_400_book.otf')}"
         + "body{font-family: Jost;color:#" + String.format("%06X", (0xFFFFFF & textColor)) + ";}"

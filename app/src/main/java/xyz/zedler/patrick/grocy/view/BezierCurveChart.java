@@ -31,11 +31,9 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
-import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -122,32 +120,32 @@ public class BezierCurveChart extends View {
     paintCurve.setStrokeWidth(UiUtil.dpToPx(context, 2));
 
     colorsAccent = new int[] {
-        ResUtil.getColorAttr(context, R.attr.colorCustomBlue),
-        ResUtil.getColorAttr(context, R.attr.colorCustomGreen),
-        ResUtil.getColorAttr(context, R.attr.colorCustomYellow),
-        ResUtil.getColorAttr(context, R.attr.colorCustomOrange),
-        ResUtil.getColorAttr(context, R.attr.colorError)
+        ResUtil.getColor(context, R.attr.colorCustomBlue),
+        ResUtil.getColor(context, R.attr.colorCustomGreen),
+        ResUtil.getColor(context, R.attr.colorCustomYellow),
+        ResUtil.getColor(context, R.attr.colorCustomOrange),
+        ResUtil.getColor(context, R.attr.colorError)
     };
     colorsOnAccent = new int[] {
-        ResUtil.getColorAttr(context, R.attr.colorOnCustomBlue),
-        ResUtil.getColorAttr(context, R.attr.colorOnCustomGreen),
-        ResUtil.getColorAttr(context, R.attr.colorOnCustomYellow),
-        ResUtil.getColorAttr(context, R.attr.colorOnCustomOrange),
-        ResUtil.getColorAttr(context, R.attr.colorOnError)
+        ResUtil.getColor(context, R.attr.colorOnCustomBlue),
+        ResUtil.getColor(context, R.attr.colorOnCustomGreen),
+        ResUtil.getColor(context, R.attr.colorOnCustomYellow),
+        ResUtil.getColor(context, R.attr.colorOnCustomOrange),
+        ResUtil.getColor(context, R.attr.colorOnError)
     };
     colorsAccentContainer = new int[] {
-        ResUtil.getColorAttr(context, R.attr.colorCustomBlueContainer),
-        ResUtil.getColorAttr(context, R.attr.colorCustomGreenContainer),
-        ResUtil.getColorAttr(context, R.attr.colorCustomYellowContainer),
-        ResUtil.getColorAttr(context, R.attr.colorCustomOrangeContainer),
-        ResUtil.getColorAttr(context, R.attr.colorErrorContainer)
+        ResUtil.getColor(context, R.attr.colorCustomBlueContainer),
+        ResUtil.getColor(context, R.attr.colorCustomGreenContainer),
+        ResUtil.getColor(context, R.attr.colorCustomYellowContainer),
+        ResUtil.getColor(context, R.attr.colorCustomOrangeContainer),
+        ResUtil.getColor(context, R.attr.colorErrorContainer)
     };
     colorsOnAccentContainer = new int[] {
-        ResUtil.getColorAttr(context, R.attr.colorOnCustomBlueContainer),
-        ResUtil.getColorAttr(context, R.attr.colorOnCustomGreenContainer),
-        ResUtil.getColorAttr(context, R.attr.colorOnCustomYellowContainer),
-        ResUtil.getColorAttr(context, R.attr.colorOnCustomOrangeContainer),
-        ResUtil.getColorAttr(context, R.attr.colorOnErrorContainer)
+        ResUtil.getColor(context, R.attr.colorOnCustomBlueContainer),
+        ResUtil.getColor(context, R.attr.colorOnCustomGreenContainer),
+        ResUtil.getColor(context, R.attr.colorOnCustomYellowContainer),
+        ResUtil.getColor(context, R.attr.colorOnCustomOrangeContainer),
+        ResUtil.getColor(context, R.attr.colorOnErrorContainer)
     };
 
     paintDot.setStyle(Paint.Style.FILL);
@@ -157,11 +155,11 @@ public class BezierCurveChart extends View {
     paintFill.setAntiAlias(true);
 
     paintChartBg.setStyle(Paint.Style.FILL);
-    paintChartBg.setColor(ResUtil.getColorAttr(context, R.attr.colorSurfaceVariant));
+    paintChartBg.setColor(ResUtil.getColor(context, R.attr.colorSurfaceVariant));
     paintChartBg.setAntiAlias(true);
 
     paintGrid.setStyle(Paint.Style.STROKE);
-    paintGrid.setColor(ResUtil.getColorAttr(context, R.attr.colorOutlineVariant));
+    paintGrid.setColor(ResUtil.getColor(context, R.attr.colorOutlineVariant));
     paintGrid.setAntiAlias(true);
     paintGrid.setStrokeWidth(UiUtil.dpToPx(context, 1));
 
@@ -172,7 +170,7 @@ public class BezierCurveChart extends View {
     paintBadgeText.setTextSize(UiUtil.spToPx(context, 12));
     paintBadgeText.setTypeface(ResourcesCompat.getFont(context, R.font.jost_medium));
 
-    paintLabel.setColor(ResUtil.getColorAttr(context, R.attr.colorOnSurface));
+    paintLabel.setColor(ResUtil.getColor(context, R.attr.colorOnSurface));
     paintLabel.setTextSize(UiUtil.spToPx(context, 11));
     paintLabel.setTypeface(ResourcesCompat.getFont(context, R.font.jost_medium));
     paintLabel.setAntiAlias(true);

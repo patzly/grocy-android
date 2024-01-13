@@ -35,7 +35,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -117,9 +116,9 @@ public class RecipePositionResolvedAdapter extends
     this.listener = listener;
     this.pluralUtil = new PluralUtil(context);
 
-    colorGreen = ResUtil.getColorAttr(context, R.attr.colorCustomGreen);
-    colorYellow = ResUtil.getColorAttr(context, R.attr.colorCustomYellow);
-    colorRed = ResUtil.getColorAttr(context, R.attr.colorError);
+    colorGreen = ResUtil.getColor(context, R.attr.colorCustomGreen);
+    colorYellow = ResUtil.getColor(context, R.attr.colorCustomYellow);
+    colorRed = ResUtil.getColor(context, R.attr.colorError);
   }
 
   @Override
@@ -421,7 +420,7 @@ public class RecipePositionResolvedAdapter extends
         R.layout.view_info_chip, null, false
     );
     chip.setText(text);
-    chip.setTextColor(ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorOnSurface)));
+    chip.setTextColor(ColorStateList.valueOf(ResUtil.getColor(context, R.attr.colorOnSurface)));
     chip.setEnabled(false);
     return chip;
   }

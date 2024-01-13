@@ -381,12 +381,8 @@ public class SystemBarBehavior {
   private void updateSystemBars() {
     boolean isOrientationPortrait = UiUtil.isOrientationPortrait(activity);
     boolean isDarkModeActive = UiUtil.isDarkModeActive(activity);
-    int colorScrim = ColorUtils.setAlphaComponent(
-        // TODO: replace with attribute when fixed in MDC
-        //ResUtil.getColorAttr(activity, R.attr.colorSurfaceContainer),
-        ResUtil.getColorSurfaceContainer(activity),
-        1
-    );
+
+    int colorScrim = ResUtil.getColor(activity, android.R.attr.colorBackground, 0.7f);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // 29
       window.setStatusBarColor(Color.TRANSPARENT);
@@ -405,8 +401,10 @@ public class SystemBarBehavior {
               isScrollable ? colorScrim : Color.parseColor("#01000000")
           );
         } else {
-          window.setNavigationBarDividerColor(ResUtil.getColorOutlineSecondary(activity));
-          window.setNavigationBarColor(ResUtil.getColorBg(activity));
+          window.setNavigationBarDividerColor(
+              ResUtil.getColor(activity, R.attr.colorOutlineVariant)
+          );
+          window.setNavigationBarColor(ResUtil.getColor(activity, android.R.attr.colorBackground));
         }
       }
     } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { // 28
@@ -418,8 +416,10 @@ public class SystemBarBehavior {
       if (isOrientationPortrait) {
         window.setNavigationBarColor(isScrollable ? colorScrim : Color.TRANSPARENT);
       } else {
-        window.setNavigationBarDividerColor(ResUtil.getColorOutlineSecondary(activity));
-        window.setNavigationBarColor(ResUtil.getColorBg(activity));
+        window.setNavigationBarDividerColor(
+            ResUtil.getColor(activity, R.attr.colorOutlineVariant)
+        );
+        window.setNavigationBarColor(ResUtil.getColor(activity, android.R.attr.colorBackground));
       }
     } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // 26
       window.setStatusBarColor(Color.TRANSPARENT);

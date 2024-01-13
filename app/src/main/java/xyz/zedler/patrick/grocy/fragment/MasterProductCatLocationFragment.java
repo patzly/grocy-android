@@ -141,7 +141,7 @@ public class MasterProductCatLocationFragment extends BaseFragment {
 
     viewModel.getFormData().getLocationErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textLocation.setTextColor(
-            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
         )
     );
 

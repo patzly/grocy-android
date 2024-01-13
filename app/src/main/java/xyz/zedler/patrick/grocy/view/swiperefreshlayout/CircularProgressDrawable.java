@@ -149,11 +149,7 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
     mRing = new Ring();
     mRing.setColors(COLORS);
 
-    setBackgroundColor(
-        // TODO: replace with attribute when fixed in MDC
-        //ResUtil.getColorAttr(context, R.attr.colorSurfaceContainer)
-        ResUtil.getColorSurfaceContainer(context)
-    );
+    setBackgroundColor(ResUtil.getColor(context, R.attr.colorSurfaceContainer));
 
     setStrokeWidth(STROKE_WIDTH);
     setupAnimators();

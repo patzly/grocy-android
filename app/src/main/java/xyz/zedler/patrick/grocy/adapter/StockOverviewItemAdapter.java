@@ -33,7 +33,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -361,7 +360,7 @@ public class StockOverviewItemAdapter extends
         && shoppingListFeatureEnabled) {
       holder.binding.viewOnShoppingList.setVisibility(View.VISIBLE);
       holder.binding.viewOnShoppingList.setBackgroundTintList(
-          ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorCustomBlue))
+          ColorStateList.valueOf(ResUtil.getColor(context, R.attr.colorCustomBlue))
       );
     } else {
       holder.binding.viewOnShoppingList.setVisibility(View.GONE);
@@ -374,8 +373,8 @@ public class StockOverviewItemAdapter extends
     );
 
     if (activeFields.contains(StockOverviewViewModel.FIELD_AMOUNT)) {
-      int colorBlueContainer = ResUtil.getColorAttr(context, R.attr.colorCustomBlueContainer);
-      int colorOnBlueContainer = ResUtil.getColorAttr(context, R.attr.colorOnCustomBlueContainer);
+      int colorBlueContainer = ResUtil.getColor(context, R.attr.colorCustomBlueContainer);
+      int colorOnBlueContainer = ResUtil.getColor(context, R.attr.colorOnCustomBlueContainer);
       StringBuilder stringBuilderAmount = new StringBuilder();
       if (!stockItem.getProduct().getNoOwnStockBoolean()) {
         AmountUtil.addStockAmountNormalInfo(context, pluralUtil, stringBuilderAmount, stockItem,
@@ -417,19 +416,19 @@ public class StockOverviewItemAdapter extends
       if (Integer.parseInt(days) <= daysExpiringSoon
           && !stockItem.getProduct().getNoOwnStockBoolean()) {  // don't color days text if product has no own stock (children will be colored)
         if (Integer.parseInt(days) >= 0) {
-          chipDate.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnCustomYellowContainer));
+          chipDate.setTextColor(ResUtil.getColor(context, R.attr.colorOnCustomYellowContainer));
           chipDate.setChipBackgroundColor(ColorStateList.valueOf(
-              ResUtil.getColorAttr(context, R.attr.colorCustomYellowContainer)
+              ResUtil.getColor(context, R.attr.colorCustomYellowContainer)
           ));
         } else if (stockItem.getDueTypeInt() == StockItem.DUE_TYPE_BEST_BEFORE) {
-          chipDate.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnCustomOrangeContainer));
+          chipDate.setTextColor(ResUtil.getColor(context, R.attr.colorOnCustomOrangeContainer));
           chipDate.setChipBackgroundColor(ColorStateList.valueOf(
-              ResUtil.getColorAttr(context, R.attr.colorCustomOrangeContainer)
+              ResUtil.getColor(context, R.attr.colorCustomOrangeContainer)
           ));
         } else {
-          chipDate.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnErrorContainer));
+          chipDate.setTextColor(ResUtil.getColor(context, R.attr.colorOnErrorContainer));
           chipDate.setChipBackgroundColor(
-              ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorErrorContainer))
+              ColorStateList.valueOf(ResUtil.getColor(context, R.attr.colorErrorContainer))
           );
         }
       }

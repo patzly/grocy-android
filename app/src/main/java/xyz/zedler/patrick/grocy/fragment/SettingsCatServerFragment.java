@@ -97,7 +97,7 @@ public class SettingsCatServerFragment extends BaseFragment {
     binding.swipe.setEnabled(false);
 
     binding.textCompatible.setTextColor(
-        ResUtil.getColorAttr(
+        ResUtil.getColor(
             activity,
             viewModel.isVersionCompatible() ? R.attr.colorCustomGreen : R.attr.colorError
         )

@@ -27,7 +27,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Point;
@@ -69,7 +68,6 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.color.ColorContrast;
 import com.google.android.material.color.ColorContrastOptions;
 import com.google.android.material.color.DynamicColors;
-import com.google.android.material.color.DynamicColorsOptions;
 import com.google.android.material.color.HarmonizedColorAttributes;
 import com.google.android.material.color.HarmonizedColors;
 import com.google.android.material.color.HarmonizedColorsOptions;
@@ -354,7 +352,7 @@ public class UiUtil {
       if (!UiUtil.areAnimationsEnabled(context)) {
         binding.bottomAppBar.replaceMenu(newMenuId);
         Menu menu = binding.bottomAppBar.getMenu();
-        int tint = ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant);
+        int tint = ResUtil.getColor(context, R.attr.colorOnSurfaceVariant);
         for (int i = 0; i < menu.size(); i++) {
           MenuItem item = menu.getItem(i);
           if (item.getIcon() != null) {
@@ -403,7 +401,7 @@ public class UiUtil {
 
         int iconIndex = 0;
         int overflowCount = 0;
-        int tint = ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant);
+        int tint = ResUtil.getColor(context, R.attr.colorOnSurfaceVariant);
         for (int i = 0; i < binding.bottomAppBar.getMenu().size(); i++) {
           MenuItem item = binding.bottomAppBar.getMenu().getItem(i);
           if (item.getIcon() == null || !item.isVisible()) {

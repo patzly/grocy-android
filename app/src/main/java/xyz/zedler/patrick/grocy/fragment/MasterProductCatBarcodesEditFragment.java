@@ -28,7 +28,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import com.google.android.material.color.ColorRoles;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -135,7 +134,7 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
     });
 
     binding.textInputAmount.setHelperTextColor(ColorStateList.valueOf(
-        ResUtil.getColorAttr(activity, R.attr.colorCustomBlue)
+        ResUtil.getColor(activity, R.attr.colorCustomBlue)
     ));
 
     embeddedFragmentScanner.setScannerVisibilityLive(

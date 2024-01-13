@@ -177,10 +177,10 @@ public class HtmlCardView extends LinearLayout {
   }
 
   private String getFormattedHtml(String html, boolean useOnSurfaceVariant) {
-    int textColor = ResUtil.getColorAttr(
+    int textColor = ResUtil.getColor(
         context, useOnSurfaceVariant ? R.attr.colorOnSurfaceVariant : R.attr.colorOnSurface
     );
-    int linkColor = ResUtil.getColorAttr(context, R.attr.colorPrimary);
+    int linkColor = ResUtil.getColor(context, R.attr.colorPrimary);
     return  "<!DOCTYPE html><html><head><meta charset='UTF-8'><style type='text/css'>"
         + "@font-face{font-family: Jost; src: url('fonts/jost_400_book.otf')}"
         + "body{font-family: Jost;color:#" + String.format("%06X", (0xFFFFFF & textColor)) + ";}"

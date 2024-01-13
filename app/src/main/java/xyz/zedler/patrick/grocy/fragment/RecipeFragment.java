@@ -40,7 +40,6 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -139,7 +138,7 @@ public class RecipeFragment extends BaseFragment implements
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    int colorOnBg = ResUtil.getColorAttr(activity, R.attr.colorOnBackground);
+    int colorOnBg = ResUtil.getColor(activity, R.attr.colorOnBackground);
     binding.appBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
       if (binding.collapsingToolbarLayout.getHeight() + verticalOffset
           < binding.collapsingToolbarLayout.getScrimVisibleHeightTrigger()) {
@@ -176,7 +175,7 @@ public class RecipeFragment extends BaseFragment implements
     });
 
     binding.buttonFulfillmentInfo.setIconTint(ColorStateList.valueOf(
-        ResUtil.getColorAttr(activity, R.attr.colorCustomYellow)
+        ResUtil.getColor(activity, R.attr.colorCustomYellow)
     ));
 
     binding.recycler.setLayoutManager(

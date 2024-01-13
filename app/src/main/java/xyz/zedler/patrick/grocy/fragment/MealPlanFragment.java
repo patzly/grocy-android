@@ -123,7 +123,7 @@ public class MealPlanFragment extends BaseFragment {
         );
         container.binding.day.setText(String.valueOf(data.getDate().getDayOfMonth()));
 
-        int colorOutline = ResUtil.getColorAttr(activity, R.attr.colorOutline);
+        int colorOutline = ResUtil.getColor(activity, R.attr.colorOutline);
         if (viewModel.getSelectedDate().isEqual(data.getDate())) {
           container.binding.card.setStrokeColor(colorOutline);
           container.binding.card.setCardBackgroundColor(colorOutline);
@@ -132,7 +132,7 @@ public class MealPlanFragment extends BaseFragment {
         } else {
           container.binding.card.setStrokeColor(colorOutline);
           container.binding.card.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent));
-          int textColor = ResUtil.getColorAttr(activity, R.attr.colorOnBackground);
+          int textColor = ResUtil.getColor(activity, R.attr.colorOnBackground);
           container.binding.weekday.setTextColor(textColor);
           container.binding.day.setTextColor(textColor);
         }

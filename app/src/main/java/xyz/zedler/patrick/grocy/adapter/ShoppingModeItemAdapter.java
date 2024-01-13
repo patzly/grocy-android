@@ -40,7 +40,6 @@ import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -317,8 +316,8 @@ public class ShoppingModeItemAdapter extends
   public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int positionDoNotUse) {
     GroupedListItem groupedListItem = groupedListItems.get(viewHolder.getAdapterPosition());
 
-    int colorPrimary = ResUtil.getColorAttr(context, R.attr.colorPrimary);
-    int colorTertiary = ResUtil.getColorAttr(context, R.attr.colorTertiary);
+    int colorPrimary = ResUtil.getColor(context, R.attr.colorPrimary);
+    int colorTertiary = ResUtil.getColor(context, R.attr.colorTertiary);
 
     int type = getItemViewType(viewHolder.getAdapterPosition());
     if (type == GroupedListItem.TYPE_HEADER) {
@@ -437,9 +436,9 @@ public class ShoppingModeItemAdapter extends
       }
       Chip chipAmount = createChip(context, stringBuilderAmount.toString());
       if (item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {
-        chipAmount.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnCustomBlueContainer));
+        chipAmount.setTextColor(ResUtil.getColor(context, R.attr.colorOnCustomBlueContainer));
         chipAmount.setChipBackgroundColor(ColorStateList.valueOf(
-            ResUtil.getColorAttr(context, R.attr.colorCustomBlueContainer)
+            ResUtil.getColor(context, R.attr.colorCustomBlueContainer)
         ));
       }
       if (item.isUndone()) {

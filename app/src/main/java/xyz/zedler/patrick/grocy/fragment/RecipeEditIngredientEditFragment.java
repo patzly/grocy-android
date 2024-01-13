@@ -122,7 +122,7 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
     });
     viewModel.getFormData().getQuantityUnitLive().observe(
         getViewLifecycleOwner(), value -> binding.textQuantityUnitLabel.setTextColor(
-            ResUtil.getColorAttr(
+            ResUtil.getColor(
                 activity, value == null ? R.attr.colorError : R.attr.colorOnSurfaceVariant
             )
         )

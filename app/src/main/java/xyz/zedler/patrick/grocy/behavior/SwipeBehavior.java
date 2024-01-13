@@ -119,9 +119,9 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     buttons = new ArrayList<>();
     buttonWidth = UiUtil.dpToPx(context, UiUtil.isOrientationPortrait(context) ? 72 : 64);
 
-    colorBg = ResUtil.getColorAttr(context, android.R.attr.colorBackground);
-    colorBgSwipe = ResUtil.getColorAttr(context, R.attr.colorPrimary);
-    colorDivider = ResUtil.getColorAttr(context, R.attr.colorOutlineVariant);
+    colorBg = ResUtil.getColor(context, android.R.attr.colorBackground);
+    colorBgSwipe = ResUtil.getColor(context, R.attr.colorPrimary);
+    colorDivider = ResUtil.getColor(context, R.attr.colorOutlineVariant);
 
     paintBg = new Paint(Paint.ANTI_ALIAS_FLAG);
     paintBg.setColor(colorBg);
@@ -392,10 +392,10 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
       if (drawable == null) {
         return;
       }
-      drawable.setColorFilter(ResUtil.getColorAttr(context, R.attr.colorOnPrimary), Mode.SRC_ATOP);
+      drawable.setColorFilter(ResUtil.getColor(context, R.attr.colorOnPrimary), Mode.SRC_ATOP);
 
       paintButton = new Paint(Paint.ANTI_ALIAS_FLAG);
-      paintButton.setColor(ResUtil.getColorAttr(context, R.attr.colorOnPrimary, 0.08f));
+      paintButton.setColor(ResUtil.getColor(context, R.attr.colorOnPrimary, 0.08f));
     }
 
     private boolean onClick(float x, float y) {

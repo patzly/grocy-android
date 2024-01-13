@@ -31,7 +31,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
-import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import xyz.zedler.patrick.grocy.BuildConfig;
 import xyz.zedler.patrick.grocy.Constants;
@@ -190,10 +189,10 @@ public class OverviewStartFragment extends BaseFragment {
 
     if (BuildConfig.DEBUG) {
       binding.imageLabelDebug.setColorFilter(
-          ResUtil.getColorAttr(activity, R.attr.colorOnCustomYellow)
+          ResUtil.getColor(activity, R.attr.colorOnCustomYellow)
       );
       binding.imageLabelDebugBg.setColorFilter(
-          ResUtil.getColorAttr(activity, R.attr.colorCustomYellow)
+          ResUtil.getColor(activity, R.attr.colorCustomYellow)
       );
     }
 
@@ -272,7 +271,7 @@ public class OverviewStartFragment extends BaseFragment {
       return false;
     }
     FormattedTextView textView = new FormattedTextView(activity);
-    textView.setTextColor(ResUtil.getColorAttr(activity, R.attr.colorOnSurfaceVariant));
+    textView.setTextColor(ResUtil.getColor(activity, R.attr.colorOnSurfaceVariant));
     textView.setTextSizeParagraph(14);
     textView.setBlockDistance(8);
     textView.setSideMargin(24);

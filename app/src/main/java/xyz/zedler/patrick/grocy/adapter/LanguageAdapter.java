@@ -115,7 +115,7 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.ViewHo
 
   private void setSelected(ViewHolder holder, boolean selected) {
     Context context = holder.binding.getRoot().getContext();
-    int colorSelected = ResUtil.getColorAttr(context, R.attr.colorOnSecondaryContainer);
+    int colorSelected = ResUtil.getColor(context, R.attr.colorOnSecondaryContainer);
     holder.binding.imageLanguageSelected.setColorFilter(colorSelected);
     holder.binding.imageLanguageSelected.setVisibility(selected ? View.VISIBLE : View.INVISIBLE);
     if (selected) {
@@ -126,10 +126,10 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.ViewHo
       );
     }
     holder.binding.textLanguageName.setTextColor(
-        selected ? colorSelected : ResUtil.getColorAttr(context, R.attr.colorOnSurface)
+        selected ? colorSelected : ResUtil.getColor(context, R.attr.colorOnSurface)
     );
     holder.binding.textLanguageTranslators.setTextColor(
-        selected ? colorSelected : ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant)
+        selected ? colorSelected : ResUtil.getColor(context, R.attr.colorOnSurfaceVariant)
     );
     holder.binding.linearLanguageContainer.setOnClickListener(
         view -> listener.onItemRowClicked(null)

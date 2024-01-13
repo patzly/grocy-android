@@ -106,82 +106,31 @@ public class ResUtil {
     context.startActivity(Intent.createChooser(intent, null));
   }
 
-  // TODO: replace with attributes when fixed in MDC and remove below methods
-
-  public static ColorStateList getColorSurfaceContainerLowest(Context context) {
-    return ContextCompat.getColorStateList(context, R.color.selector_fix_surface_container_lowest);
-  }
-
-  public static int getColorSurfaceContainerLow(Context context) {
-    ColorStateList list = ContextCompat.getColorStateList(
-        context, R.color.selector_fix_surface_container_low
-    );
-    assert list != null;
-    return list.getDefaultColor();
-  }
-
-  public static int getColorSurfaceContainer(Context context) {
-    ColorStateList list = ContextCompat.getColorStateList(
-        context, R.color.selector_fix_surface_container
-    );
-    assert list != null;
-    return list.getDefaultColor();
-  }
-
-  public static int getColorSurfaceContainerHigh(Context context) {
-    ColorStateList list = ContextCompat.getColorStateList(
-        context, R.color.selector_fix_surface_container_high
-    );
-    assert list != null;
-    return list.getDefaultColor();
-  }
-
-  public static int getColorSurfaceContainerHighest(Context context) {
-    ColorStateList list = ContextCompat.getColorStateList(
-        context, R.color.selector_fix_surface_container_highest
-    );
-    assert list != null;
-    return list.getDefaultColor();
-  }
-
-  public static ColorRoles getHarmonizedRoles(Context context, @ColorRes int resId) {
-    return MaterialColors.getColorRoles(
-        context,
-        MaterialColors.harmonizeWithPrimary(context,  ContextCompat.getColor(context, resId))
-    );
-  }
-
-  public static int getColorAttr(Context context, @AttrRes int resId) {
+  public static int getColor(Context context, @AttrRes int resId) {
     TypedValue typedValue = new TypedValue();
     context.getTheme().resolveAttribute(resId, typedValue, true);
     return typedValue.data;
   }
 
-  public static int getColorAttr(Context context, @AttrRes int resId, float alpha) {
-    return ColorUtils.setAlphaComponent(getColorAttr(context, resId), (int) (alpha * 255));
+  public static int getColor(Context context, @AttrRes int resId, float alpha) {
+    return ColorUtils.setAlphaComponent(getColor(context, resId), (int) (alpha * 255));
   }
 
-  public static int getColorBg(Context context) {
-    return getColorAttr(context, android.R.attr.colorBackground);
-  }
-
-  public static int getColorOutline(Context context) {
-    return getColorAttr(context, R.attr.colorOutline);
-  }
-
-  public static int getColorOutlineSecondary(Context context) {
-    return getColorAttr(context, R.attr.colorOutline, 0.4f);
+  public static int getSysColor(Context context, @AttrRes int resId) {
+    TypedValue typedValue = new TypedValue();
+    context.getTheme().resolveAttribute(resId, typedValue, true);
+    return typedValue.data;
   }
 
   public static int getColorHighlight(Context context) {
-    return getColorAttr(context, R.attr.colorSecondary, 0.09f);
+    return getColor(context, R.attr.colorSecondary, 0.09f);
   }
 
   public static void tintMenuItemIcon(Context context, MenuItem item) {
     if (item == null || item.getIcon() == null) {
       return;
     }
-    item.getIcon().setTint(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant));
+    item.getIcon().setTint(ResUtil.getColor(context, R.attr.colorOnSurfaceVariant));
   }
 
   public static void tintMenuItemIcons(Context context, Menu menu) {
@@ -190,7 +139,7 @@ public class ResUtil {
       if (item == null || item.getIcon() == null) {
         continue;
       }
-      item.getIcon().setTint(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant));
+      item.getIcon().setTint(ResUtil.getColor(context, R.attr.colorOnSurfaceVariant));
     }
   }
 
@@ -248,7 +197,7 @@ public class ResUtil {
     Canvas canvas = new Canvas(bitmap);
 
     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    paint.setColor(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant));
+    paint.setColor(ResUtil.getColor(context, R.attr.colorOnSurfaceVariant));
     paint.setTextSize(UiUtil.dpToPx(context, textSize));
     paint.setTypeface(ResourcesCompat.getFont(context, R.font.material_digits_round));
     paint.setLetterSpacing(0.1f);

@@ -448,7 +448,7 @@ public class DateBottomSheet extends BaseBottomSheetDialogFragment {
         .getChildAt(0);
     if (!(linearLayoutPickersView instanceof LinearLayout)) return;
 
-    @ColorInt int color = ResUtil.getColorAttr(requireContext(), R.attr.colorOnBackground);
+    @ColorInt int color = ResUtil.getColor(requireContext(), R.attr.colorOnBackground);
 
     LinearLayout linearLayoutPickers = (LinearLayout) linearLayoutPickersView;
     for (int i=0; i < linearLayoutPickers.getChildCount(); i++) {

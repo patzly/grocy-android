@@ -99,12 +99,12 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     if (location.getId() == selectedId) {
       holder.imageViewSelected.setVisibility(View.VISIBLE);
       holder.textViewName.setTextColor(
-          ResUtil.getColorAttr(context, R.attr.colorOnSecondaryContainer)
+          ResUtil.getColor(context, R.attr.colorOnSecondaryContainer)
       );
       holder.linearLayoutContainer.setBackground(ViewUtil.getBgListItemSelected(context));
     } else {
       holder.imageViewSelected.setVisibility(View.INVISIBLE);
-      holder.textViewName.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnSurface));
+      holder.textViewName.setTextColor(ResUtil.getColor(context, R.attr.colorOnSurface));
       holder.linearLayoutContainer.setOnClickListener(
           view -> listener.onItemRowClicked(holder.getAdapterPosition())
       );

@@ -37,7 +37,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -471,9 +470,9 @@ public class ShoppingListItemAdapter extends
       }
       Chip chipAmount = createChip(context, stringBuilderAmount.toString());
       if (item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {
-        chipAmount.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnCustomBlueContainer));
+        chipAmount.setTextColor(ResUtil.getColor(context, R.attr.colorOnCustomBlueContainer));
         chipAmount.setChipBackgroundColor(ColorStateList.valueOf(
-            ResUtil.getColorAttr(context, R.attr.colorCustomBlueContainer)
+            ResUtil.getColor(context, R.attr.colorCustomBlueContainer)
         ));
       }
       if (item.isUndone()) {
