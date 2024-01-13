@@ -27,6 +27,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -107,9 +108,7 @@ public class ResUtil {
   }
 
   public static int getColor(Context context, @AttrRes int resId) {
-    TypedValue typedValue = new TypedValue();
-    context.getTheme().resolveAttribute(resId, typedValue, true);
-    return typedValue.data;
+    return MaterialColors.getColor(context, resId, Color.BLACK);
   }
 
   public static int getColor(Context context, @AttrRes int resId, float alpha) {
