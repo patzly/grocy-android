@@ -99,11 +99,11 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     if (shoppingList.getId() == selectedId) {
       holder.imageSelected.setVisibility(View.VISIBLE);
-      holder.name.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnSecondaryContainer));
+      holder.name.setTextColor(ResUtil.getColor(context, R.attr.colorOnSecondaryContainer));
       holder.container.setBackground(ViewUtil.getBgListItemSelected(context));
     } else {
       holder.imageSelected.setVisibility(View.INVISIBLE);
-      holder.name.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnSurface));
+      holder.name.setTextColor(ResUtil.getColor(context, R.attr.colorOnSurface));
       holder.container.setOnClickListener(view -> listener.onItemRowClicked(shoppingList));
       holder.container.setBackground(ViewUtil.getRippleBgListItemSurface(context));
     }

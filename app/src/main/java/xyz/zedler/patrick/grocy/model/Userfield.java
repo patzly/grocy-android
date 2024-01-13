@@ -33,7 +33,6 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
@@ -161,13 +160,16 @@ public class Userfield implements Parcelable {
     if (userfield.getType().equals(Userfield.TYPE_CHECKBOX)) {
       chip.setText(context.getString(R.string.property_userfield_value_without_space,
           userfield.getCaption(), ""));
-      ColorRoles colorGreen = ResUtil.getHarmonizedRoles(context, R.color.green);
       if (value != null && value.equals("1")) {
         chip.setCloseIcon(
             ContextCompat.getDrawable(context, R.drawable.ic_round_check_circle_outline)
         );
-        chip.setCloseIconTint(ColorStateList.valueOf(colorGreen.getOnAccentContainer()));
-        chip.setChipBackgroundColor(ColorStateList.valueOf(colorGreen.getAccentContainer()));
+        chip.setCloseIconTint(ColorStateList.valueOf(
+            ResUtil.getColor(context, R.attr.colorOnCustomGreenContainer)
+        ));
+        chip.setChipBackgroundColor(ColorStateList.valueOf(
+            ResUtil.getColor(context, R.attr.colorCustomGreenContainer)
+        ));
         chip.setCloseIconVisible(true);
         return chip;
       } else {

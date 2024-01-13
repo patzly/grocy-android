@@ -367,7 +367,7 @@
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">Transação que será executada:\n\nRemoção %1$s %2$s de %3$s do estoque\nLocalização: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-  <string name="msg_quick_mode_confirm_open">Transação que será executada:\n\nMarque %1$s %2$s de %3$s como aberto\nLocalização: %4$s</string>
+  <string name="msg_quick_mode_confirm_open">Transação que será executada:\n\nMarcar %1$s %2$s de %3$s como aberto\nLocalização: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">Transação que será executada:\n\nTransferência %1$s %2$s de %3$s\nde: %4$s\npara: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
@@ -423,7 +423,7 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days">Para compras, esta quantidade de dias será somada a hoje para a sugestão de data de validade (-1 significa que este produto nunca vence).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_default_due_days_opened">Quando este produto foi marcado como aberto, a data de validade será substituída por hoje + esta quantidade de dias (o valor 0 desativa isso).</string>
+  <string name="msg_help_default_due_days_opened">Quando este produto for marcado como aberto, a data de validade será substituída por hoje + esta quantidade de dias (o valor 0 desativa isso).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days_freezing">Ao mover este produto para um local de congelamento (portanto, ao congelá-lo), a data de validade será substituída por hoje + esta quantidade de dias (-1 significa que este produto nunca vence).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -464,7 +464,7 @@
   <string name="msg_help_external_scanner_ready">Você pode usar um scanner externo para o campo abaixo enquanto estiver focado e vazio.</string>
   <string name="msg_help_external_scanner_settings">Este aplicativo oferece suporte a dispositivos de scanner externos que atuam como um teclado e podem ser conectados via USB ou Bluetooth. As seguintes opções devem ser configuradas em seu scanner externo:\n\nPrefixo: Nenhum\nSufixo: TAB ou ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_specific_item">O primeiro item nesta lista seria escolhido pela regra pré-definida que é \"Aberto primeiro, primeiro a vencer primeiro, depois primeiro a entrar primeiro a sair\".</string>
+  <string name="msg_help_specific_item">O primeiro item nesta lista seria escolhido pela regra pré-definida que é \"aberto, próximo a vencer e primeiro a entrar/primeiro a sair\".</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Isso é apenas para usos estatísticos.</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -499,6 +499,7 @@
   <string name="msg_help_home_assistant_login_token">Você pode criar um token de acesso de longa duração nas configurações do perfil do Home Assistant (última seção). Toque aqui para abrir o URL acima.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Navegue de volta ou toque neste cartão para digitalizar um código QR que preenche os campos abaixo.</string>
   <string name="msg_help_fab_overview_start">O botão de ação nesta página de visão geral tem duas ações:\n\n- Toque curto: consumir com leitor de código de barras\n- Toque longo: comprar com leitor de código de barras\n\nCom este botão, o modo rápido nas respectivas páginas é ativado por padrão. Você pode alterar isso nas configurações de comportamento.</string>
+  <string name="msg_help_fab_consume_start">O botão de ação nesta página consome o produto com os valores fornecidos. Para marcar o produto como aberto, use o botão na parte inferior esquerda da barra de menu.</string>
   <string name="msg_share">Confira este cliente Android para o incrível projeto Grocy: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">chave API não funcionando</string>
@@ -584,6 +585,7 @@
   <string name="error_invalid_base_servings">Porções inválidas</string>
   <string name="error_pictures_size_exceeds_limit">Existem imagens incorporadas nas descrições de produtos ou receitas em seu servidor, que excedem o limite de análise deste aplicativo. Por favor, remova imagens de alta qualidade e de tamanho grande de suas descrições. Isso também irá acelerar o carregamento de dados.</string>
   <string name="error_userfield_type_not_supported">Tipo de campo de usuário atualmente não suportado</string>
+  <string name="error_open_product_not_supported">Marcar o produto como aberto não é compatível com este produto</string>
   <string name="error_settings_backup">Backup falhou</string>
   <string name="error_settings_restore">Recuperação falhou</string>
 
@@ -663,9 +665,9 @@
   <string name="title_edit_barcode">Editar código de barras</string>
   <string name="title_create_barcode">Criar código de barras</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
-  <string name="title_edit_qu_conversion">Editar conversão de unidade</string>
+  <string name="title_edit_qu_conversion">Editar conversão de medida</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
-  <string name="title_create_qu_conversion">Criar conversão de unidade</string>
+  <string name="title_create_qu_conversion">Criar conversão de medida</string>
   <string name="title_shopping_list_edit">Editar lista de compras</string>
   <string name="title_shopping_list_new">Nova lista de compras</string>
   <string name="title_shopping_mode">Modo compras</string>
@@ -679,7 +681,7 @@
   <string name="title_notifications">Notificações</string>
   <string name="title_product_cat_barcodes">Códigos de barra</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
-  <string name="title_product_cat_qu_conversions">Conversoões de Unidades</string>
+  <string name="title_product_cat_qu_conversions">Conversões de medidas</string>
   <string name="title_unknown_input">Entrada desconhecida</string>
   <string name="title_presets_new_products">Padrões para novos produtos</string>
   <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
@@ -831,9 +833,9 @@
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_chores_due_soon">
-    <item quantity="one">%1$d tarefa para ser feita nos próximos %2$d dias, está atrasada</item>
-    <item quantity="many">%1$d tarefas a serem feitas nos próximos %2$d dias, estão atrasadas</item>
-    <item quantity="other">%1$d tarefas a serem feitas nos próximos %2$d dias, estão atrasadas</item>
+    <item quantity="one">%1$d tarefa, prevista para os próximos %2$d dias está atrasada</item>
+    <item quantity="many">%1$d tarefas, previstas para os próximos %2$d dias, estão atrasadas</item>
+    <item quantity="other">%1$d tarefas, previstas para os próximos %2$d dias, estão atrasadas</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_overdue">
@@ -1184,6 +1186,9 @@
   <string name="info_github">Grocy Android no GitHub</string>
   <string name="info_github_description">Código-fonte</string>
   <string name="info_website">Abrir o website Grocy</string>
+  <string name="info_translation_description">Ajude a traduzir Grocy Android</string>
+  <string name="info_privacy">Política de privacidade</string>
+  <string name="info_privacy_description">Como seus dados serão processados?</string>
 
   <string name="feature_1_title">Grocy para Android</string>
   <string name="feature_1_description">Gerenciamento de mantimentos para sua casa auto-hospedado </string>
@@ -1224,6 +1229,16 @@
   <string name="setting_theme_dark">Escuro</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_light">Claro</string>
+  <string name="setting_contrast">Contraste</string>
+  <string name="setting_contrast_description">Acessibilidade para sua visão</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast. The button width should be as dense as possible. -->
+  <string name="setting_contrast_standard">Padrão</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_medium">Médio</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_high">Alto</string>
+  <string name="setting_contrast_dynamic">O contraste do tema do dispositivo deve ser definido nas configurações do sistema</string>
+  <string name="setting_contrast_dynamic_unsupported">O contraste dinâmico para o tema do dispositivo está disponível apenas no Android 14 ou superior</string>
   <string name="setting_language">Idioma</string>
   <string name="setting_language_description">Selecione idioma</string>
   <string name="setting_language_info">Muito obrigado a todos os tradutores voluntários da Transifex!\nVisite-nos no GitHub para saber como você pode ajudar a tornar o Grocy Android disponível para o seu idioma.</string>
@@ -1251,7 +1266,7 @@
   <string name="setting_logout_description">Voltar à página de início de sessão</string>
   <string name="setting_manage_shortcuts">Gerenciar atalhos</string>
   <string name="setting_list_indicator">Indicar lista de compras</string>
-  <string name="setting_list_indicator_description">Mostrar ponto azul, se o produto estiver em uma Lista de Compras</string>
+  <string name="setting_list_indicator_description">Mostrar bolinha azul, se o produto estiver em uma Lista de Compras</string>
   <string name="setting_shopping_mode_update_interval">Intervalo de atualização do modo de compra</string>
   <string name="setting_keep_screen_on">Manter a tela ligada</string>
   <string name="setting_keep_screen_on_description">Ao estar no Modo Compras</string>
@@ -1273,7 +1288,7 @@
   <string name="setting_auto_add_shopping_list_description">Que estão abaixo da quantidade mín definida de estoque</string>
   <string name="setting_empty_value">Vazio</string>
   <string name="setting_sync_off">Sincronização desligada</string>
-  <string name="setting_loading">Lendo valor</string>
+  <string name="setting_loading">Carregando informações...</string>
   <string name="setting_not_loaded">Não pôde ser carregado</string>
   <string name="setting_debug">Habilitar registro</string>
   <string name="setting_debug_description">Mostrar erros nos registros</string>

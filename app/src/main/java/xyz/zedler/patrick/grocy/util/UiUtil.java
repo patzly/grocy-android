@@ -27,7 +27,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Point;
@@ -66,8 +65,10 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.color.ColorContrast;
+import com.google.android.material.color.ColorContrastOptions;
 import com.google.android.material.color.DynamicColors;
-import com.google.android.material.color.DynamicColorsOptions;
+import com.google.android.material.color.HarmonizedColorAttributes;
 import com.google.android.material.color.HarmonizedColors;
 import com.google.android.material.color.HarmonizedColorsOptions;
 import com.google.android.material.math.MathUtils;
@@ -86,139 +87,27 @@ import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 
 public class UiUtil {
 
+  private static final String TAG = UiUtil.class.getSimpleName();
+
   public static final int SCRIM = 0x55000000;
   public static final int SCRIM_DARK_DIALOG = 0xFF0c0c0e;
   public static final int SCRIM_LIGHT_DIALOG = 0xFF666666;
 
+  private final MainActivity activity;
+  private final ActivityMainBinding binding;
   private boolean wasKeyboardOpened;
   private float fabBaseY;
   private int focusedScrollOffset;
 
-  public static void setTheme(Activity activity, SharedPreferences sharedPrefs) {
-    switch (sharedPrefs.getString(SETTINGS.APPEARANCE.THEME, SETTINGS_DEFAULT.APPEARANCE.THEME)) {
-      case THEME.RED:
-        setContrastTheme(
-            activity, sharedPrefs,
-            R.style.Theme_Grocy_Red,
-            R.style.ThemeOverlay_Grocy_Red_MediumContrast,
-            R.style.ThemeOverlay_Grocy_Red_HighContrast
-        );
-        break;
-      case THEME.YELLOW:
-        setContrastTheme(
-            activity, sharedPrefs,
-            R.style.Theme_Grocy_Yellow,
-            R.style.ThemeOverlay_Grocy_Yellow_MediumContrast,
-            R.style.ThemeOverlay_Grocy_Yellow_HighContrast
-        );
-        break;
-      case THEME.GREEN:
-        setContrastTheme(
-            activity, sharedPrefs,
-            R.style.Theme_Grocy_Green,
-            R.style.ThemeOverlay_Grocy_Green_MediumContrast,
-            R.style.ThemeOverlay_Grocy_Green_HighContrast
-        );
-        break;
-      case THEME.BLUE:
-        setContrastTheme(
-            activity, sharedPrefs,
-            R.style.Theme_Grocy_Blue,
-            R.style.ThemeOverlay_Grocy_Blue_MediumContrast,
-            R.style.ThemeOverlay_Grocy_Blue_HighContrast
-        );
-        break;
-      default:
-        if (DynamicColors.isDynamicColorAvailable()) {
-          DynamicColors.applyToActivityIfAvailable(
-              activity,
-              new DynamicColorsOptions.Builder().setOnAppliedCallback(
-                  activityCallback -> HarmonizedColors.applyToContextIfAvailable(
-                      activity, HarmonizedColorsOptions.createMaterialDefaults()
-                  )
-              ).build()
-          );
-        } else {
-          setContrastTheme(
-              activity, sharedPrefs,
-              R.style.Theme_Grocy_Green,
-              R.style.ThemeOverlay_Grocy_Green_MediumContrast,
-              R.style.ThemeOverlay_Grocy_Green_HighContrast
-          );
-        }
-        break;
-    }
+  public UiUtil(@NonNull MainActivity activity) {
+    this.activity = activity;
+    this.binding = activity.binding;
   }
 
-  private static void setContrastTheme(
-      Activity activity,
-      SharedPreferences sharedPrefs,
-      @StyleRes int resIdStandard,
-      @StyleRes int resIdMedium,
-      @StyleRes int resIdHigh
-  ) {
-    switch (sharedPrefs.getString(
-        APPEARANCE.UI_CONTRAST, SETTINGS_DEFAULT.APPEARANCE.UI_CONTRAST)) {
-      case CONTRAST.MEDIUM:
-        activity.setTheme(resIdMedium);
-        break;
-      case CONTRAST.HIGH:
-        activity.setTheme(resIdHigh);
-        break;
-      default:
-        activity.setTheme(resIdStandard);
-    }
-  }
-
-  public static void layoutEdgeToEdge(Window window) {
-    if (Build.VERSION.SDK_INT >= VERSION_CODES.R) {
-      window.setDecorFitsSystemWindows(false);
-    } else {
-      int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
-      View decorView = window.getDecorView();
-      decorView.setSystemUiVisibility(decorView.getSystemUiVisibility() | flags);
-    }
-  }
-
-  public static void setLightNavigationBar(@NonNull View view, boolean isLight) {
-    if (Build.VERSION.SDK_INT >= VERSION_CODES.R) {
-      view.getWindowInsetsController().setSystemBarsAppearance(
-          isLight ? WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS : 0,
-          WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
-      );
-    } else if (Build.VERSION.SDK_INT >= VERSION_CODES.O) {
-      int flags = view.getSystemUiVisibility();
-      if (isLight) {
-        flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
-      } else {
-        flags &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
-      }
-      view.setSystemUiVisibility(flags);
-    }
-  }
-
-  public static void setLightStatusBar(@NonNull View view, boolean isLight) {
-    if (Build.VERSION.SDK_INT >= VERSION_CODES.S) {
-      view.getWindowInsetsController().setSystemBarsAppearance(
-          isLight ? WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS : 0,
-          WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-      );
-    } else if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
-      int flags = view.getSystemUiVisibility();
-      if (isLight) {
-        flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-      } else {
-        flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-      }
-      view.setSystemUiVisibility(flags);
-    }
-  }
-
-  public void setUpBottomAppBar(String TAG, ActivityMainBinding binding) {
+  public void setUpBottomAppBar() {
     binding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
     binding.bottomAppBar.setMenuAlignmentMode(BottomAppBar.MENU_ALIGNMENT_MODE_START);
 
-    Context context = binding.getRoot().getContext();
     // Use reflection to store bottomInset in BAB manually
     // The automatic method includes IME insets which is bad behavior for BABs
     ViewCompat.setOnApplyWindowInsetsListener(binding.bottomAppBar, (v, insets) -> {
@@ -245,18 +134,16 @@ public class UiUtil {
         }
       }
       // Calculate initial FAB y position for restoring after shifted by keyboard
-      int babHeight = UiUtil.dpToPx(context, 80);
-      int fabHeight = UiUtil.dpToPx(context, 56);
-      int bottom = UiUtil.getDisplayHeight(context);
+      int babHeight = UiUtil.dpToPx(activity, 80);
+      int fabHeight = UiUtil.dpToPx(activity, 56);
+      int bottom = UiUtil.getDisplayHeight(activity);
       fabBaseY = bottom - bottomInset - (babHeight / 2f) - (fabHeight / 2f);
       return insets;
     });
     ViewUtil.setTooltipText(binding.fabMainScroll, R.string.action_top_scroll);
   }
 
-  public static void updateBottomAppBar(
-      ActivityMainBinding binding,
-      Context context,
+  public void updateBottomAppBar(
       SharedPreferences sharedPrefs,
       boolean showFab,
       @MenuRes int newMenuId,
@@ -273,10 +160,10 @@ public class UiUtil {
       Drawable overflowIcon = binding.bottomAppBar.getOverflowIcon();
 
       // IF ANIMATIONS DISABLED
-      if (!UiUtil.areAnimationsEnabled(context)) {
+      if (!UiUtil.areAnimationsEnabled(activity)) {
         binding.bottomAppBar.replaceMenu(newMenuId);
         Menu menu = binding.bottomAppBar.getMenu();
-        int tint = ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant);
+        int tint = ResUtil.getColor(activity, R.attr.colorOnSurfaceVariant);
         for (int i = 0; i < menu.size(); i++) {
           MenuItem item = menu.getItem(i);
           if (item.getIcon() != null) {
@@ -302,7 +189,10 @@ public class UiUtil {
           && binding.bottomAppBar.getMenu().size() > 0
           && binding.bottomAppBar.getMenu().getItem(0) != null
           && binding.bottomAppBar.getMenu().getItem(0).getIcon() != null) {
-        alphaFrom = binding.bottomAppBar.getMenu().getItem(0).getIcon().getAlpha();
+        MenuItem item = binding.bottomAppBar.getMenu().getItem(0);
+        if (item.getIcon() != null && item.getIcon() != null) {
+          alphaFrom = item.getIcon().getAlpha();
+        }
       }
       ValueAnimator animatorFadeOut = ValueAnimator.ofInt(alphaFrom, 0);
       animatorFadeOut.addUpdateListener(animation -> {
@@ -325,7 +215,7 @@ public class UiUtil {
 
         int iconIndex = 0;
         int overflowCount = 0;
-        int tint = ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant);
+        int tint = ResUtil.getColor(activity, R.attr.colorOnSurfaceVariant);
         for (int i = 0; i < binding.bottomAppBar.getMenu().size(); i++) {
           MenuItem item = binding.bottomAppBar.getMenu().getItem(i);
           if (item.getIcon() == null || !item.isVisible()) {
@@ -342,7 +232,7 @@ public class UiUtil {
           new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Rect bounds = item.getIcon().copyBounds();
             int top = bounds.top;
-            int offset = UiUtil.dpToPx(context, 12);
+            int offset = UiUtil.dpToPx(activity, 12);
             ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
             animator.addUpdateListener(animation -> {
               bounds.offsetTo(
@@ -370,7 +260,7 @@ public class UiUtil {
           new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Rect bounds = overflowIconNew.copyBounds();
             int top = bounds.top;
-            int offset = UiUtil.dpToPx(context, 12);
+            int offset = UiUtil.dpToPx(activity, 12);
             ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
             animator.addUpdateListener(animation -> {
               bounds.offsetTo(
@@ -392,11 +282,8 @@ public class UiUtil {
   }
 
   public void setupImeAnimation(
-      MainActivity activity,
-      SystemBarBehavior systemBarBehavior,
-      BottomScrollBehavior scrollBehavior
+      SystemBarBehavior systemBarBehavior, BottomScrollBehavior scrollBehavior
   ) {
-    ActivityMainBinding binding = activity.binding;
     Callback callback = new Callback(Callback.DISPATCH_MODE_STOP) {
       WindowInsetsAnimationCompat animation;
       int bottomInsetStart, bottomInsetEnd;
@@ -517,6 +404,201 @@ public class UiUtil {
     ViewCompat.setWindowInsetsAnimationCallback(binding.coordinatorMain, callback);
   }
 
+  public static void setTheme(Activity activity, SharedPreferences sharedPrefs) {
+    switch (sharedPrefs.getString(SETTINGS.APPEARANCE.THEME, SETTINGS_DEFAULT.APPEARANCE.THEME)) {
+      case THEME.RED:
+        setContrastTheme(
+            activity, sharedPrefs,
+            R.style.Theme_Grocy_Red,
+            R.style.ThemeOverlay_Grocy_Red_MediumContrast,
+            R.style.ThemeOverlay_Grocy_Red_HighContrast
+        );
+        break;
+      case THEME.YELLOW:
+        setContrastTheme(
+            activity, sharedPrefs,
+            R.style.Theme_Grocy_Yellow,
+            R.style.ThemeOverlay_Grocy_Yellow_MediumContrast,
+            R.style.ThemeOverlay_Grocy_Yellow_HighContrast
+        );
+        break;
+      case THEME.GREEN:
+        setContrastTheme(
+            activity, sharedPrefs,
+            R.style.Theme_Grocy_Green,
+            R.style.ThemeOverlay_Grocy_Green_MediumContrast,
+            R.style.ThemeOverlay_Grocy_Green_HighContrast
+        );
+        break;
+      case THEME.BLUE:
+        setContrastTheme(
+            activity, sharedPrefs,
+            R.style.Theme_Grocy_Blue,
+            R.style.ThemeOverlay_Grocy_Blue_MediumContrast,
+            R.style.ThemeOverlay_Grocy_Blue_HighContrast
+        );
+        break;
+      default:
+        if (DynamicColors.isDynamicColorAvailable()) {
+          DynamicColors.applyToActivityIfAvailable(activity);
+          ColorContrast.applyToActivityIfAvailable(
+              activity,
+              new ColorContrastOptions.Builder()
+                  .setMediumContrastThemeOverlay(R.style.ThemeOverlay_Grocy_MediumContrast)
+                  .setHighContrastThemeOverlay(R.style.ThemeOverlay_Grocy_HighContrast)
+                  .build()
+          );
+        } else {
+          setContrastTheme(
+              activity, sharedPrefs,
+              R.style.Theme_Grocy_Green,
+              R.style.ThemeOverlay_Grocy_Green_MediumContrast,
+              R.style.ThemeOverlay_Grocy_Green_HighContrast
+          );
+        }
+        break;
+    }
+  }
+
+  private static void setContrastTheme(
+      Activity activity,
+      SharedPreferences sharedPrefs,
+      @StyleRes int resIdStandard,
+      @StyleRes int resIdMedium,
+      @StyleRes int resIdHigh
+  ) {
+    switch (sharedPrefs.getString(
+        APPEARANCE.UI_CONTRAST, SETTINGS_DEFAULT.APPEARANCE.UI_CONTRAST)) {
+      case CONTRAST.MEDIUM:
+        activity.setTheme(resIdMedium);
+        break;
+      case CONTRAST.HIGH:
+        activity.setTheme(resIdHigh);
+        break;
+      default:
+        activity.setTheme(resIdStandard);
+    }
+  }
+
+  public static void applyColorHarmonization(Context context) {
+    int[] attrIds = new int[] {
+        R.attr.colorError,
+        R.attr.colorOnError,
+        R.attr.colorErrorContainer,
+        R.attr.colorOnErrorContainer,
+
+        R.attr.colorCustomBlue,
+        R.attr.colorOnCustomBlue,
+        R.attr.colorCustomBlueContainer,
+        R.attr.colorOnCustomBlueContainer,
+
+        R.attr.colorCustomGreen,
+        R.attr.colorOnCustomGreen,
+        R.attr.colorCustomGreenContainer,
+        R.attr.colorOnCustomGreenContainer,
+
+        R.attr.colorCustomYellow,
+        R.attr.colorOnCustomYellow,
+        R.attr.colorCustomYellowContainer,
+        R.attr.colorOnCustomYellowContainer,
+
+        R.attr.colorCustomOrange,
+        R.attr.colorOnCustomOrange,
+        R.attr.colorCustomOrangeContainer,
+        R.attr.colorOnCustomOrangeContainer
+    };
+    int[] resIds = new int[] {
+        R.color.logo_yellow,
+        R.color.logo_green,
+        R.color.logo_red,
+
+        R.color.custom_yellow_80,
+        R.color.custom_yellow_50,
+        R.color.custom_yellow_30,
+
+        R.color.custom_green_80,
+        R.color.custom_green_50,
+
+        R.color.custom_red_60,
+        R.color.custom_red_50,
+        R.color.custom_red_35,
+        R.color.custom_red_30,
+
+        R.color.custom_brown_90,
+        R.color.custom_brown_70,
+        R.color.custom_brown_50,
+        R.color.custom_brown_30,
+
+        R.color.custom_dirt_95,
+        R.color.custom_dirt_90,
+        R.color.custom_dirt_80,
+        R.color.custom_dirt_60,
+        R.color.custom_dirt_40,
+        R.color.custom_dirt_30,
+
+        R.color.custom_blue_90,
+        R.color.custom_blue_70,
+        R.color.custom_blue_60,
+        R.color.custom_blue_40,
+        R.color.custom_blue_10,
+
+        R.color.custom_grey_95,
+        R.color.custom_grey_90,
+        R.color.custom_grey_80,
+        R.color.custom_grey_60,
+        R.color.custom_grey_10,
+    };
+    HarmonizedColorsOptions options = new HarmonizedColorsOptions.Builder()
+        .setColorResourceIds(resIds)
+        .setColorAttributes(HarmonizedColorAttributes.create(attrIds))
+        .build();
+    HarmonizedColors.applyToContextIfAvailable(context, options);
+  }
+
+  public static void layoutEdgeToEdge(Window window) {
+    if (Build.VERSION.SDK_INT >= VERSION_CODES.R) {
+      window.setDecorFitsSystemWindows(false);
+    } else {
+      int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+      View decorView = window.getDecorView();
+      decorView.setSystemUiVisibility(decorView.getSystemUiVisibility() | flags);
+    }
+  }
+
+  public static void setLightNavigationBar(@NonNull View view, boolean isLight) {
+    if (Build.VERSION.SDK_INT >= VERSION_CODES.R) {
+      view.getWindowInsetsController().setSystemBarsAppearance(
+          isLight ? WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS : 0,
+          WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
+      );
+    } else if (Build.VERSION.SDK_INT >= VERSION_CODES.O) {
+      int flags = view.getSystemUiVisibility();
+      if (isLight) {
+        flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+      } else {
+        flags &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+      }
+      view.setSystemUiVisibility(flags);
+    }
+  }
+
+  public static void setLightStatusBar(@NonNull View view, boolean isLight) {
+    if (Build.VERSION.SDK_INT >= VERSION_CODES.S) {
+      view.getWindowInsetsController().setSystemBarsAppearance(
+          isLight ? WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS : 0,
+          WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+      );
+    } else if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
+      int flags = view.getSystemUiVisibility();
+      if (isLight) {
+        flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+      } else {
+        flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+      }
+      view.setSystemUiVisibility(flags);
+    }
+  }
+
   public static boolean isDarkModeActive(Context context) {
     int uiMode = context.getResources().getConfiguration().uiMode;
     return (uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
@@ -536,6 +618,12 @@ public class UiUtil {
   public static boolean isOrientationPortrait(Context context) {
     int orientation = context.getResources().getConfiguration().orientation;
     return orientation == Configuration.ORIENTATION_PORTRAIT;
+  }
+
+  public static boolean isLandTablet(Context context) {
+    boolean isPortrait = isOrientationPortrait(context);
+    int width = context.getResources().getConfiguration().smallestScreenWidthDp;
+    return !isPortrait && width > 600;
   }
 
   public static boolean isLayoutRtl(Context context) {

@@ -77,7 +77,7 @@ public class FilterChip extends LinearLayout {
         EMPTY_STATE_SET, Color.TRANSPARENT
     );
     int bgColorTo = data.isActive()
-        ? ResUtil.getColorAttr(getContext(), R.attr.colorSecondaryContainer)
+        ? ResUtil.getColor(getContext(), R.attr.colorSecondaryContainer)
         : Color.TRANSPARENT;
     ValueAnimator colorAnimation = ValueAnimator.ofArgb(bgColorFrom, bgColorTo);
     colorAnimation.setDuration(250);
@@ -90,14 +90,14 @@ public class FilterChip extends LinearLayout {
     binding.text.setText(data.getText());
 
     // text color
-    binding.text.setTextColor(ResUtil.getColorAttr(getContext(), data.isActive()
+    binding.text.setTextColor(ResUtil.getColor(getContext(), data.isActive()
         ? R.attr.colorOnSecondaryContainer
         : R.attr.colorOnSurface
     ));
 
     // expand icon color
     binding.imageIconExpand.setImageTintList(ColorStateList.valueOf(
-        ResUtil.getColorAttr(getContext(), data.isActive()
+        ResUtil.getColor(getContext(), data.isActive()
                 ? R.attr.colorOnSecondaryContainer
                 : R.attr.colorOnSurfaceVariant
         )

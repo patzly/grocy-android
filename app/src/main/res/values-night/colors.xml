@@ -19,6 +19,57 @@
 
 <resources>
 
+  <color name="base_theme_colorCustomBlue">#A3C9FE</color>
+  <color name="base_theme_colorOnCustomBlue">#00315B</color>
+  <color name="base_theme_colorCustomBlueContainer">#1E4876</color>
+  <color name="base_theme_colorOnCustomBlueContainer">#D3E4FF</color>
+  <color name="base_theme_colorCustomGreen">#B1D18A</color>
+  <color name="base_theme_colorOnCustomGreen">#1F3701</color>
+  <color name="base_theme_colorCustomGreenContainer">#354E16</color>
+  <color name="base_theme_colorOnCustomGreenContainer">#CDEDA4</color>
+  <color name="base_theme_colorCustomYellow">#E1C46D</color>
+  <color name="base_theme_colorOnCustomYellow">#3C2F00</color>
+  <color name="base_theme_colorCustomYellowContainer">#574500</color>
+  <color name="base_theme_colorOnCustomYellowContainer">#FFE086</color>
+  <color name="base_theme_colorCustomOrange">#FFB780</color>
+  <color name="base_theme_colorOnCustomOrange">#4E2600</color>
+  <color name="base_theme_colorCustomOrangeContainer">#6D3A09</color>
+  <color name="base_theme_colorOnCustomOrangeContainer">#FFDCC4</color>
+
+  <color name="base_theme_colorCustomBlue_mediumContrast">#AACDFF</color>
+  <color name="base_theme_colorOnCustomBlue_mediumContrast">#00172F</color>
+  <color name="base_theme_colorCustomBlueContainer_mediumContrast">#6D93C5</color>
+  <color name="base_theme_colorOnCustomBlueContainer_mediumContrast">#000000</color>
+  <color name="base_theme_colorCustomGreen_mediumContrast">#B5D58E</color>
+  <color name="base_theme_colorOnCustomGreen_mediumContrast">#0C1A00</color>
+  <color name="base_theme_colorCustomGreenContainer_mediumContrast">#7D9A59</color>
+  <color name="base_theme_colorOnCustomGreenContainer_mediumContrast">#000000</color>
+  <color name="base_theme_colorCustomYellow_mediumContrast">#E5C871</color>
+  <color name="base_theme_colorOnCustomYellow_mediumContrast">#1D1500</color>
+  <color name="base_theme_colorCustomYellowContainer_mediumContrast">#A88E3D</color>
+  <color name="base_theme_colorOnCustomYellowContainer_mediumContrast">#000000</color>
+  <color name="base_theme_colorCustomOrange_mediumContrast">#FFBD8B</color>
+  <color name="base_theme_colorOnCustomOrange_mediumContrast">#271000</color>
+  <color name="base_theme_colorCustomOrangeContainer_mediumContrast">#C4824C</color>
+  <color name="base_theme_colorOnCustomOrangeContainer_mediumContrast">#000000</color>
+
+  <color name="base_theme_colorCustomBlue_highContrast">#FAFAFF</color>
+  <color name="base_theme_colorOnCustomBlue_highContrast">#000000</color>
+  <color name="base_theme_colorCustomBlueContainer_highContrast">#AACDFF</color>
+  <color name="base_theme_colorOnCustomBlueContainer_highContrast">#000000</color>
+  <color name="base_theme_colorCustomGreen_highContrast">#F4FFE0</color>
+  <color name="base_theme_colorOnCustomGreen_highContrast">#000000</color>
+  <color name="base_theme_colorCustomGreenContainer_highContrast">#B5D58E</color>
+  <color name="base_theme_colorOnCustomGreenContainer_highContrast">#000000</color>
+  <color name="base_theme_colorCustomYellow_highContrast">#FFFAF6</color>
+  <color name="base_theme_colorOnCustomYellow_highContrast">#000000</color>
+  <color name="base_theme_colorCustomYellowContainer_highContrast">#E5C871</color>
+  <color name="base_theme_colorOnCustomYellowContainer_highContrast">#000000</color>
+  <color name="base_theme_colorCustomOrange_highContrast">#FFFAF8</color>
+  <color name="base_theme_colorOnCustomOrange_highContrast">#000000</color>
+  <color name="base_theme_colorCustomOrangeContainer_highContrast">#FFBD8B</color>
+  <color name="base_theme_colorOnCustomOrangeContainer_highContrast">#000000</color>
+
   <color name="logo_yellow">@color/custom_yellow_50</color>
   <color name="logo_green">@color/custom_green_50</color>
   <color name="logo_red">@color/custom_red_35</color>

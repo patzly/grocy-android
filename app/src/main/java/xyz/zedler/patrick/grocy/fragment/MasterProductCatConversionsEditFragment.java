@@ -28,7 +28,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import com.google.android.material.color.ColorRoles;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
@@ -133,12 +132,12 @@ public class MasterProductCatConversionsEditFragment extends BaseFragment {
 
     viewModel.getFormData().getQuantityUnitFromErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textQuantityUnitFrom.setTextColor(
-            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
         )
     );
     viewModel.getFormData().getQuantityUnitToErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textQuantityUnitTo.setTextColor(
-            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
         )
     );
 
@@ -150,8 +149,9 @@ public class MasterProductCatConversionsEditFragment extends BaseFragment {
       viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
     });
 
-    ColorRoles roles = ResUtil.getHarmonizedRoles(activity, R.color.blue);
-    binding.textInputFactor.setHelperTextColor(ColorStateList.valueOf(roles.getAccent()));
+    binding.textInputFactor.setHelperTextColor(ColorStateList.valueOf(
+        ResUtil.getColor(activity, R.attr.colorCustomBlue)
+    ));
 
     // necessary because else getValue() doesn't give current value (?)
     viewModel.getFormData().getQuantityUnitsLive().observe(getViewLifecycleOwner(), qUs -> {

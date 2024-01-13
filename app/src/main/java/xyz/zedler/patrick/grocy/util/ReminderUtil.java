@@ -127,9 +127,7 @@ public class ReminderUtil {
         context,
         reminderId,
         new Intent(context, receiverClass),
-        VERSION.SDK_INT >= VERSION_CODES.M
-            ? PendingIntent.FLAG_IMMUTABLE
-            : PendingIntent.FLAG_UPDATE_CURRENT
+        getPendingIntentFlags()
     );
 
     if (notificationManager != null) {
@@ -153,9 +151,7 @@ public class ReminderUtil {
         context,
         reminderId,
         new Intent(context, receiverClass),
-        VERSION.SDK_INT >= VERSION_CODES.M
-            ? PendingIntent.FLAG_IMMUTABLE
-            : PendingIntent.FLAG_UPDATE_CURRENT
+        getPendingIntentFlags()
     );
 
     if (notificationManager != null) {
@@ -207,9 +203,7 @@ public class ReminderUtil {
           context,
           reminderId,
           new Intent(context, receiverClass),
-          VERSION.SDK_INT >= VERSION_CODES.M
-              ? PendingIntent.FLAG_IMMUTABLE
-              : PendingIntent.FLAG_UPDATE_CURRENT
+          getPendingIntentFlags()
       );
       if (alarmManager != null && pendingIntent != null) {
         alarmManager.cancel(pendingIntent);
@@ -247,56 +241,18 @@ public class ReminderUtil {
       String channelId,
       Intent intent
   ) {
-    int themeResId = -1;
-    Context dynamicColorContext = null;
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-    String theme = sharedPrefs.getString(
-        Constants.SETTINGS.APPEARANCE.THEME, Constants.SETTINGS_DEFAULT.APPEARANCE.THEME
-    );
-    switch (theme) {
-      case THEME.RED:
-        themeResId = R.style.Theme_Grocy_Red;
-        break;
-      case THEME.YELLOW:
-        themeResId = R.style.Theme_Grocy_Yellow;
-        break;
-      case THEME.GREEN:
-        themeResId = R.style.Theme_Grocy_Green;
-        break;
-      case THEME.BLUE:
-        themeResId = R.style.Theme_Grocy_Blue;
-        break;
-      default:
-        if (DynamicColors.isDynamicColorAvailable()) {
-          dynamicColorContext = DynamicColors.wrapContextIfAvailable(context);
-        } else {
-          themeResId = R.style.Theme_Grocy_Green;
-        }
-        break;
-    }
-
-    Context colorContext;
-    if (themeResId != -1) {
-      colorContext = new ContextThemeWrapper(context, themeResId);
-    } else {
-      colorContext = dynamicColorContext;
-    }
-    if (colorContext == null) colorContext = context;
-
     NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId);
     builder
         .setContentTitle(title)
         .setAutoCancel(true)
-        .setColor(ResUtil.getColorAttr(colorContext, R.attr.colorPrimary))
+        .setColor(getColor(context))
         .setSmallIcon(R.drawable.ic_round_grocy_notification)
         .setContentIntent(
             PendingIntent.getActivity(
                 context,
                 notificationId,
                 intent,
-                VERSION.SDK_INT >= VERSION_CODES.M
-                    ? PendingIntent.FLAG_IMMUTABLE
-                    : PendingIntent.FLAG_UPDATE_CURRENT
+                getPendingIntentFlags()
             )
         ).setPriority(NotificationCompat.PRIORITY_DEFAULT);
     if (text != null) {
@@ -304,6 +260,41 @@ public class ReminderUtil {
       builder.setStyle(new NotificationCompat.BigTextStyle().bigText(text));
     }
     return builder.build();
+  }
+
+  private static int getPendingIntentFlags() {
+    return VERSION.SDK_INT >= VERSION_CODES.M
+        ? PendingIntent.FLAG_IMMUTABLE
+        : PendingIntent.FLAG_UPDATE_CURRENT;
+  }
+
+  private static int getColor(Context context) {
+    Context colorContext;
+    if (DynamicColors.isDynamicColorAvailable()) {
+      colorContext = DynamicColors.wrapContextIfAvailable(context);
+    } else {
+      int themeResId;
+      SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+      String theme = sharedPrefs.getString(
+          Constants.SETTINGS.APPEARANCE.THEME, Constants.SETTINGS_DEFAULT.APPEARANCE.THEME
+      );
+      switch (theme) {
+        case THEME.RED:
+          themeResId = R.style.Theme_Grocy_Red;
+          break;
+        case THEME.YELLOW:
+          themeResId = R.style.Theme_Grocy_Yellow;
+          break;
+        case THEME.BLUE:
+          themeResId = R.style.Theme_Grocy_Blue;
+          break;
+        default:
+          themeResId = R.style.Theme_Grocy_Green;
+          break;
+      }
+      colorContext = new ContextThemeWrapper(context, themeResId);
+    }
+    return ResUtil.getSysColor(colorContext, R.attr.colorPrimary);
   }
 }
 

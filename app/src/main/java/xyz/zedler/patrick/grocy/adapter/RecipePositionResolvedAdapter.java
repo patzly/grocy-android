@@ -35,7 +35,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -80,9 +79,7 @@ public class RecipePositionResolvedAdapter extends
   private final PluralUtil pluralUtil;
   private final int maxDecimalPlacesAmount;
   private final int maxDecimalPlacesPrice;
-  private final ColorRoles colorGreen;
-  private final ColorRoles colorYellow;
-  private final ColorRoles colorRed;
+  private final int colorGreen, colorYellow, colorRed;
   private final String energyUnit;
   private final String currency;
 
@@ -119,9 +116,9 @@ public class RecipePositionResolvedAdapter extends
     this.listener = listener;
     this.pluralUtil = new PluralUtil(context);
 
-    colorGreen = ResUtil.getHarmonizedRoles(context, R.color.green);
-    colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
-    colorRed = ResUtil.getHarmonizedRoles(context, R.color.red);
+    colorGreen = ResUtil.getColor(context, R.attr.colorCustomGreen);
+    colorYellow = ResUtil.getColor(context, R.attr.colorCustomYellow);
+    colorRed = ResUtil.getColor(context, R.attr.colorError);
   }
 
   @Override
@@ -329,9 +326,7 @@ public class RecipePositionResolvedAdapter extends
             R.drawable.ic_round_check_circle_outline,
             null
         ));
-        holder.binding.imageFulfillment.setImageTintList(
-            ColorStateList.valueOf(colorGreen.getAccent())
-        );
+        holder.binding.imageFulfillment.setImageTintList(ColorStateList.valueOf(colorGreen));
         holder.binding.missing.setVisibility(View.GONE);
       } else {
         double amountMissing = conversion != null
@@ -350,9 +345,7 @@ public class RecipePositionResolvedAdapter extends
             null
         ));
         holder.binding.imageFulfillment.setImageTintList(
-            ColorStateList.valueOf(
-                amountShoppingList >= amountMissing ? colorYellow.getAccent() : colorRed.getAccent()
-            )
+            ColorStateList.valueOf(amountShoppingList >= amountMissing ? colorYellow : colorRed)
         );
         holder.binding.missing.setText(
             context.getString(
@@ -427,7 +420,7 @@ public class RecipePositionResolvedAdapter extends
         R.layout.view_info_chip, null, false
     );
     chip.setText(text);
-    chip.setTextColor(ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorOnSurface)));
+    chip.setTextColor(ColorStateList.valueOf(ResUtil.getColor(context, R.attr.colorOnSurface)));
     chip.setEnabled(false);
     return chip;
   }

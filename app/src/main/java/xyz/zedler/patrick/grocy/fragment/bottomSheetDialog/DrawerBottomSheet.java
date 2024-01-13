@@ -317,12 +317,12 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
     linearLayout.setClickable(false);
     if (textView != null) {
       textView.setTextColor(
-          ResUtil.getColorAttr(requireContext(), R.attr.colorOnSecondaryContainer)
+          ResUtil.getColor(requireContext(), R.attr.colorOnSecondaryContainer)
       );
     }
     if (imageView != null) {
       imageView.setImageTintList(
-          ColorStateList.valueOf(ResUtil.getColorAttr(requireContext(), R.attr.colorPrimary))
+          ColorStateList.valueOf(ResUtil.getColor(requireContext(), R.attr.colorPrimary))
       );
     }
   }
@@ -338,10 +338,10 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
   private void select(@NonNull MaterialButton button) {
     button.setClickable(false);
     button.setIconTint(
-        ColorStateList.valueOf(ResUtil.getColorAttr(requireContext(), R.attr.colorPrimary))
+        ColorStateList.valueOf(ResUtil.getColor(requireContext(), R.attr.colorPrimary))
     );
     button.setBackgroundColor(
-        ResUtil.getColorAttr(requireContext(), R.attr.colorSecondaryContainer)
+        ResUtil.getColor(requireContext(), R.attr.colorSecondaryContainer)
     );
   }
 

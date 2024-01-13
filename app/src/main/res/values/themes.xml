@@ -18,7 +18,7 @@
   ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
   <style name="Base.Grocy" parent="Theme.Material3.DayNight.NoActionBar">
     <item name="android:colorPrimaryDark">?android:attr/colorBackground</item>
@@ -43,9 +43,66 @@
     <!-- Dialog themes -->
     <item name="materialAlertDialogTheme">@style/ThemeOverlay.Grocy.AlertDialog</item>
     <item name="bottomSheetDialogTheme">@style/Theme.Grocy.BottomSheetDialog</item>
+
+    <!-- Custom colors -->
+
+    <item name="colorCustomBlue">@color/base_theme_colorCustomBlue</item>
+    <item name="colorOnCustomBlue">@color/base_theme_colorOnCustomBlue</item>
+    <item name="colorCustomBlueContainer">@color/base_theme_colorCustomBlueContainer</item>
+    <item name="colorOnCustomBlueContainer">@color/base_theme_colorOnCustomBlueContainer</item>
+    <item name="colorCustomGreen">@color/base_theme_colorCustomGreen</item>
+    <item name="colorOnCustomGreen">@color/base_theme_colorOnCustomGreen</item>
+    <item name="colorCustomGreenContainer">@color/base_theme_colorCustomGreenContainer</item>
+    <item name="colorOnCustomGreenContainer">@color/base_theme_colorOnCustomGreenContainer</item>
+    <item name="colorCustomYellow">@color/base_theme_colorCustomYellow</item>
+    <item name="colorOnCustomYellow">@color/base_theme_colorOnCustomYellow</item>
+    <item name="colorCustomYellowContainer">@color/base_theme_colorCustomYellowContainer</item>
+    <item name="colorOnCustomYellowContainer">@color/base_theme_colorOnCustomYellowContainer</item>
+    <item name="colorCustomOrange">@color/base_theme_colorCustomOrange</item>
+    <item name="colorOnCustomOrange">@color/base_theme_colorOnCustomOrange</item>
+    <item name="colorCustomOrangeContainer">@color/base_theme_colorCustomOrangeContainer</item>
+    <item name="colorOnCustomOrangeContainer">@color/base_theme_colorOnCustomOrangeContainer</item>
   </style>
 
   <style name="Theme.Grocy" parent="Base.Grocy" />
+
+  <style name="ThemeOverlay.Grocy.MediumContrast" parent="">
+    <item name="colorCustomBlue">@color/base_theme_colorCustomBlue_mediumContrast</item>
+    <item name="colorOnCustomBlue">@color/base_theme_colorOnCustomBlue_mediumContrast</item>
+    <item name="colorCustomBlueContainer">@color/base_theme_colorCustomBlueContainer_mediumContrast</item>
+    <item name="colorOnCustomBlueContainer">@color/base_theme_colorOnCustomBlueContainer_mediumContrast</item>
+    <item name="colorCustomGreen">@color/base_theme_colorCustomGreen_mediumContrast</item>
+    <item name="colorOnCustomGreen">@color/base_theme_colorOnCustomGreen_mediumContrast</item>
+    <item name="colorCustomGreenContainer">@color/base_theme_colorCustomGreenContainer_mediumContrast</item>
+    <item name="colorOnCustomGreenContainer">@color/base_theme_colorOnCustomGreenContainer_mediumContrast</item>
+    <item name="colorCustomYellow">@color/base_theme_colorCustomYellow_mediumContrast</item>
+    <item name="colorOnCustomYellow">@color/base_theme_colorOnCustomYellow_mediumContrast</item>
+    <item name="colorCustomYellowContainer">@color/base_theme_colorCustomYellowContainer_mediumContrast</item>
+    <item name="colorOnCustomYellowContainer">@color/base_theme_colorOnCustomYellowContainer_mediumContrast</item>
+    <item name="colorCustomOrange">@color/base_theme_colorCustomOrange_mediumContrast</item>
+    <item name="colorOnCustomOrange">@color/base_theme_colorOnCustomOrange_mediumContrast</item>
+    <item name="colorCustomOrangeContainer">@color/base_theme_colorCustomOrangeContainer_mediumContrast</item>
+    <item name="colorOnCustomOrangeContainer">@color/base_theme_colorOnCustomOrangeContainer_mediumContrast</item>
+  </style>
+
+  <style name="ThemeOverlay.Grocy.HighContrast" parent="">
+    <item name="colorCustomBlue">@color/base_theme_colorCustomBlue_highContrast</item>
+    <item name="colorOnCustomBlue">@color/base_theme_colorOnCustomBlue_highContrast</item>
+    <item name="colorCustomBlueContainer">@color/base_theme_colorCustomBlueContainer_highContrast</item>
+    <item name="colorOnCustomBlueContainer">@color/base_theme_colorOnCustomBlueContainer_highContrast</item>
+    <item name="colorCustomGreen">@color/base_theme_colorCustomGreen_highContrast</item>
+    <item name="colorOnCustomGreen">@color/base_theme_colorOnCustomGreen_highContrast</item>
+    <item name="colorCustomGreenContainer">@color/base_theme_colorCustomGreenContainer_highContrast</item>
+    <item name="colorOnCustomGreenContainer">@color/base_theme_colorOnCustomGreenContainer_highContrast</item>
+    <item name="colorCustomYellow">@color/base_theme_colorCustomYellow_highContrast</item>
+    <item name="colorOnCustomYellow">@color/base_theme_colorOnCustomYellow_highContrast</item>
+    <item name="colorCustomYellowContainer">@color/base_theme_colorCustomYellowContainer_highContrast</item>
+    <item name="colorOnCustomYellowContainer">@color/base_theme_colorOnCustomYellowContainer_highContrast</item>
+    <item name="colorCustomOrange">@color/base_theme_colorCustomOrange_highContrast</item>
+    <item name="colorOnCustomOrange">@color/base_theme_colorOnCustomOrange_highContrast</item>
+    <item name="colorCustomOrangeContainer">@color/base_theme_colorCustomOrangeContainer_highContrast</item>
+    <item name="colorOnCustomOrangeContainer">@color/base_theme_colorOnCustomOrangeContainer_highContrast</item>
+  </style>
 
   <style name="Theme.Grocy.BottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
     <item name="enableEdgeToEdge">true</item>
@@ -148,6 +205,22 @@
     <item name="colorSurfaceContainer">@color/red_theme_surfaceContainer_mediumContrast</item>
     <item name="colorSurfaceContainerHigh">@color/red_theme_surfaceContainerHigh_mediumContrast</item>
     <item name="colorSurfaceContainerHighest">@color/red_theme_surfaceContainerHighest_mediumContrast</item>
+    <item name="colorCustomBlue">@color/base_theme_colorCustomBlue_mediumContrast</item>
+    <item name="colorOnCustomBlue">@color/base_theme_colorOnCustomBlue_mediumContrast</item>
+    <item name="colorCustomBlueContainer">@color/base_theme_colorCustomBlueContainer_mediumContrast</item>
+    <item name="colorOnCustomBlueContainer">@color/base_theme_colorOnCustomBlueContainer_mediumContrast</item>
+    <item name="colorCustomGreen">@color/base_theme_colorCustomGreen_mediumContrast</item>
+    <item name="colorOnCustomGreen">@color/base_theme_colorOnCustomGreen_mediumContrast</item>
+    <item name="colorCustomGreenContainer">@color/base_theme_colorCustomGreenContainer_mediumContrast</item>
+    <item name="colorOnCustomGreenContainer">@color/base_theme_colorOnCustomGreenContainer_mediumContrast</item>
+    <item name="colorCustomYellow">@color/base_theme_colorCustomYellow_mediumContrast</item>
+    <item name="colorOnCustomYellow">@color/base_theme_colorOnCustomYellow_mediumContrast</item>
+    <item name="colorCustomYellowContainer">@color/base_theme_colorCustomYellowContainer_mediumContrast</item>
+    <item name="colorOnCustomYellowContainer">@color/base_theme_colorOnCustomYellowContainer_mediumContrast</item>
+    <item name="colorCustomOrange">@color/base_theme_colorCustomOrange_mediumContrast</item>
+    <item name="colorOnCustomOrange">@color/base_theme_colorOnCustomOrange_mediumContrast</item>
+    <item name="colorCustomOrangeContainer">@color/base_theme_colorCustomOrangeContainer_mediumContrast</item>
+    <item name="colorOnCustomOrangeContainer">@color/base_theme_colorOnCustomOrangeContainer_mediumContrast</item>
   </style>
 
   <style name="ThemeOverlay.Grocy.Red.HighContrast" parent="Theme.Grocy.Red">
@@ -197,6 +270,22 @@
     <item name="colorSurfaceContainer">@color/red_theme_surfaceContainer_highContrast</item>
     <item name="colorSurfaceContainerHigh">@color/red_theme_surfaceContainerHigh_highContrast</item>
     <item name="colorSurfaceContainerHighest">@color/red_theme_surfaceContainerHighest_highContrast</item>
+    <item name="colorCustomBlue">@color/base_theme_colorCustomBlue_highContrast</item>
+    <item name="colorOnCustomBlue">@color/base_theme_colorOnCustomBlue_highContrast</item>
+    <item name="colorCustomBlueContainer">@color/base_theme_colorCustomBlueContainer_highContrast</item>
+    <item name="colorOnCustomBlueContainer">@color/base_theme_colorOnCustomBlueContainer_highContrast</item>
+    <item name="colorCustomGreen">@color/base_theme_colorCustomGreen_highContrast</item>
+    <item name="colorOnCustomGreen">@color/base_theme_colorOnCustomGreen_highContrast</item>
+    <item name="colorCustomGreenContainer">@color/base_theme_colorCustomGreenContainer_highContrast</item>
+    <item name="colorOnCustomGreenContainer">@color/base_theme_colorOnCustomGreenContainer_highContrast</item>
+    <item name="colorCustomYellow">@color/base_theme_colorCustomYellow_highContrast</item>
+    <item name="colorOnCustomYellow">@color/base_theme_colorOnCustomYellow_highContrast</item>
+    <item name="colorCustomYellowContainer">@color/base_theme_colorCustomYellowContainer_highContrast</item>
+    <item name="colorOnCustomYellowContainer">@color/base_theme_colorOnCustomYellowContainer_highContrast</item>
+    <item name="colorCustomOrange">@color/base_theme_colorCustomOrange_highContrast</item>
+    <item name="colorOnCustomOrange">@color/base_theme_colorOnCustomOrange_highContrast</item>
+    <item name="colorCustomOrangeContainer">@color/base_theme_colorCustomOrangeContainer_highContrast</item>
+    <item name="colorOnCustomOrangeContainer">@color/base_theme_colorOnCustomOrangeContainer_highContrast</item>
   </style>
 
   <style name="Theme.Grocy.Yellow" parent="Theme.Grocy">
@@ -295,6 +384,22 @@
     <item name="colorSurfaceContainer">@color/yellow_theme_surfaceContainer_mediumContrast</item>
     <item name="colorSurfaceContainerHigh">@color/yellow_theme_surfaceContainerHigh_mediumContrast</item>
     <item name="colorSurfaceContainerHighest">@color/yellow_theme_surfaceContainerHighest_mediumContrast</item>
+    <item name="colorCustomBlue">@color/base_theme_colorCustomBlue_mediumContrast</item>
+    <item name="colorOnCustomBlue">@color/base_theme_colorOnCustomBlue_mediumContrast</item>
+    <item name="colorCustomBlueContainer">@color/base_theme_colorCustomBlueContainer_mediumContrast</item>
+    <item name="colorOnCustomBlueContainer">@color/base_theme_colorOnCustomBlueContainer_mediumContrast</item>
+    <item name="colorCustomGreen">@color/base_theme_colorCustomGreen_mediumContrast</item>
+    <item name="colorOnCustomGreen">@color/base_theme_colorOnCustomGreen_mediumContrast</item>
+    <item name="colorCustomGreenContainer">@color/base_theme_colorCustomGreenContainer_mediumContrast</item>
+    <item name="colorOnCustomGreenContainer">@color/base_theme_colorOnCustomGreenContainer_mediumContrast</item>
+    <item name="colorCustomYellow">@color/base_theme_colorCustomYellow_mediumContrast</item>
+    <item name="colorOnCustomYellow">@color/base_theme_colorOnCustomYellow_mediumContrast</item>
+    <item name="colorCustomYellowContainer">@color/base_theme_colorCustomYellowContainer_mediumContrast</item>
+    <item name="colorOnCustomYellowContainer">@color/base_theme_colorOnCustomYellowContainer_mediumContrast</item>
+    <item name="colorCustomOrange">@color/base_theme_colorCustomOrange_mediumContrast</item>
+    <item name="colorOnCustomOrange">@color/base_theme_colorOnCustomOrange_mediumContrast</item>
+    <item name="colorCustomOrangeContainer">@color/base_theme_colorCustomOrangeContainer_mediumContrast</item>
+    <item name="colorOnCustomOrangeContainer">@color/base_theme_colorOnCustomOrangeContainer_mediumContrast</item>
   </style>
 
   <style name="ThemeOverlay.Grocy.Yellow.HighContrast" parent="Theme.Grocy.Yellow">
@@ -344,6 +449,22 @@
     <item name="colorSurfaceContainer">@color/yellow_theme_surfaceContainer_highContrast</item>
     <item name="colorSurfaceContainerHigh">@color/yellow_theme_surfaceContainerHigh_highContrast</item>
     <item name="colorSurfaceContainerHighest">@color/yellow_theme_surfaceContainerHighest_highContrast</item>
+    <item name="colorCustomBlue">@color/base_theme_colorCustomBlue_highContrast</item>
+    <item name="colorOnCustomBlue">@color/base_theme_colorOnCustomBlue_highContrast</item>
+    <item name="colorCustomBlueContainer">@color/base_theme_colorCustomBlueContainer_highContrast</item>
+    <item name="colorOnCustomBlueContainer">@color/base_theme_colorOnCustomBlueContainer_highContrast</item>
+    <item name="colorCustomGreen">@color/base_theme_colorCustomGreen_highContrast</item>
+    <item name="colorOnCustomGreen">@color/base_theme_colorOnCustomGreen_highContrast</item>
+    <item name="colorCustomGreenContainer">@color/base_theme_colorCustomGreenContainer_highContrast</item>
+    <item name="colorOnCustomGreenContainer">@color/base_theme_colorOnCustomGreenContainer_highContrast</item>
+    <item name="colorCustomYellow">@color/base_theme_colorCustomYellow_highContrast</item>
+    <item name="colorOnCustomYellow">@color/base_theme_colorOnCustomYellow_highContrast</item>
+    <item name="colorCustomYellowContainer">@color/base_theme_colorCustomYellowContainer_highContrast</item>
+    <item name="colorOnCustomYellowContainer">@color/base_theme_colorOnCustomYellowContainer_highContrast</item>
+    <item name="colorCustomOrange">@color/base_theme_colorCustomOrange_highContrast</item>
+    <item name="colorOnCustomOrange">@color/base_theme_colorOnCustomOrange_highContrast</item>
+    <item name="colorCustomOrangeContainer">@color/base_theme_colorCustomOrangeContainer_highContrast</item>
+    <item name="colorOnCustomOrangeContainer">@color/base_theme_colorOnCustomOrangeContainer_highContrast</item>
   </style>
 
   <style name="Theme.Grocy.Green" parent="Theme.Grocy">
@@ -442,6 +563,22 @@
     <item name="colorSurfaceContainer">@color/green_theme_surfaceContainer_mediumContrast</item>
     <item name="colorSurfaceContainerHigh">@color/green_theme_surfaceContainerHigh_mediumContrast</item>
     <item name="colorSurfaceContainerHighest">@color/green_theme_surfaceContainerHighest_mediumContrast</item>
+    <item name="colorCustomBlue">@color/base_theme_colorCustomBlue_mediumContrast</item>
+    <item name="colorOnCustomBlue">@color/base_theme_colorOnCustomBlue_mediumContrast</item>
+    <item name="colorCustomBlueContainer">@color/base_theme_colorCustomBlueContainer_mediumContrast</item>
+    <item name="colorOnCustomBlueContainer">@color/base_theme_colorOnCustomBlueContainer_mediumContrast</item>
+    <item name="colorCustomGreen">@color/base_theme_colorCustomGreen_mediumContrast</item>
+    <item name="colorOnCustomGreen">@color/base_theme_colorOnCustomGreen_mediumContrast</item>
+    <item name="colorCustomGreenContainer">@color/base_theme_colorCustomGreenContainer_mediumContrast</item>
+    <item name="colorOnCustomGreenContainer">@color/base_theme_colorOnCustomGreenContainer_mediumContrast</item>
+    <item name="colorCustomYellow">@color/base_theme_colorCustomYellow_mediumContrast</item>
+    <item name="colorOnCustomYellow">@color/base_theme_colorOnCustomYellow_mediumContrast</item>
+    <item name="colorCustomYellowContainer">@color/base_theme_colorCustomYellowContainer_mediumContrast</item>
+    <item name="colorOnCustomYellowContainer">@color/base_theme_colorOnCustomYellowContainer_mediumContrast</item>
+    <item name="colorCustomOrange">@color/base_theme_colorCustomOrange_mediumContrast</item>
+    <item name="colorOnCustomOrange">@color/base_theme_colorOnCustomOrange_mediumContrast</item>
+    <item name="colorCustomOrangeContainer">@color/base_theme_colorCustomOrangeContainer_mediumContrast</item>
+    <item name="colorOnCustomOrangeContainer">@color/base_theme_colorOnCustomOrangeContainer_mediumContrast</item>
   </style>
 
   <style name="ThemeOverlay.Grocy.Green.HighContrast" parent="Theme.Grocy.Green">
@@ -491,6 +628,22 @@
     <item name="colorSurfaceContainer">@color/green_theme_surfaceContainer_highContrast</item>
     <item name="colorSurfaceContainerHigh">@color/green_theme_surfaceContainerHigh_highContrast</item>
     <item name="colorSurfaceContainerHighest">@color/green_theme_surfaceContainerHighest_highContrast</item>
+    <item name="colorCustomBlue">@color/base_theme_colorCustomBlue_highContrast</item>
+    <item name="colorOnCustomBlue">@color/base_theme_colorOnCustomBlue_highContrast</item>
+    <item name="colorCustomBlueContainer">@color/base_theme_colorCustomBlueContainer_highContrast</item>
+    <item name="colorOnCustomBlueContainer">@color/base_theme_colorOnCustomBlueContainer_highContrast</item>
+    <item name="colorCustomGreen">@color/base_theme_colorCustomGreen_highContrast</item>
+    <item name="colorOnCustomGreen">@color/base_theme_colorOnCustomGreen_highContrast</item>
+    <item name="colorCustomGreenContainer">@color/base_theme_colorCustomGreenContainer_highContrast</item>
+    <item name="colorOnCustomGreenContainer">@color/base_theme_colorOnCustomGreenContainer_highContrast</item>
+    <item name="colorCustomYellow">@color/base_theme_colorCustomYellow_highContrast</item>
+    <item name="colorOnCustomYellow">@color/base_theme_colorOnCustomYellow_highContrast</item>
+    <item name="colorCustomYellowContainer">@color/base_theme_colorCustomYellowContainer_highContrast</item>
+    <item name="colorOnCustomYellowContainer">@color/base_theme_colorOnCustomYellowContainer_highContrast</item>
+    <item name="colorCustomOrange">@color/base_theme_colorCustomOrange_highContrast</item>
+    <item name="colorOnCustomOrange">@color/base_theme_colorOnCustomOrange_highContrast</item>
+    <item name="colorCustomOrangeContainer">@color/base_theme_colorCustomOrangeContainer_highContrast</item>
+    <item name="colorOnCustomOrangeContainer">@color/base_theme_colorOnCustomOrangeContainer_highContrast</item>
   </style>
 
   <style name="Theme.Grocy.Blue" parent="Theme.Grocy">
@@ -589,6 +742,22 @@
     <item name="colorSurfaceContainer">@color/blue_theme_surfaceContainer_mediumContrast</item>
     <item name="colorSurfaceContainerHigh">@color/blue_theme_surfaceContainerHigh_mediumContrast</item>
     <item name="colorSurfaceContainerHighest">@color/blue_theme_surfaceContainerHighest_mediumContrast</item>
+    <item name="colorCustomBlue">@color/base_theme_colorCustomBlue_mediumContrast</item>
+    <item name="colorOnCustomBlue">@color/base_theme_colorOnCustomBlue_mediumContrast</item>
+    <item name="colorCustomBlueContainer">@color/base_theme_colorCustomBlueContainer_mediumContrast</item>
+    <item name="colorOnCustomBlueContainer">@color/base_theme_colorOnCustomBlueContainer_mediumContrast</item>
+    <item name="colorCustomGreen">@color/base_theme_colorCustomGreen_mediumContrast</item>
+    <item name="colorOnCustomGreen">@color/base_theme_colorOnCustomGreen_mediumContrast</item>
+    <item name="colorCustomGreenContainer">@color/base_theme_colorCustomGreenContainer_mediumContrast</item>
+    <item name="colorOnCustomGreenContainer">@color/base_theme_colorOnCustomGreenContainer_mediumContrast</item>
+    <item name="colorCustomYellow">@color/base_theme_colorCustomYellow_mediumContrast</item>
+    <item name="colorOnCustomYellow">@color/base_theme_colorOnCustomYellow_mediumContrast</item>
+    <item name="colorCustomYellowContainer">@color/base_theme_colorCustomYellowContainer_mediumContrast</item>
+    <item name="colorOnCustomYellowContainer">@color/base_theme_colorOnCustomYellowContainer_mediumContrast</item>
+    <item name="colorCustomOrange">@color/base_theme_colorCustomOrange_mediumContrast</item>
+    <item name="colorOnCustomOrange">@color/base_theme_colorOnCustomOrange_mediumContrast</item>
+    <item name="colorCustomOrangeContainer">@color/base_theme_colorCustomOrangeContainer_mediumContrast</item>
+    <item name="colorOnCustomOrangeContainer">@color/base_theme_colorOnCustomOrangeContainer_mediumContrast</item>
   </style>
 
   <style name="ThemeOverlay.Grocy.Blue.HighContrast" parent="Theme.Grocy.Blue">
@@ -638,6 +807,22 @@
     <item name="colorSurfaceContainer">@color/blue_theme_surfaceContainer_highContrast</item>
     <item name="colorSurfaceContainerHigh">@color/blue_theme_surfaceContainerHigh_highContrast</item>
     <item name="colorSurfaceContainerHighest">@color/blue_theme_surfaceContainerHighest_highContrast</item>
+    <item name="colorCustomBlue">@color/base_theme_colorCustomBlue_highContrast</item>
+    <item name="colorOnCustomBlue">@color/base_theme_colorOnCustomBlue_highContrast</item>
+    <item name="colorCustomBlueContainer">@color/base_theme_colorCustomBlueContainer_highContrast</item>
+    <item name="colorOnCustomBlueContainer">@color/base_theme_colorOnCustomBlueContainer_highContrast</item>
+    <item name="colorCustomGreen">@color/base_theme_colorCustomGreen_highContrast</item>
+    <item name="colorOnCustomGreen">@color/base_theme_colorOnCustomGreen_highContrast</item>
+    <item name="colorCustomGreenContainer">@color/base_theme_colorCustomGreenContainer_highContrast</item>
+    <item name="colorOnCustomGreenContainer">@color/base_theme_colorOnCustomGreenContainer_highContrast</item>
+    <item name="colorCustomYellow">@color/base_theme_colorCustomYellow_highContrast</item>
+    <item name="colorOnCustomYellow">@color/base_theme_colorOnCustomYellow_highContrast</item>
+    <item name="colorCustomYellowContainer">@color/base_theme_colorCustomYellowContainer_highContrast</item>
+    <item name="colorOnCustomYellowContainer">@color/base_theme_colorOnCustomYellowContainer_highContrast</item>
+    <item name="colorCustomOrange">@color/base_theme_colorCustomOrange_highContrast</item>
+    <item name="colorOnCustomOrange">@color/base_theme_colorOnCustomOrange_highContrast</item>
+    <item name="colorCustomOrangeContainer">@color/base_theme_colorCustomOrangeContainer_highContrast</item>
+    <item name="colorOnCustomOrangeContainer">@color/base_theme_colorOnCustomOrangeContainer_highContrast</item>
   </style>
   
 </resources>

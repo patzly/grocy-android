@@ -30,7 +30,6 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import xyz.zedler.patrick.grocy.Constants;
@@ -328,16 +327,13 @@ public class StockEntryAdapter extends
           ResourcesCompat.getFont(context, R.font.jost_medium)
       );
 
-      ColorRoles colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
-      ColorRoles colorOrange = ResUtil.getHarmonizedRoles(context, R.color.orange);
-
       int color;
       if (Integer.parseInt(days) >= 0) {
-        color = colorYellow.getAccent();
+        color = ResUtil.getColor(context, R.attr.colorCustomYellow);
       } else if (product != null && product.getDueDateTypeInt() == StockItem.DUE_TYPE_EXPIRATION) {
-        color = ResUtil.getColorAttr(context, R.attr.colorError);
+        color = ResUtil.getColor(context, R.attr.colorError);
       } else {
-        color = colorOrange.getAccent(); // formally DIRT
+        color = ResUtil.getColor(context, R.attr.colorCustomOrange);
       }
       holder.binding.dueDate.setTextColor(color);
     } else {
@@ -345,7 +341,7 @@ public class StockEntryAdapter extends
           ResourcesCompat.getFont(context, R.font.jost_book)
       );
       holder.binding.dueDate.setTextColor(
-          ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant)
+          ResUtil.getColor(context, R.attr.colorOnSurfaceVariant)
       );
     }
 

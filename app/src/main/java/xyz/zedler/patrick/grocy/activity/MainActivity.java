@@ -102,16 +102,16 @@ public class MainActivity extends AppCompatActivity {
   private final static String TAG = MainActivity.class.getSimpleName();
 
   public ActivityMainBinding binding;
+  public NavUtil navUtil;
+  public NetUtil netUtil;
+  public HapticUtil hapticUtil;
   private SharedPreferences sharedPrefs;
   private FragmentManager fragmentManager;
   private GrocyApi grocyApi;
   private ClickUtil clickUtil;
-  public NavUtil navUtil;
-  public NetUtil netUtil;
   private BroadcastReceiver networkReceiver;
   private BottomScrollBehavior scrollBehavior;
-  private SystemBarBehavior systemBarBehavior;
-  public HapticUtil hapticUtil;
+  private UiUtil uiUtil;
   private OnBackPressedDispatcher dispatcher;
   private boolean runAsSuperClass;
   private boolean debug;
@@ -138,7 +138,10 @@ public class MainActivity extends AppCompatActivity {
     AppCompatDelegate.setDefaultNightMode(modeNight);
     ResUtil.applyConfigToResources(this, modeNight);
 
+    // COLOR
+
     UiUtil.setTheme(this, sharedPrefs);
+    UiUtil.applyColorHarmonization(this);
 
     Bundle bundleInstanceState = getIntent().getBundleExtra(ARGUMENT.INSTANCE_STATE);
     super.onCreate(bundleInstanceState != null ? bundleInstanceState : savedInstanceState);
@@ -157,17 +160,13 @@ public class MainActivity extends AppCompatActivity {
     LocaleUtil.setLocalizedGrocyDemoInstance(this, sharedPrefs);  // set localized demo instance
     ShortcutUtil.refreshShortcuts(this);  // refresh shortcut language
 
-    // COLOR
-
-    ResUtil.applyColorHarmonization(this);
-
     // DATABASE
 
     // Workaround for issue #698
     // https://github.com/andpor/react-native-sqlite-storage/issues/364#issuecomment-526423153
     try {
-      @SuppressLint("PrivateApi") Field field = CursorWindow.class
-          .getDeclaredField("sCursorWindowSize");
+      @SuppressLint("PrivateApi")
+      Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
       field.setAccessible(true);
       field.set(null, 10 * 1024 * 1024); // 10MB is the new size
     } catch (Exception e) {
@@ -240,8 +239,8 @@ public class MainActivity extends AppCompatActivity {
 
     // BOTTOM APP BAR
 
-    UiUtil uiUtil = new UiUtil();
-    uiUtil.setUpBottomAppBar(TAG, binding);
+    uiUtil = new UiUtil(this);
+    uiUtil.setUpBottomAppBar();
     updateBottomNavigationMenuButton();
 
     scrollBehavior = new BottomScrollBehavior(
@@ -249,10 +248,6 @@ public class MainActivity extends AppCompatActivity {
         binding.bottomAppBar, binding.fabMain, binding.fabMainScroll,
         binding.anchor, binding.anchorMaxBottom
     );
-
-    // IME ANIMATION
-
-    uiUtil.setupImeAnimation(this, systemBarBehavior, scrollBehavior);
 
     // UPDATE CONFIG | CHECK GROCY COMPATIBILITY
     if (!PrefsUtil.isServerUrlEmpty(sharedPrefs)) {
@@ -344,8 +339,9 @@ public class MainActivity extends AppCompatActivity {
     return scrollBehavior;
   }
 
-  public void setSystemBarBehavior(SystemBarBehavior behavior) {
-    systemBarBehavior = behavior;
+  public void setSystemBarBehavior(SystemBarBehavior systemBarBehavior) {
+    // IME ANIMATION
+    uiUtil.setupImeAnimation(systemBarBehavior, scrollBehavior);
   }
 
   public void updateBottomAppBar(
@@ -353,8 +349,7 @@ public class MainActivity extends AppCompatActivity {
       @MenuRes int newMenuId,
       @Nullable OnMenuItemClickListener onMenuItemClickListener
   ) {
-    UiUtil.updateBottomAppBar(binding, this, sharedPrefs, showFab,
-        newMenuId, onMenuItemClickListener);
+    uiUtil.updateBottomAppBar(sharedPrefs, showFab, newMenuId, onMenuItemClickListener);
   }
 
   public void updateBottomAppBar(boolean showFab, @MenuRes int newMenuId) {

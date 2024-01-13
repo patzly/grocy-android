@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.behavior;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -194,7 +195,9 @@ public class SystemBarBehavior {
         return insets;
       });
     } else {
-      if (UiUtil.isNavigationModeGesture(activity) && hasContainer()) {
+      if ((UiUtil.isNavigationModeGesture(activity) || UiUtil.isLandTablet(activity))
+          && hasContainer()
+      ) {
         View container = hasScrollView || hasRecycler ? scrollContent : this.container;
         ViewCompat.setOnApplyWindowInsetsListener(container, (v, insets) -> {
           navBarInset = insets.getInsets(Type.systemBars()).bottom;
@@ -283,6 +286,7 @@ public class SystemBarBehavior {
     }
 
     // NAV BAR INSET
+    Log.i(TAG, "refresh: hello");
     if (UiUtil.isOrientationPortrait(activity) && hasContainer()) {
       View container = hasScrollView || hasRecycler ? scrollContent : this.container;
       int paddingBottom = hasScrollView || hasRecycler
@@ -294,6 +298,7 @@ public class SystemBarBehavior {
           container.getPaddingRight(),
           paddingBottom + additionalBottomInset + navBarInset
       );
+      Log.i(TAG, "refresh: hello " + container.getPaddingBottom());
     } else {
       if (UiUtil.isNavigationModeGesture(activity) && hasContainer()) {
         View container = hasScrollView || hasRecycler ? scrollContent : this.container;
@@ -380,13 +385,10 @@ public class SystemBarBehavior {
 
   private void updateSystemBars() {
     boolean isOrientationPortrait = UiUtil.isOrientationPortrait(activity);
+    boolean isLandTablet = UiUtil.isLandTablet(activity);
     boolean isDarkModeActive = UiUtil.isDarkModeActive(activity);
-    int colorScrim = ColorUtils.setAlphaComponent(
-        // TODO: replace with attribute when fixed in MDC
-        //ResUtil.getColorAttr(activity, R.attr.colorSurfaceContainer),
-        ResUtil.getColorSurfaceContainer(activity),
-        1
-    );
+
+    int colorScrim = ResUtil.getColor(activity, android.R.attr.colorBackground, 0.7f);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // 29
       window.setStatusBarColor(Color.TRANSPARENT);
@@ -400,13 +402,15 @@ public class SystemBarBehavior {
         if (!isDarkModeActive) {
           UiUtil.setLightNavigationBar(window.getDecorView(), true);
         }
-        if (isOrientationPortrait) {
+        if (isOrientationPortrait || isLandTablet) {
           window.setNavigationBarColor(
               isScrollable ? colorScrim : Color.parseColor("#01000000")
           );
         } else {
-          window.setNavigationBarDividerColor(ResUtil.getColorOutlineSecondary(activity));
-          window.setNavigationBarColor(ResUtil.getColorBg(activity));
+          window.setNavigationBarDividerColor(
+              ResUtil.getColor(activity, R.attr.colorOutlineVariant)
+          );
+          window.setNavigationBarColor(ResUtil.getColor(activity, android.R.attr.colorBackground));
         }
       }
     } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { // 28
@@ -415,18 +419,20 @@ public class SystemBarBehavior {
         UiUtil.setLightStatusBar(window.getDecorView(), true);
         UiUtil.setLightNavigationBar(window.getDecorView(), true);
       }
-      if (isOrientationPortrait) {
+      if (isOrientationPortrait || isLandTablet) {
         window.setNavigationBarColor(isScrollable ? colorScrim : Color.TRANSPARENT);
       } else {
-        window.setNavigationBarDividerColor(ResUtil.getColorOutlineSecondary(activity));
-        window.setNavigationBarColor(ResUtil.getColorBg(activity));
+        window.setNavigationBarDividerColor(
+            ResUtil.getColor(activity, R.attr.colorOutlineVariant)
+        );
+        window.setNavigationBarColor(ResUtil.getColor(activity, android.R.attr.colorBackground));
       }
     } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // 26
       window.setStatusBarColor(Color.TRANSPARENT);
       if (!isDarkModeActive) {
         UiUtil.setLightStatusBar(window.getDecorView(), true);
       }
-      if (isOrientationPortrait) {
+      if (isOrientationPortrait || isLandTablet) {
         window.setNavigationBarColor(isScrollable ? colorScrim : Color.TRANSPARENT);
         if (!isDarkModeActive) {
           UiUtil.setLightNavigationBar(window.getDecorView(), true);
@@ -439,7 +445,7 @@ public class SystemBarBehavior {
       if (!isDarkModeActive) {
         UiUtil.setLightStatusBar(window.getDecorView(), true);
       }
-      if (isOrientationPortrait) {
+      if (isOrientationPortrait || isLandTablet) {
         window.setNavigationBarColor(
             isDarkModeActive ? (isScrollable ? colorScrim : Color.TRANSPARENT) : UiUtil.SCRIM
         );
@@ -448,7 +454,7 @@ public class SystemBarBehavior {
       }
     } else { // 21
       window.setStatusBarColor(isDarkModeActive ? Color.TRANSPARENT : UiUtil.SCRIM);
-      if (isOrientationPortrait) {
+      if (isOrientationPortrait || isLandTablet) {
         window.setNavigationBarColor(
             isDarkModeActive ? (isScrollable ? colorScrim : Color.TRANSPARENT) : UiUtil.SCRIM
         );

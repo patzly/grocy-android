@@ -246,27 +246,27 @@ public class MasterProductFragment extends BaseFragment {
 
     viewModel.getFormData().getCatOptionalErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textCatOptional.setTextColor(
-            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
         )
     );
     viewModel.getFormData().getCatLocationErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textCatLocation.setTextColor(
-            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
         )
     );
     viewModel.getFormData().getCatDueDateErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textCatDueDate.setTextColor(
-            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
         )
     );
     viewModel.getFormData().getCatQuErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textCatQu.setTextColor(
-            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
         )
     );
     viewModel.getFormData().getCatAmountErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textCatAmount.setTextColor(
-            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
         )
     );
 

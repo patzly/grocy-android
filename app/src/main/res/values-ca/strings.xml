@@ -21,37 +21,37 @@
 
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in purchase screen for example. -->
-  <string name="action_purchase">Comprar</string>
+  <string name="action_purchase">Compra</string>
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in consume screen for example. -->
-  <string name="action_consume">Comsumir</string>
+  <string name="action_consume">Consumeix</string>
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in transfer screen for example. -->
-  <string name="action_transfer">Transferir</string>
+  <string name="action_transfer">Transfereix</string>
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in inventory screen for example. -->
-  <string name="action_inventory">Actualitzar quantitat</string>
+  <string name="action_inventory">Actualitza la quantitat</string>
   <!-- This is an action – in English, it contains a verb. -->
-  <string name="action_consume_all">Comsumir-ho tot</string>
+  <string name="action_consume_all">Consumeix-ho tot</string>
 
-  <string name="action_consume_spoiled">Consumir com a fet malbé</string>
-  <string name="action_consume_one_spoiled">Consumir 1 com a fet malbé</string>
+  <string name="action_consume_spoiled">Consumeix com a fet malbé</string>
+  <string name="action_consume_one_spoiled">Consumeix 1 com a fet malbé</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
-  <string name="action_consume_one">Consumir 1%1$s de %2$s</string>
-  <string name="action_open">Marcar com obert</string>
+  <string name="action_consume_one">Consumeix 1 %1$s de %2$s</string>
+  <string name="action_open">Marca com obert</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
-  <string name="action_open_one">Obrir 1 %1$s de %2$s</string>
-  <string name="action_edit_product">Editar producte</string>
-  <string name="action_shopping_list_add">Afegir a la llista de la compra</string>
-  <string name="action_consume_recipe">Consumir tots els ingredients necessaris per aquesta recepta</string>
-  <string name="action_copy_recipe">Copiar recepta</string>
-  <string name="action_apply_desired_servings">Aplicar porcions desitjades per aquesta recepta i actualitzar les dades</string>
+  <string name="action_open_one">Obre 1 %1$s de %2$s</string>
+  <string name="action_edit_product">Edita el producte</string>
+  <string name="action_shopping_list_add">Afegeix a la llista de compra</string>
+  <string name="action_consume_recipe">Consumeix tots els ingredients necessaris per aquesta recepta</string>
+  <string name="action_copy_recipe">Copia la recepta</string>
+  <string name="action_apply_desired_servings">Aplica les racions desitjades d\'aquesta recepta i actualitza les dades</string>
   <!-- This is displayed as transaction type on the stock journal page -->
   <string name="action_product_opened">Producte obert</string>
   <!-- This is displayed as transaction type on the stock journal page -->
-  <string name="action_transfer_from">Transferir desde</string>
+  <string name="action_transfer_from">Transfereix des de</string>
   <!-- This is displayed as transaction type on the stock journal page -->
-  <string name="action_transfer_to">Transferir a</string>
+  <string name="action_transfer_to">Transfereix a</string>
 
   <string name="action_back">Enrere</string>
   <string name="action_search">Cerca</string>
@@ -60,17 +60,17 @@
   <string name="action_new">Nou</string>
   <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
   <string name="action_prev">Anterior</string>
-  <string name="action_feedback">Enviar comentaris</string>
-  <string name="action_reset">Reiniciar</string>
-  <string name="action_reload">Recarregar</string>
-  <string name="action_top_scroll">Desplaceu-vos cap amunt</string>
+  <string name="action_feedback">Envia comentaris</string>
+  <string name="action_reset">Reinicia</string>
+  <string name="action_reload">Torna a carregar</string>
+  <string name="action_top_scroll">Desplaça\'t cap amunt</string>
   <string name="action_send">Envia</string>
   <string name="action_close">Tanca</string>
   <string name="action_scan">Escaneja</string>
   <string name="action_cancel">Cancel·la</string>
   <string name="action_add">Afegeix</string>
   <string name="action_clear">Neteja</string>
-  <string name="action_clear_shopping_list">Netejar llista de la compra</string>
+  <string name="action_clear_shopping_list">Neteja la llista de compra</string>
   <string name="action_rate">Puntua a Google Play</string>
   <string name="action_rate_description">Motiva als desenvolupadors</string>
   <string name="action_email">Envia email</string>
@@ -85,28 +85,35 @@
   <string name="action_retry">Reintenta</string>
   <string name="action_edit">Edita</string>
   <string name="action_copy">Copia</string>
-  <string name="action_proceed">Procedir</string>
+  <string name="action_proceed">Procedeix</string>
   <string name="action_delete">Esborra</string>
-  <string name="action_save">Guarda</string>
-  <string name="action_save_close">Desar i tancar</string>
-  <string name="action_save_not_close">Desar sense tancar</string>
+  <string name="action_save">Desa</string>
+  <string name="action_save_close">Desa i tanca</string>
+  <string name="action_save_not_close">Desa sense tancar</string>
   <string name="action_logout">Desconnecta</string>
   <string name="action_restart">Reinicia</string>
-  <string name="action_create">Crear</string>
+  <string name="action_create">Crea</string>
   <string name="action_link">Enllaç</string>
   <string name="action_try_again">Torna-ho a provar</string>
-  <string name="action_open_scanner">Obrir escaner</string>
+  <string name="action_open_scanner">Obre l\'escàner</string>
   <string name="action_discard">Descarta</string>
-  <string name="action_clear_form">Neteja formulari</string>
+  <string name="action_clear_form">Neteja el formulari</string>
+  <string name="action_take_photo">Fes una foto</string>
+  <!-- "Paste" like in "Paste from clipboard" -->
+  <string name="action_paste">Enganxa</string>
+  <!-- Short form for "Only link barcode to existing product", this should fit into a
+  button so keep it short. -->
+  <string name="action_link_and_clear">Només enllaç</string>
   <string name="action_toggle_done">Commuta finalitzat</string>
+  <string name="action_change_layout">Canvia la disposició</string>
   <string name="action_edit_notes">Edita les notes</string>
-  <string name="action_add_missing">Afegeix productes faltants</string>
-  <string name="action_purchase_done_items">Comprar productes completats</string>
-  <string name="action_purchase_all_items">Comprar tots els productes</string>
-  <string name="action_skip_entry">Omet entrada</string>
-  <string name="action_toggle_flash">Alternar mode flash</string>
-  <string name="action_edit_recipe">Editar recepta</string>
-  <string name="action_delete_recipe">Eliminar recepta</string>
+  <string name="action_add_missing">Afegeix els productes que falten</string>
+  <string name="action_purchase_done_items">Compra els productes completats</string>
+  <string name="action_purchase_all_items">Compra tots els productes</string>
+  <string name="action_skip_entry">Omet l\'entrada</string>
+  <string name="action_toggle_flash">Commuta el flash</string>
+  <string name="action_edit_recipe">Edita recepta</string>
+  <string name="action_delete_recipe">Elimina recepta</string>
   <string name="action_delete_shopping_list">Esborra la llista de la compra</string>
   <string name="action_create_key">Crea clau</string>
   <string name="action_login">Inicia sessió</string>
@@ -119,16 +126,28 @@
   <string name="action_demo_server">Servidor de mostra</string>
   <string name="action_own_server">Servidor propi</string>
   <string name="action_enter_data_manually">Entrada de dades manual</string>
+  <string name="action_settings_backup_restore">Fes còpia de seguretat o restaura la configuració</string>
+  <string name="action_details">Detalls</string>
   <string name="action_perform">Realitzar acció</string>
   <string name="action_share">Compartir</string>
   <string name="action_share_description">Parla als teus amics sobre Grocy Android</string>
   <string name="action_no_filter">Sense filtre</string>
   <string name="action_show_done_tasks">Mostrar tasques completades</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_chore_execution">Registra ara la feina programada</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_next_chore_schedule">Passa a la següent programació de la feina</string>
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_skip_next_chore_schedule">Saltar el següent horari de feines</string>
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Reprogramar següent execució</string>
   <string name="action_put_missing_products_on_shopping_list">Afegir productes faltants a la llista de la compra</string>
+  <!-- This is the action part of "Backup to file" or "Backup data" -->
+  <string name="action_backup">Fes còpia de seguretat</string>
+  <!-- This is the action part of "Restore from file" or "Restore data" -->
+  <string name="action_restore">Restaura</string>
+  <string name="action_configure_sections">Configura les seccions</string>
+
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d venceran aviat</item>
@@ -143,6 +162,16 @@
   <plurals name="msg_expired_products">
     <item quantity="one">%1$d han caducat</item>
     <item quantity="other">%1$d caducats</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_short">
+    <item quantity="one">%1$d no fresc</item>
+    <item quantity="other">%1$d no frescos</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_long">
+    <item quantity="one">%1$d no fresc (tots a sota)</item>
+    <item quantity="other">%1$d no frescos (tots a sota)</item>
   </plurals>
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
   <plurals name="msg_missing_products">
@@ -165,6 +194,11 @@
   <string name="msg_consumed_spoiled">Consumir %1$s %2$s de %3$s com a fets malbé</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Marcar %1$s %2$s de %3$s com obert</string>
+  <!-- %1$s is the number of servings of a recipe. -->
+  <plurals name="msg_servings">
+    <item quantity="one">%1$s ració</item>
+    <item quantity="other">%1$s racions</item>
+  </plurals>
   <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
   <plurals name="msg_undone_items">
     <item quantity="one">%1$d desfets</item>
@@ -200,6 +234,16 @@
     <item quantity="one">%1$dendarrerida</item>
     <item quantity="other">%1$dendarrerides</item>
   </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_short">
+    <item quantity="one">%1$d a completar</item>
+    <item quantity="other">%1$d a completar</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_long">
+    <item quantity="one">%1$d a completar (totes sota)</item>
+    <item quantity="other">%1$d a completar (totes a sota)</item>
+  </plurals>
   <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
   <plurals name="msg_assigned_tasks">
     <item quantity="one">%1$dassignada</item>
@@ -211,6 +255,8 @@
   <string name="msg_task_undo">Esborrar tasca</string>
   <string name="msg_recipes_enough_in_stock">Suficient a l\'inventari</string>
   <string name="msg_recipes_enough_in_stock_filter">(%1$d) suficient a l\'inventari</string>
+  <!-- %1$s is an amount with quantity unit (e.g. 3 bottles) -->
+  <string name="msg_recipes_enough_in_stock_amount">Suficient a l\'inventari (%1$s)</string>
   <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) no hi ha suficient a l\'inventari, pero es troben a la llista de la compra</string>
   <string name="msg_recipes_not_enough_filter">(%1$d) no hi ha suficient a l\'inventari</string>
   <string name="msg_recipes_not_enough">No hi ha suficient a l\'inventari</string>
@@ -222,6 +268,7 @@
     <item quantity="one">Falta %1$dingredient</item>
     <item quantity="other">Falten %1$dingredients</item>
   </plurals>
+  <string name="msg_recipes_ingredient_fulfillment_info_list">Falten: %1$s | A la llista de compra: %2$s</string>
   <string name="msg_chore_executed">Realització de feina en seguiment</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Comprat %1$s %2$s de %3$s</string>
@@ -237,6 +284,7 @@
   <!-- %1$s is a product name -->
   <string name="msg_no_stock_entries">No hi ha entrades d’inventari per a %1$s</string>
   <string name="msg_not_found">Producte no trobat</string>
+  <string name="msg_returning_to_overview">Es retornarà a la pàgina principal d\'aquí uns segons</string>
   <string name="msg_editor_hint">Escriu aquí el text</string>
   <string name="msg_coming_soon">Aquesta funció estarà disponible aviat</string>
   <string name="msg_undo_transaction">Esborrar transacció?</string>
@@ -269,14 +317,16 @@
     <item quantity="other">%1$s %2$s seran eliminats de l\'inventari </item>
   </plurals>
   <string name="msg_transfer_tare_weight">Els productes amb el pes de tara habilitat actualment no són compatibles amb la transferència.</string>
+  <string name="msg_should_not_be_frozen">Aquest producte no hauria de ser congelat. Vols continuar?</string>
   <string name="msg_item_marked_as_done">Producte marcat com a fet</string>
   <string name="msg_item_marked_as_undone">Producte marcat com a desfet</string>
   <string name="option_synced_success">Opció sincronitzada correctament</string>
   <string name="option_synced_error">No s\'ha pogut sincronitzar l\'opció</string>
+  <string name="msg_data_copied_from_product">Dades copiades del producte \"%1$s\"</string>
   <string name="msg_recipe_added_to_cart">Ingredients de la recepta afegits al carro</string>
   <string name="msg_recipe_consumed">S\'han retirat tots els ingredients de la recepta \"%1$s\" de l\'inventari</string>
   <string name="msg_stored_purchases_overview">Hi ha compres al dispositiu que no han estat transferides al servidor. Toca aquí per a més detalls.</string>
-  <string name="msg_stored_purchases">Les compres que encara no han estat transferides al servidor es mostren aquí. Estan guardats juntament amb productes temporals a l\'aplicació per a que puguis escanejar la teva compra més ràpidament en el mode ràpid i no hagis de crear nous productes per les dades mestres directament.</string>
+  <string name="msg_stored_purchases">Les compres que encara no han estat transferides al servidor es mostren aquí. Es desen juntament amb els productes temporals a l\'aplicació per a que puguis escanejar la teva compra més ràpidament en el mode ràpid i no hagis de crear directament nous productes per les dades mestres.</string>
   <string name="msg_stored_purchases_product_offline">Toca el producte i omple les dades requerides. Després, es mostrarà el producte com actiu i les compres guardades podran ser enviades al servidor.</string>
   <string name="msg_stored_purchases_product_online">Toca aquí per enviar les compres guardades per aquest producte al servidor.</string>
   <string name="msg_choose_product">El codi de barres escanejat encara no està vinculat a cap producte. Pots vincular-lo a un producte existent o bé crear-ne un de nou.</string>
@@ -299,36 +349,52 @@
   <string name="msg_quick_mode_confirm_transfer">Transacció que serà executada:\n\nTransferir %1$s%2$sde %3$s\nDe la Ubicació:%4$s\nA la Ubicació:%5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">Transacció que serà executada:\n\nDefinir quantitat de %1$scom a %2$s%3$s\nAplicar als elements afegits:\nData de consum preferent:%4$s\nPreu:%5$s\nBotiga:%6$s\nUbicació:%7$s</string>
+  <string name="msg_compatibility">Aquesta versió d\'aplicació no és compatible amb la versió del servidor Grocy.\n\nVersió actual del servidor: %1$s\n\nVersions de servidor compatibles:\n%2$s\nSi la versió actual del servidor té un número de versió major més alt (primer dígit) que les versions compatibles i ignores aquesta alerta, es poden produir pèrdues de dades (poc probables) o fallades (probables).\nSi només hi ha diferència en un número de versió menor (per exemple, el tercer dígit és més alt) pots ignorar aquesta alerta.</string>
   <string name="msg_logout">No es canviarà res al servidor. Seràs redirigit a la pàgina d\'inici de sessió.</string>
-  <string name="msg_logout_demo">Estas utilitzant el servidor public de demostració <u>https://grocy.info</u>.\n\n<b>Cap dels canvis que facis es guardaran per sempre!\nEs mantenen publics fins que el servidor els reescriu automàticament un cop al dia.</b>\n\nA la pantalla d\'inici de sessió pots introduïr l\'adreça del teu propi servidor.</string>
+  <string name="msg_logout_demo">Estàs utilitzant el servidor públic de demostració <u>https://grocy.info</u>.\n\n<b>Cap dels canvis que facis es desaran permanentment!\nEs mantenen públics fins que el servidor els reescriu automàticament un cop al dia.</b>\n\nA la pantalla d\'inici de sessió pots introduir l\'adreça del teu propi servidor.</string>
   <string name="msg_logout_demo_short">Servidor de demostració públic. Toca per obtenir més informació.</string>
   <string name="msg_restart">S\'ha de reiniciar l\'aplicació per aplicar la configuració actual. Vols reiniciar-la ara?</string>
   <string name="msg_full_description">Toca aquí per a veure la descripció completa.</string>
+  <string name="msg_copied_clipboard">S\'ha copiat al porta-retalls</string>
   <string name="msg_shortcuts">Pots habilitar fins a 4 dreceres:</string>
   <string name="msg_shortcuts_not_supported">Les dreceres no són compatibles amb aquesta versió d\'Android.</string>
   <string name="msg_barcode_formats">Pots millorar la velocitat del detector de codi de barres configurant-lo per a que detecti només aquells formats que esperes llegir.</string>
   <string name="msg_features">Torna a iniciar la introducció a \"Quant a\"</string>
   <string name="msg_feedback">Tens algun desig, pregunta o error? Posa\'t en contacte amb nosaltres i deixa\'ns ajudar. \ N En cas contrari, estaríem encantats de rebre una bona revisió a Play Store.</string>
   <string name="msg_point_at_barcode">Apunteu la càmera cap a un codi de barres</string>
+  <string name="msg_save_product_first">Primer desa el producte</string>
+  <string name="msg_save_recipe_first">Primer desa la recepta</string>
+  <string name="msg_recipe_contains_nested_recipes">La recepta conté receptes dins d\'ella.</string>
   <string name="msg_press_hold_confirm">Prémer i mantenir per a confirmar l\'eliminació</string>
+  <string name="msg_recipe_consume_ask">Estàs segur que vols consumir tots els ingredients necessaris per la recepta \"%1$s\"? (els ingredients marcats amb \"només comprova si hi ha alguna quantitat en existències\" seran ignorats)</string>
+  <string name="msg_recipe_shopping_list_ask">Estàs segur que vols afegir tots els ingredients que falten per la recepta \"%1$s\" a la llista de compra?\n\nDeselecciona els ingredients que no vulguis afegir a la llista:</string>
+  <string name="msg_settings_backup_restore">Aquí pots crear o restaurar una còpia de seguretat de la configuració de l\'aplicació, per exemple per compartir-la amb altres membres de la família (el fitxer conté credencials com ara la clau d\'API).\n\nDesprés d\'una restauració, és possible que les notificacions no funcionin com es desitgi i s\'hagin de reiniciar en segon pla en aquesta aplicació desactivant i tornant a activar els interruptors.\ n\nSi hi ha dades incorrectes al fitxer de restauració/còpia de seguretat, és possible que l\'aplicació deixi de funcionar després de la restaurar-la i se n\'hagin d\'esborrar totes les dades.</string>
+  <string name="msg_settings_backup_success">Còpia de seguretat de la configuració creada correctament</string>
+  <string name="msg_settings_restore_success">Configuració restaurada correctament, reiniciant l\'aplicació d\'aquí a 2 segons</string>
   <string name="msg_welcome">Benvingut a Grocy Android!</string>
+  <string name="msg_welcome_introduce">Per utilitzar Grocy de manera productiva, necessites el teu propi servidor o el complement de Grocy per a Home Assistant.\nSi només vols provar aquesta aplicació, pots utilitzar el servidor de demostració de Bernd Bestel, el creador de Grocy.</string>
   <string name="msg_choose_option_below">Si us plau, escull una opció:</string>
+  <string name="msg_qr_code_scan">En un altre dispositiu, visita el teu lloc web o URL de Grocy i ves a la pàgina \"Gestió de claus API\". Fes clic a \"Afegeix\", després fes clic al petit símbol de codi QR i escaneja el QR que apareix.</string>
+  <string name="msg_qr_code_scan_token">Estàs utilitzant el complement Grocy de Home Assistant. Crea un \'token\' d\'accés de llarga durada a la configuració del teu perfil de Home Assistant (última secció). A sota del camp del \'token\' fes clic a \"Genera codi QR\" i escaneja\'l des d\'allà.</string>
   <string name="msg_port_connection_info_without_port">L\'aplicació es connectarà al port %1$s.\nSi la vols connectar a un port diferent, pots afegir-ne un a l\'URL.\nExemple: http://domini.com:81/</string>
   <string name="msg_port_connection_info_with_port">L\'aplicació es connectarà al port%1$s.</string>
   <string name="msg_clear_form_first">Neteja primer el formulari abans d\'escanejar un nou codi de barres existent.</string>
   <string name="msg_not_implemented_yet">Això s’implementarà aviat. Fes servir de moment la teva interfície de servidor.</string>
+  <string name="msg_help_picture_changes">Els canvis d\'imatges es sincronitzen amb el servidor immediatament, no només quan desis!</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_default_stock_label_type">Aquest es el tipus d\'etiqueta d\'entrada que serà predefinida a la compra.</string>
+  <string name="msg_help_default_stock_label_type">Aquest es el tipus d\'etiqueta d\'entrada predeterminada que serà preestablerta a la compra.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">A la pàgina de descripció general de les existències s’enumeren tots els productes que actualment estan en estoc o per sota de la quantitat mínima. Activa aquesta opció per amagar sempre aquest producte.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_parent_product_deactivated">Aquest producte no pot tenir un producte principal perquè ja s’utilitza com a producte principal en un altre producte.</string>
+  <string name="msg_help_parent_product_deactivated">Aquest producte no pot tenir un producte mare perquè ja s\'utilitza com a producte mare d\'un altre producte.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_consume_location">Les existències de l\'inventari d\'aquesta ubicació es consumiran primer.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_move_on_open">Si s\'habilita, quan es marqui un producte com a obert, la quantitat corresponent es mourà a la ubicació de consum per defecte.</string>
+  <string name="msg_help_move_on_open">Si s\'activa, quan es marqui un producte com a obert, la quantitat corresponent es mourà a la ubicació de consum predeterminada.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_disable_own_stock">Si s\'habilita, el producte corresponent no pot tenir inventari propi, significa que no es podrá seleccionar a la compra (útil per a productes principals quan son utilitzats com a vista de resum/total dels subproductes).</string>
+  <string name="msg_help_disable_own_stock">Si s\'activa, el producte corresponent no pot tenir inventari propi, significa que no es podrà seleccionar a la compra (útil per a productes mare quan son utilitzats com a visualització del total de subproductes).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_should_not_be_frozen">Si està activat, quan es mogui el producte al congelador (quan es congeli), es mostrarà una alerta.</string>
   <string name="msg_help_due_date_type">Segons el tipus de data de venciment seleccionat, el ressaltat a la pàgina de visió general de les accions serà diferent. \"Data de consum preferent\" significa que el producte és segur per consumir. \"Data de caducitat\" significa que no és segur consumir el producte passat aquesta data.</string>
   <string name="msg_help_default_due_days_format">Pots mantenir premut un element a continuació per introduir una data en comptes d\'un número.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -340,20 +406,31 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days_thawing">Quan es mogui un producte des d\'una ubicació de congelació (quan es descongeli), es reemplaçarà la data de venciment amb la data d\'avui + la quantitat de dies especificada.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_qu_stock">La unitat no es pot canviar després de la primera compra.</string>
-  <string name="msg_help_qu_stock_changeable">La unitat de l\'inventari només es pot canviar si existeixen conversions d\'unitat per a la unitat de quantitat actual.</string>
+  <string name="msg_help_qu_stock">La unitat d\'inventari no es pot canviar després de la primera compra.</string>
+  <string name="msg_help_qu_stock_changeable">La unitat d\'inventari només es pot canviar si existeixen conversions d\'unitat per a la unitat actual.</string>
+  <string name="msg_help_qu_changeable">Les unitats només es poden canviar si existeixen conversions d\'unitat entre elles.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_purchase">Unitat predeterminada utilitzada quan es compri o s\'afegeixi a la llista de compra aquest producte.</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_consume">Unitat predeterminada utilitzada quan es consumeixi aquest producte.</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_price">Quan es mostrin preus d\'aquest producte, estaran relacionats amb aquesta unitat.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">Si s\'habilita, la quantitat mínima d\'existències  dels subproductes s\'acumularan en aquest producte, significa que mai \"faltarà\" el subproducte, només aquest producte.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_treat_opened_as_out_of_stock">Quan s\'habilita, els elements oberts es comptaran com a consumits a l\'hora de calcular si el producte es troba per sota el mínim d\'existències.</string>
   <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_quick_consume_amount">Aquesta quantitat es fa servir per als botons de \"Consum ràpid/obert\" en el resum d\'existències (relacionat amb la unitat de l\'inventari)</string>
+  <string name="msg_help_quick_consume_amount">Aquesta quantitat s\'utilitza per als \"botons ràpids de consum/obertura\" en la pàgina principal d\'inventari (relacionat amb la unitat d\'inventari).</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_consume_amount_new">Aquesta quantitat s\'utilitza per al \"botó ràpid de consum\" en la pàgina principal d\'inventari (relacionat amb la unitat d\'inventari).</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_open_amount">Aquesta quantitat s\'utilitza per al \"botó ràpid d\'obertura\" en la pàgina principal d\'inventari (relacionat amb la unitat d\'inventari).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_tare_weight">El maneig de la tara és útil, per exemple, per a la farina en pots - a la compra/consum/inventari sempre es pesa el pot sencer, la quantitat que es publica es calcula automàticament en funció del que hi ha a l\'inventari i la tara definida a continuació.</string>
+  <string name="msg_help_tare_weight">La gestió de tara és útil, per exemple, per a la farina en pots - a la compra/consum/inventari sempre es pesa el pot sencer, la quantitat que es desa es calcula automàticament en funció del que hi ha a l\'inventari i la tara definida a continuació.</string>
   <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_tare_weight_purchase">Maneig de la tara habilitat - si us plau, pesa tot el contenidor, la quantitat per a ser publicada es calcularà automàticament.</string>
+  <string name="msg_help_tare_weight_purchase">Gestió de tara activat - pesa tot el l\'envàs, la quantitat d\'aliment a desar es calcularà automàticament.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_disable_stock_check">Aquesta serà la configuració per defecte quan s\'afegeix aquest producte com a ingredient d\'una recepta.</string>
+  <string name="msg_help_disable_stock_check">Aquesta serà la configuració predeterminada quan s\'afegeix aquest producte com a ingredient d\'una recepta.</string>
   <string name="msg_help_inventory_fields">Els següents camps apliquen als productes nous que s\'afegeixin.</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_choose">Pots escollir un escàner de codi de barres per a l\'escaneig amb la càmera.</string>
@@ -364,26 +441,44 @@
   <string name="msg_help_external_scanner_ready">Pots utilitzar un escàner extern per al següent camp mentre aquest estigui enfocat i buit.</string>
   <string name="msg_help_external_scanner_settings">L\'aplicació suporta dispositius d\'escaneig externs que actuen com a teclats i es poden connectar via USB o Bluetooth. Les següents opcions s\'han de configurar a l\'escàner extern:\n\nPrefix: Cap\nSuffix: TAB o ENTER </string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_specific_item">El primer element d\'aquesta llista seria escollit per la regla per defecte, la qual es \"El primer obert, després el que venci primer, després el primer a entrar és el primer a sortir\".</string>
+  <string name="msg_help_specific_item">El primer element d\'aquesta llista seria escollit per la regla predeterminada que és \"Obert primer > primer en vèncer > primer en entrar, primer en sortir\".</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Només per finalitats estadístiques.</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_not_check_shopping_list">Per defecte la quantitat que s\'afegeix a la llista de la compra es \"la quantitat necesaria - la quantitat a l\'inventari - la quantitat a la llista de la compra\". Quan s\'habilita aquesta opció, només es comprova la quantitat a l\'inventari sense tenir en compte el que ja hi ha a la llista de la compra.</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_produces_product">Quan se selecciona un producte, s\'afegirà una unitat (per ració en unitats de l\'inventari) quan es consumeixi la recepta.</string>
+  <string name="msg_help_recipe_servings">Els ingredients d\'aquesta recepta proporcionen aquesta quantitat de racions.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_produces_product">Quan se seleccioni un producte, s\'afegirà una unitat (per ració en unitats d\'inventari) quan es consumeixi la recepta.</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_only_check_any_amount">Es pot indicar una quantitat/unitat diferent en la comprovació de l\'inventari si hi ha suficients existències del producte a l\'inventari.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_variable_amount">Quan no estigui buit, es mostrarà enlloc de la quantitat introduïda a dalt. La quantitat de dalt seguirà sent la utilitzada en les comprovacions d\'existències a l\'inventari. </string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_group">S\'utilitzarà com a nom per agrupar ingredients.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_price_factor">El preu resultant d\'aquest ingredient es multiplicarà per aquest factor.</string>
+  <string name="msg_help_recipe_ingredients_wrong">Amb la versions del servidor de Grocy inferiors de la 4.0.0, aquesta llista pot contenir informació incorrecta. Actualitza el teu servidor a la versió 4.0.0 o posterior per veure els valors correctes.</string>
   <string name="msg_help_date_chooser">Pots canviar a entrada de teclat a la configuració, això podria incrementar la velocitat d\'entrada.</string>
   <string name="msg_help_date_chooser_keyboard">Pots activar el format de data invers a la configuració si DDMMYY és preferible al teu país.\nPer aplicar l\'entrada i tancar aquesta pàgina pots utilitzar la tecla Fet del teclat.</string>
+  <string name="msg_help_notifications_tap">Toca aquí si no reps notificacions o les reps malament.</string>
+  <string name="msg_help_notifications">Si no reps notificacions, toca aquí per obrir la pàgina d\'informació de l\'aplicació d\'Android i comprova si les notificacions estan permeses i si les mesures d\'estalvi d\'energia es poden desactivar. A vegades, Android envia notificacions una mica més tard de l\'hora real per reduir el consum de bateria, és un comportament normal.</string>
+  <string name="msg_help_notifications_other">No tanquis l\'aplicació del menú principal on hi ha la resta d\'aplicacions en execució, en cas contrari alguns fabricants eliminen el procés de notificacions.</string>
   <string name="msg_help_quick_mode">Pots mantenir apretada la barra de títol per activar el mode ràpid. En aquest mode, les transaccions s\'executaran immediatament si s\'ha introduït o escanejat un producte i tots els camps es poden omplir automàticament (per defecte del producte i/o del codi de barres).</string>
   <string name="msg_help_loading_circle_settings">A cada pàgina on s\'ha de carregar contingut des del servidor, l\'aplicació realitza una sol·licitud on es comprova si la base de dades del servidor s\'ha modificat desde l\'última vegada i només actualitza les dades obsoletes. Activa l\'opció següent per a veure un cercle de càrrega inclús per a aquesta sol·licitud.</string>
-  <string name="msg_help_start">El mode principiant està actiu. Els textos d\'ajuda es mostren per defecte si estan disponibles. Toca per canviar-ho.</string>
-  <string name="msg_help_purchased_date_settings">Si s\'activa l\'opció següent, es mostrarà un camp per a la introducció de la data de compra a les pàgines de compra i inventari. D\'altra banda la data de compra per defecte es la data d\'avui.</string>
+  <string name="msg_help_start">El mode principiant està actiu: els textos d\'ajuda es mostren per defecte si estan disponibles. Toca per canviar-ho.</string>
+  <string name="msg_help_purchased_date_settings">Si s\'activa l\'opció següent, es mostrarà un camp per a la introducció de la data de compra a les pàgines de compra i inventari. D\'altra banda la data de compra predeterminada és la data d\'avui.</string>
+  <string name="msg_help_normal_login">Toca aquesta targeta si utilitzes Grocy amb el complement de Home Assistant.</string>
+  <string name="msg_help_home_assistant_login">Estàs utilitzant el complement de Grocy de Home Assistant i es necessiten alguns detalls més. Toca aquesta targeta per canviar a l\'inici de sessió normal.</string>
   <string name="msg_help_home_assistant_login_help_show">Toca aquí per a mostrar els textos d\'ajuda.</string>
   <string name="msg_help_home_assistant_login_help_hide">Toca aquí per amagar els textos d\'ajuda.</string>
   <string name="msg_help_home_assistant_login_server">Al següent camp pots introduir l\'URL del núvol Nabu Casa si estàs utilitzant aquest servei. Toca aquesta targeta per a visitar el lloc web de Nabu Casa.</string>
   <string name="msg_help_home_assistant_login_token">Pots crear un token d\'accés de llarga duració a la configuració de perfil de Home Assistant (la darrera secció). Toca aquí per obrir l\'URL de dalt.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Navega enrere o toca aquesta targeta per a escanejar un codi QR per omplir els camps següents.</string>
+  <string name="msg_help_fab_overview_start">El botó d\'acció d\'aquesta pàgina principal té dues accions:\n\n- Toc breu: consumeix amb escàner de codi de barres\n- Toc llarg: compra amb escàner de codi de barres\n\nAmb aquest botó s\'activa de manera predeterminada el mode ràpid de les pàgines respectives. Pots canviar-ho a la configuració de comportament.</string>
+  <string name="msg_help_fab_consume_start">El botó d\'acció d\'aquesta pàgina consumeix el producte amb els valors donats. Per marcar el producte com a obert, utilitza el botó de la part esquerra de la barra inferior.</string>
+  <string name="msg_share">Fes un cop d\'ull a aquest client d\'Android que funciona amb el projecte Grocy: \nhttps://github.com/patzly/grocy-android</string>
+
   <string name="error_api_not_working">La clau API no funciona</string>
   <string name="error_orbot_not_installed">Orbot no està instal·lat</string>
   <string name="error_select_product">Selecciona un producte</string>
@@ -403,7 +498,7 @@
   <string name="error_empty_tasks">Sense tasques</string>
   <string name="error_empty_task_categories">Sense categories de tasca</string>
   <string name="error_empty_unit_conversions">Cap conversió d\'unitats</string>
-  <string name="error_empty_chores">Sense feines</string>
+  <string name="error_empty_chores">No hi ha feina</string>
   <string name="error_empty_chores_sub">Anar a les dades mestres per crear alguns</string>
   <string name="error_empty_recipes">Cap recepta</string>
   <string name="error_empty_ingredients">Sense ingredients</string>
@@ -412,15 +507,17 @@
   <string name="error_filter">Res a mostrar</string>
   <string name="error_filter_sub">Prova altres filtres</string>
   <string name="error_duplicate">Ja existeix</string>
-  <string name="error_parent">No pot ser pare del mateix</string>
+  <string name="error_parent">No pot ser producte mare d\'ell mateix</string>
   <string name="error_invalid_product">Producte no vàlid</string>
   <string name="error_invalid_url">URL no vàlida</string>
   <string name="error_invalid_amount">Quantitat no vàlida</string>
   <string name="error_invalid_price">Preu no vàlid</string>
   <string name="error_invalid_factor">Factor no vàlid</string>
   <string name="error_invalid_date_format">Format de data no vàlid</string>
+  <string name="error_api_qr_code">No és un codi QR amb credencials d\'API de Grocy</string>
   <string name="error_token_qr_code">No és un codi QR amb un token d\'accés de llarga durada de Homa Assistant</string>
   <string name="error_loading_qus">Error en la càrrega de les unitats del producte</string>
+  <string name="error_clipboard_no_image">El porta-retalls no conté cap imatge o no s\'ha pogut llegir</string>
   <string name="error_no_children">El producte seleccionat no té fills</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">No pot ser igual a%1$s</string>
@@ -438,7 +535,12 @@
   <string name="error_already_exists">Ja existeix</string>
   <string name="error_network">Error de xarxa</string>
   <string name="error_network_subtitle">Les dades requerides no s\'han pogut carregar completament.</string>
+  <string name="error_network_exact">Error de xarxa: %1$s</string>
+  <string name="error_database">Error de base de dades</string>
+  <string name="error_insert">Error: %1$s</string>
+  <string name="error_details">Detalls de l\'error</string>
   <string name="error_unknown">Vaja!</string>
+  <string name="error_not_grocy_instance">Instància de Grocy invàlida</string>
   <string name="error_timeout">Error de temps d\'espera</string>
   <string name="error_no_product_selected">Cap producte seleccionat</string>
   <string name="error_failed_to_connect_to">Error de connexió amb el servidor</string>
@@ -453,9 +555,17 @@
   <string name="error_failed_barcode_upload">No s\'ha pogut carregar el codi de barres</string>
   <string name="error_wrong_grocycode_type">El grocycode conté una entitat incorrecta</string>
   <string name="error_stock_entry_grocycode">No s\'ha pogut trobar cap entrada a l\'inventari amb el grocycode</string>
+  <string name="error_picture_uploads_forbidden">Per raons de seguretat, només es poden pujar imatges en servidors propis. Ara estàs utilitzant el servidor de demostració.</string>
   <string name="error_permission">No hi ha permís per a aquesta acció</string>
+  <string name="error_permission_notification">El permís de notificació és necessari perquè funcionin els recordatoris</string>
   <string name="error_undefined">S\'ha produït un error</string>
-  <string name="error_invalid_base_servings">Porcions no vàlides</string>
+  <string name="error_invalid_base_servings">Racions invàlides</string>
+  <string name="error_pictures_size_exceeds_limit">Hi ha imatges incrustades a les descripcions de productes o receptes al del teu servidor que superen el límit d\'aquesta aplicació. Elimina les imatges d\'alta qualitat o mida gran de les teves descripcions; també s\'accelerarà la càrrega de dades.</string>
+  <string name="error_userfield_type_not_supported">El tipus de camp d\'usuari actualment no s\'admet</string>
+  <string name="error_open_product_not_supported">Aquest producte no admet marcar-se com a obert</string>
+  <string name="error_settings_backup">La còpia de seguretat ha fallat</string>
+  <string name="error_settings_restore">La restauració ha fallat</string>
+
   <string name="title_overview">Resum</string>
   <string name="title_stock_overview">Resum d\'existències</string>
   <string name="title_purchase">Comprar</string>
@@ -476,6 +586,7 @@
   <string name="title_shopping_list">Llista de la compra</string>
   <string name="title_feedback">Comentaris</string>
   <string name="title_settings">Configuració</string>
+  <string name="title_options">Opcions</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="title_barcode_scanner">Escàner de codi de barres</string>
   <!-- Context: About this app -->
@@ -499,8 +610,16 @@
   <string name="title_chores">Feines</string>
   <string name="title_chore">Feina</string>
   <string name="title_recipes">Receptes</string>
+  <string name="title_meal_plan">Planificació d\'àpats</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Editor</string>
+  <string name="title_task_new">Nova tasca</string>
+  <string name="title_task_edit">Edita la tasca</string>
+  <string name="title_entry_new">Nova entrada</string>
+  <string name="title_entry_edit">Edita l\'entrada</string>
+  <string name="title_ingredient_new">Nou ingredient</string>
+  <string name="title_ingredient_edit">Edita ingredient</string>
+  <string name="title_recipe_create">Nova recepta</string>
   <string name="title_recipe_edit">Editar recepta</string>
 
   <string name="title_spoiled">Fet malbé</string>
@@ -531,7 +650,7 @@
   <string name="title_shopping_mode">Mode compra</string>
   <string name="title_batch_mode_shopping_list">Llista de la compra en mode per lots</string>
   <string name="title_product_cat_optional">Propietats opcionals</string>
-  <string name="title_product_cat_location">Ubicació per defecte</string>
+  <string name="title_product_cat_location">Ubicació predeterminada</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_product_cat_due_date">Data de consum preferent</string>
   <string name="title_product_cat_amount">Quantitat</string>
@@ -542,6 +661,9 @@
   <string name="title_product_cat_qu_conversions">Conversions QU</string>
   <string name="title_unknown_input">Entrada desconeguda</string>
   <string name="title_presets_new_products">Paràmetres per defecte per a nous productes</string>
+  <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
+  <string name="title_ingredient_with_amount">%1$s %2$s de %3$s</string>
+
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s%2$s</string>
   <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
@@ -563,17 +685,17 @@
   <string name="subtitle_stock_entry_no_specific">El primer obert, després el que venci primer, després el primer a entrar és el primer a sortir</string>
   <!-- %1$s is a purchase date -->
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="subtitle_stock_entry_name">Comprat el%1$s</string>
+  <string name="subtitle_stock_entry_name">Comprat el %1$s</string>
   <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened); The same string is also in the web interface: Consume form -->
-  <string name="subtitle_stock_entry">Venç el%1$s;quantitat:%2$s;%3$s</string>
+  <string name="subtitle_stock_entry">Venç el %1$s; quantitat: %2$s; %3$s</string>
   <!-- %1$s and %2$s are numbers -->
-  <string name="subtitle_entry_num_of_num">Entrada%1$dde%2$d</string>
+  <string name="subtitle_entry_num_of_num">Entrada %1$d de %2$d</string>
   <!-- %1$s is an amount, %2$s is a quantity unit -->
-  <string name="subtitle_amount_compare">És equivalent a%1$s%2$s</string>
+  <string name="subtitle_amount_compare">És equivalent a %1$s %2$s.</string>
   <!-- %1$s is a price, %2$s is a quantity unit -->
-  <string name="subtitle_price_means">Equival a%1$sper%2$s.</string>
+  <string name="subtitle_price_means">Equival a %1$s per %2$s.</string>
   <!-- %1$s and %2$s are amounts -->
-  <string name="subtitle_factor_means">Significa que %1$ses el mateix que %2$s.</string>
+  <string name="subtitle_factor_means">Significa que %1$s es el mateix que %2$s.</string>
   <string name="subtitle_product_hidden">El producte està ocult</string>
   <string name="subtitle_product_not_hidden">El producte no està ocult</string>
   <string name="subtitle_product_not_on_server">El producte no és al servidor</string>
@@ -581,24 +703,24 @@
   <string name="subtitle_barcodes_will_be_added">Hi ha codis de barres emmagatzemats, que s\'afegeixen al producte amb l\'operació de desar.</string>
   <string name="subtitle_unknown">Desconegut</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
-  <string name="subtitle_supported">Soportada</string>
+  <string name="subtitle_supported">Admès</string>
   <!-- Like the words 'not supported' from 'This version is not supported.'-->
-  <string name="subtitle_not_supported">No soportada</string>
+  <string name="subtitle_not_supported">No admès</string>
   <!-- %1$s is a number -->
-  <string name="subtitle_barcode_amount">Quantitat:%1$s</string>
+  <string name="subtitle_barcode_amount">Quantitat: %1$s</string>
   <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">Unitat:%1$s</string>
-  <string name="subtitle_barcode">Codi de barres:%1$s</string>
-  <string name="subtitle_feature_disabled">Característica deshabilitada</string>
+  <string name="subtitle_barcode_unit">Unitat: %1$s</string>
+  <string name="subtitle_barcode">Codi de barres: %1$s</string>
+  <string name="subtitle_feature_disabled">Característica desactivada</string>
   <string name="subtitle_date_from_input">Data de l\'entrada:\n%1$s</string>
-  <string name="subtitle_product_amount">Existències mínimes, Consumir Ràpid, Factor, Maneig de la tara</string>
-  <string name="subtitle_product_default_location">Ubicació, Botiga</string>
-  <string name="subtitle_product_due_date">Tipus, dies per defecte (després d\'obrir, congelar, descongelar)</string>
-  <string name="subtitle_product_optional_properties">Estat, Producte principal, Descripció, Grup de productes, Energia, Imatge</string>
-  <string name="subtitle_product_quantity_unit">Per defecte a l\'inventari, Compra</string>
+  <string name="subtitle_product_amount">Existències mínimes, consumeix ràpid, factor, gestió de tara</string>
+  <string name="subtitle_product_default_location">Ubicació, botiga</string>
+  <string name="subtitle_product_due_date">Tipus, dies predeterminats (després d\'obrir, congelar, descongelar)</string>
+  <string name="subtitle_product_optional_properties">Estat, producte mare, descripció, grup de productes, energia, imatge</string>
+  <string name="subtitle_product_quantity_unit">Inventari, compra predeterminada</string>
   <string name="subtitle_synced_with_server">Sincronitzat amb el servidor</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
-  <string name="subtitle_recipe_due_score">Puntuació de conservació%1$s</string>
+  <string name="subtitle_recipe_due_score">Puntuació de conservació: %1$s</string>
   <string name="subtitle_per_serving">per ració</string>
   <string name="subtitle_tap_preparation_mode">Toca aquí per al mode preparació</string>
   <!-- Context is Label printer -->
@@ -607,6 +729,9 @@
   <string name="subtitle_print_label_per_purchase">Per compra</string>
   <!-- Short form for "One label per unit" -->
   <string name="subtitle_print_label_per_unit">Per unitat</string>
+  <!-- %1$s is a price and %2$s is a currency -->
+  <string name="subtitle_total_price">Preu total: %1$s %2$s</string>
+
   <string name="description_input_product_part1">El camp del producte conté:</string>
   <string name="description_input_product_part2">Si us plau, escull com procedir:</string>
   <string name="description_input_product_option1">Crea un nou producte i utilitza l\'entrada com a nom</string>
@@ -619,141 +744,151 @@
 
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock">
-    <item quantity="one">Tens %1$dproducte a l\'inventari.</item>
-    <item quantity="other">Tens%1$dproductes a l\'inventari.</item>
+    <item quantity="one">Tens %1$d producte a l\'inventari.</item>
+    <item quantity="other">Tens %1$d productes a l\'inventari.</item>
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_stock_due_soon">
-    <item quantity="one">%1$dproducte venç els propers%2$ddies.</item>
-    <item quantity="other">%1$dproductes vencen els propers%2$ddies.</item>
+    <item quantity="one">%1$d producte venç en els propers %2$d dies.</item>
+    <item quantity="other">%1$d productes vencen en els propers %2$d dies.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_overdue">
-    <item quantity="one">%1$dproducte vençut.</item>
-    <item quantity="other">%1$dproductes vençuts.</item>
+    <item quantity="one">%1$d producte vençut.</item>
+    <item quantity="other">%1$d productes vençuts.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_expired">
-    <item quantity="one">%1$dproducte caducat.</item>
-    <item quantity="other">%1$dproductes caducats.</item>
+    <item quantity="one">%1$d producte caducat.</item>
+    <item quantity="other">%1$d productes caducats.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing">
-    <item quantity="one">%1$dproducte es troba per sota el mínim d\'existències definit.</item>
-    <item quantity="other">%1$dproductes es troben per sota el mínim d\'existències definit.</item>
+    <item quantity="one">%1$d producte es troba per sota el mínim d\'existències definit.</item>
+    <item quantity="other">%1$d productes es troben per sota el mínim d\'existències definit.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_single">
-    <item quantity="one">%1$dés a la llista de la compra.</item>
-    <item quantity="other">%1$dsón a la llista de la compra</item>
+    <item quantity="one">%1$d és a la llista de compra.</item>
+    <item quantity="other">%1$d són a la llista de compra.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_multi">
-    <item quantity="one">%1$dés a les llistes de la compra.</item>
-    <item quantity="other">%1$dsón a les llistes de la compra.</item>
+    <item quantity="one">%1$d és a les llistes de compra.</item>
+    <item quantity="other">%1$d són a les llistes de compra.</item>
   </plurals>
   <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
   <plurals name="description_overview_stock_value">
-    <item quantity="one">Tens %1$dproducte a l\'inventari amb un valor de %2$s%3$s.</item>
-    <item quantity="other">Tens %1$dproductes a l\'inventari amb un valor de %2$s%3$s.</item>
+    <item quantity="one">Tens %1$d producte a l\'inventari amb un valor de %2$s %3$s.</item>
+    <item quantity="other">Tens %1$d productes a l\'inventari amb un valor de %2$s %3$s.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list_multi">
-    <item quantity="one">%1$delement és a les llistes de la compra.</item>
-    <item quantity="other">%1$delements són a les llistes de la compra.</item>
+    <item quantity="one">%1$d element és a les llistes de compra.</item>
+    <item quantity="other">%1$d elements són a les llistes de compra.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list">
-    <item quantity="one">%1$delement és a la llista de la compra.</item>
-    <item quantity="other">%1$delemens són a la llista de la compra.</item>
+    <item quantity="one">%1$d element és a la llista de compra.</item>
+    <item quantity="other">%1$d elements són a la llista de compra.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_recipes">
-    <item quantity="one">Tens%1$drecepta.</item>
-    <item quantity="other">Tens%1$dreceptes.</item>
+    <item quantity="one">Tens %1$d recepta.</item>
+    <item quantity="other">Tens %1$d receptes.</item>
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_chores_due_soon">
-    <item quantity="one">%1$dfeina s\'ha de realitzar en els següents %2$ddies</item>
-    <item quantity="other">%1$dfeines s\'han de realitzar en els següents %2$ddies</item>
+    <item quantity="one">Hi ha %1$d feina a completar en els següents %2$d dies.</item>
+    <item quantity="other">Hi ha %1$d feines a completar en els següents %2$d dies.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_overdue">
-    <item quantity="one">%1$dfeina venç aviat.</item>
-    <item quantity="other">%1$dfeines vencen aviat.</item>
+    <item quantity="one">Hi ha %1$d feina que s\'hauria d\'haver completat.</item>
+    <item quantity="other">Hi ha %1$d feines que s\'haurien d\'haver completat.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_due_today">
-    <item quantity="one">%1$dfeina venç avui.</item>
-    <item quantity="other">%1$dfeines vencen avui.</item>
+    <item quantity="one">Avui hi ha %1$d feina a completar.</item>
+    <item quantity="other">Avui hi ha %1$d feines a completar.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_assigned">
-    <item quantity="one">Tens assignada%1$dfeina.</item>
-    <item quantity="other">Tens assignades%1$dfeines.</item>
+    <item quantity="one">Tens assignada %1$d feina.</item>
+    <item quantity="other">Tens assignades %1$d feines.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks">
-    <item quantity="one">%1$dtasca s\'ha de completar</item>
-    <item quantity="other">%1$dtasques s\'han de completar</item>
+    <item quantity="one">S\'ha de completar %1$d tasca.</item>
+    <item quantity="other">S\'han de completar %1$d tasques.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks_user">
-    <item quantity="one">Tens assignada%1$dtasca.</item>
-    <item quantity="other">Tens assignades%1$dtasques.</item>
+    <item quantity="one">Tens assignada %1$d tasca.</item>
+    <item quantity="other">Tens assignades %1$d tasques.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
-    <item quantity="one">La base de dades conté%1$dproducte.</item>
-    <item quantity="other">La base de dades conté%1$dproductes.</item>
+    <item quantity="one">La base de dades conté %1$d producte.</item>
+    <item quantity="other">La base de dades conté %1$d productes.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="error_max_decimal_places">
-    <item quantity="one">Máxim%1$sxifra decimal</item>
-    <item quantity="other">Máxim%1$sxifres decimals</item>
+    <item quantity="one">Màxim %1$s xifra decimal</item>
+    <item quantity="other">Màxim %1$s xifres decimals</item>
   </plurals>
 
   <string name="property_name">Nom</string>
-  <string name="property_name_singular">Nom (forma singular)</string>
-  <string name="property_name_plural">Nom (forma plural)</string>
+  <string name="property_name_singular">Nom (singular)</string>
+  <string name="property_name_plural">Nom (plural)</string>
   <string name="property_product">Producte</string>
   <string name="property_products">Productes</string>
   <string name="property_product_name">Nom del producte</string>
-  <string name="property_parent_product">Producte principal</string>
+  <string name="property_parent_product">Producte mare</string>
   <string name="property_description">Descripció</string>
+  <string name="property_product_description">Descripció del producte</string>
   <string name="property_note">Nota</string>
   <string name="property_status">Estat</string>
+  <string name="property_status_insert">Estat:</string>
   <string name="property_amount">Quantitat</string>
-  <string name="property_amount_insert">Quantitat:%1$s</string>
+  <string name="property_amount_insert">Quantitat: %1$s</string>
   <string name="property_seconds">Segons</string>
   <!-- %1$s is a number (amount of seconds) -->
   <plurals name="property_seconds_num">
-    <item quantity="one">%1$dsegon</item>
-    <item quantity="other">%1$dsegons</item>
+    <item quantity="one">%1$d segon</item>
+    <item quantity="other">%1$d segons</item>
   </plurals>
-  <string name="property_amount_min_stock">Quantitat mínima d\'existències.</string>
+  <string name="property_amount_min_stock">Quantitat mínima d\'existències</string>
   <!-- %1$s is a quantity unit like "bottles" -->
-  <string name="property_amount_in">Quantitat en%1$s</string>
+  <string name="property_amount_in">Quantitat en %1$s</string>
   <string name="property_price">Preu</string>
   <string name="property_price_average">Preu mig</string>
   <!-- %1$s is a quantity unit-->
-  <string name="property_price_unit">Preu per%1$s</string>
+  <string name="property_price_unit">Preu per %1$s</string>
   <!-- %1$s is a price and %2$s is a quantity unit-->
-  <string name="property_price_unit_insert">%1$sper%2$s</string>
+  <string name="property_price_unit_insert">%1$s per %2$s</string>
   <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
-  <string name="property_price_with_currency">%1$s%2$s</string>
+  <string name="property_price_with_currency">%1$s %2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
-  <string name="property_price_in">Preu en%1$s</string>
+  <string name="property_price_in">Preu en %1$s</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
-  <string name="property_price_unit_in">Preu per%1$sen%2$s</string>
+  <string name="property_price_unit_in">Preu per %1$s en %2$s</string>
   <string name="property_quantity_unit">Unitat</string>
   <string name="property_quantity_units">Unitats</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_default_qu_purchase">Unitat de compra per defecte</string>
+  <string name="property_default_qu_purchase">Unitat de compra predeterminada</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_stock">Unitat de l\'inventari</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Factor de conversió d\'unitat de compra a unitat d\'inventari</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_default_qu_consume">Unitat de consum predeterminada</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_prices">Unitat pels preus</string>
+  <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
+  <string name="property_quantity_unit_from">Converteix de</string>
+  <!-- Example: "Convert to cup"; This string is part of a pair, there is also 'Convert from' -->
+  <string name="property_quantity_unit_to">Converteix a</string>
   <string name="property_factor">Factor</string>
   <string name="property_barcode">Codi de barres</string>
   <string name="property_barcodes">Codis de barres</string>
@@ -776,25 +911,26 @@
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_next">Propera data de consum preferent</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_days_default">Dies per al consum per defecte</string>
+  <string name="property_due_days_default">Dies predeterminats per al consum</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_days_default_opened">Dies per al consum després d\'obrir per defecte</string>
+  <string name="property_due_days_default_opened">Dies predeterminats per al consum després d\'obrir</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_days_default_freezing">Dies per al consum després de congelar per defecte</string>
+  <string name="property_due_days_default_freezing">Dies predeterminats per al consum després de congelar</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_days_default_thawing">Dies per al consum després de descongelar per defecte</string>
+  <string name="property_due_days_default_thawing">Dies predeterminats per al consum després de descongelar</string>
+  <string name="property_day_summary">Resum del dia</string>
   <string name="property_location">Ubicació</string>
   <string name="property_location_insert">Ubicació: %1$s</string>
-  <string name="property_location_default">Ubicació per defecte</string>
-  <string name="property_location_default_insert">Ubicació per defecte:%1$s</string>
-  <string name="property_location_consume_default">Ubicació de consum per defecte</string>
+  <string name="property_location_default">Ubicació predeterminada</string>
+  <string name="property_location_default_insert">Ubicació predeterminada: %1$s</string>
+  <string name="property_location_consume_default">Ubicació de consum predeterminada</string>
   <string name="property_move_on_open">Moure a l\'obrir</string>
   <string name="property_notes">Notes</string>
   <string name="property_locations">Ubicacions</string>
   <string name="property_store">Botiga</string>
   <string name="property_store_insert">Botiga:%1$s</string>
   <string name="property_store_unknown">Botiga desconeguda</string>
-  <string name="property_store_default">Botiga per defecte</string>
+  <string name="property_store_default">Botiga predeterminada</string>
   <string name="property_stores">Botigues</string>
   <string name="property_shopping_list">Llista de la compra</string>
   <string name="property_shopping_lists">Llista de la compra</string>
@@ -810,6 +946,7 @@
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Temps de vida mitjà de l\'inventari</string>
   <string name="property_spoil_rate">Taxa de conservació</string>
+  <string name="property_created_timestamp">Creació</string>
   <string name="property_price_history">Historial de preus</string>
   <string name="property_product_group">Grup de productes</string>
   <string name="property_product_groups">Grups de productes</string>
@@ -819,14 +956,20 @@
   <string name="property_opened">obert</string>
   <string name="property_not_opened">sense obrir</string>
   <string name="property_is_freezer">És congelador</string>
+  <!-- Means energy of an ingredient or product -->
+  <string name="property_energy_only">Energia</string>
+  <!-- %1$s is a unit for energy, like kcal (kilo calories) -->
+  <string name="property_energy_insert">Energia (%1$s) per unitat a l\'inventari</string>
   <string name="property_active">Actiu</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">No mostrar mai al resum d\'existències</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_disable_own_stock">Deshabilitar inventari propi</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_should_not_be_frozen">No s\'hauria de congelar</string>
   <string name="property_number">Número</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_enable_tare_weight">Habilitar el maneig de la tara</string>
+  <string name="property_enable_tare_weight">Activa la gestió de tara</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_tare_weight">Tara</string>
   <!-- %1$s is a quantity unit like "bottles" -->
@@ -837,6 +980,10 @@
   <string name="property_amount_quick_consume">Quantitat de consum ràpid</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_quick_consume_in">Quantitat de consum ràpid en%1$s</string>
+  <!--The same string is also in the web interface (server v4.0.0 or later): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_amount_quick_open">Quantitat d\'obertura ràpida</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_quick_open_in">Quantitat d\'obertura ràpida en %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">Acumular quantitats mínimes d\'existències dels subproductes</string>
   <string name="property_picture">Imatge</string>
@@ -855,11 +1002,29 @@
   <string name="property_ungrouped">Sense agrupar</string>
   <!-- %1$s is a property like "product group" or "due date" -->
   <string name="property_extra_field">Camp extra:%1$s</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields">Camps</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_header">Camps (capçalera)</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_entries">Camps (entrades)</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value">%1$s: %2$s</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value_without_space">%1$s:%2$s</string>
   <string name="property_task_category">Categoria de tasca</string>
   <string name="property_task_categories">Categories de tasca</string>
   <string name="property_calories">Calories</string>
   <string name="property_calories_unit">Calories (unitat)</string>
   <string name="property_calories_total">Calories (total)</string>
+  <!-- %1$s is a value like energy or price, unit means value of items per unit -->
+  <string name="property_insert_per_unit">%1$s (unitat)</string>
+  <!-- %1$s is a value like energy or price, total means value of many items in total -->
+  <string name="property_insert_total">%1$s (total)</string>
+  <!-- %1$s is a value like price, average means average price -->
+  <string name="property_insert_average">%1$s (mitja)</string>
+  <!-- %1$s is a value like price, "last" is like for example in "last price" -->
+  <string name="property_insert_last">%1$s (últim)</string>
   <string name="property_category">Categoria</string>
   <string name="property_assigned_to">Assignat a</string>
   <string name="property_users">Usuaris</string>
@@ -877,15 +1042,20 @@
   <!-- See context for this string on the web interface on the recipes edit page -->
   <string name="property_servings">Racions</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it (hover over help icon) -->
-  <string name="property_servings_base_insert">Quantitat de racions:%1$s</string>
+  <string name="property_servings_base_insert">Nombre de racions: %1$s</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_servings_desired">Racions desitjades</string>
+  <string name="property_servings_desired_insert">Racions desitjades: %1$s</string>
   <string name="property_not_check_shopping_list">No comprovar amb la llista de la compra</string>
   <string name="property_not_check_shopping_list_description">Quan s\'hi afegeixin elements faltants</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_preparation">Preparació</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">Costos</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs">Costos setmana</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs_insert">Costos setmana: %1$s</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="property_due_score">Puntuació de conservació</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
@@ -897,12 +1067,17 @@
   <string name="property_variable_amount">Quantitat variable</string>
   <string name="property_requirements_fulfilled">Requeriments complets</string>
   <string name="property_produces_product">Genera producte</string>
+  <string name="property_price_factor">Factor de preu</string>
+
   <string name="date_today">Avui</string>
   <string name="date_unknown">Desconegut</string>
   <!-- This means the 'time' context -->
   <string name="date_unlimited">Il·limitat</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Mai</string>
+  <!-- %1$s is 'from' date, %2$s is 'to' date -->
+  <string name="date_timespan">%1$s - %2$s</string>
+
   <plurals name="date_days">
     <item quantity="one">%ddia</item>
     <item quantity="other">%ddies</item>
@@ -946,6 +1121,7 @@
     <item quantity="other">D\'aquí a %danys</item>
   </plurals>
 
+  <string name="info_acknowledgement">Volem donar les gràcies al desenvolupador de Grocy, Bernd Bestel. Sense el seu gran treball aquesta aplicació no hauria estat mai possible.</string>
   <string name="info_intro">Repetir introducció</string>
   <string name="info_intro_description">Mostrant les característiques</string>
   <string name="info_dev_beginning">Inici del desenvolupament</string>
@@ -958,6 +1134,9 @@
   <string name="info_github">Grocy Android a GitHub</string>
   <string name="info_github_description">Codi font</string>
   <string name="info_website">Obrir web de Grocy</string>
+  <string name="info_translation_description">Ajuda a traduir Grocy per a Android</string>
+  <string name="info_privacy">Política de privadesa</string>
+  <string name="info_privacy_description">Com es tracten les meves dades?</string>
 
   <string name="feature_1_title">Grocy per a Android</string>
   <string name="feature_1_description">Gestió de queviures auto allotjat per a la teva llar</string>
@@ -978,6 +1157,10 @@
   <string name="category_network">Xarxa</string>
   <string name="category_network_proxy">Proxy</string>
   <string name="category_behavior">Comportament</string>
+  <string name="category_display_behavior">Comportament de visualització</string>
+  <string name="category_input_behavior">Comportament d\'entrada</string>
+  <string name="category_additional_services">Serveis addicionals</string>
+  <string name="category_other_behavior">Altres comportaments</string>
   <string name="category_debugging">Depuració</string>
   <string name="category_new_product">Nou producte</string>
   <string name="category_existing_products">Productes existents</string>
@@ -994,6 +1177,16 @@
   <string name="setting_theme_dark">Fosc</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_light">Clar</string>
+  <string name="setting_contrast">Contrast</string>
+  <string name="setting_contrast_description">Amb un contrast alt: visualització més fàcil; amb l\'estàndard: visualització habitual.</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast. The button width should be as dense as possible. -->
+  <string name="setting_contrast_standard">Estàndard</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_medium">Mitjà</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_high">Alt</string>
+  <string name="setting_contrast_dynamic">El contrast del tema del dispositiu s\'ha d\'ajustar a la configuració del sistema</string>
+  <string name="setting_contrast_dynamic_unsupported">El tema de dispositiu amb contrast dinàmic només està disponible a Android 14 o superior</string>
   <string name="setting_language">Llengua</string>
   <string name="setting_language_description">Seleccionar llengua</string>
   <string name="setting_language_info">Moltes gràcies a tots els traductors voluntaris a Transifex!\nVisita\'ns a GitHub per aprendre com pots ajudar a fer possible Grocy Android en la teva llengua.</string>
@@ -1018,7 +1211,7 @@
   <string name="setting_reload_config">Recarregar configuració</string>
   <string name="setting_reload_config_description">Reinici de l\'aplicació requerit</string>
   <string name="setting_logout">Desconnecta</string>
-  <string name="setting_logout_description">Tornar a la pàgina d\'inici de sessió</string>
+  <string name="setting_logout_description">Torna a la pàgina d\'inici de sessió</string>
   <string name="setting_manage_shortcuts">Configurar dreceres</string>
   <string name="setting_list_indicator">Indica l\'entrada de llista</string>
   <string name="setting_list_indicator_description">Mostra un punt blau si el producte és a una llista de la compra</string>
@@ -1032,9 +1225,9 @@
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Dies per consumir aviat</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="setting_default_amount_purchase">Quantitat de compra per defecte</string>
+  <string name="setting_default_amount_purchase">Quantitat de compra predeterminada</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="setting_default_amount_consume">Quantitat de consum per defecte</string>
+  <string name="setting_default_amount_consume">Quantitat de consum predeterminada</string>
   <string name="setting_treat_opened_as_out_of_stock">Tractar obert com a consumit</string>
   <string name="setting_purchased_date">Preguntar per la data de compra</string>
   <string name="setting_purchased_date_description">A la pàgina de compra i inventari</string>
@@ -1060,6 +1253,12 @@
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">Expandir parts inferiors</string>
   <string name="setting_expand_bottom_sheets_description">En el mode paisatge</string>
+  <string name="setting_bottom_menu_button">Mostra el botó de menú principal</string>
+  <string name="setting_bottom_menu_button_description">A la barra inferior de l\'aplicació</string>
+  <string name="setting_turn_on_quick_mode">Activa el mode ràpid per defecte</string>
+  <string name="setting_turn_on_quick_mode_description">Quan s\'utilitzi el botó d\'escaneig de la pàgina principal</string>
+  <string name="setting_quick_mode_return">Torna a la pàgina principal després de 20 segons</string>
+  <string name="setting_quick_mode_return_description">Quan s\'utilitzi el botó d\'escaneig de la pàgina principal i el mode ràpid no estigui actiu</string>
   <string name="setting_speed_up_start">Reduir el temps d\'inici de l\'aplicació</string>
   <string name="setting_speed_up_start_description">Només té efecte en dispositius ràpids</string>
   <string name="setting_date_keyboard_input">Introduir dates amb el teclat</string>
@@ -1081,9 +1280,25 @@
   <string name="setting_message_duration">Mostrar l\'hora per als missatges</string>
   <string name="setting_message_duration_description">Només es refereix als missatges de transacció</string>
   <string name="setting_notifications_enable">Habilitar notificacions</string>
+  <!-- The string belongs to the stock overview (stock items can be expired, overdue or due soon). -->
+  <string name="setting_notifications_stock_description">Comprova les existències de productes diàriament i t\'avisa si hi ha productes que ja no són frescos (caducats, vençuts o que vencen aviat)</string>
+  <string name="setting_notifications_chores_description">Revisa les feines diàriament i t\'avisa quan s\'han de dur a terme</string>
   <string name="setting_notification_time">Hora de la notificació</string>
   <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">Quan la comprovació s\'ha completat</string>
   <string name="setting_keep_screen_on_recipes_description">Mentre es veu una recepta</string>
+
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="notification_stock_not_fresh_title">
+    <item quantity="one">Hi ha %1$d producte que ja no és fresc.</item>
+    <item quantity="other">Hi ha %1$d productes que ja no són frescos.</item>
+  </plurals>
+  <string name="notification_stock_content">Consumeix-los en els propers dies per reduir el malbaratament alimentari. Toca per obrir la llista.</string>
+  <!-- %1$s is a number -->
+  <plurals name="notification_chores_due_title">
+    <item quantity="one">Hi ha %1$d feina a completar.</item>
+    <item quantity="other">Hi ha %1$d feines a completar.</item>
+  </plurals>
+  <string name="notification_chores_content">Procrastinar és inútil. Toca per obrir la llista.</string>
 
   </resources>

@@ -267,7 +267,6 @@ public class MealPlanEntryAdapter extends
     binding.timelineView.setPosition(entry.getItemPosition());
 
     Context context = binding.getRoot().getContext();
-    ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
 
     binding.title.setText(entry.getType());
     binding.picture.setVisibility(View.GONE);

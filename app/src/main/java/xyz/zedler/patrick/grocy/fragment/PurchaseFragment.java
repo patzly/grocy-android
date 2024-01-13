@@ -32,7 +32,6 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import xyz.zedler.patrick.grocy.Constants;
@@ -269,22 +268,22 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
             || viewModel.isProductWillBeFilled()) && viewModel.getFormData().isScannerVisible()
     );
 
-    ColorRoles roles = ResUtil.getHarmonizedRoles(activity, R.color.blue);
+    int colorBlue = ResUtil.getColor(activity, R.attr.colorCustomBlue);
     viewModel.getQuickModeEnabled().observe(
         getViewLifecycleOwner(), value -> binding.toolbar.setTitleTextColor(
-            value ? roles.getAccent() : ResUtil.getColorAttr(activity, R.attr.colorOnSurface)
+            value ? colorBlue : ResUtil.getColor(activity, R.attr.colorOnSurface)
         )
     );
-    binding.textInputAmount.setHelperTextColor(ColorStateList.valueOf(roles.getAccent()));
-    binding.textInputPurchasePrice.setHelperTextColor(ColorStateList.valueOf(roles.getAccent()));
+    binding.textInputAmount.setHelperTextColor(ColorStateList.valueOf(colorBlue));
+    binding.textInputPurchasePrice.setHelperTextColor(ColorStateList.valueOf(colorBlue));
     viewModel.getFormData().getDueDateErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textDueDate.setTextColor(
-            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
         )
     );
     viewModel.getFormData().getQuantityUnitErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textQuantityUnit.setTextColor(
-            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
         )
     );
 
@@ -441,6 +440,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
 
   public void clearInputFocus() {
     new Handler().postDelayed(() -> {
+      if (binding == null) return;
       activity.hideKeyboard();
       binding.dummyFocusView.requestFocus();
       binding.autoCompletePurchaseProduct.clearFocus();

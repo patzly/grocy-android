@@ -423,12 +423,8 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
 
     // M3 CUSTOMIZATIONS
 
-    setProgressBackgroundColorSchemeColor(
-        // TODO: replace with attribute when fixed in MDC
-        //ResUtil.getColorAttr(context, R.attr.colorSurfaceContainer)
-        ResUtil.getColorSurfaceContainer(context)
-    );
-    setColorSchemeColors(ResUtil.getColorAttr(context, R.attr.colorPrimary));
+    setProgressBackgroundColorSchemeColor(ResUtil.getColor(context, R.attr.colorSurfaceContainer));
+    setColorSchemeColors(ResUtil.getColor(context, R.attr.colorPrimary));
     setSize(LARGE);
   }
 

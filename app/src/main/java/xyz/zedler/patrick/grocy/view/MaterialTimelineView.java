@@ -3,12 +3,9 @@ package xyz.zedler.patrick.grocy.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Cap;
 import android.graphics.Paint.Style;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.view.View;
 import androidx.annotation.NonNull;
@@ -65,8 +62,8 @@ public class MaterialTimelineView extends ConstraintLayout {
     entryContentPadding = UiUtil.dpToPx(context, DEFAULT_ENTRY_CONTENT_PADDING_DP);
     lineWidth = UiUtil.dpToPx(context, LINE_WIDTH_DP);
     lineLength = UiUtil.dpToPx(context, LINE_LENGTH_DP);
-    radioColor = ResUtil.getColorAttr(context, R.attr.colorOutline);
-    lineColor = ResUtil.getColorAttr(context, R.attr.colorOutline);
+    radioColor = ResUtil.getColor(context, R.attr.colorOutline);
+    lineColor = ResUtil.getColor(context, R.attr.colorOutline);
 
     setLayerType(View.LAYER_TYPE_HARDWARE, null);
     setWillNotDraw(false);

@@ -102,13 +102,13 @@ public class ProductGroupAdapter extends RecyclerView.Adapter<ProductGroupAdapte
     if (isSelected) {
       holder.imageViewSelected.setVisibility(View.VISIBLE);
       holder.textViewName.setTextColor(
-          ResUtil.getColorAttr(context, R.attr.colorOnSecondaryContainer)
+          ResUtil.getColor(context, R.attr.colorOnSecondaryContainer)
       );
       holder.linearLayoutContainer.setBackground(ViewUtil.getBgListItemSelected(context));
     } else {
       holder.imageViewSelected.setVisibility(View.INVISIBLE);
       holder.textViewName.setTextColor(
-          ResUtil.getColorAttr(context, R.attr.colorOnSurface)
+          ResUtil.getColor(context, R.attr.colorOnSurface)
       );
       holder.linearLayoutContainer.setBackground(ViewUtil.getRippleBgListItemSurface(context));
       holder.linearLayoutContainer.setOnClickListener(

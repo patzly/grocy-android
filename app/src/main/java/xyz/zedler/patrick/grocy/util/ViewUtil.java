@@ -280,11 +280,7 @@ public class ViewUtil {
     Arrays.fill(radii, UiUtil.dpToPx(context, 16));
     RoundRectShape rect = new RoundRectShape(radii, null, null);
     ShapeDrawable shape = new ShapeDrawable(rect);
-    shape.getPaint().setColor(
-        // TODO: replace with attribute when fixed in MDC
-        //ResUtil.getColorAttr(context, R.attr.colorSurfaceContainerLow)
-        ResUtil.getColorSurfaceContainerLow(context)
-    );
+    shape.getPaint().setColor(ResUtil.getColor(context, R.attr.colorSurfaceContainerLow));
     LayerDrawable layers = new LayerDrawable(new ShapeDrawable[]{shape});
     layers.setLayerInset(
         0,
@@ -310,7 +306,7 @@ public class ViewUtil {
     Arrays.fill(radii, UiUtil.dpToPx(context, 16));
     RoundRectShape rect = new RoundRectShape(radii, null, null);
     ShapeDrawable shape = new ShapeDrawable(rect);
-    shape.getPaint().setColor(ResUtil.getColorAttr(context, R.attr.colorSecondaryContainer));
+    shape.getPaint().setColor(ResUtil.getColor(context, R.attr.colorSecondaryContainer));
     LayerDrawable layers = new LayerDrawable(new ShapeDrawable[]{shape});
     layers.setLayerInset(
         0,

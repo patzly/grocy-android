@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -122,16 +123,16 @@ public class MealPlanFragment extends BaseFragment {
         );
         container.binding.day.setText(String.valueOf(data.getDate().getDayOfMonth()));
 
-        int colorOutline = ResUtil.getColorAttr(activity, R.attr.colorOutline);
+        int colorOutline = ResUtil.getColor(activity, R.attr.colorOutline);
         if (viewModel.getSelectedDate().isEqual(data.getDate())) {
           container.binding.card.setStrokeColor(colorOutline);
           container.binding.card.setCardBackgroundColor(colorOutline);
-          container.binding.weekday.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
-          container.binding.day.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
+          container.binding.weekday.setTextColor(Color.WHITE);
+          container.binding.day.setTextColor(Color.WHITE);
         } else {
           container.binding.card.setStrokeColor(colorOutline);
           container.binding.card.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent));
-          int textColor = ResUtil.getColorAttr(activity, R.attr.colorOnBackground);
+          int textColor = ResUtil.getColor(activity, R.attr.colorOnBackground);
           container.binding.weekday.setTextColor(textColor);
           container.binding.day.setTextColor(textColor);
         }

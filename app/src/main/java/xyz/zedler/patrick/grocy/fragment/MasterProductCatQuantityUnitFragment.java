@@ -137,22 +137,22 @@ public class MasterProductCatQuantityUnitFragment extends BaseFragment {
 
     viewModel.getFormData().getQuStockErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textQuStockName.setTextColor(
-            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
         )
     );
     viewModel.getFormData().getQuPurchaseErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textQuPurchaseName.setTextColor(
-            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
         )
     );
     viewModel.getFormData().getQuConsumeErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textQuConsumeName.setTextColor(
-            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
         )
     );
     viewModel.getFormData().getQuPriceErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textQuPriceName.setTextColor(
-            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
         )
     );
 

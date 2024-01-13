@@ -23,11 +23,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
 import androidx.core.content.ContextCompat;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
@@ -36,37 +33,32 @@ import xyz.zedler.patrick.grocy.model.Userfield;
 public class ChipUtil {
 
   private final Context context;
-  private final ColorRoles colorBlue;
-  private final ColorRoles colorGreen;
-  private final ColorRoles colorYellow;
-  private final ColorRoles colorRed;
+  private final int colorGreenContainer, colorOnGreenContainer;
+  private final int colorYellowContainer, colorOnYellowContainer;
 
   public ChipUtil(Context context) {
     this.context = context;
-    colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
-    colorGreen = ResUtil.getHarmonizedRoles(context, R.color.green);
-    colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
-    colorRed = ResUtil.getHarmonizedRoles(context, R.color.red);
+    colorGreenContainer = ResUtil.getColor(context, R.attr.colorCustomGreenContainer);
+    colorOnGreenContainer = ResUtil.getColor(context, R.attr.colorOnCustomGreenContainer);
+    colorYellowContainer = ResUtil.getColor(context, R.attr.colorCustomYellowContainer);
+    colorOnYellowContainer = ResUtil.getColor(context, R.attr.colorOnCustomYellowContainer);
   }
 
-  private static Chip createChip(Context ctx, String text, int textColor) {
+  private static Chip createChip(Context ctx, String text) {
     @SuppressLint("InflateParams")
     Chip chip = (Chip) LayoutInflater.from(ctx).inflate(
         R.layout.view_info_chip, null, false
     );
     chip.setText(text);
-    if (textColor != -1) {
-      chip.setTextColor(textColor);
-    }
     return chip;
   }
 
   public Chip createTextChip(String text) {
-    return createChip(context, text, -1);
+    return createChip(context, text);
   }
 
   public Chip createTextChip(String text, String textOnClick) {
-    Chip chip = createChip(context, text, -1);
+    Chip chip = createChip(context, text);
     chip.setOnClickListener(v -> {
       new MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_Grocy_AlertDialog)
           .setMessage(textOnClick)
@@ -81,36 +73,42 @@ public class ChipUtil {
     String textFulfillment;
     if (recipeFulfillment.isNeedFulfilled()) {
       textFulfillment = context.getString(R.string.msg_recipes_enough_in_stock);
-      chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorGreen.getOnAccentContainer());
+      chipFulfillment = createChip(context, context.getString(R.string.property_status_insert));
+      chipFulfillment.setTextColor(colorOnGreenContainer);
       chipFulfillment.setCloseIcon(
           ContextCompat.getDrawable(context, R.drawable.ic_round_check_circle_outline)
       );
-      chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorGreen.getOnAccentContainer()));
-      chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorGreen.getAccentContainer()));
+      chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorOnGreenContainer));
+      chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorGreenContainer));
     } else if (recipeFulfillment.isNeedFulfilledWithShoppingList() && showYellow) {
       textFulfillment = context.getString(R.string.msg_recipes_not_enough) + "\n"
           + context.getResources()
           .getQuantityString(R.plurals.msg_recipes_ingredients_missing_but_on_shopping_list,
               recipeFulfillment.getMissingProductsCount(),
               recipeFulfillment.getMissingProductsCount());
-      chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorYellow.getOnAccentContainer());
+      chipFulfillment = createChip(context, context.getString(R.string.property_status_insert));
+      chipFulfillment.setTextColor(colorOnYellowContainer);
       chipFulfillment.setCloseIcon(
           ContextCompat.getDrawable(context, R.drawable.ic_round_error_outline)
       );
-      chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorYellow.getOnAccentContainer()));
-      chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorYellow.getAccentContainer()));
+      chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorOnYellowContainer));
+      chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorYellowContainer));
     } else {
       textFulfillment = context.getString(R.string.msg_recipes_not_enough) + "\n"
           + context.getResources()
           .getQuantityString(R.plurals.msg_recipes_ingredients_missing,
               recipeFulfillment.getMissingProductsCount(),
               recipeFulfillment.getMissingProductsCount());
-      chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorRed.getOnAccentContainer());
+      int colorOnErrorContainer = ResUtil.getColor(context, R.attr.colorOnErrorContainer);
+      chipFulfillment = createChip(context, context.getString(R.string.property_status_insert));
+      chipFulfillment.setTextColor(colorOnErrorContainer);
       chipFulfillment.setCloseIcon(
           ContextCompat.getDrawable(context, R.drawable.ic_round_highlight_off)
       );
-      chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorRed.getOnAccentContainer()));
-      chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getAccentContainer()));
+      chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorOnErrorContainer));
+      chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(
+          ResUtil.getColor(context, R.attr.colorErrorContainer)
+      ));
     }
     chipFulfillment.setCloseIconStartPadding(UiUtil.dpToPx(context, 4));
     chipFulfillment.setCloseIconVisible(true);
@@ -134,20 +132,25 @@ public class ChipUtil {
     String textFulfillment;
     if (needFulfilled) {
       textFulfillment = context.getString(R.string.msg_recipes_enough_in_stock);
-      chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorGreen.getOnAccentContainer());
+      chipFulfillment = createChip(context, context.getString(R.string.property_status_insert));
+      chipFulfillment.setTextColor(colorOnGreenContainer);
       chipFulfillment.setCloseIcon(
           ContextCompat.getDrawable(context, R.drawable.ic_round_check_circle_outline)
       );
-      chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorGreen.getOnAccentContainer()));
-      chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorGreen.getAccentContainer()));
+      chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorOnGreenContainer));
+      chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorGreenContainer));
     } else {
       textFulfillment = context.getString(R.string.msg_recipes_not_enough);
-      chipFulfillment = createChip(context, context.getString(R.string.property_status_insert), colorRed.getOnAccentContainer());
+      int colorOnErrorContainer = ResUtil.getColor(context, R.attr.colorOnErrorContainer);
+      chipFulfillment = createChip(context, context.getString(R.string.property_status_insert));
+      chipFulfillment.setTextColor(colorOnErrorContainer);
       chipFulfillment.setCloseIcon(
           ContextCompat.getDrawable(context, R.drawable.ic_round_highlight_off)
       );
-      chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorRed.getOnAccentContainer()));
-      chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getAccentContainer()));
+      chipFulfillment.setCloseIconTint(ColorStateList.valueOf(colorOnErrorContainer));
+      chipFulfillment.setChipBackgroundColor(ColorStateList.valueOf(
+          ResUtil.getColor(context, R.attr.colorErrorContainer)
+      ));
     }
     chipFulfillment.setCloseIconStartPadding(UiUtil.dpToPx(context, 4));
     chipFulfillment.setCloseIconVisible(true);
@@ -168,20 +171,22 @@ public class ChipUtil {
       dueScoreChip = createChip(context, context.getString(
           R.string.subtitle_recipe_due_score,
           String.valueOf(dueScore)
-      ), -1);
+      ));
     } else if (dueScore <= 10) {
       dueScoreChip = createChip(context, context.getString(
           R.string.subtitle_recipe_due_score,
           String.valueOf(dueScore)
-      ), colorYellow.getOnAccentContainer());
-      dueScoreChip.setChipBackgroundColor(
-          ColorStateList.valueOf(colorYellow.getAccentContainer()));
+      ));
+      dueScoreChip.setTextColor(colorOnYellowContainer);
+      dueScoreChip.setChipBackgroundColor(ColorStateList.valueOf(colorYellowContainer));
     } else {
-      dueScoreChip = createChip(context, context.getString(
-          R.string.subtitle_recipe_due_score,
-          String.valueOf(dueScore)
-      ), colorRed.getOnAccentContainer());
-      dueScoreChip.setChipBackgroundColor(ColorStateList.valueOf(colorRed.getAccentContainer()));
+      dueScoreChip = createChip(
+          context, context.getString(R.string.subtitle_recipe_due_score, String.valueOf(dueScore))
+      );
+      dueScoreChip.setTextColor(ResUtil.getColor(context, R.attr.colorOnErrorContainer));
+      dueScoreChip.setChipBackgroundColor(ColorStateList.valueOf(
+          ResUtil.getColor(context, R.attr.colorErrorContainer)
+      ));
     }
     dueScoreChip.setEnabled(false);
     dueScoreChip.setClickable(false);
@@ -192,17 +197,5 @@ public class ChipUtil {
   public Chip createUserfieldChip(Userfield userfield, String value) {
     Chip chipUserfield = createTextChip(null);
     return Userfield.fillChipWithUserfield(chipUserfield, userfield, value);
-  }
-
-  public View createSeparator() {
-    LinearLayout separator = new LinearLayout(context);
-    int dp1 = UiUtil.dpToPx(context, 1);
-    int dp18 = UiUtil.dpToPx(context, 18);
-    int dp4 = UiUtil.dpToPx(context, 4);
-    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(dp1, dp18);
-    lp.setMargins(0, dp4, 0, dp4);
-    separator.setLayoutParams(lp);
-    separator.setBackgroundColor(ResUtil.getColorAttr(context, R.attr.colorOutlineVariant));
-    return separator;
   }
 }

@@ -123,8 +123,8 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
         view -> listener.onItemRowClicked(store, true)
     );
     holder.buttonPin.setIconTint(ColorStateList.valueOf(store.getId() == currentPinId
-        ? ResUtil.getColorAttr(ctx, R.attr.colorPrimary)
-        : ResUtil.getColorAttr(ctx, R.attr.colorOnSurfaceVariant, 0.6f)));
+        ? ResUtil.getColor(ctx, R.attr.colorPrimary)
+        : ResUtil.getColor(ctx, R.attr.colorOnSurfaceVariant, 0.6f)));
 
     if (noneSelectable) {
       holder.linearLayoutContainer.setEnabled(false);

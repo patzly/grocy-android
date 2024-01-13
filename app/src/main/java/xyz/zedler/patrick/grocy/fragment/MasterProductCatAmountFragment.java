@@ -119,7 +119,7 @@ public class MasterProductCatAmountFragment extends BaseFragment {
 
     viewModel.getFormData().getTareWeightErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textTareWeightLabel.setTextColor(
-            ResUtil.getColorAttr(
+            ResUtil.getColor(
                 activity, value == null ? R.attr.colorError : R.attr.colorOnSurfaceVariant
             )
         )

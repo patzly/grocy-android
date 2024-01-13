@@ -97,9 +97,10 @@ public class SettingsCatServerFragment extends BaseFragment {
     binding.swipe.setEnabled(false);
 
     binding.textCompatible.setTextColor(
-        viewModel.isVersionCompatible()
-            ? ResUtil.getHarmonizedRoles(activity, R.color.green).getAccent()
-            : ResUtil.getColorAttr(activity, R.attr.colorError)
+        ResUtil.getColor(
+            activity,
+            viewModel.isVersionCompatible() ? R.attr.colorCustomGreen : R.attr.colorError
+        )
     );
 
     binding.linearSettingReloadConfig.setOnClickListener(v -> {

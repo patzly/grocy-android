@@ -28,7 +28,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import com.google.android.material.color.ColorRoles;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -134,8 +133,9 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
       viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
     });
 
-    ColorRoles roles = ResUtil.getHarmonizedRoles(activity, R.color.blue);
-    binding.textInputAmount.setHelperTextColor(ColorStateList.valueOf(roles.getAccent()));
+    binding.textInputAmount.setHelperTextColor(ColorStateList.valueOf(
+        ResUtil.getColor(activity, R.attr.colorCustomBlue)
+    ));
 
     embeddedFragmentScanner.setScannerVisibilityLive(
         viewModel.getFormData().getScannerVisibilityLive()

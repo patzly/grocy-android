@@ -48,8 +48,6 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.databinding.BindingAdapter;
 import com.google.android.material.color.ColorRoles;
-import com.google.android.material.color.HarmonizedColors;
-import com.google.android.material.color.HarmonizedColorsOptions;
 import com.google.android.material.color.MaterialColors;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -108,130 +106,31 @@ public class ResUtil {
     context.startActivity(Intent.createChooser(intent, null));
   }
 
-  public static void applyColorHarmonization(Context context) {
-    int[] resIds = new int[]{
-        R.color.logo_yellow,
-        R.color.logo_green,
-        R.color.logo_red,
-
-        R.color.custom_yellow_80,
-        R.color.custom_yellow_50,
-        R.color.custom_yellow_30,
-
-        R.color.custom_green_80,
-        R.color.custom_green_50,
-
-        R.color.custom_red_60,
-        R.color.custom_red_50,
-        R.color.custom_red_35,
-        R.color.custom_red_30,
-
-        R.color.custom_brown_90,
-        R.color.custom_brown_70,
-        R.color.custom_brown_50,
-        R.color.custom_brown_30,
-
-        R.color.custom_dirt_95,
-        R.color.custom_dirt_90,
-        R.color.custom_dirt_80,
-        R.color.custom_dirt_60,
-        R.color.custom_dirt_40,
-        R.color.custom_dirt_30,
-
-        R.color.custom_blue_90,
-        R.color.custom_blue_70,
-        R.color.custom_blue_60,
-        R.color.custom_blue_40,
-        R.color.custom_blue_10,
-
-        R.color.custom_grey_95,
-        R.color.custom_grey_90,
-        R.color.custom_grey_80,
-        R.color.custom_grey_60,
-        R.color.custom_grey_10,
-    };
-    HarmonizedColorsOptions options = new HarmonizedColorsOptions.Builder()
-        .setColorResourceIds(resIds)
-        .build();
-    HarmonizedColors.applyToContextIfAvailable(context, options);
-  }
-
-  // TODO: replace with attributes when fixed in MDC and remove below methods
-
-  public static ColorStateList getColorSurfaceContainerLowest(Context context) {
-    return ContextCompat.getColorStateList(context, R.color.selector_fix_surface_container_lowest);
-  }
-
-  public static int getColorSurfaceContainerLow(Context context) {
-    ColorStateList list = ContextCompat.getColorStateList(
-        context, R.color.selector_fix_surface_container_low
-    );
-    assert list != null;
-    return list.getDefaultColor();
-  }
-
-  public static int getColorSurfaceContainer(Context context) {
-    ColorStateList list = ContextCompat.getColorStateList(
-        context, R.color.selector_fix_surface_container
-    );
-    assert list != null;
-    return list.getDefaultColor();
-  }
-
-  public static int getColorSurfaceContainerHigh(Context context) {
-    ColorStateList list = ContextCompat.getColorStateList(
-        context, R.color.selector_fix_surface_container_high
-    );
-    assert list != null;
-    return list.getDefaultColor();
-  }
-
-  public static int getColorSurfaceContainerHighest(Context context) {
-    ColorStateList list = ContextCompat.getColorStateList(
-        context, R.color.selector_fix_surface_container_highest
-    );
-    assert list != null;
-    return list.getDefaultColor();
-  }
-
-  public static ColorRoles getHarmonizedRoles(Context context, @ColorRes int resId) {
-    return MaterialColors.getColorRoles(
-        context,
-        MaterialColors.harmonizeWithPrimary(context, ContextCompat.getColor(context, resId))
-    );
-  }
-
-  public static int getColorAttr(Context context, @AttrRes int resId) {
+  public static int getColor(Context context, @AttrRes int resId) {
     TypedValue typedValue = new TypedValue();
     context.getTheme().resolveAttribute(resId, typedValue, true);
     return typedValue.data;
   }
 
-  public static int getColorAttr(Context context, @AttrRes int resId, float alpha) {
-    return ColorUtils.setAlphaComponent(getColorAttr(context, resId), (int) (alpha * 255));
+  public static int getColor(Context context, @AttrRes int resId, float alpha) {
+    return ColorUtils.setAlphaComponent(getColor(context, resId), (int) (alpha * 255));
   }
 
-  public static int getColorBg(Context context) {
-    return getColorAttr(context, android.R.attr.colorBackground);
-  }
-
-  public static int getColorOutline(Context context) {
-    return getColorAttr(context, R.attr.colorOutline);
-  }
-
-  public static int getColorOutlineSecondary(Context context) {
-    return getColorAttr(context, R.attr.colorOutline, 0.4f);
+  public static int getSysColor(Context context, @AttrRes int resId) {
+    TypedValue typedValue = new TypedValue();
+    context.getTheme().resolveAttribute(resId, typedValue, true);
+    return typedValue.data;
   }
 
   public static int getColorHighlight(Context context) {
-    return getColorAttr(context, R.attr.colorSecondary, 0.09f);
+    return getColor(context, R.attr.colorSecondary, 0.09f);
   }
 
   public static void tintMenuItemIcon(Context context, MenuItem item) {
     if (item == null || item.getIcon() == null) {
       return;
     }
-    item.getIcon().setTint(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant));
+    item.getIcon().setTint(ResUtil.getColor(context, R.attr.colorOnSurfaceVariant));
   }
 
   public static void tintMenuItemIcons(Context context, Menu menu) {
@@ -240,7 +139,7 @@ public class ResUtil {
       if (item == null || item.getIcon() == null) {
         continue;
       }
-      item.getIcon().setTint(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant));
+      item.getIcon().setTint(ResUtil.getColor(context, R.attr.colorOnSurfaceVariant));
     }
   }
 
@@ -272,12 +171,12 @@ public class ResUtil {
     view.setImageDrawable(new BitmapDrawable(
         view.getResources(),
         getFromDrawableWithNumber(
-            view.getContext(),
-            R.drawable.ic_round_shopping_cart,
-            count,
-            7.3f,
-            -1.5f,
-            8
+                view.getContext(),
+                R.drawable.ic_round_shopping_cart,
+                count,
+                7.3f,
+                -1.5f,
+                8
         )
     ));
   }
@@ -300,7 +199,7 @@ public class ResUtil {
     Canvas canvas = new Canvas(bitmap);
 
     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    paint.setColor(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant));
+    paint.setColor(ResUtil.getColor(context, R.attr.colorOnSurfaceVariant));
     paint.setTextSize(UiUtil.dpToPx(context, textSize));
     paint.setTypeface(ResourcesCompat.getFont(context, R.font.material_digits_round));
     paint.setLetterSpacing(0.1f);
