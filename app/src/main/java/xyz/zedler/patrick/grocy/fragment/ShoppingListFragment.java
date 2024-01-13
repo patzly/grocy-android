@@ -147,7 +147,6 @@ public class ShoppingListFragment extends BaseFragment implements
     binding.recycler.setAdapter(adapter);
 
     if (savedInstanceState == null) {
-      binding.recycler.scrollToPosition(0);
       viewModel.resetSearch();
     }
 
@@ -194,6 +193,8 @@ public class ShoppingListFragment extends BaseFragment implements
         );
       } else if (event.getType() == Event.SCROLL_UP) {
         binding.recycler.scrollToPosition(0);
+      } else if (event.getType() == Event.TRANSACTION_SUCCESS) {
+        viewModel.downloadData(false, false);
       }
     });
 

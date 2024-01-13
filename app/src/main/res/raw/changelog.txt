@@ -1,5 +1,6 @@
 ## 3.5.1
 
+- Improved: On shopping list page keep scroll position when returning from purchase/edit page (#823)
 - Fixed: Crash on purchase page with scanner on some devices (#820)
 
 ## 3.5.0
