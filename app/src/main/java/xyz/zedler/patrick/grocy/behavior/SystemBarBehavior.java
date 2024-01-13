@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.behavior;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -285,6 +286,7 @@ public class SystemBarBehavior {
     }
 
     // NAV BAR INSET
+    Log.i(TAG, "refresh: hello");
     if (UiUtil.isOrientationPortrait(activity) && hasContainer()) {
       View container = hasScrollView || hasRecycler ? scrollContent : this.container;
       int paddingBottom = hasScrollView || hasRecycler
@@ -296,6 +298,7 @@ public class SystemBarBehavior {
           container.getPaddingRight(),
           paddingBottom + additionalBottomInset + navBarInset
       );
+      Log.i(TAG, "refresh: hello " + container.getPaddingBottom());
     } else {
       if (UiUtil.isNavigationModeGesture(activity) && hasContainer()) {
         View container = hasScrollView || hasRecycler ? scrollContent : this.container;

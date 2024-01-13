@@ -87,13 +87,322 @@ import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 
 public class UiUtil {
 
+  private static final String TAG = UiUtil.class.getSimpleName();
+
   public static final int SCRIM = 0x55000000;
   public static final int SCRIM_DARK_DIALOG = 0xFF0c0c0e;
   public static final int SCRIM_LIGHT_DIALOG = 0xFF666666;
 
+  private final MainActivity activity;
+  private final ActivityMainBinding binding;
   private boolean wasKeyboardOpened;
   private float fabBaseY;
   private int focusedScrollOffset;
+
+  public UiUtil(@NonNull MainActivity activity) {
+    this.activity = activity;
+    this.binding = activity.binding;
+  }
+
+  public void setUpBottomAppBar() {
+    binding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
+    binding.bottomAppBar.setMenuAlignmentMode(BottomAppBar.MENU_ALIGNMENT_MODE_START);
+
+    // Use reflection to store bottomInset in BAB manually
+    // The automatic method includes IME insets which is bad behavior for BABs
+    ViewCompat.setOnApplyWindowInsetsListener(binding.bottomAppBar, (v, insets) -> {
+      int bottomInset = insets.getInsets(Type.systemBars()).bottom;
+      ViewCompat.setPaddingRelative(v, 0, 0, 0, bottomInset);
+      Class<?> classBottomAppBar = BottomAppBar.class;
+      Object objectBottomAppBar = classBottomAppBar.cast(binding.bottomAppBar);
+      Field fieldBottomInset = null;
+      try {
+        if (objectBottomAppBar != null && objectBottomAppBar.getClass().getSuperclass() != null) {
+          fieldBottomInset = objectBottomAppBar.getClass().getDeclaredField("bottomInset");
+        } else {
+          Log.e(TAG, "onCreate: reflection for bottomInset not working");
+        }
+      } catch (NoSuchFieldException e) {
+        Log.e(TAG, "onCreate: ", e);
+      }
+      if (fieldBottomInset != null) {
+        fieldBottomInset.setAccessible(true);
+        try {
+          fieldBottomInset.set(objectBottomAppBar, bottomInset);
+        } catch (IllegalAccessException e) {
+          Log.e(TAG, "onCreate: ", e);
+        }
+      }
+      // Calculate initial FAB y position for restoring after shifted by keyboard
+      int babHeight = UiUtil.dpToPx(activity, 80);
+      int fabHeight = UiUtil.dpToPx(activity, 56);
+      int bottom = UiUtil.getDisplayHeight(activity);
+      fabBaseY = bottom - bottomInset - (babHeight / 2f) - (fabHeight / 2f);
+      return insets;
+    });
+    ViewUtil.setTooltipText(binding.fabMainScroll, R.string.action_top_scroll);
+  }
+
+  public void updateBottomAppBar(
+      SharedPreferences sharedPrefs,
+      boolean showFab,
+      @MenuRes int newMenuId,
+      @Nullable OnMenuItemClickListener onMenuItemClickListener
+  ) {
+    // Handler with postDelayed is necessary for workaround of issue #552
+    new Handler().postDelayed(() -> {
+      if (showFab && !binding.fabMain.isShown() && !PrefsUtil.isServerUrlEmpty(sharedPrefs)) {
+        binding.fabMain.show();
+      } else if (!showFab && binding.fabMain.isShown()) {
+        binding.fabMain.hide();
+      }
+
+      Drawable overflowIcon = binding.bottomAppBar.getOverflowIcon();
+
+      // IF ANIMATIONS DISABLED
+      if (!UiUtil.areAnimationsEnabled(activity)) {
+        binding.bottomAppBar.replaceMenu(newMenuId);
+        Menu menu = binding.bottomAppBar.getMenu();
+        int tint = ResUtil.getColor(activity, R.attr.colorOnSurfaceVariant);
+        for (int i = 0; i < menu.size(); i++) {
+          MenuItem item = menu.getItem(i);
+          if (item.getIcon() != null) {
+            item.getIcon().mutate();
+            item.getIcon().setAlpha(255);
+            item.getIcon().setTint(tint);
+          }
+        }
+        if (overflowIcon != null && overflowIcon.isVisible()) {
+          overflowIcon.setAlpha(255);
+          overflowIcon.setTint(tint);
+        }
+        binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
+        return;
+      }
+
+      long iconFadeOutDuration = 150;
+      long iconFadeInDuration = 300;
+
+      int alphaFrom = 255;
+      // get better start value if animation was not finished yet
+      if (binding.bottomAppBar.getMenu() != null
+          && binding.bottomAppBar.getMenu().size() > 0
+          && binding.bottomAppBar.getMenu().getItem(0) != null
+          && binding.bottomAppBar.getMenu().getItem(0).getIcon() != null) {
+        MenuItem item = binding.bottomAppBar.getMenu().getItem(0);
+        if (item.getIcon() != null && item.getIcon() != null) {
+          alphaFrom = item.getIcon().getAlpha();
+        }
+      }
+      ValueAnimator animatorFadeOut = ValueAnimator.ofInt(alphaFrom, 0);
+      animatorFadeOut.addUpdateListener(animation -> {
+        for (int i = 0; i < binding.bottomAppBar.getMenu().size(); i++) {
+          MenuItem item = binding.bottomAppBar.getMenu().getItem(i);
+          if (item.getIcon() != null && item.isVisible()) {
+            item.getIcon().setAlpha((int) animation.getAnimatedValue());
+          }
+        }
+        if (overflowIcon != null && overflowIcon.isVisible()) {
+          overflowIcon.setAlpha((int) animation.getAnimatedValue());
+        }
+      });
+      animatorFadeOut.setDuration(iconFadeOutDuration);
+      animatorFadeOut.setInterpolator(new FastOutSlowInInterpolator());
+      animatorFadeOut.start();
+
+      new Handler(Looper.getMainLooper()).postDelayed(() -> {
+        binding.bottomAppBar.replaceMenu(newMenuId);
+
+        int iconIndex = 0;
+        int overflowCount = 0;
+        int tint = ResUtil.getColor(activity, R.attr.colorOnSurfaceVariant);
+        for (int i = 0; i < binding.bottomAppBar.getMenu().size(); i++) {
+          MenuItem item = binding.bottomAppBar.getMenu().getItem(i);
+          if (item.getIcon() == null || !item.isVisible()) {
+            if (item.isVisible()) {
+              overflowCount++;
+            }
+            continue;
+          }
+          iconIndex++;
+          int index = iconIndex;
+          item.getIcon().mutate();
+          item.getIcon().setTint(tint);
+          item.getIcon().setAlpha(0);
+          new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            Rect bounds = item.getIcon().copyBounds();
+            int top = bounds.top;
+            int offset = UiUtil.dpToPx(activity, 12);
+            ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
+            animator.addUpdateListener(animation -> {
+              bounds.offsetTo(
+                  0,
+                  (int) (top + (float) animation.getAnimatedValue() * offset)
+              );
+              item.getIcon().setBounds(bounds);
+              item.getIcon().setAlpha(255 - (int) ((float) animation.getAnimatedValue() * 255));
+              item.getIcon().invalidateSelf();
+            });
+            animator.setDuration(iconFadeInDuration - index * 50L);
+            animator.setInterpolator(new FastOutSlowInInterpolator());
+            animator.start();
+          }, index * 90L);
+        }
+        if (overflowCount > 0) {
+          Drawable overflowIconNew = binding.bottomAppBar.getOverflowIcon();
+          if (overflowIconNew == null || !overflowIconNew.isVisible()) {
+            return;
+          }
+          iconIndex++;
+          int index = iconIndex;
+          overflowIconNew.setTint(tint);
+          overflowIconNew.setAlpha(0);
+          new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            Rect bounds = overflowIconNew.copyBounds();
+            int top = bounds.top;
+            int offset = UiUtil.dpToPx(activity, 12);
+            ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
+            animator.addUpdateListener(animation -> {
+              bounds.offsetTo(
+                  0,
+                  (int) (top + (float) animation.getAnimatedValue() * offset)
+              );
+              overflowIconNew.setBounds(bounds);
+              overflowIconNew.setAlpha(255 - (int) ((float) animation.getAnimatedValue() * 255));
+              overflowIconNew.invalidateSelf();
+            });
+            animator.setDuration(iconFadeInDuration - index * 50L);
+            animator.setInterpolator(new FastOutSlowInInterpolator());
+            animator.start();
+          }, index * 90L);
+        }
+        binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
+      }, iconFadeOutDuration);
+    }, 10);
+  }
+
+  public void setupImeAnimation(
+      SystemBarBehavior systemBarBehavior, BottomScrollBehavior scrollBehavior
+  ) {
+    Callback callback = new Callback(Callback.DISPATCH_MODE_STOP) {
+      WindowInsetsAnimationCompat animation;
+      int bottomInsetStart, bottomInsetEnd;
+      float yStart, yEnd;
+      int yScrollStart, yScrollEnd;
+
+      @Override
+      public void onPrepare(@NonNull WindowInsetsAnimationCompat animation) {
+        this.animation = animation;
+        if (systemBarBehavior != null) {
+          bottomInsetStart = systemBarBehavior.getAdditionalBottomInset();
+        }
+        yStart = binding.fabMain.getY();
+        // scroll offset to keep focused view visible
+        ViewGroup scrollView = scrollBehavior.getScrollView();
+        if (scrollView != null) {
+          yScrollStart = scrollView.getScrollY();
+        }
+      }
+
+      @NonNull
+      @Override
+      public BoundsCompat onStart(
+          @NonNull WindowInsetsAnimationCompat animation, @NonNull BoundsCompat bounds) {
+        if (systemBarBehavior != null) {
+          bottomInsetEnd = systemBarBehavior.getAdditionalBottomInset();
+          systemBarBehavior.setAdditionalBottomInset(bottomInsetStart);
+          systemBarBehavior.refresh(false);
+        }
+        yEnd = binding.fabMain.getY();
+        binding.fabMain.setY(yStart);
+        // scroll offset to keep focused view visible
+        ViewGroup scrollView = scrollBehavior.getScrollView();
+        if (scrollView != null) {
+          yScrollEnd = yScrollStart + focusedScrollOffset;
+        }
+        return bounds;
+      }
+
+      @NonNull
+      @Override
+      public WindowInsetsCompat onProgress(
+          @NonNull WindowInsetsCompat insets,
+          @NonNull List<WindowInsetsAnimationCompat> animations) {
+        if (systemBarBehavior != null) {
+          systemBarBehavior.setAdditionalBottomInset(
+              (int) MathUtils.lerp(
+                  bottomInsetStart, bottomInsetEnd, animation.getInterpolatedFraction()
+              )
+          );
+          systemBarBehavior.refresh(false);
+        }
+        binding.fabMain.setY(MathUtils.lerp(yStart, yEnd, animation.getInterpolatedFraction()));
+        // scroll offset to keep focused view visible
+        ViewGroup scrollView = scrollBehavior.getScrollView();
+        if (scrollView != null) {
+          scrollView.setScrollY(
+              (int) MathUtils.lerp(yScrollStart, yScrollEnd, animation.getInterpolatedFraction())
+          );
+        }
+        return insets;
+      }
+    };
+    ViewCompat.setOnApplyWindowInsetsListener(binding.coordinatorMain, (v, insets) -> {
+      int bottomInsetIme = insets.getInsets(Type.ime()).bottom;
+      int bottomInsetBars = insets.getInsets(Type.systemBars()).bottom;
+      if (systemBarBehavior != null) {
+        systemBarBehavior.setAdditionalBottomInset(bottomInsetIme);
+        systemBarBehavior.refresh(false);
+      }
+      // view for calculating snackbar anchor's max bottom position
+      // to prevent snackbar flickering (caused by itself when it's drawn behind navbar
+      CoordinatorLayout.LayoutParams paramsAnchor =
+          (CoordinatorLayout.LayoutParams) binding.anchorMaxBottom.getLayoutParams();
+      paramsAnchor.bottomMargin = bottomInsetBars - UiUtil.dpToPx(activity, 12);
+      if (insets.isVisible(Type.ime())) {
+        wasKeyboardOpened = true;
+        binding.fabMain.setTranslationY(-bottomInsetIme - UiUtil.dpToPx(activity, 16));
+        int keyboardY = UiUtil.getDisplayHeight(activity) - bottomInsetIme;
+        if (keyboardY < scrollBehavior.getSnackbarAnchorY()) {
+          binding.anchor.setY(keyboardY);
+        } else {
+          scrollBehavior.updateSnackbarAnchor();
+        }
+        float elevation = UiUtil.dpToPx(activity, 6);
+        ViewCompat.setElevation(binding.fabMain, elevation);
+        binding.fabMain.setCompatElevation(elevation);
+
+        // scroll offset to keep focused view visible
+        View focused = activity.getCurrentFocus();
+        if (focused != null) {
+          int[] location = new int[2];
+          focused.getLocationInWindow(location);
+          location[1] += focused.getHeight();
+          int screenHeight = UiUtil.getDisplayHeight(activity);
+          int bottomSpace = screenHeight - location[1];
+          focusedScrollOffset = bottomInsetIme - bottomSpace;
+        } else {
+          focusedScrollOffset = 0;
+        }
+      } else {
+        binding.fabMain.setY(fabBaseY);
+        scrollBehavior.updateSnackbarAnchor();
+        ViewCompat.setElevation(binding.fabMain, 0);
+        binding.fabMain.setCompatElevation(0);
+        // If the keyboard was shown and the page was therefore scrollable
+        // and the bottom bar has disappeared caused by scrolling down,
+        // then the bottom bar should not stay hidden when the keyboard disappears
+        if (wasKeyboardOpened) {
+          wasKeyboardOpened = false;
+          scrollBehavior.setBottomBarVisibility(true);
+        }
+        // scroll offset to keep focused view visible
+        focusedScrollOffset = 0;
+      }
+      return insets;
+    });
+    ViewCompat.setWindowInsetsAnimationCallback(binding.coordinatorMain, callback);
+  }
 
   public static void setTheme(Activity activity, SharedPreferences sharedPrefs) {
     switch (sharedPrefs.getString(SETTINGS.APPEARANCE.THEME, SETTINGS_DEFAULT.APPEARANCE.THEME)) {
@@ -288,309 +597,6 @@ public class UiUtil {
       }
       view.setSystemUiVisibility(flags);
     }
-  }
-
-  public void setUpBottomAppBar(String TAG, ActivityMainBinding binding) {
-    binding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
-    binding.bottomAppBar.setMenuAlignmentMode(BottomAppBar.MENU_ALIGNMENT_MODE_START);
-
-    Context context = binding.getRoot().getContext();
-    // Use reflection to store bottomInset in BAB manually
-    // The automatic method includes IME insets which is bad behavior for BABs
-    ViewCompat.setOnApplyWindowInsetsListener(binding.bottomAppBar, (v, insets) -> {
-      int bottomInset = insets.getInsets(Type.systemBars()).bottom;
-      ViewCompat.setPaddingRelative(v, 0, 0, 0, bottomInset);
-      Class<?> classBottomAppBar = BottomAppBar.class;
-      Object objectBottomAppBar = classBottomAppBar.cast(binding.bottomAppBar);
-      Field fieldBottomInset = null;
-      try {
-        if (objectBottomAppBar != null && objectBottomAppBar.getClass().getSuperclass() != null) {
-          fieldBottomInset = objectBottomAppBar.getClass().getDeclaredField("bottomInset");
-        } else {
-          Log.e(TAG, "onCreate: reflection for bottomInset not working");
-        }
-      } catch (NoSuchFieldException e) {
-        Log.e(TAG, "onCreate: ", e);
-      }
-      if (fieldBottomInset != null) {
-        fieldBottomInset.setAccessible(true);
-        try {
-          fieldBottomInset.set(objectBottomAppBar, bottomInset);
-        } catch (IllegalAccessException e) {
-          Log.e(TAG, "onCreate: ", e);
-        }
-      }
-      // Calculate initial FAB y position for restoring after shifted by keyboard
-      int babHeight = UiUtil.dpToPx(context, 80);
-      int fabHeight = UiUtil.dpToPx(context, 56);
-      int bottom = UiUtil.getDisplayHeight(context);
-      fabBaseY = bottom - bottomInset - (babHeight / 2f) - (fabHeight / 2f);
-      return insets;
-    });
-    ViewUtil.setTooltipText(binding.fabMainScroll, R.string.action_top_scroll);
-  }
-
-  public static void updateBottomAppBar(
-      ActivityMainBinding binding,
-      Context context,
-      SharedPreferences sharedPrefs,
-      boolean showFab,
-      @MenuRes int newMenuId,
-      @Nullable OnMenuItemClickListener onMenuItemClickListener
-  ) {
-    // Handler with postDelayed is necessary for workaround of issue #552
-    new Handler().postDelayed(() -> {
-      if (showFab && !binding.fabMain.isShown() && !PrefsUtil.isServerUrlEmpty(sharedPrefs)) {
-        binding.fabMain.show();
-      } else if (!showFab && binding.fabMain.isShown()) {
-        binding.fabMain.hide();
-      }
-
-      Drawable overflowIcon = binding.bottomAppBar.getOverflowIcon();
-
-      // IF ANIMATIONS DISABLED
-      if (!UiUtil.areAnimationsEnabled(context)) {
-        binding.bottomAppBar.replaceMenu(newMenuId);
-        Menu menu = binding.bottomAppBar.getMenu();
-        int tint = ResUtil.getColor(context, R.attr.colorOnSurfaceVariant);
-        for (int i = 0; i < menu.size(); i++) {
-          MenuItem item = menu.getItem(i);
-          if (item.getIcon() != null) {
-            item.getIcon().mutate();
-            item.getIcon().setAlpha(255);
-            item.getIcon().setTint(tint);
-          }
-        }
-        if (overflowIcon != null && overflowIcon.isVisible()) {
-          overflowIcon.setAlpha(255);
-          overflowIcon.setTint(tint);
-        }
-        binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
-        return;
-      }
-
-      long iconFadeOutDuration = 150;
-      long iconFadeInDuration = 300;
-
-      int alphaFrom = 255;
-      // get better start value if animation was not finished yet
-      if (binding.bottomAppBar.getMenu() != null
-          && binding.bottomAppBar.getMenu().size() > 0
-          && binding.bottomAppBar.getMenu().getItem(0) != null
-          && binding.bottomAppBar.getMenu().getItem(0).getIcon() != null) {
-        alphaFrom = binding.bottomAppBar.getMenu().getItem(0).getIcon().getAlpha();
-      }
-      ValueAnimator animatorFadeOut = ValueAnimator.ofInt(alphaFrom, 0);
-      animatorFadeOut.addUpdateListener(animation -> {
-        for (int i = 0; i < binding.bottomAppBar.getMenu().size(); i++) {
-          MenuItem item = binding.bottomAppBar.getMenu().getItem(i);
-          if (item.getIcon() != null && item.isVisible()) {
-            item.getIcon().setAlpha((int) animation.getAnimatedValue());
-          }
-        }
-        if (overflowIcon != null && overflowIcon.isVisible()) {
-          overflowIcon.setAlpha((int) animation.getAnimatedValue());
-        }
-      });
-      animatorFadeOut.setDuration(iconFadeOutDuration);
-      animatorFadeOut.setInterpolator(new FastOutSlowInInterpolator());
-      animatorFadeOut.start();
-
-      new Handler(Looper.getMainLooper()).postDelayed(() -> {
-        binding.bottomAppBar.replaceMenu(newMenuId);
-
-        int iconIndex = 0;
-        int overflowCount = 0;
-        int tint = ResUtil.getColor(context, R.attr.colorOnSurfaceVariant);
-        for (int i = 0; i < binding.bottomAppBar.getMenu().size(); i++) {
-          MenuItem item = binding.bottomAppBar.getMenu().getItem(i);
-          if (item.getIcon() == null || !item.isVisible()) {
-            if (item.isVisible()) {
-              overflowCount++;
-            }
-            continue;
-          }
-          iconIndex++;
-          int index = iconIndex;
-          item.getIcon().mutate();
-          item.getIcon().setTint(tint);
-          item.getIcon().setAlpha(0);
-          new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            Rect bounds = item.getIcon().copyBounds();
-            int top = bounds.top;
-            int offset = UiUtil.dpToPx(context, 12);
-            ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
-            animator.addUpdateListener(animation -> {
-              bounds.offsetTo(
-                  0,
-                  (int) (top + (float) animation.getAnimatedValue() * offset)
-              );
-              item.getIcon().setBounds(bounds);
-              item.getIcon().setAlpha(255 - (int) ((float) animation.getAnimatedValue() * 255));
-              item.getIcon().invalidateSelf();
-            });
-            animator.setDuration(iconFadeInDuration - index * 50L);
-            animator.setInterpolator(new FastOutSlowInInterpolator());
-            animator.start();
-          }, index * 90L);
-        }
-        if (overflowCount > 0) {
-          Drawable overflowIconNew = binding.bottomAppBar.getOverflowIcon();
-          if (overflowIconNew == null || !overflowIconNew.isVisible()) {
-            return;
-          }
-          iconIndex++;
-          int index = iconIndex;
-          overflowIconNew.setTint(tint);
-          overflowIconNew.setAlpha(0);
-          new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            Rect bounds = overflowIconNew.copyBounds();
-            int top = bounds.top;
-            int offset = UiUtil.dpToPx(context, 12);
-            ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
-            animator.addUpdateListener(animation -> {
-              bounds.offsetTo(
-                  0,
-                  (int) (top + (float) animation.getAnimatedValue() * offset)
-              );
-              overflowIconNew.setBounds(bounds);
-              overflowIconNew.setAlpha(255 - (int) ((float) animation.getAnimatedValue() * 255));
-              overflowIconNew.invalidateSelf();
-            });
-            animator.setDuration(iconFadeInDuration - index * 50L);
-            animator.setInterpolator(new FastOutSlowInInterpolator());
-            animator.start();
-          }, index * 90L);
-        }
-        binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
-      }, iconFadeOutDuration);
-    }, 10);
-  }
-
-  public void setupImeAnimation(
-      MainActivity activity,
-      SystemBarBehavior systemBarBehavior,
-      BottomScrollBehavior scrollBehavior
-  ) {
-    ActivityMainBinding binding = activity.binding;
-    Callback callback = new Callback(Callback.DISPATCH_MODE_STOP) {
-      WindowInsetsAnimationCompat animation;
-      int bottomInsetStart, bottomInsetEnd;
-      float yStart, yEnd;
-      int yScrollStart, yScrollEnd;
-
-      @Override
-      public void onPrepare(@NonNull WindowInsetsAnimationCompat animation) {
-        this.animation = animation;
-        if (systemBarBehavior != null) {
-          bottomInsetStart = systemBarBehavior.getAdditionalBottomInset();
-        }
-        yStart = binding.fabMain.getY();
-        // scroll offset to keep focused view visible
-        ViewGroup scrollView = scrollBehavior.getScrollView();
-        if (scrollView != null) {
-          yScrollStart = scrollView.getScrollY();
-        }
-      }
-
-      @NonNull
-      @Override
-      public BoundsCompat onStart(
-          @NonNull WindowInsetsAnimationCompat animation, @NonNull BoundsCompat bounds) {
-        if (systemBarBehavior != null) {
-          bottomInsetEnd = systemBarBehavior.getAdditionalBottomInset();
-          systemBarBehavior.setAdditionalBottomInset(bottomInsetStart);
-          systemBarBehavior.refresh(false);
-        }
-        yEnd = binding.fabMain.getY();
-        binding.fabMain.setY(yStart);
-        // scroll offset to keep focused view visible
-        ViewGroup scrollView = scrollBehavior.getScrollView();
-        if (scrollView != null) {
-          yScrollEnd = yScrollStart + focusedScrollOffset;
-        }
-        return bounds;
-      }
-
-      @NonNull
-      @Override
-      public WindowInsetsCompat onProgress(
-          @NonNull WindowInsetsCompat insets,
-          @NonNull List<WindowInsetsAnimationCompat> animations) {
-        if (systemBarBehavior != null) {
-          systemBarBehavior.setAdditionalBottomInset(
-              (int) MathUtils.lerp(
-                  bottomInsetStart, bottomInsetEnd, animation.getInterpolatedFraction()
-              )
-          );
-          systemBarBehavior.refresh(false);
-        }
-        binding.fabMain.setY(MathUtils.lerp(yStart, yEnd, animation.getInterpolatedFraction()));
-        // scroll offset to keep focused view visible
-        ViewGroup scrollView = scrollBehavior.getScrollView();
-        if (scrollView != null) {
-          scrollView.setScrollY(
-              (int) MathUtils.lerp(yScrollStart, yScrollEnd, animation.getInterpolatedFraction())
-          );
-        }
-        return insets;
-      }
-    };
-    ViewCompat.setOnApplyWindowInsetsListener(binding.coordinatorMain, (v, insets) -> {
-      int bottomInsetIme = insets.getInsets(Type.ime()).bottom;
-      int bottomInsetBars = insets.getInsets(Type.systemBars()).bottom;
-      if (systemBarBehavior != null) {
-        systemBarBehavior.setAdditionalBottomInset(bottomInsetIme);
-        systemBarBehavior.refresh(false);
-      }
-      // view for calculating snackbar anchor's max bottom position
-      // to prevent snackbar flickering (caused by itself when it's drawn behind navbar
-      CoordinatorLayout.LayoutParams paramsAnchor =
-          (CoordinatorLayout.LayoutParams) binding.anchorMaxBottom.getLayoutParams();
-      paramsAnchor.bottomMargin = bottomInsetBars - UiUtil.dpToPx(activity, 12);
-      if (insets.isVisible(Type.ime())) {
-        wasKeyboardOpened = true;
-        binding.fabMain.setTranslationY(-bottomInsetIme - UiUtil.dpToPx(activity, 16));
-        int keyboardY = UiUtil.getDisplayHeight(activity) - bottomInsetIme;
-        if (keyboardY < scrollBehavior.getSnackbarAnchorY()) {
-          binding.anchor.setY(keyboardY);
-        } else {
-          scrollBehavior.updateSnackbarAnchor();
-        }
-        float elevation = UiUtil.dpToPx(activity, 6);
-        ViewCompat.setElevation(binding.fabMain, elevation);
-        binding.fabMain.setCompatElevation(elevation);
-
-        // scroll offset to keep focused view visible
-        View focused = activity.getCurrentFocus();
-        if (focused != null) {
-          int[] location = new int[2];
-          focused.getLocationInWindow(location);
-          location[1] += focused.getHeight();
-          int screenHeight = UiUtil.getDisplayHeight(activity);
-          int bottomSpace = screenHeight - location[1];
-          focusedScrollOffset = bottomInsetIme - bottomSpace;
-        } else {
-          focusedScrollOffset = 0;
-        }
-      } else {
-        binding.fabMain.setY(fabBaseY);
-        scrollBehavior.updateSnackbarAnchor();
-        ViewCompat.setElevation(binding.fabMain, 0);
-        binding.fabMain.setCompatElevation(0);
-        // If the keyboard was shown and the page was therefore scrollable
-        // and the bottom bar has disappeared caused by scrolling down,
-        // then the bottom bar should not stay hidden when the keyboard disappears
-        if (wasKeyboardOpened) {
-          wasKeyboardOpened = false;
-          scrollBehavior.setBottomBarVisibility(true);
-        }
-        // scroll offset to keep focused view visible
-        focusedScrollOffset = 0;
-      }
-      return insets;
-    });
-    ViewCompat.setWindowInsetsAnimationCallback(binding.coordinatorMain, callback);
   }
 
   public static boolean isDarkModeActive(Context context) {
