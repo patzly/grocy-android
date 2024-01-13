@@ -85,7 +85,6 @@ public class BaseBottomSheetDialogFragment extends CustomBottomSheetDialogFragme
             if (container == null || sheet == null) {
               return;
             }
-            // TODO: replace with attribute when fixed in MDC
             backgroundColor = ResUtil.getColor(activity, R.attr.colorSurfaceContainerLow);
             PaintDrawable background = new PaintDrawable(backgroundColor);
             int radius = UiUtil.dpToPx(requireContext(), 28);
