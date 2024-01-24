@@ -214,14 +214,17 @@ public class MasterProductFragment extends BaseFragment {
         true,
         isEdit
             ? R.menu.menu_master_product_edit
-            : R.menu.menu_master_product_create,
+            : viewModel.isForceSaveWithClose()
+                ? R.menu.menu_master_product_create_sub
+                : R.menu.menu_master_product_create,
         menuItem -> {
           if (menuItem.getItemId() == R.id.action_delete) {
             deleteProductSafely();
             return true;
           }
-          if (menuItem.getItemId() == R.id.action_save) {
-            viewModel.saveProduct(true);
+          if (menuItem.getItemId() == R.id.action_save
+              || menuItem.getItemId() == R.id.action_save_not_close) {
+            viewModel.saveProduct(menuItem.getItemId() == R.id.action_save);
             return true;
           }
           return false;

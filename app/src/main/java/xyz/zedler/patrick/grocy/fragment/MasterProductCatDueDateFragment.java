@@ -138,7 +138,9 @@ public class MasterProductCatDueDateFragment extends BaseFragment {
         true,
         viewModel.isActionEdit()
             ? R.menu.menu_master_product_edit
-            : R.menu.menu_master_product_create,
+            : false
+                ? R.menu.menu_master_product_create_sub
+                : R.menu.menu_master_product_create,
         menuItem -> {
           if (menuItem.getItemId() == R.id.action_delete) {
             setForDestination(
@@ -149,11 +151,12 @@ public class MasterProductCatDueDateFragment extends BaseFragment {
             activity.performOnBackPressed();
             return true;
           }
-          if (menuItem.getItemId() == R.id.action_save) {
+          if (menuItem.getItemId() == R.id.action_save
+              || menuItem.getItemId() == R.id.action_save_not_close) {
             setForDestination(
                 R.id.masterProductFragment,
                 Constants.ARGUMENT.ACTION,
-                ACTION.SAVE_CLOSE
+                menuItem.getItemId() == R.id.action_save ? ACTION.SAVE_CLOSE : ACTION.SAVE_NOT_CLOSE
             );
             activity.performOnBackPressed();
             return true;
