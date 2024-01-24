@@ -74,6 +74,7 @@
   <string name="action_add">Add</string>
   <string name="action_clear">Clear</string>
   <string name="action_clear_shopping_list">Clear shopping list</string>
+  <string name="action_auto_sync">Auto sync</string>
   <string name="action_rate">Rate on Google Play</string>
   <string name="action_rate_description">Motivate the developers</string>
   <string name="action_email">Send email</string>

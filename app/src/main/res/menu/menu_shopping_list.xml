@@ -23,41 +23,55 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   tools:ignore="AlwaysShowAction">
 
-  <item
-    android:id="@+id/action_search"
-    android:title="@string/action_search"
-    android:icon="@drawable/ic_round_search_anim"
-    app:showAsAction="always" />
+  <group>
 
-  <item
-    android:id="@+id/action_shopping_mode"
-    android:title="@string/title_shopping_mode"
-    android:icon="@drawable/ic_round_storefront"
-    app:showAsAction="always" />
+    <item
+      android:id="@+id/action_search"
+      android:title="@string/action_search"
+      android:icon="@drawable/ic_round_search_anim"
+      app:showAsAction="always" />
 
-  <item
-    android:id="@+id/action_add_missing"
-    android:title="@string/action_add_missing"
-    app:showAsAction="never" />
+    <item
+      android:id="@+id/action_shopping_mode"
+      android:title="@string/title_shopping_mode"
+      android:icon="@drawable/ic_round_storefront"
+      app:showAsAction="always" />
 
-  <item
-    android:id="@+id/action_purchase_done_items"
-    android:title="@string/action_purchase_done_items"
-    app:showAsAction="never" />
+    <item
+      android:id="@+id/action_add_missing"
+      android:title="@string/action_add_missing"
+      app:showAsAction="never" />
 
-  <item
-    android:id="@+id/action_purchase_all_items"
-    android:title="@string/action_purchase_all_items"
-    app:showAsAction="never" />
+    <item
+      android:id="@+id/action_purchase_done_items"
+      android:title="@string/action_purchase_done_items"
+      app:showAsAction="never" />
 
-  <item
-    android:id="@+id/action_edit_notes"
-    android:title="@string/action_edit_notes"
-    app:showAsAction="never" />
+    <item
+      android:id="@+id/action_purchase_all_items"
+      android:title="@string/action_purchase_all_items"
+      app:showAsAction="never" />
 
-  <item
-    android:id="@+id/action_clear"
-    android:title="@string/action_clear_shopping_list"
-    app:showAsAction="never" />
+    <item
+      android:id="@+id/action_edit_notes"
+      android:title="@string/action_edit_notes"
+      app:showAsAction="never" />
+
+    <item
+      android:id="@+id/action_clear"
+      android:title="@string/action_clear_shopping_list"
+      app:showAsAction="never" />
+
+  </group>
+
+  <group android:checkableBehavior="all">
+
+    <item
+      android:id="@+id/action_sync"
+      android:title="@string/action_auto_sync"
+      app:showAsAction="never"
+      android:checkable="true" />
+
+  </group>
 
 </menu>
