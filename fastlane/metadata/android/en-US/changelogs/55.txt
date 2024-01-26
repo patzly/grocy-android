@@ -1,0 +1,4 @@
+• Improved: Keep scroll position on shopping list page when returning from purchase/edit page
+• Improved: Theme colors in high-contrast modes
+• Fixed: Crash on purchase page with scanner on some devices
+• Fixed: Text fields hidden by keyboard on pages with many fields, scrolling not possible
