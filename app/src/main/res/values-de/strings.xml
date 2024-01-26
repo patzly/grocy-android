@@ -476,6 +476,7 @@
   <string name="msg_help_home_assistant_login_token">Sie können einen langlebigen Zugangsschlüssel in Ihren Home Assistant Profileinstellungen erstellen (letzter Abschnitt). Hier tippen, um die URL von oben zu öffnen.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Navigieren Sie zurück oder tippen Sie auf  diese Karte, um einen QR-Code zu scannen, wodurch die Felder unten vorausgefüllt werden.</string>
   <string name="msg_help_fab_overview_start">Der Aktionsknopf auf dieser Übersichtsseite hat zwei Aktionen:\n\n- Kurzes Drücken: Verbrauchen mit Barcode-Scanner\n- Langes Drücken: Einkaufen mit Barcode-Scanner\n\nMit diesem Knopf ist der Schnellmodus auf den jeweiligen Seiten standardmäßig aktiviert. Dies können Sie in den Einstellungen für Verhalten ändern.</string>
+  <string name="msg_help_fab_consume_start">Der Aktionsknopf auf dieser Seite verbraucht das Produkt mit den angegebenen Werten. Um das Produkt stattdessen als offen zu markieren, verwenden Sie die Schaltfläche unten links in der Menüleiste.</string>
   <string name="msg_share">Schau Dir mal diesen Android-Client für Grocy an: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">API Schüssel funktioniert nicht</string>
@@ -561,6 +562,7 @@
   <string name="error_invalid_base_servings">Portionen ungültig</string>
   <string name="error_pictures_size_exceeds_limit">Es gibt eingebettete Bilder in Produkt- oder Rezeptbeschreibungen auf Ihrem Server, welche das Lese-Limit dieser App überschreiten. Bitte entfernen Sie Bilder mit hoher Qualität oder Größe von Ihren Beschreibungen, das wird auch das Laden der Daten beschleunigen.</string>
   <string name="error_userfield_type_not_supported">Typ von Benutzerfeld aktuell nicht unterstützt</string>
+  <string name="error_open_product_not_supported">Produkt als geöffnet markieren wird für dieses Produkt nicht unterstützt</string>
   <string name="error_settings_backup">Sicherung fehlgeschlagen</string>
   <string name="error_settings_restore">Wiederherstellen gescheitert</string>
 
@@ -916,6 +918,7 @@
   <string name="property_due_days_default_freezing">Standard-Fälligkeitstage nach dem Einfrieren</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">Standard-Fälligkeitstage nach dem Auftauen</string>
+  <string name="property_day_summary">Zusammenfassung für den Tag</string>
   <string name="property_location">Standort</string>
   <string name="property_location_insert">Standort: %1$s</string>
   <string name="property_location_default">Standard Standort</string>
@@ -1131,6 +1134,9 @@
   <string name="info_github">Grocy Android auf GitHub</string>
   <string name="info_github_description">Quellcode</string>
   <string name="info_website">Grocy Website öffnen</string>
+  <string name="info_translation_description">Helfen Sie mit, Grocy Android zu übersetzen</string>
+  <string name="info_privacy">Datenschutzrichtlinien</string>
+  <string name="info_privacy_description">Wie werden Ihre Daten verarbeitet?</string>
 
   <string name="feature_1_title">Grocy für Android</string>
   <string name="feature_1_description">Selbst gehostete Lebensmittelverwaltung für Ihr Zuhause</string>
@@ -1171,6 +1177,16 @@
   <string name="setting_theme_dark">Dunkel</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_light">Hell</string>
+  <string name="setting_contrast">Kontrast</string>
+  <string name="setting_contrast_description">Barrierefreiheit für Ihre Sicht</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast. The button width should be as dense as possible. -->
+  <string name="setting_contrast_standard">Standard</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_medium">Mittel</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_high">Hoch</string>
+  <string name="setting_contrast_dynamic">Kontrast für das Gerätethema muss in den Systemeinstellungen festgelegt werden</string>
+  <string name="setting_contrast_dynamic_unsupported">Dynamischer Kontrast für das Gerätethema ist nur auf Android 14+ verfügbar</string>
   <string name="setting_language">Sprache</string>
   <string name="setting_language_description">Sprache auswählen</string>
   <string name="setting_language_info">Vielen Dank an alle freiwilligen Übersetzer bei Transifex!\nBesuchen Sie uns auf GitHub, um zu erfahren, wie Sie helfen können, Grocy Android für Ihre Sprache verfügbar zu machen.</string>
