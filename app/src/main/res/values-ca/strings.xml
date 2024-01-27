@@ -1263,7 +1263,7 @@
   <string name="setting_speed_up_start_description">Només té efecte en dispositius ràpids</string>
   <string name="setting_date_keyboard_input">Introduir dates amb el teclat</string>
   <string name="setting_date_keyboard_input_description">En comptes del selector de dates</string>
-  <string name="setting_date_keyboard_reverse">Utilitzar format de data invers per a l\'entrada</string>
+  <string name="setting_date_keyboard_reverse">Utilitza format de data invers per a l\'entrada</string>
   <string name="setting_date_keyboard_reverse_description">DDMMYY en comptes de YYMMDD</string>
   <string name="setting_loading_circle">Mostrar cercle de càrrega per a totes les sol·licituds</string>
   <string name="setting_loading_circle_description">Útil per a connexions lentes</string>
