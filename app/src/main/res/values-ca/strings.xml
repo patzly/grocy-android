@@ -377,7 +377,7 @@
   <string name="msg_qr_code_scan">En un altre dispositiu, visita el teu lloc web o URL de Grocy i ves a la pàgina \"Gestió de claus API\". Fes clic a \"Afegeix\", després fes clic al petit símbol de codi QR i escaneja el QR que apareix.</string>
   <string name="msg_qr_code_scan_token">Estàs utilitzant el complement Grocy de Home Assistant. Crea un \'token\' d\'accés de llarga durada a la configuració del teu perfil de Home Assistant (última secció). A sota del camp del \'token\' fes clic a \"Genera codi QR\" i escaneja\'l des d\'allà.</string>
   <string name="msg_port_connection_info_without_port">L\'aplicació es connectarà al port %1$s.\nSi la vols connectar a un port diferent, pots afegir-ne un a l\'URL.\nExemple: http://domini.com:81/</string>
-  <string name="msg_port_connection_info_with_port">L\'aplicació es connectarà al port%1$s.</string>
+  <string name="msg_port_connection_info_with_port">L\'aplicació es connectarà al port %1$s.</string>
   <string name="msg_clear_form_first">Neteja primer el formulari abans d\'escanejar un nou codi de barres existent.</string>
   <string name="msg_not_implemented_yet">Això s’implementarà aviat. Fes servir de moment la teva interfície de servidor.</string>
   <string name="msg_help_picture_changes">Els canvis d\'imatges es sincronitzen amb el servidor immediatament, no només quan desis!</string>
