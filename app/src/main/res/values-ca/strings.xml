@@ -460,7 +460,7 @@
   <string name="msg_help_recipe_price_factor">El preu resultant d\'aquest ingredient es multiplicarà per aquest factor.</string>
   <string name="msg_help_recipe_ingredients_wrong">Amb la versions del servidor de Grocy inferiors de la 4.0.0, aquesta llista pot contenir informació incorrecta. Actualitza el teu servidor a la versió 4.0.0 o posterior per veure els valors correctes.</string>
   <string name="msg_help_date_chooser">Pots canviar a entrada de teclat a la configuració, això podria incrementar la velocitat d\'entrada.</string>
-  <string name="msg_help_date_chooser_keyboard">Pots activar el format de data invers a la configuració si DDMMYY és preferible al teu país.\nPer aplicar l\'entrada i tancar aquesta pàgina pots utilitzar la tecla Fet del teclat.</string>
+  <string name="msg_help_date_chooser_keyboard">Pots activar el format de data invers a la configuració si DDMMAA és preferible al teu país.\nPer aplicar l\'entrada i tancar aquesta pàgina pots utilitzar la tecla Fet del teclat.</string>
   <string name="msg_help_notifications_tap">Toca aquí si no reps notificacions o les reps malament.</string>
   <string name="msg_help_notifications">Si no reps notificacions, toca aquí per obrir la pàgina d\'informació de l\'aplicació d\'Android i comprova si les notificacions estan permeses i si les mesures d\'estalvi d\'energia es poden desactivar. A vegades, Android envia notificacions una mica més tard de l\'hora real per reduir el consum de bateria, és un comportament normal.</string>
   <string name="msg_help_notifications_other">No tanquis l\'aplicació del menú principal on hi ha la resta d\'aplicacions en execució, en cas contrari alguns fabricants eliminen el procés de notificacions.</string>
