@@ -526,7 +526,7 @@
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_bounds_min">Ha de ser major o igual a %1$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
-  <string name="error_bounds_max">Ha de ser menor o igual a%1$s</string>
+  <string name="error_bounds_max">Ha de ser menor o igual a %1$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_bounds_higher">Ha de ser major que%1$s</string>
   <string name="error_offline">No actiu</string>
