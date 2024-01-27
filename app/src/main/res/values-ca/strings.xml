@@ -522,9 +522,9 @@
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">No pot ser igual a %1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
-  <string name="error_bounds_min_max">Ha d\'estar entre %1$si%2$s</string>
+  <string name="error_bounds_min_max">Ha d\'estar entre %1$s i %2$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
-  <string name="error_bounds_min">Ha de ser major o igual a%1$s</string>
+  <string name="error_bounds_min">Ha de ser major o igual a %1$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_bounds_max">Ha de ser menor o igual a%1$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
