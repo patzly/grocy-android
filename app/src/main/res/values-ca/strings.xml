@@ -623,7 +623,7 @@
   <string name="title_recipe_edit">Editar recepta</string>
 
   <string name="title_spoiled">Fet malbé</string>
-  <string name="title_use_specific">Utilitzar element específic de l\'inventari</string>
+  <string name="title_use_specific">Utilitza un element específic de l\'inventari</string>
   <string name="title_specific">Element específic de l\'inventari</string>
   <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_exact_amount">Consumir quantitat exacta</string>
