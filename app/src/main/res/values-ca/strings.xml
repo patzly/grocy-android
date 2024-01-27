@@ -221,8 +221,8 @@
   </plurals>
   <!-- %1$s is the number of tasks which are due soon. This string is the short form of e.g. "3 tasks are due soon" -> "3 due soon" -->
   <plurals name="msg_due_tasks">
-    <item quantity="one">%1$dvenç aviat</item>
-    <item quantity="other">%1$dvencen aviat</item>
+    <item quantity="one">%1$d venç aviat</item>
+    <item quantity="other">%1$d vencen aviat</item>
   </plurals>
   <!-- %1$s is the number of tasks which are due today. This string is the short form of e.g. "3 tasks are due today" -> "3 due today" -->
   <plurals name="msg_due_today_tasks">
