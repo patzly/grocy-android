@@ -671,7 +671,7 @@
   <!-- %1$s is a number like 1, 2, 3 -->
   <string name="subtitle_amount_opened">(%1$s oberts)</string>
   <!-- %1$s is a product name -->
-  <string name="subtitle_stock_locations">On %1$stingui existències. </string>
+  <string name="subtitle_stock_locations">On %1$s tingui existències. </string>
   <string name="subtitle_none_selected">Cap seleccionat</string>
   <!-- Should follow the equality between 'None' and 'None selected' -->
   <string name="subtitle_none">Cap</string>
