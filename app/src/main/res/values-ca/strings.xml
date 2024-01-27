@@ -996,7 +996,7 @@
   <!-- %1$s is an amount together with quantity unit -->
   <string name="property_in_stock">A l\'inventari: %1$s</string>
   <!-- %1$s is a sort mode like "name" or "due date" -->
-  <string name="property_sort_mode">Ordenar:%1$s</string>
+  <string name="property_sort_mode">Ordenació: %1$s</string>
   <!-- %1$s is a grouping mode like "product group" or "due date" -->
   <string name="property_group_by">Agrupar per:%1$s</string>
   <string name="property_ungrouped">Sense agrupar</string>
