@@ -669,7 +669,7 @@
   <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
   <string name="subtitle_opened">(oberts)</string>
   <!-- %1$s is a number like 1, 2, 3 -->
-  <string name="subtitle_amount_opened">(%1$soberts)</string>
+  <string name="subtitle_amount_opened">(%1$s oberts)</string>
   <!-- %1$s is a product name -->
   <string name="subtitle_stock_locations">On %1$stingui existències. </string>
   <string name="subtitle_none_selected">Cap seleccionat</string>
