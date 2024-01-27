@@ -206,7 +206,7 @@
   </plurals>
   <!-- %1$s is the number of done items in shopping list. This string is the short form of e.g. "3 done items are in shopping list" -> "3 done" -->
   <plurals name="msg_done_items">
-    <item quantity="one">%1$dcompletat</item>
+    <item quantity="one">%1$d completat</item>
     <item quantity="other">%1$d completats</item>
   </plurals>
   <!-- %1$s is the number of tasks which are done. This string is the short form of e.g. "3 tasks are done" -> "3 done" -->
