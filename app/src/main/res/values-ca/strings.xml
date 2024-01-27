@@ -1267,7 +1267,7 @@
   <string name="setting_date_keyboard_reverse_description">DDMMYY en comptes de YYMMDD</string>
   <string name="setting_loading_circle">Mostrar cercle de càrrega per a totes les sol·licituds</string>
   <string name="setting_loading_circle_description">Útil per a connexions lentes</string>
-  <string name="setting_tor">Utilitzar Tor</string>
+  <string name="setting_tor">Utilitza Tor</string>
   <string name="setting_tor_description">Requereix Orbot</string>
   <string name="setting_proxy">Habilitar proxy HTTP</string>
   <string name="setting_proxy_description">Configura el proxy HTTP per a tots les connexions</string>
