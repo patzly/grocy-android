@@ -998,10 +998,10 @@
   <!-- %1$s is a sort mode like "name" or "due date" -->
   <string name="property_sort_mode">Ordenació: %1$s</string>
   <!-- %1$s is a grouping mode like "product group" or "due date" -->
-  <string name="property_group_by">Agrupar per:%1$s</string>
+  <string name="property_group_by">Agrupa per: %1$s</string>
   <string name="property_ungrouped">Sense agrupar</string>
   <!-- %1$s is a property like "product group" or "due date" -->
-  <string name="property_extra_field">Camp extra:%1$s</string>
+  <string name="property_extra_field">Camp extra: %1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">Camps</string>
   <!-- Fields like fields of information -->
