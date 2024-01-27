@@ -1192,7 +1192,7 @@
   <string name="setting_language_info">Moltes gràcies a tots els traductors voluntaris a Transifex!\nVisita\'ns a GitHub per aprendre com pots ajudar a fer possible Grocy Android en la teva llengua.</string>
   <string name="setting_language_system">Segons el sistema</string>
   <string name="setting_language_not_available">English si la traducció no està disponible</string>
-  <string name="setting_transition">Utilitzar la transició lliscant entre les pàgines de configuració</string>
+  <string name="setting_transition">Utilitza la transició lliscant entre les pàgines de configuració</string>
   <string name="setting_transition_description">En comptes de l\'esvaït</string>
   <string name="setting_open_food_facts">Utilitza Open Food Facts i Open Beauty Facts</string>
   <string name="setting_open_food_facts_description">Obtenir informació dels codis de barres</string>
