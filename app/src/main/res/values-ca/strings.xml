@@ -1220,7 +1220,7 @@
   <string name="setting_keep_screen_on_description">Mentre s\'està al mode compra</string>
   <string name="setting_show_done_items">Mostrar els elements completats</string>
   <string name="setting_show_done_items_description">A la part inferior</string>
-  <string name="setting_smaller_font">Utilitzar una font més petita</string>
+  <string name="setting_smaller_font">Utilitza una font més petita</string>
   <string name="setting_smaller_font_description">Per a veure més elements a la vegada</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Dies per consumir aviat</string>
@@ -1231,7 +1231,7 @@
   <string name="setting_treat_opened_as_out_of_stock">Tractar obert com a consumit</string>
   <string name="setting_purchased_date">Preguntar per la data de compra</string>
   <string name="setting_purchased_date_description">A la pàgina de compra i inventari</string>
-  <string name="setting_use_quick_consume_amount">Utilitzar la \'Quantitat de consum ràpid\'</string>
+  <string name="setting_use_quick_consume_amount">Utilitza la \'Quantitat de consum ràpid\'</string>
   <string name="setting_auto_add_shopping_list">Afegir automàticament els productes a la llista de la compra</string>
   <string name="setting_auto_add_shopping_list_description">Que estiguin per sota el mínim d\'existències definit.</string>
   <string name="setting_empty_value">Buit</string>
