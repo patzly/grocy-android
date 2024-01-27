@@ -628,7 +628,7 @@
   <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_exact_amount">Consumir quantitat exacta</string>
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="title_location_from">Desde la ubicació</string>
+  <string name="title_location_from">Des de la ubicació</string>
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_location_to">A la ubicació</string>
   <string name="title_recipe">Recepta</string>
