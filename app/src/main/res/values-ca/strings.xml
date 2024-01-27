@@ -1198,7 +1198,7 @@
   <string name="setting_open_food_facts_description">Obtenir informació dels codis de barres</string>
   <string name="setting_choose_barcode_scanner">Escollir escàner de codi de barres</string>
   <string name="setting_choose_barcode_scanner_description">Per a l\'escaneig del codi de barres amb la càmera</string>
-  <string name="setting_use_front_cam">Utilitzar càmera frontal</string>
+  <string name="setting_use_front_cam">Utilitza la càmera frontal</string>
   <string name="setting_use_front_cam_description">Per a l\'escaneig del codi de barres</string>
   <string name="setting_use_2d_scanner_format">Utilitzar format 2D d\'escàner de codi de barres</string>
   <string name="setting_use_2d_scanner_format_description">Forma quadrada per als codis QR</string>
