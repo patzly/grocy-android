@@ -211,8 +211,8 @@
   </plurals>
   <!-- %1$s is the number of tasks which are done. This string is the short form of e.g. "3 tasks are done" -> "3 done" -->
   <plurals name="msg_done_tasks">
-    <item quantity="one">%1$dcompletada</item>
-    <item quantity="other">%1$dcompletades</item>
+    <item quantity="one">%1$d completada</item>
+    <item quantity="other">%1$d completades</item>
   </plurals>
   <!-- %1$s is the number of tasks which are not done. This string is the short form of e.g. "3 tasks are not done" -> "3 not done" -->
   <plurals name="msg_not_done_tasks">
