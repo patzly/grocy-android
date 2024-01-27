@@ -1108,7 +1108,7 @@
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_days_from_now">
     <item quantity="one">D\'aquí a%ddia</item>
-    <item quantity="other">D\'aquí a%ddies</item>
+    <item quantity="other">D\'aquí a %d dies</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_months_from_now">
