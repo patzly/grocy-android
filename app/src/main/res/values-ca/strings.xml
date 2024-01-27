@@ -1117,8 +1117,8 @@
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_years_from_now">
-    <item quantity="one">D\'aquí a%dany</item>
-    <item quantity="other">D\'aquí a %danys</item>
+    <item quantity="one">D\'aquí a %d any</item>
+    <item quantity="other">D\'aquí a %d anys</item>
   </plurals>
 
   <string name="info_acknowledgement">Volem donar les gràcies al desenvolupador de Grocy, Bernd Bestel. Sense el seu gran treball aquesta aplicació no hauria estat mai possible.</string>
