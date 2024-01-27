@@ -189,7 +189,7 @@
     <item quantity="other">%1$doberts</item>
   </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
-  <string name="msg_consumed">Comsumit %1$s %2$s de %3$s</string>
+  <string name="msg_consumed">Consumit %1$s %2$s de %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">Consumir %1$s %2$s de %3$s com a fets malbé</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
