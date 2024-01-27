@@ -265,8 +265,8 @@
     <item quantity="other">Falten %1$d ingredients però son a la llista de la compra</item>
   </plurals>
   <plurals name="msg_recipes_ingredients_missing">
-    <item quantity="one">Falta %1$dingredient</item>
-    <item quantity="other">Falten %1$dingredients</item>
+    <item quantity="one">Falta %1$d ingredient</item>
+    <item quantity="other">Falten %1$d ingredients</item>
   </plurals>
   <string name="msg_recipes_ingredient_fulfillment_info_list">Falten: %1$s | A la llista de compra: %2$s</string>
   <string name="msg_chore_executed">Realització de feina en seguiment</string>
