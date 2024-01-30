@@ -1,3 +1,7 @@
+## 3.5.2
+
+- Fixed: Crash when navigating to another page while keyboard animation is running (#831)
+
 ## 3.5.1
 
 - Improved: Keep scroll position on shopping list page when returning from purchase/edit page (#823)
