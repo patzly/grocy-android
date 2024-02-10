@@ -1,6 +1,7 @@
 ## 3.5.2
 
 - Fixed: Crash when navigating to another page while keyboard animation is running (#831)
+- Fixed: Crash on purchase page or on shopping list item edit page with some invalid objects (#835)
 
 ## 3.5.1
 

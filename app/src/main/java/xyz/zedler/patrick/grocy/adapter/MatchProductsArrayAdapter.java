@@ -48,6 +48,7 @@ public class MatchProductsArrayAdapter extends ArrayAdapter<Product> {
     this.items = items;
     tempItems = new HashMap<>(); // this makes the difference.
     for (Product product : items) {
+      if (product.getName() == null) continue;
       tempItems.put(product.getName().toLowerCase(), product);
     }
   }
