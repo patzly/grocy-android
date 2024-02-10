@@ -2,6 +2,7 @@
 
 - Fixed: Crash when navigating to another page while keyboard animation is running (#831)
 - Fixed: Crash on purchase page or on shopping list item edit page with some invalid objects (#835)
+- Fixed: Incorrect recipe total count on start page when meal plan is used (#827)
 
 ## 3.5.1
 
