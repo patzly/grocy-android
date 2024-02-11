@@ -23,36 +23,50 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   tools:ignore="AlwaysShowAction">
 
-  <item
-    android:id="@+id/action_select"
-    android:title="@string/property_shopping_lists"
-    app:showAsAction="never" >
+  <group >
 
-    <menu />
+    <item
+      android:id="@+id/action_select"
+      android:title="@string/property_shopping_lists"
+      app:showAsAction="never" >
 
-  </item>
+      <menu />
 
-  <item
-    android:id="@+id/action_grouping_mode"
-    android:title="@string/property_group_by"
-    app:showAsAction="never">
+    </item>
 
-    <menu />
+    <item
+      android:id="@+id/action_grouping_mode"
+      android:title="@string/property_group_by"
+      app:showAsAction="never">
 
-  </item>
+      <menu />
 
-  <item
-    android:id="@+id/action_fields"
-    android:title="@string/property_fields"
-    app:showAsAction="never">
+    </item>
 
-    <menu />
+    <item
+      android:id="@+id/action_fields"
+      android:title="@string/property_fields"
+      app:showAsAction="never">
 
-  </item>
+      <menu />
 
-  <item
-    android:id="@+id/action_options"
-    android:title="@string/title_options"
-    app:showAsAction="never" />
+    </item>
+
+    <item
+      android:id="@+id/action_options"
+      android:title="@string/title_options"
+      app:showAsAction="never" />
+
+  </group>
+
+  <group android:checkableBehavior="all">
+
+    <item
+      android:id="@+id/action_sync"
+      android:title="@string/action_auto_sync"
+      app:showAsAction="never"
+      android:checkable="true" />
+
+  </group>
 
 </menu>
