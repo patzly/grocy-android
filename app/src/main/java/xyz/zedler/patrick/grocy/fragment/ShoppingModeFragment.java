@@ -230,7 +230,7 @@ public class ShoppingModeFragment extends BaseFragment implements
         Constants.SETTINGS.SHOPPING_MODE.UPDATE_INTERVAL,
         Constants.SETTINGS_DEFAULT.SHOPPING_MODE.UPDATE_INTERVAL
     );
-    if (seconds == 0) {
+    if (seconds == 0 || !viewModel.getAutoSyncEnabled()) {
       return;
     }
     timer = new Timer();
@@ -307,7 +307,7 @@ public class ShoppingModeFragment extends BaseFragment implements
 
   @Override
   public void updateConnectivity(boolean isOnline) {
-    if (!isOnline == viewModel.isOffline()) {
+    if (!isOnline == viewModel.isOffline() || !viewModel.getAutoSyncEnabled()) {
       return;
     }
     viewModel.downloadData(false, false);
@@ -332,6 +332,10 @@ public class ShoppingModeFragment extends BaseFragment implements
       FilterChipLiveData data = viewModel.getFilterChipLiveDataGrouping();
       itemGrouping.setTitle(data.getText());
     }
+    MenuItem itemSync = popupMenu.getMenu().findItem(R.id.action_sync);
+    if (itemSync != null) {
+      itemSync.setChecked(viewModel.getAutoSyncEnabled());
+    }
     popupMenu.setOnMenuItemClickListener(getMenuItemClickListener());
     popupMenu.show();
   }
@@ -354,6 +358,22 @@ public class ShoppingModeFragment extends BaseFragment implements
       } else if (item.getItemId() == R.id.action_options) {
         activity.navUtil.navigateFragment(ShoppingModeFragmentDirections
             .actionShoppingModeFragmentToShoppingModeOptionsFragment());
+        return true;
+      } else if (item.getItemId() == R.id.action_sync) {
+        viewModel.setAutoSyncEnabled(!viewModel.getAutoSyncEnabled());
+        if (timer != null) {
+          timer.cancel();
+        }
+        int seconds = sharedPrefs.getInt(
+            Constants.SETTINGS.SHOPPING_MODE.UPDATE_INTERVAL,
+            Constants.SETTINGS_DEFAULT.SHOPPING_MODE.UPDATE_INTERVAL
+        );
+        if (seconds == 0 || !viewModel.getAutoSyncEnabled()) {
+          return true;
+        }
+        timer = new Timer();
+        initTimerTask();
+        timer.schedule(timerTask, 2000, seconds * 1000L);
         return true;
       }
       return false;
