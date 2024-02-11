@@ -71,6 +71,7 @@
   <string name="action_add">Ajouter</string>
   <string name="action_clear">Effacer</string>
   <string name="action_clear_shopping_list">Effacer la liste de courses</string>
+  <string name="action_auto_sync">Synchronisation auto</string>
   <string name="action_rate">Notez sur Google Play</string>
   <string name="action_rate_description">Motiver les développeurs</string>
   <string name="action_email">Envoyer un e-mail</string>
@@ -555,6 +556,7 @@
   <string name="error_offline">Hors ligne</string>
   <string name="error_offline_subtitle">Cette page ne fonctionne qu\'avec un accès internet. Vérifiez votre connexion.</string>
   <string name="error_no_done_items">Il n\'y a aucun article coché</string>
+  <string name="error_auto_sync_disabled">La synchronisation automatique est désactivée</string>
   <string name="error_already_exists">Existe déjà</string>
   <string name="error_network">Erreur réseau</string>
   <string name="error_network_subtitle">Les données requises n\'ont pas pu être chargées complètement</string>
