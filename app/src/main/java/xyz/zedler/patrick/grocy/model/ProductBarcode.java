@@ -256,7 +256,7 @@ public class ProductBarcode implements Parcelable {
       String barcode
   ) {
     for (ProductBarcode code : productBarcodes) {
-      if (code.getBarcode().equals(barcode)) {
+      if (code.getBarcode() != null && code.getBarcode().equals(barcode)) {
         return code;
       }
     }
