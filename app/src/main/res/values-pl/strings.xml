@@ -782,7 +782,7 @@ https://github.com/patzly/grocy-android</string>
   <string name="subtitle_product_quantity_unit">Stan magazynowy, Domyślne zakupy</string>
   <string name="subtitle_synced_with_server">Synchronizowane z serwerem</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
-  <string name="subtitle_recipe_due_score">Przeterminuje się: %1$s</string>
+  <string name="subtitle_recipe_due_score">Wynik końcowy: %1$s</string>
   <string name="subtitle_per_serving">na porcję</string>
   <string name="subtitle_tap_preparation_mode">Dotknij tutaj, aby przejść do trybu przygotowania</string>
   <!-- Context is Label printer -->
@@ -1159,7 +1159,7 @@ https://github.com/patzly/grocy-android</string>
   <!-- See context for this string on the web interface on the meal plan page, on the header -->
   <string name="property_week_costs_insert">Tygodniowy koszt: %1$s</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
-  <string name="property_due_score">Przeterminuje się</string>
+  <string name="property_due_score">Wynik końcowy</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_ingredients">Składniki</string>
   <string name="property_only_check_single_unit_in_stock">Tylko sprawdź, czy jest jakakolwiek ilość w magazynie </string>
