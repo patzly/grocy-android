@@ -135,7 +135,7 @@
   <string name="action_no_filter">Bez filtra</string>
   <string name="action_show_done_tasks">Pokaż zakończone zadania</string>
   <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="action_track_chore_execution">Śledź wykonanie obowiązków domowych</string>
+  <string name="action_track_chore_execution">Śledź wykonanie obowiązku domowego</string>
   <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_track_next_chore_schedule">Śledź następny termin obowiązku</string>
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
