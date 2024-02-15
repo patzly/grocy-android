@@ -478,7 +478,7 @@ Jeśli chcesz tylko wypróbować tę aplikację, możesz skorzystać z serwera d
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">Kiedy włączone, minimalna ilość stanu zapasu produktów cząstkowych będzie akumulowana do tego produktu, czyli sub produktu nigdy nie zabraknie, a jedynie tego produktu.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_treat_opened_as_out_of_stock">Po włączeniu tej opcji, otwarte elementy będą liczane jako brakujące przy obliczaniu, czy ten produkt jest poniżej minimalnej ilości na stanie.</string>
+  <string name="msg_help_treat_opened_as_out_of_stock">Po włączeniu tej opcji, otwarte elementy będą liczone jako brakujące przy obliczaniu, czy ten produkt jest poniżej minimalnej ilości na stanie.</string>
   <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">Taka ilość zostanie użyta dla przycisków \"szybkie spożycie/otwórz\" na stronie przeglądu stanu zapasu (w odniesieniu do jednostki stanu zapasu).</string>
   <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
