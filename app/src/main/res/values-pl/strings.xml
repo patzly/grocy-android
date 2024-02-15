@@ -312,7 +312,7 @@
     <item quantity="other">%1$d brakujących składników</item>
   </plurals>
   <string name="msg_recipes_ingredient_fulfillment_info_list">Brakuje: %1$s | Już na liście zakupów: %2$s </string>
-  <string name="msg_chore_executed">"Śledzono wykonanie obowiązku domowego "</string>
+  <string name="msg_chore_executed">Śledzono wykonanie obowiązku domowego</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Zakup %1$s %2$s z %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
