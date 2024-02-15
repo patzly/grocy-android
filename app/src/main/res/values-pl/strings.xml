@@ -856,7 +856,7 @@ https://github.com/patzly/grocy-android</string>
   <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
   <plurals name="description_overview_stock_value">
     <item quantity="one">Masz %1$d produkt na stanie o wartości %2$s%3$s.</item>
-    <item quantity="few">Masz%1$d produkty na stanie o wartości %2$s%3$s. </item>
+    <item quantity="few">Masz %1$d produkty na stanie o wartości %2$s%3$s. </item>
     <item quantity="many">Masz %1$d produktów na stanie o wartości %2$s%3$s.</item>
     <item quantity="other">Masz %1$d produktów na stanie o wartości %2$s %3$s.</item>
   </plurals>
