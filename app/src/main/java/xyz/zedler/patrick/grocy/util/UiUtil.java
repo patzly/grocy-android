@@ -327,7 +327,7 @@ public class UiUtil {
           @NonNull WindowInsetsCompat insets,
           @NonNull List<WindowInsetsAnimationCompat> animations
       ) {
-        if (animations.isEmpty()) {
+        if (animations.isEmpty() || animations.get(0) == null) {
           return insets;
         }
         WindowInsetsAnimationCompat animation = animations.get(0);
