@@ -81,6 +81,7 @@ public class ShoppingModeViewModel extends BaseViewModel {
   private final ShoppingListRepository repository;
 
   private final MutableLiveData<Boolean> isLoadingLive;
+  private final MutableLiveData<Boolean> autoSyncDisabledLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Integer> selectedShoppingListIdLive;
   private final MutableLiveData<ArrayList<ShoppingListItem>> filteredShoppingListItemsLive;
@@ -107,6 +108,7 @@ public class ShoppingModeViewModel extends BaseViewModel {
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
+    autoSyncDisabledLive = new MutableLiveData<>(!getAutoSyncEnabled());
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue, getOfflineLive());
     grocyApi = new GrocyApi(getApplication());
     repository = new ShoppingListRepository(application);
@@ -488,6 +490,19 @@ public class ShoppingModeViewModel extends BaseViewModel {
 
   public List<String> getActiveFields() {
     return filterChipLiveDataFields.getActiveFields();
+  }
+
+  public boolean getAutoSyncEnabled() {
+    return sharedPrefs.getBoolean(PREF.SHOPPING_LIST_AUTO_SYNC, true);
+  }
+
+  public MutableLiveData<Boolean> getAutoSyncDisabledLive() {
+    return autoSyncDisabledLive;
+  }
+
+  public void setAutoSyncEnabled(boolean enabled) {
+    sharedPrefs.edit().putBoolean(PREF.SHOPPING_LIST_AUTO_SYNC, enabled).apply();
+    autoSyncDisabledLive.setValue(!enabled);
   }
 
   @Override

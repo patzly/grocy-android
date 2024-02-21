@@ -380,7 +380,7 @@ public class OverviewStartViewModel extends BaseViewModel {
       this.productsLive.setValue(data.getProducts());
       HashMap<Integer, Product> productHashMap = ArrayUtil.getProductsHashMap(data.getProducts());
       this.storedPurchasesOnDevice.setValue(data.getStoredPurchases().size() > 0);
-      this.recipesLive.setValue(data.getRecipes());
+      this.recipesLive.setValue(ArrayUtil.getRecipesWithoutShadowRecipes(data.getRecipes()));
       this.choreEntriesLive.setValue(data.getChoreEntries());
       this.tasksLive.setValue(data.getTasks());
 
