@@ -81,6 +81,16 @@
 
     </activity>
 
+    <!-- InteractiveKeyManager -->
+    <activity
+      android:name=".ssl.ikm.SelectKeyStoreActivity"
+      android:theme="@style/Theme.Material3.DayNight.Dialog.Alert"/>
+
+    <!-- MemorizingTrustManager -->
+    <activity
+      android:name=".ssl.mtm.MemorizingActivity"
+      android:theme="@style/Theme.Material3.DayNight.Dialog.Alert"/>
+
     <service
       android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
       android:enabled="false"
