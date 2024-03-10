@@ -86,6 +86,24 @@
 
       </FrameLayout>
 
+      <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorCustomBlue">
+
+        <TextView
+          style="@style/Widget.Grocy.TextView.LabelLarge"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="4dp"
+          android:layout_marginBottom="4dp"
+          android:layout_gravity="center"
+          android:visibility="@{viewModel.autoSyncDisabledLive ? View.VISIBLE : View.GONE}"
+          android:textColor="?attr/colorOnCustomBlue"
+          android:text="@string/error_auto_sync_disabled" />
+
+      </FrameLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout

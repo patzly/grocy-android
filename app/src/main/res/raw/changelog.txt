@@ -1,3 +1,12 @@
+## 3.5.2
+
+- New: Compatibility for server version 4.1.0 (#837)
+- Improved: Added option to disable auto sync on shopping mode page (e.g. disable it when you have
+  bad mobile data connection) (#816)
+- Fixed: Crash when navigating to another page while keyboard animation is running (#831)
+- Fixed: Crash on purchase page or on shopping list item edit page with some invalid objects (#835)
+- Fixed: Incorrect recipe total count on start page when meal plan is used (#827)
+
 ## 3.5.1
 
 - Improved: Keep scroll position on shopping list page when returning from purchase/edit page (#823)

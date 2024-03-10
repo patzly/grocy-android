@@ -74,6 +74,7 @@
   <string name="action_add">Add</string>
   <string name="action_clear">Clear</string>
   <string name="action_clear_shopping_list">Clear shopping list</string>
+  <string name="action_auto_sync">Auto sync</string>
   <string name="action_rate">Rate on Google Play</string>
   <string name="action_rate_description">Motivate the developers</string>
   <string name="action_email">Send email</string>
@@ -540,6 +541,7 @@
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">This page only works with internet access. Check your connection.</string>
   <string name="error_no_done_items">There are no items marked as done</string>
+  <string name="error_auto_sync_disabled">Auto sync is disabled</string>
   <string name="error_already_exists">Already exists</string>
   <string name="error_network">Network error</string>
   <string name="error_network_subtitle">The required data could not be loaded completely</string>

@@ -67,6 +67,7 @@ public final class Constants {
     public final static String SHOPPING_LIST_GROUPING_MODE = "shopping_list_grouping_mode";
     public final static String SHOPPING_LIST_FIELDS = "shopping_list_fields";
     public final static String SHOPPING_LIST_LAST_ID = "shopping_list_last_id";
+    public final static String SHOPPING_LIST_AUTO_SYNC = "shopping_list_auto_sync";
     public final static String SHOPPING_MODE_GROUPING_MODE = "shopping_mode_grouping_mode";
     public final static String SHOPPING_MODE_FIELDS = "shopping_mode_fields";
     public final static String TASKS_SORT_MODE = "tasks_sort_mode";

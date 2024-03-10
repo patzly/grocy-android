@@ -285,14 +285,12 @@ public class UiUtil {
       SystemBarBehavior systemBarBehavior, BottomScrollBehavior scrollBehavior
   ) {
     Callback callback = new Callback(Callback.DISPATCH_MODE_STOP) {
-      WindowInsetsAnimationCompat animation;
       int bottomInsetStart, bottomInsetEnd;
       float yStart, yEnd;
       int yScrollStart, yScrollEnd;
 
       @Override
       public void onPrepare(@NonNull WindowInsetsAnimationCompat animation) {
-        this.animation = animation;
         if (systemBarBehavior != null) {
           bottomInsetStart = systemBarBehavior.getAdditionalBottomInset();
         }
@@ -327,7 +325,12 @@ public class UiUtil {
       @Override
       public WindowInsetsCompat onProgress(
           @NonNull WindowInsetsCompat insets,
-          @NonNull List<WindowInsetsAnimationCompat> animations) {
+          @NonNull List<WindowInsetsAnimationCompat> animations
+      ) {
+        if (animations.isEmpty() || animations.get(0) == null) {
+          return insets;
+        }
+        WindowInsetsAnimationCompat animation = animations.get(0);
         if (systemBarBehavior != null) {
           systemBarBehavior.setAdditionalBottomInset(
               (int) MathUtils.lerp(
@@ -401,6 +404,7 @@ public class UiUtil {
       }
       return insets;
     });
+    ViewCompat.setWindowInsetsAnimationCallback(binding.coordinatorMain, null);
     ViewCompat.setWindowInsetsAnimationCallback(binding.coordinatorMain, callback);
   }
 
