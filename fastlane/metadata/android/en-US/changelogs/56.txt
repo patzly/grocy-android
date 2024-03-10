@@ -1,0 +1,5 @@
+• New: Compatibility for server version 4.1.0
+• Improved: Added option to disable auto sync on shopping mode page (e.g. disable it when you have bad mobile data connection)
+• Fixed: Crash when navigating to another page while keyboard animation is running
+• Fixed: Crash on purchase page or on shopping list item edit page with some invalid objects
+• Fixed: Incorrect recipe total count on start page when meal plan is used
