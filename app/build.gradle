@@ -42,8 +42,8 @@ android {
         minSdk 21
         targetSdk 34
         compileSdk 34
-        versionCode 55
-        versionName "3.5.1"
+        versionCode 56
+        versionName "3.5.2"
         resourceConfigurations += ['ca', 'cs', 'de', 'en', 'es', 'et', 'fr', 'hu', 'it', 'iw', 'ja', 'nb', 'nl', 'pl', 'pt-rBR', 'pt-rPT', 'ru', 'sk', 'sv', 'uk', 'zh-rCN', 'zh-rTW']
 
         javaCompileOptions {
