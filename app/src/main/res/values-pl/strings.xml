@@ -877,7 +877,7 @@ https://github.com/patzly/grocy-android</string>
   <!-- %1$s is a number -->
   <plurals name="description_overview_recipes">
     <item quantity="one">Masz %1$d przepis.</item>
-    <item quantity="few">Masz %1$d przepisów.</item>
+    <item quantity="few">Masz %1$d przepisy.</item>
     <item quantity="many">Masz %1$d przepisów.</item>
     <item quantity="other">Masz %1$d przepisów.</item>
   </plurals>
