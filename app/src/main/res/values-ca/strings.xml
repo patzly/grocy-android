@@ -343,7 +343,7 @@
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">Transacció que s\'executarà:\n\nAfegir %1$s %2$s de %3$s a l\'inventari\nData de consum preferent: %4$s\nPreu: %5$s\nBotiga: %6$s\nUbicació: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-  <string name="msg_quick_mode_confirm_consume">Transacció que serà executada:\n\nRetirar%1$s%2$sde%3$sde l\'inventari\n\nUbicació:%4$s</string>
+  <string name="msg_quick_mode_confirm_consume">Transacció que serà executada:\n\nRetirar %1$s %2$sde %3$s de l\'inventari\n\nUbicació: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_open">Transacció que serà executada:\n\nMarcar %1$s%2$s de %3$scom a obert\n\nUbicació:%4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
