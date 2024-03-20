@@ -1105,7 +1105,7 @@
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_years_ago">
     <item quantity="one">Fa%dany</item>
-    <item quantity="other">Fa%danys</item>
+    <item quantity="other">Fa %d anys</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_days_from_now">
