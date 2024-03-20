@@ -944,7 +944,7 @@
   <string name="property_last_price">Últim preu</string>
   <string name="property_last_price_unit">Últim preu (unitat)</string>
   <string name="property_last_price_total">Últim preu (total)</string>
-  <string name="property_price_insert">Preu:%1$s</string>
+  <string name="property_price_insert">Preu: %1$s</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Temps de vida mitjà de l\'inventari</string>
   <string name="property_spoil_rate">Taxa de conservació</string>
