@@ -1090,7 +1090,7 @@
   </plurals>
   <plurals name="date_years">
     <item quantity="one">%dany</item>
-    <item quantity="other">%danys</item>
+    <item quantity="other">%d anys</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_days_ago">
