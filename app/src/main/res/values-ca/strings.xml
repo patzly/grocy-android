@@ -1095,7 +1095,7 @@
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_days_ago">
     <item quantity="one">Fa%ddia</item>
-    <item quantity="other">Fa%ddies</item>
+    <item quantity="other">Fa %d dies</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_months_ago">
