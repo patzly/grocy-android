@@ -1082,7 +1082,7 @@
 
   <plurals name="date_days">
     <item quantity="one">%ddia</item>
-    <item quantity="other">%ddies</item>
+    <item quantity="other">%d dies</item>
   </plurals>
   <plurals name="date_months">
     <item quantity="one">%dmes</item>
