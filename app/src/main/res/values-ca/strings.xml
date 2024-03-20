@@ -975,7 +975,7 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_tare_weight">Tara</string>
   <!-- %1$s is a quantity unit like "bottles" -->
-  <string name="property_tare_weight_in">Tara en%1$s</string>
+  <string name="property_tare_weight_in">Tara en %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_disable_stock_check">Deshabilitar comprovació d\'existències per aquest ingredient.</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
