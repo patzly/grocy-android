@@ -1013,7 +1013,7 @@
   <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
   <string name="property_userfield_value">%1$s: %2$s</string>
   <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
-  <string name="property_userfield_value_without_space">%1$s: %2$s</string>
+  <string name="property_userfield_value_without_space">%1$s:%2$s</string>
   <string name="property_task_category">Categoria de tasca</string>
   <string name="property_task_categories">Categories de tasca</string>
   <string name="property_calories">Calories</string>
