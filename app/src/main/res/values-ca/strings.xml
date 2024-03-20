@@ -697,7 +697,7 @@
   <!-- %1$s is a price, %2$s is a quantity unit -->
   <string name="subtitle_price_means">Equival a %1$s per %2$s.</string>
   <!-- %1$s and %2$s are amounts -->
-  <string name="subtitle_factor_means">Significa que %1$s es el mateix que %2$s.</string>
+  <string name="subtitle_factor_means">Significa que %1$s és el mateix que %2$s.</string>
   <string name="subtitle_product_hidden">El producte està ocult</string>
   <string name="subtitle_product_not_hidden">El producte no està ocult</string>
   <string name="subtitle_product_not_on_server">El producte no és al servidor</string>
