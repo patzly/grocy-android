@@ -930,7 +930,7 @@
   <string name="property_notes">Notes</string>
   <string name="property_locations">Ubicacions</string>
   <string name="property_store">Botiga</string>
-  <string name="property_store_insert">Botiga:%1$s</string>
+  <string name="property_store_insert">Botiga: %1$s</string>
   <string name="property_store_unknown">Botiga desconeguda</string>
   <string name="property_store_default">Botiga predeterminada</string>
   <string name="property_stores">Botigues</string>
