@@ -310,7 +310,7 @@
   <!-- %1$s is an amount and %2$s is a quantity unit.  -->
   <plurals name="msg_inventory_transaction_add">
     <item quantity="one">%1$s%2$s s\'afegiran a l\'inventari</item>
-    <item quantity="other">%1$s%2$s seran afegits a l\'inventari </item>
+    <item quantity="other">%1$s %2$s seran afegits a l\'inventari </item>
   </plurals>
   <!-- %1$s is an amount and %2$s is a quantity unit.  -->
   <plurals name="msg_inventory_transaction_remove">
