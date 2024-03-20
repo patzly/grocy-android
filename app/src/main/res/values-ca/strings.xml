@@ -897,7 +897,7 @@
   <string name="property_barcodes_insert">Codis de barres: %1$s</string>
   <string name="property_days">Dies</string>
   <string name="property_purchased_date">Data de compra</string>
-  <string name="property_purchased_date_fill">Data de compra:%1$s</string>
+  <string name="property_purchased_date_fill">Data de compra: %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_type">Tipus de data de venciment</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
