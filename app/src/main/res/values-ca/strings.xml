@@ -1086,7 +1086,7 @@
   </plurals>
   <plurals name="date_months">
     <item quantity="one">%dmes</item>
-    <item quantity="other">%dmesos</item>
+    <item quantity="other">%d mesos</item>
   </plurals>
   <plurals name="date_years">
     <item quantity="one">%dany</item>
