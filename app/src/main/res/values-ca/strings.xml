@@ -259,7 +259,7 @@
   <!-- %1$s is an amount with quantity unit (e.g. 3 bottles) -->
   <string name="msg_recipes_enough_in_stock_amount">Suficient a l\'inventari (%1$s)</string>
   <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) no hi ha suficient a l\'inventari, pero es troben a la llista de la compra</string>
-  <string name="msg_recipes_not_enough_filter">(%1$d) no hi ha suficient a l\'inventari</string>
+  <string name="msg_recipes_not_enough_filter">(%1$d) No hi ha suficient a l\'inventari</string>
   <string name="msg_recipes_not_enough">No hi ha suficient a l\'inventari</string>
   <plurals name="msg_recipes_ingredients_missing_but_on_shopping_list">
     <item quantity="one">Falta %1$d ingredient però es a la llista de la compra</item>
