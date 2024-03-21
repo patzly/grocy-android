@@ -1,0 +1,6 @@
+[submodule "InteractiveKeyManager"]
+	path = InteractiveKeyManager
+	url = https://github.com/stephanritscher/InteractiveKeyManager
+[submodule "MemorizingTrustManager"]
+	path = MemorizingTrustManager
+	url = https://github.com/stephanritscher/MemorizingTrustManager.git
