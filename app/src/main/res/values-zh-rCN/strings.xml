@@ -71,6 +71,7 @@
   <string name="action_add">添加</string>
   <string name="action_clear">清除</string>
   <string name="action_clear_shopping_list">清空购物清单</string>
+  <string name="action_auto_sync">自动同步</string>
   <string name="action_rate">在Google Play上评分</string>
   <string name="action_rate_description">激励开发人员</string>
   <string name="action_email">发送邮件</string>
@@ -146,6 +147,8 @@
   <string name="action_backup">备份</string>
   <!-- This is the action part of "Restore from file" or "Restore data" -->
   <string name="action_restore">恢复</string>
+  <string name="action_configure_sections">配置区域</string>
+
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="other">%1$d款临期</item>
@@ -451,6 +454,7 @@
   <string name="msg_help_home_assistant_login_token">‎您可以在Home Assistant中创建长期访问令牌。点击此处打开链接。‎</string>
   <string name="msg_help_home_assistant_login_proxy_id">导航后或点击此卡以扫描填充下面的字段的QR码。</string>
   <string name="msg_help_fab_overview_start">概览页面上的条码按钮可执行两个动作：\n\n- 短按：扫码消耗\n-长按：扫码采购\n\n通过此按钮，默认开启相应页面的快速模式。您可以在“特性”中更改设置。</string>
+  <string name="msg_help_fab_consume_start">此页面上的操作按钮用于定值消耗。要将产品标记为开封状态，请使用菜单栏左下方的按钮。</string>
   <string name="msg_share">看下这个令人惊叹的Grocy项目的安卓客户端：\nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">API密钥未生效</string>
@@ -506,6 +510,7 @@
   <string name="error_offline">离线</string>
   <string name="error_offline_subtitle">检查您的连接，然后重试</string>
   <string name="error_no_done_items">没有标明已完成的项目</string>
+  <string name="error_auto_sync_disabled">自动同步已禁用</string>
   <string name="error_already_exists">已经存在</string>
   <string name="error_network">网络错误</string>
   <string name="error_network_subtitle">无法完全加载所需的数据</string>
@@ -536,6 +541,7 @@
   <string name="error_invalid_base_servings">无效的份数</string>
   <string name="error_pictures_size_exceeds_limit">您服务器上的产品或菜谱描述中嵌入的图片，超出了此应用程序的解析限制。请删除相关条目描述中的高质量和大尺寸的图片，这也将提高数据加载速度。</string>
   <string name="error_userfield_type_not_supported">不支持当前用户字段类型</string>
+  <string name="error_open_product_not_supported">此产品不支持标记为开封</string>
   <string name="error_settings_backup">备份失败</string>
   <string name="error_settings_restore">恢复失败</string>
 
@@ -583,6 +589,7 @@
   <string name="title_chores">家务</string>
   <string name="title_chore">家务</string>
   <string name="title_recipes">菜谱</string>
+  <string name="title_meal_plan">饮食计划</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">编辑</string>
   <string name="title_task_new">新建任务</string>
@@ -870,6 +877,7 @@
   <string name="property_due_days_default_freezing">冻结后的默认到期天数</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">解冻后的默认到期天数</string>
+  <string name="property_day_summary">今日概览</string>
   <string name="property_location">位置</string>
   <string name="property_location_insert">位置：%1$s</string>
   <string name="property_location_default">默认位置</string>
@@ -955,6 +963,10 @@
   <string name="property_extra_field">‎额外字段‎：%1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">字段</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_header">字段（页眉）</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_entries">字段（条目）</string>
   <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
   <string name="property_userfield_value">%1$s：%2$s</string>
   <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
@@ -999,6 +1011,10 @@
   <string name="property_preparation">步骤</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">费用</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs">每周花费</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs_insert">每周花费：%1$s</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="property_due_score">到期评分</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
@@ -1018,6 +1034,9 @@
   <string name="date_unlimited">无限</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">从不</string>
+  <!-- %1$s is 'from' date, %2$s is 'to' date -->
+  <string name="date_timespan">%1$s-%2$s</string>
+
   <plurals name="date_days">
     <item quantity="other">%d天</item>
   </plurals>
@@ -1065,6 +1084,9 @@
   <string name="info_github">GitHub上的Grocy Android</string>
   <string name="info_github_description">源代码</string>
   <string name="info_website">打开Grocy网站</string>
+  <string name="info_translation_description">协助翻译Grocy Android</string>
+  <string name="info_privacy">隐私政策</string>
+  <string name="info_privacy_description">了解数据的处理过程</string>
 
   <string name="feature_1_title">Grocy 安卓版APP</string>
   <string name="feature_1_description">为您的家庭提供自托管的杂货管理</string>
@@ -1105,6 +1127,16 @@
   <string name="setting_theme_dark">暗</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_light">亮</string>
+  <string name="setting_contrast">对比度</string>
+  <string name="setting_contrast_description">无障碍视觉</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast. The button width should be as dense as possible. -->
+  <string name="setting_contrast_standard">标准</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_medium">中</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_high">高</string>
+  <string name="setting_contrast_dynamic">必须在系统设置中设置主题的对比度</string>
+  <string name="setting_contrast_dynamic_unsupported">主题对比度动态调节仅在安卓14以上系统有效</string>
   <string name="setting_language">语言</string>
   <string name="setting_language_description">选择语言</string>
   <string name="setting_language_info">非常感谢Transifex的所有翻译志愿者！\n请访问我们的GitHub，了解如何帮助Grocy Android支持您的语言。</string>
