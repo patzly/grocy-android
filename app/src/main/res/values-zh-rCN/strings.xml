@@ -1163,7 +1163,7 @@
   <string name="setting_logout">注销</string>
   <string name="setting_logout_description">返回登录页面</string>
   <string name="setting_manage_shortcuts">管理快捷方式</string>
-  <string name="setting_list_indicator">表明列表条目</string>
+  <string name="setting_list_indicator">标注购物清单中的条目</string>
   <string name="setting_list_indicator_description">如果产品在购物清单上，则显示蓝点</string>
   <string name="setting_shopping_mode_update_interval">购物模式更新间隔</string>
   <string name="setting_keep_screen_on">保持屏幕常亮</string>
