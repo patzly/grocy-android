@@ -2,7 +2,6 @@
 package xyz.zedler.patrick.grocy.ssl.ikm;
 
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -10,8 +9,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,7 +20,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import xyz.zedler.patrick.grocy.R;
 
@@ -35,7 +31,6 @@ public class SelectKeyStoreActivity extends Activity
 
   private final static String TAG = "SelectKeyStoreActivity";
   private final static int KEYSTORE_INTENT = 1380421;
-  private final static int PERMISSIONS_REQUEST_EXTERNAL_STORAGE_BEFORE_FILE_CHOOSER = 1001;
 
   private int decisionId;
   private int state = Decision.DECISION_INVALID;
@@ -131,21 +126,10 @@ public class SelectKeyStoreActivity extends Activity
       // User selected how to provide key
       switch (btnId) {
         case DialogInterface.BUTTON_POSITIVE: // keystore file
-          // Check permission to read external storage and request it/simulate successful request
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) !=
-                PackageManager.PERMISSION_GRANTED) {
-              Log.d(TAG, "Requesting permission READ_EXTERNAL_STORAGE");
-              requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                  PERMISSIONS_REQUEST_EXTERNAL_STORAGE_BEFORE_FILE_CHOOSER);
-            } else {
-              Log.d(TAG, "Verified permission READ_EXTERNAL_STORAGE");
-              /* Permission callback invokes file chooser */
-              onRequestPermissionsResult(PERMISSIONS_REQUEST_EXTERNAL_STORAGE_BEFORE_FILE_CHOOSER,
-                  new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                  new int[]{PackageManager.PERMISSION_GRANTED});
-            }
-          }
+          Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+          intent.addCategory(Intent.CATEGORY_OPENABLE);
+          intent.setType("*/*");
+          startActivityForResult(Intent.createChooser(intent, this.getString(R.string.ikm_select_keystore)), KEYSTORE_INTENT);
           break;
         case DialogInterface.BUTTON_NEUTRAL: // keychain alias
           KeyChain.choosePrivateKeyAlias(this, this, null, null, null, -1, null);
@@ -157,28 +141,6 @@ public class SelectKeyStoreActivity extends Activity
   @Override
   public void onCancel(DialogInterface dialog) {
     sendDecision(Decision.DECISION_ABORT, null, null, null);
-  }
-
-  @Override
-  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-    // Handle result of request for permission to read external storage
-    if (requestCode == PERMISSIONS_REQUEST_EXTERNAL_STORAGE_BEFORE_FILE_CHOOSER) {
-      for (int i = 0; i < permissions.length && i < grantResults.length; i++) {
-        if (Manifest.permission.READ_EXTERNAL_STORAGE.equals(permissions[i]) && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-          // Read external storage permission granted
-          Log.d(TAG, "onRequestPermissionsResult(): Permission READ_EXTERNAL_STORAGE was granted.");
-          // Start file chooser to select keystore
-          Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-          intent.setType("file/*");
-          intent.addCategory(Intent.CATEGORY_OPENABLE);
-          startActivityForResult(Intent.createChooser(intent, this.getString(R.string.ikm_select_keystore)), KEYSTORE_INTENT);
-          return;
-        }
-      }
-      // Permission denied
-      Log.w(TAG, "onRequestPermissionsResult(): Permission READ_EXTERNAL_STORAGE was denied.");
-      sendDecision(Decision.DECISION_ABORT, null, null, null);
-    }
   }
 
   @Override

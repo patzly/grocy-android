@@ -1396,5 +1396,6 @@
   <string name="mtm_decision_abort">Abort</string>
   <string name="mtm_notification_channel">Security</string>
   <string name="mtm_notification">Certificate Verification</string>
+  <string name="mtm_error_keystore">Exception on loading key store from file</string>
 
 </resources>

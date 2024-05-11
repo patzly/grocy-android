@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.util.SparseArray;
+import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -182,6 +183,7 @@ public class MemorizingTrustManager implements X509TrustManager {
       is = new java.io.FileInputStream(keyStoreFile);
       ks.load(is, "MTM".toCharArray());
     } catch (NoSuchAlgorithmException | CertificateException | IOException e) {
+      Toast.makeText(context, R.string.mtm_error_keystore, Toast.LENGTH_SHORT).show();
       LOGGER.log(Level.INFO,
           "getAppKeyStore(" + keyStoreFile + ") - exception loading file key store", e);
     } finally {
@@ -191,6 +193,7 @@ public class MemorizingTrustManager implements X509TrustManager {
         } catch (IOException e) {
           LOGGER.log(Level.FINE, "getAppKeyStore(" + keyStoreFile
               + ") - exception closing file key store input stream", e);
+          Toast.makeText(context, R.string.mtm_error_keystore, Toast.LENGTH_SHORT).show();
         }
       }
     }
