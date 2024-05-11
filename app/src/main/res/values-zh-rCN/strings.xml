@@ -380,7 +380,7 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days_opened">本产品开封后，到期日期替换为开封日期加上此天数，但前提是新生成的日期不在原到期日期之后（值0将禁用此功能）</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_default_due_days_freezing">将此产品移动到冰箱位置（因此在冻结时），到期日将被今天更换+此数量（-1表示本产品将永远不会逾期）。</string>
+  <string name="msg_help_default_due_days_freezing">本产品放入冷冻室时（即冷冻时），到期日期替换为冷冻日期加上此天数</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days_thawing">从冰箱位置移动这款产品（因此在解冻时），截止日期将被今天替换为+这一数量的天。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
