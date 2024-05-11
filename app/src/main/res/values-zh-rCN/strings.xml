@@ -384,7 +384,7 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days_thawing">本产品从冷冻室取出时（即解冻时），到期日期替换为解冻日期加上此天数</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_qu_stock">首次购买后，数量单位库存不能更改。</string>
+  <string name="msg_help_qu_stock">首次采购后，库存产品的数量单位无法进行更改</string>
   <string name="msg_help_qu_stock_changeable">库存数量单位只能在目前的数量单位存在对应的单位转换时更改</string>
   <string name="msg_help_qu_changeable">仅当存在单位转换时，才能更改数量单位。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -396,7 +396,7 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">启用后，子产品的安全库存将累计到此产品，代表子产品安全库存永远满足，仅对此产品有效</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_treat_opened_as_out_of_stock">‎启用后，如果此产品低于安全库存，则产品开封后被视为缺货</string>
+  <string name="msg_help_treat_opened_as_out_of_stock">‎启用后，如果此产品的库存低于安全库存，则产品开封后被视为缺货</string>
   <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">此数量用于库存概览页面上的“快速消耗/打开”按钮（使用库存数量单位）</string>
   <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
