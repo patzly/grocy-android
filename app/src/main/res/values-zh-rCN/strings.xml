@@ -382,7 +382,7 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days_freezing">本产品放入冷冻室时（即冷冻时），到期日期替换为冷冻日期加上此天数</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_default_due_days_thawing">从冰箱位置移动这款产品（因此在解冻时），截止日期将被今天替换为+这一数量的天。</string>
+  <string name="msg_help_default_due_days_thawing">本产品从冷冻室取出时（即解冻时），到期日期替换为解冻日期加上此天数</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_stock">首次购买后，数量单位库存不能更改。</string>
   <string name="msg_help_qu_stock_changeable">库存数量单位只能在目前的数量单位存在对应的单位转换时更改</string>
