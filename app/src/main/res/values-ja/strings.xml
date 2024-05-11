@@ -1002,7 +1002,6 @@
   <string name="info_github">GitHubのGrocy Android</string>
   <string name="info_github_description">ソースコード</string>
   <string name="info_website">Grocy webサイトを開く</string>
-
   <string name="feature_1_title">Android用Grocy</string>
   <string name="feature_1_description">あなたの自宅でできるセルフホスト食料雑貨管理</string>
   <string name="feature_2_title">直感的デザイン</string>
