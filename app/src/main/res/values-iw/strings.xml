@@ -43,7 +43,9 @@
   <string name="action_open_one">פתיחת %1$s אחד מתוך %2$s</string>
   <string name="action_edit_product">עריכת מוצר</string>
   <string name="action_shopping_list_add">הוספה לרשימת הקניות</string>
+  <string name="action_consume_recipe">לצרוך את כל הרכיבים שנחוצים למתכון הזה</string>
   <string name="action_copy_recipe">העתקת מתכון</string>
+  <string name="action_apply_desired_servings">החלת המנות הנחוצות למתכון הזה ולעדכן את הנתונים</string>
   <!-- This is displayed as transaction type on the stock journal page -->
   <string name="action_product_opened">מוצר נפתח</string>
   <!-- This is displayed as transaction type on the stock journal page -->
@@ -69,6 +71,7 @@
   <string name="action_add">הוספה</string>
   <string name="action_clear">פינוי</string>
   <string name="action_clear_shopping_list">פינוי רשימת הקניות</string>
+  <string name="action_auto_sync">סנכרון אוטומטי</string>
   <string name="action_rate">דירוג ב־Google Play</string>
   <string name="action_rate_description">תמיכה בפיתוח</string>
   <string name="action_email">שליחת דוא״ל</string>
@@ -96,7 +99,14 @@
   <string name="action_open_scanner">פתיחת סורק</string>
   <string name="action_discard">התעלמות</string>
   <string name="action_clear_form">למחוק את הטופס</string>
+  <string name="action_take_photo">צילום תמונה</string>
+  <!-- "Paste" like in "Paste from clipboard" -->
+  <string name="action_paste">הדבקה</string>
+  <!-- Short form for "Only link barcode to existing product", this should fit into a
+  button so keep it short. -->
+  <string name="action_link_and_clear">קישור בלבד</string>
   <string name="action_toggle_done">החלפת מצב ביצוע</string>
+  <string name="action_change_layout">החלפת פריסה</string>
   <string name="action_edit_notes">עריכת הערות</string>
   <string name="action_add_missing">הוספת מוצרים חסרים</string>
   <string name="action_purchase_done_items">לרכוש מוצרים שהסתיימו</string>
@@ -117,28 +127,44 @@
   <string name="action_demo_server">שרת הדגמה</string>
   <string name="action_own_server">שרת עצמאי</string>
   <string name="action_enter_data_manually">מילוי המידע ידנית</string>
+  <string name="action_settings_backup_restore">גיבוי או שחזור הגדרות</string>
+  <string name="action_details">פרטים</string>
   <string name="action_perform">ביצוע פעולה</string>
   <string name="action_share">שיתוף</string>
   <string name="action_share_description">לספר לחבר׳ה על Grocy ל־Android</string>
   <string name="action_no_filter">ללא מסנן</string>
   <string name="action_show_done_tasks">הצגת מטלות שבוצעו</string>
-  <string name="action_track_chore_execution">מעקב אחר הוצאת מטלה לפועל</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_chore_execution">מעקב אחר ביצוע מטלות כעת</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_next_chore_schedule">מעקב אחר תזמון המטלה הבאה</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_skip_next_chore_schedule">דילוג על תזמון המטלה הבאה</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">תזמון הביצוע הבא מחדש</string>
   <string name="action_put_missing_products_on_shopping_list">הוספת המוצרים החסרים לרשימת הקניות</string>
+  <!-- This is the action part of "Backup to file" or "Backup data" -->
+  <string name="action_backup">גיבוי</string>
+  <!-- This is the action part of "Restore from file" or "Restore data" -->
+  <string name="action_restore">שחזור</string>
+  <string name="action_configure_sections">הגדרת מקטעים</string>
 
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_short">
+    <item quantity="one">אחד לא טרי</item>
+    <item quantity="two">%1$d לא טריים</item>
+    <item quantity="other">%1$d לא טריים</item>
+  </plurals>
   <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
   <plurals name="msg_in_stock_products">
     <item quantity="one">%1$d במלאי</item>
     <item quantity="two">%1$d במלאי</item>
-    <item quantity="many">%1$d במלאי</item>
     <item quantity="other">%1$d במלאי</item>
   </plurals>
   <!-- %1$s is the number of products which are opened. This string is the short form of e.g. "3 products are opened" -> "3 opened" -->
   <plurals name="msg_opened_products">
     <item quantity="one">%1$d נפתח</item>
     <item quantity="two">%1$d נפתחו</item>
-    <item quantity="many">%1$d נפתחו</item>
     <item quantity="other">%1$d נפתחו</item>
   </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -147,14 +173,29 @@
   <string name="msg_consumed_spoiled">נצרכו %1$s %2$s מתוך %3$s כמקולקלים</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">סמן %1$s %2$s מתוך %3$s כפתוחים</string>
+  <!-- %1$s is the number of servings of a recipe. -->
+  <plurals name="msg_servings">
+    <item quantity="one">מנה</item>
+    <item quantity="two">%1$s מנות</item>
+    <item quantity="other">%1$s מנות</item>
+  </plurals>
   <string name="msg_task_mark">סימון המשימה כהושלמה</string>
   <string name="msg_task_completed">משימה סומנה כהושלמה</string>
   <string name="msg_task_not_completed">סימון המשימה כלא הושלמה</string>
   <string name="msg_task_undo">ביטול משימה</string>
   <string name="msg_recipes_enough_in_stock">מספיק במלאי</string>
   <string name="msg_recipes_enough_in_stock_filter">(%1$d) מספיק במלאי</string>
+  <!-- %1$s is an amount with quantity unit (e.g. 3 bottles) -->
+  <string name="msg_recipes_enough_in_stock_amount">מספיק במלאי (%1$s)</string>
+  <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) אין מספיק במלאי אבל ברשימת הקניות</string>
   <string name="msg_recipes_not_enough_filter">(%1$d) אין מספיק במלאי</string>
   <string name="msg_recipes_not_enough">אין מספיק במלאי</string>
+  <plurals name="msg_recipes_ingredients_missing">
+    <item quantity="one">רכיב חסר</item>
+    <item quantity="two">%1$d רכיבים חסרים</item>
+    <item quantity="other">%1$d רכיבים חסרים</item>
+  </plurals>
+  <string name="msg_recipes_ingredient_fulfillment_info_list">חסר: %1$s | כבר ברשימת הקניות: %2$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">נרכשו %1$s %2$s מתוך %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -191,21 +232,25 @@
   <plurals name="msg_inventory_transaction_add">
     <item quantity="one">%1$s %2$s יתווסף למלאי.</item>
     <item quantity="two">%1$s %2$s יתווספו למלאי.</item>
-    <item quantity="many">%1$s %2$s יתווספו למלאי.</item>
     <item quantity="other">%1$s %2$s יתווספו למלאי.</item>
   </plurals>
   <!-- %1$s is an amount and %2$s is a quantity unit.  -->
   <plurals name="msg_inventory_transaction_remove">
     <item quantity="one">%1$s %2$s ייגרע מהמלאי.</item>
     <item quantity="two">%1$s %2$s ייגרעו מהמלאי.</item>
-    <item quantity="many">%1$s %2$s ייגרעו מהמלאי.</item>
     <item quantity="other">%1$s %2$s ייגרעו מהמלאי.</item>
   </plurals>
+  <string name="msg_transfer_tare_weight">מוצרים שמופעל להם משקל טרה לא נתמכים להעברה.</string>
+  <string name="msg_should_not_be_frozen">המוצר הזה לא אמור להיות קפוא. להמשיך?</string>
   <string name="msg_item_marked_as_done">פריט סומן כמושלם</string>
   <string name="msg_item_marked_as_undone">פריט סומן לטיפול</string>
   <string name="option_synced_success">האפשרות סונכרנה בהצלחה</string>
   <string name="option_synced_error">לא ניתן לסנכרן את האפשרות</string>
+  <string name="msg_data_copied_from_product">הנתונים הועתקו מהמוצר „%1$s”.</string>
+  <string name="msg_recipe_added_to_cart">הוספת רכיבי המתכון לעגלה</string>
+  <string name="msg_recipe_consumed">כל רכיבי המתכון „%1$s” הוסרו מהמלאי</string>
   <string name="msg_stored_purchases_overview">יש רכישות במכשיר שעדיין לא הועברו לשרת. נגיעה כאן תציג פרטים.</string>
+  <string name="msg_stored_purchases">רכישות שעדיין לא עברו לשרת מוצגות כאן. הן נשמרו לצד המוצרים הזמניים ביישומון הזה כדי לאפשר לך לסרוק את הקניות שלך במצב מהיר ללא צורך ליצור מוצרים חדשים בנתונים הראשיים ישירות.</string>
   <string name="msg_stored_purchases_product_offline">יש לגעת במוצר ולמלא את הנתונים הנחוצים. לאחר מכן, המוצר יופיע כאן כמקוון ואת הרכישות המאוחסנות ניתן לשלוח לשרת.</string>
   <string name="msg_stored_purchases_product_online">נגיעה כאן תשלח את הרכישות המאוחסנות של המוצר הזה לשרת.</string>
   <string name="msg_choose_product">הברקוד שסרקת אינו מקושר לאף מוצר עדיין. אפשר לקשר אותו למוצר קיים או ליצור עבורו מוצר חדש.</string>
@@ -227,17 +272,33 @@
   <string name="msg_logout_demo_short">שרת להדגמה ציבורית. יש לגעת לקבלת פרטים.</string>
   <string name="msg_restart">נדרשת הפעלת היישומון מחדש כדי להחיל את ההגדרות הנוכחיות של Grocy כראוי.</string>
   <string name="msg_full_description">נגיעה כאן תציג את התיאור המלא.</string>
+  <string name="msg_copied_clipboard">הועתק ללוח הגזירים</string>
   <string name="msg_shortcuts">ניתן להפעיל עד 4 קיצורי דרך:</string>
   <string name="msg_shortcuts_not_supported">אין תמיכה בקיצורי דרך בגרסת ה־Android הזאת.</string>
   <string name="msg_barcode_formats">אפשר לשפר את מהירות מזהה הברקודים על ידי הגדרתו לזהות את סוגי הברקודים שאמורים להיקרא.</string>
   <string name="msg_features">להתחיל את ההיכרות שוב תחת „על אודות”</string>
   <string name="msg_feedback">יש לך משאלות, שאלות או תקלות? ניתן ליצור אתנו קשר כדי לאפשר לנו לעזור לך!\nאחרת נשמח מאוד לקבל ביקורת חיובית בחנות Play.</string>
   <string name="msg_point_at_barcode">נא להפנות את המצלמה שלך לעבר ברקוד</string>
+  <string name="msg_save_product_first">נא לשמור קודם את המוצר</string>
+  <string name="msg_save_recipe_first">נא לשמור קודם את המתכון</string>
+  <string name="msg_recipe_contains_nested_recipes">המתכון הזה מכיל מתכונים מקוננים.</string>
   <string name="msg_press_hold_confirm">נגיעה והחזקה תאשרנה מחיקה</string>
-  <string name="msg_qr_code_scan">במכשיר אחר, עליך לבקר באתר של grocy ולגשת לעמוד ‚מפתחות API’. יש ללחוץ על ‚הוספה’ ואז על סמל ה־QR הקטן ולסרוק את קוד ה־QR.</string>
+  <string name="msg_recipe_consume_ask">לצרוך את כל הרכיבים שנחוצים על ידי המתכון עבור „%1$s”? (רכיבים שמסומנים ב„לסמן רק אם יש כמות כלשהי במלאי\" יוחרגו)</string>
+  <string name="msg_recipe_shopping_list_ask">לשים את כל הרכיבים החסרים שנחוצים למתכון עבור „%1$s” ברשימת הקניות?\n\nלבטל את סימון הרכיבים כדי לא לשים אותם ברשימת הקניות:</string>
+  <string name="msg_settings_backup_restore">כאן אפשר לשחזר או ליצור גיבוי של הגדרות היישומון, למשל: כדי לשתף עם בני משפחה נוספים (הקובץ מכיל פרטי גישה כגון מפתח API).\n\nלאחר השחזור, יכול להיות שההתראות לא תעבודנה כמצופה ויהיה להפעיל אותן מחדש ברקע ביישומון הזה על ידי לחיצה על המתגים כדי לכבות ולהפעיל מחדש.\n\nאם יש נתונים שגויים בקובץ המשוחזר, יכול להיות שהיישומון לא יפעל לאחר מכן וצריך יהיה למחוק את נתוני היישומון לחלוטין.</string>
+  <string name="msg_settings_backup_success">גיבוי ההגדרות נוצר בהצלחה</string>
+  <string name="msg_settings_restore_success">ההגדרות שוחזרו בהצלחה, היישומון יופעל מחדש בעוד 2 שניות</string>
+  <string name="msg_welcome">ברוך בואך ל־Grocy ל־Android!</string>
+  <string name="msg_welcome_introduce">כדי להשתמש ב־Grocy ביעילות, דרוש לך שרת משלך או את תוסף Grocy ל־Home Assistant.\nאם כל מה שמעניין אותך הוא לנסות את היישומון הזה אפשר להשתמש בשרת ההדגמה של ברנד בסטל, היוצר של Grocy.</string>
+  <string name="msg_choose_option_below">נא לבחור אפשרות להלן.</string>
+  <string name="msg_qr_code_scan">במכשיר אחר, יש לבקר באתר של Grocy ולגשת אל העמוד ‚מפתחות API’. ללחוץ על ‚הוספה’ ואז על סמל ה־QR הקטן ולסרוק את קוד ה־QR.</string>
   <string name="msg_port_connection_info_without_port">היישום יתחבר לפתחה %1$s.\nאם צריך להתחבר לפתחה אחרת, ניתן להוסיף אותה לכתובת.\nלדוגמה: http://domain.com:81/‎</string>
   <string name="msg_port_connection_info_with_port">היישומון יתחבר לפתחה %1$s.</string>
+  <string name="msg_clear_form_first">יש לנקות את הטופס תחילה בטרם סריקת ברקוד מוכר נוסף.</string>
   <string name="msg_not_implemented_yet">זה יוטמע בקרוב. נא להשתמש במנשק השרת שלך לבינתיים.</string>
+  <string name="msg_help_picture_changes">שינויים לתמונה מסונכרנים מול השרת מיידית, לא רק בעת השמירה!</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_stock_label_type">זה סוג תווית רשומת המלאי כברירת מחדל שתמולא מראש בעת רכישה.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_parent_product_deactivated">למוצר זה לא יכול להיות מוצר הורה כיוון שהוא כבר משמש כמוצר הורה למוצר אחר.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -254,9 +315,13 @@
   <string name="msg_help_default_due_days_thawing">בהוצאת המוצר הזה מהקפאה (הפשרתו), תאריך התפוגה יוחלף בהיום + כמות כזאת של ימים.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_stock">אי אפשר לשנות את יחידת הכמות במלאי לאחר הרכישה הראשונה.</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_consume">זאת יחידת כמות ברירת המחדל בה ייעשה שימוש בעת צריכת המוצר הזה.</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_price">בעת הצגת מחירים למוצר הזה, הם יהיו קשורים ליחידת כמות זאת.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_qu_purchase">זו יחידת הכמות כבררת מחדל בה ייעשה שימוש בעת הוספת המוצר הזה לרשימת הקניות.</string>
-  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_accumulate_min_amount">אם האפשרות פעילה, כמות המלאי המזערית של תת־מוצרים תיאסף לתוך המוצר הזה, כלומר שתת־המוצרים אף פעם לא „יחסרו”, רק המוצר הזה.</string>
+  <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">כמות זו משמשת ל„כפתורי צריכה/פתיחה מהירה” בעמוד סקירת המלאי (קשור ליחידת כמות המלאי).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_tare_weight">טיפול במשקל טרה שימושי למקרים של קמח בצנצנת למשל - ברכישה/צריכה/מאגר תמיד שוקלים את הצנצנת כולה, הכמות לפרסום מחושבת אוטומטית לפי מה שבמלאי ומשקל הטרה שמוגדר להלן.</string>
@@ -271,15 +336,18 @@
   <string name="msg_help_external_scanner_settings">יישומון זה תומך בהתקני סריקה חיצוניים שמכהנים כמקלדת וניתן לחבר אותם דרך USB או Bluetooth (בלוטות׳). יש להגדיר את האפשרויות הבאות בסורק החיצוני שלך:\n\nקידומת: ללא\nסיומת: TAB או ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">זה למטרות סטטיסטיות בלבד.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_servings">רכיבי המתכון הזה יספיקו לכמות כזאת של מנות.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_produces_product">כאשר מוצר נבחר, יחידה אחת (למנה ביחידת כמות מלאי) תתווסף למלאי עם צריכת המתכון הזה.</string>
   <string name="msg_help_date_chooser">אפשר להחליף קלט מקלדת בהגדרות, יכול להגביר את מהירות הקלט בשבילך.</string>
+  <string name="msg_help_notifications_other">לא להסיר את היישומון מהסקירה עם היישומונים שרצים כרגע, אחרת חלק מהיצרנים ימחקו את תהליך ההתראה.</string>
   <string name="msg_help_start">מופעל מצב מתחילים: הודעות עזרה מוצגות כבררת מחדל בכל העמודים אם הן זמינות. יש לגעת כדי לשנות.</string>
   <string name="msg_help_purchased_date_settings">אם האפשרות שלהלן מופעלת, שדה תאריך הרכישה יוצג בעמוד הרכישה והמאגר. אם לא, תאריך הרכישה יוחזר להיום.</string>
-  <string name="msg_help_normal_login">יש לגעת בכרטיס זה אם יש לך את התוספת של grocy ל־Home Assistant.</string>
+  <string name="msg_help_normal_login">יש לגעת בכרטיס הזה אם בחרת להשתמש ב־Home Assistant עם התוסף של Grocy.</string>
   <string name="msg_help_home_assistant_login_help_show">יש לגעת כאן כדי להציג הודעות עזרה.</string>
   <string name="msg_help_home_assistant_login_help_hide">יש לגעת כאן כדי להסתיר הודעות עזרה.</string>
   <string name="msg_help_home_assistant_login_proxy_id">יש לנווט בחזרה או לגעת בכרטיס הזה כדי לסרוק קוד QR שממלא את השדות שלהלן.</string>
-  <string name="msg_share">ממליצים לעיין ביישומון ה־Android הזה למיזם grocy המדהים: \nhttps://github.com/patzly/grocy-android</string>
-
   <string name="error_api_not_working">מפתח ה־API לא עובד</string>
   <string name="error_orbot_not_installed">Orbot לא מותקן</string>
   <string name="error_select_product">נא לבחור מוצר</string>
@@ -301,6 +369,8 @@
   <string name="error_empty_unit_conversions">אין המרות יחידות כמות</string>
   <string name="error_empty_chores">אין מטלות</string>
   <string name="error_empty_chores_sub">ניתן לעבור לנתונים העיקריים וליצור כאלה</string>
+  <string name="error_empty_recipes">אין מתכונים</string>
+  <string name="error_empty_ingredients">אין רכיבים</string>
   <string name="error_search">אין תוצאות חיפוש</string>
   <string name="error_search_sub">נא לנסות ביטויים אחרים</string>
   <string name="error_filter">אין מה להציג</string>
@@ -313,9 +383,11 @@
   <string name="error_invalid_price">המחיר שגוי</string>
   <string name="error_invalid_factor">מקדם שגוי</string>
   <string name="error_invalid_date_format">תצורת התאריך שגויה</string>
-  <string name="error_api_qr_code">זה אינו קוד QR עם פרטי גישה ל־API של grocy</string>
+  <string name="error_api_qr_code">זה לא קוד QR עם פרטי גישה ל־API של Grocy</string>
   <string name="error_token_qr_code">לא קוד QR עם אסימון גישה ארוך טווח מ־Home Assistant</string>
   <string name="error_loading_qus">טעינת יחידות הכמות מהמוצר נכשלה</string>
+  <string name="error_clipboard_no_image">לוח הגזירים לא מכיל תמונה או שאי אפשר לקרוא ממנו</string>
+  <string name="error_no_children">למוצר הנבחר אין צאצאים</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">לא יכול להיות שווה ל־%1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
@@ -329,10 +401,16 @@
   <string name="error_offline">בלתי מקוון</string>
   <string name="error_offline_subtitle">נא לבדוק את החיבור שלך ולנסות שוב</string>
   <string name="error_no_done_items">אין פריטים שסומנו כבוצעו</string>
+  <string name="error_auto_sync_disabled">סנכרון אוטומטי מושבת</string>
+  <string name="error_already_exists">כבר קיים</string>
   <string name="error_network">שגיאת רשת</string>
   <string name="error_network_subtitle">לא ניתן לגמרי לטעון את הנתונים הדרושים</string>
+  <string name="error_network_exact">שגיאת רשת: %1$s</string>
+  <string name="error_database">שגיאת מסד נתונים</string>
+  <string name="error_insert">שגיאה %1$s</string>
+  <string name="error_details">פרטי השגיאה</string>
   <string name="error_unknown">אופס!</string>
-  <string name="error_not_grocy_instance">מופע לא תקני של grocy</string>
+  <string name="error_not_grocy_instance">לא עותק תקף של Grocy</string>
   <string name="error_timeout">שגיאת תום זמן המתנה</string>
   <string name="error_no_product_selected">לא נבחרו מוצרים</string>
   <string name="error_failed_to_connect_to">ההתחברות לשרת נכשלה</string>
@@ -347,8 +425,16 @@
   <string name="error_failed_barcode_upload">לא ניתן להעלות ברקוד</string>
   <string name="error_wrong_grocycode_type">ה־grocycode מכיל סוג יישות שגוי</string>
   <string name="error_stock_entry_grocycode">לא נמצאה רשומת מלאי מ־grocycode</string>
+  <string name="error_picture_uploads_forbidden">מטעמי אבטחה, העלאת תמונות מורשית רק בשרתים באירוח עצמי. השרת מולו מתבצעת הפעילות כרגע הוא שרת ההדגמה.</string>
   <string name="error_permission">אין הרשאות לפעולה הזאת</string>
+  <string name="error_permission_notification">צריך הרשאות להתראות כדי שהתזכורות תעבודנה</string>
   <string name="error_undefined">אירעה שגיאה</string>
+  <string name="error_invalid_base_servings">המנות שגויות</string>
+  <string name="error_userfield_type_not_supported">סוג שדה המשתמש לא נתמך כרגע</string>
+  <string name="error_open_product_not_supported">סימון המוצר כפתור לא נתמך במוצר הזה</string>
+  <string name="error_settings_backup">הגיבוי נכשל</string>
+  <string name="error_settings_restore">השחזור נכשל</string>
+
   <string name="title_overview">סקירה</string>
   <string name="title_stock_overview">סקירת מלאי</string>
   <string name="title_purchase">רכישה</string>
@@ -365,9 +451,11 @@
   <string name="title_master_data">נתוני על</string>
   <string name="title_stock_entries">רשומות מלאי</string>
   <string name="title_stock_entry">רשומת מלאי</string>
+  <string name="title_stock_journal">יומן מלאי</string>
   <string name="title_shopping_list">רשימת קניות</string>
   <string name="title_feedback">משוב</string>
   <string name="title_settings">הגדרות</string>
+  <string name="title_options">אפשרויות</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="title_barcode_scanner">סורק ברקודים</string>
   <!-- Context: About this app -->
@@ -390,7 +478,19 @@
   <string name="title_stored_purchases">רכישות שמורות</string>
   <string name="title_chores">מטלות</string>
   <string name="title_chore">מטלה</string>
+  <string name="title_recipes">מתכונים</string>
+  <string name="title_meal_plan">תוכנית ארוחות</string>
+  <!-- Editor for editing product description or recipe preparation-->
+  <string name="title_editor">עורך</string>
+  <string name="title_task_new">משימה חדשה</string>
+  <string name="title_task_edit">עריכת משימה</string>
+  <string name="title_entry_new">רשומה חדשה</string>
+  <string name="title_entry_edit">עריכת רשומה</string>
+  <string name="title_ingredient_new">רכיב חדש</string>
+  <string name="title_ingredient_edit">עריכת רכיב</string>
+  <string name="title_recipe_create">מתכון חדש</string>
   <string name="title_recipe_edit">עריכת מתכון</string>
+
   <string name="title_spoiled">מקולקל</string>
   <string name="title_use_specific">להשתמש בפריט מסוים מהמלאי</string>
   <string name="title_specific">פריט מסוים במלאי</string>
@@ -401,6 +501,7 @@
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_location_to">אל מיקום</string>
   <string name="title_recipe">מתכון</string>
+  <string name="title_preparation_mode">מצב הכנה</string>
   <string name="title_total_price">מחיר כולל</string>
   <string name="title_unit_price">מחיר ליחידה</string>
   <!-- %1$s is a quantity unit -->
@@ -423,11 +524,15 @@
   <string name="title_product_cat_due_date">תאריך תפוגה</string>
   <string name="title_product_cat_amount">כמות</string>
   <string name="title_product_cat_quantity_unit">יחידת כמות</string>
+  <string name="title_notifications">התראות</string>
   <string name="title_product_cat_barcodes">ברקודים</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
   <string name="title_product_cat_qu_conversions">המרת יחידות כמות</string>
   <string name="title_unknown_input">קלט בלתי ידוע</string>
   <string name="title_presets_new_products">ערכות למוצרים חדשים</string>
+  <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
+  <string name="title_ingredient_with_amount">%1$s %2$s מתוך %3$s</string>
+
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
   <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
@@ -463,6 +568,7 @@
   <string name="subtitle_product_hidden">המוצר מוסתר</string>
   <string name="subtitle_product_not_hidden">המוצר לא מוסתר</string>
   <string name="subtitle_product_not_on_server">המוצר אינו בשרת</string>
+
   <string name="subtitle_barcodes_will_be_added">יש ברקודים מאוחסנים, שנוספים למוצר בפעולת השמירה.</string>
   <string name="subtitle_unknown">לא ידוע</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
@@ -476,11 +582,23 @@
   <string name="subtitle_barcode">ברקוד: %1$s</string>
   <string name="subtitle_feature_disabled">היכולת מושבתת</string>
   <string name="subtitle_date_from_input">תאריך מקלט:\n%1$s</string>
+  <string name="subtitle_product_amount">מלאי מזערי, צריכה מהירה, גורם, טיפול במשקל טרה</string>
   <string name="subtitle_product_default_location">מיקום, חנות</string>
   <string name="subtitle_product_due_date">סוג, ימי ברירת מחדל (לאחר הפתיחה, הקפאה, הפשרה)</string>
   <string name="subtitle_product_optional_properties">מצב, מוצר הורה, תיאור, קבוצת מוצרים, אנרגיה, תמונה</string>
   <string name="subtitle_product_quantity_unit">מלאי, רכישת ברירת מחדל</string>
   <string name="subtitle_synced_with_server">מסונכרן עם שרת</string>
+  <string name="subtitle_per_serving">למנה</string>
+  <string name="subtitle_tap_preparation_mode">נא ללחוץ כאן למצב הכנה</string>
+  <!-- Context is Label printer -->
+  <string name="subtitle_print_label_no">אין תווית</string>
+  <!-- Short form for "One label per purchase" -->
+  <string name="subtitle_print_label_per_purchase">לרכישה</string>
+  <!-- Short form for "One label per unit" -->
+  <string name="subtitle_print_label_per_unit">ליחידה</string>
+  <!-- %1$s is a price and %2$s is a currency -->
+  <string name="subtitle_total_price">עלות כוללת: %1$s %2$s</string>
+
   <string name="description_input_product_part1">שדה המוצר מכיל:</string>
   <string name="description_input_product_part2">נא לבחור כיצד להמשיך:</string>
   <string name="description_input_product_option1">ליצור מוצר חדש ולהשתמש בקלט כשם</string>
@@ -495,56 +613,48 @@
   <plurals name="description_overview_stock">
     <item quantity="one">יש לך מוצר אחד במלאי.</item>
     <item quantity="two">יש לך %1$d מוצרים במלאי.</item>
-    <item quantity="many">יש לך %1$d מוצרים במלאי.</item>
     <item quantity="other">יש לך %1$d מוצרים במלאי.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_single">
     <item quantity="one">%1$d מהם ברשימת הקניות שלך.</item>
     <item quantity="two">%1$d מהם ברשימת הקניות שלך.</item>
-    <item quantity="many">%1$d מהם ברשימת הקניות שלך.</item>
     <item quantity="other">%1$d מהם ברשימת הקניות שלך.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_multi">
     <item quantity="one">%1$d מהם ברשימות הקניות שלך.</item>
     <item quantity="two">%1$d מהם ברשימות הקניות שלך.</item>
-    <item quantity="many">%1$d מהם ברשימות הקניות שלך.</item>
     <item quantity="other">%1$d מהם ברשימות הקניות שלך.</item>
   </plurals>
   <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
   <plurals name="description_overview_stock_value">
     <item quantity="one">יש לך מוצר אחד במלאי בשווי של %2$s %3$s.</item>
     <item quantity="two">יש לך %1$d מוצרים במלאי בשווי של %2$s %3$s.</item>
-    <item quantity="many">יש לך %1$d מוצרים במלאי בשווי של %2$s %3$s.</item>
     <item quantity="other">יש לך %1$d מוצרים במלאי בשווי של %2$s %3$s.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list_multi">
     <item quantity="one">פריט אחד נמצא ברשימות הקניות שלך.</item>
     <item quantity="two">%1$d פריטים הם ברשימות הקניות שלך.</item>
-    <item quantity="many">%1$d פריטים הם ברשימות הקניות שלך.</item>
     <item quantity="other">%1$d פריטים הם ברשימות הקניות שלך.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list">
     <item quantity="one">פריט אחד נמצא ברשימת הקניות שלך.</item>
     <item quantity="two">%1$d פריטים נמצאים ברשימת הקניות שלך.</item>
-    <item quantity="many">%1$d פריטים נמצאים ברשימת הקניות שלך.</item>
     <item quantity="other">%1$d פריטים נמצאים ברשימת הקניות שלך.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks_user">
     <item quantity="one">הוקצתה לך משימה אחת.</item>
     <item quantity="two">הוקצו לך %1$d משימות.</item>
-    <item quantity="many">הוקצו לך %1$d משימות.</item>
     <item quantity="other">הוקצו לך %1$d משימות.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
     <item quantity="one">מסד הנתונים שלך מכיל מוצר אחד.</item>
     <item quantity="two">מסד הנתונים שלך מכיל %1$d מוצרים.</item>
-    <item quantity="many">מסד הנתונים שלך מכיל %1$d מוצרים.</item>
     <item quantity="other">מסד הנתונים שלך מכיל %1$d מוצרים.</item>
   </plurals>
   <string name="property_name">שם</string>
@@ -555,8 +665,10 @@
   <string name="property_product_name">שם מוצר</string>
   <string name="property_parent_product">מוצר הורה</string>
   <string name="property_description">תיאור</string>
+  <string name="property_product_description">תיאור מוצר</string>
   <string name="property_note">הערה</string>
   <string name="property_status">מצב</string>
+  <string name="property_status_insert">מצב:</string>
   <string name="property_amount">כמות</string>
   <string name="property_amount_insert">כמות: %1$s</string>
   <string name="property_seconds">שניות</string>
@@ -564,7 +676,6 @@
   <plurals name="property_seconds_num">
     <item quantity="one">שנייה</item>
     <item quantity="two">%1$d שניות</item>
-    <item quantity="many">%1$d שניות</item>
     <item quantity="other">%1$d שניות</item>
   </plurals>
   <string name="property_amount_min_stock">כמות מזערית במלאי</string>
@@ -576,6 +687,8 @@
   <string name="property_price_unit">מחיר ל%1$s</string>
   <!-- %1$s is a price and %2$s is a quantity unit-->
   <string name="property_price_unit_insert">%1$s ל%2$s</string>
+  <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_with_currency">%1$s %2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">מחיר ב־%1$s</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -588,6 +701,14 @@
   <string name="property_qu_stock">יחידת כמות במלאי</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">גורם המרה מרכישה למלאי</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_default_qu_consume">צריכת יחידת כמות כברירת מחדל</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_prices">יחידת כמות למחירים</string>
+  <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
+  <string name="property_quantity_unit_from">המרה מ־</string>
+  <!-- Example: "Convert to cup"; This string is part of a pair, there is also 'Convert from' -->
+  <string name="property_quantity_unit_to">המרה ל־</string>
   <string name="property_factor">גורם</string>
   <string name="property_barcode">ברקוד</string>
   <string name="property_barcodes">ברקודים</string>
@@ -605,6 +726,8 @@
   <string name="property_due_date">תאריך בתוקף עד</string>
   <!-- This string is for due date of task -->
   <string name="property_due_date_task">תאריך בתוקף עד</string>
+  <!-- %1$s is a due date-->
+  <string name="property_due_date_fill">תאריך יעד: %1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_next">תאריך בתוקף עד הבא</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -615,11 +738,13 @@
   <string name="property_due_days_default_freezing">ימים כבררת מחדל עד לתפוגה לאחר הקפאה</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">ימים כבררת מחדל עד לתפוגה לאחר הפשרה</string>
+  <string name="property_day_summary">תקציר היום</string>
   <string name="property_location">מיקום</string>
   <string name="property_location_insert">מיקום: %1$s</string>
   <string name="property_location_default">מיקום בררת מחדל</string>
   <string name="property_location_default_insert">מיקום ברירת מחדל: %1$s</string>
   <string name="property_location_consume_default">מיקום הצריכה כברירת מחדל</string>
+  <string name="property_move_on_open">העברה לפתוח</string>
   <string name="property_notes">הערות</string>
   <string name="property_locations">מיקומים</string>
   <string name="property_store">חנות</string>
@@ -641,6 +766,7 @@
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">חיי מדף ממוצעים</string>
   <string name="property_spoil_rate">יחס קלקול</string>
+  <string name="property_created_timestamp">זמן יצירה</string>
   <string name="property_price_history">היסטוריית מחירים</string>
   <string name="property_product_group">קבוצת מוצרים</string>
   <string name="property_product_groups">קבוצות מוצרים</string>
@@ -650,11 +776,17 @@
   <string name="property_opened">נפתח</string>
   <string name="property_not_opened">לא נפתח</string>
   <string name="property_is_freezer">במקפיא</string>
+  <!-- Means energy of an ingredient or product -->
+  <string name="property_energy_only">אנרגיה</string>
+  <!-- %1$s is a unit for energy, like kcal (kilo calories) -->
+  <string name="property_energy_insert">אנרגיה (%1$s) ליחידת כמות במלאי</string>
   <string name="property_active">פעיל</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">לעולם לא להציג בסקירת המלאי</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_disable_own_stock">השבתת מלאי עצמי</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_should_not_be_frozen">לא אמור להיות קפוא</string>
   <string name="property_number">מספר</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_enable_tare_weight">הפעלת טיפול במשקל טרה</string>
@@ -668,6 +800,10 @@
   <string name="property_amount_quick_consume">כמות לצריכה מהירה</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_quick_consume_in">כמות לצריכה מהירה ב%1$s</string>
+  <!--The same string is also in the web interface (server v4.0.0 or later): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_amount_quick_open">כמות פתיחה מהירה</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_quick_open_in">כמות פתיחה מהירה ב%1$s</string>
   <string name="property_picture">תמונה</string>
   <string name="property_note_singleline">הערה בשורה אחת</string>
   <string name="property_note_multiline">הערה במספר שורות</string>
@@ -684,83 +820,111 @@
   <string name="property_ungrouped">לא מקובץ</string>
   <!-- %1$s is a property like "product group" or "due date" -->
   <string name="property_extra_field">שדה נוסף: %1$s</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields">שדות</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_header">שדות (כותרת)</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_entries">שדות (רשומות)</string>
   <string name="property_task_category">קטגוריית משימה</string>
   <string name="property_task_categories">קטגוריות משימות</string>
   <string name="property_calories">קלוריות</string>
   <string name="property_calories_unit">קלוריות (ליחידת מלאי)</string>
   <string name="property_calories_total">קלוריות (סה״כ)</string>
+  <!-- %1$s is a value like energy or price, unit means value of items per unit -->
+  <string name="property_insert_per_unit">%1$s (יחידה)</string>
+  <!-- %1$s is a value like energy or price, total means value of many items in total -->
+  <string name="property_insert_total">%1$s (סך הכול)</string>
+  <!-- %1$s is a value like price, average means average price -->
+  <string name="property_insert_average">%1$s (ממוצע)</string>
+  <!-- %1$s is a value like price, "last" is like for example in "last price" -->
+  <string name="property_insert_last">%1$s (אחרון)</string>
   <string name="property_category">קטגוריה</string>
   <string name="property_assigned_to">מוקצה לטובת</string>
   <string name="property_users">משתמשים</string>
+  <!-- See context for this string on the web interface on the recipes edit page -->
+  <string name="property_servings">מנות</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it (hover over help icon) -->
+  <string name="property_servings_base_insert">מנות בסיסיות: %1$s</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_servings_desired">מנות רצויות</string>
+  <string name="property_servings_desired_insert">מנות רצויות: %1$s</string>
+  <string name="property_not_check_shopping_list">לא לבדוק מול רשימת הקניות</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_preparation">הכנה</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_costs">עלויות</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs">עלויות שבועיות</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs_insert">עלויות שבועיות: %1$s</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_ingredients">רכיבים</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
+  <string name="property_ingredient_group">קבוצה</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
+  <string name="property_variable_amount">כמות משתנה</string>
+  <string name="property_requirements_fulfilled">הדרישות מולאו</string>
+  <string name="property_price_factor">גורם מחיר</string>
+
   <string name="date_today">היום</string>
   <string name="date_unknown">לא ידוע</string>
   <!-- This means the 'time' context -->
   <string name="date_unlimited">בלתי מוגבל</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">אף פעם</string>
-
   <plurals name="date_days">
     <item quantity="one">יום</item>
     <item quantity="two">יומיים</item>
-    <item quantity="many">%d ימים</item>
     <item quantity="other">%d ימים</item>
   </plurals>
   <plurals name="date_months">
     <item quantity="one">חודש</item>
     <item quantity="two">חודשיים</item>
-    <item quantity="many">%d חודשים</item>
     <item quantity="other">%d חודשים</item>
   </plurals>
   <plurals name="date_years">
     <item quantity="one">שנה</item>
     <item quantity="two">שנתיים</item>
-    <item quantity="many">%d שנים</item>
     <item quantity="other">%d שנים</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_days_ago">
     <item quantity="one">אתמול</item>
     <item quantity="two">שלשום</item>
-    <item quantity="many">לפני %d ימים</item>
     <item quantity="other">לפני %d ימים</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_months_ago">
     <item quantity="one">לפני חודש</item>
     <item quantity="two">לפני חודשיים</item>
-    <item quantity="many">לפני %d חודשים</item>
     <item quantity="other">לפני %d חודשים</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_years_ago">
     <item quantity="one">לפני שנה</item>
     <item quantity="two">לפני שנתיים</item>
-    <item quantity="many">לפני %d שנים</item>
     <item quantity="other">לפני %d שנים</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_days_from_now">
     <item quantity="one">מחר</item>
     <item quantity="two">מחרתיים</item>
-    <item quantity="many">בעוד %d ימים מהיום</item>
     <item quantity="other">בעוד %d ימים מהיום</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_months_from_now">
     <item quantity="one">בעוד חודש מהיום</item>
     <item quantity="two">בעוד חודשיים מהיום</item>
-    <item quantity="many">בעוד %d חודשים מהיום</item>
     <item quantity="other">בעוד %d חודשים מהיום</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_years_from_now">
     <item quantity="one">בעוד שנה מהיום</item>
     <item quantity="two">בעוד שנתיים מהיום</item>
-    <item quantity="many">בעוד %d שנים מהיום</item>
     <item quantity="other">בעוד %d שנים מהיום</item>
   </plurals>
 
-  <string name="info_acknowledgement">אנו מעוניינים להודות לבֵּרְנְד בֵּסְטֵל, שללא העבודה הנפלאה שלו היישומון הזה לא היה רואה אור.</string>
   <string name="info_intro">להציג את ההיכרות שוב</string>
   <string name="info_intro_description">תכונות הצגה</string>
   <string name="info_dev_beginning">התחלת הפיתוח</string>
@@ -773,6 +937,9 @@
   <string name="info_github">Grocy ל־Android ב־GitHub</string>
   <string name="info_github_description">קוד מקור</string>
   <string name="info_website">פתיחת האתר של Grocy</string>
+  <string name="info_translation_description">סיוע בתרגום Grocy Android</string>
+  <string name="info_privacy">מדיניות פרטיות</string>
+  <string name="info_privacy_description">איך הנתונים שלך מעובדים?</string>
 
   <string name="feature_1_title">Grocy ל־Android</string>
   <string name="feature_1_description">ניהול משק בית באירוח עצמי</string>
@@ -793,6 +960,10 @@
   <string name="category_network">רשת</string>
   <string name="category_network_proxy">מתווך</string>
   <string name="category_behavior">התנהגות</string>
+  <string name="category_display_behavior">התנהגות תצוגה</string>
+  <string name="category_input_behavior">התנהגות קלט</string>
+  <string name="category_additional_services">שירותים נוספים</string>
+  <string name="category_other_behavior">התנהגות אחרת</string>
   <string name="category_debugging">ניפוי שגיאות</string>
   <string name="category_new_product">מוצר חדש</string>
   <string name="category_existing_products">מוצרים קיימים</string>
@@ -802,14 +973,30 @@
   <string name="hint_key">מפתח API תקני</string>
 
   <string name="setting_theme">ערכת עיצוב</string>
+  <string name="setting_theme_description">התנסות במראה אחר</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system (automatic or shorter auto) theme. The button width should be as dense as possible. -->
+  <string name="setting_theme_auto">אוטומטית</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">כהה</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_light">בהירה</string>
+  <string name="setting_contrast">ניגוד</string>
+  <string name="setting_contrast_description">נגישות לראייה</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast. The button width should be as dense as possible. -->
+  <string name="setting_contrast_standard">רגיל</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_medium">בינוני</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_high">גבוה</string>
+  <string name="setting_contrast_dynamic">ניגוד לערכת העיצוב של המכשיר יש לקבוע בהגדרות המערכת</string>
+  <string name="setting_contrast_dynamic_unsupported">ניגוד דינמי לערכת עיצוב המכשיר זמינה רק ב־Android 14+‎</string>
   <string name="setting_language">שפה</string>
   <string name="setting_language_description">בחירת שפה</string>
   <string name="setting_language_info">תודתנו נתונה לכל המתרגמים בהתנדבות ב־Transifex!\nנא לבקר ב־GitHub שלנו כדי ללמוד כיצד ניתן לקדם את Grocy ל־Android לדבר בשפה שלך.</string>
   <string name="setting_language_system">כמו המערכת</string>
+  <string name="setting_language_not_available">אנגלית אם תרגום לא זמין</string>
+  <string name="setting_transition">להשתמש במעברון החלקה בין עמודי הגדרות</string>
+  <string name="setting_transition_description">במקום עמעום</string>
   <string name="setting_open_food_facts">להשתמש ב־Open Food Facts</string>
   <string name="setting_open_food_facts_description">קבלת מידע מברקודים</string>
   <string name="setting_choose_barcode_scanner">נא לבחור סורק ברקודים</string>
@@ -863,9 +1050,11 @@
   <string name="setting_timeout_descriptions">לאחריו הטעינה תבוטל</string>
   <string name="setting_beginner_mode">מצב מתחילים</string>
   <string name="setting_beginner_mode_description">להציג משפטי סיוע כבררת מחדל</string>
+  <string name="setting_haptic_description">חוויה חלקה</string>
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">הרחבת הגיליונות התחתונים</string>
   <string name="setting_expand_bottom_sheets_description">במצב אופקי</string>
+  <string name="setting_bottom_menu_button">הצגת כפתור תפריט ראשי</string>
   <string name="setting_speed_up_start">צמצום זמן הפעלת היישום</string>
   <string name="setting_speed_up_start_description">יש השפעה על מכשירים מהירים בלבד</string>
   <string name="setting_date_keyboard_input">מילוי תאריכים עם המקלדת</string>
@@ -886,6 +1075,19 @@
   <string name="settings_synchronized">הגדרות אלו מסונכרנות מול השרת שלך.</string>
   <string name="setting_message_duration">הצגת זמן להודעות</string>
   <string name="setting_message_duration_description">נוגע רק להודעות תנועה</string>
-  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
-  Examples: 'de' for German; 'fr' for French -->
-</resources>
+  <string name="setting_notifications_enable">הפעלת התראות</string>
+  <string name="setting_notification_time">זמן התראה</string>
+  <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
+  <string name="setting_notification_time_description">כשהבדיקה הסתיימה</string>
+  <string name="setting_keep_screen_on_recipes_description">תוך צפייה במתכון</string>
+
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="notification_stock_not_fresh_title">
+    <item quantity="one">מוצר במלאי שלך אינו טרי עוד.</item>
+    <item quantity="two">%1$d מוצרים במלאי שלך אינם טריים עוד.</item>
+    <item quantity="other">%1$d מוצרים במלאי שלך אינם טריים עוד.</item>
+  </plurals>
+  <string name="notification_stock_content">יש לצרוך בימים הקרובים כדי לסייע בצמצום השלכת מזון. הרשימה תיפתח בנגיעה.</string>
+  <string name="notification_chores_content">אין טעם בדחיינות. הרשימה תיפתח בנגיעה.</string>
+
+  </resources>
