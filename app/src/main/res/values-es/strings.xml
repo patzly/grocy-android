@@ -141,6 +141,10 @@
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Reprogramar siguiente ejecución</string>
   <string name="action_put_missing_products_on_shopping_list">Introducir productos que faltan a la lista de la compra</string>
+  <!-- This is the action part of "Restore from file" or "Restore data" -->
+  <string name="action_restore">Restaurar</string>
+  <string name="action_configure_sections">Configurar secciones</string>
+
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d se vence pronto</item>
@@ -1172,7 +1176,6 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <string name="info_github">Grocy para Android en GitHub</string>
   <string name="info_github_description">Código fuente</string>
   <string name="info_website">Abrir sitio web de Grocy</string>
-
   <string name="feature_1_title">Grocy para Android</string>
   <string name="feature_1_description">Manejo de almacén auto-alojado para tu hogar</string>
   <string name="feature_2_title">Diseño intuitivo</string>
