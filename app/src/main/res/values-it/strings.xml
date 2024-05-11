@@ -135,6 +135,8 @@
   <string name="action_show_done_tasks">Mostra attività completate</string>
   <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_track_chore_execution">Traccia ora l\'esecuzione della faccenda</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_next_chore_schedule">Programma il prossimo orario della faccenda.</string>
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_skip_next_chore_schedule">Saltare il prossimo programma di lavoro</string>
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -198,6 +200,12 @@
   <string name="msg_consumed_spoiled">Consumato %1$s %2$s di %3$s come avariato</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Segna %1$s %2$s di %3$s come aperto</string>
+  <!-- %1$s is the number of servings of a recipe. -->
+  <plurals name="msg_servings">
+    <item quantity="one">%1$s porzione</item>
+    <item quantity="many">%1$s porzioni</item>
+    <item quantity="other">%1$s porzioni</item>
+  </plurals>
   <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
   <plurals name="msg_undone_items">
     <item quantity="one">%1$d non completato</item>
@@ -240,6 +248,12 @@
     <item quantity="many">%1$d scaduti</item>
     <item quantity="other">%1$d scaduto</item>
   </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_short">
+    <item quantity="one">%1$d in ritardo</item>
+    <item quantity="many">%1$din ritardo</item>
+    <item quantity="other">%1$din ritardo</item>
+  </plurals>
   <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
   <plurals name="msg_assigned_tasks">
     <item quantity="one">%1$d assegnato</item>
@@ -252,6 +266,8 @@
   <string name="msg_task_undo">Annulla compito</string>
   <string name="msg_recipes_enough_in_stock">Abbastanza in assortimento</string>
   <string name="msg_recipes_enough_in_stock_filter">(%1$d) Abbastanza in assortimento</string>
+  <!-- %1$s is an amount with quantity unit (e.g. 3 bottles) -->
+  <string name="msg_recipes_enough_in_stock_amount">Abbastanza in assortimento (%1$s)</string>
   <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) Non abbastanza in assortimento ma è nella lista della spesa</string>
   <string name="msg_recipes_not_enough_filter">(%1$d) Non abbastanza in assortimento</string>
   <string name="msg_recipes_not_enough">Non abbastanza in assortimento</string>
@@ -265,6 +281,7 @@
     <item quantity="many">%1$d ingredienti mancanti</item>
     <item quantity="other">%1$d ingrediente mancante</item>
   </plurals>
+  <string name="msg_recipes_ingredient_fulfillment_info_list">Mancante: %1$s | Già nella lista della spesa: %2$s</string>
   <string name="msg_chore_executed">Tracciamento dell\'esecuzione dei compiti</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Aquistato %1$s %2$s di %3$s</string>
@@ -280,6 +297,7 @@
   <!-- %1$s is a product name -->
   <string name="msg_no_stock_entries">%1$s non ha prodotti in dispensa</string>
   <string name="msg_not_found">Prodotto non trovato</string>
+  <string name="msg_returning_to_overview">Tornerai alla pagina di panoramica tra pochi secondi</string>
   <string name="msg_editor_hint">Scrivi qui</string>
   <string name="msg_coming_soon">Questa funzionalità sarà disponibile presto</string>
   <string name="msg_undo_transaction">Annullare transazione?</string>
@@ -314,6 +332,7 @@
     <item quantity="other">%1$s %2$s saranno rimossi dalla dispensa.</item>
   </plurals>
   <string name="msg_transfer_tare_weight">I prodotti con il peso della tara abilitato attualmente non sono supportati per lo spostamento.</string>
+  <string name="msg_should_not_be_frozen">Questo prodotto non dovrebbe essere congelato. Vuoi procedere?</string>
   <string name="msg_item_marked_as_done">Segna come fatto</string>
   <string name="msg_item_marked_as_undone">Segna da fare</string>
   <string name="option_synced_success">Impostazioni sincronizzate correttamente</string>
@@ -339,6 +358,10 @@
   <string name="msg_quick_mode_confirm_purchase">La transazione sarà eseguita:\n\nAggiunta di %1$s %2$s di %3$s alla dispensa\nData di scadenza: %4$s\nPrezzo: %5$s\nNegozio: %6$s\nPosizione: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">La transazione sarà eseguito:\n\nRimozione di %1$s %2$s di %3$s dalla dispensa\nPosizinoe: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_open">Transazione che verrà eseguita:
+Segna %1$s %2$s di %3$s come aperto
+Posizione: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">La transazione sarà eseguita:\n\nSpostamento %1$s %2$sdi %3$s\nDalla posizione: %4$s\nAlla posizione: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
@@ -349,19 +372,38 @@
   <string name="msg_logout_demo_short">Server demo pubblico. Premi per dettagli.</string>
   <string name="msg_restart">È necessario riaprire l\'app per applicare correttamente la configurazione corrente di Grocy</string>
   <string name="msg_full_description">Clicca qui per vedere la descrizione completa.</string>
+  <string name="msg_copied_clipboard">Copiato negli appunti</string>
   <string name="msg_shortcuts">Puoi abilitare fino a 4 scorciatoie:</string>
   <string name="msg_shortcuts_not_supported">Le scorciatoie non sono supportate da questa versione Android.</string>
   <string name="msg_barcode_formats">Puoi aumentare la velocità del lettore di codici a barre selezionando solo i formati che ti aspetti di leggere.</string>
   <string name="msg_features">Visualizza nuovamente l\'introduzione in \"Riguardo a\"</string>
   <string name="msg_feedback">Hai desideri, domande o errori? Contattaci e permettici di aiutarti!\nAltrimenti saremmo molto felici di ricevere una recensione positiva sul Play Store.</string>
   <string name="msg_point_at_barcode">Punta la fotocamera verso il codice a barre</string>
+  <string name="msg_save_product_first">Per favore, salva il prodotto prima</string>
+  <string name="msg_save_recipe_first">Per favore, salva prima la ricetta</string>
+  <string name="msg_recipe_contains_nested_recipes">Questa ricetta contiene ricette nidificate.</string>
   <string name="msg_press_hold_confirm">Tieni premuto per confermare la cancellazione</string>
+  <string name="msg_recipe_consume_ask">Sei sicuro di voler consumare tutti gli ingredienti necessari per la ricetta di \"%1$s\"? (gli ingredienti contrassegnati con \"verifica solo se è presente una quantità in magazzino\" saranno ignorati)</string>
+  <string name="msg_recipe_shopping_list_ask">Sei sicuro di voler mettere tutti gli ingredienti mancanti necessari per la ricetta di \"%1$s\" nella lista della spesa?\n\nDeseleziona gli ingredienti per non metterli nella lista della spesa:</string>
+  <string name="msg_settings_backup_restore">Qui puoi creare o ripristinare un backup delle impostazioni dell\'app, ad esempio per condividerlo con altri membri della famiglia (il file contiene credenziali come l\'API-Key).
+
+Dopo il ripristino, le notifiche potrebbero non funzionare come desiderato e dovranno essere riavviate in background in questa app, spegnendo e riaccendendo gli interruttori delle impostazioni delle notifiche.
+
+Se nel file ripristinato sono presenti dati errati, l\'app potrebbe non funzionare correttamente e i dati dell\'app dovranno essere cancellati.</string>
+  <string name="msg_settings_backup_success">Backup delle impostazioni create con successo</string>
+  <string name="msg_settings_restore_success">Impostazioni ripristinate con successo, riavvio dell\'applicazione in 2 secondi.</string>
   <string name="msg_welcome">Benvenuto su Grocy Android!</string>
+  <string name="msg_welcome_introduce">Per utilizzare Grocy in modo produttivo hai bisogno di un tuo server o dell\'addon Grocy per Home Assistant.\nSe vuoi soltanto provare l\'app puoi usare il server demo di Bernd Bestel, il creatore di Grocy.</string>
   <string name="msg_choose_option_below">Per favore scegli un opzione qui sotto.</string>
+  <string name="msg_qr_code_scan">Da un altro dispositivo, visita il tuo sito web di Grocy e vai alla pagina \'Chiavi API\'. Clicca \'Aggiungi\', quindi clicca sul piccolo simbolo QR code e scannerizza il QR code.</string>
+  <string name="msg_qr_code_scan_token">Stai utilizzando l\'add-on Grocy per Home Assistant. Crea un token di accesso a lunga durata nelle impostazioni del tuo profilo Home Assistant (ultima sezione). Sotto il campo del token, clicca su \"Genera codice QR\" e scansionalo qui.</string>
   <string name="msg_port_connection_info_without_port">L\'app si connetterà alla porta %1$s.\nSe vuoi connetterti a un\'altra porta, puoi aggiungerla alla fine dell\'URL.\nEsempio: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">L\'app si connetterà alla porta %1$s.</string>
   <string name="msg_clear_form_first">Pulisci il form prima di scannerizzare un altro codice a barre salvato.</string>
   <string name="msg_not_implemented_yet">Questo sarà implementato presto. Per favore usa l\'interfaccia server per il momento.</string>
+  <string name="msg_help_picture_changes">Le modifiche all\'immagine vengono sincronizzate immediatamente con il server, non solo al momento del salvataggio!</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_stock_label_type">Questa è la tipologia di etichetta predefinita per l\'ingresso di magazzino che verrà precompilata all\'acquisto.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">Il riepilogo della dispensa elenca tutti i prodotti che sono attualmente in dispensa o sotto la quantità minima. Abilita questo per nasconderlo sempre per questo prodotto.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -372,6 +414,8 @@
   <string name="msg_help_move_on_open">Se abilitato, impostando questo prodotto come aperto, la quantità corrispondente sarà spostata alla posizione predefinita di consumo.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_own_stock">Quando abilitato, questo prodotto non puo\' avere una propria scorta, significa che non verra\' selezionato per gli acquisti (utile per i prodotti principali i quali vengono solo usati come riepilogo del sommario/totale dei sottoprodotti)</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_should_not_be_frozen">Quando abilitato, spostando questo prodotto in una posizione del congelatore (quindi quando viene congelato), verrà mostrato un avviso.</string>
   <string name="msg_help_due_date_type">A seconda del tipo di scadenza, i filtri disponibili in dispensa cambieranno. \"Da consumarsi preferibilmente prima\" denota un prodotto che potrebbe essere consumato dopo la data di scadenza. \"Da consumarsi prima\" un prodotto che va consumato assolutamente prima che scada.</string>
   <string name="msg_help_default_due_days_format">Premi qui per inviare al server gli acquisti memorizzati per questo prodotto.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -385,6 +429,11 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_stock">Tipo di unità di quantità non può essere cambiata dopo il primo acquisto.</string>
   <string name="msg_help_qu_stock_changeable">Le unità di misura delle scorte possono essere modificate solo se esistono conversioni per l\'unità di misura corrente.</string>
+  <string name="msg_help_qu_changeable">Le unità di quantità possono essere modificate solo se esistono conversioni di unità per esse.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_purchase">Questa è l\'unità di quantità predefinita utilizzata all\'acquisto e quando si aggiunge questo prodotto alla lista della spesa.</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_consume">Questa è l\'unità di quantità predefinita utilizzata quando si consuma questo prodotto.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">Se abilitato, la quantità minima di sottoprodotti sarà sommata in questo prodotto, ciò significa che il sottoprodotto non sarà mai \"mancante\", solo questo prodotto.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -400,6 +449,16 @@
   <string name="msg_help_inventory_fields">I seguenti campi verranno riportati ai nuovi prodotti inseriti.</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_choose">Puoi scegliere uno scanner di codici a barre per scansionare i codici a barre con la telecamera.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") utilizza i dati sul contrasto dallo streaming della fotocamera per rilevare un codice a barre. Calcola quindi la larghezza relativa di tutte le linee.\n\n- A volte risultati errati\n- Il codice a barre deve essere allineato orizzontalmente\n- Richiede un buon contrasto e nitidezza\n- Viene eseguito completamente offline sul tuo dispositivo\n- Il framework è open source</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit utilizza l\'intelligenza artificale con le ultime tecnologie per la scansione dei codici a barre.
+
+- Quasi nessun risultato errato
+- L\'orientazione di lettura non importa
+- Funziona anche per codici a barre sfocati o con basso contrasto
+- Viene eseguito completamente offline sul tuo dispositivo
+- Il framework non è open source</string>
   <string name="msg_help_external_scanner_ready">Puoi utilizzare uno scanner esterno per il campo sottostante mentre è selezionato e vuoto.</string>
   <string name="msg_help_external_scanner_settings">Questa applicazione supporta dispositivi di scansione esterni che agiscono come tastiere e possono essere connessi via USB o Bluetooth. Le seguenti opzioni devono essere configurate nel tuo scanner esterno:\n\nPrefisso: Nessuno\nSuffisso: TAB o INVIO</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -409,20 +468,37 @@
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_not_check_shopping_list">Di default la quantità da aggiungere alla lista della spesa è \"Quantità necessaria - quantità in dispensa - quantità nella lista della spesa\". Se abilitato, viene controllato solo nella quantità della dispensa e non con quello che è già presente nella lista della spesa.</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_servings">Gli ingredienti di questa ricetta risultano in questa quantità di porzioni.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_produces_product">Quando un prodotto è selezionato, una unità (per porzione nella quantità della dispensa) verrà aggiunta alla dispensa consumando questa ricetta.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_only_check_any_amount">Un diverso quantitativo/unità può quindi essere utilizzato di seguito, mentre per il controllo della disponibilità di magazzino è sufficiente qualsiasi quantità del prodotto in magazzino.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_variable_amount">Quando questo non è vuoto, verrà mostrato invece dell\'importo inserito sopra, mentre l\'importo lì verrà comunque utilizzato per il controllo dell\'adempimento delle scorte.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_group">Questo sarà utilizzato come titolo per raggruppare gli ingredienti insieme.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_price_factor">Il prezzo risultante di questo ingrediente sarà moltiplicato per questo fattore.</string>
+  <string name="msg_help_recipe_ingredients_wrong">Con la versione del server Grocy inferiore a 4.0.0 questo elenco può contenere informazioni di completamento errate. Aggiorna il tuo server alla versione 4.0.0 o successiva per visualizzare i valori corretti.</string>
   <string name="msg_help_date_chooser">È possibile modificare l\'input della tastiera nelle impostazioni, in modo da aumentare la velocità di input.</string>
   <string name="msg_help_date_chooser_keyboard">Puoi attivare il formato invertito per la data nelle impostazioni se GGMMAA è il predefinito nel tuo paese.\nPer applicare e chiudere la pagina puoi usare il tasto \"Fatto\" sulla tua tastiera.</string>
   <string name="msg_help_notifications_tap">Tocca qui se non ricevi notifiche o le ricevi in modo inaffidabile.</string>
+  <string name="msg_help_notifications">Se non ricevi le notifiche, tocca qui per aprire la pagina delle informazioni dell\'app Android e controlla se le notifiche sono consentite e se le misure di risparmio energetico possono essere disattivate. Android a volte consegna le notifiche in ritardo rispetto all\'orario impostato per ridurre il consumo della batteria, il che è un comportamento normale.</string>
+  <string name="msg_help_notifications_other">Non rimuovere l\'app dalla panoramica delle app attualmente in esecuzione, altrimenti alcuni produttori elimineranno il processo di notifica.</string>
   <string name="msg_help_quick_mode">Tieni premuto sul titolo sopra per attivare la modalità rapida. In questa modalità verrà eseguita subito una transazione appena un prodotto verrà inserito o scansionato e tutti i campi potrebbero essere automaticamente compilati (in base ai valori preimpostati dal prodotto e/o barcode)</string>
   <string name="msg_help_loading_circle_settings">Su ogni pagina, l\'app invia una richiesta al server per trovare eventuali cambiamenti nel database. Abilita questa opzione se vuoi visualizzare il cerchio di caricamento anche per questa richiesta.</string>
   <string name="msg_help_start">Modalità principiante attivata: I messaggi di aiuto verranno visualizzati su ogni pagina disponibile. Fai tap per cambiare.</string>
   <string name="msg_help_purchased_date_settings">Abilitando questa opzione un campo per scegliere la data di acquisto verrà mostrato sulle pagine di acquisto e di inventario. Altrimenti verrà utilizzata la data di oggi.</string>
+  <string name="msg_help_normal_login">Tocca questa carta se usi Home Assistant con l\'add-on Grocy.</string>
+  <string name="msg_help_home_assistant_login">Stai utilizzando l\'add-on Grocy di Home Assistant. Pertanto sono necessari alcuni dettagli aggiuntivi. Tocca questa scheda per passare al login normale.</string>
   <string name="msg_help_home_assistant_login_help_show">Premi qui per mostrare testi guida.</string>
   <string name="msg_help_home_assistant_login_help_hide">Premi qui per nascondere testi guida.</string>
   <string name="msg_help_home_assistant_login_server">Nel campo sottostante puoi anche inserire l\'indirizzo web del tuo spazio Nabu Casa se stai utilizzando quel servizio. Premi questo riquadro per visitare il sito web di Nabu Casa.</string>
   <string name="msg_help_home_assistant_login_token">È possibile creare un token di accesso a lunga durata nelle impostazioni del profilo di Home Assistant (ultima sezione). Toccare qui per aprire l\'URL di cui sopra.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Torna indietro o premi questo riquadro per scannerizzare il codice QR che riempirà i campi qui sotto.</string>
   <string name="msg_help_fab_overview_start">Il pulsante rapido in questa pagina di panoramica ha due azioni:\n\n- Tocco rapido: consuma con scansione di codice a barre\n- Tocco lungo: acquista con scansione di codice a barre\n\nCon questo pulsante la modalità rapida nelle rispettive pagine viene attivata in modo predefinito. È possibile modificare questo comportamento nelle impostazioni.</string>
+  <string name="msg_share">Controlla questo client Android per il fantastico progetto Grocy: \nhttps://github.com/patzly/grocy-android</string>
+
   <string name="error_api_not_working">La chiave API non funziona</string>
   <string name="error_orbot_not_installed">Orbot non è installato</string>
   <string name="error_select_product">Seleziona un prodotto</string>
@@ -458,8 +534,11 @@
   <string name="error_invalid_price">Prezzo non valido</string>
   <string name="error_invalid_factor">Valore invalido</string>
   <string name="error_invalid_date_format">Formato della data non valido</string>
+  <string name="error_api_qr_code">Non un codice QR con le credenziali API di Grocy.</string>
   <string name="error_token_qr_code">Nessun codice QR con un token di accesso di lunga durata di Home Assistant</string>
   <string name="error_loading_qus">Caricamento delle unità di quantità del prodotto non riuscito</string>
+  <string name="error_clipboard_no_image">Gli appunti non contengono un\'immagine o non è possibile leggerla.</string>
+  <string name="error_no_children">Il prodotto selezionato non ha figli</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Non può essere uguale a %1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
@@ -496,9 +575,16 @@
   <string name="error_failed_barcode_upload">Non è stato possibile caricare il codice a barre</string>
   <string name="error_wrong_grocycode_type">il grocycode contiene un tipo di entità errato</string>
   <string name="error_stock_entry_grocycode">Elemento associato al grocycode non trovato</string>
+  <string name="error_picture_uploads_forbidden">Per motivi di sicurezza, l\'upload di immagini è consentito solo su server auto-ospitati. Attualmente stai utilizzando l\'istanza demo.</string>
   <string name="error_permission">Nessuna autorizzazione per questa azione</string>
+  <string name="error_permission_notification">La notifica di autorizzazione è richiesta affinché i promemoria funzionino.</string>
   <string name="error_undefined">Si è verificato un errore</string>
   <string name="error_invalid_base_servings">Porzioni non valide</string>
+  <string name="error_pictures_size_exceeds_limit">Ci sono immagini incorporate nelle descrizioni di prodotto o ricette sul tuo server, che superano il limite di analisi di questa app. Rimuovi le immagini di alta qualità e di grandi dimensioni dalle tue descrizioni, questo velocizzerà anche il caricamento dei dati.</string>
+  <string name="error_userfield_type_not_supported">Tipo di campo utente attualmente non supportato</string>
+  <string name="error_settings_backup">Backup non riuscito</string>
+  <string name="error_settings_restore">Ripristino fallito</string>
+
   <string name="title_overview">Riepilogo</string>
   <string name="title_stock_overview">Riepilogo della dispensa</string>
   <string name="title_purchase">Acquista</string>
@@ -543,10 +629,13 @@
   <string name="title_chores">Compiti</string>
   <string name="title_chore">Compito</string>
   <string name="title_recipes">Ricette</string>
+  <string name="title_meal_plan">Piano pasto</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Editor</string>
   <string name="title_task_new">Nuovo compito</string>
   <string name="title_task_edit">Modifica compito</string>
+  <string name="title_entry_new">Nuova voce</string>
+  <string name="title_entry_edit">Modifica voce</string>
   <string name="title_ingredient_new">Nuovo ingrediente</string>
   <string name="title_ingredient_edit">Modifica ingrediente</string>
   <string name="title_recipe_create">Nuova ricetta</string>
@@ -653,6 +742,12 @@
   <string name="subtitle_recipe_due_score">Punteggio scadenza: %1$s</string>
   <string name="subtitle_per_serving">per porzione</string>
   <string name="subtitle_tap_preparation_mode">Premi qui per la modalità preparazione</string>
+  <!-- Context is Label printer -->
+  <string name="subtitle_print_label_no">Nessuna etichetta</string>
+  <!-- Short form for "One label per purchase" -->
+  <string name="subtitle_print_label_per_purchase">Per acquisto</string>
+  <!-- Short form for "One label per unit" -->
+  <string name="subtitle_print_label_per_unit">Per unità</string>
   <!-- %1$s is a price and %2$s is a currency -->
   <string name="subtitle_total_price">Prezzo totale: %1$s %2$s</string>
 
@@ -774,6 +869,13 @@
     <item quantity="many">Il tuo database contiene %1$d prodotti.</item>
     <item quantity="other">Il tuo database contiene %1$d prodotti.</item>
   </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="error_max_decimal_places">
+    <item quantity="one">Massimo  %1$s cifra decimale</item>
+    <item quantity="many">Massimo %1$s cifre decimali</item>
+    <item quantity="other">Massimo %1$s cifre decimali</item>
+  </plurals>
+
   <string name="property_name">Nome</string>
   <string name="property_name_singular">Nome (forma singolare)</string>
   <string name="property_name_plural">Nome (forma plurale)</string>
@@ -818,6 +920,12 @@
   <string name="property_qu_stock">Unità di dispensa</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Pezzi nella confezione</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_default_qu_consume">Unità di quantità predefinita di consumo</string>
+  <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
+  <string name="property_quantity_unit_from">Converti da</string>
+  <!-- Example: "Convert to cup"; This string is part of a pair, there is also 'Convert from' -->
+  <string name="property_quantity_unit_to">Converti in</string>
   <string name="property_factor">Fattore</string>
   <string name="property_barcode">Codice a barre</string>
   <string name="property_barcodes">Codici a barre</string>
@@ -847,6 +955,7 @@
   <string name="property_due_days_default_freezing">Scadenza predefinita dopo il congelamento</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">Scadenza predefinita dopo lo scongelamento</string>
+  <string name="property_day_summary">Riepilogo per il giorno</string>
   <string name="property_location">Posizione</string>
   <string name="property_location_insert">Posizione: %1$s</string>
   <string name="property_location_default">Posizione predefinita</string>
@@ -874,6 +983,7 @@
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Durata media della dispensa</string>
   <string name="property_spoil_rate">Tasso di scadenza</string>
+  <string name="property_created_timestamp">Tempo di creazione</string>
   <string name="property_price_history">Cronologia prezzo</string>
   <string name="property_product_group">Gruppo del prodotto</string>
   <string name="property_product_groups">Gruppi prodotti</string>
@@ -883,11 +993,17 @@
   <string name="property_opened">aperto</string>
   <string name="property_not_opened">non aperto</string>
   <string name="property_is_freezer">È congelato</string>
+  <!-- Means energy of an ingredient or product -->
+  <string name="property_energy_only">Energia</string>
+  <!-- %1$s is a unit for energy, like kcal (kilo calories) -->
+  <string name="property_energy_insert">Energia (%1$s) per ogni unità di prodotto</string>
   <string name="property_active">Attiva</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Non mostrare mai nel riepilogo della dispensa</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_disable_own_stock">Disabilita la propria dispensa</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_should_not_be_frozen">Non dovrebbe essere congelato</string>
   <string name="property_number">Numero</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_enable_tare_weight">Abilita gestione del peso tara</string>
@@ -901,6 +1017,10 @@
   <string name="property_amount_quick_consume">Quantità di consumo rapida</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_quick_consume_in">Quantità di consumo rapida in %1$s</string>
+  <!--The same string is also in the web interface (server v4.0.0 or later): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_amount_quick_open">Apri rapidamente l\'importo</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_quick_open_in">Aprire rapidamente l\'importo in %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">Quantità minima cumulata di sottoprodotti in dispensa</string>
   <string name="property_picture">Immagine</string>
@@ -921,6 +1041,14 @@
   <string name="property_extra_field">Campi extra: %1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">Campi</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_header">Campi (intestazione)</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_entries">Campi (voci)</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value">%1$s: %2$s</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value_without_space">%1$s:%2$s</string>
   <string name="property_task_category">Categoria dell\'attività</string>
   <string name="property_task_categories">Categorie dell\'attività</string>
   <string name="property_calories">Calorie</string>
@@ -954,12 +1082,17 @@
   <string name="property_servings_base_insert">Porzione base: %1$s</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_servings_desired">Porzioni desiderate</string>
+  <string name="property_servings_desired_insert">Porzioni desiderate: %1$s</string>
   <string name="property_not_check_shopping_list">Non fare il controllo nella lista della spesa</string>
   <string name="property_not_check_shopping_list_description">Al momento dell\'aggiunta di elementi mancanti ad esso</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_preparation">Preparazione</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">Costi</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs">Costo della settimana</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs_insert">Costo della settimana: %1$s</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="property_due_score">Punteggio scadenza</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
@@ -971,12 +1104,17 @@
   <string name="property_variable_amount">Valore variabile</string>
   <string name="property_requirements_fulfilled">Requisito soddisfatto</string>
   <string name="property_produces_product">Produce prodotto</string>
+  <string name="property_price_factor">Fattore di prezzo</string>
+
   <string name="date_today">Oggi</string>
   <string name="date_unknown">Sconosciuto</string>
   <!-- This means the 'time' context -->
   <string name="date_unlimited">Senza limiti</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Mai</string>
+  <!-- %1$s is 'from' date, %2$s is 'to' date -->
+  <string name="date_timespan">%1$s - %2$s</string>
+
   <plurals name="date_days">
     <item quantity="one">%d giorno</item>
     <item quantity="many">%d giorni</item>
@@ -1042,7 +1180,6 @@
   <string name="info_github">Grocy Android su GitHub</string>
   <string name="info_github_description">Codice sorgente</string>
   <string name="info_website">Apri sito internet di Grocy</string>
-
   <string name="feature_1_title">Grocy per Android</string>
   <string name="feature_1_description">Gestionale per la tua dispensa domestica self-hosted</string>
   <string name="feature_2_title">Design intuitivo</string>
@@ -1152,6 +1289,7 @@
   <string name="setting_bottom_menu_button_description">Nella barra inferiore dell\'app</string>
   <string name="setting_turn_on_quick_mode">Attiva modalità rapida in modo predefinito</string>
   <string name="setting_turn_on_quick_mode_description">Quando utilizzato il pulsante di scansione nella pagina di panoramica</string>
+  <string name="setting_quick_mode_return">Torna alla pagina di panoramica dopo 20 secondi</string>
   <string name="setting_quick_mode_return_description">Quando utilizzato il pulsante di scansione nella pagina di panoramica e la modalità rapida non è attiva</string>
   <string name="setting_speed_up_start">Riduce il tempo di avvio app</string>
   <string name="setting_speed_up_start_description">Ha effetto solo su dispositivi veloci</string>
