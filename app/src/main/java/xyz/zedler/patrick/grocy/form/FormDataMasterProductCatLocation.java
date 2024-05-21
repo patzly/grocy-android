@@ -135,8 +135,7 @@ public class FormDataMasterProductCatLocation {
   }
 
   public void disableMoveOnOpenIfNecessary() {
-    moveOnOpenDisabledLive.setValue(locationLive.getValue() == locationConsumeLive.getValue()
-        || locationConsumeLive.getValue() == null);
+    moveOnOpenDisabledLive.setValue(locationConsumeLive.getValue() == null);
     assert moveOnOpenDisabledLive.getValue() != null;
     if (moveOnOpenDisabledLive.getValue()) {
       moveOnOpenLive.setValue(false);
