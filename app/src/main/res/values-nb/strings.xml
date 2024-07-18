@@ -147,6 +147,8 @@
   <string name="action_backup">sikkerhetskopi</string>
   <!-- This is the action part of "Restore from file" or "Restore data" -->
   <string name="action_restore">gjenopprette </string>
+  <string name="action_configure_sections">Konfigurer seksjoner</string>
+
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d går ut snart</item>
@@ -193,6 +195,11 @@
   <string name="msg_consumed_spoiled">Forbrukt %1$s %2$s av %3$s som ødelagt</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Merk %1$s %2$s av %3$s som åpnet</string>
+  <!-- %1$s is the number of servings of a recipe. -->
+  <plurals name="msg_servings">
+    <item quantity="one">%1$s porsjon</item>
+    <item quantity="other">%1$s porsjoner</item>
+  </plurals>
   <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
   <plurals name="msg_undone_items">
     <item quantity="one">%1$d uferdig</item>
@@ -358,9 +365,13 @@
   <string name="msg_point_at_barcode">Rett kameraet mot en strekkode</string>
   <string name="msg_save_product_first">Venligst lagre produktet først</string>
   <string name="msg_save_recipe_first">Venligst lagre oppskriften først</string>
+  <string name="msg_recipe_contains_nested_recipes">Denne oppskriften inneholder underoppskrifter.</string>
   <string name="msg_press_hold_confirm">Trykk og hold for å bekrefte sletting.</string>
   <string name="msg_recipe_consume_ask">Er du sikker på du vil forbruke alle ingrediensene i oppskriften for \"%1$s\"? (Ingredienser merket med \"Bare sjekk om noen mengde er i beholdningen\" blir ignorert)</string>
   <string name="msg_recipe_shopping_list_ask">Er du sikker på du vil legge alle manglende ingreienser i oppskriften for \"%1$s\" på handlelisten?\n\nFjern avkryssing for ingredienser du ikke vil legge på handlelisten:</string>
+  <string name="msg_settings_backup_restore">Her kan du opprette eller gjenopprette en sikkerhetskopi av appinnstillingene, for eksempel for å dele den med andre familiemedlemmer (filen inneholder legitimasjon som API-nøkkel).\n\nEtter gjenoppretting kan det hende at varsler ikke fungerer som ønsket, og må startes på nytt i bakgrunnen i denne appen ved å slå bryterne av og på igjen.\n\nHvis det er feil data i filen som gjenopprettes, kan det hende at appen ikke fungerer etterpå, og appdataene må slettes.</string>
+  <string name="msg_settings_backup_success">Innstillingsbackup opprettet</string>
+  <string name="msg_settings_restore_success">Innstillinger gjenopprettet. Appen starter på nytt om 2 sekunder</string>
   <string name="msg_welcome">Velkommen til Grocy Android!</string>
   <string name="msg_welcome_introduce">For å bruke Grocy produktivt, trenger du din egen server eller Grocy Addonen til Home Assistant.\nDersom du bare vil prøve appen, kan du bruke en av demoserverne gjort tilgjengelig av Grocy utvikleren, Bernd Bestel.</string>
   <string name="msg_choose_option_below">Velg ett alternativ under.</string>
@@ -466,6 +477,7 @@
   <string name="msg_help_home_assistant_login_token">Du kan opprette en langvarig tilgangstoken i Home Assistant profilen din (nederst  til venstre). Trykk her for å åpne URL\'en over.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Naviger tilbake eller trykk dette kortet for å scanne en QR-kode som fylller ut feltene under.</string>
   <string name="msg_help_fab_overview_start">Handlingsknappen på denne siden har to handlinger:\n\n- Kort trykk: forbruk med strekkode-scanner\n\n- Trykk og hold: innkjøp med strekkode-scanner\n\n Med denne knappen vil de respektive funksjonene åpnes i hutig modus som standard. Du kan endre dette i innstillingene.</string>
+  <string name="msg_help_fab_consume_start">Knappen på denne siden forbruker produktet med de gitte verdiene. For å markere produktet som åpent i stedet, bruk knappen nederst til venstre i menylinjen.</string>
   <string name="msg_share">Sjekk denne Android klienten for det fantastiske Grocy prosjektet: \nhttps://github.com/patzly/grozy-android</string>
 
   <string name="error_api_not_working">API-nøkkel virker ikke</string>
@@ -521,6 +533,7 @@
   <string name="error_offline">Frakoblet</string>
   <string name="error_offline_subtitle">Sjekk tilkoblingen din og prøv igjen</string>
   <string name="error_no_done_items">Det finnes ingen elementer merket som ferdig</string>
+  <string name="error_auto_sync_disabled">Auto synk er deaktivert</string>
   <string name="error_already_exists">Eksisterer allerede</string>
   <string name="error_network">Nettverksfeil</string>
   <string name="error_network_subtitle">Den påkrevde informasjonen kunne ikke lastes fullstendig</string>
@@ -550,6 +563,11 @@
   <string name="error_undefined">En feil oppstod</string>
   <string name="error_invalid_base_servings">Ugyldige porsjoner</string>
   <string name="error_pictures_size_exceeds_limit">Der er bilder i produkter eller oppskrifter på serveren som er større enn det denne appen kan tolke. Fjern høyoppløste og store bilder, dette vil også øke hastigheten i appen.</string>
+  <string name="error_userfield_type_not_supported">Brukerfelt-type ennå ikke støttet</string>
+  <string name="error_open_product_not_supported">Merk som åpnet er ikke støttet for dette produktet</string>
+  <string name="error_settings_backup">Backup feilet</string>
+  <string name="error_settings_restore">Gjenoppretting feilet</string>
+
   <string name="title_overview">Oversikt</string>
   <string name="title_stock_overview">Lageroversikt</string>
   <string name="title_purchase">Kjøp</string>
@@ -594,6 +612,7 @@
   <string name="title_chores">Plikter</string>
   <string name="title_chore">Plikt</string>
   <string name="title_recipes">Oppskrifter</string>
+  <string name="title_meal_plan">Måltidsplan</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Tekstbehandler</string>
   <string name="title_task_new">Ny oppgave</string>
@@ -901,6 +920,7 @@
   <string name="property_due_days_default_freezing">Standard utløpsdato etter innfrysing</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">Standard utløpsdato etter tining</string>
+  <string name="property_day_summary">Oppsummering for dag</string>
   <string name="property_location">Lokasjon</string>
   <string name="property_location_insert">Lokasjon: %1$s</string>
   <string name="property_location_default">Standard lokasjon</string>
@@ -928,6 +948,7 @@
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Gjennomsnittlig holdbarhet</string>
   <string name="property_spoil_rate">Ødelagt rate</string>
+  <string name="property_created_timestamp">Opprettelsestid</string>
   <string name="property_price_history">Prishistorikk</string>
   <string name="property_product_group">Produktgruppe</string>
   <string name="property_product_groups">Produktgrupper</string>
@@ -937,6 +958,10 @@
   <string name="property_opened">åpnet</string>
   <string name="property_not_opened">ikke åpnet</string>
   <string name="property_is_freezer">Er fryser</string>
+  <!-- Means energy of an ingredient or product -->
+  <string name="property_energy_only">Energi</string>
+  <!-- %1$s is a unit for energy, like kcal (kilo calories) -->
+  <string name="property_energy_insert">Energi (%1$s) per lager kvantitet enhet</string>
   <string name="property_active">Aktiv</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Aldri vis på lageroversikt</string>
@@ -981,6 +1006,14 @@
   <string name="property_extra_field">Ekstra felt: %1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">Felt</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_header">Felt (header)</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_entries">Felt (oppføringer)</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value">%1$s: %2$s</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value_without_space">%1$s:%2$s</string>
   <string name="property_task_category">Oppgavekategori</string>
   <string name="property_task_categories">Oppgavekategorier</string>
   <string name="property_calories">Kalorier</string>
@@ -1021,6 +1054,10 @@
   <string name="property_preparation">Forberedelse</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">Kostnad</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs">Uke kostnad</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs_insert">Uke kostnad: %1$s</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="property_due_score">Forfallskarakter</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
@@ -1040,6 +1077,9 @@
   <string name="date_unlimited">Ubegrenset</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Aldri</string>
+  <!-- %1$s is 'from' date, %2$s is 'to' date -->
+  <string name="date_timespan">%1$s - %2$s</string>
+
   <plurals name="date_days">
     <item quantity="one">%d dag</item>
     <item quantity="other">%d dager</item>
@@ -1096,6 +1136,10 @@
   <string name="info_github">Grocy Android på Github</string>
   <string name="info_github_description">Kildekode</string>
   <string name="info_website">Åpne Grocy-nettsiden</string>
+  <string name="info_translation_description">Hjelp oss å oversette Grocy Android</string>
+  <string name="info_privacy">Personvernregler</string>
+  <string name="info_privacy_description">Hvordan blir dine data behandlet?</string>
+
   <string name="feature_1_title">Grocy for Android</string>
   <string name="feature_1_description">Selvstyrt dagligvarebehandling for ditt hjem</string>
   <string name="feature_2_title">Intuitiv design</string>
@@ -1135,6 +1179,16 @@
   <string name="setting_theme_dark">Mørk</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_light">Lys</string>
+  <string name="setting_contrast">Kontrast</string>
+  <string name="setting_contrast_description">Tilgjengelighet for synet ditt</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast. The button width should be as dense as possible. -->
+  <string name="setting_contrast_standard">Standard</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_medium">Medium</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_high">Høy</string>
+  <string name="setting_contrast_dynamic">Kontrasten for enehetstemaet må settes i systeminnstillingene</string>
+  <string name="setting_contrast_dynamic_unsupported">Dynamisk kontrast for enhetstema er bare tilgjengelig for Android 14+</string>
   <string name="setting_language">Språk</string>
   <string name="setting_language_description">Velg språk</string>
   <string name="setting_language_info">Tusen takk til alle frivillige oversetterne på Transifex!\nBesøk oss på GitHub for å finne ut hvordan du kan hjelpe med å gjøre Grocy Android tilgjengelig for ditt språk.</string>
