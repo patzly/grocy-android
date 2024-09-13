@@ -21,7 +21,7 @@
 
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in purchase screen for example. -->
-  <string name="action_purchase">Comprar</string>
+  <string name="action_purchase">Compra</string>
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in consume screen for example. -->
   <string name="action_consume">Consumeix</string>
