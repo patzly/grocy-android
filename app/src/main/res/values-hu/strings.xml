@@ -72,6 +72,7 @@
   <string name="action_add">Hozzáadás</string>
   <string name="action_clear">Kiürítés</string>
   <string name="action_clear_shopping_list">Bevásárlólista kiürítése</string>
+  <string name="action_auto_sync">Automatikus szinkronizáció</string>
   <string name="action_rate">Értékelés a Play Áruházban</string>
   <string name="action_rate_description">Fejlesztők motiválása</string>
   <string name="action_email">E-mail küldése</string>
@@ -127,6 +128,7 @@
   <string name="action_demo_server">Demó szerver</string>
   <string name="action_own_server">Saját szerver</string>
   <string name="action_enter_data_manually">Adatok bevitele manuálisan</string>
+  <string name="action_settings_backup_restore">Beállítások mentése vagy visszaállítása</string>
   <string name="action_details">Részletek</string>
   <string name="action_perform">Művelet végrehajtása</string>
   <string name="action_share">Megosztás</string>
@@ -142,6 +144,12 @@
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Következő végrehajtás átütemezése</string>
   <string name="action_put_missing_products_on_shopping_list">Hiányzó termékek hozzáadása a bevásárlólistához</string>
+  <!-- This is the action part of "Backup to file" or "Backup data" -->
+  <string name="action_backup">Mentés</string>
+  <!-- This is the action part of "Restore from file" or "Restore data" -->
+  <string name="action_restore">Visszaállítás</string>
+  <string name="action_configure_sections">Szekciók konfigurálása</string>
+
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d hamarosan lejár</item>
@@ -358,9 +366,13 @@
   <string name="msg_point_at_barcode">Irányítsd a kamerát egy vonalkódra</string>
   <string name="msg_save_product_first">Először a terméket mentsd el</string>
   <string name="msg_save_recipe_first">Először a receptet menstd el</string>
+  <string name="msg_recipe_contains_nested_recipes">Ez a recept beágyazott recepteket tartalmaz.</string>
   <string name="msg_press_hold_confirm">Nyomd meg és tartsd lenyomva a törlés megerősítéséhez</string>
   <string name="msg_recipe_consume_ask">Biztos, hogy a \"%1$s\" recepthez szükséges összes hozzávalót fel akarod használni? (a \"Csak azt ellenőrizze, hogy készleten van\" jelöléssel ellátott hozzávalók figyelmen kívül lesznek hagyva.)</string>
   <string name="msg_recipe_shopping_list_ask">Biztos, hogy a \"%1$s\" recepthez szükséges összes hiányzó hozzávalót fel szeretnéd venni a bevásárlólistára?\n\n\nSzüntesd meg a hozzávalók kiválasztását, hogy ne kerüljenek fel a bevásárlólistára:</string>
+  <string name="msg_settings_backup_restore">Itt elmenteni vagy visszaállítani tudod az alkalmazás beállításait, pl. családtagokkal való megosztás céljából (titkos adatokat is tartalmaz, mint az API-kulcs).\n\nVisszaállítás után az értesítések nem fognak jól működni, és újra kell indítani őket a kapcsolók ki-be kapcsolásával.\n\nHa hibás adatot állítasz vissza, az alkalmazás elromolhat tőle, és törölni kell az adatait.</string>
+  <string name="msg_settings_backup_success">Beállítások sikeresen elmentve</string>
+  <string name="msg_settings_restore_success">Beállítások sikeresen visszaállítva, az alkalmazás 2 másodperc múlva újraindul</string>
   <string name="msg_welcome">Üdv a Grocy Androidban!</string>
   <string name="msg_welcome_introduce">A Grocy produktív használatához saját szerverre vagy Home Assistant használatánál a Grocy addon-ra van szükséged.\nHa csak ki szeretnéd próbálni ezt az alkalmazást, használhatod Bernd Bestel, a grocy alkotójának demó szerverét.</string>
   <string name="msg_choose_option_below">Válassz a lenti lehetőségek közül.</string>
@@ -466,6 +478,7 @@
   <string name="msg_help_home_assistant_login_token">Hosszú élettartamú hozzáférési tokent a Home Assistant profilbeállításaiban hozhatsz létre (utolsó szakasz). Koppints ide a fenti URL megnyitásához.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Lépj vissza vagy koppints erre a kártyára QR kód beolvasásához, amely kitölti ezeket a mezőket.</string>
   <string name="msg_help_fab_overview_start">Az áttekintő oldalon található művelet gomb két műveletre képes:\n\n- Rövid koppintás: felhasználás vonalkódolvasóval\n- Hosszú koppintás: vásárlás vonalkódolvasóval\n\n\nEzzel a gombbal alapértelmezés szerint bekapcsolódik a gyors üzemmód az adott oldalakon. Ezt a viselkedési beállításokban módosíthatod.</string>
+  <string name="msg_help_fab_consume_start">Az akciógomb ezen az oldalon felhasználja a terméket. Ha csak felbontottnak jelölnéd, akkor a bal alsó gombot használd.</string>
   <string name="msg_share">Nézd meg ezt az Android klienst a fantasztikus Grocy projekthez: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">Nem működik az API kulcs</string>
@@ -521,6 +534,7 @@
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">Ez az oldal csak internetkapcsolattal működik. Ellenőrizd a kapcsolatod.</string>
   <string name="error_no_done_items">Nincsenek elvégzettként megjelölt tételek</string>
+  <string name="error_auto_sync_disabled">Automatikus szinkronizáláz kikapcsolva</string>
   <string name="error_already_exists">Már létezik</string>
   <string name="error_network">Hálózati hiba</string>
   <string name="error_network_subtitle">A szükséges adatokat nem sikerült teljesen betölteni</string>
@@ -550,6 +564,10 @@
   <string name="error_undefined">Hiba történt</string>
   <string name="error_invalid_base_servings">Érvénytelen adagok</string>
   <string name="error_pictures_size_exceeds_limit">A szerveren található termék- vagy receptleírásokban olyan beágyazott képek vannak, amelyek meghaladják az alkalmazás elemzési határértékét. Kérjük, távolítsd el a jó minőségű és nagy méretű képeket a leírásokból, ez az adatok betöltését is felgyorsítja.</string>
+  <string name="error_open_product_not_supported">Ezt a terméket nem lehet felbontottnak jelölni</string>
+  <string name="error_settings_backup">Mentés sikertelen</string>
+  <string name="error_settings_restore">Visszaállítás sikertelen</string>
+
   <string name="title_overview">Áttekintés</string>
   <string name="title_stock_overview">Készlet áttekintés</string>
   <string name="title_purchase">Vásárlás</string>
@@ -594,6 +612,7 @@
   <string name="title_chores">Házimunkák</string>
   <string name="title_chore">Házimunka</string>
   <string name="title_recipes">Receptek</string>
+  <string name="title_meal_plan">Étrend terv</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Szerkesztő</string>
   <string name="title_task_new">Új feladat</string>
@@ -901,6 +920,7 @@
   <string name="property_due_days_default_freezing">Alapértelmezett lejárati idő fagyasztás után</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">Alapértelmezett lejárati idő kiolvasztás után</string>
+  <string name="property_day_summary">Napi összefoglaló</string>
   <string name="property_location">Hely</string>
   <string name="property_location_insert">Hely: %1$s</string>
   <string name="property_location_default">Alapértelmezett hely</string>
@@ -928,6 +948,7 @@
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Átlagos tárolási idő</string>
   <string name="property_spoil_rate">Megromlási arány</string>
+  <string name="property_created_timestamp">Létrehozás ideje</string>
   <string name="property_price_history">Ár előzmények</string>
   <string name="property_product_group">Termékcsoport</string>
   <string name="property_product_groups">Termékcsoportok</string>
@@ -937,6 +958,10 @@
   <string name="property_opened">felbontott</string>
   <string name="property_not_opened">felbontatlan</string>
   <string name="property_is_freezer">Fagyasztószekrény</string>
+  <!-- Means energy of an ingredient or product -->
+  <string name="property_energy_only">Energia</string>
+  <!-- %1$s is a unit for energy, like kcal (kilo calories) -->
+  <string name="property_energy_insert">Energia (%1$s) egységenként</string>
   <string name="property_active">Aktív</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Ne mutassa a készlet áttekintésnél</string>
@@ -981,6 +1006,14 @@
   <string name="property_extra_field">Extra mező: %1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">Mezők</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_header">Mezők (fejléc)</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_entries">Mezők (sorok)</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value">%1$s: %2$s</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value_without_space">%1$s:%2$s</string>
   <string name="property_task_category">Feladat kategória</string>
   <string name="property_task_categories">Feladat kategóriák</string>
   <string name="property_calories">Kalória</string>
@@ -1021,6 +1054,10 @@
   <string name="property_preparation">Elkészítés</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">Költségek</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs">Heti költésgek</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs_insert">Heti költségek: %1$s</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="property_due_score">Lejárat pontszám</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
@@ -1040,6 +1077,9 @@
   <string name="date_unlimited">Korlátlan</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Soha</string>
+  <!-- %1$s is 'from' date, %2$s is 'to' date -->
+  <string name="date_timespan">%1$s - %2$s</string>
+
   <plurals name="date_days">
     <item quantity="one">%d nap</item>
     <item quantity="other">%d nap</item>
@@ -1096,6 +1136,10 @@
   <string name="info_github">Grocy Android a Githubon</string>
   <string name="info_github_description">Forráskód</string>
   <string name="info_website">Grocy weboldal megnyitása</string>
+  <string name="info_translation_description">Segíts lefordítani a Grocy Android-ot</string>
+  <string name="info_privacy">Adatvédelmi irányelvek</string>
+  <string name="info_privacy_description">Hogyan használjuk az adataidat?</string>
+
   <string name="feature_1_title">Grocy Androidra</string>
   <string name="feature_1_description">Saját üzemeltetésű élelmiszer menedzsment a háztartásod számára</string>
   <string name="feature_2_title">Intuitív dizájn</string>
@@ -1135,6 +1179,13 @@
   <string name="setting_theme_dark">Sötét</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_light">Világos</string>
+  <string name="setting_contrast">Kontraszt</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast. The button width should be as dense as possible. -->
+  <string name="setting_contrast_standard">Normál</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_medium">Közepes</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_high">Magas</string>
   <string name="setting_language">Nyelv</string>
   <string name="setting_language_description">Nyelv kiválasztása</string>
   <string name="setting_language_info">Köszönet az önkéntes fordítóknak a Transifexen!\nKeress fel minket a Githubon, ahol megtudhatod, hogyan segíthetsz elérhetővé tenni az alkalmazást a saját nyelveden.</string>
