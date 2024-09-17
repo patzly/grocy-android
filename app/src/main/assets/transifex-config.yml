@@ -8,6 +8,7 @@ git:
   settings:
       language_mapping:
         ca_ES: ca-rES
+        da_DK: da-rDK
         el_GR: el-rGR
         en_BE: en-rBE
         es_DO: es-rDO

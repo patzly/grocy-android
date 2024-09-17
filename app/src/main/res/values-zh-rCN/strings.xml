@@ -72,6 +72,7 @@
   <string name="action_add">添加</string>
   <string name="action_clear">清除</string>
   <string name="action_clear_shopping_list">清空购物清单</string>
+  <string name="action_auto_sync">自动同步</string>
   <string name="action_rate">在Google Play上评分</string>
   <string name="action_rate_description">激励开发人员</string>
   <string name="action_email">发送邮件</string>
@@ -147,6 +148,8 @@
   <string name="action_backup">备份</string>
   <!-- This is the action part of "Restore from file" or "Restore data" -->
   <string name="action_restore">恢复</string>
+  <string name="action_configure_sections">配置区域</string>
+
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="other">%1$d款临期</item>
@@ -360,29 +363,29 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_stock_label_type">默认的库存条目标签类型，将在采购时预先填充</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_hide_on_stock">库存概述页面列出了所有库存产品或低于安全库存的产品。启用此选项可始终隐藏该产品。</string>
+  <string name="msg_help_hide_on_stock">库存总览页面列出了当前库存或低于安全库存的所有产品。启用此选项可始终隐藏该产品。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_parent_product_deactivated">这个产品不能有一个父产品，因为它已经作为另一个产品的父产品使用。</string>
+  <string name="msg_help_parent_product_deactivated">此产品不能添加父产品，因为它已经作为另一个产品的父产品使用。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_consume_location">优先消耗下面位置的库存</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_move_on_open">启用后，当产品开封时，相应数量的产品将被转移至默认消耗位置。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_disable_own_stock">当启用时，相应的产品不能有自己的库存，意味着它将无法在购买时被选择(有用的父产品，仅用作子产品的汇总/总体视图)。  </string>
+  <string name="msg_help_disable_own_stock">启用后，相应的产品不能拥有库存，意味着采购时无法选择此产品（适用于使用子产品汇总/总体视图的父产品）。  </string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_should_not_be_frozen">启用后，当移动此产品到冷冻位置时（即冷冻时），将显示警告。</string>
-  <string name="msg_help_due_date_type">根据所选的截止日期类型，库存概览页面上的突出显示会有所不同。 “保鲜期”是指产品在到期日过后仍可安全食用。 “保质期”是指产品在到期日之后不能安全食用。</string>
+  <string name="msg_help_due_date_type">根据所选的截止日期类型，库存总览页面上的高亮显示内容会有所不同。 “保鲜期”是指产品在到期日过后仍可安全食用。 “保质期”是指产品在到期日之后不能安全食用。</string>
   <string name="msg_help_default_due_days_format">‎您可以长按下面的项目以输入日期而不是数字。‎</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_default_due_days">对于购买，此天数将添加到今天以作为到期日建议（-1表示该产品永远不会过期）。</string>
+  <string name="msg_help_default_due_days">建议的到期日期，是从采购之日起加上此天数（-1表示永不到期）</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_default_due_days_opened">当此产品标记为已打开时，截止日期将被今天更换+此数天（值0禁用此）。</string>
+  <string name="msg_help_default_due_days_opened">本产品开封后，到期日期替换为开封日期加上此天数，但前提是新生成的日期不在原到期日期之后（值0将禁用此功能）</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_default_due_days_freezing">将此产品移动到冰箱位置（因此在冻结时），到期日将被今天更换+此数量（-1表示本产品将永远不会逾期）。</string>
+  <string name="msg_help_default_due_days_freezing">本产品放入冷冻室时（即冷冻时），到期日期替换为冷冻日期加上此天数（-1表示永不到期）</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_default_due_days_thawing">从冰箱位置移动这款产品（因此在解冻时），截止日期将被今天替换为+这一数量的天。</string>
+  <string name="msg_help_default_due_days_thawing">本产品从冷冻室取出时（即解冻时），到期日期替换为解冻日期加上此天数</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_qu_stock">首次购买后，数量单位库存不能更改。</string>
+  <string name="msg_help_qu_stock">首次采购后，库存产品的数量单位无法进行更改</string>
   <string name="msg_help_qu_stock_changeable">库存数量单位只能在目前的数量单位存在对应的单位转换时更改</string>
   <string name="msg_help_qu_changeable">仅当存在单位转换时，才能更改数量单位。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -394,7 +397,7 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">启用后，子产品的安全库存将累计到此产品，代表子产品安全库存永远满足，仅对此产品有效</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_treat_opened_as_out_of_stock">‎启用后，如果此产品低于安全库存，则产品开封后被视为缺货</string>
+  <string name="msg_help_treat_opened_as_out_of_stock">‎启用后，如果此产品的库存低于安全库存，则产品开封后被视为缺货</string>
   <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">此数量用于库存概览页面上的“快速消耗/打开”按钮（使用库存数量单位）</string>
   <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -452,6 +455,7 @@
   <string name="msg_help_home_assistant_login_token">‎您可以在Home Assistant中创建长期访问令牌。点击此处打开链接。‎</string>
   <string name="msg_help_home_assistant_login_proxy_id">导航后或点击此卡以扫描填充下面的字段的QR码。</string>
   <string name="msg_help_fab_overview_start">概览页面上的条码按钮可执行两个动作：\n\n- 短按：扫码消耗\n-长按：扫码采购\n\n通过此按钮，默认开启相应页面的快速模式。您可以在“特性”中更改设置。</string>
+  <string name="msg_help_fab_consume_start">此页面上的操作按钮用于定值消耗。要将产品标记为开封状态，请使用菜单栏左下方的按钮。</string>
   <string name="msg_share">看下这个令人惊叹的Grocy项目的安卓客户端：\nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">API密钥未生效</string>
@@ -507,6 +511,7 @@
   <string name="error_offline">离线</string>
   <string name="error_offline_subtitle">检查您的连接，然后重试</string>
   <string name="error_no_done_items">没有标明已完成的项目</string>
+  <string name="error_auto_sync_disabled">自动同步已禁用</string>
   <string name="error_already_exists">已经存在</string>
   <string name="error_network">网络错误</string>
   <string name="error_network_subtitle">无法完全加载所需的数据</string>
@@ -537,6 +542,7 @@
   <string name="error_invalid_base_servings">无效的份数</string>
   <string name="error_pictures_size_exceeds_limit">您服务器上的产品或菜谱描述中嵌入的图片，超出了此应用程序的解析限制。请删除相关条目描述中的高质量和大尺寸的图片，这也将提高数据加载速度。</string>
   <string name="error_userfield_type_not_supported">不支持当前用户字段类型</string>
+  <string name="error_open_product_not_supported">此产品不支持标记为开封</string>
   <string name="error_settings_backup">备份失败</string>
   <string name="error_settings_restore">恢复失败</string>
 
@@ -584,6 +590,7 @@
   <string name="title_chores">家务</string>
   <string name="title_chore">家务</string>
   <string name="title_recipes">菜谱</string>
+  <string name="title_meal_plan">饮食计划</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">编辑</string>
   <string name="title_task_new">新建任务</string>
@@ -871,6 +878,7 @@
   <string name="property_due_days_default_freezing">冻结后的默认到期天数</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">解冻后的默认到期天数</string>
+  <string name="property_day_summary">今日概览</string>
   <string name="property_location">位置</string>
   <string name="property_location_insert">位置：%1$s</string>
   <string name="property_location_default">默认位置</string>
@@ -956,6 +964,10 @@
   <string name="property_extra_field">‎额外字段‎：%1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">字段</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_header">字段（页眉）</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_entries">字段（条目）</string>
   <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
   <string name="property_userfield_value">%1$s：%2$s</string>
   <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
@@ -1000,6 +1012,10 @@
   <string name="property_preparation">步骤</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">费用</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs">每周花费</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs_insert">每周花费：%1$s</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="property_due_score">到期评分</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
@@ -1019,6 +1035,9 @@
   <string name="date_unlimited">无限</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">从不</string>
+  <!-- %1$s is 'from' date, %2$s is 'to' date -->
+  <string name="date_timespan">%1$s-%2$s</string>
+
   <plurals name="date_days">
     <item quantity="other">%d天</item>
   </plurals>
@@ -1066,6 +1085,9 @@
   <string name="info_github">GitHub上的Grocy Android</string>
   <string name="info_github_description">源代码</string>
   <string name="info_website">打开Grocy网站</string>
+  <string name="info_translation_description">协助翻译Grocy Android</string>
+  <string name="info_privacy">隐私政策</string>
+  <string name="info_privacy_description">了解数据的处理过程</string>
 
   <string name="feature_1_title">Grocy 安卓版APP</string>
   <string name="feature_1_description">为您的家庭提供自托管的杂货管理</string>
@@ -1095,7 +1117,7 @@
   <string name="category_existing_products">现有产品</string>
   <string name="category_existing_products_similar">类似的现有产品</string>
 
-  <string name="hint_server">服务器URL</string>
+  <string name="hint_server">服务器地址</string>
   <string name="hint_key">有效的API密钥</string>
 
   <string name="setting_theme">主题</string>
@@ -1106,6 +1128,16 @@
   <string name="setting_theme_dark">暗</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_light">亮</string>
+  <string name="setting_contrast">对比度</string>
+  <string name="setting_contrast_description">无障碍视觉</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast. The button width should be as dense as possible. -->
+  <string name="setting_contrast_standard">标准</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_medium">中</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_high">高</string>
+  <string name="setting_contrast_dynamic">必须在系统设置中设置主题的对比度</string>
+  <string name="setting_contrast_dynamic_unsupported">主题对比度动态调节仅在安卓14以上系统有效</string>
   <string name="setting_language">语言</string>
   <string name="setting_language_description">选择语言</string>
   <string name="setting_language_info">非常感谢Transifex的所有翻译志愿者！\n请访问我们的GitHub，了解如何帮助Grocy Android支持您的语言。</string>
@@ -1132,7 +1164,7 @@
   <string name="setting_logout">注销</string>
   <string name="setting_logout_description">返回登录页面</string>
   <string name="setting_manage_shortcuts">管理快捷方式</string>
-  <string name="setting_list_indicator">表明列表条目</string>
+  <string name="setting_list_indicator">标注购物清单中的条目</string>
   <string name="setting_list_indicator_description">如果产品在购物清单上，则显示蓝点</string>
   <string name="setting_shopping_mode_update_interval">购物模式更新间隔</string>
   <string name="setting_keep_screen_on">保持屏幕常亮</string>
