@@ -25,28 +25,17 @@ plugins {
 
 android {
     namespace 'xyz.zedler.patrick.grocy'
-    buildToolsVersion '34.0.0'
-
-    buildFeatures {
-        viewBinding true
-        dataBinding true
-        buildConfig true
-    }
-
-    lint {
-        abortOnError false
-        disable 'MissingTranslation'
-    }
+    compileSdk 35
 
     defaultConfig {
         applicationId "xyz.zedler.patrick.grocy"
         minSdk 21
-        targetSdk 34
-        compileSdk 34
+        targetSdk 35
         versionCode 56
         versionName "3.5.2"
-        resourceConfigurations += ['ca', 'cs', 'de', 'en', 'es', 'et', 'fr', 'hu', 'it', 'iw', 'ja', 'nb', 'nl', 'pl', 'pt-rBR', 'pt-rPT', 'ru', 'sk', 'sv', 'uk', 'zh-rCN', 'zh-rTW']
-
+        resourceConfigurations += ['ca', 'cs', 'de', 'en', 'es', 'et', 'fr', 'hu', 'it', 'iw', 'ja',
+                                   'nb', 'nl', 'pl', 'pt-rBR', 'pt-rPT', 'ru', 'sk', 'sv', 'uk',
+                                   'zh-rCN', 'zh-rTW']
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
@@ -77,6 +66,17 @@ android {
         }
     }
 
+    buildFeatures {
+        viewBinding true
+        dataBinding true
+        buildConfig true
+    }
+
+    lint {
+        abortOnError false
+        disable 'MissingTranslation'
+    }
+
     bundle {
         storeArchive {
             enable true
@@ -86,7 +86,7 @@ android {
     compileOptions {
         coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_17
     }
 }
 
