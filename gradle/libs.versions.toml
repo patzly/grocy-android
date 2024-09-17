@@ -1,29 +1,30 @@
 [versions]
 agp = "8.6.0"
-appcompat = "1.6.1"
-fragment = "1.7.0"
+appcompat = "1.7.0"
+fragment = "1.8.3"
 preference = "1.2.1"
 browser = "1.8.0"
 webkit = "1.11.0"
-lifecycle-viewmodel = "2.7.0"
-paging = "3.2.1"
-navigation = "2.7.7"
+lifecycle-viewmodel = "2.8.5"
+kotlinx-serialization-json = "1.6.2"
+paging = "3.3.2"
+navigation = "2.8.0"
 room = "2.6.1"
 rxandroid = "3.0.2"
-calendar = "2.5.0"
+calendar = "2.5.4"
 material = "1.12.0"
 flexbox = "3.0.0"
 volley = "1.2.1"
 glide = "4.16.0"
-conscrypt = "2.5.2"
+conscrypt = "2.5.3"
 websocket-client = "2.0.2"
-gson = "2.10.1"
+gson = "2.11.0"
 fuzzywuzzy = "1.4.0"
-work = "2.9.0"
+work = "2.9.1"
 #noinspection GradleDependency
 zxing-core = "3.3.0"
 zxing-android-embedded = "4.3.0"
-desugar = "2.0.4"
+desugar = "2.1.2"
 
 [libraries]
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
@@ -31,9 +32,10 @@ fragment = { group = "androidx.fragment", name = "fragment", version.ref = "frag
 preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 browser = { module = "androidx.browser:browser", version.ref = "browser" }
 webkit = { module = "androidx.webkit:webkit", version.ref = "webkit" }
-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle-viewmodel" }
+lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycle-viewmodel" }
 lifecycle-viewmodel-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "lifecycle-viewmodel" }
 paging = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version = "1.7.2" }
 # Navigation framework for easy navigation control using XML
 navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigation" }
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigation" }
