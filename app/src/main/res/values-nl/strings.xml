@@ -72,6 +72,7 @@
   <string name="action_add">Toevoegen</string>
   <string name="action_clear">Leegmaken</string>
   <string name="action_clear_shopping_list">Boodschappenlijst leegmaken</string>
+  <string name="action_auto_sync">Auto syncronisatie</string>
   <string name="action_rate">Beoordeel op Google Play</string>
   <string name="action_rate_description">Ondersteun de ontwikkelaars</string>
   <string name="action_email">Email versturen</string>
@@ -99,6 +100,12 @@
   <string name="action_open_scanner">Open scanner</string>
   <string name="action_discard">Verwerp</string>
   <string name="action_clear_form">Formulier leegmaken</string>
+  <string name="action_take_photo">Maak foto</string>
+  <!-- "Paste" like in "Paste from clipboard" -->
+  <string name="action_paste">Plak</string>
+  <!-- Short form for "Only link barcode to existing product", this should fit into a
+  button so keep it short. -->
+  <string name="action_link_and_clear">Link alleen</string>
   <string name="action_toggle_done">Verander status</string>
   <string name="action_change_layout">Layout aanpassen</string>
   <string name="action_edit_notes">Notitie bewerken</string>
@@ -121,6 +128,8 @@
   <string name="action_demo_server">Test server</string>
   <string name="action_own_server">Eigen server</string>
   <string name="action_enter_data_manually">Gegevens handmatig invoeren</string>
+  <string name="action_settings_backup_restore">Backup of herstel instellingen</string>
+  <string name="action_details">Details</string>
   <string name="action_perform">Actie uitvoeren</string>
   <string name="action_share">Delen</string>
   <string name="action_share_description">Vertel je vrienden over Grocy Android</string>
@@ -131,6 +140,12 @@
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Herplan de volgende uitvoering</string>
   <string name="action_put_missing_products_on_shopping_list">Zet ontbrekende producten op het boodschappenlijstje</string>
+  <!-- This is the action part of "Backup to file" or "Backup data" -->
+  <string name="action_backup">Backup</string>
+  <!-- This is the action part of "Restore from file" or "Restore data" -->
+  <string name="action_restore">Herstel</string>
+  <string name="action_configure_sections">Configureer secties</string>
+
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d vervalt binnenkort</item>
@@ -139,12 +154,12 @@
   <!-- %1$s is the number of products which are overdue. This string is the short form of e.g. "3 products are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_products">
     <item quantity="one">%1$d verlopen</item>
-    <item quantity="other">%1$d verlopen</item>
+    <item quantity="other">%1$d over de datum</item>
   </plurals>
   <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
   <plurals name="msg_expired_products">
     <item quantity="one">%1$d verlopen</item>
-    <item quantity="other">%1$d verlopen</item>
+    <item quantity="other">%1$d bedorven</item>
   </plurals>
   <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
   <plurals name="msg_not_fresh_products_short">
@@ -177,6 +192,11 @@
   <string name="msg_consumed_spoiled">Geconsumeerd %1$s %2$s van %3$s als verspild</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">%1$s %2$s van %3$s gemarkeerd als geopend</string>
+  <!-- %1$s is the number of servings of a recipe. -->
+  <plurals name="msg_servings">
+    <item quantity="one">%1$s serving</item>
+    <item quantity="other">%1$s geserveerd</item>
+  </plurals>
   <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
   <plurals name="msg_undone_items">
     <item quantity="one">%1$d nog niet gedaan</item>
@@ -210,7 +230,7 @@
   <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_tasks">
     <item quantity="one">%1$d verlopen</item>
-    <item quantity="other">%1$d verlopen</item>
+    <item quantity="other">%1$dte laat</item>
   </plurals>
   <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
   <plurals name="msg_assigned_tasks">
@@ -252,6 +272,7 @@
   <!-- %1$s is a product name -->
   <string name="msg_no_stock_entries">Geen voorraad aanwezig voor %1$s</string>
   <string name="msg_not_found">Product niet gevonden</string>
+  <string name="msg_returning_to_overview">In een paar seconden ga je terug naar de overzichtspagina</string>
   <string name="msg_editor_hint">Schrijf hier tekst</string>
   <string name="msg_coming_soon">Deze functie is binnenkort beschikbaar</string>
   <string name="msg_undo_transaction">Transactie ongedaan maken?</string>
@@ -320,6 +341,7 @@
   <string name="msg_logout_demo_short">Openbare demo server. Tik voor details.</string>
   <string name="msg_restart">Herstart de app om de nieuwe Grocy configuratie in te laden.</string>
   <string name="msg_full_description">Tik hier om de volledige beschrijving te laten zien.</string>
+  <string name="msg_copied_clipboard">Gekopieerd naar klembord</string>
   <string name="msg_shortcuts">Je kan tot 4 snelkoppelingen activeren:</string>
   <string name="msg_shortcuts_not_supported">Snelkoppelingen worden niet ondersteunt door deze Android versie.</string>
   <string name="msg_barcode_formats">Je kunt de snelheid van de streepjescodescanner verbeteren door deze te configureren om alleen die formaten te detecteren die u verwacht te lezen.</string>
@@ -350,11 +372,11 @@
   <string name="msg_help_due_date_type">De markeringen op de voorraadoverzicht pagina zijn, gebaseerd op het geselecteerde vervaldatum type, verschillend. \"Tenminste houdbaar tot\" betekent dat het product mogelijk nog steeds veilig om te consumeren is nadat de vervaldatum bereikt is. \"Houdbaarheidsdatum\" betekent dat het product niet meer veilig is om te eten na de vervaldatum.</string>
   <string name="msg_help_default_due_days_format">U kunt op een item hieronder langer drukken om een datum in te voeren in plaats van een cijfer.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_default_due_days">Bij aankopen wordt dit aantal dagen toegevoegd aan vandaag voor de vervaldatum suggestie (-1 betekent dat dit product nooit verloopt).</string>
+  <string name="msg_help_default_due_days">Bij aankopen wordt dit aantal dagen toegevoegd aan de huidige datum voor de vervaldatumsuggestie (-1 betekent dat dit product nooit verloopt).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days_opened">Als het product als open wordt gemarkeerd dan wordt de vervaldatum vervangen door vandaag + het aantal ingevulde dagen (de waarde 0 schakelt dit uit).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_default_due_days_freezing">Als het product naar een vriezer locatie wordt verplaatst (dus wanneer het ingevroren wordt), dan wordt de vervaldatum vervangen door vandaag + het aantal ingevulde dagen (-1 betekent dat dit product nooit verloopt).</string>
+  <string name="msg_help_default_due_days_freezing">Als het product naar een vriezer locatie wordt verplaatst (dus wanneer het ingevroren wordt), dan wordt de vervaldatum vervangen door de huidige datum + het aantal ingevulde dagen (-1 betekent dat dit product nooit verloopt).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days_thawing">Als het product uit een vriezer locatie wordt verplaatst (dus wanneer het ontdooid wordt), dan wordt de vervaldatum vervangen door vandaag + het aantal ingevulde dagen.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -405,7 +427,11 @@
   <string name="error_empty_products">Geen producten</string>
   <string name="error_empty_qu">Geen eenheden</string>
   <string name="error_empty_stores">Geen winkels</string>
+  <string name="error_empty_tasks">Geen taken</string>
+  <string name="error_empty_task_categories">Geen taak categoriën</string>
   <string name="error_empty_chores">Geen klussen</string>
+  <string name="error_empty_recipes">Geen recepten</string>
+  <string name="error_empty_ingredients">Geen ingrediënten</string>
   <string name="error_search">Geen zoekresultaten</string>
   <string name="error_search_sub">Probeer andere termen</string>
   <string name="error_filter">Niets om te laten zien</string>
@@ -417,6 +443,7 @@
   <string name="error_invalid_amount">Ongeldige hoeveelheid</string>
   <string name="error_invalid_price">Ongeldige prijs</string>
   <string name="error_invalid_factor">Ongeldige factor</string>
+  <string name="error_invalid_date_format">Verkeerde datum format</string>
   <string name="error_loading_qus">Kan geen eenheden laden van dit product</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Kan niet gelijk zijn aan %1$s</string>
@@ -434,6 +461,10 @@
   <string name="error_already_exists">Bestaat al</string>
   <string name="error_network">Netwerk fout</string>
   <string name="error_network_subtitle">De benodigde gegevens kunnen niet volledig geladen worden.</string>
+  <string name="error_network_exact">Netwerkfout: %1$s</string>
+  <string name="error_database">Databasefout</string>
+  <string name="error_insert">Fout: %1$s</string>
+  <string name="error_details">Fout details</string>
   <string name="error_unknown">Oeps!</string>
   <string name="error_timeout">Timeout fout</string>
   <string name="error_no_product_selected">Geen product geselecteerd</string>
@@ -462,11 +493,15 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="title_product">Product</string>
   <string name="title_product_create">Product aanmaken</string>
   <string name="title_product_edit">Product aanpassen</string>
+  <string name="title_tasks">Taken</string>
+  <string name="title_task_entry">Taak invoer</string>
   <string name="title_master_data">Masterdata</string>
   <string name="title_stock_entries">Voorraadvermeldingen</string>
+  <string name="title_stock_entry">Voorraad invoer</string>
   <string name="title_shopping_list">Boodschappenlijst</string>
   <string name="title_feedback">Feedback</string>
   <string name="title_settings">Instellingen</string>
+  <string name="title_options">Opties</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="title_barcode_scanner">Streepjescode scanner</string>
   <!-- Context: About this app -->
@@ -484,7 +519,19 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="title_input">Getal invoer</string>
   <string name="title_external_barcode_input">Externe scanner</string>
   <string name="title_confirmation">Bevestiging</string>
+  <string name="title_choose_product">Kies product</string>
+  <string name="title_stored_purchases">Opgeslagen aankopen</string>
   <string name="title_chores">Klussen</string>
+  <string name="title_chore">Klus</string>
+  <string name="title_recipes">Recepten</string>
+  <string name="title_meal_plan">Maaltijdplan</string>
+  <string name="title_task_new">Nieuwe taak</string>
+  <string name="title_task_edit">Taak aanpassen</string>
+  <string name="title_entry_new">Nieuwe invoer</string>
+  <string name="title_entry_edit">Invoer aanpassen</string>
+  <string name="title_ingredient_new">Nieuw ingrediënt</string>
+  <string name="title_ingredient_edit">Ingrediënt aanpassen</string>
+  <string name="title_recipe_create">Nieuw recept</string>
   <string name="title_recipe_edit">Recept bewerken</string>
 
   <string name="title_spoiled">Bedorven</string>
@@ -503,6 +550,8 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="title_unit_price_specific">%1$s prijs</string>
   <string name="title_stock_entry_no_specific">Geen specifieke vermelding</string>
   <string name="title_list_entry">Lijstvermelding</string>
+  <string name="title_edit_barcode">Barcode aanpassen</string>
+  <string name="title_create_barcode">Barcode aanmaken</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
   <string name="title_edit_qu_conversion">Pas hoeveelheideenheidsconversie aan</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
@@ -523,18 +572,26 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="title_product_cat_qu_conversions">Hoeveelheidseenheidsconversies</string>
   <string name="title_unknown_input">Onbekende invoer</string>
   <string name="title_presets_new_products">Voorinstellingen voor nieuwe producten</string>
+  <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
+  <string name="title_ingredient_with_amount">%1$s %2$s of %3$s</string>
+
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
+  <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
+  <string name="subtitle_opened">(geopend)</string>
   <!-- %1$s is a number like 1, 2, 3 -->
   <string name="subtitle_amount_opened">(%1$s geopend)</string>
   <!-- %1$s is a product name -->
   <string name="subtitle_stock_locations">Waar %1$s voorraad heeft</string>
   <string name="subtitle_none_selected">Niks geselecteerd</string>
+  <!-- Should follow the equality between 'None' and 'None selected' -->
+  <string name="subtitle_none">Geen</string>
   <string name="subtitle_empty">Leeg</string>
   <string name="subtitle_done">Klaar</string>
   <string name="subtitle_undone">Niet klaar</string>
+  <string name="subtitle_uncategorized">Niet categoriseerd</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="subtitle_never_overdue">Verloopt nooit</string>
+  <string name="subtitle_never_overdue">Gaat nooit over datum</string>
   <string name="subtitle_selected">Geselecteerd</string>
   <string name="subtitle_stock_entry_no_specific">Als eerste geopend, daarna als eerste over datum, daarna eerste in eerste uit</string>
   <!-- %1$s is a purchase date -->
@@ -559,6 +616,11 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="subtitle_not_supported">Niet ondersteund</string>
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Aantal: %1$s</string>
+  <!-- %1$s is a unit -->
+  <string name="subtitle_barcode_unit">Aantal unit: %1$s</string>
+  <string name="subtitle_barcode">Barcode: %1$s</string>
+  <string name="subtitle_feature_disabled">Feature uitgeschakeld</string>
+  <string name="subtitle_product_default_location">Locatie, Winkel</string>
   <string name="subtitle_synced_with_server">Gesynchroniseerd met server</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">Overdatumscore: %1$s</string>
@@ -596,12 +658,12 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_overdue">
     <item quantity="one">%1$d product is vervallen.</item>
-    <item quantity="other">%1$d producten zijn vervallen.</item>
+    <item quantity="other">%1$d producten over datum.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_expired">
     <item quantity="one">%1$d product is verlopen.</item>
-    <item quantity="other">%1$d producten zijn verlopen.</item>
+    <item quantity="other">%1$d producten zijn bedorven.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing">
@@ -687,8 +749,10 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="property_product_name">Naam van het product</string>
   <string name="property_parent_product">Parent product</string>
   <string name="property_description">Omschrijving</string>
+  <string name="property_product_description">Productbeschrijving</string>
   <string name="property_note">Notitie</string>
   <string name="property_status">Status</string>
+  <string name="property_status_insert">Status:</string>
   <string name="property_amount">Aantal</string>
   <string name="property_amount_insert">Aantal: %1$s</string>
   <string name="property_seconds">Seconden</string>
@@ -720,6 +784,10 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="property_qu_stock">Voorraadeenheid</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Factor aankoop- naar voorraadeenheid</string>
+  <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
+  <string name="property_quantity_unit_from">Converteer van</string>
+  <!-- Example: "Convert to cup"; This string is part of a pair, there is also 'Convert from' -->
+  <string name="property_quantity_unit_to">Converteer naar</string>
   <string name="property_factor">Factor</string>
   <string name="property_barcode">Streepjescode</string>
   <string name="property_barcodes">Streepjescodes</string>
@@ -749,6 +817,7 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="property_due_days_default_freezing">Standaard houdbaarheidsdagen na invriezen</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">Standaard houdbaarheidsdagen na ontdooien</string>
+  <string name="property_day_summary">Samenvatting voor een dag</string>
   <string name="property_location">Locatie</string>
   <string name="property_location_insert">Locatie: %1$s</string>
   <string name="property_location_default">Standaard locatie</string>
@@ -785,6 +854,8 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="property_opened">geopend</string>
   <string name="property_not_opened">niet geopend</string>
   <string name="property_is_freezer">Is een vriezer</string>
+  <!-- Means energy of an ingredient or product -->
+  <string name="property_energy_only">Energie</string>
   <string name="property_active">Actief</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Niet weergeven op voorraadoverzicht</string>
@@ -823,11 +894,29 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="property_ungrouped">Ongegroepeerd</string>
   <!-- %1$s is a property like "product group" or "due date" -->
   <string name="property_extra_field">Extra veld: %1$s</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields">Velden</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_header">Velden (hoofd)</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_entries">Velden (invoer)</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value">%1$s: %2$s</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value_without_space">%1$s:%2$s</string>
   <string name="property_task_category">Taak categorie</string>
   <string name="property_task_categories">Taak categorieën</string>
   <string name="property_calories">Calorieën</string>
   <string name="property_calories_unit">Calorieën (per eenheid)</string>
   <string name="property_calories_total">Calorieën (totaal)</string>
+  <!-- %1$s is a value like energy or price, unit means value of items per unit -->
+  <string name="property_insert_per_unit">%1$s (unit)</string>
+  <!-- %1$s is a value like energy or price, total means value of many items in total -->
+  <string name="property_insert_total">%1$s (totaal)</string>
+  <!-- %1$s is a value like price, average means average price -->
+  <string name="property_insert_average">%1$s (gemiddeld)</string>
+  <!-- %1$s is a value like price, "last" is like for example in "last price" -->
+  <string name="property_insert_last">%1$s (laatste)</string>
   <string name="property_category">Categorie</string>
   <string name="property_assigned_to">Toegewezen aan</string>
   <string name="property_users">Gebruikers</string>
@@ -849,14 +938,31 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="property_not_check_shopping_list_description">Bij het toevoegen van artikelen</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_preparation">Bereiding</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_costs">Kosten</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs">Weekkosten</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs_insert">Weekkosten: %1$s</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_ingredients">Ingrediënten</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
+  <string name="property_ingredient_group">Groep</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
+  <string name="property_variable_amount">Variabel hoeveelheid</string>
   <string name="property_requirements_fulfilled">Vereisten vervuld</string>
   <string name="property_produces_product">Produceert product</string>
+  <string name="property_price_factor">Prijs factor</string>
+
   <string name="date_today">Vandaag</string>
   <string name="date_unknown">Onbekend</string>
   <!-- This means the 'time' context -->
   <string name="date_unlimited">Onbeperkt</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Nooit</string>
+  <!-- %1$s is 'from' date, %2$s is 'to' date -->
+  <string name="date_timespan">%1$s - %2$s</string>
+
   <plurals name="date_days">
     <item quantity="one">%d dag</item>
     <item quantity="other">%d dagen</item>
@@ -912,7 +1018,8 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="info_github">Grocy Android op GitHub</string>
   <string name="info_github_description">Broncode</string>
   <string name="info_website">Open Grocy website</string>
-
+  <string name="info_translation_description">Help Grocy Android te vertalen</string>
+  <string name="info_privacy">Privacypolicy</string>
   <string name="feature_1_title">Grocy voor Android</string>
   <string name="feature_1_description">Zelfgehost boodschappen management tool voor thuis</string>
   <string name="feature_2_title">Intuïtief ontwerp</string>
@@ -952,6 +1059,13 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="setting_theme_dark">Donker</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_light">Licht</string>
+  <string name="setting_contrast">Contrast</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast. The button width should be as dense as possible. -->
+  <string name="setting_contrast_standard">Standaard</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_medium">Medium</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_high">Hoog</string>
   <string name="setting_language">Taal</string>
   <string name="setting_language_description">Selecteer taal</string>
   <string name="setting_language_info">Veel dank aan alle vrijwillige vertalers bij Transifex!
@@ -1044,6 +1158,8 @@ Bezoek ons op GitHub om te leren hoe u kunt helpen Grocy Android beschikbaar te 
   <string name="setting_message_duration">Weergavetijd voor berichten</string>
   <string name="setting_message_duration_description">Betreft alleen transactiemeldingen</string>
   <string name="setting_notifications_enable">Activeer notificaties</string>
+  <!-- The string belongs to the stock overview (stock items can be expired, overdue or due soon). -->
+  <string name="setting_notifications_stock_description">Controleert dagelijks de voorraad en informeert u als er producten zijn die niet meer vers zijn (bedorven, over de tht-datum of binnenkort over datum)</string>
   <string name="setting_notification_time">Notificatie tijd</string>
   <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">Wanneer een controle is gedaan</string>
