@@ -72,6 +72,7 @@
   <string name="action_add">Adicionar</string>
   <string name="action_clear">Limpar</string>
   <string name="action_clear_shopping_list">Apagar lista de compras</string>
+  <string name="action_auto_sync">Sincronizaçao Automática</string>
   <string name="action_rate">Avaliar no Google Play</string>
   <string name="action_rate_description">Apoie o desenvolvimento</string>
   <string name="action_email">Enviar e-mail</string>
@@ -556,6 +557,7 @@
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">Essa página somente funciona com acesso à Internet. Verifique sua conexão.</string>
   <string name="error_no_done_items">Não há itens marcados como concluídos</string>
+  <string name="error_auto_sync_disabled">Sincronizaçao Automática está desabilitada</string>
   <string name="error_already_exists">Já existe</string>
   <string name="error_network">Erro de rede</string>
   <string name="error_network_subtitle">Os dados necessários não puderam ser carregados completamente</string>

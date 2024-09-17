@@ -72,6 +72,7 @@
   <string name="action_add">Afegeix</string>
   <string name="action_clear">Neteja</string>
   <string name="action_clear_shopping_list">Neteja la llista de compra</string>
+  <string name="action_auto_sync">Sincronització automàtica</string>
   <string name="action_rate">Puntua a Google Play</string>
   <string name="action_rate_description">Motiva als desenvolupadors</string>
   <string name="action_email">Envia email</string>
@@ -255,11 +256,11 @@
   <string name="msg_task_not_completed">Tasca marcada com a no completada</string>
   <string name="msg_task_undo">Esborrar tasca</string>
   <string name="msg_recipes_enough_in_stock">Suficient a l\'inventari</string>
-  <string name="msg_recipes_enough_in_stock_filter">(%1$d) suficient a l\'inventari</string>
+  <string name="msg_recipes_enough_in_stock_filter">(%1$d) Suficient a l\'inventari</string>
   <!-- %1$s is an amount with quantity unit (e.g. 3 bottles) -->
   <string name="msg_recipes_enough_in_stock_amount">Suficient a l\'inventari (%1$s)</string>
-  <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) no hi ha suficient a l\'inventari, pero es troben a la llista de la compra</string>
-  <string name="msg_recipes_not_enough_filter">(%1$d) no hi ha suficient a l\'inventari</string>
+  <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) No hi ha suficient a l\'inventari, pero es troben a la llista de la compra</string>
+  <string name="msg_recipes_not_enough_filter">(%1$d) No hi ha suficient a l\'inventari</string>
   <string name="msg_recipes_not_enough">No hi ha suficient a l\'inventari</string>
   <plurals name="msg_recipes_ingredients_missing_but_on_shopping_list">
     <item quantity="one">Falta %1$d ingredient però es a la llista de la compra</item>
@@ -310,7 +311,7 @@
   <!-- %1$s is an amount and %2$s is a quantity unit.  -->
   <plurals name="msg_inventory_transaction_add">
     <item quantity="one">%1$s%2$s s\'afegiran a l\'inventari</item>
-    <item quantity="other">%1$s%2$s seran afegits a l\'inventari </item>
+    <item quantity="other">%1$s %2$s seran afegits a l\'inventari </item>
   </plurals>
   <!-- %1$s is an amount and %2$s is a quantity unit.  -->
   <plurals name="msg_inventory_transaction_remove">
@@ -343,13 +344,13 @@
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">Transacció que s\'executarà:\n\nAfegir %1$s %2$s de %3$s a l\'inventari\nData de consum preferent: %4$s\nPreu: %5$s\nBotiga: %6$s\nUbicació: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-  <string name="msg_quick_mode_confirm_consume">Transacció que serà executada:\n\nRetirar%1$s%2$sde%3$sde l\'inventari\n\nUbicació:%4$s</string>
+  <string name="msg_quick_mode_confirm_consume">Transacció que serà executada:\n\nRetirar %1$s %2$sde %3$s de l\'inventari\n\nUbicació: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-  <string name="msg_quick_mode_confirm_open">Transacció que serà executada:\n\nMarcar %1$s%2$s de %3$scom a obert\n\nUbicació:%4$s</string>
+  <string name="msg_quick_mode_confirm_open">Transacció que serà executada:\n\nMarcar %1$s %2$s de %3$s com a obert\n\nUbicació: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
-  <string name="msg_quick_mode_confirm_transfer">Transacció que serà executada:\n\nTransferir %1$s%2$sde %3$s\nDe la Ubicació:%4$s\nA la Ubicació:%5$s</string>
+  <string name="msg_quick_mode_confirm_transfer">Transacció que serà executada:\n\nTransferir %1$s %2$s de %3$s\nDe la Ubicació: %4$s\nA la Ubicació: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-  <string name="msg_quick_mode_confirm_inventory">Transacció que serà executada:\n\nDefinir quantitat de %1$scom a %2$s%3$s\nAplicar als elements afegits:\nData de consum preferent:%4$s\nPreu:%5$s\nBotiga:%6$s\nUbicació:%7$s</string>
+  <string name="msg_quick_mode_confirm_inventory">Transacció que serà executada:\n\nDefinir quantitat de %1$s com a %2$s %3$s\nAplicar als elements afegits:\nData de consum preferent: %4$s\nPreu: %5$s\nBotiga: %6$s\nUbicació: %7$s</string>
   <string name="msg_compatibility">Aquesta versió d\'aplicació no és compatible amb la versió del servidor Grocy.\n\nVersió actual del servidor: %1$s\n\nVersions de servidor compatibles:\n%2$s\nSi la versió actual del servidor té un número de versió major més alt (primer dígit) que les versions compatibles i ignores aquesta alerta, es poden produir pèrdues de dades (poc probables) o fallades (probables).\nSi només hi ha diferència en un número de versió menor (per exemple, el tercer dígit és més alt) pots ignorar aquesta alerta.</string>
   <string name="msg_logout">No es canviarà res al servidor. Seràs redirigit a la pàgina d\'inici de sessió.</string>
   <string name="msg_logout_demo">Estàs utilitzant el servidor públic de demostració <u>https://grocy.info</u>.\n\n<b>Cap dels canvis que facis es desaran permanentment!\nEs mantenen públics fins que el servidor els reescriu automàticament un cop al dia.</b>\n\nA la pantalla d\'inici de sessió pots introduir l\'adreça del teu propi servidor.</string>
@@ -533,6 +534,7 @@
   <string name="error_offline">No actiu</string>
   <string name="error_offline_subtitle">Aquesta pàgina només funciona amb accés a internet. Comprova la teva connexió.</string>
   <string name="error_no_done_items">No hi ha cap element marcat com a completat</string>
+  <string name="error_auto_sync_disabled">La sincronització automàtica està desactivada</string>
   <string name="error_already_exists">Ja existeix</string>
   <string name="error_network">Error de xarxa</string>
   <string name="error_network_subtitle">Les dades requerides no s\'han pogut carregar completament.</string>
@@ -696,7 +698,7 @@
   <!-- %1$s is a price, %2$s is a quantity unit -->
   <string name="subtitle_price_means">Equival a %1$s per %2$s.</string>
   <!-- %1$s and %2$s are amounts -->
-  <string name="subtitle_factor_means">Significa que %1$s es el mateix que %2$s.</string>
+  <string name="subtitle_factor_means">Significa que %1$s és el mateix que %2$s.</string>
   <string name="subtitle_product_hidden">El producte està ocult</string>
   <string name="subtitle_product_not_hidden">El producte no està ocult</string>
   <string name="subtitle_product_not_on_server">El producte no és al servidor</string>
@@ -893,10 +895,10 @@
   <string name="property_factor">Factor</string>
   <string name="property_barcode">Codi de barres</string>
   <string name="property_barcodes">Codis de barres</string>
-  <string name="property_barcodes_insert">Codis de barres:%1$s</string>
+  <string name="property_barcodes_insert">Codis de barres: %1$s</string>
   <string name="property_days">Dies</string>
   <string name="property_purchased_date">Data de compra</string>
-  <string name="property_purchased_date_fill">Data de compra:%1$s</string>
+  <string name="property_purchased_date_fill">Data de compra: %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_type">Tipus de data de venciment</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -908,7 +910,7 @@
   <!-- This string is for due date of task -->
   <string name="property_due_date_task">Data de consum preferent</string>
   <!-- %1$s is a due date-->
-  <string name="property_due_date_fill">Data de consum preferent:%1$s</string>
+  <string name="property_due_date_fill">Data de consum preferent: %1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_next">Propera data de consum preferent</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -929,7 +931,7 @@
   <string name="property_notes">Notes</string>
   <string name="property_locations">Ubicacions</string>
   <string name="property_store">Botiga</string>
-  <string name="property_store_insert">Botiga:%1$s</string>
+  <string name="property_store_insert">Botiga: %1$s</string>
   <string name="property_store_unknown">Botiga desconeguda</string>
   <string name="property_store_default">Botiga predeterminada</string>
   <string name="property_stores">Botigues</string>
@@ -943,7 +945,7 @@
   <string name="property_last_price">Últim preu</string>
   <string name="property_last_price_unit">Últim preu (unitat)</string>
   <string name="property_last_price_total">Últim preu (total)</string>
-  <string name="property_price_insert">Preu:%1$s</string>
+  <string name="property_price_insert">Preu: %1$s</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Temps de vida mitjà de l\'inventari</string>
   <string name="property_spoil_rate">Taxa de conservació</string>
@@ -974,13 +976,13 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_tare_weight">Tara</string>
   <!-- %1$s is a quantity unit like "bottles" -->
-  <string name="property_tare_weight_in">Tara en%1$s</string>
+  <string name="property_tare_weight_in">Tara en %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_disable_stock_check">Deshabilitar comprovació d\'existències per aquest ingredient.</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_amount_quick_consume">Quantitat de consum ràpid</string>
   <!-- %1$s is a quantity unit like "bottles" -->
-  <string name="property_amount_quick_consume_in">Quantitat de consum ràpid en%1$s</string>
+  <string name="property_amount_quick_consume_in">Quantitat de consum ràpid en %1$s</string>
   <!--The same string is also in the web interface (server v4.0.0 or later): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_amount_quick_open">Quantitat d\'obertura ràpida</string>
   <!-- %1$s is a quantity unit like "bottles" -->
@@ -1012,7 +1014,7 @@
   <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
   <string name="property_userfield_value">%1$s: %2$s</string>
   <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
-  <string name="property_userfield_value_without_space">%1$s: %2$s</string>
+  <string name="property_userfield_value_without_space">%1$s:%2$s</string>
   <string name="property_task_category">Categoria de tasca</string>
   <string name="property_task_categories">Categories de tasca</string>
   <string name="property_calories">Calories</string>
@@ -1081,30 +1083,30 @@
 
   <plurals name="date_days">
     <item quantity="one">%ddia</item>
-    <item quantity="other">%ddies</item>
+    <item quantity="other">%d dies</item>
   </plurals>
   <plurals name="date_months">
     <item quantity="one">%dmes</item>
-    <item quantity="other">%dmesos</item>
+    <item quantity="other">%d mesos</item>
   </plurals>
   <plurals name="date_years">
     <item quantity="one">%dany</item>
-    <item quantity="other">%danys</item>
+    <item quantity="other">%d anys</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_days_ago">
     <item quantity="one">Fa%ddia</item>
-    <item quantity="other">Fa%ddies</item>
+    <item quantity="other">Fa %d dies</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_months_ago">
     <item quantity="one">Fa%dmes</item>
-    <item quantity="other">Fa%dmesos</item>
+    <item quantity="other">Fa %d mesos</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_years_ago">
     <item quantity="one">Fa%dany</item>
-    <item quantity="other">Fa%danys</item>
+    <item quantity="other">Fa %d anys</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_days_from_now">
