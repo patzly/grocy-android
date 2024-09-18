@@ -1309,7 +1309,6 @@
   <string name="ikm_client_cert_notification">Client-Zertifikat auswählen für</string>
   <string name="ikm_decision_file">Von Datei</string>
   <string name="ikm_decision_keychain">Vom Geräte-Keymanager</string>
-  <string name="ikm_decision_abort">Abbrechen</string>
   <string name="ikm_notification">Client-Zertifikat auswählen</string>
   <string name="ikm_load_app_keystore">Fehler beim Laden des App-Keystores</string>
   <string name="ikm_store_aliasMapping">Fehler beim Speichern von Keychain-Aliasen</string>
@@ -1330,7 +1329,6 @@
   <string name="mtm_valid_for">Zertifikat gültig für:</string>
   <string name="mtm_decision_always">Immer</string>
   <string name="mtm_decision_once">Einmalig</string>
-  <string name="mtm_decision_abort">Abbrechen</string>
   <string name="mtm_notification_channel">Sicherheit</string>
   <string name="mtm_notification">Überprüfung des Zertifikats</string>
   <string name="mtm_error_keystore">Fehler beim Laden des Keystores aus Datei</string>
