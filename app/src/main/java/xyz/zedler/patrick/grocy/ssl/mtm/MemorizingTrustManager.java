@@ -1,5 +1,6 @@
 package xyz.zedler.patrick.grocy.ssl.mtm;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Notification;
@@ -12,6 +13,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.util.Log;
 import android.util.SparseArray;
 import android.widget.Toast;
 import java.io.File;
@@ -51,7 +53,10 @@ import xyz.zedler.patrick.grocy.R;
  * <b>WARNING:</b> This only works if a dedicated thread is used for opening sockets!
  * Source: github.com/stephanritscher/MemorizingTrustManager
  */
+@SuppressLint("CustomX509TrustManager")
 public class MemorizingTrustManager implements X509TrustManager {
+
+  private final static String TAG = MemorizingTrustManager.class.getName();
 
   final static String DECISION_INTENT = "de.duenndns.ssl.DECISION";
   final static String DECISION_INTENT_ID = DECISION_INTENT + ".decisionId";
@@ -378,7 +383,7 @@ public class MemorizingTrustManager implements X509TrustManager {
         }
       }
     } catch (CertificateParsingException e) {
-      e.printStackTrace();
+      Log.e(TAG, "certDetails: ", e);
       si.append("<Parsing error: ");
       si.append(e.getLocalizedMessage());
       si.append(">\n");
