@@ -6,7 +6,7 @@ preference = "1.2.1"
 browser = "1.8.0"
 webkit = "1.11.0"
 lifecycle-viewmodel = "2.8.5"
-kotlinx-serialization-json = "1.6.2"
+kotlinx-serialization-json = "1.7.2"
 paging = "3.3.2"
 navigation = "2.8.0"
 room = "2.6.1"
@@ -35,7 +35,8 @@ webkit = { module = "androidx.webkit:webkit", version.ref = "webkit" }
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycle-viewmodel" }
 lifecycle-viewmodel-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "lifecycle-viewmodel" }
 paging = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version = "1.7.2" }
+# Prevents compilation error at graph.setStartDestination: class file for kotlinx.serialization.KSerializer not found
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 # Navigation framework for easy navigation control using XML
 navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigation" }
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigation" }
