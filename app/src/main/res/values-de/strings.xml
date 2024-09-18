@@ -1317,7 +1317,7 @@
   <string name="ikm_remove_all_keys">Alle Verbindungsschlüssel entfernt</string>
   <string name="ikm_add_from_keystore">Fehler beim Lesen des angegebenen Keystores</string>
   <string name="ikm_add_from_keystore_alias">Fehler beim Laden der Schlüssel:</string>
-  <string name="ikm_keychain">Schlüsselbund-Fehler, gespeichertes Alias wird entfernt</string>
+  <string name="ikm_keychain">Keychain-Fehler, gespeichertes Alias wird entfernt</string>
   <string name="ikm_select_keystore">Keystore-Datei auswählen</string>
 
   <string name="mtm_security_risk">Warnung: Potenzielles Sicherheitsrisiko</string>
