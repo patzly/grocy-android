@@ -41,7 +41,7 @@ public class MemorizingActivity extends Activity implements OnClickListener,OnCa
         .setMessage(cert)
         .setPositiveButton(R.string.mtm_decision_always, this)
         .setNeutralButton(R.string.mtm_decision_once, this)
-        .setNegativeButton(R.string.mtm_decision_abort, this)
+        .setNegativeButton(R.string.action_cancel, this)
         .setOnCancelListener(this)
         .create();
     dialog.show();

@@ -1373,7 +1373,6 @@
   <string name="ikm_client_cert_notification">Select client certificate for</string>
   <string name="ikm_decision_file">From File</string>
   <string name="ikm_decision_keychain">From Device Key Manager</string>
-  <string name="ikm_decision_abort">Abort</string>
   <string name="ikm_notification">Select Client Certificate</string>
   <string name="ikm_load_app_keystore">Error loading app keystore</string>
   <string name="ikm_store_aliasMapping">Error storing keychain aliases</string>
@@ -1394,7 +1393,6 @@
   <string name="mtm_valid_for">Certificate valid for:</string>
   <string name="mtm_decision_always">Always</string>
   <string name="mtm_decision_once">Once</string>
-  <string name="mtm_decision_abort">Abort</string>
   <string name="mtm_notification_channel">Security</string>
   <string name="mtm_notification">Certificate Verification</string>
   <string name="mtm_error_keystore">Exception on loading key store from file</string>

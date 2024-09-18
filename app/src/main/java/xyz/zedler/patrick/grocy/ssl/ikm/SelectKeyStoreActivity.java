@@ -53,7 +53,7 @@ public class SelectKeyStoreActivity extends Activity
         .setView(hostnamePortInput)
         .setPositiveButton(R.string.ikm_decision_file, this)
         .setNeutralButton(R.string.ikm_decision_keychain, this)
-        .setNegativeButton(R.string.ikm_decision_abort, this)
+        .setNegativeButton(R.string.action_cancel, this)
         .setOnCancelListener(this)
         .create();
     final Context context = this;

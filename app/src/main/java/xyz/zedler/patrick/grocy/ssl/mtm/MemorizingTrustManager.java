@@ -58,25 +58,23 @@ public class MemorizingTrustManager implements X509TrustManager {
 
   private final static String TAG = MemorizingTrustManager.class.getName();
 
-  final static String DECISION_INTENT = "de.duenndns.ssl.DECISION";
-  final static String DECISION_INTENT_ID = DECISION_INTENT + ".decisionId";
-  final static String DECISION_INTENT_CERT = DECISION_INTENT + ".cert";
+  private final static String DECISION_INTENT = "de.duenndns.ssl.DECISION";
+  public final static String DECISION_INTENT_ID = DECISION_INTENT + ".decisionId";
+  public final static String DECISION_INTENT_CERT = DECISION_INTENT + ".cert";
 
-  private final static Logger LOGGER = Logger.getLogger(MemorizingTrustManager.class.getName());
-  final static String DECISION_TITLE_ID = DECISION_INTENT + ".titleId";
+  public final static String DECISION_TITLE_ID = DECISION_INTENT + ".titleId";
   private final static int NOTIFICATION_ID = 100509;
 
-  static String KEYSTORE_DIR = "KeyStore";
-  static String KEYSTORE_FILE = "KeyStore.bks";
+  private final static String KEYSTORE_DIR = "KeyStore";
+  private final static String KEYSTORE_FILE = "KeyStore.bks";
 
-  Context context;
-  Activity foregroundAct;
-  NotificationManager notificationManager;
+  private Context context;
+  private NotificationManager notificationManager;
   private static final String CHANNEL_ID = "memorizingtrustmanager";
   private static int decisionId = 0;
   private static final SparseArray<Decision> openDecisions = new SparseArray<>();
 
-  Handler masterHandler;
+  private Handler masterHandler;
   private File keyStoreFile;
   private KeyStore appKeyStore;
   private final X509TrustManager defaultTrustManager;
@@ -115,15 +113,17 @@ public class MemorizingTrustManager implements X509TrustManager {
     this.defaultTrustManager = getTrustManager(null);
   }
 
-  void init(Context context) {
+  private void init(Context context) {
     this.context = context;
     masterHandler = new Handler(context.getMainLooper());
     notificationManager = (NotificationManager) context.getSystemService(
-        Context.NOTIFICATION_SERVICE);
+        Context.NOTIFICATION_SERVICE
+    );
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       NotificationChannel channel = notificationManager.getNotificationChannel(CHANNEL_ID);
       if (channel == null) {
-        channel = new NotificationChannel(CHANNEL_ID,
+        channel = new NotificationChannel(
+            CHANNEL_ID,
             context.getString(R.string.mtm_notification_channel),
             NotificationManager.IMPORTANCE_DEFAULT
         );
@@ -148,11 +148,29 @@ public class MemorizingTrustManager implements X509TrustManager {
 
     File dir = app.getDir(KEYSTORE_DIR, Context.MODE_PRIVATE);
     keyStoreFile = new File(dir + File.separator + KEYSTORE_FILE);
-    LOGGER.log(Level.INFO, "init(): Using keyStoreFile " + keyStoreFile.getPath());
+    Log.i(TAG, "init: Using keyStoreFile " + keyStoreFile.getPath());
     appKeyStore = loadAppKeyStore();
   }
 
-  X509TrustManager getTrustManager(KeyStore ks) {
+  @Override
+  public void checkClientTrusted(X509Certificate[] chain, String authType)
+      throws CertificateException {
+    checkCertTrusted(chain, authType, false);
+  }
+
+  @Override
+  public void checkServerTrusted(X509Certificate[] chain, String authType)
+      throws CertificateException {
+    checkCertTrusted(chain, authType, true);
+  }
+
+  @Override
+  public X509Certificate[] getAcceptedIssuers() {
+    Log.i(TAG, "getAcceptedIssuers");
+    return defaultTrustManager.getAcceptedIssuers();
+  }
+
+  private X509TrustManager getTrustManager(KeyStore ks) {
     try {
       TrustManagerFactory tmf = TrustManagerFactory.getInstance("X509");
       tmf.init(ks);
@@ -162,26 +180,23 @@ public class MemorizingTrustManager implements X509TrustManager {
         }
       }
     } catch (Exception e) {
-      // Here, we are covering up errors. It might be more useful
-      // however to throw them out of the constructor so the
-      // embedding app knows something went wrong.
-      LOGGER.log(Level.SEVERE, "getTrustManager(" + ks + ")", e);
+      Log.e(TAG, "getTrustManager: " + ks, e);
     }
     return null;
   }
 
-  KeyStore loadAppKeyStore() {
+  private KeyStore loadAppKeyStore() {
     KeyStore ks;
     try {
       ks = KeyStore.getInstance(KeyStore.getDefaultType());
     } catch (KeyStoreException e) {
-      LOGGER.log(Level.SEVERE, "getAppKeyStore()", e);
+      Log.e(TAG, "loadAppKeyStore: ", e);
       return null;
     }
     try {
       ks.load(null, null);
     } catch (NoSuchAlgorithmException | CertificateException | IOException e) {
-      LOGGER.log(Level.SEVERE, "getAppKeyStore(" + keyStoreFile + ")", e);
+      Log.e(TAG, "loadAppKeyStore: " + keyStoreFile, e);
     }
     InputStream is = null;
     try {
@@ -189,15 +204,17 @@ public class MemorizingTrustManager implements X509TrustManager {
       ks.load(is, "MTM".toCharArray());
     } catch (NoSuchAlgorithmException | CertificateException | IOException e) {
       Toast.makeText(context, R.string.mtm_error_keystore, Toast.LENGTH_SHORT).show();
-      LOGGER.log(Level.INFO,
-          "getAppKeyStore(" + keyStoreFile + ") - exception loading file key store", e);
+      Log.e(TAG, "loadAppKeyStore: exception loading file key store: " + keyStoreFile, e);
     } finally {
       if (is != null) {
         try {
           is.close();
         } catch (IOException e) {
-          LOGGER.log(Level.FINE, "getAppKeyStore(" + keyStoreFile
-              + ") - exception closing file key store input stream", e);
+          Log.e(
+              TAG,
+              "loadAppKeyStore: exception closing file key store input stream " + keyStoreFile,
+              e
+          );
           Toast.makeText(context, R.string.mtm_error_keystore, Toast.LENGTH_SHORT).show();
         }
       }
@@ -205,22 +222,22 @@ public class MemorizingTrustManager implements X509TrustManager {
     return ks;
   }
 
-  void storeCert(String alias, Certificate cert) {
+  private void storeCert(String alias, Certificate cert) {
     try {
       appKeyStore.setCertificateEntry(alias, cert);
-      LOGGER.log(Level.INFO, "storeCert(" + alias + ")");
+      Log.i(TAG, "storeCert: " + alias);
     } catch (KeyStoreException e) {
-      LOGGER.log(Level.SEVERE, "storeCert(" + cert + ")", e);
+      Log.e(TAG, "storeCert: " + cert, e);
       return;
     }
     keyStoreUpdated();
   }
 
-  void storeCert(X509Certificate cert) {
+  private void storeCert(X509Certificate cert) {
     storeCert(cert.getSubjectDN().toString(), cert);
   }
 
-  void keyStoreUpdated() {
+  private void keyStoreUpdated() {
     // reload appTrustManager
     appTrustManager = getTrustManager(appKeyStore);
 
@@ -230,13 +247,13 @@ public class MemorizingTrustManager implements X509TrustManager {
       fos = new java.io.FileOutputStream(keyStoreFile);
       appKeyStore.store(fos, "MTM".toCharArray());
     } catch (Exception e) {
-      LOGGER.log(Level.SEVERE, "storeCert(" + keyStoreFile + ")", e);
+      Log.e(TAG, "keyStoreUpdated: " + keyStoreFile, e);
     } finally {
       if (fos != null) {
         try {
           fos.close();
         } catch (IOException e) {
-          LOGGER.log(Level.SEVERE, "storeCert(" + keyStoreFile + ")", e);
+          Log.e(TAG, "keyStoreUpdated: " + keyStoreFile, e);
         }
       }
     }
@@ -271,56 +288,40 @@ public class MemorizingTrustManager implements X509TrustManager {
     return false;
   }
 
-  public void checkCertTrusted(X509Certificate[] chain, String authType, boolean isServer)
+  private void checkCertTrusted(X509Certificate[] chain, String authType, boolean isServer)
       throws CertificateException {
-    LOGGER.log(Level.INFO,
-        "checkCertTrusted(" + Arrays.toString(chain) + ", " + authType + ", " + isServer + ")");
+    Log.i(
+        TAG, "checkCertTrusted: " + Arrays.toString(chain) + ", " + authType + ", " + isServer
+    );
     try {
-      LOGGER.log(Level.FINE, "checkCertTrusted: trying appTrustManager");
+      Log.i(TAG, "checkCertTrusted: trying appTrustManager");
       if (isServer) {
         appTrustManager.checkServerTrusted(chain, authType);
       } else {
         appTrustManager.checkClientTrusted(chain, authType);
       }
     } catch (CertificateException ae) {
-      LOGGER.log(Level.FINER,
-          "checkCertTrusted: appTrustManager did not verify certificate. Will fall back to secondary verification mechanisms (if any).",
-          ae);
+      Log.e(TAG, "checkCertTrusted: appTrustManager did not verify certificate. Will fall back to secondary verification mechanisms (if any).", ae);
       if (isCertKnown(chain[0])) {
-        LOGGER.log(Level.INFO, "checkCertTrusted: accepting cert already stored in keystore");
+        Log.i(TAG, "checkCertTrusted: accepting cert already stored in keystore");
         return;
       }
       try {
         if (defaultTrustManager == null) {
-          LOGGER.fine("No defaultTrustManager set. Verification failed, throwing " + ae);
+          Log.i(TAG, "checkCertTrusted: No defaultTrustManager set. Verification failed, throwing " + ae);
           throw ae;
         }
-        LOGGER.log(Level.FINE, "checkCertTrusted: trying defaultTrustManager");
+        Log.i(TAG, "checkCertTrusted: trying defaultTrustManager");
         if (isServer) {
           defaultTrustManager.checkServerTrusted(chain, authType);
         } else {
           defaultTrustManager.checkClientTrusted(chain, authType);
         }
       } catch (CertificateException e) {
-        LOGGER.log(Level.FINER, "checkCertTrusted: defaultTrustManager failed", e);
+        Log.e(TAG, "checkCertTrusted: defaultTrustManager failed", e);
         interactCert(chain, e);
       }
     }
-  }
-
-  public void checkClientTrusted(X509Certificate[] chain, String authType)
-      throws CertificateException {
-    checkCertTrusted(chain, authType, false);
-  }
-
-  public void checkServerTrusted(X509Certificate[] chain, String authType)
-      throws CertificateException {
-    checkCertTrusted(chain, authType, true);
-  }
-
-  public X509Certificate[] getAcceptedIssuers() {
-    LOGGER.log(Level.FINE, "getAcceptedIssuers()");
-    return defaultTrustManager.getAcceptedIssuers();
   }
 
   private static int createDecisionId(Decision d) {
@@ -405,7 +406,7 @@ public class MemorizingTrustManager implements X509TrustManager {
 
   private String certChainMessage(final X509Certificate[] chain, CertificateException cause) {
     Throwable e = cause;
-    LOGGER.log(Level.FINE, "certChainMessage for " + e);
+    Log.i(TAG, "certChainMessage: for " + e);
     StringBuilder si = new StringBuilder();
     if (isPathException(e)) {
       si.append(context.getString(R.string.mtm_trust_anchor));
@@ -427,7 +428,7 @@ public class MemorizingTrustManager implements X509TrustManager {
     return si.toString();
   }
 
-  void startActivityNotification(Intent intent, int decisionId, String certName) {
+  private void startActivityNotification(Intent intent, int decisionId, String certName) {
     Notification notification;
     final PendingIntent call;
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -454,16 +455,7 @@ public class MemorizingTrustManager implements X509TrustManager {
     notificationManager.notify(NOTIFICATION_ID + decisionId, notification);
   }
 
-  /**
-   * Returns the top-most entry of the activity stack.
-   *
-   * @return the Context of the currently bound UI or the master context if none is bound
-   */
-  Context getUI() {
-    return (foregroundAct != null) ? foregroundAct : context;
-  }
-
-  int interact(final String message, final int titleId) {
+  private int interact(final String message, final int titleId) {
     /* prepare the MTMDecision blocker object */
     Decision choice = new Decision();
     final int myId = createDecisionId(choice);
@@ -482,26 +474,26 @@ public class MemorizingTrustManager implements X509TrustManager {
       // invalid / expired activity, the catch-all fallback is
       // deployed.
       try {
-        getUI().startActivity(ni);
+        context.startActivity(ni);
       } catch (Exception e) {
-        LOGGER.log(Level.SEVERE, "startActivity(MemorizingActivity)", e);
+        Log.e(TAG, "interact: startActivity(MemorizingActivity)", e);
         startActivityNotification(ni, myId, message);
       }
     });
 
-    LOGGER.log(Level.FINE, "openDecisions: " + openDecisions + ", waiting on " + myId);
+    Log.i(TAG, "interact: openDecisions: " + openDecisions + ", waiting on " + myId);
     try {
       synchronized (choice) {
         choice.wait();
       }
     } catch (InterruptedException e) {
-      LOGGER.log(Level.FINER, "InterruptedException", e);
+      Log.e(TAG, "interact: ", e);
     }
-    LOGGER.log(Level.FINE, "finished wait on " + myId + ": " + choice.state);
+    Log.i(TAG, "interact: finished wait on " + myId + ": " + choice.state);
     return choice.state;
   }
 
-  void interactCert(final X509Certificate[] chain, CertificateException cause)
+  private void interactCert(final X509Certificate[] chain, CertificateException cause)
       throws CertificateException {
     switch (interact(certChainMessage(chain, cause), R.string.mtm_security_risk)) {
       case Decision.DECISION_ALWAYS:
@@ -520,7 +512,7 @@ public class MemorizingTrustManager implements X509TrustManager {
       openDecisions.remove(decisionId);
     }
     if (decision == null) {
-      LOGGER.log(Level.SEVERE, "interactResult: aborting due to stale decision reference!");
+      Log.e(TAG, "interactResult: aborting due to stale decision reference!");
       return;
     }
     synchronized (decision) {
