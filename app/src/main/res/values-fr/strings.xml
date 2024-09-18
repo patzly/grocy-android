@@ -1363,7 +1363,6 @@
   <string name="ikm_client_cert_notification">Sélectionner le certificat client pour</string>
   <string name="ikm_decision_file">À partir du fichier</string>
   <string name="ikm_decision_keychain">Depuis le Gestionnaire de clés de l\'appareil</string>
-  <string name="ikm_decision_abort">Annuler</string>
   <string name="ikm_notification">Sélectionner le certificat client</string>
   <string name="ikm_load_app_keystore">Erreur lors du chargement du magasin de clés</string>
   <string name="ikm_store_aliasMapping">Erreur lors du stockage des alias du trousseau</string>
@@ -1384,7 +1383,6 @@
   <string name="mtm_valid_for">Certificat valable pour :</string>
   <string name="mtm_decision_always">Toujours</string>
   <string name="mtm_decision_once">Une fois</string>
-  <string name="mtm_decision_abort">Annuler</string>
   <string name="mtm_notification_channel">Sécurité</string>
   <string name="mtm_notification">Vérification du certificat</string>
   <string name="mtm_error_keystore">Exception lors du chargement du magasin de clés à partir du fichier</string>
