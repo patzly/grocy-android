@@ -34,20 +34,25 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.NETWORK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.ssl.ikm.InteractiveKeyManager;
+import xyz.zedler.patrick.grocy.ssl.mtm.MemorizingTrustManager;
 
 public class RequestQueueSingleton {
 
   private static RequestQueueSingleton instance;
   private RequestQueue requestQueue;
-  private static Context ctx;
+  private static Context context;
 
   private RequestQueueSingleton(Context context) {
-    ctx = context.getApplicationContext();
+    RequestQueueSingleton.context = context.getApplicationContext();
     requestQueue = getRequestQueue();
   }
 
@@ -68,9 +73,9 @@ public class RequestQueueSingleton {
   public void newRequestQueue() {
     //requestQueue = Volley.newRequestQueue(ctx);
 
-    Cache cache = new DiskBasedCache(ctx.getCacheDir(), 1024 * 1024);
+    Cache cache = new DiskBasedCache(context.getCacheDir(), 1024 * 1024);
 
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     boolean useTor = sharedPrefs.getBoolean(NETWORK.TOR, SETTINGS_DEFAULT.NETWORK.TOR);
     boolean useProxy = sharedPrefs.getBoolean(NETWORK.PROXY, SETTINGS_DEFAULT.NETWORK.PROXY);
 
@@ -94,9 +99,15 @@ public class RequestQueueSingleton {
     private final SSLSocketFactory internalSSLSocketFactory;
 
     public TLSSocketFactory() throws KeyManagementException, NoSuchAlgorithmException {
-      SSLContext context = SSLContext.getInstance("TLS");
-      context.init(null, null, null);
-      internalSSLSocketFactory = context.getSocketFactory();
+      SSLContext sslContext = SSLContext.getInstance("TLS");
+      sslContext.init(null, null, null);
+
+      // Client certificates
+      KeyManager keyManager = new InteractiveKeyManager(context);
+      TrustManager mtm = new MemorizingTrustManager(context);
+      sslContext.init(new KeyManager[]{keyManager}, new TrustManager[]{mtm}, new SecureRandom());
+
+      internalSSLSocketFactory = sslContext.getSocketFactory();
     }
 
     @Override

@@ -1368,4 +1368,35 @@
   <string name="url_volley" translatable="false">https://github.com/google/volley</string>
   <string name="url_zxing_android" translatable="false">https://github.com/journeyapps/zxing-android-embedded</string>
 
+  <string name="ikm_select_cert">Select Client Certificate</string>
+  <string name="ikm_client_cert">Server requested a client certificate. Please select which certificate you want to use.</string>
+  <string name="ikm_client_cert_notification">Select client certificate for</string>
+  <string name="ikm_decision_file">From File</string>
+  <string name="ikm_decision_keychain">From Device Key Manager</string>
+  <string name="ikm_decision_abort">Abort</string>
+  <string name="ikm_notification">Select Client Certificate</string>
+  <string name="ikm_load_app_keystore">Error loading app keystore</string>
+  <string name="ikm_store_aliasMapping">Error storing keychain aliases</string>
+  <string name="ikm_remove_keys">Connection error: removed keys for</string>
+  <string name="ikm_remove_all_keys">Removed all connection keys</string>
+  <string name="ikm_add_from_keystore">Error reading specified keystore</string>
+  <string name="ikm_add_from_keystore_alias">Error loading keys:</string>
+  <string name="ikm_keychain">KeyChain error; removing stored alias</string>
+  <string name="ikm_select_keystore">Select keystore file</string>
+
+  <string name="mtm_security_risk">Warning: Potential Security Risk</string>
+  <string name="mtm_trust_anchor">The server certificate is not signed by a known Certificate Authority.</string>
+  <string name="mtm_cert_expired">The server certificate is expired.</string>
+  <string name="mtm_hostname_mismatch">Server could not authenticate as \&quot;%s\&quot;.</string>
+  <string name="mtm_trust_certificate">Do you trust this certificate? It will be used to verify all listed names.</string>
+  <string name="mtm_accept_servername">Accept Mismatching Server Name?</string>
+  <string name="mtm_cert_details">Certificate details:</string>
+  <string name="mtm_valid_for">Certificate valid for:</string>
+  <string name="mtm_decision_always">Always</string>
+  <string name="mtm_decision_once">Once</string>
+  <string name="mtm_decision_abort">Abort</string>
+  <string name="mtm_notification_channel">Security</string>
+  <string name="mtm_notification">Certificate Verification</string>
+  <string name="mtm_error_keystore">Exception on loading key store from file</string>
+
 </resources>
