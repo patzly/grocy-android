@@ -1,4 +1,4 @@
-## 3.5.3
+## 3.6.0
 
 ? Because my twin brother Dominic switched to Apple devices a while ago and doesn't actively use
 Grocy himself, he has withdrawn from the Grocy Android project. This means that I am now the sole
