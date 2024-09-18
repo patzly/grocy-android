@@ -1313,7 +1313,7 @@
   <string name="ikm_notification">Client-Zertifikat auswählen</string>
   <string name="ikm_load_app_keystore">Fehler beim Laden des App-Keystores</string>
   <string name="ikm_store_aliasMapping">Fehler beim Speichern von Keychain-Aliasen</string>
-  <string name="ikm_remove_keys">Verbindungsfehler: Schlüssel entfernt für</string>
+  <string name="ikm_remove_keys">Verbindungsfehler: Key entfernt für</string>
   <string name="ikm_remove_all_keys">Alle Verbindungsschlüssel entfernt</string>
   <string name="ikm_add_from_keystore">Fehler beim Lesen des angegebenen Keystores</string>
   <string name="ikm_add_from_keystore_alias">Fehler beim Laden der Keys:</string>
