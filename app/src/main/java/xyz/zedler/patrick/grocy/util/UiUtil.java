@@ -571,7 +571,8 @@ public class UiUtil {
   }
 
   public static void setLightNavigationBar(@NonNull View view, boolean isLight) {
-    if (Build.VERSION.SDK_INT >= VERSION_CODES.R) {
+    if (Build.VERSION.SDK_INT >= VERSION_CODES.S && view.getWindowInsetsController() != null) {
+      // API is already available in R but very buggy
       view.getWindowInsetsController().setSystemBarsAppearance(
           isLight ? WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS : 0,
           WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
@@ -588,7 +589,8 @@ public class UiUtil {
   }
 
   public static void setLightStatusBar(@NonNull View view, boolean isLight) {
-    if (Build.VERSION.SDK_INT >= VERSION_CODES.S) {
+    if (Build.VERSION.SDK_INT >= VERSION_CODES.S && view.getWindowInsetsController() != null) {
+      // API is already available in R but very buggy
       view.getWindowInsetsController().setSystemBarsAppearance(
           isLight ? WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS : 0,
           WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
