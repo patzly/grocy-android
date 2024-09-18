@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.util.SparseArray;
 import android.widget.Toast;
+import androidx.core.app.NotificationCompat;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -301,7 +302,7 @@ public class MemorizingTrustManager implements X509TrustManager {
         appTrustManager.checkClientTrusted(chain, authType);
       }
     } catch (CertificateException ae) {
-      Log.e(TAG, "checkCertTrusted: appTrustManager did not verify certificate. Will fall back to secondary verification mechanisms (if any).", ae);
+      Log.w(TAG, "checkCertTrusted: appTrustManager did not verify certificate. Will fall back to secondary verification mechanisms (if any).", ae);
       if (isCertKnown(chain[0])) {
         Log.i(TAG, "checkCertTrusted: accepting cert already stored in keystore");
         return;
@@ -429,7 +430,6 @@ public class MemorizingTrustManager implements X509TrustManager {
   }
 
   private void startActivityNotification(Intent intent, int decisionId, String certName) {
-    Notification notification;
     final PendingIntent call;
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
       call = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE);
@@ -439,10 +439,10 @@ public class MemorizingTrustManager implements X509TrustManager {
     final String mtmNotification = context.getString(R.string.mtm_notification);
     final long currentMillis = System.currentTimeMillis();
 
-    Notification.Builder notificationBuilder = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ?
-        new Notification.Builder(context, CHANNEL_ID)
-        : new Notification.Builder(context);
-    notification = notificationBuilder
+    NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(
+        context, CHANNEL_ID
+    );
+    Notification notification = notificationBuilder
         .setContentTitle(mtmNotification)
         .setContentText(certName)
         .setTicker(certName)
@@ -450,8 +450,7 @@ public class MemorizingTrustManager implements X509TrustManager {
         .setWhen(currentMillis)
         .setContentIntent(call)
         .setAutoCancel(true)
-        .getNotification();
-
+        .build();
     notificationManager.notify(NOTIFICATION_ID + decisionId, notification);
   }
 
