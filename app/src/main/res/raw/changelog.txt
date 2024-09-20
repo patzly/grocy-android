@@ -12,6 +12,7 @@ job and my other projects, as my free time allows.
   (thanks @ssiegel) (#860)
 - Improved: Colors of in-app provided themes
 - Fixed: Invisible status bar icons on some devices with Android 11
+- Fixed: Missing page transitions for actions in product details dialog
 
 ## 3.5.2
 

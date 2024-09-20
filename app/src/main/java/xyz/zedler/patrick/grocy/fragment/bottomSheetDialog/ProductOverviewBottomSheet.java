@@ -242,7 +242,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
 
     binding.chipConsume.setVisibility(isInStock ? View.VISIBLE : View.GONE);
     binding.chipConsume.setOnClickListener(v -> {
-      NavHostFragment.findNavController(this).navigate(
+      activity.navUtil.navigateFragment(
           ProductOverviewBottomSheetDirections
               .actionProductOverviewBottomSheetDialogFragmentToConsumeFragment()
               .setCloseWhenFinished(true)
@@ -252,7 +252,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     });
 
     binding.chipPurchase.setOnClickListener(v -> {
-      NavHostFragment.findNavController(this).navigate(
+      activity.navUtil.navigateFragment(
           ProductOverviewBottomSheetDirections
               .actionProductOverviewBottomSheetDialogFragmentToPurchaseFragment()
               .setCloseWhenFinished(true)
@@ -264,7 +264,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     binding.chipTransfer.setVisibility(isInStock && product.getEnableTareWeightHandlingInt() == 0
         ? View.VISIBLE : View.GONE);
     binding.chipTransfer.setOnClickListener(v -> {
-      NavHostFragment.findNavController(this).navigate(
+      activity.navUtil.navigateFragment(
           ProductOverviewBottomSheetDirections
               .actionProductOverviewBottomSheetDialogFragmentToTransferFragment()
               .setCloseWhenFinished(true)
@@ -274,7 +274,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     });
 
     binding.chipInventory.setOnClickListener(v -> {
-      NavHostFragment.findNavController(this).navigate(
+      activity.navUtil.navigateFragment(
           ProductOverviewBottomSheetDirections
               .actionProductOverviewBottomSheetDialogFragmentToInventoryFragment()
               .setCloseWhenFinished(true)

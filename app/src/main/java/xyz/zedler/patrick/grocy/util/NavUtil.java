@@ -85,31 +85,20 @@ public class NavUtil {
   }
 
   public NavOptions.Builder getNavOptionsBuilderFragmentFadeOrSlide() {
+    NavOptions.Builder builder = new NavOptions.Builder();
     if (UiUtil.areAnimationsEnabled(activity)) {
       boolean useSliding = sharedPrefs.getBoolean(
           Constants.SETTINGS.APPEARANCE.USE_SLIDING,
           Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
       );
-      if (useSliding) {
-        return new NavOptions.Builder()
-            .setEnterAnim(R.anim.open_enter_slide)
-            .setExitAnim(R.anim.open_exit_slide)
-            .setPopEnterAnim(R.anim.close_enter_slide)
-            .setPopExitAnim(R.anim.close_exit_slide);
-      } else {
-        return new NavOptions.Builder()
-            .setEnterAnim(R.animator.open_enter)
-            .setExitAnim(R.animator.open_exit)
-            .setPopEnterAnim(R.animator.close_enter)
-            .setPopExitAnim(R.animator.close_exit);
-      }
+      builder.setEnterAnim(useSliding ? R.anim.open_enter_slide : R.animator.open_enter);
+      builder.setExitAnim(useSliding ? R.anim.open_exit_slide : R.animator.open_exit);
+      builder.setPopEnterAnim(useSliding ? R.anim.close_enter_slide : R.animator.close_enter);
+      builder.setPopExitAnim(useSliding ? R.anim.close_exit_slide : R.animator.close_exit);
     } else {
-      return new NavOptions.Builder()
-          .setEnterAnim(-1)
-          .setExitAnim(-1)
-          .setPopEnterAnim(-1)
-          .setPopExitAnim(-1);
+      builder.setEnterAnim(-1).setExitAnim(-1).setPopEnterAnim(-1).setPopExitAnim(-1);
     }
+    return builder;
   }
 
   public void navigate(NavDirections directions) {

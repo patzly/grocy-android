@@ -19,14 +19,12 @@
   ~ Copyright (c) 2024 by Patrick Zedler
   -->
 <set xmlns:android="http://schemas.android.com/apk/res/android">
-  <set android:ordering="sequentially">
-    <objectAnimator
-      android:duration="300"
-      android:interpolator="@android:interpolator/fast_out_slow_in"
-      android:propertyName="translationX"
-      android:valueFrom="0"
-      android:valueTo="@dimen/fading_end" />
-  </set>
+  <objectAnimator
+    android:duration="300"
+    android:interpolator="@android:interpolator/fast_out_slow_in"
+    android:propertyName="translationX"
+    android:valueFrom="0"
+    android:valueTo="@dimen/fading_end" />
   <objectAnimator
     android:duration="200"
     android:interpolator="@android:interpolator/fast_out_slow_in"

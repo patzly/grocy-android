@@ -48,12 +48,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
-import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -113,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
   private BroadcastReceiver networkReceiver;
   private BottomScrollBehavior scrollBehavior;
   private UiUtil uiUtil;
-  private OnBackPressedDispatcher dispatcher;
   private boolean runAsSuperClass;
   private boolean debug;
 
@@ -215,8 +214,7 @@ public class MainActivity extends AppCompatActivity {
     }, sharedPrefs, TAG);
     navUtil.updateStartDestination();
 
-    dispatcher = getOnBackPressedDispatcher();
-    OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+    OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(false) {
       @Override
       public void handleOnBackPressed() {
         BaseFragment currentFragment = getCurrentFragment();
@@ -226,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
           boolean handled = currentFragment.onBackPressed();
           if (!handled) {
             setEnabled(false);
-            dispatcher.onBackPressed();
+            getOnBackPressedDispatcher().onBackPressed();
             setEnabled(true);
           }
           if (!PrefsUtil.isServerUrlEmpty(sharedPrefs)) {
@@ -236,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
         hideKeyboard();
       }
     };
-    dispatcher.addCallback(this, onBackPressedCallback);
+    getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
 
     // BOTTOM APP BAR
 
@@ -424,10 +422,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void performOnBackPressed() {
-    if (dispatcher == null) {
-      dispatcher = getOnBackPressedDispatcher();
-    }
-    dispatcher.onBackPressed();
+    getOnBackPressedDispatcher().onBackPressed();
   }
 
   @Override
