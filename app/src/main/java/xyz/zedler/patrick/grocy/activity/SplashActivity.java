@@ -39,6 +39,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.color.DynamicColors;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.Constants;
@@ -55,7 +57,7 @@ public class SplashActivity extends MainActivity {
   public void onCreate(Bundle bundle) {
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2) {
       super.onCreate(bundle);
 
       boolean speedUpStart = sharedPrefs.getBoolean(
@@ -63,26 +65,21 @@ public class SplashActivity extends MainActivity {
           Constants.SETTINGS_DEFAULT.BEHAVIOR.SPEED_UP_START
       );
 
-      if (Build.VERSION.SDK_INT >= 33 && !speedUpStart) {
-        // SDK 33+ manages splash screen animation duration itself
-        return;
-      }
-
       getSplashScreen().setOnExitAnimationListener(view -> {
-        AnimatorSet set = new AnimatorSet();
-        set.playTogether(
-            ObjectAnimator.ofFloat(view, "alpha", 0),
-            ObjectAnimator.ofFloat(view.getIconView(), "alpha", 0)
-        );
-        set.setDuration(speedUpStart ? 200 : 400);
-        set.setStartDelay(speedUpStart ? 0 : 550);
-        set.addListener(new AnimatorListenerAdapter() {
+        Instant startTime = view.getIconAnimationStart();
+        assert startTime != null;
+        Instant now = Instant.now();
+        long animRuntime = startTime.until(now, ChronoUnit.MILLIS);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(view, "alpha", 0);
+        animator.setDuration(speedUpStart ? 150 : 250);
+        animator.setStartDelay(speedUpStart ? 0 : 900 - animRuntime);
+        animator.addListener(new AnimatorListenerAdapter() {
           @Override
           public void onAnimationEnd(@NonNull Animator animation, boolean isReverse) {
             view.remove();
           }
         });
-        set.start();
+        animator.start();
       });
     } else {
       // DARK MODE

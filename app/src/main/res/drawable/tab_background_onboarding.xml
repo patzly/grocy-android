@@ -27,7 +27,7 @@
 
     <shape android:shape="rectangle">
 
-      <solid android:color="?attr/colorSurfaceVariant" />
+      <solid android:color="?attr/colorSurfaceContainerHighest" />
 
       <corners android:radius="4dp" />
 

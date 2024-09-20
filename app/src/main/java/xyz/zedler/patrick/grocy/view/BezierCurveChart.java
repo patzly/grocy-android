@@ -156,7 +156,7 @@ public class BezierCurveChart extends View {
     paintFill.setAntiAlias(true);
 
     paintChartBg.setStyle(Paint.Style.FILL);
-    paintChartBg.setColor(ResUtil.getColor(context, R.attr.colorSurfaceVariant));
+    paintChartBg.setColor(ResUtil.getColor(context, R.attr.colorSurfaceContainerHighest));
     paintChartBg.setAntiAlias(true);
 
     paintGrid.setStyle(Paint.Style.STROKE);

@@ -39,7 +39,7 @@
     android:id="@+id/coordinate_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/colorBackground">
+    android:background="?attr/colorSurface">
 
     <androidx.core.widget.NestedScrollView
       android:id="@+id/scroll"

@@ -44,7 +44,7 @@
   <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/colorBackground"
+    android:background="?attr/colorSurface"
     android:animateLayoutChanges="true"
     app:transitionTypeChanging="@{true}">
 
@@ -288,7 +288,7 @@
                           android:layout_marginEnd="6dp"
                           android:layout_gravity="center_vertical"
                           android:background="@drawable/shape_circle"
-                          android:backgroundTint="?attr/colorOnBackground" />
+                          android:backgroundTint="?attr/colorOnSurface" />
 
                         <TextView
                           style="@style/Widget.Grocy.TextView"
@@ -328,7 +328,7 @@
                           android:layout_marginEnd="6dp"
                           android:layout_gravity="center_vertical"
                           android:background="@drawable/shape_circle"
-                          android:backgroundTint="?attr/colorOnBackground" />
+                          android:backgroundTint="?attr/colorOnSurface" />
 
                         <TextView
                           style="@style/Widget.Grocy.TextView"
@@ -368,7 +368,7 @@
                           android:layout_marginEnd="6dp"
                           android:layout_gravity="center_vertical"
                           android:background="@drawable/shape_circle"
-                          android:backgroundTint="?attr/colorOnBackground" />
+                          android:backgroundTint="?attr/colorOnSurface" />
 
                         <TextView
                           style="@style/Widget.Grocy.TextView"
@@ -412,7 +412,7 @@
                         android:layout_marginEnd="6dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/shape_circle"
-                        android:backgroundTint="?attr/colorOnBackground" />
+                        android:backgroundTint="?attr/colorOnSurface" />
 
                       <TextView
                         style="@style/Widget.Grocy.TextView"
@@ -732,7 +732,7 @@
                         android:layout_marginEnd="6dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/shape_circle"
-                        android:backgroundTint="?attr/colorOnBackground" />
+                        android:backgroundTint="?attr/colorOnSurface" />
 
                       <TextView
                         style="@style/Widget.Grocy.TextView"
@@ -772,7 +772,7 @@
                         android:layout_marginEnd="6dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/shape_circle"
-                        android:backgroundTint="?attr/colorOnBackground" />
+                        android:backgroundTint="?attr/colorOnSurface" />
 
                       <TextView
                         style="@style/Widget.Grocy.TextView"
@@ -812,7 +812,7 @@
                         android:layout_marginEnd="6dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/shape_circle"
-                        android:backgroundTint="?attr/colorOnBackground" />
+                        android:backgroundTint="?attr/colorOnSurface" />
 
                       <TextView
                         style="@style/Widget.Grocy.TextView"
@@ -852,7 +852,7 @@
                         android:layout_marginEnd="6dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/shape_circle"
-                        android:backgroundTint="?attr/colorOnBackground" />
+                        android:backgroundTint="?attr/colorOnSurface" />
 
                       <TextView
                         style="@style/Widget.Grocy.TextView"
@@ -918,7 +918,7 @@
                         android:layout_marginEnd="6dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/shape_circle"
-                        android:backgroundTint="?attr/colorOnBackground" />
+                        android:backgroundTint="?attr/colorOnSurface" />
 
                       <TextView
                         style="@style/Widget.Grocy.TextView"
@@ -958,7 +958,7 @@
                         android:layout_marginEnd="6dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/shape_circle"
-                        android:backgroundTint="?attr/colorOnBackground" />
+                        android:backgroundTint="?attr/colorOnSurface" />
 
                       <TextView
                         style="@style/Widget.Grocy.TextView"

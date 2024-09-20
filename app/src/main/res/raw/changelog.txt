@@ -11,6 +11,7 @@ job and my other projects, as my free time allows.
 - Improved: Only disable move-on-open switch if no default consume location selected
   (thanks @ssiegel) (#860)
 - Improved: Colors of in-app provided themes
+- Improved: splash screen on Android 12+
 - Fixed: Invisible status bar icons on some devices with Android 11
 - Fixed: Missing page transitions for actions in product details dialog
 

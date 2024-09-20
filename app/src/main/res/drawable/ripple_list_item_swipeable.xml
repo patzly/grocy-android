@@ -27,7 +27,7 @@
     android:top="1dp"
     android:bottom="1dp">
     <shape android:shape="rectangle">
-      <solid android:color="?android:attr/colorBackground" />
+      <solid android:color="?attr/colorSurface" />
       <corners
         android:topLeftRadius="16dp"
         android:bottomLeftRadius="16dp" />
@@ -42,7 +42,7 @@
         android:bottom="2dp">
         <shape android:shape="rectangle">
           <corners android:radius="16dp" />
-          <solid android:color="?android:attr/colorBackground" />
+          <solid android:color="?attr/colorSurface" />
         </shape>
       </item>
     </ripple>

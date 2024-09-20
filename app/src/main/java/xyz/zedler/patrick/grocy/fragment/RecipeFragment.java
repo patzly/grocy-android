@@ -139,7 +139,7 @@ public class RecipeFragment extends BaseFragment implements
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    int colorOnBg = ResUtil.getColor(activity, R.attr.colorOnBackground);
+    int colorOnBg = ResUtil.getColor(activity, R.attr.colorOnSurface);
     binding.appBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
       if (binding.collapsingToolbarLayout.getHeight() + verticalOffset
           < binding.collapsingToolbarLayout.getScrimVisibleHeightTrigger()) {

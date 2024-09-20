@@ -87,7 +87,7 @@
   </style>
 
   <style name="Widget.Grocy.Snackbar.TextView" parent="Widget.Material3.Snackbar.TextView">
-    <item name="android:textColor">?attr/colorSurfaceVariant</item>
+    <item name="android:textColor">?attr/colorSurfaceContainerHighest</item>
   </style>
 
   <!-- Localized style, no empty base style needed -->
@@ -446,7 +446,7 @@
     <item name="android:paddingBottom">8dp</item>
     <item name="android:fontFamily">@font/jost_book</item>
     <item name="android:textAppearance">?attr/textAppearanceBodyLarge</item>
-    <item name="android:textColor">?attr/colorOnBackground</item>
+    <item name="android:textColor">?attr/colorOnSurface</item>
   </style>
 
   <!-- Switch -->
@@ -480,7 +480,7 @@
     <item name="thumbElevation">1dp</item>
     <item name="labelStyle">@style/Widget.Grocy.Tooltip</item>
     <item name="trackColorInactive">@color/selector_slider_inactive_track_color</item>
-    <item name="tickColorActive">?attr/colorSurfaceVariant</item>
+    <item name="tickColorActive">?attr/colorSurfaceContainerHighest</item>
   </style>
 
   <!-- Chip -->
@@ -743,7 +743,7 @@
 
   <style name="Base.Grocy.TextView" parent="Widget.MaterialComponents.TextView">
     <item name="android:textAppearance">?attr/textAppearanceBodyLarge</item>
-    <item name="android:textColor">?attr/colorOnBackground</item>
+    <item name="android:textColor">?attr/colorOnSurface</item>
     <item name="android:textAlignment">viewStart</item>
     <item name="android:fontFamily">@font/jost_book</item>
     <item name="android:breakStrategy" tools:targetApi="m">high_quality</item>
@@ -911,7 +911,7 @@
   </style>
 
   <style name="TextAppearance.Grocy.Tooltip" parent="TextAppearance.MaterialComponents.Tooltip">
-    <item name="android:textColor">?android:attr/colorBackground</item>
+    <item name="android:textColor">?attr/colorSurface</item>
     <item name="android:fontFamily">@font/jost_book</item>
     <item name="fontFamily">@font/jost_book</item>
   </style>

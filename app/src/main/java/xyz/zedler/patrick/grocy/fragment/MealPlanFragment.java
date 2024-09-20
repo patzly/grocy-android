@@ -133,7 +133,7 @@ public class MealPlanFragment extends BaseFragment {
         } else {
           container.binding.card.setStrokeColor(colorOutline);
           container.binding.card.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent));
-          int textColor = ResUtil.getColor(activity, R.attr.colorOnBackground);
+          int textColor = ResUtil.getColor(activity, R.attr.colorOnSurface);
           container.binding.weekday.setTextColor(textColor);
           container.binding.day.setTextColor(textColor);
         }

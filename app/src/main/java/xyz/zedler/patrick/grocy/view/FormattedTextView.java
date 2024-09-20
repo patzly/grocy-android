@@ -73,7 +73,7 @@ public class FormattedTextView extends LinearLayout {
     setOrientation(VERTICAL);
     int padding = UiUtil.dpToPx(context, 16);
     setPadding(0, padding, 0, 0);
-    textColor = ResUtil.getColor(context, R.attr.colorOnBackground);
+    textColor = ResUtil.getColor(context, R.attr.colorOnSurface);
     textSizeParagraph = -1;
     sideMargin = 16;
     blockDistance = 16;
@@ -329,7 +329,7 @@ public class FormattedTextView extends LinearLayout {
   private MaterialCardView getMessage(String text, boolean useErrorColors,
       boolean addBottomMargin) {
     int colorSurface = ResUtil.getColor(
-        context, useErrorColors ? R.attr.colorErrorContainer : R.attr.colorSurfaceVariant
+        context, useErrorColors ? R.attr.colorErrorContainer : R.attr.colorSurfaceContainerHighest
     );
     int colorOnSurface = ResUtil.getColor(
         context, useErrorColors ? R.attr.colorOnErrorContainer : R.attr.colorOnSurfaceVariant
