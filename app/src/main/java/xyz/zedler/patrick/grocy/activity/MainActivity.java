@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
     }, sharedPrefs, TAG);
     navUtil.updateStartDestination();
 
-    OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(false) {
+    OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
       @Override
       public void handleOnBackPressed() {
         BaseFragment currentFragment = getCurrentFragment();
