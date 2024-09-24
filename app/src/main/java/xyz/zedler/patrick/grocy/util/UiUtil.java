@@ -113,7 +113,7 @@ public class UiUtil {
     // The automatic method includes IME insets which is bad behavior for BABs
     ViewCompat.setOnApplyWindowInsetsListener(binding.bottomAppBar, (v, insets) -> {
       int bottomInset = insets.getInsets(Type.systemBars()).bottom;
-      ViewCompat.setPaddingRelative(v, 0, 0, 0, bottomInset);
+      v.setPaddingRelative(0, 0, 0, bottomInset);
       Class<?> classBottomAppBar = BottomAppBar.class;
       Object objectBottomAppBar = classBottomAppBar.cast(binding.bottomAppBar);
       Field fieldBottomInset = null;
@@ -340,7 +340,10 @@ public class UiUtil {
           );
           systemBarBehavior.refresh(false);
         }
-        binding.fabMain.setY(MathUtils.lerp(yStart, yEnd, animation.getInterpolatedFraction()));
+        if (yStart > 0 && yEnd > 0) {
+          // Prevent FAB from jumping to the top when the keyboard is closed. TODO: investigate?
+          binding.fabMain.setY(MathUtils.lerp(yStart, yEnd, animation.getInterpolatedFraction()));
+        }
         // scroll offset to keep focused view visible
         ViewGroup scrollView = scrollBehavior.getScrollView();
         if (scrollView != null) {
