@@ -20,7 +20,9 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -47,6 +49,7 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Locale;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MealPlanPagerAdapter;
@@ -242,7 +245,21 @@ public class MealPlanFragment extends BaseFragment {
   public PopupMenu.OnMenuItemClickListener getFieldsMenuItemClickListener() {
     return item -> {
       if (item.getItemId() == R.id.action_configure_sections) {
-        viewModel.showMessage(R.string.msg_not_implemented_yet);
+        viewModel.showMessageWithAction(
+            R.string.msg_not_implemented_yet,
+            R.string.action_open_server,
+            () -> {
+              Intent browserIntent = new Intent(
+                  Intent.ACTION_VIEW,
+                  Uri.parse(activity.getGrocyApi().getBaseUrl() + "/mealplansections")
+              );
+              startActivity(browserIntent);
+            },
+            getSharedPrefs().getInt(
+                Constants.SETTINGS.BEHAVIOR.MESSAGE_DURATION,
+                Constants.SETTINGS_DEFAULT.BEHAVIOR.MESSAGE_DURATION
+            )
+        );
         return true;
       } else if (item.getItemId() == R.id.action_fields_header) {
         PopupMenu popupMenu = new PopupMenu(requireContext(), binding.fieldsMenuButton);

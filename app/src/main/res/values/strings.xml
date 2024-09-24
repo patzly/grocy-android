@@ -130,6 +130,7 @@
   <string name="action_display_help">Display help texts</string>
   <string name="action_demo_server">Demo server</string>
   <string name="action_own_server">Own server</string>
+  <string name="action_open_server">Use server interface</string>
   <string name="action_enter_data_manually">Enter data manually</string>
   <string name="action_settings_backup_restore">Backup or restore settings</string>
   <string name="action_details">Details</string>

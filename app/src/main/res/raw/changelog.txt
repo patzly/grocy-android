@@ -7,6 +7,7 @@ job and my other projects, as my free time allows.
 
 - New: Compatibility for server version 4.2.0 and 4.1.0 (#855)
 - New: Support for Android 15
+- Improved: Link to server interface for some unimplemented features (#859)
 - Improved: Only disable move-on-open switch if no default consume location selected
   (thanks @ssiegel) (#860)
 - Improved: Colors of in-app provided themes

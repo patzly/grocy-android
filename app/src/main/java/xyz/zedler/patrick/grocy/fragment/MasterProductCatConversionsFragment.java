@@ -20,7 +20,10 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +31,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import com.google.android.material.snackbar.Snackbar;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.R;
@@ -168,7 +172,20 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
         R.menu.menu_master_product_edit_sub,
         menuItem -> {
           if (menuItem.getItemId() == R.id.action_delete) {
-            activity.showSnackbar(R.string.msg_not_implemented_yet, false);
+            Snackbar snackbar = activity.getSnackbar(
+                R.string.msg_not_implemented_yet, true
+            ).setAction(
+                R.string.action_open_server,
+                v -> {
+                  Intent browserIntent = new Intent(
+                      Intent.ACTION_VIEW,
+                      Uri.parse(activity.getGrocyApi().getBaseUrl()
+                          + "/product/" + viewModel.getFilledProduct().getId())
+                  );
+                  startActivity(browserIntent);
+                }
+            );
+            activity.showSnackbar(snackbar);
             return true;
           }
           if (menuItem.getItemId() == R.id.action_save) {

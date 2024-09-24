@@ -123,6 +123,10 @@ public class GrocyApi {
     baseUrl = serverUrl;
   }
 
+  public String getBaseUrl() {
+    return baseUrl;
+  }
+
   private String getUrl(String command) {
     return baseUrl + "/api" + command;
   }
