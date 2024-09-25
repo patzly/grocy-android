@@ -127,6 +127,7 @@
   <string name="action_display_help">Afficher les messages d\'aide</string>
   <string name="action_demo_server">Serveur de démo</string>
   <string name="action_own_server">Votre serveur</string>
+  <string name="action_open_server">Utiliser l\'interface du serveur</string>
   <string name="action_enter_data_manually">Entrer les données manuellement</string>
   <string name="action_settings_backup_restore">Sauvegarder ou restaurer les paramètres</string>
   <string name="action_details">Détails</string>
