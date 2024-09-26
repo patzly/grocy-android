@@ -1196,8 +1196,6 @@
   <string name="setting_language_info">Vielen Dank an alle freiwilligen Übersetzer bei Transifex!\nBesuchen Sie uns auf GitHub, um zu erfahren, wie Sie helfen können, Grocy Android für Ihre Sprache verfügbar zu machen.</string>
   <string name="setting_language_system">System folgen</string>
   <string name="setting_language_not_available">Englisch, wenn Übersetzung nicht verfügbar</string>
-  <string name="setting_transition">Schieben als Seitenübergang verwenden</string>
-  <string name="setting_transition_description">Anstatt auszublenden</string>
   <string name="setting_open_food_facts">Open Food Facts und Open Beauty Facts benutzen</string>
   <string name="setting_open_food_facts_description">Info von Barcodes bekommen</string>
   <string name="setting_choose_barcode_scanner">Barcode-Scanner wählen</string>
