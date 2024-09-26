@@ -205,7 +205,7 @@ public class RecipesFragment extends BaseFragment implements
         R.string.title_recipe_create,
         Constants.FAB.TAG.ADD,
         savedInstanceState == null,
-        () -> activity.navUtil.navigateFragment(
+        () -> activity.navUtil.navigate(
             RecipesFragmentDirections.actionRecipesFragmentToRecipeEditFragment(ACTION.CREATE)
         )
     );
@@ -262,7 +262,7 @@ public class RecipesFragment extends BaseFragment implements
       return;
     }
 
-    activity.navUtil.navigateFragment(RecipesFragmentDirections
+    activity.navUtil.navigate(RecipesFragmentDirections
         .actionRecipesFragmentToRecipeFragment(recipe.getId()));
   }
 

@@ -64,13 +64,12 @@ import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.view.ThemeSelectionCardView;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
-public class SettingsCatAppearanceFragment extends BaseFragment implements OnCheckedChangeListener {
+public class SettingsCatAppearanceFragment extends BaseFragment {
 
   private final static String TAG = SettingsCatAppearanceFragment.class.getSimpleName();
 
   private FragmentSettingsCatAppearanceBinding binding;
   private MainActivity activity;
-  private SettingsViewModel viewModel;
 
   @Override
   public View onCreateView(
@@ -89,7 +88,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
+    SettingsViewModel viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
     binding.setActivity(activity);
     binding.setFragment(this);
     binding.setViewModel(viewModel);
@@ -192,19 +191,6 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
             : R.string.setting_contrast_dynamic_unsupported
     );
 
-    binding.partialOptionTransition.linearOtherTransition.setOnClickListener(
-        v -> binding.partialOptionTransition.switchOtherTransition.setChecked(
-            !binding.partialOptionTransition.switchOtherTransition.isChecked()
-        )
-    );
-    binding.partialOptionTransition.switchOtherTransition.setChecked(
-        getSharedPrefs().getBoolean(
-            SETTINGS.APPEARANCE.USE_SLIDING, SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
-        )
-    );
-    binding.partialOptionTransition.switchOtherTransition.setOnCheckedChangeListener(this);
-    binding.partialOptionTransition.switchOtherTransition.jumpDrawablesToCurrentState();
-
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, false
@@ -213,16 +199,6 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
     activity.updateBottomAppBar(false, R.menu.menu_empty);
 
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
-  }
-
-  @Override
-  public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-    int id = buttonView.getId();
-    performHapticClick();
-    if (id == R.id.switch_other_transition) {
-      ViewUtil.startIcon(binding.partialOptionTransition.imageOtherTransition);
-      getSharedPrefs().edit().putBoolean(SETTINGS.APPEARANCE.USE_SLIDING, isChecked).apply();
-    }
   }
 
   public String getLanguage() {

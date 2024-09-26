@@ -130,7 +130,7 @@ public class LoginApiFormFragment extends BaseFragment {
     if (ingressProxyId != null) {
       grocyServerUrl += "/api/hassio_ingress/" + ingressProxyId;
     }
-    activity.navUtil.navigateFragment(
+    activity.navUtil.navigate(
         LoginApiFormFragmentDirections.actionLoginApiFormFragmentToLoginRequestFragment(
             grocyServerUrl,
             viewModel.getFormData().getApiKeyTrimmed()

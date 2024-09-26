@@ -125,7 +125,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
       } else if (event.getType() == Event.CHOOSE_PRODUCT) {
         String barcode = event.getBundle().getString(ARGUMENT.BARCODE);
-        activity.navUtil.navigateFragment(
+        activity.navUtil.navigate(
             R.id.chooseProductFragment,
             new ChooseProductFragmentArgs.Builder(barcode).build().toBundle()
         );

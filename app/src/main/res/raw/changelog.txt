@@ -10,11 +10,12 @@ job and my other projects, as my free time allows.
 - Improved: Link to server interface for some unimplemented features (#859)
 - Improved: Only disable move-on-open switch if no default consume location selected
   (thanks @ssiegel) (#860)
+- Improved: Refined and unified navigation transitions
 - Improved: Colors of in-app provided themes
 - Improved: splash screen on Android 12+
 - Fixed: Action button jumping to the top after saving new master data (#886)
 - Fixed: Invisible status bar icons on some devices with Android 11
-- Fixed: Missing page transitions for actions in product details dialog
+- Fixed: Missing navigation transitions for actions in product details dialog
 
 ## 3.5.2
 

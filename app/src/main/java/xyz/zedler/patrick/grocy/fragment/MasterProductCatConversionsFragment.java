@@ -23,7 +23,6 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -204,7 +203,7 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
         R.string.action_add,
         Constants.FAB.TAG.ADD,
         savedInstanceState == null,
-        () -> activity.navUtil.navigateFragment(MasterProductCatConversionsFragmentDirections
+        () -> activity.navUtil.navigate(MasterProductCatConversionsFragmentDirections
             .actionMasterProductCatConversionsFragmentToMasterProductCatConversionsEditFragment(
                 viewModel.getFilledProduct()
             )
@@ -216,7 +215,7 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
     if (clickUtil.isDisabled()) {
       return;
     }
-    activity.navUtil.navigateFragment(MasterProductCatConversionsFragmentDirections
+    activity.navUtil.navigate(MasterProductCatConversionsFragmentDirections
         .actionMasterProductCatConversionsFragmentToMasterProductCatConversionsEditFragment(viewModel.getFilledProduct())
         .setConversion(conversion)
     );

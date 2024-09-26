@@ -231,7 +231,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
-                android:onClick="@{() -> activity.navUtil.navigateFragment(R.id.stockOverviewFragment)}"
+                android:onClick="@{() -> activity.navUtil.navigate(R.id.stockOverviewFragment)}"
                 app:clickUtil="@{clickUtil}"
                 app:contentPaddingLeft="0dp"
                 app:contentPaddingRight="0dp"
@@ -464,7 +464,7 @@
                         style="@style/Widget.Grocy.Button.OutlinedButton.Icon"
                         android:layout_marginEnd="8dp"
                         android:text="@string/title_inventory"
-                        android:onClick="@{() -> activity.navUtil.navigateFragment(R.id.inventoryFragment)}"
+                        android:onClick="@{() -> activity.navUtil.navigate(R.id.inventoryFragment)}"
                         app:clickUtil="@{clickUtil}"
                         app:icon="@drawable/ic_round_inventory" />
 
@@ -473,7 +473,7 @@
                         style="@style/Widget.Grocy.Button.IconButton.Filled.Tonal.Small"
                         android:layout_marginEnd="8dp"
                         android:visibility="gone"
-                        android:onClick="@{() -> activity.navUtil.navigateFragment(R.id.inventoryFragment)}"
+                        android:onClick="@{() -> activity.navUtil.navigate(R.id.inventoryFragment)}"
                         app:clickUtil="@{clickUtil}"
                         app:icon="@drawable/ic_round_inventory" />
 
@@ -483,7 +483,7 @@
                         android:layout_marginEnd="8dp"
                         android:text="@string/title_transfer"
                         android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) ? View.VISIBLE : View.GONE}"
-                        android:onClick="@{() -> activity.navUtil.navigateFragment(R.id.transferFragment)}"
+                        android:onClick="@{() -> activity.navUtil.navigate(R.id.transferFragment)}"
                         app:clickUtil="@{clickUtil}"
                         app:icon="@drawable/ic_round_swap_horiz" />
 
@@ -492,7 +492,7 @@
                         style="@style/Widget.Grocy.Button.IconButton.Filled.Tonal.Small"
                         android:layout_marginEnd="8dp"
                         android:visibility="gone"
-                        android:onClick="@{() -> activity.navUtil.navigateFragment(R.id.transferFragment)}"
+                        android:onClick="@{() -> activity.navUtil.navigate(R.id.transferFragment)}"
                         app:clickUtil="@{clickUtil}"
                         app:icon="@drawable/ic_round_swap_horiz" />
 
@@ -500,14 +500,14 @@
                         style="@style/Widget.Grocy.Button.TonalButton.Icon"
                         android:layout_marginEnd="8dp"
                         android:text="@string/title_consume"
-                        android:onClick="@{() -> activity.navUtil.navigateFragment(R.id.consumeFragment)}"
+                        android:onClick="@{() -> activity.navUtil.navigate(R.id.consumeFragment)}"
                         app:clickUtil="@{clickUtil}"
                         app:icon="@drawable/ic_round_consume_product" />
 
                       <com.google.android.material.button.MaterialButton
                         style="@style/Widget.Grocy.Button.TonalButton.Icon"
                         android:text="@string/title_purchase"
-                        android:onClick="@{() -> activity.navUtil.navigateFragment(R.id.purchaseFragment)}"
+                        android:onClick="@{() -> activity.navUtil.navigate(R.id.purchaseFragment)}"
                         app:clickUtil="@{clickUtil}"
                         app:icon="@drawable/ic_round_local_grocery_store" />
 

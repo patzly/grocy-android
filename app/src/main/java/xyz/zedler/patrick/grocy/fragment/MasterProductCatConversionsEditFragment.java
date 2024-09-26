@@ -198,7 +198,7 @@ public class MasterProductCatConversionsEditFragment extends BaseFragment {
 
   @Override
   public void createQuantityUnit(Bundle args) {
-    activity.navUtil.navigateFragment(MasterProductCatConversionsEditFragmentDirections
+    activity.navUtil.navigate(MasterProductCatConversionsEditFragmentDirections
         .actionMasterProductCatConversionsEditFragmentToMasterQuantityUnitFragment()
         .setIdForReturnValue(args.getBoolean(
             MasterProductCatConversionsEditViewModel.QUANTITY_UNIT_IS_FROM)

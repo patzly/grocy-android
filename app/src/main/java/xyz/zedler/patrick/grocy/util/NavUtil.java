@@ -84,23 +84,6 @@ public class NavUtil {
     navController.setGraph(graph);
   }
 
-  public NavOptions.Builder getNavOptionsBuilderFragmentFadeOrSlide() {
-    NavOptions.Builder builder = new NavOptions.Builder();
-    if (UiUtil.areAnimationsEnabled(activity)) {
-      boolean useSliding = sharedPrefs.getBoolean(
-          Constants.SETTINGS.APPEARANCE.USE_SLIDING,
-          Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
-      );
-      builder.setEnterAnim(useSliding ? R.anim.open_enter_slide : R.animator.open_enter);
-      builder.setExitAnim(useSliding ? R.anim.open_exit_slide : R.animator.open_exit);
-      builder.setPopEnterAnim(useSliding ? R.anim.close_enter_slide : R.animator.close_enter);
-      builder.setPopExitAnim(useSliding ? R.anim.close_exit_slide : R.animator.close_exit);
-    } else {
-      builder.setEnterAnim(-1).setExitAnim(-1).setPopEnterAnim(-1).setPopExitAnim(-1);
-    }
-    return builder;
-  }
-
   public void navigate(NavDirections directions) {
     if (navController == null || directions == null) {
       Log.e(TAG, "navigate: controller or direction is null");
@@ -110,6 +93,18 @@ public class NavUtil {
       navController.navigate(directions);
     } catch (IllegalArgumentException e) {
       Log.e(TAG, "navigate: " + directions, e);
+    }
+  }
+
+  public void navigate(@IdRes int destination) {
+    if (navController == null) {
+      Log.e(TAG, "navigate: controller or direction is null");
+      return;
+    }
+    try {
+      navController.navigate(destination);
+    } catch (IllegalArgumentException e) {
+      Log.e(TAG, "navigate: ", e);
     }
   }
 
@@ -150,39 +145,20 @@ public class NavUtil {
     activity.hideKeyboard();
   }
 
-  public void navigateFragment(@IdRes int destination) {
-    navigateFragment(destination, (Bundle) null);
-  }
-
-  public void navigateFragment(@IdRes int destination, @Nullable Bundle arguments) {
+  @Deprecated
+  public void navigate(@IdRes int destination, @Nullable Bundle arguments) {
     if (navController == null ) {
       Log.e(TAG, "navigateFragment: controller is null");
       return;
     }
     try {
-      navController.navigate(
-          destination, arguments, getNavOptionsBuilderFragmentFadeOrSlide().build()
-      );
+      navController.navigate(destination, arguments);
     } catch (IllegalArgumentException e) {
       Log.e(TAG, "navigateFragment: ", e);
     }
   }
 
-  public void navigateFragment(NavDirections directions) {
-    if (navController == null || directions == null) {
-      Log.e(TAG, "navigateFragment: controller or direction is null");
-      return;
-    }
-    try {
-      navController.navigate(
-          directions, getNavOptionsBuilderFragmentFadeOrSlide().build()
-      );
-    } catch (IllegalArgumentException e) {
-      Log.e(TAG, "navigateFragment: " + directions, e);
-    }
-  }
-
-  public void navigateFragment(@IdRes int destination, @NonNull NavOptions navOptions) {
+  public void navigate(@IdRes int destination, @NonNull NavOptions navOptions) {
     if (navController == null ) {
       Log.e(TAG, "navigateFragment: controller is null");
       return;
@@ -200,7 +176,7 @@ public class NavUtil {
       return;
     }
     try {
-      navController.navigate(uri, getNavOptionsBuilderFragmentFadeOrSlide().build());
+      navController.navigate(uri);
     } catch (IllegalArgumentException e) {
       Log.e(TAG, "navigateDeepLink: ", e);
     }

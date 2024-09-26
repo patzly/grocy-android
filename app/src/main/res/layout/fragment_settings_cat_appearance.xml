@@ -283,10 +283,6 @@
 
           </HorizontalScrollView>
 
-          <include
-            android:id="@+id/partial_option_transition"
-            layout="@layout/partial_option_transition" />
-
           <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
             android:layout_width="match_parent"

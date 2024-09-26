@@ -121,7 +121,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
       ActionGlobalOnboardingFragment directions
           = NavigationMainDirections.actionGlobalOnboardingFragment();
       directions.setShowAgain(true);
-      activity.navUtil.navigateFragment(directions);
+      activity.navUtil.navigate(directions);
     } else if (v.getId() == R.id.linear_changelog) {
       ViewUtil.startIcon(binding.imageChangelog);
       VersionUtil.showChangelogBottomSheet(activity);

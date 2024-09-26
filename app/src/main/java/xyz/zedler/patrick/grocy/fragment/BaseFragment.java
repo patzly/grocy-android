@@ -37,6 +37,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import com.android.volley.VolleyError;
+import com.google.android.material.transition.MaterialSharedAxis;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
@@ -69,6 +70,11 @@ public class BaseFragment extends Fragment {
 
     activity = (MainActivity) requireActivity();
     viewUtil = new ViewUtil();
+
+    setEnterTransition(new MaterialSharedAxis(MaterialSharedAxis.Z, true));
+    setReenterTransition(new MaterialSharedAxis(MaterialSharedAxis.Z, false));
+    setReturnTransition(new MaterialSharedAxis(MaterialSharedAxis.Z, false));
+    setExitTransition(new MaterialSharedAxis(MaterialSharedAxis.Z, true));
   }
 
   @Override

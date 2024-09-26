@@ -201,7 +201,7 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
         R.string.action_add,
         Constants.FAB.TAG.ADD,
         savedInstanceState == null,
-        () -> activity.navUtil.navigateFragment(MasterProductCatBarcodesFragmentDirections
+        () -> activity.navUtil.navigate(MasterProductCatBarcodesFragmentDirections
             .actionMasterProductCatBarcodesFragmentToMasterProductCatBarcodesEditFragment(
                 viewModel.getFilledProduct()
             )
@@ -214,7 +214,7 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
     if (clickUtil.isDisabled()) {
       return;
     }
-    activity.navUtil.navigateFragment(MasterProductCatBarcodesFragmentDirections
+    activity.navUtil.navigate(MasterProductCatBarcodesFragmentDirections
         .actionMasterProductCatBarcodesFragmentToMasterProductCatBarcodesEditFragment(viewModel.getFilledProduct())
         .setProductBarcode(productBarcode)
     );

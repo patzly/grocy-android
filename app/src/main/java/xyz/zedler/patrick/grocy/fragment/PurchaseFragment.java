@@ -186,7 +186,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
         embeddedFragmentScanner.startScannerIfVisible();
       } else if (event.getType() == Event.CHOOSE_PRODUCT) {
         String barcode = event.getBundle().getString(ARGUMENT.BARCODE);
-        activity.navUtil.navigateFragment(PurchaseFragmentDirections
+        activity.navUtil.navigate(PurchaseFragmentDirections
             .actionPurchaseFragmentToChooseProductFragment(barcode)
             .setPendingProductsActive(viewModel.isQuickModeEnabled()));
       } else if (event.getType() == Event.CONFIRM_FREEZING) {
@@ -459,7 +459,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   }
 
   public void navigateToPendingProductsPage() {
-    activity.navUtil.navigateFragment(
+    activity.navUtil.navigate(
         PurchaseFragmentDirections.actionPurchaseFragmentToPendingPurchasesFragment()
     );
   }

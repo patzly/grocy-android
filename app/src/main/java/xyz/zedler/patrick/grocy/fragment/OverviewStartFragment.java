@@ -215,11 +215,11 @@ public class OverviewStartFragment extends BaseFragment {
           if (showFabInfoDialogIfAppropriate()) {
             return;
           }
-          activity.navUtil.navigateFragment(
+          activity.navUtil.navigate(
               R.id.consumeFragment,
               new ConsumeFragmentArgs.Builder().setStartWithScanner(true).build().toBundle()
           );
-        }, () -> activity.navUtil.navigateFragment(
+        }, () -> activity.navUtil.navigate(
             R.id.purchaseFragment,
             new PurchaseFragmentArgs.Builder().setStartWithScanner(true).build().toBundle()
         )
@@ -285,7 +285,7 @@ public class OverviewStartFragment extends BaseFragment {
         .setPositiveButton(R.string.title_consume, (dialog, which) -> {
           performHapticClick();
           viewModel.setOverviewFabInfoShown();
-          activity.navUtil.navigateFragment(
+          activity.navUtil.navigate(
               R.id.consumeFragment,
               new ConsumeFragmentArgs.Builder()
                   .setStartWithScanner(true).build().toBundle()
@@ -293,7 +293,7 @@ public class OverviewStartFragment extends BaseFragment {
         }).setNegativeButton(R.string.title_purchase, (dialog, which) -> {
           performHapticClick();
           viewModel.setOverviewFabInfoShown();
-          activity.navUtil.navigateFragment(
+          activity.navUtil.navigate(
               R.id.purchaseFragment,
               new PurchaseFragmentArgs.Builder()
                   .setStartWithScanner(true).build().toBundle()

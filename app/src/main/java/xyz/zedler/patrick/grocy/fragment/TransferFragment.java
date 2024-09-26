@@ -156,7 +156,7 @@ public class TransferFragment extends BaseFragment implements BarcodeListener {
         embeddedFragmentScanner.startScannerIfVisible();
       } else if (event.getType() == Event.CHOOSE_PRODUCT) {
         String barcode = event.getBundle().getString(ARGUMENT.BARCODE);
-        activity.navUtil.navigateFragment(
+        activity.navUtil.navigate(
             TransferFragmentDirections
                 .actionTransferFragmentToChooseProductFragment(barcode)
                 .setForbidCreateProduct(true)

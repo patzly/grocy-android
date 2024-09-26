@@ -29,7 +29,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import com.google.android.material.snackbar.Snackbar;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
@@ -87,37 +86,37 @@ public class MasterDataOverviewFragment extends BaseFragment {
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
-    binding.linearProducts.setOnClickListener(v -> activity.navUtil.navigateFragment(
+    binding.linearProducts.setOnClickListener(v -> activity.navUtil.navigate(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.PRODUCTS
             ))
     );
-    binding.linearQuantityUnits.setOnClickListener(v -> activity.navUtil.navigateFragment(
+    binding.linearQuantityUnits.setOnClickListener(v -> activity.navUtil.navigate(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.QUANTITY_UNITS
             ))
     );
-    binding.linearLocations.setOnClickListener(v -> activity.navUtil.navigateFragment(
+    binding.linearLocations.setOnClickListener(v -> activity.navUtil.navigate(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.LOCATIONS
             ))
     );
-    binding.linearProductGroups.setOnClickListener(v -> activity.navUtil.navigateFragment(
+    binding.linearProductGroups.setOnClickListener(v -> activity.navUtil.navigate(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.PRODUCT_GROUPS
             ))
     );
-    binding.linearStores.setOnClickListener(v -> activity.navUtil.navigateFragment(
+    binding.linearStores.setOnClickListener(v -> activity.navUtil.navigate(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.STORES
             ))
     );
-    binding.linearTaskCategories.setOnClickListener(v -> activity.navUtil.navigateFragment(
+    binding.linearTaskCategories.setOnClickListener(v -> activity.navUtil.navigate(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.TASK_CATEGORIES
