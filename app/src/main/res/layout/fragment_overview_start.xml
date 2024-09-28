@@ -42,11 +42,10 @@
   </data>
 
   <RelativeLayout
+    android:id="@+id/relative"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface"
-    android:animateLayoutChanges="true"
-    app:transitionTypeChanging="@{true}">
+    android:transitionGroup="true">
 
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
@@ -167,11 +166,10 @@
             android:paddingBottom="@dimen/global_scroll_bottom_padding">
 
             <LinearLayout
+              android:id="@+id/linear_container"
               android:layout_width="0dp"
               android:layout_height="wrap_content"
               android:orientation="vertical"
-              android:animateLayoutChanges="true"
-              app:transitionTypeChanging="@{true}"
               app:layout_constraintTop_toTopOf="parent"
               app:layout_constraintWidth_max="@dimen/max_content_width"
               app:layout_constraintStart_toStartOf="parent"

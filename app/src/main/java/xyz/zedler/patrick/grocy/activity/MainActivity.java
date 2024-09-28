@@ -560,9 +560,7 @@ public class MainActivity extends AppCompatActivity {
 
   @NonNull
   public BaseFragment getCurrentFragment() {
-    Fragment navHostFragment = fragmentManager.findFragmentById(R.id.fragment_main_nav_host);
-    assert navHostFragment != null;
-    return (BaseFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+    return navUtil.getCurrentFragment();
   }
 
   private void replaceFabIcon(Drawable icon, String tag, boolean animated) {

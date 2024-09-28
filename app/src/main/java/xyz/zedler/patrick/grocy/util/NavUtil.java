@@ -30,7 +30,12 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentManager.OnBackStackChangedListener;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
 import androidx.navigation.NavController;
 import androidx.navigation.NavController.OnDestinationChangedListener;
 import androidx.navigation.NavDirections;
@@ -44,13 +49,14 @@ import java.nio.charset.StandardCharsets;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 
 public class NavUtil {
 
   private final String TAG;
   private final MainActivity activity;
-  private NavController navController;
-  private final FragmentManager fragmentManager;
+  private final NavController navController;
+  private final NavHostFragment navHostFragment;
   private final SharedPreferences sharedPrefs;
 
   public NavUtil(
@@ -60,14 +66,20 @@ public class NavUtil {
       String tag
   ) {
     this.activity = mainActivity;
-    this.fragmentManager = mainActivity.getSupportFragmentManager();
-    NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
-        .findFragmentById(R.id.fragment_main_nav_host);
+    FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
+    navHostFragment = (NavHostFragment) fragmentManager.findFragmentById(
+        R.id.fragment_main_nav_host
+    );
     assert navHostFragment != null;
     navController = navHostFragment.getNavController();
     navController.addOnDestinationChangedListener(destinationListener);
     this.sharedPrefs = sharedPrefs;
     this.TAG = tag;
+  }
+
+  @NonNull
+  public BaseFragment getCurrentFragment() {
+    return (BaseFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
   }
 
   public void updateStartDestination() {
@@ -133,19 +145,11 @@ public class NavUtil {
   }
 
   public void navigateUp() {
-    if (navController == null) {
-      NavHostFragment navHostFragment = (NavHostFragment) fragmentManager.findFragmentById(
-          R.id.fragment_main_nav_host
-      );
-      assert navHostFragment != null;
-      navController = navHostFragment.getNavController();
-    }
     navController.navigateUp();
     activity.binding.bottomAppBar.performShow();
     activity.hideKeyboard();
   }
 
-  @Deprecated
   public void navigate(@IdRes int destination, @Nullable Bundle arguments) {
     if (navController == null ) {
       Log.e(TAG, "navigateFragment: controller is null");

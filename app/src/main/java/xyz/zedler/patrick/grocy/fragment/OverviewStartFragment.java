@@ -20,6 +20,7 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.animation.LayoutTransition;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -97,6 +98,17 @@ public class OverviewStartFragment extends BaseFragment {
     systemBarBehavior.applyStatusBarInsetOnContainer(false);
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
+
+    binding.relative.post(() -> {
+      LayoutTransition transition = new LayoutTransition();
+      transition.enableTransitionType(LayoutTransition.CHANGING);
+      binding.relative.setLayoutTransition(transition);
+    });
+    binding.linearContainer.post(() -> {
+      LayoutTransition transition = new LayoutTransition();
+      transition.enableTransitionType(LayoutTransition.CHANGING);
+      binding.linearContainer.setLayoutTransition(transition);
+    });
 
     ViewUtil.setOnlyOverScrollStretchEnabled(binding.scrollHorizActionsStockOverview);
     binding.scrollHorizActionsStockOverview.post(
