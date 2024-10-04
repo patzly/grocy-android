@@ -24,6 +24,7 @@ import android.animation.LayoutTransition;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -161,42 +162,6 @@ public class OverviewStartFragment extends BaseFragment {
     if (savedInstanceState == null || !viewModel.isAlreadyLoadedFromDatabase()) {
       viewModel.loadFromDatabase(true);
     }
-
-    ViewTreeObserver observer = binding.scrollHorizActionsStockOverview.getViewTreeObserver();
-    observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-      @Override
-      public void onGlobalLayout() {
-        int containerWidthStock = binding.scrollHorizActionsStockOverview.getWidth();
-        int buttonWidthStock = binding.linearStockActionsContainer.getWidth();
-        boolean isScrollableStock
-            = buttonWidthStock >= containerWidthStock - UiUtil.dpToPx(activity, 32);
-        if (isScrollableStock) {
-          binding.buttonInventoryText.setVisibility(View.GONE);
-          binding.buttonInventoryIcon.setVisibility(View.VISIBLE);
-          boolean isLocationTrackingEnabled = viewModel.isFeatureEnabled(
-              Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING
-          );
-          if (isLocationTrackingEnabled) {
-            binding.buttonTransferText.setVisibility(View.GONE);
-            binding.buttonTransferIcon.setVisibility(View.VISIBLE);
-          }
-        }
-
-        int containerWidthShopping = binding.scrollHorizActionsShoppingList.getWidth();
-        int buttonWidthShopping = binding.linearShoppingListActionsContainer.getWidth();
-        boolean isScrollableShopping
-            = buttonWidthShopping >= containerWidthShopping - UiUtil.dpToPx(activity, 32);
-        if (isScrollableShopping) {
-          binding.buttonShoppingText.setVisibility(View.GONE);
-          binding.buttonShoppingIcon.setVisibility(View.VISIBLE);
-        }
-
-        if (binding.scrollHorizActionsStockOverview.getViewTreeObserver().isAlive()) {
-          binding.scrollHorizActionsStockOverview.getViewTreeObserver()
-              .removeOnGlobalLayoutListener(this);
-        }
-      }
-    });
 
     // DEBUG LABEL
 
