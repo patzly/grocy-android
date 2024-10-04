@@ -1,0 +1,11 @@
+• New: Compatibility for server version 4.2.0 and 4.1.0
+• New: Support for Android 15
+• Improved: Link to server interface for some unimplemented features
+• Improved: Only disable move-on-open switch if no default consume location selected
+• Improved: Overview actions appearance
+• Improved: Refined and unified navigation transitions
+• Improved: Colors of in-app provided themes
+• Improved: splash screen on Android 12+
+• Fixed: Action button jumping to the top after saving new master data
+• Fixed: Invisible status bar icons on some devices with Android 11
+• Fixed: Missing navigation transitions for actions in product details dialog
