@@ -80,7 +80,7 @@ public class LoginIntroFragment extends BaseFragment {
 
   public void loginDemoInstance() {
     String demoDomain = LocaleUtil.getLocalizedGrocyDemoDomain(requireContext());
-    activity.navUtil.navigateFragment(
+    activity.navUtil.navigate(
         LoginIntroFragmentDirections.actionLoginIntroFragmentToLoginRequestFragment(
             demoDomain != null && !demoDomain.isBlank()
                 ? "https://" + demoDomain
@@ -93,11 +93,11 @@ public class LoginIntroFragment extends BaseFragment {
   public void loginOwnInstance() {
     PackageManager pm = activity.getPackageManager();
     if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-      activity.navUtil.navigateFragment(
+      activity.navUtil.navigate(
           LoginIntroFragmentDirections.actionLoginIntroFragmentToLoginApiQrCodeFragment()
       );
     } else {
-      activity.navUtil.navigateFragment(
+      activity.navUtil.navigate(
           LoginIntroFragmentDirections.actionLoginIntroFragmentToLoginApiFormFragment()
       );
     }

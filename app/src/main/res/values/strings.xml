@@ -130,6 +130,7 @@
   <string name="action_display_help">Display help texts</string>
   <string name="action_demo_server">Demo server</string>
   <string name="action_own_server">Own server</string>
+  <string name="action_open_server">Use server interface</string>
   <string name="action_enter_data_manually">Enter data manually</string>
   <string name="action_settings_backup_restore">Backup or restore settings</string>
   <string name="action_details">Details</string>
@@ -1210,8 +1211,6 @@
   <string name="setting_language_info">Many thanks to all the volunteer translators at Transifex!\nPlease visit us on GitHub to learn how you can help make Grocy Android available for your language.</string>
   <string name="setting_language_system">Follow system</string>
   <string name="setting_language_not_available">English if translation is not available</string>
-  <string name="setting_transition">Use sliding transition between settings pages</string>
-  <string name="setting_transition_description">Instead of fading</string>
   <string name="setting_open_food_facts">Use Open Food Facts and Open Beauty Facts</string>
   <string name="setting_open_food_facts_description">Get info from barcodes</string>
   <string name="setting_choose_barcode_scanner">Choose barcode scanner</string>
@@ -1367,5 +1366,34 @@
   <string name="url_netcipher" translatable="false">https://github.com/guardianproject/NetCipher</string>
   <string name="url_volley" translatable="false">https://github.com/google/volley</string>
   <string name="url_zxing_android" translatable="false">https://github.com/journeyapps/zxing-android-embedded</string>
+
+  <string name="ikm_select_cert">Select Client Certificate</string>
+  <string name="ikm_client_cert">Server requested a client certificate. Please select which certificate you want to use.</string>
+  <string name="ikm_client_cert_notification">Select client certificate for</string>
+  <string name="ikm_decision_file">From File</string>
+  <string name="ikm_decision_keychain">From Device Key Manager</string>
+  <string name="ikm_notification">Select Client Certificate</string>
+  <string name="ikm_load_app_keystore">Error loading app keystore</string>
+  <string name="ikm_store_aliasMapping">Error storing keychain aliases</string>
+  <string name="ikm_remove_keys">Connection error: removed keys for</string>
+  <string name="ikm_remove_all_keys">Removed all connection keys</string>
+  <string name="ikm_add_from_keystore">Error reading specified keystore</string>
+  <string name="ikm_add_from_keystore_alias">Error loading keys:</string>
+  <string name="ikm_keychain">KeyChain error; removing stored alias</string>
+  <string name="ikm_select_keystore">Select keystore file</string>
+
+  <string name="mtm_security_risk">Warning: Potential Security Risk</string>
+  <string name="mtm_trust_anchor">The server certificate is not signed by a known Certificate Authority.</string>
+  <string name="mtm_cert_expired">The server certificate is expired.</string>
+  <string name="mtm_hostname_mismatch">Server could not authenticate as \&quot;%s\&quot;.</string>
+  <string name="mtm_trust_certificate">Do you trust this certificate? It will be used to verify all listed names.</string>
+  <string name="mtm_accept_servername">Accept Mismatching Server Name?</string>
+  <string name="mtm_cert_details">Certificate details:</string>
+  <string name="mtm_valid_for">Certificate valid for:</string>
+  <string name="mtm_decision_always">Always</string>
+  <string name="mtm_decision_once">Once</string>
+  <string name="mtm_notification_channel">Security</string>
+  <string name="mtm_notification">Certificate Verification</string>
+  <string name="mtm_error_keystore">Exception on loading key store from file</string>
 
 </resources>

@@ -218,7 +218,7 @@ public class MasterProductCatQuantityUnitFragment extends BaseFragment {
 
   @Override
   public void createQuantityUnit(Bundle args) {
-    activity.navUtil.navigateFragment(MasterProductCatQuantityUnitFragmentDirections
+    activity.navUtil.navigate(MasterProductCatQuantityUnitFragmentDirections
         .actionMasterProductCatQuantityUnitFragmentToMasterQuantityUnitFragment()
         .setIdForReturnValue(args.getString(
             FormDataMasterProductCatQuantityUnit.QUANTITY_UNIT_TYPE,

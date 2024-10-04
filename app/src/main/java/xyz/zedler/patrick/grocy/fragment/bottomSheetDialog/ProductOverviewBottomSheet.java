@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.animation.ValueAnimator;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -37,7 +36,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.MenuCompat;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
@@ -242,7 +240,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
 
     binding.chipConsume.setVisibility(isInStock ? View.VISIBLE : View.GONE);
     binding.chipConsume.setOnClickListener(v -> {
-      NavHostFragment.findNavController(this).navigate(
+      activity.navUtil.navigate(
           ProductOverviewBottomSheetDirections
               .actionProductOverviewBottomSheetDialogFragmentToConsumeFragment()
               .setCloseWhenFinished(true)
@@ -252,7 +250,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     });
 
     binding.chipPurchase.setOnClickListener(v -> {
-      NavHostFragment.findNavController(this).navigate(
+      activity.navUtil.navigate(
           ProductOverviewBottomSheetDirections
               .actionProductOverviewBottomSheetDialogFragmentToPurchaseFragment()
               .setCloseWhenFinished(true)
@@ -264,7 +262,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     binding.chipTransfer.setVisibility(isInStock && product.getEnableTareWeightHandlingInt() == 0
         ? View.VISIBLE : View.GONE);
     binding.chipTransfer.setOnClickListener(v -> {
-      NavHostFragment.findNavController(this).navigate(
+      activity.navUtil.navigate(
           ProductOverviewBottomSheetDirections
               .actionProductOverviewBottomSheetDialogFragmentToTransferFragment()
               .setCloseWhenFinished(true)
@@ -274,7 +272,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     });
 
     binding.chipInventory.setOnClickListener(v -> {
-      NavHostFragment.findNavController(this).navigate(
+      activity.navUtil.navigate(
           ProductOverviewBottomSheetDirections
               .actionProductOverviewBottomSheetDialogFragmentToInventoryFragment()
               .setCloseWhenFinished(true)

@@ -277,27 +277,27 @@ public class MasterObjectListFragment extends BaseFragment
         () -> {
           switch (entity) {
             case GrocyApi.ENTITY.QUANTITY_UNITS:
-              activity.navUtil.navigateFragment(MasterObjectListFragmentDirections
+              activity.navUtil.navigate(MasterObjectListFragmentDirections
                   .actionMasterObjectListFragmentToMasterQuantityUnitFragment());
               break;
             case GrocyApi.ENTITY.PRODUCT_GROUPS:
-              activity.navUtil.navigateFragment(MasterObjectListFragmentDirections
+              activity.navUtil.navigate(MasterObjectListFragmentDirections
                   .actionMasterObjectListFragmentToMasterProductGroupFragment());
               break;
             case GrocyApi.ENTITY.LOCATIONS:
-              activity.navUtil.navigateFragment(MasterObjectListFragmentDirections
+              activity.navUtil.navigate(MasterObjectListFragmentDirections
                   .actionMasterObjectListFragmentToMasterLocationFragment());
               break;
             case GrocyApi.ENTITY.STORES:
-              activity.navUtil.navigateFragment(MasterObjectListFragmentDirections
+              activity.navUtil.navigate(MasterObjectListFragmentDirections
                   .actionMasterObjectListFragmentToMasterStoreFragment());
               break;
             case GrocyApi.ENTITY.PRODUCTS:
-              activity.navUtil.navigateFragment(MasterObjectListFragmentDirections
+              activity.navUtil.navigate(MasterObjectListFragmentDirections
                   .actionMasterObjectListFragmentToMasterProductFragment(Constants.ACTION.CREATE));
               break;
             case ENTITY.TASK_CATEGORIES:
-              activity.navUtil.navigateFragment(MasterObjectListFragmentDirections
+              activity.navUtil.navigate(MasterObjectListFragmentDirections
                   .actionMasterObjectListFragmentToMasterTaskCategoryFragment());
               break;
           }
@@ -323,27 +323,27 @@ public class MasterObjectListFragment extends BaseFragment
     }
     switch (entity) {
       case GrocyApi.ENTITY.QUANTITY_UNITS:
-        activity.navUtil.navigateFragment(MasterObjectListFragmentDirections
+        activity.navUtil.navigate(MasterObjectListFragmentDirections
             .actionMasterObjectListFragmentToMasterQuantityUnitFragment()
             .setQuantityUnit((QuantityUnit) object));
         break;
       case GrocyApi.ENTITY.PRODUCT_GROUPS:
-        activity.navUtil.navigateFragment(MasterObjectListFragmentDirections
+        activity.navUtil.navigate(MasterObjectListFragmentDirections
             .actionMasterObjectListFragmentToMasterProductGroupFragment()
             .setProductGroup((ProductGroup) object));
         break;
       case GrocyApi.ENTITY.LOCATIONS:
-        activity.navUtil.navigateFragment(MasterObjectListFragmentDirections
+        activity.navUtil.navigate(MasterObjectListFragmentDirections
             .actionMasterObjectListFragmentToMasterLocationFragment()
             .setLocation((Location) object));
         break;
       case GrocyApi.ENTITY.STORES:
-        activity.navUtil.navigateFragment(MasterObjectListFragmentDirections
+        activity.navUtil.navigate(MasterObjectListFragmentDirections
             .actionMasterObjectListFragmentToMasterStoreFragment()
             .setStore((Store) object));
         break;
       case GrocyApi.ENTITY.TASK_CATEGORIES:
-        activity.navUtil.navigateFragment(MasterObjectListFragmentDirections
+        activity.navUtil.navigate(MasterObjectListFragmentDirections
             .actionMasterObjectListFragmentToMasterTaskCategoryFragment()
             .setTaskCategory((TaskCategory) object));
         break;
@@ -356,7 +356,7 @@ public class MasterObjectListFragment extends BaseFragment
   @Override
   public void editObject(Object object) {
     if (ENTITY.PRODUCTS.equals(entity)) {
-      activity.navUtil.navigateFragment(MasterObjectListFragmentDirections
+      activity.navUtil.navigate(MasterObjectListFragmentDirections
           .actionMasterObjectListFragmentToMasterProductFragment(
               ACTION.EDIT
           ).setProduct((Product) object));
@@ -390,7 +390,7 @@ public class MasterObjectListFragment extends BaseFragment
 
   @Override
   public void copyProduct(Product product) {
-    activity.navUtil.navigateFragment(MasterObjectListFragmentDirections
+    activity.navUtil.navigate(MasterObjectListFragmentDirections
         .actionMasterObjectListFragmentToMasterProductFragment(Constants.ACTION.CREATE)
         .setProduct(product));
   }

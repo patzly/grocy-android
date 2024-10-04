@@ -237,7 +237,7 @@ public class TasksFragment extends BaseFragment implements
         R.string.title_task_new,
         Constants.FAB.TAG.ADD,
         savedInstanceState == null,
-        () -> activity.navUtil.navigateFragment(
+        () -> activity.navUtil.navigate(
             TasksFragmentDirections.actionTasksFragmentToTaskEntryEditFragment(ACTION.CREATE)
         )
     );
@@ -290,7 +290,7 @@ public class TasksFragment extends BaseFragment implements
 
   @Override
   public void editTask(Task task) {
-    activity.navUtil.navigateFragment(
+    activity.navUtil.navigate(
         TasksFragmentDirections
             .actionTasksFragmentToTaskEntryEditFragment(ACTION.EDIT)
             .setTaskEntry(task)

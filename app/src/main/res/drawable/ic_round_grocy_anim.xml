@@ -66,13 +66,13 @@
         <path
           android:name="path_10"
           android:pathData="M14,6L14,6A4,4 0,0 1,18 10L18,13A4,4 0,0 1,14 17L14,17A4,4 0,0 1,10 13L10,10A4,4 0,0 1,14 6z"
-          android:strokeColor="?attr/colorOnBackground"
+          android:strokeColor="?attr/colorOnSurface"
           android:strokeWidth="1.25" />
         <path
           android:name="path_9"
           android:pathData="m3.3,13.23 l1.7,6.2A4.85,4.85 0,0 0,9.67 23h8.65A4.85,4.85 0,0 0,23 19.43l1.7,-6.2A1.76,1.76 0,0 0,23 11H5a1.76,1.76 0,0 0,-1.7 2.23z"
           android:fillColor="?attr/colorPrimaryContainer"
-          android:strokeColor="?attr/colorOnBackground"
+          android:strokeColor="?attr/colorOnSurface"
           android:strokeWidth="1.25" />
         <path
           android:name="path_11"

@@ -20,13 +20,11 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.animation.Animator;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -109,16 +107,18 @@ public class LoginRequestFragment extends BaseFragment {
     activity.getScrollBehavior().setCanBottomAppBarBeVisible(false);
     activity.getScrollBehavior().setBottomBarVisibility(false, true, false);
 
-    if (!UiUtil.areAnimationsEnabled(activity)) {
+    if (UiUtil.areAnimationsEnabled(activity)) {
+      new Handler().postDelayed(() -> login(true), 300);
+    } else {
       login(true);
     }
   }
 
   private void navigateToStartDestination() {
     activity.navUtil.updateStartDestination();
-    NavOptions.Builder builder = activity.navUtil.getNavOptionsBuilderFragmentFadeOrSlide();
+    NavOptions.Builder builder = new NavOptions.Builder();
     builder.setPopUpTo(R.id.navigation_main, true);
-    activity.navUtil.navigateFragment(
+    activity.navUtil.navigate(
         findNavController().getGraph().getStartDestinationId(), builder.build()
     );
   }
@@ -127,20 +127,5 @@ public class LoginRequestFragment extends BaseFragment {
   public void login(boolean checkVersion) {
     viewModel.clearHassData();
     new Handler().postDelayed(() -> viewModel.login(checkVersion), 500);
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return UiUtil.runOnAnimationEnd(
-        requireContext(), enter, nextAnim, () -> login(true)
-    );
-  }
-
-  @Nullable
-  @Override
-  public Animator onCreateAnimator(int transit, boolean enter, int nextAnim) {
-    return UiUtil.runOnAnimatorEnd(
-        requireContext(), enter, nextAnim, () -> login(true)
-    );
   }
 }

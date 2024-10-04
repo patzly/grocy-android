@@ -44,13 +44,14 @@ import java.nio.charset.StandardCharsets;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 
 public class NavUtil {
 
   private final String TAG;
   private final MainActivity activity;
-  private NavController navController;
-  private final FragmentManager fragmentManager;
+  private final NavController navController;
+  private final NavHostFragment navHostFragment;
   private final SharedPreferences sharedPrefs;
 
   public NavUtil(
@@ -60,14 +61,20 @@ public class NavUtil {
       String tag
   ) {
     this.activity = mainActivity;
-    this.fragmentManager = mainActivity.getSupportFragmentManager();
-    NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
-        .findFragmentById(R.id.fragment_main_nav_host);
+    FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
+    navHostFragment = (NavHostFragment) fragmentManager.findFragmentById(
+        R.id.fragment_main_nav_host
+    );
     assert navHostFragment != null;
     navController = navHostFragment.getNavController();
     navController.addOnDestinationChangedListener(destinationListener);
     this.sharedPrefs = sharedPrefs;
     this.TAG = tag;
+  }
+
+  @NonNull
+  public BaseFragment getCurrentFragment() {
+    return (BaseFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
   }
 
   public void updateStartDestination() {
@@ -84,34 +91,6 @@ public class NavUtil {
     navController.setGraph(graph);
   }
 
-  public NavOptions.Builder getNavOptionsBuilderFragmentFadeOrSlide() {
-    if (UiUtil.areAnimationsEnabled(activity)) {
-      boolean useSliding = sharedPrefs.getBoolean(
-          Constants.SETTINGS.APPEARANCE.USE_SLIDING,
-          Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
-      );
-      if (useSliding) {
-        return new NavOptions.Builder()
-            .setEnterAnim(R.anim.open_enter_slide)
-            .setExitAnim(R.anim.open_exit_slide)
-            .setPopEnterAnim(R.anim.close_enter_slide)
-            .setPopExitAnim(R.anim.close_exit_slide);
-      } else {
-        return new NavOptions.Builder()
-            .setEnterAnim(R.animator.open_enter)
-            .setExitAnim(R.animator.open_exit)
-            .setPopEnterAnim(R.animator.close_enter)
-            .setPopExitAnim(R.animator.close_exit);
-      }
-    } else {
-      return new NavOptions.Builder()
-          .setEnterAnim(-1)
-          .setExitAnim(-1)
-          .setPopEnterAnim(-1)
-          .setPopExitAnim(-1);
-    }
-  }
-
   public void navigate(NavDirections directions) {
     if (navController == null || directions == null) {
       Log.e(TAG, "navigate: controller or direction is null");
@@ -121,6 +100,18 @@ public class NavUtil {
       navController.navigate(directions);
     } catch (IllegalArgumentException e) {
       Log.e(TAG, "navigate: " + directions, e);
+    }
+  }
+
+  public void navigate(@IdRes int destination) {
+    if (navController == null) {
+      Log.e(TAG, "navigate: controller or direction is null");
+      return;
+    }
+    try {
+      navController.navigate(destination);
+    } catch (IllegalArgumentException e) {
+      Log.e(TAG, "navigate: ", e);
     }
   }
 
@@ -149,51 +140,24 @@ public class NavUtil {
   }
 
   public void navigateUp() {
-    if (navController == null) {
-      NavHostFragment navHostFragment = (NavHostFragment) fragmentManager.findFragmentById(
-          R.id.fragment_main_nav_host
-      );
-      assert navHostFragment != null;
-      navController = navHostFragment.getNavController();
-    }
     navController.navigateUp();
     activity.binding.bottomAppBar.performShow();
     activity.hideKeyboard();
   }
 
-  public void navigateFragment(@IdRes int destination) {
-    navigateFragment(destination, (Bundle) null);
-  }
-
-  public void navigateFragment(@IdRes int destination, @Nullable Bundle arguments) {
+  public void navigate(@IdRes int destination, @Nullable Bundle arguments) {
     if (navController == null ) {
       Log.e(TAG, "navigateFragment: controller is null");
       return;
     }
     try {
-      navController.navigate(
-          destination, arguments, getNavOptionsBuilderFragmentFadeOrSlide().build()
-      );
+      navController.navigate(destination, arguments);
     } catch (IllegalArgumentException e) {
       Log.e(TAG, "navigateFragment: ", e);
     }
   }
 
-  public void navigateFragment(NavDirections directions) {
-    if (navController == null || directions == null) {
-      Log.e(TAG, "navigateFragment: controller or direction is null");
-      return;
-    }
-    try {
-      navController.navigate(
-          directions, getNavOptionsBuilderFragmentFadeOrSlide().build()
-      );
-    } catch (IllegalArgumentException e) {
-      Log.e(TAG, "navigateFragment: " + directions, e);
-    }
-  }
-
-  public void navigateFragment(@IdRes int destination, @NonNull NavOptions navOptions) {
+  public void navigate(@IdRes int destination, @NonNull NavOptions navOptions) {
     if (navController == null ) {
       Log.e(TAG, "navigateFragment: controller is null");
       return;
@@ -211,7 +175,7 @@ public class NavUtil {
       return;
     }
     try {
-      navController.navigate(uri, getNavOptionsBuilderFragmentFadeOrSlide().build());
+      navController.navigate(uri);
     } catch (IllegalArgumentException e) {
       Log.e(TAG, "navigateDeepLink: ", e);
     }

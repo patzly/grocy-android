@@ -49,14 +49,14 @@
         android:singleLine="true"
         android:textSize="26sp"
         android:background="@drawable/bg_placeholder_text"
-        android:backgroundTint="?attr/colorSurfaceVariant" />
+        android:backgroundTint="?attr/colorSurfaceContainerHighest" />
 
       <TextView
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:background="@drawable/bg_placeholder_text"
-        android:backgroundTint="?attr/colorSurfaceVariant"
+        android:backgroundTint="?attr/colorSurfaceContainerHighest"
         android:singleLine="true" />
 
     </LinearLayout>

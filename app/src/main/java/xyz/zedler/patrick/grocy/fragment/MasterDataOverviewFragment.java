@@ -20,6 +20,8 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +29,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -83,45 +86,56 @@ public class MasterDataOverviewFragment extends BaseFragment {
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
-    binding.linearProducts.setOnClickListener(v -> activity.navUtil.navigateFragment(
+    binding.linearProducts.setOnClickListener(v -> activity.navUtil.navigate(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.PRODUCTS
             ))
     );
-    binding.linearQuantityUnits.setOnClickListener(v -> activity.navUtil.navigateFragment(
+    binding.linearQuantityUnits.setOnClickListener(v -> activity.navUtil.navigate(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.QUANTITY_UNITS
             ))
     );
-    binding.linearLocations.setOnClickListener(v -> activity.navUtil.navigateFragment(
+    binding.linearLocations.setOnClickListener(v -> activity.navUtil.navigate(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.LOCATIONS
             ))
     );
-    binding.linearProductGroups.setOnClickListener(v -> activity.navUtil.navigateFragment(
+    binding.linearProductGroups.setOnClickListener(v -> activity.navUtil.navigate(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.PRODUCT_GROUPS
             ))
     );
-    binding.linearStores.setOnClickListener(v -> activity.navUtil.navigateFragment(
+    binding.linearStores.setOnClickListener(v -> activity.navUtil.navigate(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.STORES
             ))
     );
-    binding.linearTaskCategories.setOnClickListener(v -> activity.navUtil.navigateFragment(
+    binding.linearTaskCategories.setOnClickListener(v -> activity.navUtil.navigate(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.TASK_CATEGORIES
             ))
     );
-    binding.linearChores.setOnClickListener(
-        v -> viewModel.showMessage(R.string.msg_not_implemented_yet)
-    );
+    binding.linearChores.setOnClickListener(v -> viewModel.showMessageWithAction(
+        R.string.msg_not_implemented_yet,
+        R.string.action_open_server,
+        () -> {
+          Intent browserIntent = new Intent(
+              Intent.ACTION_VIEW, Uri.parse(activity.getGrocyApi().getBaseUrl() + "/chores")
+          );
+          startActivity(browserIntent);
+        },
+        getSharedPrefs().getInt(
+            Constants.SETTINGS.BEHAVIOR.MESSAGE_DURATION,
+            Constants.SETTINGS_DEFAULT.BEHAVIOR.MESSAGE_DURATION
+        )
+    ));
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {

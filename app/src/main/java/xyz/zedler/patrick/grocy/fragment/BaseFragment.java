@@ -37,6 +37,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import com.android.volley.VolleyError;
+import com.google.android.material.transition.MaterialSharedAxis;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
@@ -57,7 +58,6 @@ import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.util.NavUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
-@SuppressWarnings("EmptyMethod")
 public class BaseFragment extends Fragment {
 
   private MainActivity activity;
@@ -69,6 +69,11 @@ public class BaseFragment extends Fragment {
 
     activity = (MainActivity) requireActivity();
     viewUtil = new ViewUtil();
+
+    setEnterTransition(new MaterialSharedAxis(MaterialSharedAxis.Z, true));
+    setReenterTransition(new MaterialSharedAxis(MaterialSharedAxis.Z, false));
+    setReturnTransition(new MaterialSharedAxis(MaterialSharedAxis.Z, false));
+    setExitTransition(new MaterialSharedAxis(MaterialSharedAxis.Z, true));
   }
 
   @Override
@@ -106,19 +111,15 @@ public class BaseFragment extends Fragment {
     return false;
   }
 
-  public void getActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-
-  }
+  public void getActivityResult(int requestCode, int resultCode, @Nullable Intent data) {}
 
   public boolean isSearchVisible() {
     return false;
   }
 
-  public void dismissSearch() {
-  }
+  public void dismissSearch() {}
 
-  public void onBottomSheetDismissed() {
-  }
+  public void onBottomSheetDismissed() {}
 
   public boolean onBackPressed() {
     return false;
@@ -132,160 +133,110 @@ public class BaseFragment extends Fragment {
     return false;
   }
 
-  public void editObject(Object object) {
-  }
+  public void editObject(Object object) {}
 
-  public void copyProduct(Product product) {
-  }
+  public void copyProduct(Product product) {}
 
-  public void deleteObject(int objectId) {
-  }
+  public void deleteObject(int objectId) {}
 
-  public void deleteShoppingList(ShoppingList shoppingList) {
-  }
+  public void deleteShoppingList(ShoppingList shoppingList) {}
 
-  public void clearShoppingList(ShoppingList shoppingList, boolean onlyDoneItems) {
-  }
+  public void clearShoppingList(ShoppingList shoppingList, boolean onlyDoneItems) {}
 
-  public void toggleDoneStatus(ShoppingListItem shoppingListItem) {
-  }
+  public void toggleDoneStatus(ShoppingListItem shoppingListItem) {}
 
-  public void purchaseItem(ShoppingListItem shoppingListItem) {
-  }
+  public void purchaseItem(ShoppingListItem shoppingListItem) {}
 
-  public void deleteItem(ShoppingListItem shoppingListItem) {
-  }
+  public void deleteItem(ShoppingListItem shoppingListItem) {}
 
-  public void editItem(ShoppingListItem shoppingListItem) {
-  }
+  public void editItem(ShoppingListItem shoppingListItem) {}
 
-  public void trackNextChoreSchedule(ChoreEntry choreEntry) {
-  }
+  public void trackNextChoreSchedule(ChoreEntry choreEntry) {}
 
-  public void skipNextChoreSchedule(ChoreEntry choreEntry) {
-  }
+  public void skipNextChoreSchedule(ChoreEntry choreEntry) {}
 
-  public void trackChoreExecutionNow(ChoreEntry choreEntry) {
-  }
+  public void trackChoreExecutionNow(ChoreEntry choreEntry) {}
 
-  public void rescheduleNextExecution(ChoreEntry choreEntry) {
-  }
+  public void rescheduleNextExecution(ChoreEntry choreEntry) {}
 
-  public void toggleDoneStatus(Task task) {
-  }
+  public void toggleDoneStatus(Task task) {}
 
-  public void deleteTask(Task task) {
-  }
+  public void deleteTask(Task task) {}
 
-  public void editTask(Task task) {
-  }
+  public void editTask(Task task) {}
 
-  public void deleteRecipePosition(int recipePositionId) {
-  }
+  public void deleteRecipePosition(int recipePositionId) {}
 
   @Nullable
   public MutableLiveData<Integer> getSelectedShoppingListIdLive() {
     return null;
   }
 
-  public void updateConnectivity(boolean isOnline) {
-  }
+  public void updateConnectivity(boolean isOnline) {}
 
-  public void selectShoppingList(ShoppingList shoppingList) {
-  }
+  public void selectShoppingList(ShoppingList shoppingList) {}
 
-  public void selectProduct(Product product) {
-  }
+  public void selectProduct(Product product) {}
 
-  public void createQuantityUnit(Bundle argsBundle) {
-  }
+  public void createQuantityUnit(Bundle argsBundle) {}
 
-  public void selectQuantityUnit(QuantityUnit quantityUnit) {
-  }
+  public void selectQuantityUnit(QuantityUnit quantityUnit) {}
 
-  public void selectQuantityUnit(QuantityUnit quantityUnit, Bundle argsBundle) {
-  }
+  public void selectQuantityUnit(QuantityUnit quantityUnit, Bundle argsBundle) {}
 
-  public void selectPurchasedDate(String purchasedDate) {
-  }
+  public void selectPurchasedDate(String purchasedDate) {}
 
-  public void selectDueDate(String dueDate) {
-  }
+  public void selectDueDate(String dueDate) {}
 
-  public void selectStockLocation(StockLocation stockLocation) {
-  }
+  public void selectStockLocation(StockLocation stockLocation) {}
 
-  public void selectStockEntry(StockEntry stockEntry) {
-  }
+  public void selectStockEntry(StockEntry stockEntry) {}
 
-  public void createProductGroup() {
-  }
+  public void createProductGroup() {}
 
-  public void selectProductGroup(ProductGroup productGroup) {
-  }
+  public void selectProductGroup(ProductGroup productGroup) {}
 
-  public void createLocation(Bundle args) {
-  }
+  public void createLocation(Bundle args) {}
 
-  public void selectLocation(Location location) {
-  }
+  public void selectLocation(Location location) {}
 
-  public void selectLocation(Location location, Bundle argsBundle) {
-  }
+  public void selectLocation(Location location, Bundle argsBundle) {}
 
-  public void selectStore(Store store) {
-  }
+  public void selectStore(Store store) {}
 
-  public void selectStore(Store store, boolean pinClicked) {
-  }
+  public void selectStore(Store store, boolean pinClicked) {}
 
-  public void selectTaskCategory(TaskCategory taskCategory) {
-  }
+  public void selectTaskCategory(TaskCategory taskCategory) {}
 
-  public void selectUser(User user) {
-  }
+  public void selectUser(User user) {}
 
-  public void setLanguage(Language language) {
-  }
+  public void setLanguage(Language language) {}
 
-  public void addBarcodeToNewProduct(String barcode) {
-  }
+  public void addBarcodeToNewProduct(String barcode) {}
 
-  public void addBarcodeToExistingProduct(String barcode) {
-  }
+  public void addBarcodeToExistingProduct(String barcode) {}
 
-  public void saveText(Spanned spanned) {
-  }
+  public void saveText(Spanned spanned) {}
 
-  public void saveInput(String text, Bundle argsBundle) {
-  }
+  public void saveInput(String text, Bundle argsBundle) {}
 
-  public void performAction(String action, StockItem stockItem) {
-  }
+  public void performAction(String action, StockItem stockItem) {}
 
-  public void performAction(String action, StockEntry stockEntry) {
-  }
+  public void performAction(String action, StockEntry stockEntry) {}
 
-  public void updateShortcuts() {
-  }
+  public void updateShortcuts() {}
 
-  public void updateBarcodeFormats() {
-  }
+  public void updateBarcodeFormats() {}
 
-  public void startTransaction() {
-  }
+  public void startTransaction() {}
 
-  public void startTransaction(boolean open) {
-  }
+  public void startTransaction(boolean open) {}
 
-  public void interruptCurrentProductFlow() {
-  }
+  public void interruptCurrentProductFlow() {}
 
-  public void enableLoginButtons() {
-  }
+  public void enableLoginButtons() {}
 
-  public void login(boolean checkVersion) {
-  }
+  public void login(boolean checkVersion) {}
 
   @NonNull
   public NavController findNavController() {
@@ -400,11 +351,9 @@ public class BaseFragment extends Fragment {
     return backStackEntry.getDestination();
   }
 
-  public void setOption(Object value, String option) {
-  }
+  public void setOption(Object value, String option) {}
 
   interface ObserverListener {
-
     void onChange(Object value);
   }
 }

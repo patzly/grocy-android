@@ -48,7 +48,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
-import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
@@ -113,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
   private BroadcastReceiver networkReceiver;
   private BottomScrollBehavior scrollBehavior;
   private UiUtil uiUtil;
-  private OnBackPressedDispatcher dispatcher;
   private boolean runAsSuperClass;
   private boolean debug;
 
@@ -215,7 +213,6 @@ public class MainActivity extends AppCompatActivity {
     }, sharedPrefs, TAG);
     navUtil.updateStartDestination();
 
-    dispatcher = getOnBackPressedDispatcher();
     OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
       @Override
       public void handleOnBackPressed() {
@@ -226,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
           boolean handled = currentFragment.onBackPressed();
           if (!handled) {
             setEnabled(false);
-            dispatcher.onBackPressed();
+            getOnBackPressedDispatcher().onBackPressed();
             setEnabled(true);
           }
           if (!PrefsUtil.isServerUrlEmpty(sharedPrefs)) {
@@ -236,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
         hideKeyboard();
       }
     };
-    dispatcher.addCallback(this, onBackPressedCallback);
+    getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
 
     // BOTTOM APP BAR
 
@@ -424,10 +421,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void performOnBackPressed() {
-    if (dispatcher == null) {
-      dispatcher = getOnBackPressedDispatcher();
-    }
-    dispatcher.onBackPressed();
+    getOnBackPressedDispatcher().onBackPressed();
   }
 
   @Override
@@ -566,9 +560,7 @@ public class MainActivity extends AppCompatActivity {
 
   @NonNull
   public BaseFragment getCurrentFragment() {
-    Fragment navHostFragment = fragmentManager.findFragmentById(R.id.fragment_main_nav_host);
-    assert navHostFragment != null;
-    return (BaseFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+    return navUtil.getCurrentFragment();
   }
 
   private void replaceFabIcon(Drawable icon, String tag, boolean animated) {

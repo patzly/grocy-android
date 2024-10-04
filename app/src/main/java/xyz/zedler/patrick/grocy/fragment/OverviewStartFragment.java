@@ -20,9 +20,11 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.animation.LayoutTransition;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,6 +100,17 @@ public class OverviewStartFragment extends BaseFragment {
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
+    binding.relative.post(() -> {
+      LayoutTransition transition = new LayoutTransition();
+      transition.enableTransitionType(LayoutTransition.CHANGING);
+      binding.relative.setLayoutTransition(transition);
+    });
+    binding.linearContainer.post(() -> {
+      LayoutTransition transition = new LayoutTransition();
+      transition.enableTransitionType(LayoutTransition.CHANGING);
+      binding.linearContainer.setLayoutTransition(transition);
+    });
+
     ViewUtil.setOnlyOverScrollStretchEnabled(binding.scrollHorizActionsStockOverview);
     binding.scrollHorizActionsStockOverview.post(
         () -> {
@@ -150,42 +163,6 @@ public class OverviewStartFragment extends BaseFragment {
       viewModel.loadFromDatabase(true);
     }
 
-    ViewTreeObserver observer = binding.scrollHorizActionsStockOverview.getViewTreeObserver();
-    observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-      @Override
-      public void onGlobalLayout() {
-        int containerWidthStock = binding.scrollHorizActionsStockOverview.getWidth();
-        int buttonWidthStock = binding.linearStockActionsContainer.getWidth();
-        boolean isScrollableStock
-            = buttonWidthStock >= containerWidthStock - UiUtil.dpToPx(activity, 32);
-        if (isScrollableStock) {
-          binding.buttonInventoryText.setVisibility(View.GONE);
-          binding.buttonInventoryIcon.setVisibility(View.VISIBLE);
-          boolean isLocationTrackingEnabled = viewModel.isFeatureEnabled(
-              Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING
-          );
-          if (isLocationTrackingEnabled) {
-            binding.buttonTransferText.setVisibility(View.GONE);
-            binding.buttonTransferIcon.setVisibility(View.VISIBLE);
-          }
-        }
-
-        int containerWidthShopping = binding.scrollHorizActionsShoppingList.getWidth();
-        int buttonWidthShopping = binding.linearShoppingListActionsContainer.getWidth();
-        boolean isScrollableShopping
-            = buttonWidthShopping >= containerWidthShopping - UiUtil.dpToPx(activity, 32);
-        if (isScrollableShopping) {
-          binding.buttonShoppingText.setVisibility(View.GONE);
-          binding.buttonShoppingIcon.setVisibility(View.VISIBLE);
-        }
-
-        if (binding.scrollHorizActionsStockOverview.getViewTreeObserver().isAlive()) {
-          binding.scrollHorizActionsStockOverview.getViewTreeObserver()
-              .removeOnGlobalLayoutListener(this);
-        }
-      }
-    });
-
     // DEBUG LABEL
 
     if (BuildConfig.DEBUG) {
@@ -215,11 +192,11 @@ public class OverviewStartFragment extends BaseFragment {
           if (showFabInfoDialogIfAppropriate()) {
             return;
           }
-          activity.navUtil.navigateFragment(
+          activity.navUtil.navigate(
               R.id.consumeFragment,
               new ConsumeFragmentArgs.Builder().setStartWithScanner(true).build().toBundle()
           );
-        }, () -> activity.navUtil.navigateFragment(
+        }, () -> activity.navUtil.navigate(
             R.id.purchaseFragment,
             new PurchaseFragmentArgs.Builder().setStartWithScanner(true).build().toBundle()
         )
@@ -285,7 +262,7 @@ public class OverviewStartFragment extends BaseFragment {
         .setPositiveButton(R.string.title_consume, (dialog, which) -> {
           performHapticClick();
           viewModel.setOverviewFabInfoShown();
-          activity.navUtil.navigateFragment(
+          activity.navUtil.navigate(
               R.id.consumeFragment,
               new ConsumeFragmentArgs.Builder()
                   .setStartWithScanner(true).build().toBundle()
@@ -293,7 +270,7 @@ public class OverviewStartFragment extends BaseFragment {
         }).setNegativeButton(R.string.title_purchase, (dialog, which) -> {
           performHapticClick();
           viewModel.setOverviewFabInfoShown();
-          activity.navUtil.navigateFragment(
+          activity.navUtil.navigate(
               R.id.purchaseFragment,
               new PurchaseFragmentArgs.Builder()
                   .setStartWithScanner(true).build().toBundle()

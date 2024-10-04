@@ -32,7 +32,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/colorBackground">
+    android:background="?attr/colorSurface">
 
     <xyz.zedler.patrick.grocy.view.photoview.PhotoView
       android:id="@+id/photo_view"

@@ -139,7 +139,7 @@ public class RecipeFragment extends BaseFragment implements
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    int colorOnBg = ResUtil.getColor(activity, R.attr.colorOnBackground);
+    int colorOnBg = ResUtil.getColor(activity, R.attr.colorOnSurface);
     binding.appBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
       if (binding.collapsingToolbarLayout.getHeight() + verticalOffset
           < binding.collapsingToolbarLayout.getScrimVisibleHeightTrigger()) {
@@ -172,7 +172,7 @@ public class RecipeFragment extends BaseFragment implements
           grocyApi.getRecipePictureServeLarge(recipe.getPictureFileName()),
           true
       ).build().toBundle();
-      activity.navUtil.navigateFragment(R.id.photoViewerFragment, argsPhotoViewer);
+      activity.navUtil.navigate(R.id.photoViewerFragment, argsPhotoViewer);
     });
 
     binding.buttonFulfillmentInfo.setIconTint(ColorStateList.valueOf(
@@ -600,7 +600,7 @@ public class RecipeFragment extends BaseFragment implements
       return false;
     }
     if (item.getItemId() == R.id.action_edit_recipe) {
-      activity.navUtil.navigateFragment(RecipeFragmentDirections
+      activity.navUtil.navigate(RecipeFragmentDirections
           .actionRecipeFragmentToRecipeEditFragment(ACTION.EDIT).setRecipe(recipe));
       return true;
     } else if (item.getItemId() == R.id.action_copy_recipe) {

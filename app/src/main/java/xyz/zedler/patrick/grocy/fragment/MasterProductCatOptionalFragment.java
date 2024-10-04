@@ -286,13 +286,13 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
 
   public void navigateToHtmlEditor() {
     if (viewModel.getFormData().getDescriptionLive().getValue() != null) {
-      activity.navUtil.navigateFragment(
+      activity.navUtil.navigate(
           MasterProductCatOptionalFragmentDirections
               .actionMasterProductCatOptionalFragmentToEditorHtmlFragment()
               .setText(viewModel.getFormData().getDescriptionLive().getValue())
       );
     } else {
-      activity.navUtil.navigateFragment(
+      activity.navUtil.navigate(
           MasterProductCatOptionalFragmentDirections
               .actionMasterProductCatOptionalFragmentToEditorHtmlFragment()
       );
@@ -323,7 +323,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
 
   @Override
   public void createProductGroup() {
-    activity.navUtil.navigateFragment(MasterProductCatOptionalFragmentDirections
+    activity.navUtil.navigate(MasterProductCatOptionalFragmentDirections
         .actionMasterProductCatOptionalFragmentToMasterProductGroupFragment());
   }
   @Override

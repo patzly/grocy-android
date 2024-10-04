@@ -23,7 +23,7 @@
 
   <item android:id="@android:id/background">
 
-    <shape android:tint="?attr/colorSurfaceVariant" />
+    <shape android:tint="?attr/colorSurfaceContainerHighest" />
 
   </item>
 

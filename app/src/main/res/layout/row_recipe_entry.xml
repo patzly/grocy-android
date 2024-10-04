@@ -49,7 +49,7 @@
       app:cardCornerRadius="12dp"
       app:cardElevation="0dp"
       app:strokeWidth="0dp"
-      app:cardBackgroundColor="?attr/colorSurfaceVariant">
+      app:cardBackgroundColor="?attr/colorSurfaceContainerHighest">
 
       <ImageView
         style="@style/Widget.Grocy.ImageView.Icon"

@@ -255,7 +255,7 @@ public class MasterProductCatLocationFragment extends BaseFragment {
 
   @Override
   public void createLocation(Bundle args) {
-    activity.navUtil.navigateFragment(MasterProductCatLocationFragmentDirections
+    activity.navUtil.navigate(MasterProductCatLocationFragmentDirections
         .actionMasterProductCatLocationFragmentToMasterLocationFragment()
         .setIdForReturnValue(args.getBoolean(IS_CONSUME_LOCATION, false)
             ? IS_CONSUME_LOCATION : null));

@@ -32,7 +32,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/colorBackground">
+    android:background="?attr/colorSurface">
 
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
@@ -71,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="8.5sp"
-            android:textColor="?attr/colorOnBackground"
+            android:textColor="?attr/colorOnSurface"
             android:textIsSelectable="true"
             android:padding="16dp"
             tools:ignore="SmallSp" />

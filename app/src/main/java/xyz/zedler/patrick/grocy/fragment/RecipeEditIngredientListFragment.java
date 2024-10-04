@@ -210,7 +210,7 @@ public class RecipeEditIngredientListFragment extends BaseFragment
         R.string.title_ingredient_new,
         Constants.FAB.TAG.ADD,
         savedInstanceState == null,
-        () -> activity.navUtil.navigateFragment(RecipeEditIngredientListFragmentDirections
+        () -> activity.navUtil.navigate(RecipeEditIngredientListFragmentDirections
             .actionRecipeEditIngredientListFragmentToRecipeEditIngredientEditFragment(
                 ACTION.CREATE,
                 viewModel.getAction()
@@ -222,7 +222,7 @@ public class RecipeEditIngredientListFragment extends BaseFragment
 
   @Override
   public void onItemRowClicked(RecipePosition recipePosition, int position) {
-    activity.navUtil.navigateFragment(
+    activity.navUtil.navigate(
         RecipeEditIngredientListFragmentDirections
             .actionRecipeEditIngredientListFragmentToRecipeEditIngredientEditFragment(
                     ACTION.EDIT,

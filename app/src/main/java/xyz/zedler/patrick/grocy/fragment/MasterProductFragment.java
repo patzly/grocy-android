@@ -111,27 +111,27 @@ public class MasterProductFragment extends BaseFragment {
     binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
 
     binding.categoryOptional.setOnClickListener(
-        v -> activity.navUtil.navigateFragment(MasterProductFragmentDirections
+        v -> activity.navUtil.navigate(MasterProductFragmentDirections
             .actionMasterProductFragmentToMasterProductCatOptionalFragment(viewModel.getAction())
             .setProduct(viewModel.getFilledProduct())
             .setForceSaveWithClose(viewModel.isForceSaveWithClose())));
     binding.categoryLocation.setOnClickListener(
-        v -> activity.navUtil.navigateFragment(MasterProductFragmentDirections
+        v -> activity.navUtil.navigate(MasterProductFragmentDirections
             .actionMasterProductFragmentToMasterProductCatLocationFragment(viewModel.getAction())
             .setProduct(viewModel.getFilledProduct())
             .setForceSaveWithClose(viewModel.isForceSaveWithClose())));
     binding.categoryDueDate.setOnClickListener(
-        v -> activity.navUtil.navigateFragment(MasterProductFragmentDirections
+        v -> activity.navUtil.navigate(MasterProductFragmentDirections
             .actionMasterProductFragmentToMasterProductCatDueDateFragment(viewModel.getAction())
             .setProduct(viewModel.getFilledProduct())
             .setForceSaveWithClose(viewModel.isForceSaveWithClose())));
     binding.categoryAmount.setOnClickListener(
-        v -> activity.navUtil.navigateFragment(MasterProductFragmentDirections
+        v -> activity.navUtil.navigate(MasterProductFragmentDirections
             .actionMasterProductFragmentToMasterProductCatAmountFragment(viewModel.getAction())
             .setProduct(viewModel.getFilledProduct())
             .setForceSaveWithClose(viewModel.isForceSaveWithClose())));
     binding.categoryQuantityUnit.setOnClickListener(
-        v -> activity.navUtil.navigateFragment(MasterProductFragmentDirections
+        v -> activity.navUtil.navigate(MasterProductFragmentDirections
             .actionMasterProductFragmentToMasterProductCatQuantityUnitFragment(viewModel.getAction())
             .setProduct(viewModel.getFilledProduct())
             .setForceSaveWithClose(viewModel.isForceSaveWithClose())));
@@ -140,7 +140,7 @@ public class MasterProductFragment extends BaseFragment {
         activity.showSnackbar(R.string.msg_save_product_first, true);
         return;
       }
-      activity.navUtil.navigateFragment(MasterProductFragmentDirections
+      activity.navUtil.navigate(MasterProductFragmentDirections
           .actionMasterProductFragmentToMasterProductCatBarcodesFragment(viewModel.getAction())
           .setProduct(viewModel.getFilledProduct()));
     });
@@ -149,7 +149,7 @@ public class MasterProductFragment extends BaseFragment {
         activity.showSnackbar(R.string.msg_save_product_first, true);
         return;
       }
-      activity.navUtil.navigateFragment(MasterProductFragmentDirections
+      activity.navUtil.navigate(MasterProductFragmentDirections
           .actionMasterProductFragmentToMasterProductCatConversionsFragment(viewModel.getAction())
           .setProduct(viewModel.getFilledProduct()));
     });
@@ -247,27 +247,27 @@ public class MasterProductFragment extends BaseFragment {
 
     viewModel.getFormData().getCatOptionalErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textCatOptional.setTextColor(
-            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnSurface)
         )
     );
     viewModel.getFormData().getCatLocationErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textCatLocation.setTextColor(
-            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnSurface)
         )
     );
     viewModel.getFormData().getCatDueDateErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textCatDueDate.setTextColor(
-            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnSurface)
         )
     );
     viewModel.getFormData().getCatQuErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textCatQu.setTextColor(
-            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnSurface)
         )
     );
     viewModel.getFormData().getCatAmountErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textCatAmount.setTextColor(
-            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
+            ResUtil.getColor(activity, value ? R.attr.colorError : R.attr.colorOnSurface)
         )
     );
 

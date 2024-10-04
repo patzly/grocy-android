@@ -299,7 +299,7 @@ public class ShoppingListFragment extends BaseFragment implements
     if (showOfflineError()) {
       return;
     }
-    activity.navUtil.navigateFragment(
+    activity.navUtil.navigate(
         ShoppingListFragmentDirections
             .actionShoppingListFragmentToShoppingListItemEditFragment(Constants.ACTION.EDIT)
             .setShoppingListItem(shoppingListItem)
@@ -316,7 +316,7 @@ public class ShoppingListFragment extends BaseFragment implements
     if (showOfflineError()) {
       return;
     }
-    activity.navUtil.navigateFragment(
+    activity.navUtil.navigate(
         R.id.purchaseFragment,
         new PurchaseFragmentArgs.Builder()
             .setShoppingListItems(new int[]{shoppingListItem.getId()})
@@ -341,7 +341,7 @@ public class ShoppingListFragment extends BaseFragment implements
   }
 
   public void addItem() {
-    activity.navUtil.navigateFragment(
+    activity.navUtil.navigate(
         ShoppingListFragmentDirections
             .actionShoppingListFragmentToShoppingListItemEditFragment(Constants.ACTION.CREATE)
             .setSelectedShoppingListId(viewModel.getSelectedShoppingListId())
@@ -380,7 +380,7 @@ public class ShoppingListFragment extends BaseFragment implements
         setUpSearch();
         return true;
       } else if (item.getItemId() == R.id.action_shopping_mode) {
-        activity.navUtil.navigateFragment(
+        activity.navUtil.navigate(
             ShoppingListFragmentDirections.actionShoppingListFragmentToShoppingModeFragment()
         );
         return true;
@@ -410,7 +410,7 @@ public class ShoppingListFragment extends BaseFragment implements
         for (int i = 0; i < array.length; i++) {
           array[i] = listItems.get(i).getId();
         }
-        activity.navUtil.navigateFragment(
+        activity.navUtil.navigate(
             R.id.purchaseFragment,
             new PurchaseFragmentArgs.Builder()
                 .setShoppingListItems(array)
@@ -447,7 +447,7 @@ public class ShoppingListFragment extends BaseFragment implements
         for (int i = 0; i < array.length; i++) {
           array[i] = doneItems.get(i).getId();
         }
-        activity.navUtil.navigateFragment(
+        activity.navUtil.navigate(
             R.id.purchaseFragment,
             new PurchaseFragmentArgs.Builder()
                 .setShoppingListItems(array)
@@ -455,7 +455,7 @@ public class ShoppingListFragment extends BaseFragment implements
         );
         return true;
       } else if (item.getItemId() == R.id.action_shopping_mode) {
-        activity.navUtil.navigateFragment(
+        activity.navUtil.navigate(
             ShoppingListFragmentDirections.actionShoppingListFragmentToShoppingModeFragment()
         );
         return true;

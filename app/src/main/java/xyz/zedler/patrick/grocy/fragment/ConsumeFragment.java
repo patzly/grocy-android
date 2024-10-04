@@ -170,7 +170,7 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
         embeddedFragmentScanner.startScannerIfVisible();
       } else if (event.getType() == Event.CHOOSE_PRODUCT) {
         String barcode = event.getBundle().getString(ARGUMENT.BARCODE);
-        activity.navUtil.navigateFragment(ConsumeFragmentDirections
+        activity.navUtil.navigate(ConsumeFragmentDirections
             .actionConsumeFragmentToChooseProductFragment(barcode)
             .setForbidCreateProduct(true));
       }

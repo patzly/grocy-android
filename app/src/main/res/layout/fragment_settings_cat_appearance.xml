@@ -44,7 +44,7 @@
   <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/colorBackground">
+    android:background="?attr/colorSurface">
 
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
@@ -282,10 +282,6 @@
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
           </HorizontalScrollView>
-
-          <include
-            android:id="@+id/partial_option_transition"
-            layout="@layout/partial_option_transition" />
 
           <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"

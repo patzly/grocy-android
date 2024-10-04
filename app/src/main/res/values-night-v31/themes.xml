@@ -18,12 +18,11 @@
   ~ Copyright (c) 2024 by Patrick Zedler
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
   <style name="Theme.Grocy" parent="Base.Grocy">
-    <item name="android:windowSplashScreenBackground">@android:color/system_neutral1_900</item>
+    <item name="android:windowSplashScreenBackground" tools:ignore="PrivateResource">@color/m3_sys_color_dynamic_dark_surface</item>
     <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_logo_anim</item>
-    <item name="android:windowSplashScreenAnimationDuration">970</item>
   </style>
 
 </resources>

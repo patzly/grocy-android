@@ -336,12 +336,12 @@ public class StockOverviewFragment extends BaseFragment implements
       setUpSearch();
       return true;
     } else if (item.getItemId() == R.id.action_stock_journal) {
-      activity.navUtil.navigateFragment(
+      activity.navUtil.navigate(
           StockOverviewFragmentDirections.actionStockOverviewFragmentToStockJournalFragment()
       );
       return true;
     } else if (item.getItemId() == R.id.action_stock_entries) {
-      activity.navUtil.navigateFragment(
+      activity.navUtil.navigate(
           StockOverviewFragmentDirections.actionStockOverviewFragmentToStockEntriesFragment()
       );
       return true;
@@ -376,7 +376,7 @@ public class StockOverviewFragment extends BaseFragment implements
       activity.showSnackbar(R.string.error_undefined, false);
       return;
     }
-    activity.navUtil.navigateFragment(StockOverviewFragmentDirections
+    activity.navUtil.navigate(StockOverviewFragmentDirections
         .actionStockOverviewFragmentToProductOverviewBottomSheetDialogFragment()
         .setShowActions(true)
         .setStockItem(stockItem)

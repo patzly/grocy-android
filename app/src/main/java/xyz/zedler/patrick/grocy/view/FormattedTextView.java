@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy.view;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.util.AttributeSet;
@@ -30,23 +29,18 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.text.HtmlCompat;
 import androidx.core.widget.TextViewCompat;
-import androidx.preference.PreferenceManager;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.divider.MaterialDivider;
-import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textview.MaterialTextView;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
-import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class FormattedTextView extends LinearLayout {
 
@@ -73,7 +67,7 @@ public class FormattedTextView extends LinearLayout {
     setOrientation(VERTICAL);
     int padding = UiUtil.dpToPx(context, 16);
     setPadding(0, padding, 0, 0);
-    textColor = ResUtil.getColor(context, R.attr.colorOnBackground);
+    textColor = ResUtil.getColor(context, R.attr.colorOnSurface);
     textSizeParagraph = -1;
     sideMargin = 16;
     blockDistance = 16;
@@ -116,28 +110,6 @@ public class FormattedTextView extends LinearLayout {
         );
       } else if (part.startsWith("---")) {
         addView(getDivider());
-      } else if (part.startsWith("OPTION_USE_SLIDING")) {
-        View optionTransition = inflate(context, R.layout.partial_option_transition, null);
-        optionTransition.setBackground(ViewUtil.getRippleBgListItemSurface(context));
-        optionTransition.setLayoutParams(getVerticalLayoutParams(0, 16));
-        MaterialSwitch toggle = optionTransition.findViewById(R.id.switch_other_transition);
-        optionTransition.setOnClickListener(v -> toggle.setChecked(!toggle.isChecked()));
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        toggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
-          ViewUtil.startIcon(
-              (ImageView) optionTransition.findViewById(R.id.image_other_transition)
-          );
-          sharedPrefs.edit()
-              .putBoolean(Constants.SETTINGS.APPEARANCE.USE_SLIDING, isChecked)
-              .apply();
-        });
-        toggle.setChecked(
-            sharedPrefs.getBoolean(
-                Constants.SETTINGS.APPEARANCE.USE_SLIDING,
-                Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
-            )
-        );
-        addView(optionTransition);
       } else {
         part = part.replaceAll("\n", " ");
         addBottomMargin = addBottomMargin && !partNext.startsWith("=> ");
@@ -329,7 +301,7 @@ public class FormattedTextView extends LinearLayout {
   private MaterialCardView getMessage(String text, boolean useErrorColors,
       boolean addBottomMargin) {
     int colorSurface = ResUtil.getColor(
-        context, useErrorColors ? R.attr.colorErrorContainer : R.attr.colorSurfaceVariant
+        context, useErrorColors ? R.attr.colorErrorContainer : R.attr.colorSurfaceContainerHighest
     );
     int colorOnSurface = ResUtil.getColor(
         context, useErrorColors ? R.attr.colorOnErrorContainer : R.attr.colorOnSurfaceVariant

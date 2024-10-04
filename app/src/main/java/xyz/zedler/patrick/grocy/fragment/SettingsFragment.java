@@ -20,18 +20,11 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.animation.Animator;
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -95,6 +88,12 @@ public class SettingsFragment extends BaseFragment {
     prefsUtil = new PrefsUtil(activity, this);
 
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
+
+    if (UiUtil.areAnimationsEnabled(activity)) {
+      new Handler().postDelayed(this::navigateToSubpage, 300);
+    } else {
+      login(true);
+    }
   }
 
   public void openBackupDialog() {
@@ -116,27 +115,16 @@ public class SettingsFragment extends BaseFragment {
         && args.getShowCategory().equals(Constants.SETTINGS.SERVER.class.getSimpleName());
   }
 
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return UiUtil.runOnAnimationEnd(requireContext(), enter, nextAnim, this::navigateToSubpage);
-  }
-
-  @Nullable
-  @Override
-  public Animator onCreateAnimator(int transit, boolean enter, int nextAnim) {
-    return UiUtil.runOnAnimatorEnd(requireContext(), enter, nextAnim, this::navigateToSubpage);
-  }
-
   private void navigateToSubpage() {
     if (shouldNavigateToBehavior()) {
       setArguments(new SettingsFragmentArgs.Builder(args).setShowCategory(null).build().toBundle());
-      new Handler().postDelayed(() -> activity.navUtil.navigateFragment(
+      new Handler().postDelayed(() -> activity.navUtil.navigate(
           SettingsFragmentDirections.actionSettingsFragmentToSettingsCatBehaviorFragment()),
           200
       );
     } else if (shouldNavigateToServer()) {
       setArguments(new SettingsFragmentArgs.Builder(args).setShowCategory(null).build().toBundle());
-      new Handler().postDelayed(() -> activity.navUtil.navigateFragment(
+      new Handler().postDelayed(() -> activity.navUtil.navigate(
           SettingsFragmentDirections.actionSettingsFragmentToSettingsCatServerFragment()),
           200
       );

@@ -29,6 +29,6 @@
     android:layout_gravity="start|center_vertical"
     android:singleLine="true"
     android:background="@drawable/bg_placeholder_text"
-    android:backgroundTint="?attr/colorSurfaceVariant" />
+    android:backgroundTint="?attr/colorSurfaceContainerHighest" />
 
 </LinearLayout>

@@ -10,13 +10,6 @@ At the bottom, you can find out how to ask other questions, request features, an
 - <b>Camera</>: to scan barcodes
 - <b>Vibration</>: to perform haptic effects e. g. after scanning a barcode
 
-#### All pages are just blank?
-
-That's a bug on a few devices out there, mostly with Android 8.1 and 9. For a workaround please
-activate the following option:
-
-OPTION_USE_SLIDING
-
 #### How do I know what something does?
 
 Starting with Android 8 you can long-press almost every clickable element without a label to see

@@ -120,7 +120,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     buttons = new ArrayList<>();
     buttonWidth = UiUtil.dpToPx(context, UiUtil.isOrientationPortrait(context) ? 72 : 64);
 
-    colorBg = ResUtil.getColor(context, android.R.attr.colorBackground);
+    colorBg = ResUtil.getColor(context, R.attr.colorSurface);
     colorBgSwipe = ResUtil.getColor(context, R.attr.colorPrimary);
     colorDivider = ResUtil.getColor(context, R.attr.colorOutlineVariant);
 

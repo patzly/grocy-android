@@ -357,7 +357,7 @@ public class ShoppingModeFragment extends BaseFragment implements
         popupMenu.show();
         return true;
       } else if (item.getItemId() == R.id.action_options) {
-        activity.navUtil.navigateFragment(ShoppingModeFragmentDirections
+        activity.navUtil.navigate(ShoppingModeFragmentDirections
             .actionShoppingModeFragmentToShoppingModeOptionsFragment());
         return true;
       } else if (item.getItemId() == R.id.action_sync) {
