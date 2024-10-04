@@ -113,8 +113,6 @@ public class BaseFragment extends Fragment {
 
   public void getActivityResult(int requestCode, int resultCode, @Nullable Intent data) {}
 
-  public void updateUi(boolean animated) {}
-
   public boolean isSearchVisible() {
     return false;
   }

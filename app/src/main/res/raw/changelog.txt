@@ -2,7 +2,7 @@
 
 ? Because my twin brother Dominic switched to Apple devices a while ago and doesn't actively use
 Grocy himself, he has withdrawn from the Grocy Android project. This means that I am now the sole
-maintainer of this now large project. I will continue to develop the app alongside my studies, my
+maintainer of this large project. I will continue to develop the app alongside my studies, my
 job and my other projects, as my free time allows.
 
 - New: Compatibility for server version 4.2.0 and 4.1.0 (#855)
