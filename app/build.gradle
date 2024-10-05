@@ -31,7 +31,7 @@ android {
         applicationId "xyz.zedler.patrick.grocy"
         minSdk 21
         targetSdk 35
-        versionCode 57
+        versionCode 58
         versionName "3.6.0"
         resourceConfigurations += ['ca', 'cs', 'de', 'en', 'es', 'et', 'fr', 'hu', 'it', 'iw', 'ja',
                                    'nb', 'nl', 'pl', 'pt-rBR', 'pt-rPT', 'ru', 'sk', 'sv', 'uk',
