@@ -1433,7 +1433,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="mtm_security_risk">Pozor: vybraný certifikát má závažnou chybu</string>
   <string name="mtm_trust_anchor">certifikát nebyl podepsán důvěryhodným vydavatelem</string>
   <string name="mtm_cert_expired">certifikátu vypršela platnost</string>
-  <string name="mtm_hostname_mismatch">Server nemá jméno „%s“.</string>
+  <string name="mtm_hostname_mismatch">Server se nejmenuje „%s“.</string>
   <string name="mtm_trust_certificate">Důvěřujete tomuto certifikátu? Vše uvedené jím bude ověřováno.</string>
   <string name="mtm_accept_servername">Opravdu vám nevadí rozdíl skutečného jména serveru a jeho označení v certifikátu?</string>
   <string name="mtm_cert_details">Údaje k certifikátu:</string>
