@@ -1428,7 +1428,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="ikm_add_from_keystore">Z vybraného úložiště certifikátů nelze číst</string>
   <string name="ikm_add_from_keystore_alias">Tento certifikát se nepodařilo načíst:</string>
   <string name="ikm_keychain">V úložišti certifikátů došlo k chybě. Právě ukládané kopie budou odstraněny.</string>
-  <string name="ikm_select_keystore">Vyberte soubor s uloženými šifrovacími klíči</string>
+  <string name="ikm_select_keystore">Vyberte soubor s certifikátem</string>
 
   <string name="mtm_security_risk">Pozor: vybraný certifikát má závažnou chybu</string>
   <string name="mtm_trust_anchor">certifikát nebyl podepsán důvěryhodným vydavatelem</string>
