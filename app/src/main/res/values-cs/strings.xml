@@ -1427,7 +1427,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="ikm_remove_all_keys">Všechny certifikáty pro připojení byly odstraněny</string>
   <string name="ikm_add_from_keystore">Z vybraného úložiště certifikátů nelze číst</string>
   <string name="ikm_add_from_keystore_alias">Tento certifikát se nepodařilo načíst:</string>
-  <string name="ikm_keychain">V úložišti šifrovacích klíčů došlo k chybě. Právě ukládané popisy šifrovacích klíčů budou odstraněny.</string>
+  <string name="ikm_keychain">V úložišti certifikátů došlo k chybě. Právě ukládané kopie budou odstraněny.</string>
   <string name="ikm_select_keystore">Vyberte soubor s uloženými šifrovacími klíči</string>
 
   <string name="mtm_security_risk">Pozor: vybraný certifikát má závažnou chybu</string>
