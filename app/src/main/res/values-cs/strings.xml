@@ -1422,7 +1422,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="ikm_decision_keychain">z Úložiště bezpečnostních prvků telefonu</string>
   <string name="ikm_notification">Vyberte certifikát pro připojení k serveru</string>
   <string name="ikm_load_app_keystore">Čtení z úložiště bezpečnostních prvků aplikace se nezdařilo</string>
-  <string name="ikm_store_aliasMapping">Zápis do Úložiště klíčů se nezdařil</string>
+  <string name="ikm_store_aliasMapping">Zápis do Zabezpečeného úložiště se nezdařil</string>
   <string name="ikm_remove_keys">Chyba připojení: byly odstraněny šifrovací klíče pro</string>
   <string name="ikm_remove_all_keys">Všechny šifrovací klíče pro připojení byly odstraněny</string>
   <string name="ikm_add_from_keystore">Z vybraného úložiště šifrovacích klíčů nelze číst data</string>
