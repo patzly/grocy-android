@@ -1425,7 +1425,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="ikm_store_aliasMapping">Zápis do Zabezpečeného úložiště se nezdařil</string>
   <string name="ikm_remove_keys">Chyba připojení: byly odstraněny certifikáty pro</string>
   <string name="ikm_remove_all_keys">Všechny certifikáty pro připojení byly odstraněny</string>
-  <string name="ikm_add_from_keystore">Z vybraného úložiště šifrovacích klíčů nelze číst data</string>
+  <string name="ikm_add_from_keystore">Z vybraného úložiště certifikátů nelze číst</string>
   <string name="ikm_add_from_keystore_alias">Tyto šifrovací klíče se nepodařilo načíst:</string>
   <string name="ikm_keychain">V úložišti šifrovacích klíčů došlo k chybě. Právě ukládané popisy šifrovacích klíčů budou odstraněny.</string>
   <string name="ikm_select_keystore">Vyberte soubor s uloženými šifrovacími klíči</string>
