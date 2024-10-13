@@ -127,6 +127,7 @@
   <string name="action_display_help">Exibir texto de ajuda</string>
   <string name="action_demo_server">Servidor de demonstração</string>
   <string name="action_own_server">Servidor pessoal</string>
+  <string name="action_open_server">Usar interface do servidor</string>
   <string name="action_enter_data_manually">Adicionar dados manualmente</string>
   <string name="action_settings_backup_restore">Backup e recuperação das configurações</string>
   <string name="action_details">Detalhes</string>
@@ -1247,8 +1248,6 @@
   <string name="setting_language_info">Muito obrigado a todos os tradutores voluntários da Transifex!\nVisite-nos no GitHub para saber como você pode ajudar a tornar o Grocy Android disponível para o seu idioma.</string>
   <string name="setting_language_system">Acompanhar sistema</string>
   <string name="setting_language_not_available">Inglês, se a tradução não estiver disponível</string>
-  <string name="setting_transition">Use a transição deslizante entre as páginas de configurações</string>
-  <string name="setting_transition_description">Em vez de desaparecer</string>
   <string name="setting_open_food_facts">Usar Open Food Facts e Open Beauty Facts</string>
   <string name="setting_open_food_facts_description">Obter info dos códigos de barras</string>
   <string name="setting_choose_barcode_scanner">Escolha o leitor de código de barras</string>
@@ -1358,4 +1357,33 @@
   </plurals>
   <string name="notification_chores_content">A procrastinação é inútil. Toque para abrir a lista.</string>
 
-  </resources>
+  <string name="ikm_select_cert">Selecione o Certificado do Cliente</string>
+  <string name="ikm_client_cert">O servidor solicitou um certificado de cliente. Selecione qual certificado você deseja usar.</string>
+  <string name="ikm_client_cert_notification">Selecione o certificado de cliente para</string>
+  <string name="ikm_decision_file">Do arquivo</string>
+  <string name="ikm_decision_keychain">Do gerenciador de chaves do dispositivo</string>
+  <string name="ikm_notification">Selecione o Certificado do Cliente</string>
+  <string name="ikm_load_app_keystore">Erro lendo o keystore do aplicativo</string>
+  <string name="ikm_store_aliasMapping">Erro gravando os apelidos do keystore</string>
+  <string name="ikm_remove_keys">Erro de conexão: chaves removidas para</string>
+  <string name="ikm_remove_all_keys">Todas as chaves de conexão foram removidas</string>
+  <string name="ikm_add_from_keystore">Erro ao ler o keystore especificado</string>
+  <string name="ikm_add_from_keystore_alias">Erro lendo chaves:</string>
+  <string name="ikm_keychain">Erro no Keychain; removendo apelidos armazenados</string>
+  <string name="ikm_select_keystore">Selecione arquivo de keystore</string>
+
+  <string name="mtm_security_risk">Aviso: Risco potencial de segurança</string>
+  <string name="mtm_trust_anchor">O certificado do servidor não está assinado por uma Autoridade de Certificação conhecida.</string>
+  <string name="mtm_cert_expired">O certificado do servidor expirou.</string>
+  <string name="mtm_hostname_mismatch">O servidor não pôde autenticar como \&quot;%s\&quot;.</string>
+  <string name="mtm_trust_certificate">Você confia neste certificado? Ele será usado para verificar todos os nomes listados.</string>
+  <string name="mtm_accept_servername">Aceitar nome de servidor incompatível?</string>
+  <string name="mtm_cert_details">Detalhes do certificado:</string>
+  <string name="mtm_valid_for">Certificado válido para: </string>
+  <string name="mtm_decision_always">Sempre</string>
+  <string name="mtm_decision_once">Uma vez</string>
+  <string name="mtm_notification_channel">Segurança</string>
+  <string name="mtm_notification">Verificação de Certificado</string>
+  <string name="mtm_error_keystore">Exceção ao carregar o keystore do arquivo</string>
+
+</resources>
