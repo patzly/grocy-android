@@ -16,7 +16,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.util.SparseArray;
 import android.widget.Toast;
+
 import androidx.core.app.NotificationCompat;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +27,7 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
 import java.security.cert.CertPathValidatorException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
@@ -37,11 +40,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
+
 import xyz.zedler.patrick.grocy.R;
 
 /**
@@ -292,7 +296,9 @@ public class MemorizingTrustManager implements X509TrustManager {
   private void checkCertTrusted(X509Certificate[] chain, String authType, boolean isServer)
       throws CertificateException {
     Log.i(
-        TAG, "checkCertTrusted: " + Arrays.toString(chain) + ", " + authType + ", " + isServer
+        TAG, "checkCertTrusted: " + (chain == null ? "null" :
+                    Arrays.stream(chain).map(X509Certificate::getSubjectDN).map(Principal::getName).collect(Collectors.joining(";")))
+                    + ", " + authType + ", " + isServer
     );
     try {
       Log.i(TAG, "checkCertTrusted: trying appTrustManager");
