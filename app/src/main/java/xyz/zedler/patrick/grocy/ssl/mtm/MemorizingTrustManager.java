@@ -311,7 +311,7 @@ public class MemorizingTrustManager implements X509TrustManager {
       }
     } catch (CertificateException ae) {
       Log.w(TAG, "checkCertTrusted: appTrustManager did not verify certificate. Will fall back to secondary verification mechanisms (if any).", ae);
-      if (isCertKnown(chain[0])) {
+      if (chain != null && chain.length >= 1 && isCertKnown(chain[0])) {
         Log.i(TAG, "checkCertTrusted: accepting cert already stored in keystore");
         return;
       }
@@ -431,8 +431,10 @@ public class MemorizingTrustManager implements X509TrustManager {
     si.append("\n\n");
     si.append(context.getString(R.string.mtm_trust_certificate));
     si.append("\n\n");
-    for (X509Certificate c : chain) {
-      certDetails(si, c);
+    if (chain != null) {
+      for (X509Certificate c : chain) {
+        certDetails(si, c);
+      }
     }
     return si.toString();
   }
