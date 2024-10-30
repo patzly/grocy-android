@@ -203,24 +203,26 @@ public class MemorizingTrustManager implements X509TrustManager {
     } catch (NoSuchAlgorithmException | CertificateException | IOException e) {
       Log.e(TAG, "loadAppKeyStore: " + keyStoreFile, e);
     }
-    InputStream is = null;
-    try {
-      is = new java.io.FileInputStream(keyStoreFile);
-      ks.load(is, "MTM".toCharArray());
-    } catch (NoSuchAlgorithmException | CertificateException | IOException e) {
-      Toast.makeText(context, R.string.mtm_error_keystore, Toast.LENGTH_SHORT).show();
-      Log.e(TAG, "loadAppKeyStore: exception loading file key store: " + keyStoreFile, e);
-    } finally {
-      if (is != null) {
-        try {
-          is.close();
-        } catch (IOException e) {
-          Log.e(
-              TAG,
-              "loadAppKeyStore: exception closing file key store input stream " + keyStoreFile,
-              e
-          );
-          Toast.makeText(context, R.string.mtm_error_keystore, Toast.LENGTH_SHORT).show();
+    if (keyStoreFile.exists()) {
+      InputStream is = null;
+      try {
+        is = new java.io.FileInputStream(keyStoreFile);
+        ks.load(is, "MTM".toCharArray());
+      } catch (NoSuchAlgorithmException | CertificateException | IOException e) {
+        Toast.makeText(context, R.string.mtm_error_keystore, Toast.LENGTH_SHORT).show();
+        Log.e(TAG, "loadAppKeyStore: exception loading file key store: " + keyStoreFile, e);
+      } finally {
+        if (is != null) {
+          try {
+            is.close();
+          } catch (IOException e) {
+            Log.e(
+                    TAG,
+                    "loadAppKeyStore: exception closing file key store input stream " + keyStoreFile,
+                    e
+            );
+            Toast.makeText(context, R.string.mtm_error_keystore, Toast.LENGTH_SHORT).show();
+          }
         }
       }
     }
