@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 import androidx.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -49,6 +50,8 @@ import xyz.zedler.patrick.grocy.util.NavUtil;
 import xyz.zedler.patrick.grocy.util.ReminderUtil;
 
 public class StockNotificationReceiver extends BroadcastReceiver {
+
+  private static final String TAG = StockNotificationReceiver.class.getSimpleName();
 
   public void onReceive(Context context, Intent intent) {
     NotificationManager notificationManager = (NotificationManager) context.getSystemService(
@@ -94,6 +97,11 @@ public class StockNotificationReceiver extends BroadcastReceiver {
         ArrayList<StockItem> expiredItems = dlHelper.gson.fromJson(
             jsonObject.getJSONArray("expired_products").toString(), typeStockItem
         );
+        // filter out expired items from overdueItems, else they will be counted twice
+        // expired items are currently also included in overdue items, maybe a bug or a feature
+        overdueItems.removeIf(stockItem -> expiredItems.stream().anyMatch(
+            expiredItem -> expiredItem.getProductId() == stockItem.getProductId()
+        ));
         int notFreshCount = dueItems.size() + overdueItems.size() + expiredItems.size();
         if (notFreshCount == 0 ) return;
 
@@ -122,7 +130,7 @@ public class StockNotificationReceiver extends BroadcastReceiver {
         ));
         dlHelper.destroy();
       } catch (JSONException e) {
-        e.printStackTrace();
+        Log.e(TAG, "onReceive: ", e);
         dlHelper.destroy();
       }
     }, error -> {
