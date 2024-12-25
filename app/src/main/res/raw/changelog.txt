@@ -1,6 +1,7 @@
 ## 3.6.1
 
 - New: Compatibility for server version 4.3.0
+- Fixed: Incorrect stock notification (#898)
 - Fixed: Transaction buttons on overview page had multiple lines when being pressed
 
 ## 3.6.0
