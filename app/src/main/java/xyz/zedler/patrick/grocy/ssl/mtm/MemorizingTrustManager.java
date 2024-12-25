@@ -16,9 +16,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.util.SparseArray;
 import android.widget.Toast;
-
 import androidx.core.app.NotificationCompat;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,11 +39,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
-
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
-
 import xyz.zedler.patrick.grocy.R;
 
 /**
@@ -217,9 +213,9 @@ public class MemorizingTrustManager implements X509TrustManager {
             is.close();
           } catch (IOException e) {
             Log.e(
-                    TAG,
-                    "loadAppKeyStore: exception closing file key store input stream " + keyStoreFile,
-                    e
+                TAG,
+                "loadAppKeyStore: error closing file key store input stream " + keyStoreFile,
+                e
             );
             Toast.makeText(context, R.string.mtm_error_keystore, Toast.LENGTH_SHORT).show();
           }
@@ -299,8 +295,9 @@ public class MemorizingTrustManager implements X509TrustManager {
       throws CertificateException {
     Log.i(
         TAG, "checkCertTrusted: " + (chain == null ? "null" :
-                    Arrays.stream(chain).map(X509Certificate::getSubjectDN).map(Principal::getName).collect(Collectors.joining(";")))
-                    + ", " + authType + ", " + isServer
+            Arrays.stream(chain).map(X509Certificate::getSubjectDN).map(Principal::getName)
+                .collect(Collectors.joining(";")))
+            + ", " + authType + ", " + isServer
     );
     try {
       Log.i(TAG, "checkCertTrusted: trying appTrustManager");
@@ -310,14 +307,17 @@ public class MemorizingTrustManager implements X509TrustManager {
         appTrustManager.checkClientTrusted(chain, authType);
       }
     } catch (CertificateException ae) {
-      Log.w(TAG, "checkCertTrusted: appTrustManager did not verify certificate. Will fall back to secondary verification mechanisms (if any).", ae);
+      Log.w(TAG,
+          "checkCertTrusted: appTrustManager did not verify certificate. Will fall back to secondary verification mechanisms (if any).",
+          ae);
       if (chain != null && chain.length >= 1 && isCertKnown(chain[0])) {
         Log.i(TAG, "checkCertTrusted: accepting cert already stored in keystore");
         return;
       }
       try {
         if (defaultTrustManager == null) {
-          Log.i(TAG, "checkCertTrusted: No defaultTrustManager set. Verification failed, throwing " + ae);
+          Log.i(TAG,
+              "checkCertTrusted: No defaultTrustManager set. Verification failed, throwing " + ae);
           throw ae;
         }
         Log.i(TAG, "checkCertTrusted: trying defaultTrustManager");
