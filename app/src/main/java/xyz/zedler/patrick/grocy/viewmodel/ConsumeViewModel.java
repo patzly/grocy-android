@@ -424,8 +424,7 @@ public class ConsumeViewModel extends BaseViewModel {
           String transactionId = null;
           double amountConsumed = 0;
           try {
-            transactionId = response.getJSONObject(0)
-                .getString("transaction_id");
+            transactionId = response.getJSONObject(0).getString("transaction_id");
             for (int i = 0; i < response.length(); i++) {
               if (isActionOpen) {
                 amountConsumed += response.getJSONObject(i).getDouble("amount");
@@ -433,12 +432,12 @@ public class ConsumeViewModel extends BaseViewModel {
                 amountConsumed -= response.getJSONObject(i).getDouble("amount");
               }
             }
-          } catch (JSONException e) {
-            if (debug)
-              Log.e(TAG, "consumeProduct: " + e);
+          } catch (Exception e) {
+            Log.e(TAG, "consumeProduct: ", e);
           }
-          if (debug)
+          if (debug) {
             Log.i(TAG, "consumeProduct: transaction successful");
+          }
 
           SnackbarMessage snackbarMessage = new SnackbarMessage(
               formData.getTransactionSuccessMsg(isActionOpen, amountConsumed)
