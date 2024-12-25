@@ -203,7 +203,7 @@ public class StockOverviewFragment extends BaseFragment implements
         ) {
           if (viewHolder.getItemViewType() != GroupedListItem.TYPE_ENTRY) return;
           if (!(binding.recycler.getAdapter() instanceof StockOverviewItemAdapter)) return;
-          int position = viewHolder.getAdapterPosition();
+          int position = viewHolder.getBindingAdapterPosition();
           GroupedListItem item = ((StockOverviewItemAdapter) binding.recycler.getAdapter())
               .getGroupedListItemForPos(position);
           if (!(item instanceof StockItem)) {

@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
@@ -1001,6 +1002,16 @@ public class Product extends GroupedListItem implements Parcelable {
       }
     }
     return activeProductsOnly;
+  }
+
+  public static ArrayList<Product> getActiveInStockProductsOnly(
+      List<Product> allProducts, List<StockItem> stockItems
+  ) {
+    return allProducts.stream()
+        .filter(Product::isActive)
+        .filter(product -> stockItems.stream()
+            .anyMatch(stockItem -> stockItem.getProductId() == product.getId()))
+        .collect(Collectors.toCollection(ArrayList::new));
   }
 
   public static ArrayList<Product> getProductsForRecipePositions(List<Product> products, List<RecipePosition> recipePositions) {

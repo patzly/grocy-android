@@ -61,6 +61,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockEntry;
+import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.repository.InventoryRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
@@ -138,7 +139,9 @@ public class ConsumeViewModel extends BaseViewModel {
       this.barcodes = data.getBarcodes();
       this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
       this.unitConversions = data.getQuantityUnitConversionsResolved();
-      formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
+      formData.getProductsLive().setValue(
+          Product.getActiveInStockProductsOnly(products, data.getStockItems())
+      );
       if (downloadAfterLoading) {
         downloadData(false);
       } else if (queueEmptyAction != null) {
@@ -164,7 +167,8 @@ public class ConsumeViewModel extends BaseViewModel {
         Product.class,
         ProductBarcode.class,
         QuantityUnit.class,
-        QuantityUnitConversionResolved.class
+        QuantityUnitConversionResolved.class,
+        StockItem.class
     );
   }
 

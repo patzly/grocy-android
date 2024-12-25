@@ -2,6 +2,7 @@
 
 - New: Compatibility for server version 4.3.0
 - Fixed: Incorrect stock notification (#898)
+- Fixed: Only suggest products in stock on consume page (#884)
 - Fixed: Transaction buttons on overview page had multiple lines when being pressed
 
 ## 3.6.0

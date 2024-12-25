@@ -32,6 +32,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
+import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.Store;
 
 public class InventoryRepository {
@@ -55,6 +56,7 @@ public class InventoryRepository {
     private final List<QuantityUnitConversionResolved> quantityUnitConversions;
     private final List<Store> stores;
     private final List<Location> locations;
+    private final List<StockItem> stockItems;
 
     public InventoryData(
         List<Product> products,
@@ -62,7 +64,8 @@ public class InventoryRepository {
         List<QuantityUnit> quantityUnits,
         List<QuantityUnitConversionResolved> quantityUnitConversions,
         List<Store> stores,
-        List<Location> locations
+        List<Location> locations,
+        List<StockItem> stockItems
     ) {
       this.products = products;
       this.barcodes = barcodes;
@@ -70,6 +73,7 @@ public class InventoryRepository {
       this.quantityUnitConversions = quantityUnitConversions;
       this.stores = stores;
       this.locations = locations;
+      this.stockItems = stockItems;
     }
 
     public List<Product> getProducts() {
@@ -95,6 +99,10 @@ public class InventoryRepository {
     public List<Location> getLocations() {
       return locations;
     }
+
+    public List<StockItem> getStockItems() {
+      return stockItems;
+    }
   }
 
   public void loadFromDatabase(DataListener onSuccess, Consumer<Throwable> onError) {
@@ -106,6 +114,7 @@ public class InventoryRepository {
             appDatabase.quantityUnitConversionResolvedDao().getConversionsResolved(),
             appDatabase.storeDao().getStores(),
             appDatabase.locationDao().getLocations(),
+            appDatabase.stockItemDao().getStockItems(),
             InventoryData::new
         )
         .subscribeOn(Schedulers.io())
