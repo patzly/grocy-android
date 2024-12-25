@@ -20,9 +20,6 @@
 
 package xyz.zedler.patrick.grocy.util;
 
-import android.animation.Animator;
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -49,8 +46,6 @@ import android.view.Window;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.view.WindowMetrics;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import androidx.annotation.Dimension;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
@@ -564,7 +559,8 @@ public class UiUtil {
   }
 
   public static void layoutEdgeToEdge(Window window) {
-    if (Build.VERSION.SDK_INT >= VERSION_CODES.R) {
+    if (Build.VERSION.SDK_INT >= VERSION_CODES.R
+        && Build.VERSION.SDK_INT < VERSION_CODES.VANILLA_ICE_CREAM) {
       window.setDecorFitsSystemWindows(false);
     } else {
       int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;

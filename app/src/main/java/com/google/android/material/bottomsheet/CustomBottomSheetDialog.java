@@ -70,6 +70,7 @@ import xyz.zedler.patrick.grocy.util.UiUtil;
  * `paddingBottomSystemWindowInsets`, `paddingLeftSystemWindowInsets`, or
  * `paddingRightSystemWindowInsets` are set to true in the style.
  */
+@SuppressLint("RestrictedApi")
 public class CustomBottomSheetDialog extends AppCompatDialog {
 
   private BottomSheetBehavior<FrameLayout> behavior;
