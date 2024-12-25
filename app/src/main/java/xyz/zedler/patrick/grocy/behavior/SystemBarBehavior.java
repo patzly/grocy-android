@@ -23,6 +23,7 @@ package xyz.zedler.patrick.grocy.behavior;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Build.VERSION_CODES;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -387,7 +388,28 @@ public class SystemBarBehavior {
 
     int colorScrim = ResUtil.getColor(activity, R.attr.colorSurface, 0.7f);
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // 29
+    if (Build.VERSION.SDK_INT >= VERSION_CODES.VANILLA_ICE_CREAM) { // 35
+      if (!isDarkModeActive) {
+        UiUtil.setLightStatusBar(window.getDecorView(), true);
+      }
+      if (UiUtil.isNavigationModeGesture(activity)) {
+        window.setNavigationBarContrastEnforced(true);
+      } else {
+        if (!isDarkModeActive) {
+          UiUtil.setLightNavigationBar(window.getDecorView(), true);
+        }
+        if (isOrientationPortrait || isLandTablet) {
+          window.setNavigationBarColor(
+              isScrollable ? colorScrim : Color.parseColor("#01000000")
+          );
+        } else {
+          window.setNavigationBarDividerColor(
+              ResUtil.getColor(activity, R.attr.colorOutlineVariant)
+          );
+          window.setNavigationBarColor(ResUtil.getColor(activity, R.attr.colorSurface));
+        }
+      }
+    }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // 29
       window.setStatusBarColor(Color.TRANSPARENT);
       if (!isDarkModeActive) {
         UiUtil.setLightStatusBar(window.getDecorView(), true);

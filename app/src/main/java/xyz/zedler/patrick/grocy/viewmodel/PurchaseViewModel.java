@@ -496,6 +496,10 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public void onBarcodeRecognized(String barcode) {
+    if (barcodes == null) {
+      loadFromDatabase(true);
+      return;
+    }
     if (formData.getProductDetailsLive().getValue() != null) {
       if (ProductBarcode.getFromBarcode(barcodes, barcode) == null) {
         formData.getBarcodeLive().setValue(barcode);

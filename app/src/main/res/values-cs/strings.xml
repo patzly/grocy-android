@@ -127,6 +127,7 @@
   <string name="action_display_help">Zobrazit nápovědu</string>
   <string name="action_demo_server">Server s demoverzí</string>
   <string name="action_own_server">Můj server s Grocy</string>
+  <string name="action_open_server">Použít rozhraní serveru</string>
   <string name="action_enter_data_manually">Ruční vložení údajů o serveru</string>
   <string name="action_settings_backup_restore">Záloha nebo obnovení nastavení</string>
   <string name="action_details">Podrobnosti</string>
@@ -1303,8 +1304,6 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="setting_language_info">Děkujeme všem dobrovolným překladatelům na Transifexu!\nPodívejte se, prosím, na náš GitHub, kde najdete, jak můžete pomoci s překladem grocy i do vašeho jazyka</string>
   <string name="setting_language_system">Podle operačního systému</string>
   <string name="setting_language_not_available">Angličtina – pokud není k dispozici překlad</string>
-  <string name="setting_transition">Použít lineární přechod mezi stránkami nastavení</string>
-  <string name="setting_transition_description">Místo prolnutí</string>
   <string name="setting_open_food_facts">Použij Open Food Facts</string>
   <string name="setting_open_food_facts_description">Získat informace z čárových kódů</string>
   <string name="setting_choose_barcode_scanner">Vyberte skener čárových kódů</string>
@@ -1416,4 +1415,33 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   </plurals>
   <string name="notification_chores_content">Odkládání povinností nikam nevede. Klepněte pro jejich seznam.</string>
 
-  </resources>
+  <string name="ikm_select_cert">Vyberte certifikát pro připojení k serveru</string>
+  <string name="ikm_client_cert">Server potřebuje pro šifrované připojení certifikát. Vyberte jeden.</string>
+  <string name="ikm_client_cert_notification">Vyberte certifikát pro</string>
+  <string name="ikm_decision_file">ze souboru</string>
+  <string name="ikm_decision_keychain">z Úložiště bezpečnostních prvků telefonu</string>
+  <string name="ikm_notification">Vyberte certifikát pro připojení k serveru</string>
+  <string name="ikm_load_app_keystore">Čtení z úložiště bezpečnostních prvků aplikace se nezdařilo</string>
+  <string name="ikm_store_aliasMapping">Zápis do Zabezpečeného úložiště se nezdařil</string>
+  <string name="ikm_remove_keys">Chyba připojení: byly odstraněny certifikáty pro</string>
+  <string name="ikm_remove_all_keys">Všechny certifikáty pro připojení byly odstraněny</string>
+  <string name="ikm_add_from_keystore">Z vybraného úložiště certifikátů nelze číst</string>
+  <string name="ikm_add_from_keystore_alias">Tento certifikát se nepodařilo načíst:</string>
+  <string name="ikm_keychain">V úložišti certifikátů došlo k chybě. Právě ukládané kopie budou odstraněny.</string>
+  <string name="ikm_select_keystore">Vyberte soubor s certifikátem</string>
+
+  <string name="mtm_security_risk">Pozor: vybraný certifikát má závažnou chybu</string>
+  <string name="mtm_trust_anchor">certifikát nebyl podepsán důvěryhodným vydavatelem</string>
+  <string name="mtm_cert_expired">certifikátu vypršela platnost</string>
+  <string name="mtm_hostname_mismatch">Server se nejmenuje „%s“.</string>
+  <string name="mtm_trust_certificate">Důvěřujete tomuto certifikátu? Vše uvedené jím bude ověřováno.</string>
+  <string name="mtm_accept_servername">Opravdu vám nevadí rozdíl skutečného jména serveru a jeho označení v certifikátu?</string>
+  <string name="mtm_cert_details">Údaje k certifikátu:</string>
+  <string name="mtm_valid_for">Platnost do:</string>
+  <string name="mtm_decision_always">vždy</string>
+  <string name="mtm_decision_once">jen jednou</string>
+  <string name="mtm_notification_channel">Zabezpečení</string>
+  <string name="mtm_notification">Ověření certifikátu</string>
+  <string name="mtm_error_keystore">Chyba při čtení certifikátu ze souboru</string>
+
+</resources>

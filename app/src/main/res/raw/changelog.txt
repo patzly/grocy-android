@@ -1,3 +1,11 @@
+## 3.6.1
+
+- New: Compatibility for server version 4.3.0
+- New: Support for client certificates (thanks @stephanritscher!) (#771, #892)
+- Fixed: Incorrect stock notification (#898)
+- Fixed: Only suggest products in stock on consume page (#884)
+- Fixed: Transaction buttons on overview page had multiple lines when being pressed
+
 ## 3.6.0
 
 ? Because my twin brother Dominic switched to Apple devices a while ago and doesn't actively use
@@ -13,7 +21,7 @@ job and my other projects, as my free time allows.
 - Improved: Overview actions appearance
 - Improved: Refined and unified navigation transitions
 - Improved: Colors of in-app provided themes
-- Improved: splash screen on Android 12+
+- Improved: Splash screen on Android 12+
 - Fixed: Action button jumping to the top after saving new master data (#886)
 - Fixed: Invisible status bar icons on some devices with Android 11
 - Fixed: Missing navigation transitions for actions in product details dialog

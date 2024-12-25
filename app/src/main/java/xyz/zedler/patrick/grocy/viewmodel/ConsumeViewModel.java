@@ -61,6 +61,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversionResolved;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockEntry;
+import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.repository.InventoryRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
@@ -138,7 +139,9 @@ public class ConsumeViewModel extends BaseViewModel {
       this.barcodes = data.getBarcodes();
       this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
       this.unitConversions = data.getQuantityUnitConversionsResolved();
-      formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
+      formData.getProductsLive().setValue(
+          Product.getActiveInStockProductsOnly(products, data.getStockItems())
+      );
       if (downloadAfterLoading) {
         downloadData(false);
       } else if (queueEmptyAction != null) {
@@ -164,7 +167,8 @@ public class ConsumeViewModel extends BaseViewModel {
         Product.class,
         ProductBarcode.class,
         QuantityUnit.class,
-        QuantityUnitConversionResolved.class
+        QuantityUnitConversionResolved.class,
+        StockItem.class
     );
   }
 
@@ -420,8 +424,7 @@ public class ConsumeViewModel extends BaseViewModel {
           String transactionId = null;
           double amountConsumed = 0;
           try {
-            transactionId = response.getJSONObject(0)
-                .getString("transaction_id");
+            transactionId = response.getJSONObject(0).getString("transaction_id");
             for (int i = 0; i < response.length(); i++) {
               if (isActionOpen) {
                 amountConsumed += response.getJSONObject(i).getDouble("amount");
@@ -429,12 +432,12 @@ public class ConsumeViewModel extends BaseViewModel {
                 amountConsumed -= response.getJSONObject(i).getDouble("amount");
               }
             }
-          } catch (JSONException e) {
-            if (debug)
-              Log.e(TAG, "consumeProduct: " + e);
+          } catch (Exception e) {
+            Log.e(TAG, "consumeProduct: ", e);
           }
-          if (debug)
+          if (debug) {
             Log.i(TAG, "consumeProduct: transaction successful");
+          }
 
           SnackbarMessage snackbarMessage = new SnackbarMessage(
               formData.getTransactionSuccessMsg(isActionOpen, amountConsumed)

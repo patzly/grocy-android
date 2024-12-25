@@ -25,6 +25,7 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
 import java.security.cert.CertPathValidatorException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
@@ -37,8 +38,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
@@ -199,24 +199,26 @@ public class MemorizingTrustManager implements X509TrustManager {
     } catch (NoSuchAlgorithmException | CertificateException | IOException e) {
       Log.e(TAG, "loadAppKeyStore: " + keyStoreFile, e);
     }
-    InputStream is = null;
-    try {
-      is = new java.io.FileInputStream(keyStoreFile);
-      ks.load(is, "MTM".toCharArray());
-    } catch (NoSuchAlgorithmException | CertificateException | IOException e) {
-      Toast.makeText(context, R.string.mtm_error_keystore, Toast.LENGTH_SHORT).show();
-      Log.e(TAG, "loadAppKeyStore: exception loading file key store: " + keyStoreFile, e);
-    } finally {
-      if (is != null) {
-        try {
-          is.close();
-        } catch (IOException e) {
-          Log.e(
-              TAG,
-              "loadAppKeyStore: exception closing file key store input stream " + keyStoreFile,
-              e
-          );
-          Toast.makeText(context, R.string.mtm_error_keystore, Toast.LENGTH_SHORT).show();
+    if (keyStoreFile.exists()) {
+      InputStream is = null;
+      try {
+        is = new java.io.FileInputStream(keyStoreFile);
+        ks.load(is, "MTM".toCharArray());
+      } catch (NoSuchAlgorithmException | CertificateException | IOException e) {
+        Toast.makeText(context, R.string.mtm_error_keystore, Toast.LENGTH_SHORT).show();
+        Log.e(TAG, "loadAppKeyStore: exception loading file key store: " + keyStoreFile, e);
+      } finally {
+        if (is != null) {
+          try {
+            is.close();
+          } catch (IOException e) {
+            Log.e(
+                TAG,
+                "loadAppKeyStore: error closing file key store input stream " + keyStoreFile,
+                e
+            );
+            Toast.makeText(context, R.string.mtm_error_keystore, Toast.LENGTH_SHORT).show();
+          }
         }
       }
     }
@@ -292,7 +294,10 @@ public class MemorizingTrustManager implements X509TrustManager {
   private void checkCertTrusted(X509Certificate[] chain, String authType, boolean isServer)
       throws CertificateException {
     Log.i(
-        TAG, "checkCertTrusted: " + Arrays.toString(chain) + ", " + authType + ", " + isServer
+        TAG, "checkCertTrusted: " + (chain == null ? "null" :
+            Arrays.stream(chain).map(X509Certificate::getSubjectDN).map(Principal::getName)
+                .collect(Collectors.joining(";")))
+            + ", " + authType + ", " + isServer
     );
     try {
       Log.i(TAG, "checkCertTrusted: trying appTrustManager");
@@ -302,14 +307,17 @@ public class MemorizingTrustManager implements X509TrustManager {
         appTrustManager.checkClientTrusted(chain, authType);
       }
     } catch (CertificateException ae) {
-      Log.w(TAG, "checkCertTrusted: appTrustManager did not verify certificate. Will fall back to secondary verification mechanisms (if any).", ae);
-      if (isCertKnown(chain[0])) {
+      Log.w(TAG,
+          "checkCertTrusted: appTrustManager did not verify certificate. Will fall back to secondary verification mechanisms (if any).",
+          ae);
+      if (chain != null && chain.length >= 1 && isCertKnown(chain[0])) {
         Log.i(TAG, "checkCertTrusted: accepting cert already stored in keystore");
         return;
       }
       try {
         if (defaultTrustManager == null) {
-          Log.i(TAG, "checkCertTrusted: No defaultTrustManager set. Verification failed, throwing " + ae);
+          Log.i(TAG,
+              "checkCertTrusted: No defaultTrustManager set. Verification failed, throwing " + ae);
           throw ae;
         }
         Log.i(TAG, "checkCertTrusted: trying defaultTrustManager");
@@ -423,8 +431,10 @@ public class MemorizingTrustManager implements X509TrustManager {
     si.append("\n\n");
     si.append(context.getString(R.string.mtm_trust_certificate));
     si.append("\n\n");
-    for (X509Certificate c : chain) {
-      certDetails(si, c);
+    if (chain != null) {
+      for (X509Certificate c : chain) {
+        certDetails(si, c);
+      }
     }
     return si.toString();
   }

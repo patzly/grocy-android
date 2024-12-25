@@ -103,9 +103,9 @@ public class RequestQueueSingleton {
       sslContext.init(null, null, null);
 
       // Client certificates
-      /*KeyManager keyManager = new InteractiveKeyManager(context);
+      KeyManager keyManager = new InteractiveKeyManager(context);
       TrustManager mtm = new MemorizingTrustManager(context);
-      sslContext.init(new KeyManager[]{keyManager}, new TrustManager[]{mtm}, new SecureRandom());*/
+      sslContext.init(new KeyManager[]{keyManager}, new TrustManager[]{mtm}, new SecureRandom());
 
       internalSSLSocketFactory = sslContext.getSocketFactory();
     }

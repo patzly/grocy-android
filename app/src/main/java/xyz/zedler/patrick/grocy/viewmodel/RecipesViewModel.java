@@ -177,7 +177,11 @@ public class RecipesViewModel extends BaseViewModel {
     int notEnoughInStockButInShoppingListCount = 0;
     int notEnoughInStockCount = 0;
 
-    for (Recipe recipe : this.recipes) {
+    if (recipes == null || recipeFulfillments == null) {
+      loadFromDatabase(true);
+      return;
+    }
+    for (Recipe recipe : recipes) {
       RecipeFulfillment recipeFulfillment = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(recipeFulfillments, recipe.getId());
 
       if (recipeFulfillment != null) {

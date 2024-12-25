@@ -18,16 +18,7 @@
   ~ Copyright (c) 2024 by Patrick Zedler
   -->
 
-<resources>
-
-  <string-array name="compatible_grocy_versions" translatable="false">
-    <item>4.0.0</item>
-    <item>4.0.1</item>
-    <item>4.0.2</item>
-    <item>4.0.3</item>
-    <item>4.1.0</item>
-    <item>4.2.0</item>
-    <item>4.3.0</item>
-  </string-array>
-
-</resources>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+  <item app:widthChange="0%"/>
+</selector>

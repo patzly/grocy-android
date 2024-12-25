@@ -228,14 +228,22 @@ public class ShoppingModeViewModel extends BaseViewModel {
   }
 
   private void syncShoppingListItems() {
-    if (isOffline()) return;
+    if (isOffline()) {
+      return;
+    }
+    if (shoppingListItems == null) {
+      loadFromDatabase(true);
+      return;
+    }
     ArrayList<ShoppingListItem> itemsToSync = new ArrayList<>();
     for (ShoppingListItem item : shoppingListItems) {
       if (item.getDoneSynced() != -1) {
         itemsToSync.add(item);
       }
     }
-    if (itemsToSync.isEmpty()) return;
+    if (itemsToSync.isEmpty()) {
+      return;
+    }
     Runnable emptyListener = () -> {
       ArrayList<ShoppingListItem> itemsToUpdate = new ArrayList<>();
       for (ShoppingListItem itemToSync : itemsToSync) {
