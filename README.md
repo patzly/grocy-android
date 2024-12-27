@@ -4,15 +4,15 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Release](https://img.shields.io/github/v/release/patzly/grocy-android?label=Release)](https://github.com/patzly/grocy-android/releases)  [![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads)](https://github.com/patzly/grocy-android/releases) 
 
-Grocy Android is an open-source Android client for [grocy](https://grocy.info/) ([source code](https://github.com/grocy/grocy)), a self-hosted grocery and household management solution for your home.
+Grocy Android is an open-source Android client for [Grocy](https://grocy.info/) ([source code](https://github.com/grocy/grocy)), a self-hosted grocery and household management solution for your home.
 
-Grocy Android uses grocy's official API to provide you a beautiful interface on your smartphone with powerful barcode scanning and intuitive batch processing, all what you need to efficiently manage your groceries.
+Grocy Android uses Grocy's official API to provide you a beautiful interface on your smartphone with powerful barcode scanning and intuitive batch processing, all what you need to efficiently manage your groceries.
 
-**This app requires a running self-hosted instance of the [grocy server application](https://grocy.info/).**  
+**This app requires a running self-hosted instance of the [Grocy server application](https://grocy.info/).**  
 It is a **companion** app, therefore it **cannot run standalone** or manage products itself.  
 You can try it using the demo option available on the login screen.
 
-iOS/macOS client for grocy: [Grocy-SwiftUI](https://github.com/supergeorg/Grocy-SwiftUI)
+iOS/macOS client for Grocy: [Grocy-SwiftUI](https://github.com/supergeorg/Grocy-SwiftUI)
 
 ## Downloads
 
@@ -43,7 +43,7 @@ If you want to try new features right after development, you can download an uns
 
 Grocy Android requires at least Android 5.0 Lollipop and works properly on devices without any Google service installed.
 
-It is also possible to use the grocy Add-on on an [Home Assistant](https://www.home-assistant.io/getting-started/) server. Click [here](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq4) for instructions.
+It is also possible to use the Grocy Add-on on an [Home Assistant](https://www.home-assistant.io/getting-started/) server. Click [here](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq4) for instructions.
 
 This app supports `https` encryption
 - if your server uses a certificate which is signed by a public and trusted [certificate authority (CA)](https://en.wikipedia.org/wiki/Certificate_authority). To meet this requirement, you can use a free certificate from [letsencrypt.org](https://letsencrypt.org/) for your server. Old Android devices can have problems with newer CAs because their internal list of trusted CAs can be outdated if they don't receive system updates anymore, therefore we've integrated [Conscrypt](https://github.com/google/conscrypt/#readme) into the app to support current CAs on all Android versions.
@@ -68,11 +68,12 @@ Thanks for your contributions!
 
 This app is a project of my brother [Dominic Zedler](https://github.com/dominiczedler) and me, [Patrick Zedler](https://github.com/patzly). We started working on it during the first months of the Corona pandemic in Germany, just before our Abitur in 2020, when the schools had to close.
 
-We'd like to thank the developer of grocy, [Bernd Bestel](https://berrnd.de/), without whose great work this app would never have been possible.
+We'd like to thank the developer of Grocy, [Bernd Bestel](https://berrnd.de/), without whose great work this app would never have been possible.
 
 ## License
 
-Copyright &copy; 2020-2023 Patrick Zedler & Dominic Zedler. All rights reserved.
+Copyright &copy; 2020-2024 Patrick Zedler & Dominic Zedler,
+Copyright &copy; 2024 by Patrick Zedler. All rights reserved.
 
 [GNU General Public License version 3](https://www.gnu.org/licenses/gpl.txt)
 
