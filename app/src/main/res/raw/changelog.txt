@@ -1,3 +1,8 @@
+## 3.7.1
+
+- Improved: Hide bottom bar if it is empty
+- Fixed: Bottom bar not hiding on some pages when scrolled down
+
 ## 3.7.0
 
 - New: Compatibility for server version 4.3.0

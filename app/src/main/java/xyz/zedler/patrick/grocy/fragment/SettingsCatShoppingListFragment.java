@@ -98,7 +98,9 @@ public class SettingsCatShoppingListFragment extends BaseFragment {
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, false
     );
-    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.getScrollBehavior().setBottomBarVisibility(
+        activity.hasBottomNavigationIcon(), !activity.hasBottomNavigationIcon()
+    );
     activity.updateBottomAppBar(false, R.menu.menu_empty);
 
     setForPreviousDestination(ARGUMENT.ANIMATED, false);
