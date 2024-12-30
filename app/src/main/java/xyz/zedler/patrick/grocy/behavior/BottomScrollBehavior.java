@@ -72,7 +72,7 @@ public class BottomScrollBehavior {
   private int currentState;
   private final int topScrollLimit;
   private boolean isTopScroll = false;
-  private boolean canBottomAppBarBeVisible;
+  private boolean canBottomAppBarBeVisible, hideOnScroll;
   private boolean useOverScrollFix;
   private boolean useTopScrollAsAnchor, useFabAsAnchor;
   private boolean anchorAnimPending;
@@ -108,6 +108,10 @@ public class BottomScrollBehavior {
         }
       }
     });
+
+    // We'll handle this manually
+    this.bottomAppBar.setHideOnScroll(false);
+    hideOnScroll = false;
 
     int fabMainMarginTop = UiUtil.dpToPx(context, 12);
     int bottomEdgeDistance = UiUtil.dpToPx(context, 16);
@@ -228,7 +232,7 @@ public class BottomScrollBehavior {
           ((RecyclerView) scrollView).smoothScrollToPosition(0);
         }
         fabTopScroll.hide();
-        if (bottomAppBar.getHideOnScroll()) {
+        if (hideOnScroll) {
           bottomAppBar.performShow(true);
         }
       });
@@ -260,7 +264,7 @@ public class BottomScrollBehavior {
   }
 
   public void setBottomBarVisibility(boolean visible, boolean stay, boolean animated) {
-    bottomAppBar.setHideOnScroll(canBottomAppBarBeVisible && !stay);
+    hideOnScroll = canBottomAppBarBeVisible && !stay;
     ViewTreeObserver observer = bottomAppBar.getViewTreeObserver();
     observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
       @Override
@@ -445,6 +449,9 @@ public class BottomScrollBehavior {
   private void onScrollUp() {
     currentState = STATE_SCROLLED_UP;
     appBar.setLifted(true);
+    if (bottomAppBar != null && canBottomAppBarBeVisible && hideOnScroll) {
+      bottomAppBar.performShow(true);
+    }
     if (DEBUG) {
       Log.i(TAG, "onScrollUp: UP");
     }
@@ -457,6 +464,9 @@ public class BottomScrollBehavior {
     if (scrollView != null) {
       appBar.setLifted(true);
       setOverScrollEnabled(true);
+    }
+    if (bottomAppBar != null && canBottomAppBarBeVisible && hideOnScroll) {
+      bottomAppBar.performHide(true);
     }
     if (DEBUG) {
       Log.i(TAG, "onScrollDown: DOWN");

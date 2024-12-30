@@ -1,9 +1,15 @@
+## 3.7.1
+
+- Improved: Hide bottom bar if it is empty
+- Fixed: notification settings not displaying current value in certain cases
+- Fixed: Bottom bar not hiding on some pages when scrolled down
+
 ## 3.7.0
 
 - New: Compatibility for server version 4.3.0
 - New: Support for client certificates (thanks @stephanritscher!) (#771, #892)
 - Fixed: Incorrect stock notification (#898)
-- Fixed: Only suggest products in stock on consume page (#884)
+- Fixed: Suggest only products in stock on consume page (#884)
 - Fixed: Transaction buttons on overview page had multiple lines when being pressed
 - Fixed: Some crashes on certain devices in certain situations
 

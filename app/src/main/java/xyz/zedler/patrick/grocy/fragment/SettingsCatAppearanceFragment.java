@@ -195,7 +195,9 @@ public class SettingsCatAppearanceFragment extends BaseFragment {
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, false
     );
-    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.getScrollBehavior().setBottomBarVisibility(
+        activity.hasBottomNavigationIcon(), !activity.hasBottomNavigationIcon()
+    );
     activity.updateBottomAppBar(false, R.menu.menu_empty);
 
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);

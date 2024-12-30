@@ -621,6 +621,10 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
+  public boolean hasBottomNavigationIcon() {
+    return binding.bottomAppBar.getNavigationIcon() != null;
+  }
+
   public void startIconAnimation(View view, boolean hasFocus) {
     if (!hasFocus) {
       return;

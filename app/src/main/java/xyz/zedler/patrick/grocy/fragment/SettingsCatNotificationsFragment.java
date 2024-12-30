@@ -113,10 +113,10 @@ public class SettingsCatNotificationsFragment extends BaseFragment {
       }
     });
 
-    binding.switchStockEnableNotifications.post(() -> {
-      binding.switchStockEnableNotifications.jumpDrawablesToCurrentState();
-      binding.switchChoresEnableNotifications.jumpDrawablesToCurrentState();
-    });
+    binding.switchStockEnableNotifications.setChecked(viewModel.getStockNotificationsEnabled());
+    binding.switchStockEnableNotifications.post(
+        () -> binding.switchStockEnableNotifications.jumpDrawablesToCurrentState()
+    );
     permStockLauncher = registerForActivityResult(new RequestPermission(), isGranted -> {
       if (isGranted) {
         if (binding != null) {
@@ -147,6 +147,10 @@ public class SettingsCatNotificationsFragment extends BaseFragment {
       }
     });
 
+    binding.switchChoresEnableNotifications.setChecked(viewModel.getChoresNotificationsEnabled());
+    binding.switchChoresEnableNotifications.post(
+        () -> binding.switchChoresEnableNotifications.jumpDrawablesToCurrentState()
+    );
     permChoresLauncher = registerForActivityResult(new RequestPermission(), isGranted -> {
       if (isGranted) {
         if (binding != null) {
@@ -181,7 +185,9 @@ public class SettingsCatNotificationsFragment extends BaseFragment {
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, false
     );
-    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.getScrollBehavior().setBottomBarVisibility(
+        activity.hasBottomNavigationIcon(), !activity.hasBottomNavigationIcon()
+    );
     activity.updateBottomAppBar(false, R.menu.menu_empty);
 
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);

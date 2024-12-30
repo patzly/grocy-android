@@ -1,0 +1,6 @@
+• New: Compatibility for server version 4.3.0
+• New: Support for client certificates
+• Fixed: Incorrect stock notification
+• Fixed: Suggest only products in stock on consume page
+• Fixed: Transaction buttons on overview page had multiple lines when being pressed
+• Fixed: Some crashes on certain devices in certain situations

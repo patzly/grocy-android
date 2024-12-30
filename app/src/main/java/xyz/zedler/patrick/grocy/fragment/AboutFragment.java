@@ -98,9 +98,11 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
 
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(
-        binding.appBarAbout, false, binding.scrollAbout
+        binding.appBarAbout, false, binding.scrollAbout, false
     );
-    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.getScrollBehavior().setBottomBarVisibility(
+        activity.hasBottomNavigationIcon(), !activity.hasBottomNavigationIcon()
+    );
     activity.updateBottomAppBar(false, R.menu.menu_empty);
   }
 
