@@ -113,10 +113,10 @@ public class SettingsCatNotificationsFragment extends BaseFragment {
       }
     });
 
-    binding.switchStockEnableNotifications.post(() -> {
-      binding.switchStockEnableNotifications.jumpDrawablesToCurrentState();
-      binding.switchChoresEnableNotifications.jumpDrawablesToCurrentState();
-    });
+    binding.switchStockEnableNotifications.setChecked(viewModel.getStockNotificationsEnabled());
+    binding.switchStockEnableNotifications.post(
+        () -> binding.switchStockEnableNotifications.jumpDrawablesToCurrentState()
+    );
     permStockLauncher = registerForActivityResult(new RequestPermission(), isGranted -> {
       if (isGranted) {
         if (binding != null) {
@@ -147,6 +147,10 @@ public class SettingsCatNotificationsFragment extends BaseFragment {
       }
     });
 
+    binding.switchChoresEnableNotifications.setChecked(viewModel.getChoresNotificationsEnabled());
+    binding.switchChoresEnableNotifications.post(
+        () -> binding.switchChoresEnableNotifications.jumpDrawablesToCurrentState()
+    );
     permChoresLauncher = registerForActivityResult(new RequestPermission(), isGranted -> {
       if (isGranted) {
         if (binding != null) {

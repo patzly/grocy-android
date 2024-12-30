@@ -1,6 +1,7 @@
 ## 3.7.1
 
 - Improved: Hide bottom bar if it is empty
+- Fixed: notification settings not displaying current value in certain cases
 - Fixed: Bottom bar not hiding on some pages when scrolled down
 
 ## 3.7.0
