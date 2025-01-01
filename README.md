@@ -73,7 +73,7 @@ We'd like to thank the developer of Grocy, [Bernd Bestel](https://berrnd.de/), w
 ## License
 
 Copyright &copy; 2020-2024 Patrick Zedler & Dominic Zedler,
-Copyright &copy; 2024 by Patrick Zedler. All rights reserved.
+Copyright &copy; 2024-2025 by Patrick Zedler. All rights reserved.
 
 [GNU General Public License version 3](https://www.gnu.org/licenses/gpl.txt)
 
