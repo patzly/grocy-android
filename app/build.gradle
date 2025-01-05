@@ -127,6 +127,8 @@ dependencies {
     // ZXing for barcode scanning
     implementation libs.zxing.core
     implementation libs.zxing.android.embedded
+    // For image rotation
+    implementation libs.exifinterface
     // https://github.com/journeyapps/zxing-android-embedded#option-2-desugaring-advanced
     // prevents bug https://github.com/patzly/grocy-android/issues/425
     coreLibraryDesugaring libs.desugar
