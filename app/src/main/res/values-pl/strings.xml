@@ -77,7 +77,7 @@
   <string name="action_rate_description">Wesprzyj rozwój</string>
   <string name="action_email">Wyślij e-mail</string>
   <string name="action_email_description">Skontaktuj się z programistami</string>
-  <string name="action_new_issue">Otwórz nowy problem na GitHubie</string>
+  <string name="action_new_issue">Otwórz nowy problem na GitHub\'ie</string>
   <string name="action_new_issue_description">Zgłoś błąd lub poproś o funkcję</string>
   <string name="action_get_started">Zacznij</string>
   <string name="action_ascending">Rosnąco</string>
