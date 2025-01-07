@@ -133,7 +133,7 @@
   <string name="action_details">Szczegóły</string>
   <string name="action_perform">Wykonaj akcję</string>
   <string name="action_share">Udostępnij</string>
-  <string name="action_share_description">"Powiedz znajomym o apilkacji Grocy na Andorida. "</string>
+  <string name="action_share_description">Powiedz znajomym o apilkacji Grocy na Android\'a. </string>
   <string name="action_no_filter">Bez filtra</string>
   <string name="action_show_done_tasks">Pokaż zakończone zadania</string>
   <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
