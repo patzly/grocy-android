@@ -110,7 +110,7 @@
   <string name="action_change_layout">Zmień ułożenie</string>
   <string name="action_edit_notes">Edytuj notatki</string>
   <string name="action_add_missing">Dodaj brakujące produkty</string>
-  <string name="action_purchase_done_items">Kup wykonane pozycje</string>
+  <string name="action_purchase_done_items">Kup wykonane produkty</string>
   <string name="action_purchase_all_items">Kup wszystkie pozycje</string>
   <string name="action_skip_entry">Pomiń wpis</string>
   <string name="action_toggle_flash">Przełącz lampę błyskową</string>
