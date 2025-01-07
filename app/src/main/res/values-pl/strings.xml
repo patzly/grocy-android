@@ -127,6 +127,7 @@
   <string name="action_display_help">Wyświetl tekst pomocy</string>
   <string name="action_demo_server">Serwer demonstracyjny</string>
   <string name="action_own_server">Własny serwer</string>
+  <string name="action_open_server">Użyj interfejsu serwera</string>
   <string name="action_enter_data_manually">Wpisz dane ręcznie</string>
   <string name="action_settings_backup_restore">Tworzenie kopii zapasowej lub przywracanie ustawień</string>
   <string name="action_details">Szczegóły</string>
@@ -1313,8 +1314,6 @@ https://github.com/patzly/grocy-android</string>
   <string name="setting_language_info">Duże podziękowania dla wszystkich wolontariuszy tłumaczących na Transifex!\nOdwiedź nas na GitHub aby dowiedzieć się jak możesz pomóc w udostępnieniu Grocy Android w twoim języku.</string>
   <string name="setting_language_system">Postępuj zgodnie z systemem</string>
   <string name="setting_language_not_available">Nie dostępne</string>
-  <string name="setting_transition">Użyj efektu przesuwania między stronami ustawień</string>
-  <string name="setting_transition_description">Zamiast efektu znikania</string>
   <string name="setting_open_food_facts">Użyj Open Food Facts</string>
   <string name="setting_open_food_facts_description">Zbierz informacje z kodów kreskowych</string>
   <string name="setting_choose_barcode_scanner">Wybierz skaner kodów kreskowych</string>
@@ -1403,7 +1402,7 @@ https://github.com/patzly/grocy-android</string>
   <string name="setting_notifications_enable">Włącz powiadomienia</string>
   <!-- The string belongs to the stock overview (stock items can be expired, overdue or due soon). -->
   <string name="setting_notifications_stock_description">Sprawdza zapasy codziennie i powiadamia Cię, jeśli są produkty, które nie są już świeże (przedawnione, przeterminowane lub wkrótce będą przeterminowane)</string>
-  <string name="setting_notifications_chores_description">Sprawdza obowiązki domowe codziennie i powiadamia cię zanim obowiązki będą wymagały wykonania</string>
+  <string name="setting_notifications_chores_description">Codziennie sprawdza obowiązki domowe i powiadamia cię zanim będzie trzeba je wykonać</string>
   <string name="setting_notification_time">Notification time</string>
   <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">Kiedy sprawdzenie jest wykonane</string>
@@ -1422,8 +1421,37 @@ https://github.com/patzly/grocy-android</string>
     <item quantity="one">%1$d obowiązek do wykonania.</item>
     <item quantity="few">%1$d obowiązków należy wykonać.</item>
     <item quantity="many">%1$d obowiązków należy wykonać.</item>
-    <item quantity="other">%1$d obowiązków należy wykonać.</item>
+    <item quantity="other">%1$d obowiązków do wykonania.</item>
   </plurals>
   <string name="notification_chores_content">Prokrastynacja jest bezużyteczna. Dotknij, aby otworzyć listę.</string>
 
-  </resources>
+  <string name="ikm_select_cert">Wybierz Certyfikat Klienta</string>
+  <string name="ikm_client_cert">Serwer zażądał certyfikatu klienta. Wybierz, którego certyfikatu chcesz użyć.</string>
+  <string name="ikm_client_cert_notification">Wybierz certyfikat klienta dla</string>
+  <string name="ikm_decision_file">Z Pliku</string>
+  <string name="ikm_decision_keychain">Z Menadżera Kluczy Urządzenia</string>
+  <string name="ikm_notification">Wybierz Certyfikat Klienta</string>
+  <string name="ikm_load_app_keystore">Błąd wczytywania magazynu kluczy aplikacji</string>
+  <string name="ikm_store_aliasMapping">Błąd przechowywania aliasów pęku kluczy</string>
+  <string name="ikm_remove_keys">Błąd połączenia: usunięte klucze dla</string>
+  <string name="ikm_remove_all_keys">Usunięto wszystkie klucze połączeń</string>
+  <string name="ikm_add_from_keystore">Błąd odczytu wybranego magazynu kluczy</string>
+  <string name="ikm_add_from_keystore_alias">Błąd wczytywania kluczy:</string>
+  <string name="ikm_keychain">Błąd Pęku Kluczy; usuwanie zapisanego aliasu</string>
+  <string name="ikm_select_keystore">Wybierz plik magazynu kluczy</string>
+
+  <string name="mtm_security_risk">Ostrzeżenie: Potencjalne Zagrożenie Bezpieczeństwa</string>
+  <string name="mtm_trust_anchor">Certyfikat serwera nie jest podpisane przez Urząd Certyfikacji.</string>
+  <string name="mtm_cert_expired">Certyfikat serwera wygasł.</string>
+  <string name="mtm_hostname_mismatch">Serwer nie mógł uwierzytelnić się jako \&quot:%s\&quot;.</string>
+  <string name="mtm_trust_certificate">Ufasz temu certyfikatowi? Zostanie on użyty do weryfikacji wszystkich wymienionych nazw.</string>
+  <string name="mtm_accept_servername">Zaakceptować Niezgodną Nazwę Serwera?</string>
+  <string name="mtm_cert_details">Szczegóły certyfikatu:</string>
+  <string name="mtm_valid_for">Certyfikat ważny dla:</string>
+  <string name="mtm_decision_always">Zawsze</string>
+  <string name="mtm_decision_once">Raz</string>
+  <string name="mtm_notification_channel">Bezpieczeństwo</string>
+  <string name="mtm_notification">Weryfikacja Certyfikatu</string>
+  <string name="mtm_error_keystore">Wyjątek podczas wczytywania magazynu kluczy z pliku</string>
+
+</resources>
