@@ -292,7 +292,7 @@
   </plurals>
   <string name="msg_task_mark">Oznacz zadanie jako wykonane</string>
   <string name="msg_task_completed">Oznaczono zadanie jako wykonane</string>
-  <string name="msg_task_not_completed">Oznaczono zadanie jako nie wykonane</string>
+  <string name="msg_task_not_completed">Oznaczono zadanie jako niewykonane</string>
   <string name="msg_task_undo">Cofnij zadanie</string>
   <string name="msg_recipes_enough_in_stock">Wystarczająca ilość na stanie</string>
   <string name="msg_recipes_enough_in_stock_filter">(%1$d) Wystarczająca ilość na stanie</string>
