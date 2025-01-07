@@ -191,7 +191,7 @@
     <item quantity="one">%1$d poniżej min. ilość zapasów</item>
     <item quantity="few">%1$d poniżej min. ilość zapasów</item>
     <item quantity="many">%1$d poniżej min. ilość zapasów</item>
-    <item quantity="other">%1$d poniżej min. ilość zapasów</item>
+    <item quantity="other">%1$d poniżej min. ilości zapasów</item>
   </plurals>
   <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
   <plurals name="msg_in_stock_products">
