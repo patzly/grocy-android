@@ -225,7 +225,7 @@
     <item quantity="one">%1$d nie zrobiony</item>
     <item quantity="few">%1$d nie zrobionych</item>
     <item quantity="many">%1$d nie zrobionych</item>
-    <item quantity="other">%1$d nie zrobionych</item>
+    <item quantity="other">%1$d niezrobionych</item>
   </plurals>
   <!-- %1$s is the number of done items in shopping list. This string is the short form of e.g. "3 done items are in shopping list" -> "3 done" -->
   <plurals name="msg_done_items">
