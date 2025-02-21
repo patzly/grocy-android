@@ -1,8 +1,12 @@
-## 3.7.1
+## 3.8.0
 
+- New: Compatibility for server version 4.4.x
 - Improved: Hide bottom bar if it is empty
-- Fixed: notification settings not displaying current value in certain cases
+- Improved: Updated translations
+- Fixed: Images incorrectly rotated (thanks @sbrunk!) (#904, #877)
+- Fixed: Notification settings not displaying current value in certain cases
 - Fixed: Bottom bar not hiding on some pages when scrolled down
+- Fixed: Some crash causes
 
 ## 3.7.0
 

@@ -15,7 +15,7 @@
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
   ~ Copyright (c) 2020-2024 by Patrick Zedler and Dominic Zedler
-  ~ Copyright (c) 2024 by Patrick Zedler
+  ~ Copyright (c) 2024-2025 by Patrick Zedler
   -->
 
 <resources>
@@ -28,6 +28,8 @@
     <item>4.1.0</item>
     <item>4.2.0</item>
     <item>4.3.0</item>
+    <item>4.4.0</item>
+    <item>4.4.1</item>
   </string-array>
 
 </resources>
