@@ -115,12 +115,13 @@ public class X509KeyStoreFile {
   /**
    * Save keystore to file
    */
-  private void save() throws IOException, KeyStoreException {
+  private void save() throws IOException {
     Log.d(TAG, "save(file=" + file + ")");
     // Check if file is up to date via shared preferences
     if (sharedPrefs != null
         && loadedVersion != sharedPrefs.getLong(sharedPrefVersionKey(), -1)) {
-      throw new IllegalStateException("Keystore is not up to date");
+      Log.e(TAG, "save: keystore not up to date");
+      return;
     }
     FileOutputStream fos = null;
     try {
@@ -134,7 +135,7 @@ public class X509KeyStoreFile {
         editor.apply();
       }
     } catch (CertificateException | KeyStoreException | NoSuchAlgorithmException e) {
-      throw new KeyStoreException("Could not save keystore", e);
+      Log.e(TAG, "save: could not save keystore", e);
     } finally {
       if (fos != null) {
         try {
