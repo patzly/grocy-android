@@ -22,11 +22,14 @@ package xyz.zedler.patrick.grocy.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.exifinterface.media.ExifInterface;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.DataSource;
@@ -43,6 +46,8 @@ import java.io.IOException;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class PictureUtil {
+
+  private static final String TAG = PictureUtil.class.getSimpleName();
 
   public static void loadPicture(ImageView imageView, @Nullable CardView frame, String pictureUrl) {
     Glide.with(imageView.getContext())
@@ -117,7 +122,20 @@ public class PictureUtil {
     int scaleFactor = Math.min(imageWidth / maxWidth, imageHeight / maxHeight);
     options.inJustDecodeBounds = false;
     options.inSampleSize = scaleFactor;
-    return BitmapFactory.decodeFile(imagePath, options);
+    int rotation = 0;
+    try {
+      var exif = new ExifInterface(imagePath);
+      rotation = exif.getRotationDegrees();
+    } catch (IOException e) {
+      Log.w(TAG, "Reading exif data failed, ignoring possible rotation: " + e);
+    }
+    var bitmap = BitmapFactory.decodeFile(imagePath, options);
+    if (rotation == 0) return bitmap;
+    else {
+      var matrix = new Matrix();
+      matrix.postRotate(rotation);
+      return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    }
   }
 
   public static Bitmap scaleBitmap(Bitmap bitmap) {
