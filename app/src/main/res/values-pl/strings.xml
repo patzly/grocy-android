@@ -1443,7 +1443,7 @@ https://github.com/patzly/grocy-android</string>
   <string name="mtm_security_risk">Ostrzeżenie: Potencjalne Zagrożenie Bezpieczeństwa</string>
   <string name="mtm_trust_anchor">Certyfikat serwera nie jest podpisane przez Urząd Certyfikacji.</string>
   <string name="mtm_cert_expired">Certyfikat serwera wygasł.</string>
-  <string name="mtm_hostname_mismatch">Serwer nie mógł uwierzytelnić się jako \&quot:%s\&quot;.</string>
+  <string name="mtm_hostname_mismatch">Serwer nie mógł uwierzytelnić się jako \&quot;%s\&quot;.</string>
   <string name="mtm_trust_certificate">Ufasz temu certyfikatowi? Zostanie on użyty do weryfikacji wszystkich wymienionych nazw.</string>
   <string name="mtm_accept_servername">Zaakceptować Niezgodną Nazwę Serwera?</string>
   <string name="mtm_cert_details">Szczegóły certyfikatu:</string>
