@@ -1,0 +1,1 @@
+• New: Compatibility for server version 4.4.2
