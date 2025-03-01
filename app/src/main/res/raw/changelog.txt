@@ -1,6 +1,10 @@
+## 3.8.1
+
+- New: Compatibility for server version 4.4.2
+
 ## 3.8.0
 
-- New: Compatibility for server version 4.4.x
+- New: Compatibility for server version 4.4.0 and 4.4.1
 - Improved: Hide bottom bar if it is empty
 - Improved: Updated translations
 - Fixed: Images incorrectly rotated (thanks @sbrunk!) (#904, #877)
