@@ -4,7 +4,7 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Release](https://img.shields.io/github/v/release/patzly/grocy-android?label=Release)](https://github.com/patzly/grocy-android/releases)  [![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads)](https://github.com/patzly/grocy-android/releases) 
 
-> ⚠️ Because I don't have much time for Grocy Android in addition to my studies, work and other spare time activities and projects, pull requests for closing issues, adding improvements or implementing new features are highly appreciated!
+> **⚠️ Because I don't have much time for Grocy Android in addition to my studies, work and other spare time activities and projects, pull requests for closing issues, adding improvements or implementing new features are highly appreciated!**
 
 Grocy Android is an open-source Android client for [Grocy](https://grocy.info/) ([source code](https://github.com/grocy/grocy)), a self-hosted grocery and household management solution for your home.
 
