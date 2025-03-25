@@ -1,0 +1,1335 @@
+<!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2024 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2024-2025 by Patrick Zedler
+  -->
+
+<resources>
+
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in purchase screen for example. -->
+  <string name="action_purchase">Satın Al</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in consume screen for example. -->
+  <string name="action_consume">Tüket</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in transfer screen for example. -->
+  <string name="action_transfer">Transfer Et</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in inventory screen for example. -->
+  <string name="action_inventory">Miktarı Güncelle</string>
+  <!-- This is an action – in English, it contains a verb. -->
+  <string name="action_consume_all">Hepsini Tüket</string>
+
+  <string name="action_consume_spoiled">Bozulmuş olarak tüket</string>
+  <string name="action_consume_one_spoiled">1 taneyi bozulmuş olarak tüket</string>
+  <!-- %1$s is a quantity unit and %2$s is a product name -->
+  <string name="action_consume_one">%1$s adet %2$s ürününü 1 adet tüket </string>
+  <string name="action_open">Açılmış olarak işaretle</string>
+  <!-- %1$s is a quantity unit and %2$s is a product name -->
+  <string name="action_open_one">%1$s adet %2$s ürününün 1 tanesini aç</string>
+  <string name="action_edit_product">Ürünü düzenle</string>
+  <string name="action_shopping_list_add">Alışveriş listesine ekle</string>
+  <string name="action_consume_recipe">Bu tarif için gerekli olan tüm ürünleri tüket</string>
+  <string name="action_copy_recipe">Tarifi kopyala</string>
+  <string name="action_apply_desired_servings">Tarif porsiyonunu ve verileri güncelle</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_product_opened">Ürün açıldı</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_from">Şuradan transfer et</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_to">Şuraya transfer et</string>
+
+  <string name="action_back">Geri</string>
+  <string name="action_search">Ara</string>
+  <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+  <string name="action_next">İleri</string>
+  <string name="action_new">Yen</string>
+  <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+  <string name="action_prev">Önceki</string>
+  <string name="action_feedback">Geribildirim gönder</string>
+  <string name="action_reset">Sıfırla</string>
+  <string name="action_reload">Yeniden yükle</string>
+  <string name="action_top_scroll">En üste çık</string>
+  <string name="action_send">Gönder</string>
+  <string name="action_close">Kapat</string>
+  <string name="action_scan">Tara</string>
+  <string name="action_cancel">İptal</string>
+  <string name="action_add">Ekle</string>
+  <string name="action_clear">Temizle</string>
+  <string name="action_clear_shopping_list">Alışveriş listesini temizle</string>
+  <string name="action_auto_sync">Otomatik Eşleştir</string>
+  <string name="action_rate">Google Play\'de değerlendir</string>
+  <string name="action_rate_description">Geliştiricileri motive et</string>
+  <string name="action_email">E-Posta gönder</string>
+  <string name="action_email_description">Geliştiricilerle iletişime geç</string>
+  <string name="action_new_issue">GitHub\'da yeni bir sorun oluştur</string>
+  <string name="action_new_issue_description">Bug\'ları bildir, ya da yeni bir özellik isteğinde bulun</string>
+  <string name="action_get_started">Başlangıç</string>
+  <string name="action_ascending">Yükselen</string>
+  <string name="action_filter">Filtre</string>
+  <string name="action_sort">Sırala</string>
+  <string name="action_undo">Geri al</string>
+  <string name="action_retry">Tekrar dene</string>
+  <string name="action_edit">Düzenle</string>
+  <string name="action_copy">Kopyala</string>
+  <string name="action_proceed">Devam et</string>
+  <string name="action_delete">Sil</string>
+  <string name="action_save">Kaydet</string>
+  <string name="action_save_close">Kaydet ve kapat</string>
+  <string name="action_save_not_close">Kaydetmeden kapat</string>
+  <string name="action_logout">Oturumu sonlandır</string>
+  <string name="action_restart">Yeniden başlat</string>
+  <string name="action_create">Oluştur</string>
+  <string name="action_link">Link</string>
+  <string name="action_try_again">Yeniden dene</string>
+  <string name="action_open_scanner">Tarayıcıyı aç</string>
+  <string name="action_discard">Gözardı et</string>
+  <string name="action_clear_form">Formu temizle</string>
+  <string name="action_take_photo">Fotoğraf çek</string>
+  <!-- "Paste" like in "Paste from clipboard" -->
+  <string name="action_paste">Yapıştır</string>
+  <!-- Short form for "Only link barcode to existing product", this should fit into a
+  button so keep it short. -->
+  <string name="action_link_and_clear">Sadece link</string>
+  <string name="action_toggle_done">Tamamlandı olarak işaretle</string>
+  <string name="action_change_layout">Arayüzü değiştir</string>
+  <string name="action_edit_notes">Notları düzenle</string>
+  <string name="action_add_missing">Eksik ürünleri ekle</string>
+  <string name="action_purchase_done_items">Tamamlanmış ürünleri satın al</string>
+  <string name="action_purchase_all_items">Tüm ürünleri satın al</string>
+  <string name="action_skip_entry">Girişi geç</string>
+  <string name="action_toggle_flash">Flash olarak işaretle</string>
+  <string name="action_edit_recipe">Tarifi değiştir</string>
+  <string name="action_delete_recipe">Tarifi sil</string>
+  <string name="action_delete_shopping_list">Alışveriş listesini sil</string>
+  <string name="action_create_key">Anahtar oluştur</string>
+  <string name="action_login">Oturum aç</string>
+  <string name="action_ignore">Gözardı et</string>
+  <!-- This string should follow the equality between "all" and "Clear all items" -->
+  <string name="action_clear_all">Tümü</string>
+  <!-- This string should follow the equality between "done" and "Clear done items" -->
+  <string name="action_clear_done">Tamamlanan</string>
+  <string name="action_display_help">Yardımcı yazılarını göster</string>
+  <string name="action_demo_server">Test sunucusu</string>
+  <string name="action_own_server">Kendi sunucum</string>
+  <string name="action_open_server">Server arayüzünü kullan</string>
+  <string name="action_enter_data_manually">Manuel veri girişi</string>
+  <string name="action_settings_backup_restore">Ayarları geri getir</string>
+  <string name="action_details">Detaylar</string>
+  <string name="action_perform">Aksiyonu gerçekleştir</string>
+  <string name="action_share">Paylaş</string>
+  <string name="action_share_description">Arkadaşlarına Grocy Android\'i anlat.</string>
+  <string name="action_no_filter">Filtre yok</string>
+  <string name="action_show_done_tasks">Tamamlanan görevleri göster</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_chore_execution">Ev işlerinin durumlarını kontrol et</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_next_chore_schedule">Sonraki ev işi programına geçiş yap</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_skip_next_chore_schedule">Sonraki ev işi programına geçiş yap</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_reschedule_next_execution">Sonraki gerçekleştirmeyi yeniden programla</string>
+  <string name="action_put_missing_products_on_shopping_list">Eksik ürünleri alışveriş listesine ekle</string>
+  <!-- This is the action part of "Backup to file" or "Backup data" -->
+  <string name="action_backup">Geri Yükleme</string>
+  <!-- This is the action part of "Restore from file" or "Restore data" -->
+  <string name="action_restore">Onar</string>
+  <string name="action_configure_sections">Bölümleri düzenle</string>
+
+  <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
+  <plurals name="msg_due_products">
+    <item quantity="one">%1$d ürünün tarihi yaklaşıyor</item>
+    <item quantity="other">%1$d ürünün tarihi yaklaşıyor</item>
+  </plurals>
+  <!-- %1$s is the number of products which are overdue. This string is the short form of e.g. "3 products are overdue" -> "3 overdue" -->
+  <plurals name="msg_overdue_products">
+    <item quantity="one">%1$d ürünün tarihi geçti</item>
+    <item quantity="other">%1$d ürünün tarihi geçti</item>
+  </plurals>
+  <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
+  <plurals name="msg_expired_products">
+    <item quantity="one">%1$d ürün bozuldu</item>
+    <item quantity="other">%1$d ürün bozuldu</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_short">
+    <item quantity="one">%1$d ürün taze değil</item>
+    <item quantity="other">%1$d taze değil</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_long">
+    <item quantity="one">%1$d ürün taze değil (aşağıda listelendi)</item>
+    <item quantity="other">%1$d taze değil (aşağıda listelendi)</item>
+  </plurals>
+  <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
+  <plurals name="msg_missing_products">
+    <item quantity="one">%1$d ürün min. stok miktarının altında</item>
+    <item quantity="other">%1$d min. stok miktarının altında</item>
+  </plurals>
+  <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
+  <plurals name="msg_in_stock_products">
+    <item quantity="one">%1$d stokta</item>
+    <item quantity="other">%1$d stokta</item>
+  </plurals>
+  <!-- %1$s is the number of products which are opened. This string is the short form of e.g. "3 products are opened" -> "3 opened" -->
+  <plurals name="msg_opened_products">
+    <item quantity="one">%1$d açıldı</item>
+    <item quantity="other">%1$d açıldı</item>
+  </plurals>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_consumed">%3$s%2$s ürünün%1$s tanesi tüketildi.</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_consumed_spoiled">%3$s%2$s ürünün %1$s tanesi bozuk olarak tüketildi.</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_opened">%3$s%2$s ürünün %1$s tanesini açıldı olarak işaretle</string>
+  <!-- %1$s is the number of servings of a recipe. -->
+  <plurals name="msg_servings">
+    <item quantity="one">%1$s porsiyon</item>
+    <item quantity="other">%1$s porsiyon</item>
+  </plurals>
+  <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
+  <plurals name="msg_undone_items">
+    <item quantity="one">%1$d tamamlanmadı</item>
+    <item quantity="other">%1$d tamamlanmadı</item>
+  </plurals>
+  <!-- %1$s is the number of done items in shopping list. This string is the short form of e.g. "3 done items are in shopping list" -> "3 done" -->
+  <plurals name="msg_done_items">
+    <item quantity="one">%1$d tamamlandı</item>
+    <item quantity="other">%1$d tamamlandı</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are done. This string is the short form of e.g. "3 tasks are done" -> "3 done" -->
+  <plurals name="msg_done_tasks">
+    <item quantity="one">%1$d tamamlandı</item>
+    <item quantity="other">%1$d tamamlandı</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are not done. This string is the short form of e.g. "3 tasks are not done" -> "3 not done" -->
+  <plurals name="msg_not_done_tasks">
+    <item quantity="one">%1$d tamamlanmadı</item>
+    <item quantity="other">%1$d tamamlanmadı</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are due soon. This string is the short form of e.g. "3 tasks are due soon" -> "3 due soon" -->
+  <plurals name="msg_due_tasks">
+    <item quantity="one">%1$d ürünün tarihi yaklaşıyor</item>
+    <item quantity="other">%1$d yaklaşıyor</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are due today. This string is the short form of e.g. "3 tasks are due today" -> "3 due today" -->
+  <plurals name="msg_due_today_tasks">
+    <item quantity="one">%1$d bugün</item>
+    <item quantity="other">%1$d bugün</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
+  <plurals name="msg_overdue_tasks">
+    <item quantity="one">%1$d ürünün tarihi geçti</item>
+    <item quantity="other">%1$d geçti</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_short">
+    <item quantity="one">%1$d bugün</item>
+    <item quantity="other">%1$d bugün</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_long">
+    <item quantity="one">%1$d bugün (aşağıda listelendi)</item>
+    <item quantity="other">%1$d bugün (aşağıda listelendi)</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
+  <plurals name="msg_assigned_tasks">
+    <item quantity="one">%1$d atandı</item>
+    <item quantity="other">%1$d atandı</item>
+  </plurals>
+  <string name="msg_task_mark">Görevi tamamlandı olarak işaretle</string>
+  <string name="msg_task_completed">Görev tamamlandı olarak işaretlendi</string>
+  <string name="msg_task_not_completed">Görev tamamlanmadı olarak işaretlendi.</string>
+  <string name="msg_task_undo">Görevi geri al</string>
+  <string name="msg_recipes_enough_in_stock">Stokta yeteri kadar mevcut</string>
+  <string name="msg_recipes_enough_in_stock_filter">(%1$d) stokta yeteri kadar mevcut</string>
+  <!-- %1$s is an amount with quantity unit (e.g. 3 bottles) -->
+  <string name="msg_recipes_enough_in_stock_amount">Stokta yeteri kadar mevcut (%1$s)</string>
+  <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) stokta yeteri kadar mevcut değil fakat alışveriş listesinde</string>
+  <string name="msg_recipes_not_enough_filter">(%1$d) stokta yeteri kadar mevcut değil</string>
+  <string name="msg_recipes_not_enough">Stokta yeteri kadar mevcut değil</string>
+  <plurals name="msg_recipes_ingredients_missing_but_on_shopping_list">
+    <item quantity="one">%1$d ürün eksik ama alışveriş listesinde</item>
+    <item quantity="other">%1$d malzeme eksik fakat alışveriş listesinde</item>
+  </plurals>
+  <plurals name="msg_recipes_ingredients_missing">
+    <item quantity="one">%1$d ürün eksik</item>
+    <item quantity="other">%1$d ürün eksik</item>
+  </plurals>
+  <string name="msg_recipes_ingredient_fulfillment_info_list">%1$s eksik | %2$s alışveriş listesinde mevcut</string>
+  <string name="msg_chore_executed">Ev işlerinin tamamlanması izlendi</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_purchased">%1$s %2$s %3$salındı</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_transferred">%1$s %2$s %3$s transfer edildi</string>
+  <!-- %1$s is a product name, %2$s a number, %3$s is a quantity unit and %4$s a number (e.g. -3) -->
+  <string name="msg_inventoried">%1$s ürününün stok adedi şimdi %2$s%3$s (%4$s)</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_not_in_stock">%1$s stokta yok</string>
+  <string name="msg_no_connection">Bağlantı yok</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_no_stock_locations">%1$s için stok lokasyonu yok</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_no_stock_entries">%1$s için stok girdisi yok</string>
+  <string name="msg_not_found">Ürün bulunamadı</string>
+  <string name="msg_returning_to_overview">Birkaç saniye içerisinde özet sayfasına dönülüyor</string>
+  <string name="msg_editor_hint">Buraya metni girin</string>
+  <string name="msg_coming_soon">Bu özellik yakında kullanılabilir olacak</string>
+  <string name="msg_undo_transaction">Alışverişi geri al?</string>
+  <string name="msg_undone_transaction">Alışveriş geri alındı</string>
+  <!-- %1$s is a date -->
+  <string name="msg_undone_transaction_description">%1$s tarihinde geri alındı</string>
+  <string name="msg_failed_to_sync">Girdileri eş zamanlama başarısız oldu</string>
+  <string name="msg_synced">Girdiler başarıyla eş zamanlandı</string>
+  <!-- %1$s is a shopping list name -->
+  <string name="msg_added_missing_products">Eksik ürünler %1$s listesine eklendi</string>
+  <!-- %1$s is a shopping list name -->
+  <string name="msg_shopping_list_cleared">%1$s listesi başarıyla temizlendi</string>
+  <!-- %1$s is a shopping list name -->
+  <string name="msg_shopping_list_deleted">%1$s listesi başarıyla silindi</string>
+  <string name="msg_barcode_duplicate">Barkod zaten mevcut</string>
+  <!-- %1$s is a master data type like "Product group" or "Location"; %2$s is the name of it. -->
+  <string name="msg_master_delete">\"%2$s\" isimli %1$s ürününü silmek istediğinizden emin misiniz?</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_master_delete_product">\"%1$s\" ürününü silmek istediğinizden emin misiniz??\n\nBu aynı zamanda stok miktarını, günlüğü ve bu ürünün yer aldığı her şeyi siler. Eğer bunları saklamak istiyorsanız ürünü gizlemeyi de deneyebilirsiniz.</string>
+  <!-- %1$s is a master data type like "location" or "product" -->
+  <string name="msg_master_delete_usage">Bu %1$s hala kullanımda</string>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_add">
+    <item quantity="one">%1$s adet %2$s stoğa eklenecek</item>
+    <item quantity="other">%1$s adet %2$s stoğa eklenecek</item>
+  </plurals>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_remove">
+    <item quantity="one">%1$s adet %2$s stoktan silinecek</item>
+    <item quantity="other">%1$s adet %2$s stoktan silinecek</item>
+  </plurals>
+  <string name="msg_transfer_tare_weight">Dara ağırlığı etkinleştirilmiş ürünlerin transferi şu anda desteklenmiyor</string>
+  <string name="msg_should_not_be_frozen">Bu ürün dondurulmamalıdır. Devam etmek istiyor musunuz?</string>
+  <string name="msg_item_marked_as_done">Öğeyi tamamlandı olarak işaretle</string>
+  <string name="msg_item_marked_as_undone">Öğeyi tamamlanmadı olarak işaretle</string>
+  <string name="option_synced_success">Tercih başarıyla eş zamanlandı</string>
+  <string name="option_synced_error">Tercih eş zamanlanamadı</string>
+  <string name="msg_data_copied_from_product">Veri, bu üründen kopyalandı \"%1$s\".</string>
+  <string name="msg_recipe_added_to_cart">Tarif malzemeleri sepete eklendi</string>
+  <string name="msg_recipe_consumed">\"%1$s\" tarifinin tüm malzemeleri stoktan çıkarıldı</string>
+  <string name="msg_stored_purchases_overview">Bu cihazda yer alan fakat sunucuya transfer edilmemiş alışverişler mevcut. Detaylı bilgi için buraya tıklayın.</string>
+  <string name="msg_stored_purchases">Henüz sunucuya transfer edilmemiş alışverişleriniz burada gösterilir. Geçici ürünler bu uygulamada saklanır, böylece satın almalarınızı hızlı modda hızlıca tarayabilir ve master data\'ya direkt olarak ekleyebilirsiniz.</string>
+  <string name="msg_stored_purchases_product_offline">Ürüne dokunun ve gerekli verilerin girişini sağlayın. Sonrasında, ürün burada çevrimiçi olarak görünecek ve alışverişleriniz sunucuya gönderilebilir olacak.</string>
+  <string name="msg_stored_purchases_product_online">Bu ürün için saklanan alışverişleri sunucuya göndermek için buraya dokunun.</string>
+  <string name="msg_choose_product">Tarattığınız barkod herhangi bir ürüne eşli değil. Var olan bir ürüne ekleyebilir veya yeni bir ürün oluşturabilirsiniz.</string>
+  <string name="msg_product_name_off">Barkodun ürün adı Open Food Facts tarafından sağlandı.</string>
+  <string name="msg_product_name_obf">Barkodun ürün adı Open Beauty Facts tarafından sağlandı.</string>
+  <string name="msg_product_name_lookup_error">Barkod, Open Food Facts ya da Open Beauty Facts\'te aranamadı.</string>
+  <string name="msg_product_name_lookup_empty">Barkod, Open Food Facts ya da Open Beauty Facts\'te yer almıyor.</string>
+  <string name="msg_off_option_deactivated">Otomatik ürün ismi önerileri için ayarlardan Open Food Facts\'te aramayı etkinleştirebilirsiniz.</string>
+  <string name="msg_create_new_product_filled">Yeni ürün oluştur \"%1$s\"</string>
+  <string name="msg_create_new_product">Yeni ürün oluştur</string>
+  <string name="msg_create_new_pending_product_filled">Geçici olarak yeni ürün oluştur \"%1$s\"</string>
+  <string name="msg_create_new_pending_product">Geçici yeni ürün oluştur</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_purchase">Gerçekleştirilecek işlem:\n\nEkle %1$s %2$s %3$snu stoktan\nSon tarih: %4$s\nFiyat: %5$s\nMağaza: %6$s\nKonum: %7$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_consume">Yürütülecek işlem:\n\nKaldır %1$s %2$s %3$snı stoktan \nKonum: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_open">Gerçekleştirilecek işlem:\n\n%1$s %2$s %3$s açılmış olarak işaretle\nKonum: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
+  <string name="msg_quick_mode_confirm_transfer">Gerçekleştirilecek işlem:\n\nAktar %1$s %2$s %3$s \nKonumdan: %4$s \nKonuma: %5$s</string>
+  <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_inventory">Gerçekleştirilecek işlem:\n\nStok miktarını ayarlayın %1$s %2$s %3$s\nEklenen öğeler için uygula:\nSon tarih:%4$s\nFiyat: %5$s\nMağaza: %6$s \nKonum: %7$s </string>
+  <string name="msg_compatibility">Bu uygulama sürümü sunucudaki Grocy sürümüyle uyumlu değil.\n\nMevcut sunucu sürümü:%1$s\n\nDesteklenen sunucu sürümleri:\n %2$s\nMevcut sunucu sürümünün desteklenen sürümlerden daha yüksek bir ana sürüm numarası (ilk hane) varsa ve bu uyarıyı yok sayarsanız, veri kaybı (olası değil) veya çökmeler (olası) meydana gelebilir.\nSadece küçük bir fark varsa (ör. üçüncü hane daha yüksekse) muhtemelen bu uyarıyı yok sayabilirsiniz.</string>
+  <string name="msg_logout">Sunucunuzdaki hiçbir şey değiştirilmeyecek. Oturum açma sayfasına yönlendiriliyorsunuz.</string>
+  <string name="msg_logout_demo"><u>https://grocy.info</u> açık deneme sunucusunu kullanıyorsunuz.\n\n<b>Burada yaptığınız değişiklikler saklanmayacak!\nVerileriniz, deneme sunucusunun girdileri günlük olarak silmesine kadar herkes tarafından erişilebilir olacak.</b>\n\nOturum açma sayfasında kendi sunucunuzun adresini girebilirsiniz.</string>
+  <string name="msg_logout_demo_short">Açık deneme sunucusu. Bilgi için dokunun.</string>
+  <string name="msg_restart">Tercihleri uygulamak için uygulamanın yeniden başlatılması gerekli. Şimdi yeniden başlatmak istiyor musunuz?</string>
+  <string name="msg_full_description">Tüm açıklamayı görmek için buraya dokunun.</string>
+  <string name="msg_copied_clipboard">Panoya kopyalandı</string>
+  <string name="msg_shortcuts">4 kısayola kadar etkinleştirebilirsiniz:</string>
+  <string name="msg_shortcuts_not_supported">Kısayollar, Android\'in bu sürümünde desteklenmiyor.</string>
+  <string name="msg_barcode_formats">Barkod dedektörünün hızını, sadece seçili formatları okuyacak şekilde ayarlayarak hızlandırabilirsiniz.</string>
+  <string name="msg_features">Girişi \"Hakkında\" kısmından tekrar başlatabilirsiniz.</string>
+  <string name="msg_feedback">Herhangi bir dileğiniz, sorunuz ya da aldığınız hatalar mı var? Bize ulaşın, size memnuniyetle yardımcı olalım!\nEğer yoksa Play Store\'da bizi değerlendirebilirseniz çok mutlu oluruz.</string>
+  <string name="msg_point_at_barcode">Kameranızı barkoda doğrultun</string>
+  <string name="msg_save_product_first">Lütfen önce bu ürünü kaydedin</string>
+  <string name="msg_save_recipe_first">Lütfen önce tarifi kaydedin</string>
+  <string name="msg_recipe_contains_nested_recipes">Bu tarifte iç içe geçmiş tarifler bulunmaktadır.</string>
+  <string name="msg_press_hold_confirm">Silme işlemini onaylamak için uzun dokunun.</string>
+  <string name="msg_recipe_consume_ask">Bu tarif için gerekli tüm malzemeleri tüketmek istediğinize emin misiniz \"%1$s\"? (\"Sadece stokta olduğunu kontrol et\" olarak işaretlenmiş malzemeler gözardı edilecek.)</string>
+  <string name="msg_recipe_shopping_list_ask">Bu tarif için gerekli eksik malzemeleri alışveriş listesine eklemek istediğinize emin misiniz \"%1$s\" ?\n\nEklenmesini istemediğiniz malzemelerin seçimini kaldırıp, listeden çıkartabilirsiniz:</string>
+  <string name="msg_settings_backup_restore">Burada uygulama ayarlarının yedeğini oluşturabilir veya geri yükleyebilirsiniz, örneğin bunu diğer aile üyeleriyle paylaşmak için (dosya API Anahtarı gibi kimlik bilgilerini içerir).\n\nGeri yüklemeden sonra, bildirimler istenildiği gibi çalışmayabilir ve bu uygulamada anahtarları kapatıp tekrar açarak arka planda yeniden başlatılması gerekebilir.\n\nGeri yüklenen dosyada yanlış veriler varsa, uygulama bundan sonra çalışmayabilir ve uygulama verilerinin temizlenmesi gerekir.</string>
+  <string name="msg_settings_backup_success">Ayarlar yedeklemesi başarıyla oluşturuldu</string>
+  <string name="msg_settings_restore_success">Ayarlar başarıyla geri yüklendi, uygulama 2 saniye içinde yeniden başlatılacak</string>
+  <string name="msg_welcome">Grocy Android\'e hoşgeldiniz!</string>
+  <string name="msg_welcome_introduce">Grocy Android\'i verimli kullanmak için kendi sunucunuzu ya da Home Assistant için Grocy eklentisini kullanmalısınız.\nSadece denemek istiyorsanız, Grocy\'nin yaratıcısı Bernd Bestel tarafından sağlanan test sunucusunu kullanabilirsiniz.</string>
+  <string name="msg_choose_option_below">Lütfen aşağıdan bir seçim yapın.</string>
+  <string name="msg_qr_code_scan">Başka bir cihazda, Grocy web sitesini ziyaret edin ve \"API Anahtarları\" sayfasına gidin. \"Ekle\" butonuna sonrasında da küçük QR kod ikonuna basın. Çıkan QR kodu burada okutun.</string>
+  <string name="msg_qr_code_scan_token">Grocy Home Assistant eklentisini kullanıyorsunuz. Home Assistant profil ayarları kısmında \"Uzun ömürlü erişim anahtarı\" oluşturun (sayfa sonunda). Anahtar kısmının altında \"QR Kod oluştur\"\'a tıklayın ve burada okutun.</string>
+  <string name="msg_port_connection_info_without_port">Uygulama %1$s portuna bağlanacak.\nEğer başka bir porta bağlanmak istiyorsanız portu URL\'in sonuna ekleyebilirsiniz.\nÖrneğin: http://alanadı.com:81/</string>
+  <string name="msg_port_connection_info_with_port">Bu uygulama %1$s portuna bağlanacak.</string>
+  <string name="msg_clear_form_first">Başka bir öğrenilen barkodu okumadan önce formu temizleyin.</string>
+  <string name="msg_not_implemented_yet">Bu özellik yakında uyarlanacak. Şu an için lütfen sunucu arayüzünü kullanın.</string>
+  <string name="msg_help_picture_changes">Resimlere yapılan değişiklikler sunucunuzla anlık olarak eş zamanlanır, sadece kaydedince değil!</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_stock_label_type">Satın alma sırasında önceden doldurulacak olan varsayılan stok giriş etiketi türüdür.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_hide_on_stock">Stok genel bakış sayfası, şu anda stokta olan veya minimum miktarının altında olan tüm ürünleri listeler. Bu ürünü sayfada her zaman gizlemek için etkinleştirin.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_parent_product_deactivated">Bu ürünün ana ürünü olamaz çünkü başka bir üründe ana ürün olarak kullanılıyor.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_consume_location">Aşağıdaki lokasyondaki stok girişleri öncelikle tüketilecektir.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_move_on_open">Etkinleştirildiğinde, bu ürünü açılmış olarak işaretlediğinizde, karşılık gelen miktar varsayılan tüketim konumuna taşınacaktır.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_disable_own_stock">Etkinleştirildiğinde, ilgili ürünün kendi stoğu olamaz, yani satın alma sırasında seçilemez (sadece alt ürünlerin özeti/toplam görünümü olarak kullanılan ana ürünler için yararlıdır).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_should_not_be_frozen">Etkinleştirildiğinde, bu ürünü dondurucu bir yere taşıdığınızda (yani dondururken) bir uyarı gösterilecektir.</string>
+  <string name="msg_help_due_date_type">Seçilen son tarih türüne bağlı olarak, stok genel bakış sayfasındaki vurgulama farklı olacaktır. \"Son kullanma tarihi\", ürünün son kullanma tarihine ulaşıldıktan sonra tüketilmesinin hala güvenli olabileceği anlamına gelir. \"Son kullanma tarihi\", ürünün son kullanma tarihine ulaşıldıktan sonra tüketilmesinin güvenli olmadığı anlamına gelir.</string>
+  <string name="msg_help_default_due_days_format">Numara yerine tarih girmek için aşağıdaki öğelerden birine dokunup tutabilirsiniz.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days">Bu miktardaki satın alımlarda vade önerisi için bugüne gün sayısı eklenecektir (-1 bu ürünün hiçbir zaman tüketim tarihinin dolmayacağı anlamına gelir).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days_opened">Bu ürün açılmış olarak işaretlendiğinde, son teslim tarihi bugün + bu gün sayısı ile değiştirilecektir (0 değeri bunu devre dışı bırakır).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days_freezing">Bu ürünü dondurucuya taşıdığınızda (yani dondurduğunuzda), son teslim tarihi bugün + bu gün sayısıyla değiştirilecektir (-1, bu ürünün hiçbir zaman gecikmeyeceği anlamına gelir).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days_thawing">Bu ürünü dondurucudan çıkarırken (yani çözdürürken) son tüketim tarihi bugün + belirtilen gün sayısı ile değiştirilecektir.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_stock">İlk satın alma işleminden sonra adet birim stok değiştirilemez.</string>
+  <string name="msg_help_qu_stock_changeable">Miktar birim stoku, yalnızca mevcut miktar birimi için birim dönüşümleri mevcutsa değiştirilebilir.</string>
+  <string name="msg_help_qu_changeable">Miktar birimleri ancak bunlar için birim dönüşümleri mevcutsa değiştirilebilir.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_purchase">Satın alırken ve bu ürünü alışveriş listesine eklerken kullanılan varsayılan miktar birimidir.</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_consume">Bu ürün tüketilirken kullanılan varsayılan tüketim miktar birimidir.</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_price">Bu ürüne ait fiyatlar görüntülenirken, bu miktar birimine bağlı olacaktır.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_accumulate_min_amount">Etkinleştirildiğinde, alt ürünlerin minimum stok miktarı bu ürüne biriktirilecektir, yani alt ürün hiçbir zaman \"eksik\" olmayacaktır, yalnızca bu ürün olacaktır.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_treat_opened_as_out_of_stock">Etkinleştirildiğinde, açık olarak işaretlenen ürünler mevcut stok hesaplamasına dahil edilmeyecektir</string>
+  <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_consume_amount">Bu tutar, stok genel bakış sayfasında (miktar birim stok ile ilgili) \"hızlı tüketim/açma butonları\" için kullanılır.</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_consume_amount_new">Bu tutar, stok genel bakış sayfasında (miktar birim stok ile ilgili) \"hızlı tüketim butonu\" için kullanılır.</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_open_amount">Bu tutar, stok genel bakış sayfasında (miktar birim stok ile ilgili) \"hızlı açma butonu\" için kullanılır.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_tare_weight">Dara ağırlığı yönetimi, örneğin kavanozlardaki un için yararlıdır - satın alma/tüketim/stoklama sırasında her zaman kavanozun tamamını tartarsınız, daha sonra gönderilecek miktar, stokta olan miktara ve aşağıda tanımlanan tar ağırlığına göre otomatik olarak hesaplanır.</string>
+  <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_tare_weight_purchase">Dara ağırlığı işleme özelliği etkinleştirildi - Lütfen ürünün tamamını tartın, gönderilecek miktar otomatik olarak hesaplanacaktır.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_disable_stock_check">Bu ürün tarif malzemesi olarak eklendiğinde varsayılan ayar olarak kullanılacaktır.</string>
+  <string name="msg_help_inventory_fields">Aşağıdaki alanlar yeni eklenen ürünler için geçerlidir.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_choose">Kamera barkod taraması için barkod tarayıcıyı seçebilirsiniz.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\"), bir barkodu algılamak için kamera akışından gelen kontrast verilerini kullanır. Daha sonra tüm çizgilerin göreli genişliğini hesaplar.\n\n- Bazen yanlış sonuçlar\n- Barkodun yatay olarak hizalanması gerekir\n- İyi kontrast ve keskinlik gerektirir\n- Cihazınızda tamamen çevrimdışı olarak gerçekleştirilir\n- Çerçeve açık kaynaklıdır</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit, barkod tarama için en son teknolojilerle makine öğrenimini kullanır.\n\n- Hemen hemen hiç yanlış sonuç yok\n- Yönlendirme önemli değil\n- Bulanık veya düşük kontrastlı barkodlar için bile çalışır\n- Cihazınızda tamamen çevrimdışı olarak gerçekleştirilir\n- Çerçeve açık kaynaklı değildir</string>
+  <string name="msg_help_external_scanner_ready">Odaklanmış ve boş durumdayken aşağıdaki alan için harici bir tarayıcı kullanabilirsiniz.</string>
+  <string name="msg_help_external_scanner_settings">Bu uygulama, klavye görevi gören ve USB veya Bluetooth ile bağlanabilen harici tarayıcı aygıtlarını destekler. Aşağıdaki seçenekler harici tarayıcınızda yapılandırılmalıdır:\n\nÖn ek: Yok\nSon ek: TAB veya ENTER</string>
+  <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_specific_item">Bu listedeki ilk madde, \"Önce açılan, sonra ilk teslim edilen, sonra ilk giren ilk çıkar\" varsayılan kuralına göre seçilecektir.</string>
+  <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_consume">Sadece istatistiksel amaçlıdır.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_not_check_shopping_list">Varsayılan olarak alışveriş listesine eklenecek miktar \"gerekli miktar - stok miktarı - alışveriş listesi miktarı\"dır. Bu etkinleştirildiğinde, yalnızca stok miktarına göre kontrol edilir, alışveriş listesinde bulunan miktara göre değil.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_servings">Tarifin malzemeleri ile bu miktarda porsiyon elde edilmektedir.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_produces_product">Bir ürün seçildiğinde, bu tarif tüketildiğinde stok miktarına bir birim (stoktaki porsiyon başına) eklenecektir.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_only_check_any_amount">Daha sonra farklı bir miktar/birim kullanılabilirken, stok kontrolü için stokta herhangi bir miktarda ürün olması yeterlidir.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_variable_amount">Bu alan boş olmadığında yukarıda girilen tutar yerine bu gösterilecek ancak oradaki tutar stok karşılama kontrolü için kullanılmaya devam edilecektir.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_group">Malzemeleri bir arada gruplandırmak için başlık olarak kullanılacaktır.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_price_factor">Malzemenin ortaya çıkan fiyatı bu değerle çarpılacaktır.</string>
+  <string name="msg_help_recipe_ingredients_wrong">Grocy sunucu sürümü 4.0.0\'ın altındaysa bu liste yanlış yerine getirme bilgisi içerebilir. Doğru değerleri görmek için lütfen sunucunuzu 4.0.0 veya sonraki bir sürüme güncelleyin.</string>
+  <string name="msg_help_date_chooser">Ayarlardan klavye girişine geçebilirsiniz, bu sizin için giriş hızını artırabilir.</string>
+  <string name="msg_help_date_chooser_keyboard">Ülkenizde GGAAYY tercih ediliyorsa ayarlardan ters tarih formatını aktifleştirebilirsiniz.\nGirişi uygulamak ve bu sayfayı kapatmak için klavyenizdeki Bitti tuşunu kullanabilirsiniz.</string>
+  <string name="msg_help_notifications_tap">Bildirimleri almıyorsanız veya istikrarlı bir şekilde almıyorsanız buraya dokunun.</string>
+  <string name="msg_help_notifications">Bildirim almıyorsanız, Android uygulama bilgi sayfasını açmak ve bildirimlere izin verilip verilmediğini ve güç tasarrufu önlemlerinin devre dışı bırakılıp bırakılamayacağını kontrol etmek için buraya dokunun. Android bazen pil tüketimini azaltmak için bildirimleri ayarlanan zamandan daha geç iletir; bu normal bir davranıştır.</string>
+  <string name="msg_help_notifications_other">Şu anda çalışan uygulamalarla uygulamayı genel bakıştan kaldırmayın, aksi takdirde bazı üreticiler bildirim sürecini silecektir.</string>
+  <string name="msg_help_quick_mode">Hızlı modu etkinleştirmek için yukarıdaki başlık çubuğuna uzun süre dokunabilirsiniz. Bu modda, bir ürün girilmiş veya taranmışsa hemen bir işlem yürütülür ve tüm alanlar otomatik olarak doldurulabilir (ürün ve/veya barkod varsayılanlarına göre).</string>
+  <string name="msg_help_loading_circle_settings">Sunucudan bir şeyin yüklenmesi gereken her sayfada, uygulama önce sunucu veritabanının son zamandan beri değişip değişmediğini küçük bir istekle kontrol eder ve yalnızca güncel olmayan verileri günceller. Bu küçük istek için bile bir yükleme çemberi göstermek için aşağıdaki seçeneği etkinleştirin.</string>
+  <string name="msg_help_start">Beginner mode is active: Help texts are displayed by default on all pages if available. Tap to change.</string>
+  <string name="msg_help_purchased_date_settings">Aşağıdaki seçenek etkinleştirilirse, satın alma ve envanter sayfasında satın alma tarihi için bir alan gösterilecektir. Aksi takdirde satın alma tarihi varsayılan olarak bugün olur.</string>
+  <string name="msg_help_normal_login">Grocy eklentisiyle Home Assistant\'ı kullanıyorsanız bu karta dokunun.</string>
+  <string name="msg_help_home_assistant_login">Grocy Home Assistant eklentisini kullanıyorsunuz. Bu yüzden biraz daha fazla bilgiye ihtiyacımız var. Bu karta dokunarak normal oturum açmaya dönebilirsiniz.</string>
+  <string name="msg_help_home_assistant_login_help_show">Yardım metinlerini göstermek için buraya dokunun.</string>
+  <string name="msg_help_home_assistant_login_help_hide">Yardım metinlerini gizlemek için buraya dokunun.</string>
+  <string name="msg_help_home_assistant_login_server">Aşağıdaki alana, bu hizmeti kullanıyorsanız Nabu Casa bulut URL\'nizi de girebilirsiniz. Nabu Casa web sitesini ziyaret etmek için bu karta dokunun.</string>
+  <string name="msg_help_home_assistant_login_token">Uzun ömürlü bir erişim token\'ı oluşturmak için Home Assistant profil ayarlarınıza gidin (son bölüm). Yukarıdaki URL\'yi açmak için buraya dokunun.</string>
+  <string name="msg_help_home_assistant_login_proxy_id">Geri dönün veya aşağıdaki alanları dolduran QR kodunu taramak için bu karta dokunun.</string>
+  <string name="msg_help_fab_overview_start">Bu genel bakış sayfasındaki eylem düğmesinin iki eylemi vardır:\n\n- Kısa dokunma: barkod tarayıcısıyla tüket\n- Uzun dokunma: barkod tarayıcısıyla satın al\n\nBu düğmeyle ilgili sayfalardaki hızlı mod varsayılan olarak açılır. Bunu davranış ayarlarından değiştirebilirsiniz.</string>
+  <string name="msg_help_fab_consume_start">Bu sayfadaki eylem düğmesi, verilen değerlere sahip ürünü tüketir. Ürünü açık olarak işaretlemek için menü çubuğunun sol alt kısmındaki düğmeyi kullanın.</string>
+  <string name="msg_share">Muhteşem Grocy projesi için bu Android istemcisine göz atın: \nhttps://github.com/patzly/grocy-android</string>
+
+  <string name="error_api_not_working">API anahtarı çalışmıyor</string>
+  <string name="error_orbot_not_installed">Orbot yüklü değil</string>
+  <string name="error_select_product">Bir ürün seçin</string>
+  <string name="error_empty">Gerekli</string>
+  <string name="error_empty_stock">Stokta hiçbir şey yok</string>
+  <string name="error_empty_stock_sub">Gidip bazı ürünler satın al</string>
+  <string name="error_empty_shopping_list">Alışveriş listesini boşalt</string>
+  <string name="error_empty_shopping_list_sub">İhtiyacın olan bazı ürünleri ekle</string>
+  <string name="error_empty_barcodes_sub">Aşağıdaki barkod butonuyla ekle</string>
+  <string name="error_empty_master_data_sub">Aşağıdaki butonla yarat</string>
+  <string name="error_empty_product_barcodes">Hiç ürün barkodu yok</string>
+  <string name="error_empty_locations">Lokasyon yok</string>
+  <string name="error_empty_product_groups">Ürün grupları yok</string>
+  <string name="error_empty_products">Ürün yok</string>
+  <string name="error_empty_qu">Miktar birimi yok</string>
+  <string name="error_empty_stores">Mağaza yok</string>
+  <string name="error_empty_tasks">Görev yok</string>
+  <string name="error_empty_task_categories">Görev kategorisi yok</string>
+  <string name="error_empty_unit_conversions">Miktar dönüşümü yok</string>
+  <string name="error_empty_chores">Ev işi yok</string>
+  <string name="error_empty_chores_sub">Master veriye gidip oluştur</string>
+  <string name="error_empty_recipes">Tarif yok</string>
+  <string name="error_empty_ingredients">Malzeme yok</string>
+  <string name="error_search">Arama sonucu yok</string>
+  <string name="error_search_sub">Başka terimleri dene</string>
+  <string name="error_filter">Gösterilecek bir şey yok</string>
+  <string name="error_filter_sub">Diğer filtreleri dene</string>
+  <string name="error_duplicate">Zaten mevcut</string>
+  <string name="error_parent">Kendisinin üstü olamaz</string>
+  <string name="error_invalid_product">Geçersiz ürün</string>
+  <string name="error_invalid_url">Geçersiz URL</string>
+  <string name="error_invalid_amount">Geçersiz miktar</string>
+  <string name="error_invalid_price">Geçersiz fiyat</string>
+  <string name="error_invalid_factor">Geçersiz faktör</string>
+  <string name="error_invalid_date_format">Geçersiz tarih formatı</string>
+  <string name="error_api_qr_code">QR Kod, Grocy API anahtarı bilgilerini içermiyor</string>
+  <string name="error_token_qr_code">QR Kod, Home Assistant uzun ömürlü erişim anahtarı bilgileri içermiyor</string>
+  <string name="error_loading_qus">Ürünün miktar birimi yüklenemedi</string>
+  <string name="error_clipboard_no_image">Pano resim içermiyor ya da okunabilir değil</string>
+  <string name="error_no_children">Seçili ürünün çocuğu yok</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_amount_equal_stock">Şu numaraya eşit olamaz: %1$s</string>
+  <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
+  <string name="error_bounds_min_max">%1$s ve %2$s arasında olmak zorunda</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_bounds_min">Şu miktardan büyük olmalı: %1$s</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_bounds_max">Şu miktara eşit, ya da daha az olmalıdır: %1$s</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_bounds_higher">Şu miktardan büyük olmalı: %1$s</string>
+  <string name="error_offline">Çevrimdışı</string>
+  <string name="error_offline_subtitle">Bu sayfa sadece internet bağlantısı olduğunda çalışır. Lütfen bağlantınızı kontrole din.</string>
+  <string name="error_no_done_items">Tamamlandı olarak işaretlenen bir öğe yok</string>
+  <string name="error_auto_sync_disabled">Otomatik senkronizasyon devre dışı bırakıldı</string>
+  <string name="error_already_exists">Zaten mevcut</string>
+  <string name="error_network">Ağ hatası</string>
+  <string name="error_network_subtitle">Gerekli veri doğru bir şekilde yüklenemedi</string>
+  <string name="error_network_exact">Ağ hatası: %1$s</string>
+  <string name="error_database">Veritabanı hatası</string>
+  <string name="error_insert">Hata: %1$s</string>
+  <string name="error_details">Hata ayrıntıları</string>
+  <string name="error_unknown">Hay aksi!</string>
+  <string name="error_not_grocy_instance">Geçerli bir Grocy istemcisi değil</string>
+  <string name="error_timeout">Zamanaşımı hatası</string>
+  <string name="error_no_product_selected">Hiç ürün seçilmedi</string>
+  <string name="error_failed_to_connect_to">Sunucuya bağlantı başarısız</string>
+  <string name="error_missing_information">Gerekli alanlar doldurulmadı</string>
+  <string name="error_handshake">Geçersiz sertifika</string>
+  <string name="error_handshake_description">Bu sunucu, Android tarafından bilinmeyen veya güvenilmeyen bir sertifika gerektiriyor.\nSunucu sertifikası, güvenilir bir sertifika yetkilisi (ör. letsencrypt.org) tarafından imzalanmış veya bu cihazın Android kullanıcı sertifika deposunda saklanmış olmalıdır.</string>
+  <string name="error_unexpected_response_code">Beklenmeyen cevap kodu</string>
+  <string name="error_unexpected_response">Beklenmeyen sunucu cevabı</string>
+  <string name="error_no_browser">Yardım sitesini görüntülemek için bir web tarayıcısı yükleyin</string>
+  <string name="error_barcode_not_linked">Barkod herhangi bir ürüne bağlı değil</string>
+  <string name="error_no_product_details">Ürün ayrıntıları alınamadı</string>
+  <string name="error_failed_barcode_upload">Barkod karşıya yüklenemedi</string>
+  <string name="error_wrong_grocycode_type">grocycode hatalı giriş tipi içeriyor</string>
+  <string name="error_stock_entry_grocycode">grocycode\'dan stok girdisi bulunamadı</string>
+  <string name="error_picture_uploads_forbidden">Güvenlik nedeniyle, resim yüklemeye yalnızca kendi barındırdığınız sunucularda izin verilir. Şu anda demo örneğini kullanıyorsunuz.</string>
+  <string name="error_permission">Bu işlemi gerçekleştirme yetkiniz yok</string>
+  <string name="error_permission_notification">Hatırlatıcıların çalışması için bildirimlere izin vermeniz gerekli</string>
+  <string name="error_undefined">Bir hata oluştu</string>
+  <string name="error_invalid_base_servings">Porsiyon geçersiz</string>
+  <string name="error_pictures_size_exceeds_limit">Sunucunuzdaki ürün veya tarif açıklamalarında bu uygulamanın ayrıştırma sınırını aşan gömülü resimler var. Lütfen açıklamalarınızdan yüksek kaliteli ve büyük boyutlu resimleri kaldırın, bu aynı zamanda veri yüklemesini de hızlandıracaktır.</string>
+  <string name="error_userfield_type_not_supported">Kullanıcı alanı türü şu anda desteklenmiyor</string>
+  <string name="error_open_product_not_supported">Ürünü açık olarak işaretleme özelliği bu ürün için desteklenmiyor</string>
+  <string name="error_settings_backup">Yedekleme başarısız oldu</string>
+  <string name="error_settings_restore">Geri yükleme başarısız oldu</string>
+
+  <string name="title_overview">Göz at</string>
+  <string name="title_stock_overview">Stoklara göz at</string>
+  <string name="title_purchase">Satın Al</string>
+  <string name="title_consume">Tüket</string>
+  <string name="title_transfer">Transfer Et</string>
+  <string name="title_inventory">Envanter</string>
+  <string name="title_barcode_input">Barkod girişi</string>
+  <string name="title_product_overview">Ürüne göz at</string>
+  <string name="title_product">Ürün</string>
+  <string name="title_product_create">Ürün yarat</string>
+  <string name="title_product_edit">Ürünü düzenle</string>
+  <string name="title_tasks">Görevler</string>
+  <string name="title_task_entry">Görev girişi</string>
+  <string name="title_master_data">Master veri</string>
+  <string name="title_stock_entries">Stok girişleri</string>
+  <string name="title_stock_entry">Stok girişi</string>
+  <string name="title_stock_journal">Stok günlüğü</string>
+  <string name="title_shopping_list">Alışveriş listesi</string>
+  <string name="title_feedback">Geribildirim</string>
+  <string name="title_settings">Ayarlar</string>
+  <string name="title_options">Seçenekler</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="title_barcode_scanner">Barkod okuyucu</string>
+  <!-- Context: About this app -->
+  <string name="title_about">Hakkında</string>
+  <string name="title_info">Bilgi</string>
+  <string name="title_help">Yardım</string>
+  <string name="title_logs">Günlük kayıtları</string>
+  <string name="title_compatibility">Uyumluluk sorunları</string>
+  <string name="title_logout">Grocy oturumunu kapat?</string>
+  <string name="title_restart">Grocy\'i yeniden başlat?</string>
+  <string name="title_logout_demo">Deneme modu oturumunu kapat?</string>
+  <string name="title_manage_master_data">Master veriyi yönet</string>
+  <string name="title_edit_description">Açıklamayı değiştir</string>
+  <!-- This is the header of a bottom sheet which is used to get numbers or text from the user. -->
+  <string name="title_input">Girdi</string>
+  <string name="title_external_barcode_input">Harici okuyucu</string>
+  <string name="title_confirmation">Onay</string>
+  <string name="title_choose_product">Ürün seçin</string>
+  <string name="title_pending_products">Bekleyen ürünler</string>
+  <string name="title_stored_purchases">Kaydedilen alışverişler</string>
+  <string name="title_chores">Ev işleri</string>
+  <string name="title_chore">Ev işi</string>
+  <string name="title_recipes">Tarifler</string>
+  <string name="title_meal_plan">Yemek planı</string>
+  <!-- Editor for editing product description or recipe preparation-->
+  <string name="title_editor">Düzenleyici</string>
+  <string name="title_task_new">Yeni görev</string>
+  <string name="title_task_edit">Görevi düzenle</string>
+  <string name="title_entry_new">Yeni giriş</string>
+  <string name="title_entry_edit">Girişi düzenle</string>
+  <string name="title_ingredient_new">Yeni içerik</string>
+  <string name="title_ingredient_edit">İçeriği düzenle</string>
+  <string name="title_recipe_create">Yeni tarif</string>
+  <string name="title_recipe_edit">Tarifi düzenle</string>
+
+  <string name="title_spoiled">Bozulmuş</string>
+  <string name="title_use_specific">Belirli bir stok öğesi kullan</string>
+  <string name="title_specific">Belirlenen stok öğesi</string>
+  <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_exact_amount">Tam bu kadar tüket</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_from">Buradan</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_to">Buraya</string>
+  <string name="title_recipe">Tarif</string>
+  <string name="title_preparation_mode">Hazırlama modu</string>
+  <string name="title_total_price">Toplam fiyat</string>
+  <string name="title_unit_price">Birim fiyat</string>
+  <!-- %1$s is a quantity unit -->
+  <string name="title_unit_price_specific">%1$s fiyatı</string>
+  <string name="title_stock_entry_no_specific">Belirli bir giriş yok</string>
+  <string name="title_list_entry">Giriş listele</string>
+  <string name="title_edit_barcode">Barkodu düzenle</string>
+  <string name="title_create_barcode">Barkod oluştur</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_edit_qu_conversion">MÖ dönüşümünü düzenle</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_create_qu_conversion">MÖ dönüşümü yarat</string>
+  <string name="title_shopping_list_edit">Alışveriş listesini düzenle</string>
+  <string name="title_shopping_list_new">Yeni alışveriş listesi</string>
+  <string name="title_shopping_mode">Alışveriş modu</string>
+  <string name="title_batch_mode_shopping_list">Toplu alışveriş listesi modu</string>
+  <string name="title_product_cat_optional">İsteğe bağlı seçenekler</string>
+  <string name="title_product_cat_location">Varsayılan lokasyon</string>
+  <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_product_cat_due_date">SKT</string>
+  <string name="title_product_cat_amount">Miktar</string>
+  <string name="title_product_cat_quantity_unit">Miktar ölçüsü</string>
+  <string name="title_notifications">Bildirimler</string>
+  <string name="title_product_cat_barcodes">Barkodlar</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_product_cat_qu_conversions">MÖ dönüşümleri</string>
+  <string name="title_unknown_input">Bilinmeyen giriş</string>
+  <string name="title_presets_new_products">Yeni ürünler için varsayılanlar</string>
+  <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
+  <string name="title_ingredient_with_amount">%3$s adet %2$s , şu kadarı: %1$s  </string>
+
+  <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
+  <string name="subtitle_amount">%1$s adet %2$s</string>
+  <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
+  <string name="subtitle_opened">(açılmış)</string>
+  <!-- %1$s is a number like 1, 2, 3 -->
+  <string name="subtitle_amount_opened">(%1$s adet açılmış)</string>
+  <!-- %1$s is a product name -->
+  <string name="subtitle_stock_locations">Stokta %1$s olan</string>
+  <string name="subtitle_none_selected">Hiç seçim yapılmadı</string>
+  <!-- Should follow the equality between 'None' and 'None selected' -->
+  <string name="subtitle_none">Hiç</string>
+  <string name="subtitle_empty">Boş</string>
+  <string name="subtitle_done">Tamam</string>
+  <string name="subtitle_undone">Tamamlanmamış</string>
+  <string name="subtitle_uncategorized">Kategorilenmemiş</string>
+  <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="subtitle_never_overdue">Son tüketim tarihi yok. (Ürün bozulmaz)</string>
+  <string name="subtitle_selected">Seçili</string>
+  <string name="subtitle_stock_entry_no_specific">Önce açık olan, sonra SKT\'si yakın olan, sonra ilk giren ilk çıkar</string>
+  <!-- %1$s is a purchase date -->
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="subtitle_stock_entry_name">%1$s satın alındı </string>
+  <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened); The same string is also in the web interface: Consume form -->
+  <string name="subtitle_stock_entry">%1$s son tarihi; miktar: %2$s;%3$s</string>
+  <!-- %1$s and %2$s are numbers -->
+  <string name="subtitle_entry_num_of_num">Giriş %1$d / %2$d</string>
+  <!-- %1$s is an amount, %2$s is a quantity unit -->
+  <string name="subtitle_amount_compare">Bu ürün %1$s%2$s eder.</string>
+  <!-- %1$s is a price, %2$s is a quantity unit -->
+  <string name="subtitle_price_means">%2$s başına %1$s demektir.</string>
+  <!-- %1$s and %2$s are amounts -->
+  <string name="subtitle_factor_means">%1$s ve %2$s aynıdır.</string>
+  <string name="subtitle_product_hidden">Gizlenmiş ürün</string>
+  <string name="subtitle_product_not_hidden">Ürün gizli değil</string>
+  <string name="subtitle_product_not_on_server">Ürün sunucuda değil</string>
+
+  <string name="subtitle_barcodes_will_be_added">Ürüne kaydetme işlemi ile eklenen kayıtlı barkodlar bulunmaktadır.</string>
+  <string name="subtitle_unknown">Bilinmeyen</string>
+  <!-- Like the word 'supported' from 'This version is supported.'-->
+  <string name="subtitle_supported">Desteklenen</string>
+  <!-- Like the words 'not supported' from 'This version is not supported.'-->
+  <string name="subtitle_not_supported">Desteklenmiyor</string>
+  <!-- %1$s is a number -->
+  <string name="subtitle_barcode_amount">Miktar: %1$s</string>
+  <!-- %1$s is a unit -->
+  <string name="subtitle_barcode_unit">Miktar birimi: %1$s</string>
+  <string name="subtitle_barcode">Barkod: %1$s</string>
+  <string name="subtitle_feature_disabled">Özellik devre dışı bırakıldı</string>
+  <string name="subtitle_date_from_input">Giriş tarihi:\n%1$s</string>
+  <string name="subtitle_product_amount">Min. stok, Hızlı tüketim, Faktör, Tara ağırlık yönetimi</string>
+  <string name="subtitle_product_default_location">Konum, Mağaza</string>
+  <string name="subtitle_product_due_date">Tür, Varsayılan günler (açıldıktan, dondurulduktan, çözüldükten sonra)</string>
+  <string name="subtitle_product_optional_properties">Durum, Ana ürün, Açıklama, Ürün grubu, Enerji, Resim</string>
+  <string name="subtitle_product_quantity_unit">Stok, Satınalma varsayılanı</string>
+  <string name="subtitle_synced_with_server">Sunucuyla senkronize edildi</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
+  <string name="subtitle_recipe_due_score">Son skor: %1$s</string>
+  <string name="subtitle_per_serving">porsiyon başına</string>
+  <string name="subtitle_tap_preparation_mode">Hazırlık modu için buraya dokunun</string>
+  <!-- Context is Label printer -->
+  <string name="subtitle_print_label_no">Etiket yok</string>
+  <!-- Short form for "One label per purchase" -->
+  <string name="subtitle_print_label_per_purchase">Satın alma başına</string>
+  <!-- Short form for "One label per unit" -->
+  <string name="subtitle_print_label_per_unit">Birim başına</string>
+  <!-- %1$s is a price and %2$s is a currency -->
+  <string name="subtitle_total_price">Toplam fiyat:%1$s%2$s</string>
+
+  <string name="description_input_product_part1">Ürün alanı şunları içerir:</string>
+  <string name="description_input_product_part2">Lütfen nasıl devam edeceğinizi seçin:</string>
+  <string name="description_input_product_option1">Yeni ürün oluştur ve girdiyi isim olarak kullan</string>
+  <string name="description_input_product_option2">Yeni ürün oluştur ve girdiyi barkod olarak kullan</string>
+  <string name="description_input_product_option3">Mevcut ürüne barkod olarak ekle</string>
+  <!-- Context: Clear shopping list -->
+  <string name="description_clear_shopping_list_option1">Yalnızca tamamlanmış ürünlerisil</string>
+  <!-- Context: Clear shopping list -->
+  <string name="description_clear_shopping_list_option2">Tüm öğeleri sil</string>
+
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock">
+    <item quantity="one">Stokunuzda %1$d adet ürün bulunmaktadır.</item>
+    <item quantity="other">Stokunuzda %1$d adet ürün bulunmaktadır.</item>
+  </plurals>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="description_overview_stock_due_soon">
+    <item quantity="one">%1$d ürünün %2$d gün içerisinde tüketilmesi gerekiyor.</item>
+    <item quantity="other">%1$d ürünün %2$d gün içerisinde tüketilmesi gerekiyor.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_overdue">
+    <item quantity="one">%1$d ürünün tavsiye edilen tüketim tarihi geçmiş.</item>
+    <item quantity="other">%1$d ürünün tavsiye edilen tüketim tarihi geçmiş.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_expired">
+    <item quantity="one">%1$dürünün son tüketim tarihi geçmiş.</item>
+    <item quantity="other">%1$dürünün son tüketim tarihi geçmiş.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing">
+    <item quantity="one">%1$d ürün belirlenen minimum stok miktarının altındadır.</item>
+    <item quantity="other">%1$d ürün belirlenen minimum stok miktarının altındadır.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing_shopping_list_single">
+    <item quantity="one">Ürünlerin %1$d tanesi alışveriş listenizde yer alıyor.</item>
+    <item quantity="other">Ürünlerin %1$dtanesi alışveriş listenizde yer alıyor.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing_shopping_list_multi">
+    <item quantity="one">Ürünlerin %1$d tanesi alışveriş listenizde yer alıyor.</item>
+    <item quantity="other">Ürünlerin %1$dtanesi alışveriş listenizde yer alıyor.</item>
+  </plurals>
+  <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
+  <plurals name="description_overview_stock_value">
+    <item quantity="one">Stoğunuzdaki %1$d ürünün toplam değeri %2$s %3$s.</item>
+    <item quantity="other">Stoğunuzdaki %1$d ürünün toplam değeri %2$s%3$s.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_shopping_list_multi">
+    <item quantity="one">%1$d ürün alışveriş listesinizde.</item>
+    <item quantity="other">%1$d ürün alışveriş listesinizde.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_shopping_list">
+    <item quantity="one">%1$d ürün alışveriş listesinizde.</item>
+    <item quantity="other">%1$d ürün alışveriş listesinizde.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_recipes">
+    <item quantity="one">%1$d tarifiniz var.</item>
+    <item quantity="other">%1$d tarifiniz var.</item>
+  </plurals>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="description_overview_chores_due_soon">
+    <item quantity="one">Önümüzdeki %1$d gün içerisinde %2$d işin tamamlanması gerekiyor.</item>
+    <item quantity="other">Önümüzdeki %1$d gün içerisinde %2$d işin tamamlanması gerekiyor.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_overdue">
+    <item quantity="one">Yapılması gereken %1$d iş gecikti.</item>
+    <item quantity="other">Yapılması gereken %1$d iş gecikti.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_due_today">
+    <item quantity="one">Bugün yapılması gereken %1$d iş var.</item>
+    <item quantity="other">Bugün yapılması gereken %1$d iş var.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_assigned">
+    <item quantity="one">%1$d adet görev atandı.</item>
+    <item quantity="other">%1$d adet görev atandı.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_tasks">
+    <item quantity="one">Tamamlanması gereken %1$d adet görev var.</item>
+    <item quantity="other">Tamamlanması gereken %1$d adet görev var.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_tasks_user">
+    <item quantity="one">%1$d görev atandı.</item>
+    <item quantity="other">%1$d görev atandı.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_master_data">
+    <item quantity="one">Veritabanınız %1$d ürün içerir.</item>
+    <item quantity="other">Veritabanınız %1$d ürün içerir.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="error_max_decimal_places">
+    <item quantity="one">Max. %1$s ondalık basamak</item>
+    <item quantity="other">Max. %1$s ondalık basamak</item>
+  </plurals>
+
+  <string name="property_name">İsim</string>
+  <string name="property_name_singular">İsim (tekil form)</string>
+  <string name="property_name_plural">İsim (çoğul hali)</string>
+  <string name="property_product">Ürün</string>
+  <string name="property_products">Ürünler</string>
+  <string name="property_product_name">Ürün adı</string>
+  <string name="property_parent_product">Ana ürün</string>
+  <string name="property_description">Açıklama</string>
+  <string name="property_product_description">Ürün Açıklaması</string>
+  <string name="property_note">Not</string>
+  <string name="property_status">Durum</string>
+  <string name="property_status_insert">Durum:</string>
+  <string name="property_amount">Miktar</string>
+  <string name="property_amount_insert">Miktar: %1$s</string>
+  <string name="property_seconds">Saniye</string>
+  <!-- %1$s is a number (amount of seconds) -->
+  <plurals name="property_seconds_num">
+    <item quantity="one">%1$d saniye</item>
+    <item quantity="other">%1$d saniye</item>
+  </plurals>
+  <string name="property_amount_min_stock">Min. stok miktarı</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_in">Amount in %1$s</string>
+  <string name="property_price">Fiyat</string>
+  <string name="property_price_average">Ortalama fiyat</string>
+  <!-- %1$s is a quantity unit-->
+  <string name="property_price_unit">Fiyat başına %1$s</string>
+  <!-- %1$s is a price and %2$s is a quantity unit-->
+  <string name="property_price_unit_insert">%2$s başına %1$s</string>
+  <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_with_currency">%1$s adet %2$s</string>
+  <!-- %1$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_in">%1$s cinsinden fiyat</string>
+  <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_unit_in">%1$s başına fiyat %2$s cinsinden</string>
+  <string name="property_quantity_unit">Miktar ölçüsü</string>
+  <string name="property_quantity_units">Miktar birimleri</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_default_qu_purchase">Varsayılan satın alma miktar birimi</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_stock">Adet birim stok</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_factor">Satın alma birimini stok miktar birimine çevirme faktörü</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_default_qu_consume">Varsayılan miktar birimi tüket</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_prices">Fiyat için miktar birimi</string>
+  <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
+  <string name="property_quantity_unit_from">Den Dönüştür</string>
+  <!-- Example: "Convert to cup"; This string is part of a pair, there is also 'Convert from' -->
+  <string name="property_quantity_unit_to">E dönüştür</string>
+  <string name="property_factor">Faktör</string>
+  <string name="property_barcode">Barkod</string>
+  <string name="property_barcodes">Barkodlar</string>
+  <string name="property_barcodes_insert">Barkodlar: %1$s</string>
+  <string name="property_days">Günler</string>
+  <string name="property_purchased_date">Satın alma tarihi</string>
+  <string name="property_purchased_date_fill">Satın alma tarihi: %1$s</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_date_type">Son tarih türü</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_type_best_before">Tavsiye edilen tüketim tarihi</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_type_expiration">Son tüketim tarihi</string>
+  <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_date">SKT</string>
+  <!-- This string is for due date of task -->
+  <string name="property_due_date_task">SKT</string>
+  <!-- %1$s is a due date-->
+  <string name="property_due_date_fill">Son tarih: %1$s</string>
+  <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_date_next">Sonraki son tarih</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_days_default">Varsayılan son tarih</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_days_default_opened">Açıldıktan sonraki varsayılan vade günü</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_days_default_freezing">Dondurulduktan sonraki varsayılan vade günü</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_days_default_thawing">Çözünme sonrasındaki varsayılan vade günleri</string>
+  <string name="property_day_summary">Günün özeti</string>
+  <string name="property_location">Konum</string>
+  <string name="property_location_insert">Konum: %1$s</string>
+  <string name="property_location_default">Varsayılan lokasyon</string>
+  <string name="property_location_default_insert">Varsayılan lokasyon: %1$s</string>
+  <string name="property_location_consume_default">Varsayılan tüketim konumu</string>
+  <string name="property_move_on_open">Açıldığında taşı</string>
+  <string name="property_notes">Notlar</string>
+  <string name="property_locations">Konumlar</string>
+  <string name="property_store">Mağaza</string>
+  <string name="property_store_insert">Mağaza: %1$s</string>
+  <string name="property_store_unknown">Bilinmeyen mağaza</string>
+  <string name="property_store_default">Varsayılan mağaza</string>
+  <string name="property_stores">Mağazalar</string>
+  <string name="property_shopping_list">Alışveriş listesi</string>
+  <string name="property_shopping_lists">Alışveriş listeleri</string>
+  <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_last_purchased">Son satın alınan</string>
+  <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_last_used">Son kullanılan</string>
+  <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_last_price">Son fiyat</string>
+  <string name="property_last_price_unit">Son fiyat (birim)</string>
+  <string name="property_last_price_total">Son fiyat (toplam)</string>
+  <string name="property_price_insert">Fiyat: %1$s</string>
+  <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_average_shelf_life">Ortalama raf ömrü</string>
+  <string name="property_spoil_rate">Atık oranı</string>
+  <string name="property_created_timestamp">Oluşturulma zamanı</string>
+  <string name="property_price_history">Fiyat geçmişi</string>
+  <string name="property_product_group">Ürün grubu</string>
+  <string name="property_product_groups">Ürün grupları</string>
+  <string name="property_assignment">Atama</string>
+  <string name="property_value">Değer</string>
+  <string name="property_stock_value">Stok değeri</string>
+  <string name="property_opened">açılmış</string>
+  <string name="property_not_opened">açılmamış</string>
+  <string name="property_is_freezer">Dondurulacak mı</string>
+  <!-- Means energy of an ingredient or product -->
+  <string name="property_energy_only">Enerji</string>
+  <!-- %1$s is a unit for energy, like kcal (kilo calories) -->
+  <string name="property_energy_insert">Kalori (%1$s) birim başına</string>
+  <string name="property_active">Aktif</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_never_show">Stok genel bakışında asla gösterilmez</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_disable_own_stock">Kendi stokunu devre dışı bırak</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_should_not_be_frozen">Dondurulmamalıdır</string>
+  <string name="property_number">Sayı</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_enable_tare_weight">Dara ağırlığının işlenmesini etkinleştir</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_tare_weight">Dara ağırlığı</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_tare_weight_in">%1$s dara ağırlığı</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_disable_stock_check">Bu içerik için stok karşılama kontrolünü devre dışı bırakın</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_amount_quick_consume">Hızlı tüketim miktarı</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_quick_consume_in">%1$s için hızlı tüketim miktarı</string>
+  <!--The same string is also in the web interface (server v4.0.0 or later): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_amount_quick_open">Hızlı açılış miktarı</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_quick_open_in">%1$s için hızlı açılan miktar</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_accumulate_amount">Alt ürünleri minimum stok miktarı kadar biriktirin</string>
+  <string name="property_picture">Resim</string>
+  <string name="property_note_singleline">Tek satırlık not</string>
+  <string name="property_note_multiline">Çoklu satırlı not</string>
+  <!-- like the words 'Single-line' in 'Single-line description'-->
+  <string name="property_singleline">Tek satır</string>
+  <!-- like the words 'Multi-line' in 'Multi-line description'-->
+  <string name="property_multiline">Çoklu satır</string>
+  <!-- %1$s is an amount together with quantity unit -->
+  <string name="property_in_stock">Stokta: %1$s</string>
+  <!-- %1$s is a sort mode like "name" or "due date" -->
+  <string name="property_sort_mode">Sort: %1$s</string>
+  <!-- %1$s is a grouping mode like "product group" or "due date" -->
+  <string name="property_group_by">Grupla: %1$s</string>
+  <string name="property_ungrouped">Gruplandırılmamış</string>
+  <!-- %1$s is a property like "product group" or "due date" -->
+  <string name="property_extra_field">Ekstra alan: %1$s</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields">Alanlar</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_header">Alanlar (başlık)</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_entries">Alanlar (girişler)</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value">%1$s : %2$s</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value_without_space">%1$s : %2$s</string>
+  <string name="property_task_category">Görev kategorisi</string>
+  <string name="property_task_categories">Görev kategorileri</string>
+  <string name="property_calories">Kalori</string>
+  <string name="property_calories_unit">Kalori (birim)</string>
+  <string name="property_calories_total">Kalori (toplam)</string>
+  <!-- %1$s is a value like energy or price, unit means value of items per unit -->
+  <string name="property_insert_per_unit">%1$s (birim)</string>
+  <!-- %1$s is a value like energy or price, total means value of many items in total -->
+  <string name="property_insert_total">%1$s (toplam)</string>
+  <!-- %1$s is a value like price, average means average price -->
+  <string name="property_insert_average">%1$s (ortalama)</string>
+  <!-- %1$s is a value like price, "last" is like for example in "last price" -->
+  <string name="property_insert_last">%1$s (son)</string>
+  <string name="property_category">Kategori</string>
+  <string name="property_assigned_to">Atandı</string>
+  <string name="property_users">Kullanıcılar</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
+  <string name="property_last_done_by">Son tamamlayan</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
+  <string name="property_last_tracked">Son izlenen</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
+  <string name="property_tracked_count">Takip edilen sayım</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
+  <string name="property_average_execution_frequency">Ortalama yürütme sıklığı</string>
+  <!-- See context for this string on the web interface on the chores page, the table has this column -->
+  <string name="property_next_estimated_tracking">Sonraki tahmini takip</string>
+  <string name="property_next_estimated_tracking_time">Sonraki tahmini takip süresi</string>
+  <!-- See context for this string on the web interface on the recipes edit page -->
+  <string name="property_servings">Porsiyonlar</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it (hover over help icon) -->
+  <string name="property_servings_base_insert">Temel porsiyonlar: %1$s</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_servings_desired">İstenilen porsiyonlar</string>
+  <string name="property_servings_desired_insert">İstenilen porsiyon: %1$s</string>
+  <string name="property_not_check_shopping_list">Alışveriş listesine göre kontrol etmeyin</string>
+  <string name="property_not_check_shopping_list_description">Eksik öğeleri eklerken</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_preparation">Hazırlık</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_costs">Maliyetler</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs">Haftalık maliyet</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs_insert">Haftalık maliyet: %1$s</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
+  <string name="property_due_score">Son skor</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_ingredients">İçindekiler</string>
+  <string name="property_only_check_single_unit_in_stock">Sadece stokta herhangi bir miktar olup olmadığını kontrol edin</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
+  <string name="property_ingredient_group">Grup</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
+  <string name="property_variable_amount">Değişken miktar</string>
+  <string name="property_requirements_fulfilled">Gereksinimler yerine getirildi</string>
+  <string name="property_produces_product">Ürün üretir</string>
+  <string name="property_price_factor">Fiyatı</string>
+
+  <string name="date_today">Bugün</string>
+  <string name="date_unknown">Bilinmeyen</string>
+  <!-- This means the 'time' context -->
+  <string name="date_unlimited">Limitsiz</string>
+  <!-- This means the 'time' context, like 'Last used date: Never' -->
+  <string name="date_never">Hiçbir zaman</string>
+  <!-- %1$s is 'from' date, %2$s is 'to' date -->
+  <string name="date_timespan">%1$s - %2$s</string>
+
+  <plurals name="date_days">
+    <item quantity="one">%d gün</item>
+    <item quantity="other">%d gün</item>
+  </plurals>
+  <plurals name="date_months">
+    <item quantity="one">%d ay</item>
+    <item quantity="other">%d ay</item>
+  </plurals>
+  <plurals name="date_years">
+    <item quantity="one">%d yıl</item>
+    <item quantity="other">%d yıl</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_days_ago">
+    <item quantity="one">%d gün önce</item>
+    <item quantity="other">%d gün önce</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_months_ago">
+    <item quantity="one">%day önce</item>
+    <item quantity="other">%d ay önce</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_years_ago">
+    <item quantity="one">%d yıl önce</item>
+    <item quantity="other">%d yıl önce</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_days_from_now">
+    <item quantity="one">%d gün sonra </item>
+    <item quantity="other">%d gün sonra</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_months_from_now">
+    <item quantity="one">%d ay sonra</item>
+    <item quantity="other">%d ay sonra</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_years_from_now">
+    <item quantity="one">%d yıl sonra</item>
+    <item quantity="other">%d yıl sonra</item>
+  </plurals>
+
+  <string name="info_acknowledgement">Bu uygulamanın ortaya çıkması için Grocy\'nin geliştiricisi Bernd Bestel\'e teşekkür etmek istiyoruz. Onun harika çalışmaları olmasaydı bu uygulama asla mümkün olmazdı.</string>
+  <string name="info_intro">Girişi tekrar oynat</string>
+  <string name="info_intro_description">Gösterilen özellikler</string>
+  <string name="info_dev_beginning">Geliştirmenin başlangıcı</string>
+  <string name="info_dev_beginning_date">Nisan 2020</string>
+  <string name="info_version">Versiyon</string>
+  <string name="info_grocy_version">Grocy versiyonu</string>
+  <string name="info_changelog">Değişiklik Günlüğü</string>
+  <string name="info_changelog_description">Yeni ne var?</string>
+  <string name="info_developers">Geliştiriciler</string>
+  <string name="info_github">GitHub\'da Grocy Android</string>
+  <string name="info_github_description">Kaynak kodu</string>
+  <string name="info_website">Grocy web sitesini açın</string>
+  <string name="info_translation_description">Grocy Android\'i çevirmeye yardım et =P</string>
+  <string name="info_privacy">Gizlilik Politikası</string>
+  <string name="info_privacy_description">Verileriniz nasıl işleniyor?</string>
+
+  <string name="feature_1_title">Android için Grocy</string>
+  <string name="feature_1_description">Eviniz için kişisel market yönetimi</string>
+  <string name="feature_2_title">Sezgisel tasarım</string>
+  <string name="feature_2_description">Tek bir kaydırmayla açın ve tüketin</string>
+  <string name="feature_3_title">Güçlü toplu işleme</string>
+  <string name="feature_3_description">Tüm satın alma işlemlerinizi saniyeler içinde tarayın</string>
+
+  <string name="category_licenses">Açık kaynak lisansları</string>
+  <string name="category_general">Genel</string>
+  <string name="category_stock">Stok</string>
+  <string name="category_server">Sunucu</string>
+  <string name="category_user_settings">Kullanıcı ayarları</string>
+  <string name="category_scanner">Scanner</string>
+  <string name="category_scanner_camera">Kamera scanner</string>
+  <string name="category_scanner_external">Harici okuyucu</string>
+  <string name="category_appearance">Görünüm</string>
+  <string name="category_network">Ağ</string>
+  <string name="category_network_proxy">Proxy</string>
+  <string name="category_behavior">Davranış</string>
+  <string name="category_display_behavior">Davranışı görüntüle</string>
+  <string name="category_input_behavior">Giriş davranışı</string>
+  <string name="category_additional_services">Ek hizmetler</string>
+  <string name="category_other_behavior">Diğer davranış</string>
+  <string name="category_debugging">Hata ayıklama</string>
+  <string name="category_new_product">Yeni ürün</string>
+  <string name="category_existing_products">Mevcut ürünler</string>
+  <string name="category_existing_products_similar">Benzer mevcut ürünler</string>
+
+  <string name="hint_server">Sunucu URL\'si</string>
+  <string name="hint_key">Geçerli API anahtarı</string>
+
+  <string name="setting_theme">Tema</string>
+  <string name="setting_theme_description">Başka bir görünüm deneyin</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system (automatic or shorter auto) theme. The button width should be as dense as possible. -->
+  <string name="setting_theme_auto">Otomatik</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_dark">Koyu</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_light">Açık </string>
+  <string name="setting_contrast">Kontrast</string>
+  <string name="setting_contrast_description">Görüşünüz için erişilebilirlik</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast. The button width should be as dense as possible. -->
+  <string name="setting_contrast_standard">Standart</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_medium">Orta</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_high">Yüksek</string>
+  <string name="setting_contrast_dynamic">Cihaz teması için kontrastın sistem ayarlarında ayarlanması gerekir</string>
+  <string name="setting_contrast_dynamic_unsupported">Cihaz teması için dinamik kontrast yalnızca Android 14+ sürümlerinde kullanılabilir</string>
+  <string name="setting_language">Dil</string>
+  <string name="setting_language_description">Dil seçin</string>
+  <string name="setting_language_info">Transifex\'teki tüm gönüllü çevirmenlere çok teşekkür ederiz!\nGrocy Android\'i kendi diliniz için nasıl kullanılabilir hale getirebileceğinizi öğrenmek için lütfen GitHub\'ı ziyaret edin.</string>
+  <string name="setting_language_system">Sistem varsayılan</string>
+  <string name="setting_language_not_available">Çeviri mevcut değilse İngilizce</string>
+  <string name="setting_open_food_facts">Açık Gıda Bilgileri ve Açık Güzellik Bilgileri\'ni kullanın</string>
+  <string name="setting_open_food_facts_description">Barkodlardan bilgi alın</string>
+  <string name="setting_choose_barcode_scanner">Barkod tarayıcıyı seçin</string>
+  <string name="setting_choose_barcode_scanner_description">Kamera barkod taraması için</string>
+  <string name="setting_use_front_cam">Ön kamerayı kullan</string>
+  <string name="setting_use_front_cam_description">Barkod tarama için</string>
+  <string name="setting_use_2d_scanner_format">2D barkod tarayıcı formatını kullanın</string>
+  <string name="setting_use_2d_scanner_format_description">QR kodları için kare şekli</string>
+  <string name="setting_barcode_formats">Barkod formatları</string>
+  <!-- %1$s are barcode formats -->
+  <string name="setting_barcode_formats_description">Sınırla: %1$s</string>
+  <string name="setting_barcode_formats_description_all">Kısıtlama yok</string>
+  <string name="setting_external_support">Harici scanner desteği</string>
+  <string name="setting_external_support_description">USB veya Bluetooth ile</string>
+  <string name="setting_reload_config">Yapılandırmayı yeniden yükle</string>
+  <string name="setting_reload_config_description">Uygulamanın yeniden başlatılması gerekiyor</string>
+  <string name="setting_logout">Oturumu sonlandır</string>
+  <string name="setting_logout_description">Login sayfasına geri dön</string>
+  <string name="setting_manage_shortcuts">Kısayolları yönet</string>
+  <string name="setting_list_indicator">Liste girişini göster</string>
+  <string name="setting_list_indicator_description">Ürün bir alışveriş listesindeyse mavi nokta göster</string>
+  <string name="setting_shopping_mode_update_interval">Alışveriş modu güncelleme aralığı</string>
+  <string name="setting_keep_screen_on">Ekranı açık tut</string>
+  <string name="setting_keep_screen_on_description">Alışveriş modundayken</string>
+  <string name="setting_show_done_items">Tamamlanan öğeleri göster</string>
+  <string name="setting_show_done_items_description">Altta</string>
+  <string name="setting_smaller_font">Daha küçük yazı tipi kullan</string>
+  <string name="setting_smaller_font_description">Daha fazla öğeyi aynı anda görmek için</string>
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="setting_due_soon_days">Çok yakında</string>
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="setting_default_amount_purchase">Satın alma için varsayılan tutar</string>
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="setting_default_amount_consume">Tüketim için varsayılan miktar</string>
+  <string name="setting_treat_opened_as_out_of_stock">Açılmış ürünü stokta yok olarak kabul et</string>
+  <string name="setting_purchased_date">Satın alma tarihini sor</string>
+  <string name="setting_purchased_date_description">Satın alma ve envanter sayfasında</string>
+  <string name="setting_use_quick_consume_amount">Ürünün \"Hızlı tüketim miktarı\"nı kullanın</string>
+  <string name="setting_auto_add_shopping_list">Ürünleri otomatik olarak alışveriş listesine ekle</string>
+  <string name="setting_auto_add_shopping_list_description">Tanımlanmış minimum stok miktarının altında olanlar</string>
+  <string name="setting_empty_value">Boş</string>
+  <string name="setting_sync_off">Senkronizasyon kapalı</string>
+  <string name="setting_loading">Değer yükleniyor</string>
+  <string name="setting_not_loaded">Yüklenemedi</string>
+  <string name="setting_debug">Günlüğe kaydetmeyi etkinleştir</string>
+  <string name="setting_debug_description">Hata ayıklama amaçlı</string>
+  <string name="setting_log_level">Log seviyesi</string>
+  <string name="setting_error_logs">Yalnızca hata günlüklerini göster</string>
+  <string name="setting_info_logs">Hata ve bilgi günlüklerini göster</string>
+  <string name="setting_logs_description">Hata ve bilgi günlüklerini göster</string>
+  <string name="setting_timeout">Yükleme zaman aşımı</string>
+  <string name="setting_timeout_descriptions">Daha sonra yükleme iptal edilir</string>
+  <string name="setting_beginner_mode">Acemi Modu</string>
+  <string name="setting_beginner_mode_description">Yardım metinlerini varsayılan olarak görüntüle</string>
+  <string name="setting_haptic">Dokunsal efektler</string>
+  <string name="setting_haptic_description">Sürükleyici bir deneyim</string>
+  <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
+  <string name="setting_expand_bottom_sheets">Alt sayfaları genişlet</string>
+  <string name="setting_expand_bottom_sheets_description">Manzara modunda</string>
+  <string name="setting_bottom_menu_button">Ana menü düğmesini göster</string>
+  <string name="setting_bottom_menu_button_description">Alt uygulama çubuğunda</string>
+  <string name="setting_turn_on_quick_mode">Varsayılan olarak hızlı modu aç</string>
+  <string name="setting_turn_on_quick_mode_description">Genel bakış sayfasında tarama düğmesini kullanırken</string>
+  <string name="setting_quick_mode_return">20 saniye sonra genel bakış sayfasına dön</string>
+  <string name="setting_quick_mode_return_description">Genel bakış sayfasında tarama düğmesi kullanıldığında ve hızlı mod kullanımda olmadığında</string>
+  <string name="setting_speed_up_start">Uygulama açılış süresini azaltın</string>
+  <string name="setting_speed_up_start_description">Sadece hızlı cihazlarda etkilidir</string>
+  <string name="setting_date_keyboard_input">Tarihleri ​​klavye ile girin</string>
+  <string name="setting_date_keyboard_input_description">Tarih seçici tekerlek yerine</string>
+  <string name="setting_date_keyboard_reverse">Giriş için ters tarih biçimini kullanın</string>
+  <string name="setting_date_keyboard_reverse_description">Tarih için YYMMDD yerine DDMMYY formatını kullan</string>
+  <string name="setting_loading_circle">Tüm istekler için yükleme barını göster</string>
+  <string name="setting_loading_circle_description">Yavaş ağlar için yararlıdır</string>
+  <string name="setting_tor">Tor kullan</string>
+  <string name="setting_tor_description">Orbot\'a ihtiyaç duyar</string>
+  <string name="setting_proxy">HTTP proxy\'sini etkinleştir</string>
+  <string name="setting_proxy_description">Tüm ağ istekleri için HTTP proxy\'sini yapılandırın</string>
+  <string name="setting_proxy_host">Proxy sunucusu</string>
+  <string name="setting_proxy_host_description">Proxy\'nizin ana bilgisayar adı</string>
+  <string name="setting_proxy_port">Proxy port</string>
+  <string name="setting_proxy_port_description">Proxy\'nizin port numarası</string>
+  <string name="setting_synchronized">Aşağıdaki seçenek sunucunuzla senkronize edilir.</string>
+  <string name="settings_synchronized">Bu ayarlar sunucunuzla senkronize edilir.</string>
+  <string name="setting_message_duration">Mesajlar için görüntüleme süresi</string>
+  <string name="setting_message_duration_description">Sadece işlem mesajlarını ilgilendirir</string>
+  <string name="setting_notifications_enable">Bildirimleri etkinleştir</string>
+  <!-- The string belongs to the stock overview (stock items can be expired, overdue or due soon). -->
+  <string name="setting_notifications_stock_description">Stokları günlük olarak kontrol eder ve artık taze olmayan ürünler (son kullanma tarihi geçmiş, gecikmiş veya yakında) varsa sizi bilgilendirir.</string>
+  <string name="setting_notifications_chores_description">Günlük işleri kontrol eder ve işlerin ne zaman yapılması gerektiğini size bildirir</string>
+  <string name="setting_notification_time">Bildirim zamanı</string>
+  <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
+  <string name="setting_notification_time_description">Kontrol tamamlandığında</string>
+  <string name="setting_keep_screen_on_recipes_description">Bir tarifi görüntülerken</string>
+
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="notification_stock_not_fresh_title">
+    <item quantity="one">Stokunuzda bulunan %1$d ürün artık taze değil.</item>
+    <item quantity="other">Stokunuzda bulunan %1$d ürün artık taze değil.</item>
+  </plurals>
+  <string name="notification_stock_content">Önümüzdeki birkaç gün içinde tüketerek yiyecek israfını azaltmaya yardımcı olun. Listeyi açmak için dokunun.</string>
+  <!-- %1$s is a number -->
+  <plurals name="notification_chores_due_title">
+    <item quantity="one">Yapılması gereken %1$d iş var.</item>
+    <item quantity="other">Yapılması gereken %1$d iş var.</item>
+  </plurals>
+  <string name="notification_chores_content">Ertelemenin faydası yok. Listeyi açmak için dokunun.</string>
+
+  <string name="ikm_select_cert">İstemci Sertifikasını Seçin</string>
+  <string name="ikm_client_cert">Sunucu bir istemci sertifikası talep etti. Lütfen kullanmak istediğiniz sertifikayı seçin.</string>
+  <string name="ikm_client_cert_notification">İstemci sertifikasını seçin</string>
+  <string name="ikm_decision_file">Dosyadan</string>
+  <string name="ikm_decision_keychain">Aygıt Anahtar Yöneticisinden</string>
+  <string name="ikm_notification">İstemci Sertifikasını Seçin</string>
+  <string name="ikm_load_app_keystore">Uygulama anahtar deposu yüklenirken hata oluştu</string>
+  <string name="ikm_store_aliasMapping">Anahtarlık takma adlarını depolamada hata oluştu</string>
+  <string name="ikm_remove_keys">Bağlantı hatası: anahtarlar kaldırıldı</string>
+  <string name="ikm_remove_all_keys">Tüm bağlantı anahtarları kaldırıldı</string>
+  <string name="ikm_add_from_keystore">Belirtilen anahtar deposunu okurken hata oluştu</string>
+  <string name="ikm_add_from_keystore_alias">Anahtarlar yüklenirken hata oluştu:</string>
+  <string name="ikm_keychain">Anahtar Zinciri hatası; depolanan takma ad kaldırılıyor</string>
+  <string name="ikm_select_keystore">Anahtar deposu dosyasını seçin</string>
+
+  <string name="mtm_security_risk">Uyarı: Potansiyel Güvenlik Riski</string>
+  <string name="mtm_trust_anchor">Sunucu sertifikası bilinen bir Sertifika Yetkilisi tarafından imzalanmamış.</string>
+  <string name="mtm_cert_expired">Sunucu sertifikasının süresi doldu.</string>
+  <string name="mtm_hostname_mismatch">Sunucu  \&quot;%s\&quot;olarak kimlik doğrulaması yapamadı,</string>
+  <string name="mtm_trust_certificate">Bu sertifikaya güveniyor musunuz? Listelenen tüm isimleri doğrulamak için kullanılacaktır</string>
+  <string name="mtm_accept_servername">Uyuşmayan Sunucu Adını Kabul Ediyor musunuz?</string>
+  <string name="mtm_cert_details">Sertifika detayları:</string>
+  <string name="mtm_valid_for">Sertifikanın geçerlilik süresi:</string>
+  <string name="mtm_decision_always">Her zaman</string>
+  <string name="mtm_decision_once">Bir kere</string>
+  <string name="mtm_notification_channel">Güvenlik</string>
+  <string name="mtm_notification">Sertifika Doğrulaması</string>
+  <string name="mtm_error_keystore">Anahtar deposunu dosyadan yüklemeyle ilgili istisna</string>
+
+</resources>
