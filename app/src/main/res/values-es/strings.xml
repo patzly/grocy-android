@@ -652,7 +652,7 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <string name="title_help">Ayuda</string>
   <string name="title_logs">Registros</string>
   <string name="title_compatibility">Problemas de compatibilidad</string>
-  <string name="title_logout">Cerrar sesión en Grocy?</string>
+  <string name="title_logout">¿Cerrar sesión en Grocy?</string>
   <string name="title_restart">Reiniciar Grocy?</string>
   <string name="title_logout_demo">Cerrar sesión del modo de demostración?</string>
   <string name="title_manage_master_data">Manejar datos maestros</string>
