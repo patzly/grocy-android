@@ -72,6 +72,7 @@
   <string name="action_add">Añadir</string>
   <string name="action_clear">Vaciar</string>
   <string name="action_clear_shopping_list">Vaciar lista de la compra</string>
+  <string name="action_auto_sync">Auto sincronizar</string>
   <string name="action_rate">Calificar en Google Play</string>
   <string name="action_rate_description">Apoya el desarrollo</string>
   <string name="action_email">Enviar correo electrónico</string>
@@ -126,7 +127,9 @@
   <string name="action_display_help">Mostrar los textos de ayuda</string>
   <string name="action_demo_server">Servidor de prueba</string>
   <string name="action_own_server">Servidor propio</string>
+  <string name="action_open_server">Usar interfase del servidor</string>
   <string name="action_enter_data_manually">Introducir datos manualmente</string>
+  <string name="action_settings_backup_restore">Guardar o restaurar copia de seguridad de la configuración</string>
   <string name="action_details">Detalles</string>
   <string name="action_perform">Realizar una acción</string>
   <string name="action_share">Compartir</string>
@@ -142,6 +145,8 @@
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="action_reschedule_next_execution">Reprogramar siguiente ejecución</string>
   <string name="action_put_missing_products_on_shopping_list">Introducir productos que faltan a la lista de la compra</string>
+  <!-- This is the action part of "Backup to file" or "Backup data" -->
+  <string name="action_backup">Copia de seguridad</string>
   <!-- This is the action part of "Restore from file" or "Restore data" -->
   <string name="action_restore">Restaurar</string>
   <string name="action_configure_sections">Configurar secciones</string>
@@ -154,15 +159,15 @@
   </plurals>
   <!-- %1$s is the number of products which are overdue. This string is the short form of e.g. "3 products are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_products">
-    <item quantity="one">%1$d caducado</item>
-    <item quantity="many">%1$d caducados</item>
-    <item quantity="other">%1$d caducados</item>
-  </plurals>
-  <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
-  <plurals name="msg_expired_products">
     <item quantity="one">%1$d vencido</item>
     <item quantity="many">%1$d vencidos</item>
     <item quantity="other">%1$d vencidos</item>
+  </plurals>
+  <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
+  <plurals name="msg_expired_products">
+    <item quantity="one">%1$d caducado</item>
+    <item quantity="many">%1$d caducados</item>
+    <item quantity="other">%1$d caducados</item>
   </plurals>
   <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
   <plurals name="msg_not_fresh_products_short">
@@ -200,6 +205,12 @@
   <string name="msg_consumed_spoiled">Consumido %1$s %2$s de %3$s como vencido</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Marcar %1$s %2$s de %3$s como abiertos</string>
+  <!-- %1$s is the number of servings of a recipe. -->
+  <plurals name="msg_servings">
+    <item quantity="one">%1$sración</item>
+    <item quantity="many">%1$sraciones</item>
+    <item quantity="other">%1$s raciones</item>
+  </plurals>
   <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
   <plurals name="msg_undone_items">
     <item quantity="one">%1$d sin hacer</item>
@@ -238,9 +249,9 @@
   </plurals>
   <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_tasks">
-    <item quantity="one">%1$d caducado</item>
-    <item quantity="many">%1$d caducados</item>
-    <item quantity="other">%1$d caducados</item>
+    <item quantity="one">%1$d vencido</item>
+    <item quantity="many">%1$d vencidos</item>
+    <item quantity="other">%1$d vencidos</item>
   </plurals>
   <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
   <plurals name="msg_due_tasks_short">
@@ -387,11 +398,15 @@ Si sólo hay de diferencia una versión minorante (por ejemplo, el tercer dígit
   <string name="msg_point_at_barcode">Apunta tu cámara al código de barras.</string>
   <string name="msg_save_product_first">Por favor, guarde el producto primero</string>
   <string name="msg_save_recipe_first">Por favor, guarde la receta primero. </string>
+  <string name="msg_recipe_contains_nested_recipes">Esta receta contiene recetas anidadas.</string>
   <string name="msg_press_hold_confirm">Mantén pulsado para confirmar eliminación</string>
   <string name="msg_recipe_consume_ask">¿Estás seguro que quieres consumir todos los ingredientes necesarios para la receta por \"%1$s\"? (Los ingredientes marcados con \"sólo tildar si existe en el stock\" serán ignorados)</string>
   <string name="msg_recipe_shopping_list_ask">¿Está seguro que desea poner todos los ingredientes faltantes necesarios para la receta para \"%1$s\" en la lista de compra?
 
 Destilda ingredientes para no agregarlos a la lista de compra:</string>
+  <string name="msg_settings_backup_restore">Aquí puedes crear o restaurar una copia de seguridad de la configuración de la app, p.e. para compartirla con otros miembros de la familia (el archivo contiene credenciales como la API-Key).\n\nDespués de la restauración, las notificaciones pueden no funcionar como deseado y han de ser reiniciadas en segundo plano en esta app apagando los interruptores y volviéndolos a activar de nuevo.\n\nSi hay información incorrecta en el archivo a ser restaurado, la app podría no funcionar después de esto y la información de la app tendría que ser eliminada.</string>
+  <string name="msg_settings_backup_success">Se ha creado la copia de seguridad de los ajustes correctamente</string>
+  <string name="msg_settings_restore_success">Los ajustes se han restaurado correctamente, la aplicación se reiniciará en 2 segundos</string>
   <string name="msg_welcome">¡Bienvenido a Grocy Android!</string>
   <string name="msg_welcome_introduce">Para utilizar Grocy productivamente, necesitas tu propio servidor o el complemento de Grocy para \"Home Assistant\".
 Si sólo quieres probar esta aplicación, puedes utilizar el servidor de prueba de Bernd Bestel, el creador de Grocy.</string>
@@ -516,6 +531,7 @@ Toque corto: Consumir con escáner de código de barras.
 Toque largo: Compra con escáner de código de barras.
 
 Con este botón, el \"modo rápido\" en las respectivas páginas está activado por defecto. Puedes cambiar esto en las configuraciones de comportamiento.</string>
+  <string name="msg_help_fab_consume_start">El botón de esta página consume el producto con los valores dados. Para marcar el producto como abierto, usa el botón de abajo a la izquierda de la barra de menú.</string>
   <string name="msg_share">Echa un vistazo a este cliente para Android del increíble proyecto Grocy: https://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">La clave de la API no está funcionando</string>
@@ -571,6 +587,7 @@ Con este botón, el \"modo rápido\" en las respectivas páginas está activado 
   <string name="error_offline">Desconectado</string>
   <string name="error_offline_subtitle">Revisa tu conexión y vuelve a intentarlo</string>
   <string name="error_no_done_items">No hay artículos marcados como hechos</string>
+  <string name="error_auto_sync_disabled">La auto sincronización está desactivada</string>
   <string name="error_already_exists">Ya existe</string>
   <string name="error_network">Error de red</string>
   <string name="error_network_subtitle">Los datos requeridos no pudieron cargarse completamente</string>
@@ -601,6 +618,11 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <string name="error_undefined">Sucedió un error</string>
   <string name="error_invalid_base_servings">Porciones inválidas</string>
   <string name="error_pictures_size_exceeds_limit">Hay imágenes incrustadas en las descripciones de los productos o recetas en tu servidor que exceden el límite de análisis de esta aplicación. Por favor, remueve las imágenes pesadas o de gran calidad de tus descripciones. Esto también aumentará la velocidad de carga de información.</string>
+  <string name="error_userfield_type_not_supported">Los campos personalizados de usuario no están soportados todavía</string>
+  <string name="error_open_product_not_supported">Este producto no permite \"marcar como abierto\"</string>
+  <string name="error_settings_backup">La copia de seguridad falló</string>
+  <string name="error_settings_restore">La restauración de la copia de seguridad falló</string>
+
   <string name="title_overview">Vista general</string>
   <string name="title_stock_overview">Resumen de inventario</string>
   <string name="title_purchase">Comprar</string>
@@ -645,6 +667,7 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <string name="title_chores">Quehaceres</string>
   <string name="title_chore">Quehacer</string>
   <string name="title_recipes">Recetas</string>
+  <string name="title_meal_plan">Menú semanal</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Editor</string>
   <string name="title_task_new">Nueva tarea</string>
@@ -797,9 +820,9 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_expired">
-    <item quantity="one">%1$d producto ha expirado.</item>
-    <item quantity="many">%1$d productos han expirado.</item>
-    <item quantity="other">%1$d productos han expirado.</item>
+    <item quantity="one">%1$d producto ha caducado.</item>
+    <item quantity="many">%1$d productos han caducado.</item>
+    <item quantity="other">%1$d productos han caducado.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing">
@@ -973,6 +996,7 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <string name="property_due_days_default_freezing">Días para vencimiento después de congelar</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">Días para vencimiento después de descongelar</string>
+  <string name="property_day_summary">Resumen del día</string>
   <string name="property_location">Ubicación</string>
   <string name="property_location_insert">Ubicación: %1$s</string>
   <string name="property_location_default">Ubicación por defecto</string>
@@ -1000,6 +1024,7 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Vida útil promedio</string>
   <string name="property_spoil_rate">Porcentaje de vencimiento</string>
+  <string name="property_created_timestamp">Fecha de creación</string>
   <string name="property_price_history">Historial de precios</string>
   <string name="property_product_group">Grupo de producto</string>
   <string name="property_product_groups">Grupos de producto</string>
@@ -1009,6 +1034,10 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <string name="property_opened">abierto</string>
   <string name="property_not_opened">cerrado</string>
   <string name="property_is_freezer">Está en el congelador</string>
+  <!-- Means energy of an ingredient or product -->
+  <string name="property_energy_only">Energía</string>
+  <!-- %1$s is a unit for energy, like kcal (kilo calories) -->
+  <string name="property_energy_insert">Energía (%1$s) por unidad de stock</string>
   <string name="property_active">Activo</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show"> Nunca mostrar en el resumen de inventario</string>
@@ -1053,6 +1082,14 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <string name="property_extra_field">Campo extra: %1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">Campos</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_header">Campos (cabecera)</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_entries">Campos (elementos)</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value">%1$s: %2$s</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value_without_space">%1$s: %2$s</string>
   <string name="property_task_category">Categoria de la tarea</string>
   <string name="property_task_categories">Categorías de tareas</string>
   <string name="property_calories">Calorías</string>
@@ -1093,6 +1130,10 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <string name="property_preparation">Preparación</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">Costos</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs">Coste semanal</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs_insert">Coste semanal: %1$s</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="property_due_score">Puntuación de vencimiento</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
@@ -1112,6 +1153,9 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <string name="date_unlimited">Ilimitado</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Nunca</string>
+  <!-- %1$s is 'from' date, %2$s is 'to' date -->
+  <string name="date_timespan">%1$s - %2$s</string>
+
   <plurals name="date_days">
     <item quantity="one">%d dia</item>
     <item quantity="many">%d dias</item>
@@ -1177,6 +1221,10 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <string name="info_github">Grocy para Android en GitHub</string>
   <string name="info_github_description">Código fuente</string>
   <string name="info_website">Abrir sitio web de Grocy</string>
+  <string name="info_translation_description">Ayuda a traducir Grocy Android</string>
+  <string name="info_privacy">Política de privacidad</string>
+  <string name="info_privacy_description">¿Cómo son tus datos procesados?</string>
+
   <string name="feature_1_title">Grocy para Android</string>
   <string name="feature_1_description">Manejo de almacén auto-alojado para tu hogar</string>
   <string name="feature_2_title">Diseño intuitivo</string>
@@ -1216,13 +1264,21 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <string name="setting_theme_dark">Oscuro</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_light">Claro</string>
+  <string name="setting_contrast">Contraste</string>
+  <string name="setting_contrast_description">Accesibilidad para tu visión</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast. The button width should be as dense as possible. -->
+  <string name="setting_contrast_standard">Normal</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_medium">Medio</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_high">Alto</string>
+  <string name="setting_contrast_dynamic">El contraste para el tema del dispositivo tiene que establecerse en los ajustes del sistema</string>
+  <string name="setting_contrast_dynamic_unsupported">El contraste dinámico para el tema del dispositivo sólo esta disponible para Android 14 o superior</string>
   <string name="setting_language">Idioma</string>
   <string name="setting_language_description">Selecciona un idioma</string>
   <string name="setting_language_info">Muchas gracias a todos los traductores voluntarios de Transifex!\nPr favor visítanos en GitHub para aprender como puedes ayudar a tener disponible Grocy Android en tu idioma.</string>
   <string name="setting_language_system">Escoger el del sistema</string>
   <string name="setting_language_not_available">Inglés si la traducción no está disponible</string>
-  <string name="setting_transition">Usar transición de deslizamiento entre las páginas de opciones</string>
-  <string name="setting_transition_description">En vez de desaparecer</string>
   <string name="setting_open_food_facts">Usar Open Food Facts</string>
   <string name="setting_open_food_facts_description">Obtener información de códigos de barra</string>
   <string name="setting_choose_barcode_scanner">Elige un Lector de códigos de barras</string>
@@ -1310,7 +1366,7 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <string name="setting_message_duration_description">Sólo concierne a mensajes de transacción</string>
   <string name="setting_notifications_enable">Habilitar notificaciones</string>
   <!-- The string belongs to the stock overview (stock items can be expired, overdue or due soon). -->
-  <string name="setting_notifications_stock_description">Verifica el inventario diariamente y te notifica si hay algún producto que no esté fresco (Expirado, vencido o vence pronto)</string>
+  <string name="setting_notifications_stock_description">Verifica el inventario diariamente y te notifica si hay algún producto que no esté fresco (Caducado, vencido o vence pronto)</string>
   <string name="setting_notifications_chores_description">Verifica los quehaceres diariamente y notifica cuando tus tareas están por vencerse.</string>
   <string name="setting_notification_time">Tiempo de notificación</string>
   <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
@@ -1332,4 +1388,33 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   </plurals>
   <string name="notification_chores_content">La procrastinación es inútil. Presiona para abrir la lista.</string>
 
-  </resources>
+  <string name="ikm_select_cert">Selecciona el certificado del cliente</string>
+  <string name="ikm_client_cert">El servidor solicita un certificado de cliente. Por favor selecciona el que quieras usar</string>
+  <string name="ikm_client_cert_notification">Selecciona el certificado de cliente para</string>
+  <string name="ikm_decision_file">De archivo</string>
+  <string name="ikm_decision_keychain">Desde el administrador de claves del dispositivo</string>
+  <string name="ikm_notification">Selecciona el certificado del cliente</string>
+  <string name="ikm_load_app_keystore">Error cargando el llavero de claves</string>
+  <string name="ikm_store_aliasMapping">Error almacenando los alias en el llavero de claves</string>
+  <string name="ikm_remove_keys">Error de conexión: eliminadas las claves para</string>
+  <string name="ikm_remove_all_keys">Eliminadas todas las claves de conexión</string>
+  <string name="ikm_add_from_keystore">Ocurrió un error leyendo el almacén de claves especificado</string>
+  <string name="ikm_add_from_keystore_alias">Error cargando claves:</string>
+  <string name="ikm_keychain">Error en el llavero de claves; eliminando los alias almacenados</string>
+  <string name="ikm_select_keystore">Selecciona archivo de almacén de claves</string>
+
+  <string name="mtm_security_risk">Atención: posible riesgo de seguridad</string>
+  <string name="mtm_trust_anchor">El certificado del servidor no está firmado por una Autoridad de Certificación conocida</string>
+  <string name="mtm_cert_expired">El certificado del servidor ha caducado.</string>
+  <string name="mtm_hostname_mismatch">El servidor no se pudo autenticar como \&quot;%s\&quot;.</string>
+  <string name="mtm_trust_certificate">¿Confías en este certificado? Se utilizará para verificar todos los nombres listados.</string>
+  <string name="mtm_accept_servername">El nombre del servidor no coincide, ¿aceptar?</string>
+  <string name="mtm_cert_details">Detalles del certificado:</string>
+  <string name="mtm_valid_for">Validez del certificado hasta: </string>
+  <string name="mtm_decision_always">Siempre</string>
+  <string name="mtm_decision_once">Una vez</string>
+  <string name="mtm_notification_channel">Seguridad</string>
+  <string name="mtm_notification">Verificación de Certificado</string>
+  <string name="mtm_error_keystore">Ocurrió una excepción cargando el almacén de claves desde archivo</string>
+
+</resources>
