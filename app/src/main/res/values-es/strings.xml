@@ -595,7 +595,7 @@ Con este botón, el \"modo rápido\" en las respectivas páginas está activado 
   <string name="error_database">Error en la base de datos.</string>
   <string name="error_insert">Error: %1$s</string>
   <string name="error_details">Detalles del error</string>
-  <string name="error_unknown">Ups!</string>
+  <string name="error_unknown">¡Ups!</string>
   <string name="error_not_grocy_instance">No es una instancia válida de grocy.</string>
   <string name="error_timeout">Se agotó el tiempo de espera</string>
   <string name="error_no_product_selected">Sin productos seleccionados</string>
