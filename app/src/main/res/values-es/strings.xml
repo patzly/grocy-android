@@ -394,7 +394,7 @@ Si sólo hay de diferencia una versión minorante (por ejemplo, el tercer dígit
   <string name="msg_shortcuts_not_supported">Los accesos directos no están soportados por esta versión de Android.</string>
   <string name="msg_barcode_formats">Puedes mejorar la velocidad del lector de códigos de barras configurando solo los formatos que esperas leer.</string>
   <string name="msg_features">Empieza la introducción nuevamente en \"Acerca de\"</string>
-  <string name="msg_feedback">Tienes algún deseo, preguntas o errores? Contáctanos y déjanos ayudar!\nDe otro modo estaríamos muy contentos de recibir una buena reseña en la Play Store.</string>
+  <string name="msg_feedback">¿Tienes algún deseo, preguntas o errores? ¡Contáctanos y déjanos ayudar!\nDe otro modo estaríamos muy contentos de recibir una buena reseña en la Play Store.</string>
   <string name="msg_point_at_barcode">Apunta tu cámara al código de barras.</string>
   <string name="msg_save_product_first">Por favor, guarde el producto primero</string>
   <string name="msg_save_recipe_first">Por favor, guarde la receta primero. </string>
