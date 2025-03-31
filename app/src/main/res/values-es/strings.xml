@@ -1276,7 +1276,7 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <string name="setting_contrast_dynamic_unsupported">El contraste dinámico para el tema del dispositivo sólo esta disponible para Android 14 o superior</string>
   <string name="setting_language">Idioma</string>
   <string name="setting_language_description">Selecciona un idioma</string>
-  <string name="setting_language_info">Muchas gracias a todos los traductores voluntarios de Transifex!\nPr favor visítanos en GitHub para aprender como puedes ayudar a tener disponible Grocy Android en tu idioma.</string>
+  <string name="setting_language_info">¡Muchas gracias a todos los traductores voluntarios de Transifex!\nPr favor visítanos en GitHub para aprender como puedes ayudar a tener disponible Grocy Android en tu idioma.</string>
   <string name="setting_language_system">Escoger el del sistema</string>
   <string name="setting_language_not_available">Inglés si la traducción no está disponible</string>
   <string name="setting_open_food_facts">Usar Open Food Facts</string>
