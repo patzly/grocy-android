@@ -325,7 +325,7 @@
   <string name="msg_shopping_list_deleted">%1$s eliminada exitosamente</string>
   <string name="msg_barcode_duplicate">El codigo de barras ya existe</string>
   <!-- %1$s is a master data type like "Product group" or "Location"; %2$s is the name of it. -->
-  <string name="msg_master_delete">Eliminar %1$s \"%2$s\"?</string>
+  <string name="msg_master_delete">¿Eliminar %1$s \"%2$s\"?</string>
   <!-- %1$s is a product name -->
   <string name="msg_master_delete_product">¿Estás seguro de querer eliminar \"%1$s\"?\n\nEsto también elimina cualquier cantidad del inventario y cualquier otra referencia del producto. Considera deshabilitarlo si solamente quieres ocultar el producto.</string>
   <!-- %1$s is a master data type like "location" or "product" -->
