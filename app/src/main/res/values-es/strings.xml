@@ -127,7 +127,7 @@
   <string name="action_display_help">Mostrar los textos de ayuda</string>
   <string name="action_demo_server">Servidor de prueba</string>
   <string name="action_own_server">Servidor propio</string>
-  <string name="action_open_server">Usar interfase del servidor</string>
+  <string name="action_open_server">Usar interfaz del servidor</string>
   <string name="action_enter_data_manually">Introducir datos manualmente</string>
   <string name="action_settings_backup_restore">Guardar o restaurar copia de seguridad de la configuración</string>
   <string name="action_details">Detalles</string>
