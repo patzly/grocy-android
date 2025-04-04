@@ -1214,7 +1214,7 @@
   <string name="setting_date_keyboard_input">キーボードで日付入力</string>
   <string name="setting_date_keyboard_input_description">日付ホイールを使用しない</string>
   <string name="setting_date_keyboard_reverse">入力に逆順日付形式を使用</string>
-  <string name="setting_date_keyboard_reverse_description">YYMMDDの代わりにDDMMYY</string>
+  <string name="setting_date_keyboard_reverse_description">YYMMDDではなくDDMMYYを使用</string>
   <string name="setting_loading_circle">全リクエストで処理中マークを表示</string>
   <string name="setting_loading_circle_description">低速ネットワーク向け</string>
   <string name="setting_tor">Torを使用</string>
