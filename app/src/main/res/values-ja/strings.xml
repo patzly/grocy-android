@@ -339,7 +339,7 @@
   <string name="msg_shortcuts">最大4つのショートカットを有効化できます:</string>
   <string name="msg_shortcuts_not_supported">このAndroidバージョンではショートカットはサポートされていません。</string>
   <string name="msg_barcode_formats">想定されるフォーマットのみを検出するようにバーコード検出システムを設定することで、検出速度が向上します。</string>
-  <string name="msg_features">「概要」からイントロダクションを再表示</string>
+  <string name="msg_features">「概要」からイントロダクションを再表示できます</string>
   <string name="msg_feedback">ご意見、ご質問、エラーの報告などは、こちらにご連絡ください！\nそして、Playストアに素敵なレビューを投稿していただけると嬉しく思います。</string>
   <string name="msg_point_at_barcode">カメラをバーコードに向けてください</string>
   <string name="msg_save_product_first">先に物品を保存してください</string>
