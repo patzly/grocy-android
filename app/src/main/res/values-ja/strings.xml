@@ -442,7 +442,7 @@
   <string name="msg_help_date_chooser">設定でキーボード入力に切り替えると、入力速度が向上します。</string>
   <string name="msg_help_date_chooser_keyboard">お住まいの国でDDMMYY表記が一般的な場合は、設定から逆順日付形式を有効化できます。\nキーボードの「完了」キーを押すと、入力を適用してこのページを閉じます。</string>
   <string name="msg_help_notifications_tap">通知が届かない、または受信が不安定な場合はここをタップしてください。</string>
-  <string name="msg_help_notifications">通知が届かない場合は、ここをタップしてAndroidのアプリ情報メニューを開き、通知の許可と省電力モードの無効化を確認してください。Androidはバッテリー消費を抑える目的で指定時間よりも遅く通知を受信することがありますが、これは省電力モードの正常な動作です。</string>
+  <string name="msg_help_notifications">通知が届かない場合はここをタップしてAndroidのアプリ情報メニューを開き、通知の許可と省電力モードの無効化を確認してください。Androidはバッテリー消費を抑える目的で指定時間よりも遅く通知を受信することがありますが、これは省電力モードの正常な動作です。</string>
   <string name="msg_help_notifications_other">実行中のアプリ一覧からアプリを終了しないでください。デバイスのメーカーによっては通知プロセスが削除されてしまいます。</string>
   <string name="msg_help_quick_mode">上部タイトルバーを長押しすると、クイックモードが有効になります。このモードでは、物品を入力/スキャンしてすべてのフィールドが(物品やバーコードの既定設定に基づいて)自動入力された場合、自動的に処理が実行されます</string>
   <string name="msg_help_loading_circle_settings">各ページでサーバーからデータなどを読み込む際、アプリはまず最小限のリクエストを送信してサーバーデータベースが前回から変更されているかどうかを確認し、変更されたデータのみを更新します。こうした最小限リクエストでも処理中マークを表示する場合は、以下の項目を有効化してください。</string>
