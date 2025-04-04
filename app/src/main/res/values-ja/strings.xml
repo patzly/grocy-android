@@ -1151,7 +1151,7 @@
   <string name="setting_use_front_cam">インカメラを使用</string>
   <string name="setting_use_front_cam_description">バーコードスキャン</string>
   <string name="setting_use_2d_scanner_format">2次元バーコードスキャナ形式を使用</string>
-  <string name="setting_use_2d_scanner_format_description">QRコードの輪郭</string>
+  <string name="setting_use_2d_scanner_format_description">QRコード用の正方形フレーム</string>
   <string name="setting_barcode_formats">バーコード形式</string>
   <!-- %1$s are barcode formats -->
   <string name="setting_barcode_formats_description">制限: %1$s</string>
