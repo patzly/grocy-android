@@ -305,7 +305,7 @@
   <string name="msg_data_copied_from_product">物品「%1$s」のデータをコピーしました。</string>
   <string name="msg_recipe_added_to_cart">レシピの材料をカートに追加しました</string>
   <string name="msg_recipe_consumed">レシピ「%1$s」の材料をすべて削除しました</string>
-  <string name="msg_stored_purchases_overview">サーバーに送信されていない購入データがデバイス上に残っています。詳細はここをタップしてください。</string>
+  <string name="msg_stored_purchases_overview">サーバーに送信されていない購入データがデバイス上に残っています。ここをタップすると詳細が表示されます。</string>
   <string name="msg_stored_purchases">まだサーバーに送信されていない購入データがここに表示されます。データはアプリ内に一時物品データと共に保存されており、クイックモードで購入をより素早く記録でき、マスターデータとして物品を新規作成する必要はありません。</string>
   <string name="msg_stored_purchases_product_offline">物品をタップして必要なデータを入力すると、オンライン状態でここに物品が表示され、保存された購入データをサーバーに送信できるようになります。</string>
   <string name="msg_stored_purchases_product_online">この物品の購入データをサーバーに送信するには、ここをタップしてください。</string>
