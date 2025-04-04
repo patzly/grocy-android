@@ -1148,7 +1148,7 @@
   <string name="setting_open_food_facts_description">バーコードから情報を取得</string>
   <string name="setting_choose_barcode_scanner">バーコードスキャナを選択</string>
   <string name="setting_choose_barcode_scanner_description">カメラによるバーコードスキャン</string>
-  <string name="setting_use_front_cam">フロントカメラを使用</string>
+  <string name="setting_use_front_cam">インカメラを使用</string>
   <string name="setting_use_front_cam_description">バーコードスキャン</string>
   <string name="setting_use_2d_scanner_format">2次元バーコードスキャナ形式を使用</string>
   <string name="setting_use_2d_scanner_format_description">QRコードの輪郭</string>
