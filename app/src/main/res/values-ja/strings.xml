@@ -1076,7 +1076,7 @@
   <string name="info_acknowledgement">Grocyの開発者であるBernd Bestel氏に感謝の意を表します。この人物の素晴らしい仕事がなければ、このアプリは決して実現しなかったでしょう。</string>
   <string name="info_intro">イントロダクションを再表示</string>
   <string name="info_intro_description">機能の紹介</string>
-  <string name="info_dev_beginning">開発の開始</string>
+  <string name="info_dev_beginning">開発開始</string>
   <string name="info_dev_beginning_date">2020年4月</string>
   <string name="info_version">バージョン</string>
   <string name="info_grocy_version">Grocyバージョン</string>
