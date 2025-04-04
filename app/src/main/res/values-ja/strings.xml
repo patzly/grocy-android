@@ -1195,7 +1195,7 @@
   <string name="setting_info_logs">エラーログと情報ログを表示</string>
   <string name="setting_logs_description">このプロセスのlogcatを表示</string>
   <string name="setting_timeout">ロードのタイムアウト</string>
-  <string name="setting_timeout_descriptions">ロードのキャンセル後</string>
+  <string name="setting_timeout_descriptions">秒後にロードをキャンセル</string>
   <string name="setting_beginner_mode">ビギナーモード</string>
   <string name="setting_beginner_mode_description">既定でヘルプテキストを表示</string>
   <string name="setting_haptic">触覚エフェクト</string>
