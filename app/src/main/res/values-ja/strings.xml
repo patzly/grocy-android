@@ -1198,7 +1198,7 @@
   <string name="setting_timeout_descriptions">読み込みキャンセルまでの時間</string>
   <string name="setting_beginner_mode">ビギナーモード</string>
   <string name="setting_beginner_mode_description">既定でヘルプテキストを表示</string>
-  <string name="setting_haptic">触覚エフェクト</string>
+  <string name="setting_haptic">タッチ操作バイブ</string>
   <string name="setting_haptic_description">没入感の高い操作</string>
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">ボトムシート展開</string>
