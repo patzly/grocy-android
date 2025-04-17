@@ -316,7 +316,7 @@
   <!-- %1$s is a date -->
   <string name="msg_undone_transaction_description">Desfeita em %1$s</string>
   <string name="msg_failed_to_sync">Falha ao sincronizar entradas</string>
-  <string name="msg_synced">Entradas sincronizadas com êxito</string>
+  <string name="msg_synced">Entradas sincronizadas com sucesso</string>
   <!-- %1$s is a shopping list name -->
   <string name="msg_added_missing_products">Adicionados os produtos faltantes para %1$s</string>
   <!-- %1$s is a shopping list name -->
@@ -595,7 +595,7 @@
 
   <string name="title_overview">Visão geral</string>
   <string name="title_stock_overview">Visão geral</string>
-  <string name="title_purchase">Compra</string>
+  <string name="title_purchase">Comprar</string>
   <string name="title_consume">Consumir</string>
   <string name="title_transfer">Transferir</string>
   <string name="title_inventory">Inventário</string>
@@ -699,7 +699,7 @@
   <string name="subtitle_amount_opened">(%1$s abertos)</string>
   <!-- %1$s is a product name -->
   <string name="subtitle_stock_locations">Onde %1$s há no estoque</string>
-  <string name="subtitle_none_selected">Nenhum informado</string>
+  <string name="subtitle_none_selected">Nenhuma informada</string>
   <!-- Should follow the equality between 'None' and 'None selected' -->
   <string name="subtitle_none">Nenhum</string>
   <string name="subtitle_empty">Vazio</string>
