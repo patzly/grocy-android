@@ -328,7 +328,7 @@
   <string name="msg_quick_mode_confirm_transfer">将被执行的事务: \n\n 迁移%1$s%2$s的%3$s \n 从位置:%4$s \n 到位置:%5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">将被执行的事务: \n\n 设置%1$s的库存数量为%2$s%3$s \n 申请新增项目:\n 到期日:%4$s \n价格:%5$s \n 商店:%6$s \n 位置:%7$s</string>
-  <string name="msg_compatibility">此APP版本与服务器上的Grocy版本不兼容。\n\n当前服务器版本：%1$s\n\n支持的服务器版本：%2$s\n如果当前服务器版本的主版本号（第一位数字）高于支持的版本，而您忽略此警告，则可能会发生数据丢失（不太可能）或崩溃（可能）的情况。\n如果只有细微的差异（例如，第三位数字更高），则可以忽略此警告。</string>
+  <string name="msg_compatibility">此APP版本与服务器上的Grocy版本不兼容。\n\n当前服务器版本：%1$s\n\n支持的服务器版本：\n%2$s\n如果当前服务器版本的主版本号（第一位数字）高于支持的版本，而您忽略此警告，则可能会发生数据丢失（不太可能）或崩溃（可能）的情况。\n如果只有细微的差异（例如，第三位数字更高），则可以忽略此警告。</string>
   <string name="msg_logout">您的服务器上的任何内容都不会更改。您将被重定向到登录页面。</string>
   <string name="msg_logout_demo">您正在运行<u>https://grocy.info</u>的常规演示实例。\n\n<b>此处未保存任何更改！\n它们将保持公开状态，直到服务器自动覆盖它们。</b>\n\n在登录屏幕上，您可以输入您的自己的服务器地址。</string>
   <string name="msg_logout_demo_short">公开的演示服务器，点击了解详情</string>
