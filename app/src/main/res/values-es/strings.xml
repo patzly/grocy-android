@@ -80,7 +80,7 @@
   <string name="action_new_issue">Abrir nueva propuesta en GitHub</string>
   <string name="action_new_issue_description">Reportar problemas o solicitar una característica</string>
   <string name="action_get_started">Empieza</string>
-  <string name="action_ascending">Ascendiente</string>
+  <string name="action_ascending">Ascendente</string>
   <string name="action_filter">Filtrar</string>
   <string name="action_sort">Ordenar</string>
   <string name="action_undo">Deshacer</string>
