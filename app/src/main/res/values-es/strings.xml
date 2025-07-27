@@ -290,7 +290,7 @@
   <plurals name="msg_recipes_ingredients_missing">
     <item quantity="one">%1$dingrediente perdido</item>
     <item quantity="many">%1$d ingredientes perdidos</item>
-    <item quantity="other">%1$d ingredientes perdidos</item>
+    <item quantity="other">%1$d ingredientes faltantes</item>
   </plurals>
   <string name="msg_recipes_ingredient_fulfillment_info_list">Faltantes: %1$s | Actualmente en lista de compra: %2$s</string>
   <string name="msg_chore_executed">Ejecución de tarea en seguimiento</string>
