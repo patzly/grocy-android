@@ -56,7 +56,7 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetDueDateBinding;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetPostponeDateBinding;
 import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatDueDate;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.util.DateUtil;
@@ -64,9 +64,9 @@ import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
-public class DueDateBottomSheet extends BaseBottomSheetDialogFragment {
+public class PostponeDateBottomSheet extends BaseBottomSheetDialogFragment {
 
-  private final static String TAG = DueDateBottomSheet.class.getSimpleName();
+  private final static String TAG = PostponeDateBottomSheet.class.getSimpleName();
 
   public final static String DATE_TYPE = "date_type";
   public final static int PURCHASED_DATE = 1;
@@ -74,7 +74,7 @@ public class DueDateBottomSheet extends BaseBottomSheetDialogFragment {
   public final static int DUE_DAYS_DEFAULT = 3;
 
   private MainActivity activity;
-  private FragmentBottomsheetDueDateBinding binding;
+  private FragmentBottomsheetPostponeDateBinding binding;
   private Bundle args;
   private Calendar calendar;
   private DateUtil dateUtil;
@@ -92,7 +92,7 @@ public class DueDateBottomSheet extends BaseBottomSheetDialogFragment {
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    binding = FragmentBottomsheetDueDateBinding.inflate(inflater, container, false);
+    binding = FragmentBottomsheetPostponeDateBinding.inflate(inflater, container, false);
     activity = (MainActivity) requireActivity();
     args = requireArguments();
 
