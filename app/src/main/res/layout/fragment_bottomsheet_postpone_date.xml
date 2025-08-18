@@ -144,13 +144,13 @@
           <TextView
               android:id="@+id/textView"
               android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
+              android:layout_height="16dp"
               android:layout_weight="1"
-              android:text="Postpone" />
+              android:text="@string/property_postpone" />
 
           <EditText
               android:id="@+id/editTextPostpone"
-              android:layout_width="80dp"
+              android:layout_width="70dp"
               android:layout_height="wrap_content"
               android:layout_weight="1"
               android:ems="10"
@@ -169,13 +169,13 @@
                 android:id="@+id/radioButtonYear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Years" />
+                android:text="@string/property_years" />
 
             <RadioButton
                 android:id="@+id/radioButtonMonth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Months" />
+                android:text="@string/property_months" />
 
             <RadioButton
                 android:id="@+id/radioButtonDay"
