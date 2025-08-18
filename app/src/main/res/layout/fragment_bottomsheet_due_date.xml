@@ -134,6 +134,59 @@
           android:fontFamily="@font/jost_medium" />
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+          <TextView
+              android:id="@+id/textView"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:text="Postpone" />
+
+          <EditText
+              android:id="@+id/editTextPostpone"
+              android:layout_width="80dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:ems="10"
+              android:inputType="number"
+              android:textAlignment="center"
+              android:hint="0" />
+
+          <RadioGroup
+              android:id="@+id/radio"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioButtonYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Years" />
+
+            <RadioButton
+                android:id="@+id/radioButtonMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Months" />
+
+            <RadioButton
+                android:id="@+id/radioButtonDay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/property_days" />
+          </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="horizontal"

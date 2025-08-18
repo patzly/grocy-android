@@ -48,6 +48,7 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.form.FormDataPurchase;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DateBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DueDateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductsBottomSheet;
@@ -911,7 +912,7 @@ public class PurchaseViewModel extends BaseViewModel {
         formData.getDueDateLive().getValue()
     );
     bundle.putInt(DateBottomSheet.DATE_TYPE, DateBottomSheet.DUE_DATE);
-    showBottomSheet(new DateBottomSheet(), bundle);
+    showBottomSheet(new DueDateBottomSheet(), bundle);
   }
 
   public void showStoresBottomSheet() {

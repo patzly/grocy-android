@@ -56,7 +56,7 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetDateBinding;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetDueDateBinding;
 import xyz.zedler.patrick.grocy.form.FormDataMasterProductCatDueDate;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.util.DateUtil;
@@ -74,7 +74,7 @@ public class DueDateBottomSheet extends BaseBottomSheetDialogFragment {
   public final static int DUE_DAYS_DEFAULT = 3;
 
   private MainActivity activity;
-  private FragmentBottomsheetDateBinding binding;
+  private FragmentBottomsheetDueDateBinding binding;
   private Bundle args;
   private Calendar calendar;
   private DateUtil dateUtil;
@@ -92,7 +92,7 @@ public class DueDateBottomSheet extends BaseBottomSheetDialogFragment {
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    binding = FragmentBottomsheetDateBinding.inflate(inflater, container, false);
+    binding = FragmentBottomsheetDueDateBinding.inflate(inflater, container, false);
     activity = (MainActivity) requireActivity();
     args = requireArguments();
 
@@ -344,6 +344,8 @@ public class DueDateBottomSheet extends BaseBottomSheetDialogFragment {
         calendar.get(Calendar.MONTH),
         calendar.get(Calendar.DAY_OF_MONTH)
     );
+    binding.editTextPostpone.setText("");
+    binding.radio.check(R.id.radioButtonMonth);
   }
 
   @Override
@@ -359,6 +361,23 @@ public class DueDateBottomSheet extends BaseBottomSheetDialogFragment {
             binding.datePicker.getMonth(),
             binding.datePicker.getDayOfMonth()
         );
+
+        // postpone date
+        int postpone;
+        try {
+          postpone = Integer.parseInt(binding.editTextPostpone.getText().toString());
+        } catch (Exception ex) {
+          postpone = 0;
+        }
+        int radio = binding.radio.getCheckedRadioButtonId();
+        if (radio == R.id.radioButtonYear) {
+          calendar.add(Calendar.YEAR, postpone);
+        } else if (radio == R.id.radioButtonDay) {
+          calendar.add(Calendar.DATE, postpone);
+        } else { // default month
+          calendar.add(Calendar.MONTH, postpone);
+        }
+
         date = dateFormatGrocy.format(calendar.getTime());
       } else {
         date = DATE.NEVER_OVERDUE;
