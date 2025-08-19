@@ -36,6 +36,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
@@ -265,11 +266,14 @@ public class PostponeDateBottomSheet extends BaseBottomSheetDialogFragment {
     setDatePickerTextColor(binding.datePicker);
 
     binding.checkboxNeverExpires.setOnCheckedChangeListener(
-        (v, isChecked) -> binding.datePicker.animate()
+        (v, isChecked) -> { binding.datePicker.animate()
             .alpha(isChecked ? 0.38f : 1)
             .withEndAction(() -> binding.datePicker.setEnabled(!isChecked))
             .setDuration(150)
-            .start()
+            .start();
+            binding.editTextPostpone.setEnabled(!isChecked);
+            setRadioEnabled(binding.radio, !isChecked);
+        }
     );
 
     binding.linearNeverExpires.setBackground(ViewUtil.getRippleBgListItemSurface(activity));
@@ -307,6 +311,8 @@ public class PostponeDateBottomSheet extends BaseBottomSheetDialogFragment {
         && selectedBestBeforeDate.equals(DATE.NEVER_OVERDUE)) {
       binding.datePicker.setEnabled(false);
       binding.datePicker.setAlpha(0.38f);
+      binding.editTextPostpone.setEnabled(false);
+      setRadioEnabled(binding.radio, false);
       binding.checkboxNeverExpires.setChecked(true);
     } else if (selectedBestBeforeDate != null) {
       try {
@@ -321,21 +327,29 @@ public class PostponeDateBottomSheet extends BaseBottomSheetDialogFragment {
       }
       binding.datePicker.setEnabled(true);
       binding.datePicker.setAlpha(1.0f);
+      binding.editTextPostpone.setEnabled(true);
+      setRadioEnabled(binding.radio, true);
       binding.checkboxNeverExpires.setChecked(false);
     } else if (defaultDueDays != null) {
       if (Integer.parseInt(defaultDueDays) < 0) {
         binding.datePicker.setEnabled(false);
         binding.datePicker.setAlpha(0.38f);
+        binding.editTextPostpone.setEnabled(false);
+        setRadioEnabled(binding.radio, false);
         binding.checkboxNeverExpires.setChecked(true);
       } else {
         binding.datePicker.setEnabled(true);
         binding.datePicker.setAlpha(1.0f);
+        binding.editTextPostpone.setEnabled(true);
+        setRadioEnabled(binding.radio, true);
         binding.checkboxNeverExpires.setChecked(false);
         calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(defaultDueDays));
       }
     } else {
       binding.datePicker.setEnabled(false);
       binding.datePicker.setAlpha(0.38f);
+      binding.editTextPostpone.setEnabled(false);
+      setRadioEnabled(binding.radio, false);
       binding.checkboxNeverExpires.setChecked(true);
     }
 
@@ -492,6 +506,12 @@ public class PostponeDateBottomSheet extends BaseBottomSheetDialogFragment {
         if(child instanceof EditText) ((EditText) child).setTextColor(color);
       }
       numberPicker.invalidate();
+    }
+  }
+
+  private void setRadioEnabled(RadioGroup radio, boolean enabled) {
+    for (int i = 0; i < radio.getChildCount(); i++) {
+      radio.getChildAt(i).setEnabled(enabled);
     }
   }
 
