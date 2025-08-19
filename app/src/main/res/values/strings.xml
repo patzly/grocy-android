@@ -912,9 +912,9 @@
   <string name="property_barcodes">Barcodes</string>
   <string name="property_barcodes_insert">Barcodes: %1$s</string>
   <string name="property_postpone">Postpone</string>
-  <string name="property_years">Years</string>
-  <string name="property_months">Months</string>
-  <string name="property_days">Days</string>
+  <string name="property_years">years</string>
+  <string name="property_months">months</string>
+  <string name="property_days">days</string>
   <string name="property_purchased_date">Purchased date</string>
   <string name="property_purchased_date_fill">Purchased date: %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
