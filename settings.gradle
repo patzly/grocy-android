@@ -36,4 +36,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Grocy Android"
-include ':app'
+include ':grocy'
