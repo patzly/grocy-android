@@ -361,14 +361,14 @@
           <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_date"
             style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-            android:hint="MMDD | YYMMDD"
+            android:hint="MMDD | YYMMDD . 2y | 1m | 0d"
             app:helperTextEnabled="false">
 
             <com.google.android.material.textfield.TextInputEditText
               android:id="@+id/edit_text_date"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:inputType="number"
+              android:inputType="numberDecimal"
               android:imeOptions="actionDone"
               android:selectAllOnFocus="true"/>
 

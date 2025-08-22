@@ -188,64 +188,16 @@ public class PostponeDateBottomSheet extends BaseBottomSheetDialogFragment {
       binding.linearMonthReverse.setVisibility(reverseDateFormat ? View.VISIBLE : View.GONE);
 
       moreMonth.setOnClickListener(view -> {
-        Date date = getTextFieldDate();
-        if (date != null) {
-          String input = binding.editTextDate.getText() != null
-              ? binding.editTextDate.getText().toString().trim()
-              : "";
-          calendar.setTime(date);
-          calendar.add(Calendar.MONTH, 1);
-          if (input.length() == 6) {
-            binding.editTextDate.setText(dateFormatKeyboardInput.format(calendar.getTime()));
-          } else if (input.length() == 4) {
-            binding.editTextDate.setText(dateFormatKeyboardInputShort.format(calendar.getTime()));
-          }
-        }
+        doMoreLessMonthDay(true, true);
       });
       binding.moreDay.setOnClickListener(view -> {
-        Date date = getTextFieldDate();
-        if (date != null) {
-          String input = binding.editTextDate.getText() != null
-              ? binding.editTextDate.getText().toString().trim()
-              : "";
-          calendar.setTime(date);
-          calendar.add(Calendar.DAY_OF_MONTH, 1);
-          if (input.length() == 6) {
-            binding.editTextDate.setText(dateFormatKeyboardInput.format(calendar.getTime()));
-          } else if (input.length() == 4) {
-            binding.editTextDate.setText(dateFormatKeyboardInputShort.format(calendar.getTime()));
-          }
-        }
+        doMoreLessMonthDay(true, false);
       });
       lessMonth.setOnClickListener(view -> {
-        Date date = getTextFieldDate();
-        if (date != null) {
-          String input = binding.editTextDate.getText() != null
-              ? binding.editTextDate.getText().toString().trim()
-              : "";
-          calendar.setTime(date);
-          calendar.add(Calendar.MONTH, -1);
-          if (input.length() == 6) {
-            binding.editTextDate.setText(dateFormatKeyboardInput.format(calendar.getTime()));
-          } else if (input.length() == 4) {
-            binding.editTextDate.setText(dateFormatKeyboardInputShort.format(calendar.getTime()));
-          }
-        }
+        doMoreLessMonthDay(false, true);
       });
       binding.lessDay.setOnClickListener(view -> {
-        Date date = getTextFieldDate();
-        if (date != null) {
-          String input = binding.editTextDate.getText() != null
-              ? binding.editTextDate.getText().toString().trim()
-              : "";
-          calendar.setTime(date);
-          calendar.add(Calendar.DAY_OF_MONTH, -1);
-          if (input.length() == 6) {
-            binding.editTextDate.setText(dateFormatKeyboardInput.format(calendar.getTime()));
-          } else if (input.length() == 4) {
-            binding.editTextDate.setText(dateFormatKeyboardInputShort.format(calendar.getTime()));
-          }
-        }
+        doMoreLessMonthDay(false, false);
       });
       binding.clear.setOnClickListener(v -> {
         binding.editTextDate.setText("");
@@ -397,7 +349,7 @@ public class PostponeDateBottomSheet extends BaseBottomSheetDialogFragment {
         date = DATE.NEVER_OVERDUE;
       }
     } else {
-      Date textFieldDate = getTextFieldDate();
+      Date textFieldDate = getTextFieldPostponeDate();
       if (textFieldDate != null) {
         date = dateFormatGrocy.format(textFieldDate);
       } else {
@@ -422,7 +374,9 @@ public class PostponeDateBottomSheet extends BaseBottomSheetDialogFragment {
   }
 
   private void updateDateHint() {
-    Date date = getTextFieldDate();
+    String[] fields = splitTextFieldDate();
+    Date date = parseBaseDate(fields[0]);
+
     Date neverOverdueDate = null;
     try {
       neverOverdueDate = dateFormatGrocy.parse(DATE.NEVER_OVERDUE);
@@ -432,10 +386,40 @@ public class PostponeDateBottomSheet extends BaseBottomSheetDialogFragment {
           getString(R.string.subtitle_date_from_input, getString(R.string.subtitle_never_overdue))
       );
     } else if (date != null) {
-      binding.textInputHint.setText(getString(
-          R.string.subtitle_date_from_input,
-          dateUtil.getLocalizedDate(dateFormatGrocy.format(date), DateUtil.FORMAT_SHORT)
-      ));
+      String text = getString(R.string.subtitle_date_from_input,
+              dateUtil.getLocalizedDate(dateFormatGrocy.format(date), DateUtil.FORMAT_SHORT));
+
+      if (fields.length > 1 && fields[1].length() > 1) {
+        int postpone = parsePostpone(fields[1]);
+
+        // postpone date
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        switch (parsePostponeUnit(fields[1])) {
+          case '0': // 0 for days
+            calendar.add(Calendar.DATE, postpone);
+            text += "+" + postpone;
+            text += getString(R.string.property_days);
+            date = calendar.getTime();
+            text += "=" + dateUtil.getLocalizedDate(dateFormatGrocy.format(date), DateUtil.FORMAT_SHORT);
+            break;
+          case '1': // 1 for months
+            calendar.add(Calendar.MONTH, postpone);
+            text += "+" + postpone;
+            text += getString(R.string.property_months);
+            date = calendar.getTime();
+            text += "=" + dateUtil.getLocalizedDate(dateFormatGrocy.format(date), DateUtil.FORMAT_SHORT);
+            break;
+          case '2': // 2 for years
+            calendar.add(Calendar.YEAR, postpone);
+            text += "+" + postpone;
+            text += getString(R.string.property_years);
+            date = calendar.getTime();
+            text += "=" + dateUtil.getLocalizedDate(dateFormatGrocy.format(date), DateUtil.FORMAT_SHORT);
+            break;
+        }
+      }
+      binding.textInputHint.setText(text);
     } else {
       binding.textInputHint.setText(getString(
           R.string.subtitle_date_from_input,
@@ -444,29 +428,100 @@ public class PostponeDateBottomSheet extends BaseBottomSheetDialogFragment {
     }
   }
 
+  private String[] splitTextFieldDate() {
+    String text = binding.editTextDate.getText() != null
+            ? binding.editTextDate.getText().toString().trim()
+            : "";
+    return text.split("\\.", 2);
+  }
+
   private Date getTextFieldDate() {
-    String input = binding.editTextDate.getText() != null
-        ? binding.editTextDate.getText().toString().trim()
-        : "";
+    String[] fields = splitTextFieldDate();
+    Date date = parseBaseDate(fields[0]);
+    return date;
+  }
+
+  private Date parseBaseDate(String input) {
     Date date;
     if (input.length() == 0) {
       date = parseDate(dateFormatGrocy, DATE.NEVER_OVERDUE);
-    } else if (input.length() == 6) {
+    } else if (input.length() == 6) { // YYMMDD
       date = parseDate(dateFormatKeyboardInput, input);
-    } else if (input.length() == 4) {
+    } else if (input.length() == 4) { // MMDD
       date = parseDate(dateFormatKeyboardInputShort, input);
       if (date != null) {
+        Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
-        if (calendar.before(Calendar.getInstance())) {
-          calendar.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR)+1);
-        }
         date = calendar.getTime();
       }
     } else {
       date = null;
     }
     return date;
+  }
+
+  private char parsePostponeUnit(String input) {
+    return input.charAt(0);
+  }
+
+  // parse postpone
+  private int parsePostpone(String input) {
+    int postpone;
+    try {
+      postpone = Integer.parseInt(input.substring(1).toString());
+    } catch (Exception ex) {
+      postpone = 0;
+    }
+    return postpone;
+  }
+
+  private Date getTextFieldPostponeDate() {
+    String[] fields = splitTextFieldDate();
+    Date date = parseBaseDate(fields[0]);
+
+    if (fields.length > 1 && fields[1].length() > 1) {
+      int postpone = parsePostpone(fields[1]);
+
+      // postpone date
+      Calendar calendar = Calendar.getInstance();
+      calendar.setTime(date);
+      switch (parsePostponeUnit(fields[1])) {
+        case '0': // 0 for days
+          calendar.add(Calendar.DATE, postpone);
+          break;
+        case '1': // 1 for months
+          calendar.add(Calendar.MONTH, postpone);
+          break;
+        case '2': // 2 for years
+          calendar.add(Calendar.YEAR, postpone);
+          break;
+      }
+      date = calendar.getTime();
+    }
+
+    return date;
+  }
+
+  private void doMoreLessMonthDay(boolean more, boolean month) {
+    String[] fields = splitTextFieldDate();
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(parseBaseDate(fields[0]));
+    calendar.add(month ? Calendar.MONTH : Calendar.DAY_OF_MONTH, more ? 1 : -1);
+    String postpone;
+    if (fields.length > 1) {
+      postpone = '.' + fields[1];
+    } else {
+      postpone = "";
+    }
+    switch (fields[0].length()) {
+      case 6:
+        binding.editTextDate.setText(dateFormatKeyboardInput.format(calendar.getTime()) + postpone);
+        break;
+      case 4:
+        binding.editTextDate.setText(dateFormatKeyboardInputShort.format(calendar.getTime()) + postpone);
+        break;
+    }
   }
 
   private Date parseDate(SimpleDateFormat dateFormat, String date) {
