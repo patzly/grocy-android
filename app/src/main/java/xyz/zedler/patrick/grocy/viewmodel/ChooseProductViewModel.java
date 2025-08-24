@@ -155,7 +155,11 @@ public class ChooseProductViewModel extends BaseViewModel {
 
     if (productName == null || productName.isEmpty()) {
       SortUtil.sortProductsByName(products, true);
-      displayedItemsLive.setValue(products);
+      if (products.size() > 30) {
+        displayedItemsLive.setValue(products.subList(0, 30));
+      } else {
+        displayedItemsLive.setValue(products);
+      }
       createProductTextLive.setValue(getString(R.string.msg_create_new_product));
       if (pendingProductsActive) {
         createPendingProductTextLive.setValue(
@@ -174,11 +178,12 @@ public class ChooseProductViewModel extends BaseViewModel {
     ArrayList<Product> allProducts = new ArrayList<>();
     allProducts.addAll(products);
     allProducts.addAll(pendingProducts);
-    ArrayList<Product> suggestions = new ArrayList<>(allProducts.size());
-    List<BoundExtractedResult<Product>> results = FuzzySearch.extractSorted(
+    ArrayList<Product> suggestions = new ArrayList<>(30);
+    List<BoundExtractedResult<Product>> results = FuzzySearch.extractTop(
             productName.toLowerCase(),
             allProducts,
             Product::getName,
+            30,
             20
     );
     for (BoundExtractedResult<Product> result : results) {

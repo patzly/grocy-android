@@ -176,14 +176,15 @@ public class MasterObjectListViewModel extends BaseViewModel {
     ArrayList<Object> searchedItems;
     if (search != null && !search.isEmpty()) {
 
-      ArrayList<Object> searchResultsFuzzy = new ArrayList<>(objects.size());
-      List results = FuzzySearch.extractSorted(
+      ArrayList<Object> searchResultsFuzzy = new ArrayList<>(30);
+      List results = FuzzySearch.extractTop(
           search,
           objects,
           item -> {
             String name = ObjectUtil.getObjectName(item, entity);
             return name != null ? name.toLowerCase() : "";
           },
+          30,
           70
       );
       for (Object result : results) {
