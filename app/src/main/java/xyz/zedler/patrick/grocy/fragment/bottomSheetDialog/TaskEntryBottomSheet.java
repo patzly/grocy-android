@@ -44,6 +44,7 @@ import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
+import xyz.zedler.patrick.grocy.util.ValueAnimatorUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
@@ -54,7 +55,7 @@ public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
   private MainActivity activity;
   private FragmentBottomsheetTaskEntryBinding binding;
   private ProgressBar progressConfirm;
-  private ValueAnimator confirmProgressAnimator;
+  private ValueAnimatorUtil confirmProgressAnimator;
   private Task task;
 
   @Override
@@ -164,15 +165,15 @@ public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
       confirmProgressAnimator.cancel();
       confirmProgressAnimator = null;
     }
-    confirmProgressAnimator = ValueAnimator.ofInt(startValue, progressConfirm.getMax());
+    confirmProgressAnimator = ValueAnimatorUtil.ofInt(startValue, progressConfirm.getMax());
     confirmProgressAnimator.setDuration((long) DELETE_CONFIRMATION_DURATION
         * (progressConfirm.getMax() - startValue) / progressConfirm.getMax());
     confirmProgressAnimator.addUpdateListener(
         animation -> progressConfirm.setProgress((Integer) animation.getAnimatedValue())
     );
-    confirmProgressAnimator.addListener(new AnimatorListenerAdapter() {
+    confirmProgressAnimator.addListener(new ValueAnimatorUtil.AnimatorListenerAdapter() {
       @Override
-      public void onAnimationEnd(Animator animation) {
+      public void onAnimationEnd(ValueAnimatorUtil animation) {
         int currentProgress = progressConfirm.getProgress();
         if (currentProgress == progressConfirm.getMax()) {
           TransitionManager.beginDelayedTransition((ViewGroup) requireView());
@@ -182,16 +183,16 @@ public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
           dismiss();
           return;
         }
-        confirmProgressAnimator = ValueAnimator.ofInt(currentProgress, 0);
+        confirmProgressAnimator = ValueAnimatorUtil.ofInt(currentProgress, 0);
         confirmProgressAnimator.setDuration((long) (DELETE_CONFIRMATION_DURATION / 2)
             * currentProgress / progressConfirm.getMax());
         confirmProgressAnimator.setInterpolator(new FastOutSlowInInterpolator());
         confirmProgressAnimator.addUpdateListener(
             anim -> progressConfirm.setProgress((Integer) anim.getAnimatedValue())
         );
-        confirmProgressAnimator.addListener(new AnimatorListenerAdapter() {
+        confirmProgressAnimator.addListener(new ValueAnimatorUtil.AnimatorListenerAdapter() {
           @Override
-          public void onAnimationEnd(Animator animation) {
+          public void onAnimationEnd(ValueAnimatorUtil animation) {
             TransitionManager.beginDelayedTransition((ViewGroup) requireView());
             progressConfirm.setVisibility(View.GONE);
           }
