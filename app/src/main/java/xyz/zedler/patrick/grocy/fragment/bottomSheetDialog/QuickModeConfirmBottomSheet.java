@@ -20,9 +20,6 @@
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +32,7 @@ import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetScanModeConfirmBinding;
 import xyz.zedler.patrick.grocy.util.UiUtil;
+import xyz.zedler.patrick.grocy.util.ValueAnimatorUtil;
 
 public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
 
@@ -43,7 +41,7 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
 
   private FragmentBottomsheetScanModeConfirmBinding binding;
   private MainActivity activity;
-  private ValueAnimator confirmProgressAnimator;
+  private ValueAnimatorUtil confirmProgressAnimator;
   private boolean openAction = false;
   private boolean progressStopped = false;
 
@@ -163,15 +161,15 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
       confirmProgressAnimator.cancel();
       confirmProgressAnimator = null;
     }
-    confirmProgressAnimator = ValueAnimator.ofInt(startValue, binding.progressTimeout.getMax());
+    confirmProgressAnimator = ValueAnimatorUtil.ofInt(startValue, binding.progressTimeout.getMax());
     confirmProgressAnimator.setDuration((long) CONFIRMATION_DURATION
         * (binding.progressTimeout.getMax() - startValue) / binding.progressTimeout.getMax());
     confirmProgressAnimator.addUpdateListener(
         animation -> binding.progressTimeout.setProgress((Integer) animation.getAnimatedValue())
     );
-    confirmProgressAnimator.addListener(new AnimatorListenerAdapter() {
+    confirmProgressAnimator.addListener(new ValueAnimatorUtil.AnimatorListenerAdapter() {
       @Override
-      public void onAnimationEnd(Animator animation) {
+      public void onAnimationEnd(ValueAnimatorUtil animation) {
         if (binding.progressTimeout.getProgress() != binding.progressTimeout.getMax()) {
           return;
         }
