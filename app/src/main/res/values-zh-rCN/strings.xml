@@ -328,7 +328,7 @@
   <string name="msg_quick_mode_confirm_transfer">将被执行的事务: \n\n 迁移%1$s%2$s的%3$s \n 从位置:%4$s \n 到位置:%5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">将被执行的事务: \n\n 设置%1$s的库存数量为%2$s%3$s \n 申请新增项目:\n 到期日:%4$s \n价格:%5$s \n 商店:%6$s \n 位置:%7$s</string>
-  <string name="msg_compatibility">此APP版本与服务器上的Grocy版本不兼容。\n\n当前服务器版本：%1$s\n\n支持的服务器版本：%2$s\n如果当前服务器版本的主版本号（第一位数字）高于支持的版本，而您忽略此警告，则可能会发生数据丢失（不太可能）或崩溃（可能）的情况。\n如果只有细微的差异（例如，第三位数字更高），则可以忽略此警告。</string>
+  <string name="msg_compatibility">此APP版本与服务器上的Grocy版本不兼容。\n\n当前服务器版本：%1$s\n\n支持的服务器版本：\n%2$s\n如果当前服务器版本的主版本号（第一位数字）高于支持的版本，而您忽略此警告，则可能会发生数据丢失（不太可能）或崩溃（可能）的情况。\n如果只有细微的差异（例如，第三位数字更高），则可以忽略此警告。</string>
   <string name="msg_logout">您的服务器上的任何内容都不会更改。您将被重定向到登录页面。</string>
   <string name="msg_logout_demo">您正在运行<u>https://grocy.info</u>的常规演示实例。\n\n<b>此处未保存任何更改！\n它们将保持公开状态，直到服务器自动覆盖它们。</b>\n\n在登录屏幕上，您可以输入您的自己的服务器地址。</string>
   <string name="msg_logout_demo_short">公开的演示服务器，点击了解详情</string>
@@ -407,7 +407,7 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_tare_weight">去皮功能很实用。例如：罐装面粉在购买、消费、调整库存时可以整罐称重，系统会根据下方皮重自动计算出净重，并调整库存数量</string>
   <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_tare_weight_purchase">已启用去皮功能--请称重整个容器，提交数量后将自动计算净重</string>
+  <string name="msg_help_tare_weight_purchase">已启用去皮功能&#8212;请称重整个容器，提交数量后将自动计算净重</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_stock_check">当添加此产品作为菜谱的食材时，这将作为默认设置</string>
   <string name="msg_help_inventory_fields">以下字段应用于新增产品</string>
@@ -853,6 +853,9 @@
   <string name="property_barcode">条码</string>
   <string name="property_barcodes">条码</string>
   <string name="property_barcodes_insert">‎条码‎：%1$s</string>
+  <string name="property_postpone">推迟</string>
+  <string name="property_years">年</string>
+  <string name="property_months">月</string>
   <string name="property_days">天</string>
   <string name="property_purchased_date">购买日期</string>
   <string name="property_purchased_date_fill">‎购买日期‎：%1$s</string>
@@ -1143,8 +1146,6 @@
   <string name="setting_language_info">非常感谢Transifex的所有翻译志愿者！\n请访问我们的GitHub，了解如何帮助Grocy Android支持您的语言。</string>
   <string name="setting_language_system">跟随系统</string>
   <string name="setting_language_not_available">若无对应翻译语言，请使用英语</string>
-  <string name="setting_transition">使用平滑效果切换页面</string>
-  <string name="setting_transition_description">代替淡出效果</string>
   <string name="setting_open_food_facts">获取Open Food Facts和Open Beauty Facts数据库数据</string>
   <string name="setting_open_food_facts_description">通过条形码获取信息</string>
   <string name="setting_choose_barcode_scanner">选择条码扫描器</string>
