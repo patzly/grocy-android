@@ -33,7 +33,7 @@
     <com.google.android.material.appbar.MaterialToolbar
       android:id="@+id/toolbar"
       style="@style/Widget.Grocy.Toolbar.Start"
-      app:title="@string/property_due_date" />
+      app:title="@string/property_purchased_date" />
 
     <FrameLayout
       android:id="@+id/frame_help_button"
