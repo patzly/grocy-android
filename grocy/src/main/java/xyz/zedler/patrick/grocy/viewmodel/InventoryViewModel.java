@@ -47,6 +47,7 @@ import xyz.zedler.patrick.grocy.fragment.InventoryFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.PostponeDateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuickModeConfirmBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
@@ -508,7 +509,7 @@ public class InventoryViewModel extends BaseViewModel {
         formData.getDueDateLive().getValue()
     );
     bundle.putInt(DateBottomSheet.DATE_TYPE, DateBottomSheet.DUE_DATE);
-    showBottomSheet(new DateBottomSheet(), bundle);
+    showBottomSheet(new PostponeDateBottomSheet(), bundle);
   }
 
   public void showStoresBottomSheet() {
