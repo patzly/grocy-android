@@ -33,7 +33,7 @@
     <com.google.android.material.appbar.MaterialToolbar
       android:id="@+id/toolbar"
       style="@style/Widget.Grocy.Toolbar.Start"
-      app:title="@string/property_purchased_date" />
+      app:title="@string/property_due_date" />
 
     <FrameLayout
       android:id="@+id/frame_help_button"
@@ -132,6 +132,59 @@
           android:calendarViewShown="false"
           android:datePickerMode="spinner"
           android:fontFamily="@font/jost_medium" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+          <TextView
+              android:id="@+id/textView"
+              android:layout_width="wrap_content"
+              android:layout_height="16dp"
+              android:layout_weight="1"
+              android:text="@string/property_postpone" />
+
+          <EditText
+              android:id="@+id/editTextPostpone"
+              android:layout_width="70dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:ems="10"
+              android:inputType="number"
+              android:textAlignment="center"
+              android:hint="0" />
+
+          <RadioGroup
+              android:id="@+id/radio"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioButtonYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/property_years" />
+
+            <RadioButton
+                android:id="@+id/radioButtonMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/property_months" />
+
+            <RadioButton
+                android:id="@+id/radioButtonDay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/property_days" />
+          </RadioGroup>
+
+        </LinearLayout>
 
         <LinearLayout
           android:layout_width="match_parent"
@@ -308,14 +361,14 @@
           <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_date"
             style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-            android:hint="MMDD | YYMMDD"
+            android:hint="MMDD | YYMMDD . 2y | 1m | 0d"
             app:helperTextEnabled="false">
 
             <com.google.android.material.textfield.TextInputEditText
               android:id="@+id/edit_text_date"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:inputType="number"
+              android:inputType="numberDecimal"
               android:imeOptions="actionDone"
               android:selectAllOnFocus="true"/>
 
