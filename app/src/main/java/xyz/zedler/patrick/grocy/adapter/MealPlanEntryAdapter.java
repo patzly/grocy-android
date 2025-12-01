@@ -89,12 +89,18 @@ public class MealPlanEntryAdapter extends
   private final int maxDecimalPlacesAmount;
   private final int decimalPlacesPriceDisplay;
   private final String currency;
+  private final MealPlanEntryAdapterListener listener;
+
+  public interface MealPlanEntryAdapterListener {
+    void onDeleteMealPlanEntry(MealPlanEntry entry);
+  }
 
   public MealPlanEntryAdapter(
       Context context,
       GrocyApi grocyApi,
       LazyHeaders grocyAuthHeaders,
-      String date
+      String date,
+      MealPlanEntryAdapterListener listener
   ) {
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     this.maxDecimalPlacesAmount = sharedPrefs.getInt(
@@ -120,6 +126,7 @@ public class MealPlanEntryAdapter extends
     this.grocyApi = grocyApi;
     this.grocyAuthHeaders = grocyAuthHeaders;
     this.groupedListItems = new ArrayList<>();
+    this.listener = listener;
   }
 
   static ArrayList<GroupedListItem> getGroupedListItems(
@@ -514,6 +521,20 @@ public class MealPlanEntryAdapter extends
     }
 
     binding.flexboxLayout.setVisibility(binding.flexboxLayout.getChildCount() > 0 ? View.VISIBLE : View.GONE);
+
+    // Hide delete button for day summary entries
+    if (MealPlanEntry.TYPE_DAY_INFO.equals(entry.getType())) {
+      binding.buttonDelete.setVisibility(View.GONE);
+    } else {
+      binding.buttonDelete.setVisibility(View.VISIBLE);
+    }
+
+    // Set up delete button click listener
+    binding.buttonDelete.setOnClickListener(v -> {
+      if (listener != null) {
+        listener.onDeleteMealPlanEntry(entry);
+      }
+    });
 
   }
 

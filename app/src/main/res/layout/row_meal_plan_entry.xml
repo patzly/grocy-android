@@ -97,6 +97,13 @@
 
       </LinearLayout>
 
+      <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_delete"
+        style="@style/Widget.Grocy.Button.IconButton"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="4dp"
+        app:icon="@drawable/ic_round_delete_anim" />
+
     </LinearLayout>
 
   </LinearLayout>
