@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2024 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2024-2025 by Patrick Zedler
+  -->
+
+<layout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <variable
+      name="bottomsheet"
+      type="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.AddRecipeToMealPlanBottomSheet" />
+  </data>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.MaterialToolbar
+      style="@style/Widget.Grocy.Toolbar.Start"
+      app:title="@string/title_add_recipe_to_meal_plan" />
+
+    <com.google.android.material.divider.MaterialDivider
+      style="@style/Widget.Grocy.Divider" />
+
+    <androidx.core.widget.NestedScrollView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:scrollbars="none"
+      android:overScrollMode="ifContentScrolls">
+
+      <LinearLayout
+        android:id="@+id/linear_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="12dp">
+
+        <LinearLayout
+          style="@style/Widget.Grocy.LinearLayout.ListItem"
+          android:paddingTop="0dp"
+          android:paddingBottom="8dp">
+
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
+            android:src="@drawable/ic_round_label_anim" />
+
+          <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+              android:text="@string/property_recipe" />
+
+            <TextView
+              android:id="@+id/text_recipe"
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@{bottomsheet.recipeLive}" />
+
+          </LinearLayout>
+
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_recipe"
+            style="@style/Widget.Grocy.Button.IconButton"
+            android:layout_gravity="center_vertical"
+            android:onClick="@{() -> bottomsheet.showRecipeBottomSheet()}"
+            app:icon="@drawable/ic_round_chevron_right" />
+
+        </LinearLayout>
+
+        <LinearLayout
+          style="@style/Widget.Grocy.LinearLayout.ListItem"
+          android:paddingTop="8dp"
+          android:paddingBottom="8dp">
+
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
+            android:src="@drawable/ic_round_label_anim" />
+
+          <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_servings"
+            style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:hint="@string/property_servings">
+
+            <com.google.android.material.textfield.TextInputEditText
+              android:id="@+id/edit_text_servings"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:inputType="numberDecimal"
+              android:text="@={bottomsheet.servingsLive}"
+              app:onDoneClickInSoftKeyboard="@{() -> bottomsheet.dismiss()}" />
+
+          </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+          style="@style/Widget.Grocy.LinearLayout.ListItem"
+          android:paddingTop="8dp"
+          android:paddingBottom="8dp">
+
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
+            android:src="@drawable/ic_round_event" />
+
+          <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+              android:text="@string/property_date" />
+
+            <TextView
+              android:id="@+id/text_date"
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@{bottomsheet.dateLive}" />
+
+          </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:layout_marginTop="8dp"
+          android:gravity="end">
+
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_cancel"
+            style="@style/Widget.Grocy.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/action_cancel"
+            android:onClick="@{() -> bottomsheet.dismiss()}" />
+
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_save"
+            style="@style/Widget.Grocy.Button.UnelevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="0dp"
+            android:text="@string/action_save"
+            android:enabled="@{bottomsheet.canSaveLive}"
+            android:onClick="@{() -> bottomsheet.saveRecipe()}" />
+
+        </LinearLayout>
+
+      </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+  </LinearLayout>
+
+</layout>

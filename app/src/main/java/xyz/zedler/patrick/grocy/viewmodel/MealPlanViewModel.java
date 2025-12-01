@@ -32,6 +32,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants.PREF;
@@ -344,6 +345,20 @@ public class MealPlanViewModel extends BaseViewModel {
         PREF.CURRENCY,
         ""
     );
+  }
+
+  public ArrayList<Recipe> getRecipes() {
+    if (recipeHashMap != null) {
+      ArrayList<Recipe> recipes = new ArrayList<>();
+      for (Recipe recipe : recipeHashMap.values()) {
+        // Filter out shadow recipes (nested recipes with negative IDs)
+        if (recipe.getId() >= 0) {
+          recipes.add(recipe);
+        }
+      }
+      return recipes;
+    }
+    return new ArrayList<>();
   }
 
   @Override

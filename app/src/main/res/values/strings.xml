@@ -73,6 +73,7 @@
   <string name="action_scan">Scan</string>
   <string name="action_cancel">Cancel</string>
   <string name="action_add">Add</string>
+  <string name="action_add_recipe_to_meal_plan">Add recipe to meal plan</string>
   <string name="action_clear">Clear</string>
   <string name="action_clear_shopping_list">Clear shopping list</string>
   <string name="action_auto_sync">Auto sync</string>
@@ -335,6 +336,7 @@
   <string name="msg_data_copied_from_product">Data was copied from the product \"%1$s\".</string>
   <string name="msg_recipe_added_to_cart">Added recipe ingredients to cart</string>
   <string name="msg_recipe_consumed">Removed all ingredients of recipe \"%1$s\" from stock</string>
+  <string name="msg_recipe_added_to_meal_plan">Recipe added to meal plan</string>
   <string name="msg_stored_purchases_overview">There are purchases on the device that have not yet been transferred to the server. Tap here for details.</string>
   <string name="msg_stored_purchases">Purchases that have not yet been transferred to the server are displayed here. They were saved together with temporary products in this app so that you could scan your purchase faster in quick mode and not have to create new products for the master data directly.</string>
   <string name="msg_stored_purchases_product_offline">Tap on the product and fill in the required data. After that, the product will be shown here as online and the stored purchases can be sent to the server.</string>
@@ -555,6 +557,8 @@
   <string name="error_not_grocy_instance">Not a valid Grocy instance</string>
   <string name="error_timeout">Timeout error</string>
   <string name="error_no_product_selected">No product selected</string>
+  <string name="error_no_recipes">No recipes available</string>
+  <string name="error_invalid_servings">Invalid servings</string>
   <string name="error_failed_to_connect_to">Failed to connect to server</string>
   <string name="error_missing_information">Not all required fields are filled</string>
   <string name="error_handshake">Invalid certificate</string>
@@ -650,6 +654,7 @@
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_location_to">To location</string>
   <string name="title_recipe">Recipe</string>
+  <string name="title_add_recipe_to_meal_plan">Add recipe to meal plan</string>
   <string name="title_preparation_mode">Preparation mode</string>
   <string name="title_total_price">Total price</string>
   <string name="title_unit_price">Unit price</string>
@@ -1057,6 +1062,9 @@
   <!-- See context for this string on the web interface on the chores page, the table has this column -->
   <string name="property_next_estimated_tracking">Next estimated tracking</string>
   <string name="property_next_estimated_tracking_time">Next estimated tracking time</string>
+  <string name="property_recipe">Recipe</string>
+  <string name="property_recipes">Recipes</string>
+  <string name="property_date">Date</string>
   <!-- See context for this string on the web interface on the recipes edit page -->
   <string name="property_servings">Servings</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it (hover over help icon) -->

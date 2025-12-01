@@ -178,6 +178,8 @@ public class BaseFragment extends Fragment {
 
   public void selectProduct(Product product) {}
 
+  public void selectRecipe(xyz.zedler.patrick.grocy.model.Recipe recipe) {}
+
   public void createQuantityUnit(Bundle argsBundle) {}
 
   public void selectQuantityUnit(QuantityUnit quantityUnit) {}

@@ -57,6 +57,7 @@ import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMealPlanBinding;
 import xyz.zedler.patrick.grocy.databinding.ViewCalendarDayLayoutBinding;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
@@ -71,6 +72,7 @@ public class MealPlanFragment extends BaseFragment {
   private ClickUtil clickUtil;
   private FragmentMealPlanBinding binding;
   private SystemBarBehavior systemBarBehavior;
+  private xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.AddRecipeToMealPlanBottomSheet addRecipeBottomSheet;
 
   @Override
   public View onCreateView(
@@ -224,7 +226,15 @@ public class MealPlanFragment extends BaseFragment {
 
     activity.getScrollBehavior().setUpScroll(binding.appBar, false, null);
     activity.getScrollBehavior().setBottomBarVisibility(true);
-    activity.updateBottomAppBar(false, R.menu.menu_meal_plan, this::onMenuItemClick);
+    activity.updateBottomAppBar(true, R.menu.menu_meal_plan, this::onMenuItemClick);
+    activity.updateFab(
+        R.drawable.ic_round_add_anim,
+        R.string.action_add_recipe_to_meal_plan,
+        Constants.FAB.TAG.ADD,
+        savedInstanceState == null,
+        this::showAddRecipeBottomSheet,
+        null
+    );
   }
 
   private boolean onMenuItemClick(MenuItem item) {
@@ -296,6 +306,38 @@ public class MealPlanFragment extends BaseFragment {
     systemBarBehavior.refresh();
     if (isOnline) {
       viewModel.downloadData(false);
+    }
+  }
+
+  private void showAddRecipeBottomSheet() {
+    if (viewModel == null) {
+      return;
+    }
+
+    Bundle bundle = new Bundle();
+    bundle.putSerializable(Constants.ARGUMENT.SELECTED_DATE, viewModel.getSelectedDate());
+    bundle.putParcelableArrayList(Constants.ARGUMENT.RECIPES, viewModel.getRecipes());
+    addRecipeBottomSheet = new xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.AddRecipeToMealPlanBottomSheet();
+    activity.showBottomSheet(addRecipeBottomSheet, bundle);
+  }
+
+  @Override
+  public void selectRecipe(Recipe recipe) {
+    if (addRecipeBottomSheet != null && addRecipeBottomSheet.isAdded()) {
+      addRecipeBottomSheet.selectRecipe(recipe);
+    }
+  }
+
+  public void performAction(String action) {
+    if (action.equals(Constants.ACTION.REFRESH)) {
+      viewModel.downloadData(false);
+    }
+  }
+
+  public void onBottomSheetDismissed() {
+    // Clear reference when bottom sheet is dismissed
+    if (addRecipeBottomSheet != null && !addRecipeBottomSheet.isAdded()) {
+      addRecipeBottomSheet = null;
     }
   }
 
