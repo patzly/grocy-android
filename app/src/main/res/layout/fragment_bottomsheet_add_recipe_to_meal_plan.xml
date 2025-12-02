@@ -126,6 +126,41 @@
 
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
+            android:src="@drawable/ic_round_category" />
+
+          <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+              android:text="@string/property_meal_plan_section" />
+
+            <TextView
+              android:id="@+id/text_section"
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@{bottomsheet.sectionLive}" />
+
+          </LinearLayout>
+
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_section"
+            style="@style/Widget.Grocy.Button.IconButton"
+            android:layout_gravity="center_vertical"
+            android:onClick="@{() -> bottomsheet.showSectionBottomSheet()}"
+            app:icon="@drawable/ic_round_chevron_right" />
+
+        </LinearLayout>
+
+        <LinearLayout
+          style="@style/Widget.Grocy.LinearLayout.ListItem"
+          android:paddingTop="8dp"
+          android:paddingBottom="8dp">
+
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
             android:src="@drawable/ic_round_event" />
 
           <LinearLayout

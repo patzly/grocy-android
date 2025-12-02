@@ -56,11 +56,14 @@ public class AddRecipeToMealPlanBottomSheet extends BaseBottomSheetDialogFragmen
   private MutableLiveData<String> recipeLive;
   private MutableLiveData<String> servingsLive;
   private MutableLiveData<String> dateLive;
+  private MutableLiveData<String> sectionLive;
   private MutableLiveData<Boolean> canSaveLive;
 
   private Recipe selectedRecipe;
   private LocalDate selectedDate;
   private ArrayList<Recipe> recipes;
+  private ArrayList<xyz.zedler.patrick.grocy.model.MealPlanSection> sections;
+  private xyz.zedler.patrick.grocy.model.MealPlanSection selectedSection;
 
   @Override
   public View onCreateView(
@@ -86,6 +89,7 @@ public class AddRecipeToMealPlanBottomSheet extends BaseBottomSheetDialogFragmen
     recipeLive = new MutableLiveData<>(getString(R.string.subtitle_none_selected));
     servingsLive = new MutableLiveData<>("1");
     dateLive = new MutableLiveData<>();
+    sectionLive = new MutableLiveData<>(getString(R.string.subtitle_none));
     canSaveLive = new MutableLiveData<>(false);
 
     // Get arguments
@@ -101,6 +105,12 @@ public class AddRecipeToMealPlanBottomSheet extends BaseBottomSheetDialogFragmen
       recipes = bundle.getParcelableArrayList(ARGUMENT.RECIPES);
     } else {
       recipes = new ArrayList<>();
+    }
+
+    if (bundle.containsKey(ARGUMENT.MEAL_PLAN_SECTIONS)) {
+      sections = bundle.getParcelableArrayList(ARGUMENT.MEAL_PLAN_SECTIONS);
+    } else {
+      sections = new ArrayList<>();
     }
 
     // Observe servings changes to update save button state
@@ -128,6 +138,10 @@ public class AddRecipeToMealPlanBottomSheet extends BaseBottomSheetDialogFragmen
     return dateLive;
   }
 
+  public MutableLiveData<String> getSectionLive() {
+    return sectionLive;
+  }
+
   public MutableLiveData<Boolean> getCanSaveLive() {
     return canSaveLive;
   }
@@ -144,6 +158,30 @@ public class AddRecipeToMealPlanBottomSheet extends BaseBottomSheetDialogFragmen
       bundle.putInt(ARGUMENT.SELECTED_ID, selectedRecipe.getId());
     }
     activity.showBottomSheet(new RecipesBottomSheet(), bundle);
+  }
+
+  public void showSectionBottomSheet() {
+    if (sections == null || sections.isEmpty()) {
+      // No sections available, keep it as "None"
+      return;
+    }
+
+    Bundle bundle = new Bundle();
+    bundle.putParcelableArrayList(ARGUMENT.MEAL_PLAN_SECTIONS, sections);
+    if (selectedSection != null) {
+      bundle.putString(ARGUMENT.SELECTED_ID, String.valueOf(selectedSection.getId()));
+    }
+    activity.showBottomSheet(new MealPlanSectionsSelectionBottomSheet(), bundle);
+  }
+
+  public void selectSection(xyz.zedler.patrick.grocy.model.MealPlanSection section) {
+    selectedSection = section;
+    if (section == null || section.getId() == -1) {
+      sectionLive.setValue(getString(R.string.subtitle_none));
+      selectedSection = null;
+    } else {
+      sectionLive.setValue(section.getName());
+    }
   }
 
   public void selectRecipe(Recipe recipe) {
@@ -188,6 +226,12 @@ public class AddRecipeToMealPlanBottomSheet extends BaseBottomSheetDialogFragmen
       jsonObject.put("recipe_servings", servings);
       jsonObject.put("day", selectedDate.toString());
       jsonObject.put("type", "recipe");
+      if (selectedSection != null && selectedSection.getId() != -1) {
+        jsonObject.put("section_id", String.valueOf(selectedSection.getId()));
+      } else {
+        // Explicitly set to null if no section or "None" selected
+        jsonObject.put("section_id", JSONObject.NULL);
+      }
     } catch (JSONException e) {
       activity.showSnackbar(R.string.error_undefined, false);
       canSaveLive.setValue(true);

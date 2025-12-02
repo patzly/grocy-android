@@ -31,6 +31,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import org.json.JSONException;
+import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MealPlanEntryAdapter;
@@ -158,6 +161,111 @@ public class MealPlanPagingFragment extends Fragment implements MealPlanEntryAda
         }).setNegativeButton(R.string.action_cancel, (dialog, which) -> {})
         .create()
         .show();
+  }
+
+  @Override
+  public void onCompleteMealPlanEntry(MealPlanEntry entry) {
+    // Toggle the done status
+    String newDoneStatus = "1".equals(entry.getDone()) ? "0" : "1";
+
+    JSONObject jsonObject = new JSONObject();
+    try {
+      jsonObject.put("done", newDoneStatus);
+    } catch (JSONException e) {
+      activity.showSnackbar(R.string.error_undefined, false);
+      return;
+    }
+
+    dlHelper.put(
+        viewModel.getGrocyApi().getObject(GrocyApi.ENTITY.MEAL_PLAN, entry.getId()),
+        jsonObject,
+        response -> {
+          if ("1".equals(newDoneStatus)) {
+            activity.showSnackbar(R.string.msg_marked_as_complete, false);
+          } else {
+            activity.showSnackbar(R.string.msg_marked_as_incomplete, false);
+          }
+          viewModel.downloadData(false);
+        },
+        error -> activity.showSnackbar(R.string.error_undefined, false)
+    );
+  }
+
+  @Override
+  public void onAddToShoppingListMealPlanEntry(MealPlanEntry entry) {
+    // Only works for recipes
+    if (!MealPlanEntry.TYPE_RECIPE.equals(entry.getType())) {
+      return;
+    }
+
+    try {
+      int recipeId = Integer.parseInt(entry.getRecipeId());
+
+      // Create JSON object with servings if available
+      JSONObject jsonObject = new JSONObject();
+      if (entry.getRecipeServings() != null && !entry.getRecipeServings().isEmpty()) {
+        try {
+          jsonObject.put("servings", entry.getRecipeServings());
+        } catch (JSONException e) {
+          // Ignore, will use default servings
+        }
+      }
+
+      dlHelper.post(
+          viewModel.getGrocyApi().addNotFulfilledProductsToCartForRecipe(recipeId),
+          jsonObject,
+          response -> {
+            activity.showSnackbar(R.string.msg_added_to_shopping_list, false);
+          },
+          error -> activity.showSnackbar(R.string.error_undefined, false)
+      );
+    } catch (NumberFormatException e) {
+      activity.showSnackbar(R.string.error_undefined, false);
+    }
+  }
+
+  @Override
+  public void onChangeSectionMealPlanEntry(MealPlanEntry entry) {
+    // Show bottom sheet to select section
+    Bundle bundle = new Bundle();
+    bundle.putParcelableArrayList(
+        xyz.zedler.patrick.grocy.Constants.ARGUMENT.MEAL_PLAN_SECTIONS,
+        new ArrayList<>(viewModel.getMealPlanSections())
+    );
+    bundle.putInt(xyz.zedler.patrick.grocy.Constants.ARGUMENT.MEAL_PLAN_ENTRY_ID, entry.getId());
+    bundle.putString(
+        xyz.zedler.patrick.grocy.Constants.ARGUMENT.SELECTED_ID,
+        entry.getSectionId()
+    );
+
+    activity.showBottomSheet(
+        new xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MealPlanSectionSelectionBottomSheet(),
+        bundle
+    );
+  }
+
+  public void updateMealPlanEntrySection(int entryId, String sectionId) {
+    JSONObject jsonObject = new JSONObject();
+    try {
+      if (sectionId != null && !sectionId.isEmpty()) {
+        jsonObject.put("section_id", sectionId);
+      } else {
+        jsonObject.put("section_id", JSONObject.NULL);
+      }
+    } catch (JSONException e) {
+      activity.showSnackbar(R.string.error_undefined, false);
+      return;
+    }
+
+    dlHelper.put(
+        viewModel.getGrocyApi().getObject(GrocyApi.ENTITY.MEAL_PLAN, entryId),
+        jsonObject,
+        response -> {
+          activity.showSnackbar(R.string.msg_section_updated, false);
+          viewModel.downloadData(false);
+        },
+        error -> activity.showSnackbar(R.string.error_undefined, false)
+    );
   }
 
   private String getEntryDisplayName(MealPlanEntry entry) {

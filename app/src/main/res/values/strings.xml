@@ -339,6 +339,10 @@
   <string name="msg_recipe_added_to_meal_plan">Recipe added to meal plan</string>
   <string name="msg_deleted">Deleted successfully</string>
   <string name="msg_saved">Saved successfully</string>
+  <string name="msg_marked_as_complete">Marked as complete</string>
+  <string name="msg_marked_as_incomplete">Marked as incomplete</string>
+  <string name="msg_added_to_shopping_list">Added to shopping list</string>
+  <string name="msg_section_updated">Section updated</string>
   <string name="msg_stored_purchases_overview">There are purchases on the device that have not yet been transferred to the server. Tap here for details.</string>
   <string name="msg_stored_purchases">Purchases that have not yet been transferred to the server are displayed here. They were saved together with temporary products in this app so that you could scan your purchase faster in quick mode and not have to create new products for the master data directly.</string>
   <string name="msg_stored_purchases_product_offline">Tap on the product and fill in the required data. After that, the product will be shown here as online and the stored purchases can be sent to the server.</string>
@@ -634,6 +638,7 @@
   <string name="title_meal_plan_sections">Meal plan sections</string>
   <string name="title_new_meal_plan_section">New meal plan section</string>
   <string name="title_edit_meal_plan_section">Edit meal plan section</string>
+  <string name="title_select_section">Select section</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Editor</string>
   <string name="title_task_new">New task</string>

@@ -93,6 +93,9 @@ public class MealPlanEntryAdapter extends
 
   public interface MealPlanEntryAdapterListener {
     void onDeleteMealPlanEntry(MealPlanEntry entry);
+    void onCompleteMealPlanEntry(MealPlanEntry entry);
+    void onAddToShoppingListMealPlanEntry(MealPlanEntry entry);
+    void onChangeSectionMealPlanEntry(MealPlanEntry entry);
   }
 
   public MealPlanEntryAdapter(
@@ -138,6 +141,15 @@ public class MealPlanEntryAdapter extends
     if (mealPlanEntries == null || mealPlanEntries.isEmpty()) {
       return groupedListItems;
     }
+
+    // Filter out sections with null or empty names
+    List<MealPlanSection> validSections = new ArrayList<>();
+    for (MealPlanSection section : mealPlanSections) {
+      if (section.getName() != null && !section.getName().isBlank()) {
+        validSections.add(section);
+      }
+    }
+
     HashMap<Integer, List<MealPlanEntry>> mealPlanEntriesGrouped = new HashMap<>();
     for (MealPlanEntry entry : mealPlanEntries) {
       int sectionId = NumUtil.isStringInt(entry.getSectionId())
@@ -155,22 +167,37 @@ public class MealPlanEntryAdapter extends
       dayInfo.setType(MealPlanEntry.TYPE_DAY_INFO);
       groupedListItems.add(dayInfo);
     }
-    for (MealPlanSection section : mealPlanSections) {
+
+    // First add entries with no section (section_id = null, which is -1 in the map)
+    List<MealPlanEntry> entriesWithoutSection = mealPlanEntriesGrouped.get(-1);
+    if (entriesWithoutSection != null && !entriesWithoutSection.isEmpty()) {
+      for (MealPlanEntry entry : entriesWithoutSection) {
+        groupedListItems.add(entry);
+        int index = groupedListItems.indexOf(entry);
+        if (index == 0) {
+          entry.setItemPosition(MaterialTimelineView.POSITION_FIRST);
+        } else {
+          entry.setItemPosition(MaterialTimelineView.POSITION_MIDDLE);
+        }
+      }
+    }
+
+    // Then add entries with valid sections
+    for (MealPlanSection section : validSections) {
       List<MealPlanEntry> list = mealPlanEntriesGrouped.get(section.getId());
       if (list == null || list.isEmpty()) {
         continue;
       }
-      if (section.getName() != null && !section.getName().isBlank()) {
-        if (!groupedListItems.isEmpty()) {
-          GroupedListItem lastItem = groupedListItems.get(groupedListItems.size()-1);
-          if (lastItem instanceof MealPlanEntry) {
-            ((MealPlanEntry) lastItem).setItemPosition(groupedListItems.size() > 1
-                ? MaterialTimelineView.POSITION_MIDDLE : MaterialTimelineView.POSITION_FIRST);
-          }
+
+      if (!groupedListItems.isEmpty()) {
+        GroupedListItem lastItem = groupedListItems.get(groupedListItems.size()-1);
+        if (lastItem instanceof MealPlanEntry) {
+          ((MealPlanEntry) lastItem).setItemPosition(groupedListItems.size() > 1
+              ? MaterialTimelineView.POSITION_MIDDLE : MaterialTimelineView.POSITION_FIRST);
         }
-        groupedListItems.add(section);
-        section.setTopItem(groupedListItems.indexOf(section) == 0);
       }
+      groupedListItems.add(section);
+      section.setTopItem(groupedListItems.indexOf(section) == 0);
 
       for (MealPlanEntry entry : list) {
         groupedListItems.add(entry);
@@ -182,10 +209,13 @@ public class MealPlanEntryAdapter extends
         }
       }
     }
-    GroupedListItem lastItem = groupedListItems.get(groupedListItems.size()-1);
-    if (lastItem instanceof MealPlanEntry) {
-      ((MealPlanEntry) lastItem).setItemPosition(groupedListItems.size() > 1
-          ? MaterialTimelineView.POSITION_LAST : MaterialTimelineView.POSITION_SINGLE);
+
+    if (!groupedListItems.isEmpty()) {
+      GroupedListItem lastItem = groupedListItems.get(groupedListItems.size()-1);
+      if (lastItem instanceof MealPlanEntry) {
+        ((MealPlanEntry) lastItem).setItemPosition(groupedListItems.size() > 1
+            ? MaterialTimelineView.POSITION_LAST : MaterialTimelineView.POSITION_SINGLE);
+      }
     }
     return groupedListItems;
   }
@@ -522,17 +552,52 @@ public class MealPlanEntryAdapter extends
 
     binding.flexboxLayout.setVisibility(binding.flexboxLayout.getChildCount() > 0 ? View.VISIBLE : View.GONE);
 
-    // Hide delete button for day summary entries
+    // Hide button container for day summary entries
     if (MealPlanEntry.TYPE_DAY_INFO.equals(entry.getType())) {
-      binding.buttonDelete.setVisibility(View.GONE);
+      binding.buttonContainer.setVisibility(View.GONE);
     } else {
-      binding.buttonDelete.setVisibility(View.VISIBLE);
+      binding.buttonContainer.setVisibility(View.VISIBLE);
+
+      // Only show shopping list button for recipes
+      if (MealPlanEntry.TYPE_RECIPE.equals(entry.getType())) {
+        binding.buttonShoppingList.setVisibility(View.VISIBLE);
+      } else {
+        binding.buttonShoppingList.setVisibility(View.GONE);
+      }
+
+      // Update complete button appearance based on done status
+      if ("1".equals(entry.getDone())) {
+        binding.buttonComplete.setIconResource(R.drawable.ic_round_undo);
+      } else {
+        binding.buttonComplete.setIconResource(R.drawable.ic_round_check_anim);
+      }
     }
 
     // Set up delete button click listener
     binding.buttonDelete.setOnClickListener(v -> {
       if (listener != null) {
         listener.onDeleteMealPlanEntry(entry);
+      }
+    });
+
+    // Set up complete button click listener
+    binding.buttonComplete.setOnClickListener(v -> {
+      if (listener != null) {
+        listener.onCompleteMealPlanEntry(entry);
+      }
+    });
+
+    // Set up shopping list button click listener
+    binding.buttonShoppingList.setOnClickListener(v -> {
+      if (listener != null) {
+        listener.onAddToShoppingListMealPlanEntry(entry);
+      }
+    });
+
+    // Set up section button click listener
+    binding.buttonSection.setOnClickListener(v -> {
+      if (listener != null) {
+        listener.onChangeSectionMealPlanEntry(entry);
       }
     });
 

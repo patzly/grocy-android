@@ -97,12 +97,47 @@
 
       </LinearLayout>
 
+    </LinearLayout>
+
+    <!-- Action buttons row at bottom -->
+    <LinearLayout
+      android:id="@+id/button_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:gravity="end"
+      android:paddingStart="16dp"
+      android:paddingEnd="8dp"
+      android:paddingTop="4dp"
+      android:paddingBottom="8dp">
+
+      <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_section"
+        style="@style/Widget.Grocy.Button.IconButton"
+        android:layout_marginEnd="0dp"
+        app:icon="@drawable/ic_round_category"
+        tools:ignore="ContentDescription" />
+
+      <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_shopping_list"
+        style="@style/Widget.Grocy.Button.IconButton"
+        android:layout_marginEnd="0dp"
+        app:icon="@drawable/ic_round_shopping_cart"
+        tools:ignore="ContentDescription" />
+
+      <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_complete"
+        style="@style/Widget.Grocy.Button.IconButton"
+        android:layout_marginEnd="0dp"
+        app:icon="@drawable/ic_round_check_anim"
+        tools:ignore="ContentDescription" />
+
       <com.google.android.material.button.MaterialButton
         android:id="@+id/button_delete"
         style="@style/Widget.Grocy.Button.IconButton"
-        android:layout_gravity="center_vertical"
         android:layout_marginEnd="4dp"
-        app:icon="@drawable/ic_round_delete_anim" />
+        app:icon="@drawable/ic_round_delete_anim"
+        tools:ignore="ContentDescription" />
 
     </LinearLayout>
 

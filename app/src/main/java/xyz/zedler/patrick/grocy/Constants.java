@@ -484,6 +484,7 @@ public final class Constants {
     public final static String RECIPES = "recipes";
     public final static String MEAL_PLAN_SECTIONS = "meal_plan_sections";
     public final static String SECTION_ID = "section_id";
+    public final static String MEAL_PLAN_ENTRY_ID = "meal_plan_entry_id";
     public final static String RUN_AS_SUPER_CLASS = "run_as_super_class";
     public final static String INSTANCE_STATE = "instance_state";
     public final static String SCROLL_POSITION = "scroll_position";

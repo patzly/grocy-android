@@ -305,6 +305,8 @@ public class MealPlanFragment extends BaseFragment {
     Bundle bundle = new Bundle();
     bundle.putSerializable(Constants.ARGUMENT.SELECTED_DATE, viewModel.getSelectedDate());
     bundle.putParcelableArrayList(Constants.ARGUMENT.RECIPES, viewModel.getRecipes());
+    bundle.putParcelableArrayList(Constants.ARGUMENT.MEAL_PLAN_SECTIONS,
+        new java.util.ArrayList<>(viewModel.getMealPlanSections()));
     addRecipeBottomSheet = new xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.AddRecipeToMealPlanBottomSheet();
     activity.showBottomSheet(addRecipeBottomSheet, bundle);
   }
@@ -313,6 +315,12 @@ public class MealPlanFragment extends BaseFragment {
   public void selectRecipe(Recipe recipe) {
     if (addRecipeBottomSheet != null && addRecipeBottomSheet.isAdded()) {
       addRecipeBottomSheet.selectRecipe(recipe);
+    }
+  }
+
+  public void selectMealPlanSection(xyz.zedler.patrick.grocy.model.MealPlanSection section) {
+    if (addRecipeBottomSheet != null && addRecipeBottomSheet.isAdded()) {
+      addRecipeBottomSheet.selectSection(section);
     }
   }
 
