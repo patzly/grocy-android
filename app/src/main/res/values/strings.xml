@@ -338,6 +338,7 @@
   <string name="msg_recipe_consumed">Removed all ingredients of recipe \"%1$s\" from stock</string>
   <string name="msg_recipe_added_to_meal_plan">Recipe added to meal plan</string>
   <string name="msg_deleted">Deleted successfully</string>
+  <string name="msg_saved">Saved successfully</string>
   <string name="msg_stored_purchases_overview">There are purchases on the device that have not yet been transferred to the server. Tap here for details.</string>
   <string name="msg_stored_purchases">Purchases that have not yet been transferred to the server are displayed here. They were saved together with temporary products in this app so that you could scan your purchase faster in quick mode and not have to create new products for the master data directly.</string>
   <string name="msg_stored_purchases_product_offline">Tap on the product and fill in the required data. After that, the product will be shown here as online and the stored purchases can be sent to the server.</string>
@@ -497,6 +498,8 @@
   <string name="error_orbot_not_installed">Orbot is not installed</string>
   <string name="error_select_product">Select a product</string>
   <string name="error_empty">Required</string>
+  <string name="error_empty_field">This field cannot be empty</string>
+  <string name="error_cannot_delete_section_in_use">Cannot delete section because it is being used by meal plan entries</string>
   <string name="error_empty_stock">Nothing in stock</string>
   <string name="error_empty_stock_sub">Go purchase some products</string>
   <string name="error_empty_shopping_list">Empty shopping list</string>
@@ -628,6 +631,9 @@
   <string name="title_chore">Chore</string>
   <string name="title_recipes">Recipes</string>
   <string name="title_meal_plan">Meal plan</string>
+  <string name="title_meal_plan_sections">Meal plan sections</string>
+  <string name="title_new_meal_plan_section">New meal plan section</string>
+  <string name="title_edit_meal_plan_section">Edit meal plan section</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">Editor</string>
   <string name="title_task_new">New task</string>
@@ -1066,6 +1072,7 @@
   <string name="property_recipe">Recipe</string>
   <string name="property_recipes">Recipes</string>
   <string name="property_meal_plan_entry">Meal plan entry</string>
+  <string name="property_meal_plan_section">Meal plan section</string>
   <string name="property_date">Date</string>
   <!-- See context for this string on the web interface on the recipes edit page -->
   <string name="property_servings">Servings</string>

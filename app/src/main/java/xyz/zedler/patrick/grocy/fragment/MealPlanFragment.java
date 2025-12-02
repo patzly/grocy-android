@@ -47,6 +47,7 @@ import java.time.format.FormatStyle;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import xyz.zedler.patrick.grocy.Constants;
@@ -73,6 +74,7 @@ public class MealPlanFragment extends BaseFragment {
   private FragmentMealPlanBinding binding;
   private SystemBarBehavior systemBarBehavior;
   private xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.AddRecipeToMealPlanBottomSheet addRecipeBottomSheet;
+  private xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MealPlanSectionsBottomSheet sectionsBottomSheet;
 
   @Override
   public View onCreateView(
@@ -255,21 +257,7 @@ public class MealPlanFragment extends BaseFragment {
   public PopupMenu.OnMenuItemClickListener getFieldsMenuItemClickListener() {
     return item -> {
       if (item.getItemId() == R.id.action_configure_sections) {
-        viewModel.showMessageWithAction(
-            R.string.msg_not_implemented_yet,
-            R.string.action_open_server,
-            () -> {
-              Intent browserIntent = new Intent(
-                  Intent.ACTION_VIEW,
-                  Uri.parse(activity.getGrocyApi().getBaseUrl() + "/mealplansections")
-              );
-              startActivity(browserIntent);
-            },
-            getSharedPrefs().getInt(
-                Constants.SETTINGS.BEHAVIOR.MESSAGE_DURATION,
-                Constants.SETTINGS_DEFAULT.BEHAVIOR.MESSAGE_DURATION
-            )
-        );
+        showMealPlanSectionsBottomSheet();
         return true;
       } else if (item.getItemId() == R.id.action_fields_header) {
         PopupMenu popupMenu = new PopupMenu(requireContext(), binding.fieldsMenuButton);
@@ -334,10 +322,38 @@ public class MealPlanFragment extends BaseFragment {
     }
   }
 
+  private void showMealPlanSectionsBottomSheet() {
+    if (viewModel == null) {
+      return;
+    }
+
+    Bundle bundle = new Bundle();
+    bundle.putParcelableArrayList(Constants.ARGUMENT.MEAL_PLAN_SECTIONS,
+        new ArrayList<>(viewModel.getMealPlanSections()));
+    sectionsBottomSheet = new xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MealPlanSectionsBottomSheet();
+    activity.showBottomSheet(sectionsBottomSheet, bundle);
+  }
+
+  @Override
+  public void saveInput(String text, Bundle argsBundle) {
+    if (sectionsBottomSheet != null && sectionsBottomSheet.isAdded()) {
+      sectionsBottomSheet.saveInput(text, argsBundle);
+    }
+  }
+
+  public void refreshMealPlanData() {
+    if (viewModel != null) {
+      viewModel.downloadData(false);
+    }
+  }
+
   public void onBottomSheetDismissed() {
     // Clear reference when bottom sheet is dismissed
     if (addRecipeBottomSheet != null && !addRecipeBottomSheet.isAdded()) {
       addRecipeBottomSheet = null;
+    }
+    if (sectionsBottomSheet != null && !sectionsBottomSheet.isAdded()) {
+      sectionsBottomSheet = null;
     }
   }
 
