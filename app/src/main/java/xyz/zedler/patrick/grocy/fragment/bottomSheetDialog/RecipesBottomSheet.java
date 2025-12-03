@@ -22,6 +22,8 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +50,8 @@ public class RecipesBottomSheet extends BaseBottomSheetDialogFragment
   private FragmentBottomsheetListSelectionBinding binding;
   private MainActivity activity;
   private ArrayList<Recipe> recipes;
+  private ArrayList<Recipe> filteredRecipes;
+  private RecipeAdapter adapter;
 
   @Override
   public View onCreateView(
@@ -67,6 +71,7 @@ public class RecipesBottomSheet extends BaseBottomSheetDialogFragment
     recipes = new ArrayList<>(recipesArg);
 
     SortUtil.sortRecipesByName(recipes, true);
+    filteredRecipes = new ArrayList<>(recipes);
     int selected = bundle.getInt(ARGUMENT.SELECTED_ID, -1);
 
     binding.textListSelectionTitle.setText(activity.getString(R.string.property_recipes));
@@ -80,9 +85,24 @@ public class RecipesBottomSheet extends BaseBottomSheetDialogFragment
         )
     );
     binding.recyclerListSelection.setItemAnimator(new DefaultItemAnimator());
-    binding.recyclerListSelection.setAdapter(
-        new RecipeAdapter(recipes, selected, this)
-    );
+    adapter = new RecipeAdapter(filteredRecipes, selected, this);
+    binding.recyclerListSelection.setAdapter(adapter);
+
+    // Set up search functionality
+    binding.editTextSearch.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+      }
+
+      @Override
+      public void onTextChanged(CharSequence s, int start, int before, int count) {
+      }
+
+      @Override
+      public void afterTextChanged(Editable s) {
+        filterRecipes(s.toString());
+      }
+    });
 
     return binding.getRoot();
   }
@@ -95,8 +115,27 @@ public class RecipesBottomSheet extends BaseBottomSheetDialogFragment
 
   @Override
   public void onItemRowClicked(int position) {
-    activity.getCurrentFragment().selectRecipe(recipes.get(position));
+    activity.getCurrentFragment().selectRecipe(filteredRecipes.get(position));
     dismiss();
+  }
+
+  private void filterRecipes(String searchText) {
+    if (searchText == null || searchText.trim().isEmpty()) {
+      // Show all recipes when search is empty
+      filteredRecipes.clear();
+      filteredRecipes.addAll(recipes);
+    } else {
+      // Filter recipes by name (case-insensitive)
+      String searchLower = searchText.toLowerCase().trim();
+      filteredRecipes.clear();
+      for (Recipe recipe : recipes) {
+        if (recipe.getName() != null &&
+            recipe.getName().toLowerCase().contains(searchLower)) {
+          filteredRecipes.add(recipe);
+        }
+      }
+    }
+    adapter.notifyDataSetChanged();
   }
 
   @Override

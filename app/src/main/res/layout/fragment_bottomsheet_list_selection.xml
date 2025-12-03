@@ -104,6 +104,30 @@
   <com.google.android.material.divider.MaterialDivider
     style="@style/Widget.Grocy.Divider" />
 
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/text_input_search"
+    style="@style/Widget.Grocy.TextInputLayout.FilledBox.Dense"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    app:endIconMode="clear_text"
+    app:startIconDrawable="@drawable/ic_round_search_anim">
+
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/edit_text_search"
+      style="@style/Widget.Grocy.TextInputEditText.FilledBox.Dense"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/action_search"
+      android:imeOptions="actionSearch"
+      android:inputType="textAutoCorrect|textAutoComplete|textCapSentences"
+      android:singleLine="true" />
+
+  </com.google.android.material.textfield.TextInputLayout>
+
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recycler_list_selection"
     android:layout_width="match_parent"
