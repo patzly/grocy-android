@@ -68,6 +68,12 @@ public class ProductDetails implements Parcelable {
   @SerializedName("quantity_unit_stock")
   private final QuantityUnit quantityUnitStock;
 
+  @SerializedName("quantity_unit_consume")
+  private final QuantityUnit quantityUnitConsume;
+
+  @SerializedName("quantity_unit_price")
+  private final QuantityUnit quantityUnitPrice;
+
   @SerializedName("last_price")
   private final String lastPrice;
 
@@ -118,6 +124,8 @@ public class ProductDetails implements Parcelable {
     stockAmountOpenedAggregated = parcel.readString();
     quantityUnitPurchase = parcel.readParcelable(QuantityUnit.class.getClassLoader());
     quantityUnitStock = parcel.readParcelable(QuantityUnit.class.getClassLoader());
+    quantityUnitConsume = parcel.readParcelable(QuantityUnit.class.getClassLoader());
+    quantityUnitPrice = parcel.readParcelable(QuantityUnit.class.getClassLoader());
     lastPrice = parcel.readString();
     avgPrice = parcel.readString();
     currentPrice = parcel.readString();
@@ -145,6 +153,8 @@ public class ProductDetails implements Parcelable {
     dest.writeString(stockAmountOpenedAggregated);
     dest.writeParcelable(quantityUnitPurchase, 0);
     dest.writeParcelable(quantityUnitStock, 0);
+    dest.writeParcelable(quantityUnitConsume, 0);
+    dest.writeParcelable(quantityUnitPrice, 0);
     dest.writeString(lastPrice);
     dest.writeString(avgPrice);
     dest.writeString(currentPrice);
@@ -207,6 +217,14 @@ public class ProductDetails implements Parcelable {
 
   public QuantityUnit getQuantityUnitStock() {
     return quantityUnitStock;
+  }
+
+  public QuantityUnit getQuantityUnitConsume() {
+    return quantityUnitConsume;
+  }
+
+  public QuantityUnit getQuantityUnitPrice() {
+    return quantityUnitPrice;
   }
 
   public String getLastPrice() {
