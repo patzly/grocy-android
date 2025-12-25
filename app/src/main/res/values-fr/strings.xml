@@ -375,7 +375,6 @@
   <string name="msg_quick_mode_confirm_transfer">Opération qui sera exécutée :\n\nTransférer %1$s %2$s de %3$s\nDe l\'emplacement : %4$s\nÀ l\'emplacement : %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">Opération qui sera exécutée :\n\nDéfinir le stock de %1$s à %2$s %3$s\nAppliqué aux articles ajoutés :\nDate de péremption : %4$s\nPrix : %5$s\nMagasin : %6$s\nEmplacement : %7$s</string>
-  <string name="msg_compatibility">Cette version de l\'application n\'est pas compatible avec la version de Grocy sur le serveur.\n\nVersion actuelle du serveur : %1$s \n\nVersions de serveur prises en charge :\n%2$s\nSi la version actuelle du serveur a un numéro de version majeur (premier chiffre) supérieur aux versions prises en charge et que vous ignorez cet avertissement, une perte de données (peu probable) ou des plantages (probables) peuvent se produire.\nS\'il n\'y a qu\'une différence mineure (par exemple, le troisième chiffre est plus élevé), vous pouvez probablement ignorer cet avertissement.</string>
   <string name="msg_logout">Rien sur votre serveur ne sera modifié. Vous serez redirigé vers la page de connexion.</string>
   <string name="msg_logout_demo">Vous utilisez le serveur public grocy de démonstration <u>https://grocy.info.</u>\n\n <b>Aucune de vos modifications n\'est enregistrée à long terme !\nElles restent publiques jusqu\'à ce que le serveur les écrase automatiquement une fois par jour.</b>\n\nSur l\'écran de connexion, vous pouvez entrer l\'adresse de votre propre serveur.</string>
   <string name="msg_logout_demo_short">Serveur public de démonstration. Appuyez pour plus de détails.</string>
@@ -1319,6 +1318,8 @@
   <string name="setting_date_keyboard_input_description">Au lieu du sélecteur de date</string>
   <string name="setting_date_keyboard_reverse">Utiliser le format de date inversé pour la saisie</string>
   <string name="setting_date_keyboard_reverse_description">JJMMAA au lieu de AAMMJJ</string>
+  <string name="setting_barcode_amount">Utilisez la quantité pour la génération du code-barres</string>
+  <string name="setting_barcode_amount_description">Lors de la création d\'un produit dans le cadre d\'un achat, le montant saisi est utilisé pour la génération du code-barres.</string>
   <string name="setting_loading_circle">Afficher une animation de chargement pour toutes les requêtes</string>
   <string name="setting_loading_circle_description">Utile pour les connexions lentes</string>
   <string name="setting_tor">Utiliser Tor</string>
