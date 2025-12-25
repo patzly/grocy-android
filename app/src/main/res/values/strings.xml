@@ -1282,6 +1282,8 @@
   <string name="setting_date_keyboard_input_description">Instead of date picker wheels</string>
   <string name="setting_date_keyboard_reverse">Use reverse date format for input</string>
   <string name="setting_date_keyboard_reverse_description">DDMMYY instead of YYMMDD</string>
+  <string name="setting_barcode_amount">Use amount for barcode generation</string>
+  <string name="setting_barcode_amount_description">When creating a product as part of a purchase, the entered amount is used for barcode generation.</string>
   <string name="setting_loading_circle">Show loading circle for all requests</string>
   <string name="setting_loading_circle_description">Helpful for slow networks</string>
   <string name="setting_tor">Use Tor</string>

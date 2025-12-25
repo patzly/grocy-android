@@ -373,6 +373,18 @@ public class SettingsViewModel extends BaseViewModel {
         .putBoolean(Constants.SETTINGS.BEHAVIOR.DATE_KEYBOARD_REVERSE, enabled).apply();
   }
 
+  public boolean getBarcodeAmountEnabled() {
+    return sharedPrefs.getBoolean(
+        BEHAVIOR.BARCODE_AMOUNT,
+        Constants.SETTINGS_DEFAULT.BEHAVIOR.BARCODE_AMOUNT
+    );
+  }
+
+  public void setBarcodeAmountEnabled(boolean enabled) {
+    sharedPrefs.edit()
+        .putBoolean(Constants.SETTINGS.BEHAVIOR.BARCODE_AMOUNT, enabled).apply();
+  }
+
   public boolean getKeepScreenOnRecipesEnabled() {
     return sharedPrefs.getBoolean(
             RECIPES.KEEP_SCREEN_ON,
