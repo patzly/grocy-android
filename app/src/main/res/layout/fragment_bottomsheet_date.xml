@@ -131,7 +131,7 @@
           android:layout_height="wrap_content"
           android:calendarViewShown="false"
           android:datePickerMode="spinner"
-          android:fontFamily="@font/jost_medium" />
+          android:fontFamily="@font/google_sans_flex_medium" />
 
         <LinearLayout
           android:layout_width="match_parent"

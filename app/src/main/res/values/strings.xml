@@ -1340,8 +1340,7 @@
   <string name="license_fuzzywuzzy" translatable="false">JavaWuzzy</string>
   <string name="license_fuzzywuzzy_author" translatable="false">Panayiotis aka xdrop</string>
   <string name="license_gson" translatable="false">Gson</string>
-  <string name="license_jost" translatable="false">Jost* Typeface</string>
-  <string name="license_jost_author" translatable="false">Owen Earl</string>
+  <string name="license_google_sans_flex" translatable="false">Google Sans Flex</string>
   <string name="license_material_components" translatable="false">Material Components Android</string>
   <string name="license_material_icons" translatable="false">Material Design Icons</string>
   <string name="license_netcipher" translatable="false">NetCipher</string>
@@ -1361,7 +1360,7 @@
   <string name="url_conscrypt" translatable="false">https://github.com/google/conscrypt/</string>
   <string name="url_fuzzywuzzy" translatable="false">https://github.com/xdrop/fuzzywuzzy</string>
   <string name="url_gson" translatable="false">https://github.com/google/gson</string>
-  <string name="url_jost" translatable="false">https://github.com/indestructible-type/Jost</string>
+  <string name="url_google_sans_flex" translatable="false">https://fonts.google.com/specimen/Google+Sans+Flex</string>
   <string name="url_material_components" translatable="false">https://github.com/material-components/material-components-android</string>
   <string name="url_material_icons" translatable="false">https://github.com/google/material-design-icons</string>
   <string name="url_netcipher" translatable="false">https://github.com/guardianproject/NetCipher</string>

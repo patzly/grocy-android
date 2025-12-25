@@ -325,7 +325,7 @@ public class StockEntryAdapter extends
 
     if (colorDays) {
       holder.binding.dueDate.setTypeface(
-          ResourcesCompat.getFont(context, R.font.jost_medium)
+          ResourcesCompat.getFont(context, R.font.google_sans_flex_medium)
       );
 
       int color;
@@ -339,7 +339,7 @@ public class StockEntryAdapter extends
       holder.binding.dueDate.setTextColor(color);
     } else {
       holder.binding.dueDate.setTypeface(
-          ResourcesCompat.getFont(context, R.font.jost_book)
+          ResourcesCompat.getFont(context, R.font.google_sans_flex)
       );
       holder.binding.dueDate.setTextColor(
           ResUtil.getColor(context, R.attr.colorOnSurfaceVariant)

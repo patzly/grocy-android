@@ -94,8 +94,8 @@
   <style
     name="Widget.Grocy.Button.TextButton.Snackbar"
     parent="Widget.Material3.Button.TextButton.Snackbar">
-    <item name="android:fontFamily">@font/jost_medium</item>
-    <item name="fontFamily">@font/jost_medium</item>
+    <item name="android:fontFamily">@font/google_sans_flex_medium</item>
+    <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>
 
   <!-- ImageView (icons) -->
@@ -135,8 +135,8 @@
   <style
     name="Widget.Grocy.Button.UnelevatedButton"
     parent="Base.Grocy.Button.UnelevatedButton">
-    <item name="android:fontFamily">@font/jost_medium</item>
-    <item name="fontFamily">@font/jost_medium</item>
+    <item name="android:fontFamily">@font/google_sans_flex_medium</item>
+    <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>
 
   <!-- Base style -->
@@ -151,8 +151,8 @@
   <style
     name="Widget.Grocy.Button.TonalButton"
     parent="Base.Grocy.Button.TonalButton">
-    <item name="android:fontFamily">@font/jost_medium</item>
-    <item name="fontFamily">@font/jost_medium</item>
+    <item name="android:fontFamily">@font/google_sans_flex_medium</item>
+    <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>
 
   <!-- Base style -->
@@ -167,8 +167,8 @@
   <style
     name="Widget.Grocy.Button.TonalButton.Icon"
     parent="Base.Grocy.Button.TonalButton.Icon">
-    <item name="android:fontFamily">@font/jost_medium</item>
-    <item name="fontFamily">@font/jost_medium</item>
+    <item name="android:fontFamily">@font/google_sans_flex_medium</item>
+    <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>
 
   <!-- Base style -->
@@ -183,8 +183,8 @@
   <style
     name="Widget.Grocy.Button.OutlinedButton"
     parent="Base.Grocy.Button.OutlinedButton">
-    <item name="android:fontFamily">@font/jost_medium</item>
-    <item name="fontFamily">@font/jost_medium</item>
+    <item name="android:fontFamily">@font/google_sans_flex_medium</item>
+    <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>
 
   <!-- Base style -->
@@ -200,8 +200,8 @@
   <style
     name="Widget.Grocy.Button.OutlinedButton.Icon"
     parent="Base.Grocy.Button.OutlinedButton.Icon">
-    <item name="android:fontFamily">@font/jost_medium</item>
-    <item name="fontFamily">@font/jost_medium</item>
+    <item name="android:fontFamily">@font/google_sans_flex_medium</item>
+    <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>
 
   <!-- Base style -->
@@ -216,8 +216,8 @@
   <style
     name="Widget.Grocy.Button.TextButton"
     parent="Base.Grocy.Button.TextButton">
-    <item name="android:fontFamily">@font/jost_medium</item>
-    <item name="fontFamily">@font/jost_medium</item>
+    <item name="android:fontFamily">@font/google_sans_flex_medium</item>
+    <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>
 
   <!-- Base style -->
@@ -233,16 +233,16 @@
   <style
     name="Widget.Grocy.Button.TextButton.Icon"
     parent="Base.Grocy.Button.TextButton.Icon">
-    <item name="android:fontFamily">@font/jost_medium</item>
-    <item name="fontFamily">@font/jost_medium</item>
+    <item name="android:fontFamily">@font/google_sans_flex_medium</item>
+    <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>
 
   <!-- Localized style, no empty base style needed -->
   <style
     name="Widget.Grocy.Button.TextButton.Dialog"
     parent="Widget.Material3.Button.TextButton.Dialog">
-    <item name="android:fontFamily">@font/jost_medium</item>
-    <item name="fontFamily">@font/jost_medium</item>
+    <item name="android:fontFamily">@font/google_sans_flex_medium</item>
+    <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>
 
   <style
@@ -444,7 +444,7 @@
     <item name="android:paddingStart">12dp</item>
     <item name="android:paddingTop">8dp</item>
     <item name="android:paddingBottom">8dp</item>
-    <item name="android:fontFamily">@font/jost_book</item>
+    <item name="android:fontFamily">@font/google_sans_flex</item>
     <item name="android:textAppearance">?attr/textAppearanceBodyLarge</item>
     <item name="android:textColor">?attr/colorOnSurface</item>
   </style>
@@ -465,8 +465,8 @@
 
   <style name="Widget.Grocy.DatePicker" parent="">
     <item name="android:textSize">16sp</item>
-    <item name="android:fontFamily">@font/jost_400_book</item>
-    <item name="fontFamily">@font/jost_400_book</item>
+    <item name="android:fontFamily">@font/google_sans_flex_regular</item>
+    <item name="fontFamily">@font/google_sans_flex_regular</item>
   </style>
 
   <!-- Slider -->
@@ -519,8 +519,8 @@
   <style
     name="Widget.Grocy.ExtendedFloatingActionButton"
     parent="Widget.Material3.ExtendedFloatingActionButton.Primary">
-    <item name="android:fontFamily">@font/jost_medium</item>
-    <item name="fontFamily">@font/jost_medium</item>
+    <item name="android:fontFamily">@font/google_sans_flex_medium</item>
+    <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>
 
   <!-- TimePicker -->
@@ -537,8 +537,8 @@
   <style
     name="TextAppearance.Grocy.TimePicker.Title"
     parent="TextAppearance.Material3.MaterialTimePicker.Title">
-    <item name="android:fontFamily">@font/jost_medium</item>
-    <item name="fontFamily">@font/jost_medium</item>
+    <item name="android:fontFamily">@font/google_sans_flex_medium</item>
+    <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>
 
   <style
@@ -551,8 +551,8 @@
   <style
     name="TextAppearance.Grocy.TimePicker.DisplayLarge"
     parent="TextAppearance.Material3.DisplayLarge">
-    <item name="android:fontFamily">@font/jost_book</item>
-    <item name="fontFamily">@font/jost_book</item>
+    <item name="android:fontFamily">@font/google_sans_flex</item>
+    <item name="fontFamily">@font/google_sans_flex</item>
   </style>
 
   <style
@@ -564,8 +564,8 @@
   <style
     name="TextAppearance.Grocy.TimePicker.HeadlineMedium"
     parent="TextAppearance.Material3.HeadlineMedium">
-    <item name="android:fontFamily">@font/jost_book</item>
-    <item name="fontFamily">@font/jost_book</item>
+    <item name="android:fontFamily">@font/google_sans_flex</item>
+    <item name="fontFamily">@font/google_sans_flex</item>
   </style>
 
   <style
@@ -587,8 +587,8 @@
   <style
     name="Widget.Grocy.Button.TextButton.Dialog.Flush"
     parent="Widget.Material3.Button.TextButton.Dialog.Flush">
-    <item name="android:fontFamily">@font/jost_medium</item>
-    <item name="fontFamily">@font/jost_medium</item>
+    <item name="android:fontFamily">@font/google_sans_flex_medium</item>
+    <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>
 
   <!-- LinearLayout (lists) -->
@@ -745,7 +745,7 @@
     <item name="android:textAppearance">?attr/textAppearanceBodyLarge</item>
     <item name="android:textColor">?attr/colorOnSurface</item>
     <item name="android:textAlignment">viewStart</item>
-    <item name="android:fontFamily">@font/jost_book</item>
+    <item name="android:fontFamily">@font/google_sans_flex</item>
     <item name="android:breakStrategy" tools:targetApi="m">high_quality</item>
     <item name="android:hyphenationFrequency" tools:targetApi="m">full</item>
     <item name="android:lineBreakWordStyle" tools:targetApi="33">phrase</item>
@@ -758,8 +758,8 @@
 
   <!-- Localized style, no empty base style needed -->
   <style name="Widget.Grocy.TextView.Medium" parent="Widget.Grocy.TextView">
-    <item name="android:fontFamily">@font/jost_medium</item>
-    <item name="fontFamily">@font/jost_medium</item>
+    <item name="android:fontFamily">@font/google_sans_flex_medium</item>
+    <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>
 
   <style name="Widget.Grocy.TextView.Paragraph" parent="Widget.Grocy.TextView" />
@@ -871,47 +871,47 @@
   <!-- TextAppearance -->
 
   <style name="TextAppearance.Grocy.HeadlineLarge" parent="TextAppearance.Material3.HeadlineLarge">
-    <item name="android:fontFamily">@font/jost_book</item>
-    <item name="fontFamily">@font/jost_book</item>
+    <item name="android:fontFamily">@font/google_sans_flex</item>
+    <item name="fontFamily">@font/google_sans_flex</item>
   </style>
 
   <style name="TextAppearance.Grocy.HeadlineMedium" parent="TextAppearance.Material3.HeadlineMedium">
-    <item name="android:fontFamily">@font/jost_book</item>
-    <item name="fontFamily">@font/jost_book</item>
+    <item name="android:fontFamily">@font/google_sans_flex</item>
+    <item name="fontFamily">@font/google_sans_flex</item>
   </style>
 
   <style name="TextAppearance.Grocy.HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">
-    <item name="android:fontFamily">@font/jost_book</item>
-    <item name="fontFamily">@font/jost_book</item>
+    <item name="android:fontFamily">@font/google_sans_flex</item>
+    <item name="fontFamily">@font/google_sans_flex</item>
   </style>
 
   <style name="TextAppearance.Grocy.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
-    <item name="android:fontFamily">@font/jost_book</item>
-    <item name="fontFamily">@font/jost_book</item>
+    <item name="android:fontFamily">@font/google_sans_flex</item>
+    <item name="fontFamily">@font/google_sans_flex</item>
   </style>
 
   <!-- Localized style, no empty base style needed -->
   <style name="TextAppearance.Grocy.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
-    <item name="android:fontFamily">@font/jost_medium</item>
-    <item name="fontFamily">@font/jost_medium</item>
+    <item name="android:fontFamily">@font/google_sans_flex_medium</item>
+    <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>
 
   <!-- Localized style, no empty base style needed -->
   <style name="TextAppearance.Grocy.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
-    <item name="android:fontFamily">@font/jost_medium</item>
-    <item name="fontFamily">@font/jost_medium</item>
+    <item name="android:fontFamily">@font/google_sans_flex_medium</item>
+    <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>
 
   <!-- Localized style, no empty base style needed -->
   <style name="TextAppearance.Grocy.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
-    <item name="android:fontFamily">@font/jost_medium</item>
-    <item name="fontFamily">@font/jost_medium</item>
+    <item name="android:fontFamily">@font/google_sans_flex_medium</item>
+    <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>
 
   <style name="TextAppearance.Grocy.Tooltip" parent="TextAppearance.MaterialComponents.Tooltip">
     <item name="android:textColor">?attr/colorSurface</item>
-    <item name="android:fontFamily">@font/jost_book</item>
-    <item name="fontFamily">@font/jost_book</item>
+    <item name="android:fontFamily">@font/google_sans_flex</item>
+    <item name="fontFamily">@font/google_sans_flex</item>
   </style>
 
 </resources>

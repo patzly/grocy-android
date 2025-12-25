@@ -30,7 +30,7 @@
     <item name="android:colorEdgeEffect">?attr/colorSecondary</item>
     <item name="android:textColorHighlight">@color/selector_highlighted_text_selected</item>
 
-    <item name="android:fontFamily">@font/jost_book</item>
+    <item name="android:fontFamily">@font/google_sans_flex</item>
 
     <!-- Widget styles -->
     <item name="snackbarStyle">@style/Widget.Grocy.Snackbar</item>

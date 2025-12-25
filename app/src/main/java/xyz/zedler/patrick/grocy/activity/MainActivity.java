@@ -489,7 +489,7 @@ public class MainActivity extends AppCompatActivity {
       if (linearLayout != null) {
         TextView textView = (TextView) linearLayout.getChildAt(0);
         if (textView != null) {
-          textView.setTypeface(ResourcesCompat.getFont(this, R.font.jost_book));
+          textView.setTypeface(ResourcesCompat.getFont(this, R.font.google_sans_flex));
         }
       }
     }

@@ -528,7 +528,7 @@ public class RecipeFragment extends BaseFragment implements
     MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(
         activity, R.style.ThemeOverlay_Grocy_AlertDialog
     );
-    Typeface jost = ResourcesCompat.getFont(activity, R.font.jost_book);
+    Typeface jost = ResourcesCompat.getFont(activity, R.font.google_sans_flex);
 
     TextView title = new TextView(activity);
     title.setTextAppearance(activity, R.style.Widget_Grocy_TextView_HeadlineSmall);
