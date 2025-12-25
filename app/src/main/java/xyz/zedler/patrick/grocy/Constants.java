@@ -133,8 +133,6 @@ public final class Constants {
     public final static String CAMERA_SCANNER_VISIBLE_RECIPE = "camera_scanner_visible_recipe";
 
     public final static String INTRO_SHOWN = "intro_shown";
-    public final static String VERSION_COMPATIBILITY_IGNORED = "version_ignored_compatibility";
-    public final static String UPDATE_INFO_READ = "update_info_read";
     public final static String LAST_VERSION = "last_version";
     public final static String LAST_VERSION_DATABASE = "last_version_database";
     public final static String OVERVIEW_FAB_INFO_SHOWN = "overview_fab_info_shown";
@@ -461,7 +459,6 @@ public final class Constants {
     public final static String HIGHLIGHTS = "highlights";
     public final static String HINT = "hint";
     public final static String CURRENCY = "currency";
-    public final static String SUPPORTED_VERSIONS = "supported_versions";
     public final static String VERSION = "version";
     public final static String SERVER = "server";
     public final static String KEY = "key";

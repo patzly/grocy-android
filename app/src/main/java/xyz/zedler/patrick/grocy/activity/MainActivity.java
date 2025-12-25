@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
           new DownloadHelper(this, TAG),
           grocyApi,
           sharedPrefs,
-          () -> VersionUtil.showCompatibilityBottomSheetIfNecessary(this, sharedPrefs),
+          () -> {},
           null
       );
     }

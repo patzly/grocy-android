@@ -236,7 +236,7 @@ public class BaseFragment extends Fragment {
 
   public void enableLoginButtons() {}
 
-  public void login(boolean checkVersion) {}
+  public void login() {}
 
   @NonNull
   public NavController findNavController() {

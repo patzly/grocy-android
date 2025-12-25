@@ -23,7 +23,6 @@ package xyz.zedler.patrick.grocy.viewmodel;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -40,8 +39,6 @@ import com.android.volley.TimeoutError;
 import dev.gustavoavila.websocketclient.WebSocketClient;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
@@ -49,7 +46,6 @@ import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.LoginRequestFragmentArgs;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnErrorListener;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnMultiTypeErrorListener;
@@ -117,7 +113,7 @@ public class LoginRequestViewModel extends BaseViewModel {
     loginErrorHassLog = new MutableLiveData<>();
   }
 
-  public void login(boolean checkVersion) {
+  public void login() {
     loginErrorOccurred.setValue(false);
     loginErrorMsg.setValue(null);
     loginErrorExactMsg.setValue(null);
@@ -142,15 +138,7 @@ public class LoginRequestViewModel extends BaseViewModel {
             String grocyVersion = new JSONObject(response)
                 .getJSONObject("grocy_version")
                 .getString("Version");
-            ArrayList<String> supportedVersions = new ArrayList<>(
-                Arrays.asList(getResources()
-                    .getStringArray(R.array.compatible_grocy_versions))
-            );
-            appendHassLog(" Success.");
-            if (checkVersion && !supportedVersions.contains(grocyVersion)) {
-              showCompatibilityBottomSheet(supportedVersions, grocyVersion);
-              return;
-            }
+            appendHassLog(" Success: grocy version " + grocyVersion + ".\n");
           } catch (JSONException e) {
             Log.e(TAG, "requestLogin: " + e);
             appendHassLog(" Error.\nFailed to parse system info response.\n");
@@ -334,7 +322,7 @@ public class LoginRequestViewModel extends BaseViewModel {
                   jsonObject.getJSONObject("result").getString("session")
               ).apply();
               appendHassLog(" Success.\n");
-              new Handler(getApplication().getMainLooper()).post(() -> login(true));
+              new Handler(getApplication().getMainLooper()).post(() -> login());
             } else {
               appendHassLog(" Error: " + message + "\n");
               Log.e(TAG, "createWebSocketClient: onTextReceived: " + message);
@@ -368,17 +356,6 @@ public class LoginRequestViewModel extends BaseViewModel {
     webSocketClient.setReadTimeout(60000);
     webSocketClient.enableAutomaticReconnection(5000);
     webSocketClient.connect();
-  }
-
-  private void showCompatibilityBottomSheet(
-      ArrayList<String> supportedVersions,
-      String grocyVersion
-  ) {
-    sharedPrefs.edit().remove(Constants.PREF.VERSION_COMPATIBILITY_IGNORED).apply();
-    Bundle bundle = new Bundle();
-    bundle.putString(Constants.ARGUMENT.VERSION, grocyVersion);
-    bundle.putStringArrayList(Constants.ARGUMENT.SUPPORTED_VERSIONS, supportedVersions);
-    showBottomSheet(new CompatibilityBottomSheet(), bundle);
   }
 
   public MutableLiveData<Boolean> getLoginErrorOccurred() {
