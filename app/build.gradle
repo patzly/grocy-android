@@ -19,20 +19,20 @@
  */
 
 plugins {
-    alias libs.plugins.android.application
-    alias libs.plugins.navigation.safeargs
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.navigation.safeargs)
 }
 
 android {
-    namespace 'xyz.zedler.patrick.grocy'
-    compileSdk 35
+    namespace = 'xyz.zedler.patrick.grocy'
+    compileSdk = 36
 
     defaultConfig {
-        applicationId "xyz.zedler.patrick.grocy"
-        minSdk 21
-        targetSdk 35
-        versionCode 62
-        versionName "3.8.2"
+        applicationId = "xyz.zedler.patrick.grocy"
+        minSdk = 23
+        targetSdk = 36
+        versionCode = 62
+        versionName = "3.8.2"
         resourceConfigurations += ['ca', 'cs', 'de', 'en', 'es', 'et', 'fr', 'hu', 'it', 'iw', 'ja',
                                    'nb', 'nl', 'pl', 'pt-rBR', 'pt-rPT', 'ru', 'sk', 'sv', 'uk',
                                    'zh-rCN', 'zh-rTW']
@@ -50,86 +50,94 @@ android {
     buildTypes {
         release {
             postprocessing {
-                removeUnusedCode true
-                removeUnusedResources true
-                obfuscate false
-                optimizeCode true
+                removeUnusedCode = true
+                removeUnusedResources = true
+                obfuscate = false
+                optimizeCode = true
                 proguardFiles {
                     getDefaultProguardFile('proguard-android-optimize.txt')
                     'proguard-rules.pro'
                 }
             }
-            debuggable false
+            debuggable = false
         }
         debug {
-            applicationIdSuffix '.debug'
+            applicationIdSuffix = '.debug'
         }
     }
 
     buildFeatures {
-        viewBinding true
-        dataBinding true
-        buildConfig true
+        viewBinding = true
+        dataBinding = true
+        buildConfig = true
     }
 
     lint {
-        abortOnError false
-        disable 'MissingTranslation'
+        abortOnError = false
+        disable = ['MissingTranslation']
     }
 
     bundle {
         storeArchive {
-            enable true
+            enable = true
         }
     }
-    
+
     compileOptions {
-        coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_17
+        coreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    dependenciesInfo {
+        includeInApk = false
+    }
+
+    packagingOptions {
+        jniLibs.useLegacyPackaging = false
     }
 }
 
 dependencies {
-    implementation libs.appcompat
-    implementation libs.fragment
-    implementation libs.preference
-    implementation libs.browser
-    implementation libs.webkit
-    implementation libs.lifecycle.viewmodel.savedstate
-    implementation libs.lifecycle.viewmodel
-    implementation libs.paging
-    implementation libs.kotlinx.serialization.json
+    implementation(libs.appcompat)
+    implementation(libs.fragment)
+    implementation(libs.preference)
+    implementation(libs.browser)
+    implementation(libs.webkit)
+    implementation(libs.lifecycle.viewmodel.savedstate)
+    implementation(libs.lifecycle.viewmodel)
+    implementation(libs.paging)
+    implementation(libs.kotlinx.serialization.json)
     // Navigation framework for easy navigation control using XML
-    implementation libs.navigation.fragment
-    implementation libs.navigation.ui
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
     // Android Room for database and RxJava for Async access of database
-    implementation libs.room.runtime
-    implementation libs.room.rxjava3
-    annotationProcessor libs.room.compiler
-    implementation libs.rxandroid
+    implementation(libs.room.runtime)
+    implementation(libs.room.rxjava3)
+    annotationProcessor(libs.room.compiler)
+    implementation(libs.rxandroid)
     // Material views
-    implementation libs.material
-    implementation libs.calendar
-    implementation libs.flexbox
+    implementation(libs.material)
+    implementation(libs.calendar)
+    implementation(libs.flexbox)
     // Volley for all general network requests and Glide for image loading
     // Conscrypt for new TLS support on old Android devices
-    implementation libs.volley
-    implementation libs.glide
-    implementation libs.conscrypt
-    implementation libs.websocket.client
+    implementation(libs.volley)
+    implementation(libs.glide)
+    implementation(libs.conscrypt)
+    implementation(libs.websocket.client)
     // GSON for converting JSON responses to Java objects
-    implementation libs.gson
+    implementation(libs.gson)
     // FuzzyWuzzy for fuzzy search in product names and autocompletion
-    implementation libs.fuzzywuzzy
+    implementation(libs.fuzzywuzzy)
     // Work for daily notifications
-    implementation libs.work.runtime
+    implementation(libs.work.runtime)
     // ZXing for barcode scanning
-    implementation libs.zxing.core
-    implementation libs.zxing.android.embedded
+    implementation(libs.zxing.core)
+    implementation(libs.zxing.android.embedded)
     // For image rotation
-    implementation libs.exifinterface
+    implementation(libs.exifinterface)
     // https://github.com/journeyapps/zxing-android-embedded#option-2-desugaring-advanced
     // prevents bug https://github.com/patzly/grocy-android/issues/425
-    coreLibraryDesugaring libs.desugar
+    coreLibraryDesugaring(libs.desugar)
 }
