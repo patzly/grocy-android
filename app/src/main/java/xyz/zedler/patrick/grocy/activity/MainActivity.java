@@ -35,6 +35,7 @@ import android.database.CursorWindow;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -114,6 +115,16 @@ public class MainActivity extends AppCompatActivity {
   private UiUtil uiUtil;
   private boolean runAsSuperClass;
   private boolean debug;
+
+  @Override
+  protected void onNewIntent(@NonNull Intent intent) {
+      super.onNewIntent(intent);
+      setIntent(intent);
+      Uri data = intent.getData();
+      if (data != null) {
+          navUtil.navigateDeepLink(data);
+      }
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
