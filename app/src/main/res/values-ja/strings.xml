@@ -1214,7 +1214,7 @@
   <string name="setting_date_keyboard_input_description">日付ホイールを使用しない</string>
   <string name="setting_date_keyboard_reverse">入力に逆順日付形式を使用</string>
   <string name="setting_date_keyboard_reverse_description">YYMMDDではなくDDMMYYを使用</string>
-  <string name="setting_barcode_amount">バーコード生成に使う数量</string>
+  <string name="setting_barcode_amount">バーコード生成時の数量</string>
   <string name="setting_barcode_amount_description">購入の一部として物品を作成する場合、入力した数量がバーコード生成時に使用されます。</string>
   <string name="setting_loading_circle">全リクエストで処理中マークを表示</string>
   <string name="setting_loading_circle_description">低速ネットワーク向け</string>
