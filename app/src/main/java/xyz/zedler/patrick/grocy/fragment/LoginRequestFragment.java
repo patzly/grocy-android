@@ -108,9 +108,9 @@ public class LoginRequestFragment extends BaseFragment {
     activity.getScrollBehavior().setBottomBarVisibility(false, true, false);
 
     if (UiUtil.areAnimationsEnabled(activity)) {
-      new Handler().postDelayed(() -> login(true), 300);
+      new Handler().postDelayed(this::login, 300);
     } else {
-      login(true);
+      login();
     }
   }
 
@@ -124,8 +124,8 @@ public class LoginRequestFragment extends BaseFragment {
   }
 
   @Override
-  public void login(boolean checkVersion) {
+  public void login() {
     viewModel.clearHassData();
-    new Handler().postDelayed(() -> viewModel.login(checkVersion), 500);
+    new Handler().postDelayed(() -> viewModel.login(), 500);
   }
 }

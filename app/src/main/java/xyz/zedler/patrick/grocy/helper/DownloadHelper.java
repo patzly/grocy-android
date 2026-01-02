@@ -108,7 +108,6 @@ public class DownloadHelper {
   private final String apiKey;
   public final boolean debug;
   private final int timeoutSeconds;
-  private int loadingRequests;
 
   public DownloadHelper(
       Application application,
@@ -128,7 +127,6 @@ public class DownloadHelper {
     apiKey = sharedPrefs.getString(Constants.PREF.API_KEY, "");
     uuidHelper = UUID.randomUUID().toString();
     queueArrayList = new ArrayList<>();
-    loadingRequests = 0;
     this.onLoadingListener = onLoadingListener;
     this.offlineLive = offlineLive;
     timeoutSeconds = sharedPrefs.getInt(
@@ -156,7 +154,6 @@ public class DownloadHelper {
     this.apiKey = apiKey;
     uuidHelper = UUID.randomUUID().toString();
     queueArrayList = new ArrayList<>();
-    loadingRequests = 0;
     this.onLoadingListener = onLoadingListener;
     this.offlineLive = null;
     timeoutSeconds = sharedPrefs.getInt(

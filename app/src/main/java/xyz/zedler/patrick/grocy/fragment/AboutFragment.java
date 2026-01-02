@@ -88,7 +88,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         R.id.linear_license_conscrypt,
         R.id.linear_license_fuzzywuzzy,
         R.id.linear_license_gson,
-        R.id.linear_license_jost,
+        R.id.linear_license_google_sans_flex,
         R.id.linear_license_material_components,
         R.id.linear_license_material_icons,
         R.id.linear_license_netcipher,
@@ -170,12 +170,12 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
           R.string.license_gson,
           R.string.url_gson
       );
-    } else if (v.getId() == R.id.linear_license_jost) {
-      ViewUtil.startIcon(binding.imageLicenseJost);
+    } else if (v.getId() == R.id.linear_license_google_sans_flex) {
+      ViewUtil.startIcon(binding.imageLicenseGoogleSansFlex);
       activity.showTextBottomSheet(
           R.raw.license_ofl,
-          R.string.license_jost,
-          R.string.url_jost
+          R.string.license_google_sans_flex,
+          R.string.url_google_sans_flex
       );
     } else if (v.getId() == R.id.linear_license_material_components) {
       ViewUtil.startIcon(binding.imageLicenseMaterialComponents);

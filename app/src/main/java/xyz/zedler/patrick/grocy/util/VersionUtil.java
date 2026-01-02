@@ -31,7 +31,6 @@ import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.NavigationMainDirections;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
 
 public class VersionUtil {
 
@@ -66,35 +65,6 @@ public class VersionUtil {
     } catch (IllegalArgumentException e) {
       return true;
     }
-  }
-
-  public static void showCompatibilityBottomSheetIfNecessary(
-      MainActivity mainActivity,
-      SharedPreferences sharedPrefs
-  ) {
-    String version = sharedPrefs.getString(Constants.PREF.GROCY_VERSION, null);
-    if (version == null || version.isEmpty()) {
-      return;
-    }
-    ArrayList<String> supportedVersions = new ArrayList<>(
-        Arrays.asList(mainActivity.getResources().getStringArray(R.array.compatible_grocy_versions))
-    );
-    if (supportedVersions.contains(version)) {
-      return;
-    }
-
-    // If user already ignored warning, do not display again
-    String ignoredVersion = sharedPrefs.getString(
-        Constants.PREF.VERSION_COMPATIBILITY_IGNORED, null
-    );
-    if (ignoredVersion != null && ignoredVersion.equals(version)) {
-      return;
-    }
-
-    Bundle bundle = new Bundle();
-    bundle.putString(Constants.ARGUMENT.VERSION, version);
-    bundle.putStringArrayList(Constants.ARGUMENT.SUPPORTED_VERSIONS, supportedVersions);
-    mainActivity.showBottomSheet(new CompatibilityBottomSheet(), bundle);
   }
 
   public static boolean isAppUpdated(SharedPreferences sharedPrefs) {

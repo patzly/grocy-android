@@ -122,6 +122,7 @@ public class SettingsCatBehaviorFragment extends BaseFragment {
       binding.switchTurnOnQuickMode.jumpDrawablesToCurrentState();
       binding.switchDateKeyboardInput.jumpDrawablesToCurrentState();
       binding.switchDateKeyboardReverse.jumpDrawablesToCurrentState();
+      binding.switchBarcodeAmount.jumpDrawablesToCurrentState();
       binding.switchOpenFoodFacts.jumpDrawablesToCurrentState();
       binding.switchSpeedUpStart.jumpDrawablesToCurrentState();
     });

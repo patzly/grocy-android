@@ -31,28 +31,28 @@
   <string name="action_transfer">移動</string>
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in inventory screen for example. -->
-  <string name="action_inventory">在庫を更新</string>
+  <string name="action_inventory">数量を更新</string>
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">全て消費</string>
 
-  <string name="action_consume_spoiled">廃棄</string>
-  <string name="action_consume_one_spoiled">1つを廃棄</string>
+  <string name="action_consume_spoiled">廃棄済みとして消費</string>
+  <string name="action_consume_one_spoiled">廃棄済みとして1消費</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
-  <string name="action_consume_one">%2$sのうち1%1$sを消費</string>
-  <string name="action_open">開封として記録</string>
+  <string name="action_consume_one">%2$sを1%1$s消費</string>
+  <string name="action_open">開封済みとしてマーク</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
-  <string name="action_open_one">%2$sのうち1 %1$sを開封</string>
-  <string name="action_edit_product">製品を編集</string>
+  <string name="action_open_one">1%1$sの%2$sを開封</string>
+  <string name="action_edit_product">物品を編集</string>
   <string name="action_shopping_list_add">買い物リストに追加</string>
-  <string name="action_consume_recipe">このレシピが必要とする全ての材料を消費</string>
+  <string name="action_consume_recipe">このレシピの全材料を消費</string>
   <string name="action_copy_recipe">レシピをコピー</string>
-  <string name="action_apply_desired_servings">このレシピで提供したい量を適用しデータを更新</string>
+  <string name="action_apply_desired_servings">このレシピに分量を適用してデータを更新</string>
   <!-- This is displayed as transaction type on the stock journal page -->
-  <string name="action_product_opened">製品が開封されました</string>
+  <string name="action_product_opened">開封済</string>
   <!-- This is displayed as transaction type on the stock journal page -->
-  <string name="action_transfer_from">転送元：</string>
+  <string name="action_transfer_from">移動元</string>
   <!-- This is displayed as transaction type on the stock journal page -->
-  <string name="action_transfer_to">転送先：</string>
+  <string name="action_transfer_to">移動先</string>
 
   <string name="action_back">戻る</string>
   <string name="action_search">検索</string>
@@ -63,112 +63,125 @@
   <string name="action_prev">前</string>
   <string name="action_feedback">フィードバック送信</string>
   <string name="action_reset">リセット</string>
-  <string name="action_reload">表示更新</string>
-  <string name="action_top_scroll">冒頭へスクロール</string>
+  <string name="action_reload">再読み込み</string>
+  <string name="action_top_scroll">最上までスクロール</string>
   <string name="action_send">送る</string>
   <string name="action_close">閉じる</string>
   <string name="action_scan">スキャン</string>
   <string name="action_cancel">キャンセル</string>
   <string name="action_add">追加</string>
-  <string name="action_clear">クリア</string>
-  <string name="action_clear_shopping_list">買い物リストをクリア</string>
+  <string name="action_clear">消去</string>
+  <string name="action_clear_shopping_list">買い物リストを消去</string>
+  <string name="action_auto_sync">自動同期</string>
   <string name="action_rate">Google Playで評価</string>
-  <string name="action_rate_description">開発者を支援する</string>
+  <string name="action_rate_description">開発者の励みになります</string>
   <string name="action_email">email送信</string>
   <string name="action_email_description">開発者に連絡</string>
   <string name="action_new_issue">GitHubでissueを開く</string>
-  <string name="action_new_issue_description">バグ報告・機能をリクエスト</string>
-  <string name="action_get_started">はじめる</string>
-  <string name="action_ascending">上順</string>
-  <string name="action_filter">フィルタリング</string>
-  <string name="action_sort">順番</string>
-  <string name="action_undo">取消</string>
+  <string name="action_new_issue_description">バグの報告や機能のリクエスト</string>
+  <string name="action_get_started">始める</string>
+  <string name="action_ascending">昇順</string>
+  <string name="action_filter">フィルター</string>
+  <string name="action_sort">並べ替え</string>
+  <string name="action_undo">元に戻す</string>
   <string name="action_retry">再試行</string>
   <string name="action_edit">編集</string>
   <string name="action_copy">コピー</string>
   <string name="action_proceed">続行</string>
-  <string name="action_delete">消去</string>
+  <string name="action_delete">削除</string>
   <string name="action_save">保存</string>
   <string name="action_save_close">保存して閉じる</string>
-  <string name="action_save_not_close">閉じずに保存</string>
+  <string name="action_save_not_close">保存して続ける</string>
   <string name="action_logout">ログアウト</string>
   <string name="action_restart">再起動</string>
-  <string name="action_create">作る</string>
+  <string name="action_create">新規作成</string>
   <string name="action_link">リンク</string>
   <string name="action_try_again">再試行</string>
   <string name="action_open_scanner">スキャナを開く</string>
   <string name="action_discard">取消</string>
-  <string name="action_clear_form">フォームをクリアする</string>
-  <string name="action_take_photo">写真を撮影</string>
+  <string name="action_clear_form">フォーム消去</string>
+  <string name="action_take_photo">写真撮影</string>
   <!-- "Paste" like in "Paste from clipboard" -->
   <string name="action_paste">ペースト</string>
   <!-- Short form for "Only link barcode to existing product", this should fit into a
   button so keep it short. -->
   <string name="action_link_and_clear">リンクのみ</string>
-  <string name="action_toggle_done">実行済みとしてトグル</string>
+  <string name="action_toggle_done">完了済に切替</string>
   <string name="action_change_layout">レイアウト変更</string>
-  <string name="action_edit_notes">ノートを編集</string>
-  <string name="action_add_missing">不足製品を追加</string>
-  <string name="action_purchase_done_items">完了済みアイテムを購入</string>
-  <string name="action_purchase_all_items">全アイテムを購入</string>
+  <string name="action_edit_notes">ノート編集</string>
+  <string name="action_add_missing">不足物品を追加</string>
+  <string name="action_purchase_done_items">完了済項目の物品を購入</string>
+  <string name="action_purchase_all_items">全項目の物品を購入</string>
   <string name="action_skip_entry">項目をスキップ</string>
-  <string name="action_toggle_flash">フラッシュをトグル</string>
-  <string name="action_edit_recipe">レシピを編集</string>
-  <string name="action_delete_recipe">レシピを消去</string>
-  <string name="action_delete_shopping_list">買い物リストを消去</string>
-  <string name="action_create_key">キーを作成</string>
+  <string name="action_toggle_flash">フラッシュ切替</string>
+  <string name="action_edit_recipe">レシピ編集</string>
+  <string name="action_delete_recipe">レシピ削除</string>
+  <string name="action_delete_shopping_list">買い物リスト削除</string>
+  <string name="action_create_key">キー新規作成</string>
   <string name="action_login">ログイン</string>
   <string name="action_ignore">無視</string>
   <!-- This string should follow the equality between "all" and "Clear all items" -->
-  <string name="action_clear_all">全て</string>
+  <string name="action_clear_all">すべて</string>
   <!-- This string should follow the equality between "done" and "Clear done items" -->
   <string name="action_clear_done">完了</string>
   <string name="action_display_help">ヘルプを表示</string>
   <string name="action_demo_server">デモサーバー</string>
-  <string name="action_own_server">自前サーバー</string>
+  <string name="action_own_server">独自サーバー</string>
+  <string name="action_open_server">サーバーインターフェース使用</string>
   <string name="action_enter_data_manually">手動でデータ入力</string>
+  <string name="action_settings_backup_restore">設定のバックアップと復元</string>
   <string name="action_details">詳細</string>
   <string name="action_perform">実行</string>
   <string name="action_share">シェア</string>
-  <string name="action_share_description">友人にGrocy Androidを紹介</string>
+  <string name="action_share_description">友達にGrocy Androidを紹介</string>
   <string name="action_no_filter">フィルターなし</string>
   <string name="action_show_done_tasks">完了済みタスクを表示</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_chore_execution">家事を今すぐ実行</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_next_chore_schedule">次回予定を実行</string>
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="action_skip_next_chore_schedule">次の家事実行をスキップ</string>
+  <string name="action_skip_next_chore_schedule">次回予定までスキップ</string>
   <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="action_reschedule_next_execution">次回実行をリスケジュール</string>
-  <string name="action_put_missing_products_on_shopping_list">不足商品を買い物リストに追加</string>
+  <string name="action_reschedule_next_execution">次回予定を変更</string>
+  <string name="action_put_missing_products_on_shopping_list">不足物品を買い物リストに追加</string>
+  <!-- This is the action part of "Backup to file" or "Backup data" -->
+  <string name="action_backup">バックアップ作成</string>
+  <!-- This is the action part of "Restore from file" or "Restore data" -->
+  <string name="action_restore">復元</string>
+  <string name="action_configure_sections">区分設定</string>
+
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
-    <item quantity="other">%1$dがもうすぐ賞味期限切れ</item>
+    <item quantity="other">まもなく期限 %1$d 点</item>
   </plurals>
   <!-- %1$s is the number of products which are overdue. This string is the short form of e.g. "3 products are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_products">
-    <item quantity="other">%1$dが賞味期限切れ</item>
+    <item quantity="other">期限超過 %1$d 点</item>
   </plurals>
   <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
   <plurals name="msg_expired_products">
-    <item quantity="other">%1$dが消費期限切れ</item>
+    <item quantity="other">消費期限切れ %1$d 点</item>
   </plurals>
   <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
   <plurals name="msg_not_fresh_products_short">
-    <item quantity="other">%1$dが賞味・消費期限切れ</item>
+    <item quantity="other">期限切れ %1$d 点</item>
   </plurals>
   <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
   <plurals name="msg_not_fresh_products_long">
-    <item quantity="other">%1$dが期限切れ(以下の積算)</item>
+    <item quantity="other">期限切れ(以下すべて) %1$d 点</item>
   </plurals>
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
   <plurals name="msg_missing_products">
-    <item quantity="other">%1$d最低在庫量以下</item>
+    <item quantity="other">最低数量未満 %1$d 点</item>
   </plurals>
   <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
   <plurals name="msg_in_stock_products">
-    <item quantity="other">%1$d在庫</item>
+    <item quantity="other">ストック %1$d 点　</item>
   </plurals>
   <!-- %1$s is the number of products which are opened. This string is the short form of e.g. "3 products are opened" -> "3 opened" -->
   <plurals name="msg_opened_products">
-    <item quantity="other">%1$d開封済</item>
+    <item quantity="other">開封済 %1$d 点</item>
   </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">%3$sの%1$s%2$sを消費</string>
@@ -176,341 +189,380 @@
   <string name="msg_consumed_spoiled">%3$sの%1$s%2$sを廃棄</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">%3$sの%1$s%2$sを開封</string>
+  <!-- %1$s is the number of servings of a recipe. -->
+  <plurals name="msg_servings">
+    <item quantity="other">分量 %1$s</item>
+  </plurals>
   <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
   <plurals name="msg_undone_items">
-    <item quantity="other">%1$d未完了</item>
+    <item quantity="other">未完了 %1$d 点</item>
   </plurals>
   <!-- %1$s is the number of done items in shopping list. This string is the short form of e.g. "3 done items are in shopping list" -> "3 done" -->
   <plurals name="msg_done_items">
-    <item quantity="other">%1$d完了</item>
+    <item quantity="other">完了 %1$d 点</item>
   </plurals>
   <!-- %1$s is the number of tasks which are done. This string is the short form of e.g. "3 tasks are done" -> "3 done" -->
   <plurals name="msg_done_tasks">
-    <item quantity="other">%1$d完了</item>
+    <item quantity="other">完了 %1$d 件</item>
   </plurals>
   <!-- %1$s is the number of tasks which are not done. This string is the short form of e.g. "3 tasks are not done" -> "3 not done" -->
   <plurals name="msg_not_done_tasks">
-    <item quantity="other">%1$d未完了</item>
+    <item quantity="other">未完了 %1$d 件　</item>
   </plurals>
   <!-- %1$s is the number of tasks which are due soon. This string is the short form of e.g. "3 tasks are due soon" -> "3 due soon" -->
   <plurals name="msg_due_tasks">
-    <item quantity="other">%1$d期限間近</item>
+    <item quantity="other">まもなく期限 %1$d 件</item>
   </plurals>
   <!-- %1$s is the number of tasks which are due today. This string is the short form of e.g. "3 tasks are due today" -> "3 due today" -->
   <plurals name="msg_due_today_tasks">
-    <item quantity="other">%1$d本日期限</item>
+    <item quantity="other">本日期限 %1$d 件</item>
   </plurals>
   <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_tasks">
-    <item quantity="other">%1$d期限超過</item>
+    <item quantity="other">期限超過 %1$d 件</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_short">
+    <item quantity="other">期限 %1$d 件</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_long">
+    <item quantity="other">期限(以下すべて) %1$d 点</item>
   </plurals>
   <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
   <plurals name="msg_assigned_tasks">
-    <item quantity="other">%1$d割り当て</item>
+    <item quantity="other">担当 %1$d 件</item>
   </plurals>
-  <string name="msg_task_mark">タスクを完了として登録</string>
+  <string name="msg_task_mark">タスクを完了としてマーク</string>
   <string name="msg_task_completed">タスクを完了として登録しました</string>
-  <string name="msg_task_not_completed">タスクを未完了として登録</string>
-  <string name="msg_task_undo">タスク実行を取消</string>
-  <string name="msg_recipes_enough_in_stock">在庫は足りています</string>
-  <string name="msg_recipes_enough_in_stock_filter">(%1$d)在庫は足りています</string>
+  <string name="msg_task_not_completed">タスクを未完了としてマーク</string>
+  <string name="msg_task_undo">タスクの状態を元に戻す</string>
+  <string name="msg_recipes_enough_in_stock">ストックあり</string>
+  <string name="msg_recipes_enough_in_stock_filter">ストックあり(%1$d)</string>
   <!-- %1$s is an amount with quantity unit (e.g. 3 bottles) -->
-  <string name="msg_recipes_enough_in_stock_amount">在庫は足りています(%1$s)</string>
-  <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d)不足在庫が買い物リストに登録あり</string>
-  <string name="msg_recipes_not_enough_filter">(%1$d)在庫不足</string>
-  <string name="msg_recipes_not_enough">在庫不足</string>
+  <string name="msg_recipes_enough_in_stock_amount">ストックあり(%1$s)</string>
+  <string name="msg_recipes_not_enough_but_on_shopping_list_filter">買い物リスト追加済み(%1$d)</string>
+  <string name="msg_recipes_not_enough_filter">不足(%1$d)</string>
+  <string name="msg_recipes_not_enough">不足</string>
   <plurals name="msg_recipes_ingredients_missing_but_on_shopping_list">
-    <item quantity="other">%1$dの材料が不足していますが買い物リストに登録あり</item>
+    <item quantity="other">買い物リスト追加済み %1$d 点　</item>
   </plurals>
   <plurals name="msg_recipes_ingredients_missing">
-    <item quantity="other">%1$dの材料が不足</item>
+    <item quantity="other">材料不足 %1$d 点</item>
   </plurals>
-  <string name="msg_recipes_ingredient_fulfillment_info_list">不足：%1$s|買い物リストに登録済み：%2$s</string>
-  <string name="msg_chore_executed">家事の実行を記録</string>
+  <string name="msg_recipes_ingredient_fulfillment_info_list">不足: %1$s、買い物リスト追加済み: %2$s</string>
+  <string name="msg_chore_executed">実行した家事</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
-  <string name="msg_purchased">%3$sの%1$s%2$sを購入</string>
+  <string name="msg_purchased">%3$s(%1$s%2$s)を購入しました</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
-  <string name="msg_transferred">%3$sの%1$s%2$sを移動</string>
+  <string name="msg_transferred">%3$s(%1$s%2$s)を移動しました</string>
   <!-- %1$s is a product name, %2$s a number, %3$s is a quantity unit and %4$s a number (e.g. -3) -->
-  <string name="msg_inventoried">%1$sの在庫が現在%2$s%3$s(%4$s)</string>
+  <string name="msg_inventoried">現在ストックに%1$sが%2$s%3$s(%4$s)あります</string>
   <!-- %1$s is a product name -->
-  <string name="msg_not_in_stock">%1$sが在庫にありません</string>
-  <string name="msg_no_connection">接続が切れています</string>
+  <string name="msg_not_in_stock">%1$sはストックなしです</string>
+  <string name="msg_no_connection">接続なし</string>
   <!-- %1$s is a product name -->
   <string name="msg_no_stock_locations">%1$sのストック場所がありません</string>
   <!-- %1$s is a product name -->
-  <string name="msg_no_stock_entries">%1$sの在庫記録がありません</string>
-  <string name="msg_not_found">製品が見つかりませんでした</string>
-  <string name="msg_editor_hint">ここにテキスト入力</string>
-  <string name="msg_coming_soon">近日実装予定</string>
-  <string name="msg_undo_transaction">送信を取り消しますか？</string>
-  <string name="msg_undone_transaction">送信を取り消しました</string>
+  <string name="msg_no_stock_entries">%1$sのストック追加履歴がありません</string>
+  <string name="msg_not_found">物品が見つかりませんでした</string>
+  <string name="msg_returning_to_overview">数秒後に一覧ページに戻ります</string>
+  <string name="msg_editor_hint">ここにテキストを入力</string>
+  <string name="msg_coming_soon">この機能はまもなく利用可能になります</string>
+  <string name="msg_undo_transaction">処理を元に戻しますか？</string>
+  <string name="msg_undone_transaction">処理を元に戻しました</string>
   <!-- %1$s is a date -->
-  <string name="msg_undone_transaction_description">%1$sを取り消しました</string>
-  <string name="msg_failed_to_sync">同期に失敗しました</string>
-  <string name="msg_synced">同期に成功しました</string>
+  <string name="msg_undone_transaction_description">%1$sを元に戻しました</string>
+  <string name="msg_failed_to_sync">履歴の同期に失敗しました</string>
+  <string name="msg_synced">履歴を同期しました</string>
   <!-- %1$s is a shopping list name -->
-  <string name="msg_added_missing_products">%1$sに不足製品を追加しました</string>
+  <string name="msg_added_missing_products">%1$sに不足物品を追加しました</string>
   <!-- %1$s is a shopping list name -->
-  <string name="msg_shopping_list_cleared">%1$sをクリアしました</string>
+  <string name="msg_shopping_list_cleared">%1$sを消去しました</string>
   <!-- %1$s is a shopping list name -->
-  <string name="msg_shopping_list_deleted">%1$sを消去しました</string>
+  <string name="msg_shopping_list_deleted">%1$sを削除しました</string>
   <string name="msg_barcode_duplicate">すでにバーコードが存在します</string>
   <!-- %1$s is a master data type like "Product group" or "Location"; %2$s is the name of it. -->
-  <string name="msg_master_delete">%1$s\"%2$s\"を本当に消去しますか？</string>
+  <string name="msg_master_delete">%1$s「%2$s」を削除してもよろしいですか？</string>
   <!-- %1$s is a product name -->
-  <string name="msg_master_delete_product">本当に製品\"%1$s\"を消去しますか？\n\n本操作により在庫や過去の消費記録やリファレンスも消去されます。「無効化」すれば表示だけを隠すことができます。</string>
+  <string name="msg_master_delete_product">物品「%1$s」を削除してもよろしいですか？\n\nこの操作によって物品のストック量、履歴、その他すべての参照が削除されます。データを保持する場合は、非表示化してください。</string>
   <!-- %1$s is a master data type like "location" or "product" -->
-  <string name="msg_master_delete_usage">この%1$sはまだ使用中</string>
+  <string name="msg_master_delete_usage">この%1$sは現在使用中です</string>
   <!-- %1$s is an amount and %2$s is a quantity unit.  -->
   <plurals name="msg_inventory_transaction_add">
-    <item quantity="other">%1$s%2$sが在庫に追加されます</item>
+    <item quantity="other">ストックに%1$s%2$s追加します。</item>
   </plurals>
   <!-- %1$s is an amount and %2$s is a quantity unit.  -->
   <plurals name="msg_inventory_transaction_remove">
-    <item quantity="other">%1$s%2$sが在庫から消去されます</item>
+    <item quantity="other">ストックから%1$s%2$s削除します。</item>
   </plurals>
-  <string name="msg_transfer_tare_weight">本バージョンでは容器で管理している製品を移動できません</string>
-  <string name="msg_should_not_be_frozen">この製品は冷凍に向きません。本当に冷凍しますか？</string>
-  <string name="msg_item_marked_as_done">アイテムを完了済みとして登録</string>
-  <string name="msg_item_marked_as_undone">アイテムを未完了として登録</string>
-  <string name="option_synced_success">オプションが同期されました</string>
-  <string name="option_synced_error">オプションが同期できませんでした</string>
-  <string name="msg_data_copied_from_product">製品「%1$s」のデータがコピーされました。</string>
+  <string name="msg_transfer_tare_weight">容器重量が有効になっている物品は移動操作がサポートされていません。</string>
+  <string name="msg_should_not_be_frozen">この物品は冷凍禁止に指定されています。続行しますか？</string>
+  <string name="msg_item_marked_as_done">項目を完了として登録</string>
+  <string name="msg_item_marked_as_undone">項目を未完了として登録</string>
+  <string name="option_synced_success">オプションを同期しました</string>
+  <string name="option_synced_error">オプションを同期できませんでした</string>
+  <string name="msg_data_copied_from_product">物品「%1$s」のデータをコピーしました。</string>
   <string name="msg_recipe_added_to_cart">レシピの材料をカートに追加しました</string>
-  <string name="msg_recipe_consumed">レシピ \"%1$s\" の材料を在庫から消去しました</string>
-  <string name="msg_stored_purchases_overview">サーバーに送信できなかった購入情報があります。詳細はここをタップ</string>
-  <string name="msg_stored_purchases">まだサーバーに転送されていない購入がここに表示されています。 これらは、クイック モードで購入品をより速くスキャンできるように、マスター データ用に新しい商品を直接作成する必要がないように、このアプリに一時的な商品と一緒に保存されました。</string>
-  <string name="msg_stored_purchases_product_offline">製品をタップし、必要なデータを入力します。 その後、ここでは製品がオンラインとして表示され、保存された購入内容をサーバーに送信できるようになります。</string>
-  <string name="msg_stored_purchases_product_online">ここをタップして、保存されているこの製品の購入内容をサーバーに送信します。</string>
-  <string name="msg_choose_product">スキャンしたバーコードはまだ製品にリンクされていません。 既存の製品にリンクしたり、新しい製品を作成したりできます。</string>
-  <string name="msg_product_name_off">バーコードの商品名は Open Food Facts からのものです。</string>
-  <string name="msg_product_name_obf">バーコードの商品名は Open Beauty Facts からのものです。</string>
-  <string name="msg_product_name_lookup_error">Open Food Facts または Open Beauty Facts ではバーコードを検索できませんでした。</string>
-  <string name="msg_product_name_lookup_empty">バーコードが Open Food Facts データベースや Open Beauty Facts データベースにありません。</string>
-  <string name="msg_off_option_deactivated">製品名の自動補完のため設定で Open Food Facts ルックアップを有効にすることができます。</string>
-  <string name="msg_create_new_product_filled">新規製品\"%1$s\"を作成</string>
-  <string name="msg_create_new_product">新規製品を作成</string>
-  <string name="msg_create_new_pending_product_filled">臨時の製品\"%1$s\"を新規作成</string>
-  <string name="msg_create_new_pending_product">臨時の製品を新規作成</string>
+  <string name="msg_recipe_consumed">レシピ「%1$s」の材料をすべて削除しました</string>
+  <string name="msg_stored_purchases_overview">サーバーに送信されていない購入データがデバイス上に残っています。詳細はここをタップしてください。</string>
+  <string name="msg_stored_purchases">まだサーバーに送信されていない購入データがここに表示されます。データはアプリ内に一時物品データと共に保存されており、クイックモードで購入をより素早く記録でき、マスターデータとして物品を新規作成する必要はありません。</string>
+  <string name="msg_stored_purchases_product_offline">物品をタップして必要なデータを入力すると、オンライン状態でここに物品が表示され、保存された購入データをサーバーに送信できるようになります。</string>
+  <string name="msg_stored_purchases_product_online">この物品の購入データをサーバーに送信するには、ここをタップしてください。</string>
+  <string name="msg_choose_product">スキャンしたバーコードはまだ物品にリンクされていません。既存の物品にリンクするか、物品を新規作成できます。</string>
+  <string name="msg_product_name_off">バーコードの物品名はOpen Food Factsから取得されます。</string>
+  <string name="msg_product_name_obf">バーコードの物品名はOpen Beauty Factsから取得されます。</string>
+  <string name="msg_product_name_lookup_error">バーコードをOpen Food FactsとOpen Beauty Factsで検索できませんでした。</string>
+  <string name="msg_product_name_lookup_empty">バーコードがOpen Food FactsとOpen Beauty Factsのデータベースにありません。</string>
+  <string name="msg_off_option_deactivated">設定でOpen Food Facts検索を有効化すると、物品名を自動補完できます。</string>
+  <string name="msg_create_new_product_filled">物品「%1$s」を新規作成</string>
+  <string name="msg_create_new_product">物品を新規作成</string>
+  <string name="msg_create_new_pending_product_filled">一時物品「%1$s」を新規作成</string>
+  <string name="msg_create_new_pending_product">一時物品を新規作成</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-  <string name="msg_quick_mode_confirm_purchase">以下のトランザクションを実行します：\n\n%3$sを%1$s%2$sストックに追加。\n期限：%4$s\n価格：%5$s\n場所：%7$s</string>
+  <string name="msg_quick_mode_confirm_purchase">実行される処理:\n\nストックに%3$s(%1$s%2$s)を追加\n期限: %4$s\n価格: %5$s\n購入店: %6$s\n保管場所: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-  <string name="msg_quick_mode_confirm_consume">以下のトランザクションを実行します：%3$sを%1$s%2$s除去\n場所：%4$s</string>
+  <string name="msg_quick_mode_confirm_consume">実行される処理: ストックから%3$s(%1$s%2$s)を削除\n保管場所: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-  <string name="msg_quick_mode_confirm_open">以下のトランザクションを実行します：%3$sを%1$s%2$s開封\n場所：%4$s</string>
+  <string name="msg_quick_mode_confirm_open">実行される処理:%3$s(%1$s%2$s)を開封済としてマーク\n保管場所: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
-  <string name="msg_quick_mode_confirm_transfer">以下のトランザクションを実行します：%3$sを%1$s%2$s移動\n移動元：%4$s\n移動先：%5$s</string>
+  <string name="msg_quick_mode_confirm_transfer">実行される処理: %3$s(%1$s%2$s)を移動\n移動元: %4$s\n移動先: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-  <string name="msg_quick_mode_confirm_inventory">以下のトランザクションを実行します：\n\n在庫を%1$sから%2$s%3$sへ変更\n追加された製品：\n期限：%4$s\n価格：\n購入店：%5$s\n場所：%7$s</string>
-  <string name="msg_compatibility">このアプリのバージョンは、サーバー上の Grocy バージョンと互換性がありません。\n\n現在のサーバー バージョン: %1$s \n\nサポートされているサーバー バージョン:%2$s\n\n現在のサーバー バージョンのメジャー バージョン番号(最初の桁)がサポートされているバージョンよりも大きい場合、この警告を無視すると、(低い確率で)データ損失または(高い確率で)クラッシュが発生する可能性があります。\nわずかな違いしかない場合(たとえば3 桁目が大きいなど)、この警告はおそらく無視しても問題ありません。</string>
-  <string name="msg_logout">サーバー上のデータは何も変更されません。 ログインページにリダイレクトされます。</string>
-  <string name="msg_logout_demo">パブリック デモ サーバー <u>https://grocy.info</u> を使用しています。\n\n<b>ここでの変更は永久に保存されません!\nサーバーが 1 日に 1 回自動的に上書きするまで、変更は公開されたままになります。</b>\n\nログイン画面で、自前サーバーのアドレスを入力できます。</string>
-  <string name="msg_logout_demo_short">パブリックデモサーバーです。 タップで詳細表示</string>
-  <string name="msg_restart">現在の構成を適用するには、アプリを再起動する必要があります。 今すぐ再起動しますか?</string>
-  <string name="msg_full_description">ここをタップすると完全な説明が表示されます</string>
+  <string name="msg_quick_mode_confirm_inventory">実行される処理: \n\n%1$sのストック数量を%2$s%3$sに変更\n変更した物品の情報:\n期限: %4$s\n価格: \n購入店: %5$s\n保管場所: %7$s</string>
+  <string name="msg_logout">サーバー上のデータはすべて変更されません。ログインページにリダイレクトされます。</string>
+  <string name="msg_logout_demo">パブリックデモサーバー <u>https://grocy.info</u> を使用しています。\n\n<b>ここでの変更は永久に保存されるわけではありません！\nサーバーが1日に1回データを自動的に上書きするまで、編集内容は公開状態になります。</b>\n\nログインページから独自サーバーのアドレスを入力できます。</string>
+  <string name="msg_logout_demo_short">パブリックデモサーバーです。詳細はここをタップしてください。</string>
+  <string name="msg_restart">現在の構成を適用するには、アプリを再起動する必要があります。 今すぐ再起動しますか？</string>
+  <string name="msg_full_description">ここをタップすると詳細が表示されます。</string>
   <string name="msg_copied_clipboard">クリップボードにコピーしました</string>
-  <string name="msg_shortcuts">最大 4 つのショートカットを有効にできます</string>
-  <string name="msg_shortcuts_not_supported">この Android バージョンではショートカットはサポートされていません</string>
-  <string name="msg_barcode_formats">予想される形式のみを検出するようバーコード検出器を構成することで、バーコードの検出速度を向上させることができます</string>
-  <string name="msg_features">「概要」からイントロをもう一度開始</string>
-  <string name="msg_feedback">ご要望、ご質問、間違いなどございましたら私たちにご連絡ください。お手伝いいたします!\nまたはPlay ストアで素敵なレビューをいただければ幸いです。</string>
-  <string name="msg_point_at_barcode">カメラをバーコードに向けます</string>
-  <string name="msg_save_product_first">製品を保存してください</string>
-  <string name="msg_save_recipe_first">レシピを保存してください</string>
-  <string name="msg_press_hold_confirm">長押しして削除</string>
-  <string name="msg_recipe_consume_ask">レシピ「%1$s」に必要な材料をすべて消費しますか？ （「在庫が存在する場合のみチェック」がチェックされている食材は無視されます）</string>
-  <string name="msg_recipe_shopping_list_ask">レシピ「%1$s」に必要な不足材料をすべて買い物リストに追加してもよろしいですか?\n\n材料を買い物リストに追加しない場合は、材料のチェックを外してください:</string>
-  <string name="msg_welcome">Grocy Android へようこそ!</string>
-  <string name="msg_welcome_introduce">Grocy を生産的に使用するには、独自のサーバーまたは Home Assistant 用の Grocy アドオンが必要です。\nこのアプリを試してみたいだけの場合は、grocy の作成者である Bernd Bestel のデモ サーバーを使用できます。</string>
-  <string name="msg_choose_option_below">以下のオプションを選択してください</string>
-  <string name="msg_qr_code_scan">別のデバイスで、Grocy Web サイトにアクセスし、「API キー」ページに移動します。 「追加」をクリックし、小さな QR コード シンボルをクリックして QR コードをスキャンします。</string>
-  <string name="msg_qr_code_scan_token">Grocy Home Assistant アドオンを使用しています。 ホーム アシスタントのプロファイル設定で、有効期間の長いアクセス トークンを作成します (最後のセクション)。 トークンフィールドの下にある「QRコードを生成」をクリックし、ここでスキャンします。</string>
-  <string name="msg_port_connection_info_without_port">このアプリはポート%1$sに接続します。\n別のポートに接続する場合は、URL にポートを追加できます。\n例: http://domain.com:81/</string>
-  <string name="msg_port_connection_info_with_port">このアプリはポート%1$sに接続します</string>
-  <string name="msg_clear_form_first">別の既知のバーコードをスキャンする前に、まずフォームをクリアしてください。</string>
-  <string name="msg_not_implemented_yet">近日実装予定です。 サーバー インターフェイスをご利用ください。</string>
-  <string name="msg_help_picture_changes">画像の変更は、保存時だけでなく、すぐにサーバーと同期されます。</string>
+  <string name="msg_shortcuts">最大4つのショートカットを有効化できます:</string>
+  <string name="msg_shortcuts_not_supported">このAndroidバージョンではショートカットはサポートされていません。</string>
+  <string name="msg_barcode_formats">想定されるフォーマットのみを検出するようにバーコード検出システムを設定することで、検出速度が向上します。</string>
+  <string name="msg_features">「概要」からイントロダクションを再表示できます</string>
+  <string name="msg_feedback">ご意見、ご質問、エラーの報告などは、こちらにご連絡ください！\nそして、Playストアに素敵なレビューを投稿していただけると嬉しく思います。</string>
+  <string name="msg_point_at_barcode">カメラをバーコードに向けてください</string>
+  <string name="msg_save_product_first">先に物品を保存してください</string>
+  <string name="msg_save_recipe_first">先にレシピを保存してください</string>
+  <string name="msg_recipe_contains_nested_recipes">このレシピには入れ子になったレシピが含まれています。</string>
+  <string name="msg_press_hold_confirm">長押しして削除を確定</string>
+  <string name="msg_recipe_consume_ask">レシピ「%1$s」の全材料を消費してもよろしいですか？(「ストック確認のみ」にチェックを入れた物品は無視されます)</string>
+  <string name="msg_recipe_shopping_list_ask">レシピ「%1$s」の不足材料をすべて買い物リストに追加してもよろしいですか？\n\n買い物リストに追加しない材料のチェックを外してください:</string>
+  <string name="msg_settings_backup_restore">アプリ設定のバックアップと復元を使うことで、設定を複数人で共有できます(ファイルにはAPIキーなどの認証情報が含まれています)。\n\n復元後は通知が正常に機能しない可能性があります。アプリの通知の許可を一度オフにしてから再度オンにし、アプリを再起動してください。\n\n復元するファイルに不正なデータが含まれている場合、復元後にアプリが動作しなくなる可能性があります。その場合はアプリのデータを消去してください。</string>
+  <string name="msg_settings_backup_success">設定のバックアップが正常に作成されました</string>
+  <string name="msg_settings_restore_success">設定が正常に復元されました。2秒後にアプリが再起動します。</string>
+  <string name="msg_welcome">Grocy Androidへようこそ!</string>
+  <string name="msg_welcome_introduce">Grocyを効果的に使用するには、独自のサーバーまたはHome Assistant用のGrocyアドオンが必要です。\nアプリを試用する場合は、grocyの作成者であるBernd Bestelのデモサーバーを使うことができます。</string>
+  <string name="msg_choose_option_below">以下よりお選びください。</string>
+  <string name="msg_qr_code_scan">別のデバイスでWeb版Grocyにアクセスし、「APIキー」ページを表示します。「追加」を押し、QRコードのマークをクリックして表示されたQRコードをスキャンします。</string>
+  <string name="msg_qr_code_scan_token">Grocy Home Assistantアドオンを使用している場合の方法です。 Home Assistantのプロファイル設定(最後のセクション)で、長期アクセストークンを作成します。トークンフィールドの下にある「QRコードを生成」をクリックし、このデバイスでスキャンします。</string>
+  <string name="msg_port_connection_info_without_port">アプリはポート %1$s に接続します。\n別のポートに接続する場合は、URLにポートを追加できます。\n例: http://domain.com:81/</string>
+  <string name="msg_port_connection_info_with_port">このアプリはポート %1$s に接続します。</string>
+  <string name="msg_clear_form_first">別の既知のバーコードをスキャンする前に、まずフォームを消去してください。</string>
+  <string name="msg_not_implemented_yet">この機能はまもなく利用可能になります。現時点ではサーバーインターフェイスをご利用ください。</string>
+  <string name="msg_help_picture_changes">画像の変更は、保存時だけでなく変更直後にサーバーと同期されます。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_default_stock_label_type">これは、購入時に事前入力されるデフォルトの在庫項目ラベル タイプです。</string>
+  <string name="msg_help_default_stock_label_type">購入時に事前入力される既定ののストックラベルタイプです。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_hide_on_stock">在庫概要ページには、現在在庫があるか、最小在庫数を下回るすべての製品がリストされますが、これを有効にすると、非表示にできます。</string>
+  <string name="msg_help_hide_on_stock">ストック一覧ページにはストックがある物品と最低数量未満の物品が一覧表示されますが、この項目を有効化した物品は常に表示されなくなります。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_parent_product_deactivated">この商品はすでに別の製品から親製品として使用されているため、親製品を設定できません。</string>
+  <string name="msg_help_parent_product_deactivated">この物品は既に別の物品の上位物品に指定されているため、上位物品を指定できません。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_consume_location">以下の場所にある在庫エントリが最初に消費されます</string>
+  <string name="msg_help_consume_location">以下の保管場所にあるストックを優先的に消費します。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_move_on_open">有効にすると、この製品を開封済みとしてマークした場合、対応する量がデフォルトの消費場所に移動されます。</string>
+  <string name="msg_help_move_on_open">有効化すると、この物品を開封済みとしてマークしたとき既定の数量を既定の保管場所に移動します</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_disable_own_stock">有効にすると、対応する製品は独自の在庫を持つことができなくなり、購入時に選択できなくなります (サブ製品の概要/全体ビューとしてのみ使用される親製品に役立ちます)。</string>
+  <string name="msg_help_disable_own_stock">有効化すると、この物品を開封済みとしてマークしたとき既定の数量を既定の保管場所に移動します</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_should_not_be_frozen">有効にすると、この製品を冷凍庫の場所に移動するとき (冷凍するとき)警告が表示されます。</string>
-  <string name="msg_help_due_date_type">選択した期日のタイプに基づいて、在庫概要ページの強調表示が変化します。 「賞味期限」とは、期限に達した後も製品がまだ安全に摂取できる可能性があることを意味します。 「消費期限」とは、期限を過ぎた製品は安全に摂取できないことを意味します。</string>
-  <string name="msg_help_default_due_days_format">以下項目を長押しすると、数字の代わりに日付を入力できます</string>
+  <string name="msg_help_should_not_be_frozen">有効化すると、この物品を冷凍庫に移動(冷凍)する前に警告が表示されます。</string>
+  <string name="msg_help_due_date_type">選択したタイプによって、ストック一覧ページでのハイライト表示が変化します。「賞味期限」は、期限が過ぎても安全に摂取できる可能性がある物品に指定します。「消費期限」は、期限を過ぎると安全に摂取できない物品に指定します。</string>
+  <string name="msg_help_default_due_days_format">以下の項目を長押しすると、数字の代わりに日付を入力できます。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_default_due_days">購入時に、今日からこの日数が経過した日を期限としてサジェストします (-1 を設定すると期限がない商品を登録できます)</string>
+  <string name="msg_help_default_due_days">購入日にこの日数を足した日が期限として提案されます(-1を入力すると、期限がない物品として登録されます)。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_default_due_days_opened">この製品を開封すると、今日からこの日数が経過した日を期限に設定します (値 0 を指定すると無効化)</string>
+  <string name="msg_help_default_due_days_opened">この物品が開封済みになると、開封日にこの日数を足した日が期限になります(値が0の場合は無効化されます)。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_default_due_days_freezing">この製品を冷凍すると、今日からこの日数が経過した日を期限に設定します (値 -1 を指定すると期限を無効にします)</string>
+  <string name="msg_help_default_due_days_freezing">この物品の保管場所を冷凍庫に移動する(冷凍する)と、冷凍日にこの日数を足した日が期限になります(-1を入力すると、期限がない物品として登録されます)。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_default_due_days_thawing">この製品を解凍(冷凍庫から移動)すると、今日からこの日数が経過した日を期限に設定します</string>
+  <string name="msg_help_default_due_days_thawing">この物品の保管場所を冷凍庫から移動する(解凍する)と、解凍日にこの日数を足した日が期限になります。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_qu_stock">最初の購入後に数量単位在庫を変更することはできません</string>
-  <string name="msg_help_qu_stock_changeable">数量単位在庫は、現在の数量単位の単位換算が存在する場合にのみ変更できます</string>
+  <string name="msg_help_qu_stock">最初の購入後にストック単位を変更することはできません。</string>
+  <string name="msg_help_qu_stock_changeable">ストック単位は、現在の数量単位の変換が存在する場合にのみ変更できます。</string>
+  <string name="msg_help_qu_changeable">ストック単位は単位変換が存在する場合にのみ変更できます。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_accumulate_min_amount">有効にすると、最小値が表示されます。 サブ製品の在庫量の総和が表示されます。その際にサブ製品が「欠落」する代わりにこの製品が増える、という挙動はしません。</string>
+  <string name="msg_help_qu_purchase">この物品の購入時および買い物リスト追加時に使用する既定の単位です。</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_consume">この物品の消費時に使用する既定の単位です。</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_price">この物品の価格表示に使う単位です。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_treat_opened_as_out_of_stock">有効にすると、この製品が最低在庫量を下回っている場合、開封済みアイテムが不足としてカウントされます。</string>
+  <string name="msg_help_accumulate_min_amount">有効化すると、下位物品の最低ストック数量をこの物品に合算し、下位物品ではなくこの物品の「不足」が表示されるようになります。</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_treat_opened_as_out_of_stock">有効化すると、この物品が最低ストック数量未満の場合に開封済みの物品がストックとして扱われません。</string>
   <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_quick_consume_amount">この数量は、在庫概要ページの「クイック消費/買う風ボタン」で使用されます(数量単位在庫に関連しています) 。</string>
+  <string name="msg_help_quick_consume_amount">ストック一覧ページの「クイック消費/開封ボタン」で使用する数量です(ストック単位)。</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_consume_amount_new">ストック一覧ページの「クイック消費ボタン」で使用する数量です(ストック単位)。</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_open_amount">ストック一覧ページの「クイック開封ボタン」で使用する数量です(ストック単位)。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_tare_weight">容器による管理は、瓶入りの小麦粉などで便利です。購入/消費/在庫目録に記録される量は、瓶全体の重量を入力すると、在庫にあるものと以下に定義されている風袋重量に基づいて常に自動計算されます。</string>
+  <string name="msg_help_tare_weight">容器重量処理は、例えば瓶に入った小麦粉などを扱う場合にチェックを入れておくと、購入/消費/ストック編集時には物品の重量を容器に入ったまま計測し、ストックと以下に定義された容器重量に基づいて実際の重量を自動計算します</string>
   <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_tare_weight_purchase">容器による管理が有効になりました - コンテナ全体の重量を量りましょう。記録される量は自動計算されます。</string>
+  <string name="msg_help_tare_weight_purchase">容器重量処理が有効です。容器の重量を入力してください。編集時には物品の実際の重量が自動計算されます</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_disable_stock_check">この製品をレシピの材料として追加する際にデフォルト設定として使用されます。</string>
-  <string name="msg_help_inventory_fields">以下のフィールドは、新しく追加した製品に適用されます。</string>
+  <string name="msg_help_disable_stock_check">この物品をレシピの材料として追加する際の既定設定です。</string>
+  <string name="msg_help_inventory_fields">新たに追加した物品に以下のフィールドが適用されます。</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_choose">カメラのバーコード スキャン用にバーコード スキャナーを選択できます。</string>
+  <string name="msg_help_barcode_scanner_choose">カメラのバーコードスキャンで用いるスキャナーを選択できます。</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_zxing">ZXing (zebra crossing) は、カメラ ストリームからのコントラスト データを使用してバーコードを検出し、次にすべての線の相対的な幅が計算されます。\n\n- 誤った結果が得られる場合があります\n- バーコードは水平方向に揃える必要があります\n- 適切なコントラストとシャープネスが必要です\n- デバイス上で完全にオフラインで実行されます\n- フレームワークはオープンソースです</string>
+  <string name="msg_help_barcode_scanner_info_zxing">ZXing (zebra crossing) は、カメラストリームからのコントラストデータを用いてバーコードを検出した後、すべての線の相対的な幅を算出します。\n\n- 結果が不正確な場合があります\n- バーコードは水平方向に揃える必要があります\n- 適切なコントラストとシャープネスが必要です\n- デバイス上で完全にオフラインで実行されます\n- フレームワークはオープンソースです</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit は、バーコード スキャンに最新テクノロジーを使用した機械学習を使用します。\n\n- 不正確な結果はほとんどありません\n- 向きは関係ありません\n- あいまいなバーコードやコントラストの低いバーコードでも機能します\n- コンピュータ上で完全にオフラインで実行されます。デバイス\n- フレームワークはオープンソースではありません</string>
-  <string name="msg_help_external_scanner_ready">以下のフィールドがフォーカスされていて空の場合は、外部スキャナーを使用できます。</string>
-  <string name="msg_help_external_scanner_settings">このアプリは、キーボードとして機能し、USB または Bluetooth 経由で接続できる外部スキャナ デバイスをサポートしています。 次のオプションを外部スキャナで構成する必要があります:\n\n接頭辞: なし\n接尾辞: TAB または ENTER</string>
+  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit は、最新テクノロジーを用いた機械学習によってバーコードをスキャンします。\n\n- 結果はほぼ正確です\n- バーコードの向きを揃える必要がありません\n- 不明瞭・明度の低いバーコードでも機能します\n- デバイス上で完全にオフラインで実行されます\n- フレームワークはオープンソースではありません</string>
+  <string name="msg_help_external_scanner_ready">以下のフィールドが選択されており空の場合は、外部スキャナーを使用できます。</string>
+  <string name="msg_help_external_scanner_settings">このアプリは、USBまたは Bluetooth経由で接続できる外部スキャナデバイスに対応しており、キーボードとして機能します。外部スキャナで次のオプションを設定する必要があります:\n\n接頭辞: なし\n接尾辞: TAB または ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_specific_item">このリストの最初の項目は、「最初に開かれ、次に期限が先で、先入れ先出し」というデフォルトの規則によって選択されます。</string>
+  <string name="msg_help_specific_item">このリストの項目順序は、既定消費ルール(開封済み、期限切れ、ストック追加が古い物品の順に優先して消費)によって選択されます。</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_recipe_consume">これは統計記録のみを目的としています。</string>
+  <string name="msg_help_recipe_consume">統計目的のみに使用されます。</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_not_check_shopping_list">デフォルトでは、買い物リストに追加される数量は「必要量 - 在庫量 - 買い物リストの金額」となります。 これを有効にすると、既に買い物リストにあるものではなく、在庫量に対してのみチェックされます。</string>
+  <string name="msg_help_not_check_shopping_list">既定では買い物リストに追加する数量は「必要数量 - ストック数量 - 買い物リスト追加済み数量」で算出されますが、チェックを入れると、買い物リストに追加済みの数量は無視してストック数量のみ参照します。</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_recipe_servings">このレシピの材料を使用した際に生産される量</string>
+  <string name="msg_help_recipe_servings">このレシピの材料で完成する分量です。</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_produces_product">製品が選択されると、このレシピを消費した際に1 単位 (在庫数量単位で 1 食分あたり) が在庫に追加されます。</string>
+  <string name="msg_help_produces_product">指定した物品がこのレシピによって完成し、ストックに(分量1に対応する数量が)追加されます。</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_only_check_any_amount">在庫確認の際、以下の数量/単位を使用します。その製品の数量が十分であれば在庫確認しますが、不足している場合は確認しません。</string>
+  <string name="msg_help_only_check_any_amount">以下の項目から既定と異なる数量/単位を指定できます。ストックが0でなければ実際の数量にかかわらずストックありと表示されます。</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_variable_amount">値を設定すると、上で設定した量の代わりにレシピに表示されますが、在庫量を確認するときの値は変更されません</string>
+  <string name="msg_help_variable_amount">上記の数量を元にストックの有無を確認しますが、レシピには不定の数量フォームに入力した文字列を表示します。</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_recipe_group">材料をグループ化するための見出しとして使用されます。</string>
+  <string name="msg_help_recipe_group">材料をグループ化する際の見出しです</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_recipe_price_factor">価格計算時に、この材料の価格に乗算する係数</string>
-  <string name="msg_help_recipe_ingredients_wrong">Grocy サーバーのバージョンが 4.0.0 未満の場合、このリストには間違ったフルフィルメント情報が含まれる可能性があります。 正しい値を確認するには、サーバーをバージョン 4.0.0 以降に更新してください。</string>
-  <string name="msg_help_date_chooser">設定からキーボードによる入力を選択できます。入力スピードを向上できます。</string>
-  <string name="msg_help_date_chooser_keyboard">お住まいの国で DDMMYY が使用されている場合は、設定で逆順日付形式を有効化できます。\n入力を適用してこのページを閉じるには、キーボードの「完了」キーを使用できます。</string>
-  <string name="msg_help_quick_mode">上のタイトル バーを長押しすると、クイック モードが起動します。 このモードでは、製品が入力またはスキャンされ、すべてのフィールド (製品および/またはバーコードのデフォルト値) が自動的に入力され、トランザクションがすぐに実行されます。</string>
-  <string name="msg_help_loading_circle_settings">各ページでサーバーから何かを読み込む際、アプリは最初にサーバー データベースの変更があるかどうかを確認し、古いデータのみを更新します。 こうした小さいリクエストでもローディング サークルを表示するには、以下のオプションを有効にします。</string>
-  <string name="msg_help_start">初心者モードがアクティブです。ヘルプ テキストが利用可能な場合、デフォルトですべてのページに表示されます。 タップで変更できます。</string>
-  <string name="msg_help_purchased_date_settings">以下のオプションを有効にすると、購入日のフィールドが購入・在庫目録ページに表示されます。 それ以外の場合、購入日はデフォルトで今日になります。</string>
-  <string name="msg_help_normal_login">Grocy アドオンで Home Assistant を使用している場合は、このカードをタップします。</string>
-  <string name="msg_help_home_assistant_login">Grocy Home Assistant アドオンを使用しているため、追加でいくつかの詳細が必要になります。 このカードをタップすると、通常のログインに切り替わります。</string>
-  <string name="msg_help_home_assistant_login_help_show">タップしてヘルプを表示</string>
-  <string name="msg_help_home_assistant_login_help_hide">タップしてヘルプを非表示</string>
-  <string name="msg_help_home_assistant_login_server">Nabu Casa クラウドのサービスを使用している場合は、下のフィールドにその URL を入力できます。 このカードをタップすると、Nabu Casa の Web サイトにアクセスします。</string>
-  <string name="msg_help_home_assistant_login_token">ホーム アシスタントのプロファイル設定 (最後のセクション) から長有効期間アクセス トークンを作成できます。 ここをタップすると上記URLを開きます。</string>
-  <string name="msg_help_home_assistant_login_proxy_id">戻るか、このカードをタップして、下のフィールドに入力する QR コードをスキャンします。</string>
-  <string name="msg_help_fab_overview_start">この概要ページのアクション ボタンには 2 つのアクションがあります:\n\n- 短くタップ: バーコード スキャナで消費\n- 長タップ: バーコード スキャナで購入\n\nこのボタンを使用すると、各ページのクイック モードがデフォルトでオンになります。 これは動作設定で変更できます。</string>
-  <string name="msg_share">素晴らしい Grocy プロジェクトについては、この Android クライアントをチェックしてください: \nhttps://github.com/patzly/grocy-android</string>
+  <string name="msg_help_recipe_price_factor">この材料の価格にこの係数を乗算します。</string>
+  <string name="msg_help_recipe_ingredients_wrong">Grocy サーバーのバージョンが4.0.0未満の場合、このリストには間違ったストック数量が含まれる可能性があります。正しい値を表示するには、サーバーをバージョン4.0.0以降に更新してください。</string>
+  <string name="msg_help_date_chooser">設定でキーボード入力に切り替えると、入力速度が向上します。</string>
+  <string name="msg_help_date_chooser_keyboard">お住まいの国でDDMMYY表記が一般的な場合は、設定から逆順日付形式を有効化できます。\nキーボードの「完了」キーを押すと、入力を適用してこのページを閉じます。</string>
+  <string name="msg_help_notifications_tap">通知が届かない、または受信が不安定な場合はここをタップしてください。</string>
+  <string name="msg_help_notifications">通知が届かない場合はここをタップしてAndroidのアプリ情報メニューを開き、通知の許可と省電力モードの無効化を確認してください。Androidはバッテリー消費を抑える目的で指定時間よりも遅く通知を受信することがありますが、これは省電力モードの正常な動作です。</string>
+  <string name="msg_help_notifications_other">実行中のアプリ一覧からアプリを終了しないでください。デバイスのメーカーによっては通知プロセスが削除されてしまいます。</string>
+  <string name="msg_help_quick_mode">上部タイトルバーを長押しすると、クイックモードが有効になります。このモードでは、物品を入力/スキャンしてすべてのフィールドが(物品やバーコードの既定設定に基づいて)自動入力された場合、自動的に処理が実行されます</string>
+  <string name="msg_help_loading_circle_settings">各ページでサーバーからデータなどを読み込む際、アプリはまず最小限のリクエストを送信してサーバーデータベースが前回から変更されているかどうかを確認し、変更されたデータのみを更新します。こうした最小限リクエストでも処理中マークを表示する場合は、以下の項目を有効化してください。</string>
+  <string name="msg_help_start">ビギナーモードが有効です。ヘルプテキストが利用可能な場合はすべてのページで表示されます。タップしてモードを切り替えられます。</string>
+  <string name="msg_help_purchased_date_settings">以下の項目が有効になっていると、購入とストック編集時に購入日フィールドが追加されます。入力しない場合、既定の購入日は当日になります。</string>
+  <string name="msg_help_normal_login">Grocyアドオンを追加したHome Assistantを使用している場合は、このカードをタップしてください。</string>
+  <string name="msg_help_home_assistant_login">Grocy Home Assistantアドオンを使用しているため、追加の詳細情報が必要です。このカードをタップすると、通常のログインに切り替わります。</string>
+  <string name="msg_help_home_assistant_login_help_show">ここをタップしてヘルプテキストを表示します。</string>
+  <string name="msg_help_home_assistant_login_help_hide">ここをタップしてヘルプテキストを隠します。</string>
+  <string name="msg_help_home_assistant_login_server">Nabu Casaクラウドサービスを使用している場合、以下のフィールドにそのURLを入力できます。 このカードをタップすると、Nabu CasaのWebサイトにアクセスします。</string>
+  <string name="msg_help_home_assistant_login_token">Home Assistantのプロファイル設定(最後のセクション)から長期アクセストークンを作成できます。ここをタップすると上記URLを開きます。</string>
+  <string name="msg_help_home_assistant_login_proxy_id">前画面に戻るか、このカードをタップしてQRコードをスキャンし、以下のフィールドに入力してください。</string>
+  <string name="msg_help_fab_overview_start">この一覧ページのアクションボタンで2つの機能を実行できます:\n\n- ショートタップ: バーコードスキャナを使って消費を記録\n- ロングタップ: バーコードスキャナを使って購入を記録\n\nこのボタンを使用すると、各ページのクイックモードが必ずオンになります。この挙動は設定から変更できます。</string>
+  <string name="msg_help_fab_consume_start">このページのアクションボタンを押すと、物品を指定した値だけ消費します。物品を開封済みとしてマークする場合は、メニューバー左下にあるボタンを押してください。</string>
+  <string name="msg_share">素晴らしいGrocyプロジェクトのAndroidクライアント版はこちら: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">APIキーが無効です</string>
   <string name="error_orbot_not_installed">Orbotがインストールされていません</string>
-  <string name="error_select_product">製品を選択してください</string>
-  <string name="error_empty">必要です</string>
-  <string name="error_empty_stock">在庫がありません</string>
-  <string name="error_empty_stock_sub">製品を購入する</string>
+  <string name="error_select_product">物品を選択してください</string>
+  <string name="error_empty">必須</string>
+  <string name="error_empty_stock">ストックがありません</string>
+  <string name="error_empty_stock_sub">物品を購入する</string>
   <string name="error_empty_shopping_list">買い物リストを空にする</string>
-  <string name="error_empty_shopping_list_sub">必要製品を追加</string>
-  <string name="error_empty_barcodes_sub">以下のボタンでバーコードを追加</string>
-  <string name="error_empty_master_data_sub">下の ＋ ボタンを押して作成</string>
-  <string name="error_empty_product_barcodes">製品バーコードがありません</string>
-  <string name="error_empty_locations">場所がありません</string>
-  <string name="error_empty_product_groups">製品グループがありません</string>
-  <string name="error_empty_products">製品がありません</string>
+  <string name="error_empty_shopping_list_sub">必要な物品を追加</string>
+  <string name="error_empty_barcodes_sub">以下のボタンを押してバーコードを追加</string>
+  <string name="error_empty_master_data_sub">以下のボタンを押して作成</string>
+  <string name="error_empty_product_barcodes">物品バーコードがありません</string>
+  <string name="error_empty_locations">保管場所がありません</string>
+  <string name="error_empty_product_groups">物品グループがありません</string>
+  <string name="error_empty_products">物品がありません</string>
   <string name="error_empty_qu">数量単位がありません</string>
   <string name="error_empty_stores">購入店がありません</string>
   <string name="error_empty_tasks">タスクがありません</string>
-  <string name="error_empty_task_categories">タスクカテゴリーがありません</string>
-  <string name="error_empty_unit_conversions">単位換算がありません</string>
+  <string name="error_empty_task_categories">タスク分類がありません</string>
+  <string name="error_empty_unit_conversions">単位変換がありません</string>
   <string name="error_empty_chores">家事がありません</string>
-  <string name="error_empty_chores_sub">マスターデータで作成</string>
+  <string name="error_empty_chores_sub">マスターデータを作成</string>
   <string name="error_empty_recipes">レシピがありません</string>
   <string name="error_empty_ingredients">材料がありません</string>
   <string name="error_search">検索結果なし</string>
-  <string name="error_search_sub">他の用語を試す</string>
-  <string name="error_filter">表示できるものがありません</string>
-  <string name="error_filter_sub">他のフィルタを試す</string>
+  <string name="error_search_sub">他の文字列を入力してください</string>
+  <string name="error_filter">表示するものがありません</string>
+  <string name="error_filter_sub">他のフィルターを適用してください</string>
   <string name="error_duplicate">すでに存在します</string>
-  <string name="error_parent">自分を親に設定できません</string>
-  <string name="error_invalid_product">無効な製品</string>
+  <string name="error_parent">同じ物品を上位物品に指定できません</string>
+  <string name="error_invalid_product">無効な物品</string>
   <string name="error_invalid_url">無効なURL</string>
   <string name="error_invalid_amount">無効な数量</string>
   <string name="error_invalid_price">無効な価格</string>
   <string name="error_invalid_factor">無効な係数</string>
   <string name="error_invalid_date_format">無効な日付フォーマット</string>
-  <string name="error_api_qr_code">Grocy API 認証情報を含む QR コードではありません</string>
-  <string name="error_token_qr_code">Home Assistantの長有効期間アクセストークンによるQRコードではありません</string>
-  <string name="error_loading_qus">製品から数量単位をロードできません</string>
-  <string name="error_clipboard_no_image">クリップボードに画像が含まれていないか、読み取ることができませんでした</string>
-  <string name="error_no_children">選択した製品には子製品がありません</string>
+  <string name="error_api_qr_code">Grocy API認証情報を含むQRコードではありません</string>
+  <string name="error_token_qr_code">Home Assistantの長期アクセストークンを含むQRコードではありません</string>
+  <string name="error_loading_qus">物品から数量単位を読み込めません</string>
+  <string name="error_clipboard_no_image">クリップボードに画像が含まれていないか、読み取れません</string>
+  <string name="error_no_children">選択した物品には下位物品がありません</string>
   <!-- %1$s is a number like 0, 1, 2 -->
-  <string name="error_amount_equal_stock">%1$sと等しくできません</string>
+  <string name="error_amount_equal_stock">%1$sと同等にできません</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
-  <string name="error_bounds_min_max">%1$sから%2$sの間の値にしてください</string>
+  <string name="error_bounds_min_max">%1$sから%2$sの範囲の値を入力してください</string>
   <!-- %1$s is a number like 0, 1, 2 -->
-  <string name="error_bounds_min">%1$s以上にしてください</string>
+  <string name="error_bounds_min">%1$s以上の値を入力してください</string>
   <!-- %1$s is a number like 0, 1, 2 -->
-  <string name="error_bounds_max">%1$s以下にしてください</string>
+  <string name="error_bounds_max">%1$s以下の値を入力してください</string>
   <!-- %1$s is a number like 0, 1, 2 -->
-  <string name="error_bounds_higher">%1$sよりも大きな値にしてください</string>
+  <string name="error_bounds_higher">%1$sを超える値を入力してください</string>
   <string name="error_offline">オフライン</string>
-  <string name="error_offline_subtitle">ネット接続が必要です。接続されていますか？</string>
-  <string name="error_no_done_items">実行済のアイテムがありません</string>
+  <string name="error_offline_subtitle">このページはインターネット接続がある場合のみ機能します。接続を確認してください。</string>
+  <string name="error_no_done_items">完了としてマークされた項目がありません</string>
+  <string name="error_auto_sync_disabled">自動同期が無効です</string>
   <string name="error_already_exists">すでに存在します</string>
   <string name="error_network">ネットワークエラー</string>
-  <string name="error_network_subtitle">必要なデータを完全にはロードできませんでした</string>
-  <string name="error_network_exact">ネットワークエラー：%1$s</string>
+  <string name="error_network_subtitle">必要なデータを完全に読み込むことができませんでした</string>
+  <string name="error_network_exact">ネットワークエラー: %1$s</string>
   <string name="error_database">データベースエラー</string>
-  <string name="error_insert">エラー：%1$s</string>
+  <string name="error_insert">エラー: %1$s</string>
   <string name="error_details">エラーの詳細</string>
-  <string name="error_unknown">おっと！</string>
-  <string name="error_not_grocy_instance">有効な Grocy インスタンスではありません</string>
+  <string name="error_unknown">おおっと！</string>
+  <string name="error_not_grocy_instance">有効なGrocyインスタンスではありません</string>
   <string name="error_timeout">タイムアウトエラー</string>
-  <string name="error_no_product_selected">製品が未選択</string>
+  <string name="error_no_product_selected">物品が未選択</string>
   <string name="error_failed_to_connect_to">サーバーに接続できません</string>
   <string name="error_missing_information">未入力フィールドがあります</string>
   <string name="error_handshake">無効な証明書</string>
-  <string name="error_handshake_description">サーバーがこのAndroid にインストール・信頼されていない証明書を要求しています。\nサーバー証明書は、信頼できる認証局 (letsencrypt.org など) によって署名されているか、このデバイスの Android ユーザー証明書ストアに保存されている必要があります。</string>
+  <string name="error_handshake_description">このサーバーはAndroidが認識していない、または信頼していない証明書を要求しています。\nサーバー証明書は、信頼できる認証局(letsencrypt.orgなど)によって署名されているか、Androidユーザー証明書ストアに保存されている必要があります。</string>
   <string name="error_unexpected_response_code">予期しない応答コード</string>
   <string name="error_unexpected_response">予期しないサーバー応答</string>
-  <string name="error_no_browser">ヘルプWebサイトを表示するにはWebブラウザをインストールしてください</string>
-  <string name="error_barcode_not_linked">バーコードが商品に関連付けられていません</string>
-  <string name="error_no_product_details">製品の詳細が取得できませんでした</string>
+  <string name="error_no_browser">ヘルプページを表示するにはWebブラウザをインストールしてください</string>
+  <string name="error_barcode_not_linked">バーコードが物品にリンクされていません</string>
+  <string name="error_no_product_details">物品の詳細を取得できませんでした</string>
   <string name="error_failed_barcode_upload">バーコードをアップロードできませんでした</string>
-  <string name="error_wrong_grocycode_type">grocycodeに誤ったエンティティ タイプが含まれています</string>
-  <string name="error_stock_entry_grocycode">grocycodeの在庫項目が見つかりませんでした</string>
+  <string name="error_wrong_grocycode_type">grocycodeに誤ったエンティティタイプが含まれています</string>
+  <string name="error_stock_entry_grocycode">grocycodeのストック項目が見つかりませんでした</string>
+  <string name="error_picture_uploads_forbidden">セキュリティ上の理由から、画像のアップロードはセルフホスト型サーバーでのみ許可されています。現在はデモインスタンスを利用しています。</string>
   <string name="error_permission">実行権限がありません</string>
+  <string name="error_permission_notification">リマインダーを使うには通知の許可が必要です</string>
   <string name="error_undefined">エラーが発生しました</string>
-  <string name="error_invalid_base_servings">無効な提供数</string>
-  <string name="error_pictures_size_exceeds_limit">サーバー上の製品またはレシピの説明に埋め込まれた画像があり、このアプリで処理できる限界を超えています。 説明から高品質で大きなサイズの写真を削除してください。これにより、データの読み込みも高速化されます。</string>
-  <string name="title_overview">概要</string>
-  <string name="title_stock_overview">在庫の概要</string>
+  <string name="error_invalid_base_servings">無効な分量</string>
+  <string name="error_pictures_size_exceeds_limit">サーバー上の物品またはレシピの説明に埋め込まれている画像が原因で、このアプリの処理限界を超えています。 高品質な画像やサイズが巨大な画像を削除してください。データ読み込み速度が向上します。</string>
+  <string name="error_userfield_type_not_supported">ユーザーフィールドタイプは現在サポートされていません</string>
+  <string name="error_open_product_not_supported">この物品を開封としてマークする機能はサポートされていません</string>
+  <string name="error_settings_backup">バックアップに失敗しました</string>
+  <string name="error_settings_restore">復元に失敗しました</string>
+
+  <string name="title_overview">一覧</string>
+  <string name="title_stock_overview">ストック一覧</string>
   <string name="title_purchase">購入</string>
   <string name="title_consume">消費</string>
   <string name="title_transfer">移動</string>
-  <string name="title_inventory">在庫目録</string>
+  <string name="title_inventory">ストック編集</string>
   <string name="title_barcode_input">バーコード入力</string>
-  <string name="title_product_overview">製品概要</string>
-  <string name="title_product">製品</string>
-  <string name="title_product_create">製品を作成</string>
-  <string name="title_product_edit">製品を編集</string>
+  <string name="title_product_overview">物品一覧</string>
+  <string name="title_product">物品</string>
+  <string name="title_product_create">新規作成/物品</string>
+  <string name="title_product_edit">物品を編集</string>
   <string name="title_tasks">タスク</string>
-  <string name="title_task_entry">タスク項目</string>
+  <string name="title_task_entry">タスク追加</string>
   <string name="title_master_data">マスターデータ</string>
-  <string name="title_stock_entries">在庫入力</string>
-  <string name="title_stock_entry">在庫項目</string>
-  <string name="title_stock_journal">在庫記録</string>
+  <string name="title_stock_entries">ストック追加履歴</string>
+  <string name="title_stock_entry">ストック追加</string>
+  <string name="title_stock_journal">ストック記録</string>
   <string name="title_shopping_list">買い物リスト</string>
   <string name="title_feedback">フィードバック</string>
   <string name="title_settings">設定</string>
@@ -518,7 +570,7 @@
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="title_barcode_scanner">バーコードスキャナ</string>
   <!-- Context: About this app -->
-  <string name="title_about">About</string>
+  <string name="title_about">概要</string>
   <string name="title_info">情報</string>
   <string name="title_help">ヘルプ</string>
   <string name="title_logs">ログ</string>
@@ -526,70 +578,71 @@
   <string name="title_logout">Grocyからログアウトしますか？</string>
   <string name="title_restart">Grocyを再起動しますか？</string>
   <string name="title_logout_demo">デモモードからログアウトしますか？</string>
-  <string name="title_manage_master_data">マスターデータを管理</string>
+  <string name="title_manage_master_data">マスターデータ管理</string>
   <string name="title_edit_description">説明を編集</string>
   <!-- This is the header of a bottom sheet which is used to get numbers or text from the user. -->
   <string name="title_input">入力</string>
   <string name="title_external_barcode_input">外部スキャナ</string>
   <string name="title_confirmation">確認</string>
-  <string name="title_choose_product">製品を選ぶ</string>
-  <string name="title_pending_products">製品をペンディング</string>
-  <string name="title_stored_purchases">保管された購入</string>
+  <string name="title_choose_product">物品を選択</string>
+  <string name="title_pending_products">物品を保留</string>
+  <string name="title_stored_purchases">保留された購入データ</string>
   <string name="title_chores">家事</string>
   <string name="title_chore">家事</string>
   <string name="title_recipes">レシピ</string>
+  <string name="title_meal_plan">献立プラン</string>
   <!-- Editor for editing product description or recipe preparation-->
   <string name="title_editor">エディタ</string>
-  <string name="title_task_new">新しいタスク</string>
+  <string name="title_task_new">新規タスク</string>
   <string name="title_task_edit">タスクを編集</string>
   <string name="title_entry_new">新規項目</string>
   <string name="title_entry_edit">項目を編集</string>
-  <string name="title_ingredient_new">新しい材料</string>
+  <string name="title_ingredient_new">新規材料</string>
   <string name="title_ingredient_edit">材料を編集</string>
   <string name="title_recipe_create">新規レシピ</string>
   <string name="title_recipe_edit">レシピを編集</string>
 
   <string name="title_spoiled">廃棄済</string>
-  <string name="title_use_specific">特定の在庫アイテムを使用</string>
-  <string name="title_specific">特定の在庫アイテム</string>
+  <string name="title_use_specific">特定のストックを消費</string>
+  <string name="title_specific">特定のストック</string>
   <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="title_exact_amount">消費量を指定</string>
+  <string name="title_exact_amount">数量を指定して消費</string>
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_location_from">移動元</string>
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_location_to">移動先</string>
   <string name="title_recipe">レシピ</string>
   <string name="title_preparation_mode">準備モード</string>
-  <string name="title_total_price">全価格</string>
-  <string name="title_unit_price">単位価格</string>
+  <string name="title_total_price">合計価格</string>
+  <string name="title_unit_price">単価</string>
   <!-- %1$s is a quantity unit -->
   <string name="title_unit_price_specific">%1$s価格</string>
   <string name="title_stock_entry_no_specific">項目がありません</string>
   <string name="title_list_entry">項目を並べる</string>
-  <string name="title_edit_barcode">バーコードを修正</string>
-  <string name="title_create_barcode">バーコードを作成</string>
+  <string name="title_edit_barcode">バーコードを編集</string>
+  <string name="title_create_barcode">新規作成/バーコード</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
-  <string name="title_edit_qu_conversion">数量単位の換算係数を編集</string>
+  <string name="title_edit_qu_conversion">単位変換を編集</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
-  <string name="title_create_qu_conversion">数量単位の換算係数を作成</string>
+  <string name="title_create_qu_conversion">新規作成/単位変換</string>
   <string name="title_shopping_list_edit">買い物リストを編集</string>
   <string name="title_shopping_list_new">新規買い物リスト</string>
-  <string name="title_shopping_mode">ショッピングモード</string>
-  <string name="title_batch_mode_shopping_list">バッチモードのショッピングリスト</string>
-  <string name="title_product_cat_optional">オプションプロパティ</string>
-  <string name="title_product_cat_location">デフォルトの場所</string>
+  <string name="title_shopping_mode">買い物モード</string>
+  <string name="title_batch_mode_shopping_list">一括モードの買い物リスト</string>
+  <string name="title_product_cat_optional">任意プロパティ</string>
+  <string name="title_product_cat_location">既定の保管場所</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="title_product_cat_due_date">期限日</string>
+  <string name="title_product_cat_due_date">期限</string>
   <string name="title_product_cat_amount">数量</string>
   <string name="title_product_cat_quantity_unit">単位</string>
   <string name="title_notifications">通知</string>
   <string name="title_product_cat_barcodes">バーコード</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
-  <string name="title_product_cat_qu_conversions">単位換算</string>
+  <string name="title_product_cat_qu_conversions">単位変換</string>
   <string name="title_unknown_input">不明な入力</string>
-  <string name="title_presets_new_products">新規製品プリセット</string>
+  <string name="title_presets_new_products">既定の新規物品</string>
   <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
-  <string name="title_ingredient_with_amount">%3$sを%1$s%2$s</string>
+  <string name="title_ingredient_with_amount">%3$s(%1$s%2$s)</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s%2$s</string>
@@ -598,58 +651,58 @@
   <!-- %1$s is a number like 1, 2, 3 -->
   <string name="subtitle_amount_opened">(%1$s 開封済)</string>
   <!-- %1$s is a product name -->
-  <string name="subtitle_stock_locations">%1$sに在庫がある場合</string>
+  <string name="subtitle_stock_locations">%1$sの保管場所</string>
   <string name="subtitle_none_selected">未選択</string>
   <!-- Should follow the equality between 'None' and 'None selected' -->
   <string name="subtitle_none">なし</string>
   <string name="subtitle_empty">空</string>
   <string name="subtitle_done">完了</string>
-  <string name="subtitle_undone">未実行</string>
+  <string name="subtitle_undone">未完了</string>
   <string name="subtitle_uncategorized">分類なし</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="subtitle_never_overdue">期限なし</string>
   <string name="subtitle_selected">選択</string>
-  <string name="subtitle_stock_entry_no_specific">最初に開封済のもの、次に早い期限のもの、以降先入れ先出し</string>
+  <string name="subtitle_stock_entry_no_specific">開封済み、期限切れ、ストック追加が古い物品の順に優先して消費</string>
   <!-- %1$s is a purchase date -->
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="subtitle_stock_entry_name">%1$sで購入</string>
+  <string name="subtitle_stock_entry_name">購入日 %1$s</string>
   <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened); The same string is also in the web interface: Consume form -->
-  <string name="subtitle_stock_entry">期限：%1$s　 数量：%2$s　状態：%3$s</string>
+  <string name="subtitle_stock_entry">期限 %1$s; 数量: %2$s; %3$s</string>
   <!-- %1$s and %2$s are numbers -->
-  <string name="subtitle_entry_num_of_num">%2$dの項目%1$d</string>
+  <string name="subtitle_entry_num_of_num">%2$d/%1$d</string>
   <!-- %1$s is an amount, %2$s is a quantity unit -->
-  <string name="subtitle_amount_compare">%1$s%2$sに相当</string>
+  <string name="subtitle_amount_compare">%1$s%2$sと同等。</string>
   <!-- %1$s is a price, %2$s is a quantity unit -->
-  <string name="subtitle_price_means">%1$sが%2$sに相当</string>
+  <string name="subtitle_price_means">%2$sあたり%1$s</string>
   <!-- %1$s and %2$s are amounts -->
-  <string name="subtitle_factor_means">%1$sが%2$sに相当</string>
-  <string name="subtitle_product_hidden">製品が非表示です</string>
-  <string name="subtitle_product_not_hidden">製品が表示されています</string>
-  <string name="subtitle_product_not_on_server">サーバーに製品がありません</string>
+  <string name="subtitle_factor_means">%1$sと%2$sが同等</string>
+  <string name="subtitle_product_hidden">物品が表示されません</string>
+  <string name="subtitle_product_not_hidden">物品が表示されてます</string>
+  <string name="subtitle_product_not_on_server">サーバーに物品データがありません</string>
 
-  <string name="subtitle_barcodes_will_be_added">バーコードが保存されており、保存の操作によって製品に追加されます。</string>
+  <string name="subtitle_barcodes_will_be_added">保留されたバーコードがあり、保存することで物品に追加されます。</string>
   <string name="subtitle_unknown">不明</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
-  <string name="subtitle_supported">サポートあり</string>
+  <string name="subtitle_supported">対応</string>
   <!-- Like the words 'not supported' from 'This version is not supported.'-->
-  <string name="subtitle_not_supported">未サポート</string>
+  <string name="subtitle_not_supported">非対応</string>
   <!-- %1$s is a number -->
-  <string name="subtitle_barcode_amount">数量：%1$s</string>
+  <string name="subtitle_barcode_amount">数量: %1$s</string>
   <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">単位：%1$s</string>
-  <string name="subtitle_barcode">バーコード：%1$s</string>
-  <string name="subtitle_feature_disabled">無効化された機能</string>
-  <string name="subtitle_date_from_input">入力の日付：%1$s</string>
-  <string name="subtitle_product_amount">最小在庫量、クイック消費、係数、容器で管理</string>
-  <string name="subtitle_product_default_location">場所、購入店</string>
-  <string name="subtitle_product_due_date">タイプとデフォルト期日(開封・冷凍・解凍後)</string>
-  <string name="subtitle_product_optional_properties">状態・親製品・説明・製品グループ・エネルギー・画像</string>
-  <string name="subtitle_product_quantity_unit">在庫、購入のデフォルト</string>
-  <string name="subtitle_synced_with_server">サーバーと同期</string>
+  <string name="subtitle_barcode_unit">単位: %1$s</string>
+  <string name="subtitle_barcode">バーコード: %1$s</string>
+  <string name="subtitle_feature_disabled">機能が無効化されています</string>
+  <string name="subtitle_date_from_input">入力日: %1$s</string>
+  <string name="subtitle_product_amount">最低ストック、クイック消費、係数、容器重量処理</string>
+  <string name="subtitle_product_default_location">保管場所、購入店</string>
+  <string name="subtitle_product_due_date">タイプと既定の期限(開封、冷凍、解凍)</string>
+  <string name="subtitle_product_optional_properties">状態、上位物品、説明、物品グループ、エネルギー、画像</string>
+  <string name="subtitle_product_quantity_unit">ストック、既定の購入</string>
+  <string name="subtitle_synced_with_server">サーバーと同期しました</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
-  <string name="subtitle_recipe_due_score">期限スコア：%1$s</string>
-  <string name="subtitle_per_serving">1提供あたり</string>
-  <string name="subtitle_tap_preparation_mode">準備モードにするにはここをタップ</string>
+  <string name="subtitle_recipe_due_score">期限スコア: %1$s</string>
+  <string name="subtitle_per_serving">分量1</string>
+  <string name="subtitle_tap_preparation_mode">準備モードにするにはここをタップしてください</string>
   <!-- Context is Label printer -->
   <string name="subtitle_print_label_no">ラベルなし</string>
   <!-- Short form for "One label per purchase" -->
@@ -657,117 +710,117 @@
   <!-- Short form for "One label per unit" -->
   <string name="subtitle_print_label_per_unit">1単位あたり</string>
   <!-- %1$s is a price and %2$s is a currency -->
-  <string name="subtitle_total_price">全価格：%1$s%2$s</string>
+  <string name="subtitle_total_price">合計価格: %1$s%2$s</string>
 
-  <string name="description_input_product_part1">製品フィールドの内容：</string>
-  <string name="description_input_product_part2">続ける方法を選択：</string>
-  <string name="description_input_product_option1">新しい製品を作成し、名前として入力</string>
-  <string name="description_input_product_option2">新しい製品を作成し、バーコードとして入力</string>
-  <string name="description_input_product_option3">既存の製品にバーコードとして追加</string>
+  <string name="description_input_product_part1">物品フィールドの内容:</string>
+  <string name="description_input_product_part2">続行方法を選択:</string>
+  <string name="description_input_product_option1">物品を新規作成して入力</string>
+  <string name="description_input_product_option2">物品を新規作成してバーコードで入力</string>
+  <string name="description_input_product_option3">既存の物品にバーコードで追加</string>
   <!-- Context: Clear shopping list -->
-  <string name="description_clear_shopping_list_option1">完了済みアイテムのみ消去</string>
+  <string name="description_clear_shopping_list_option1">完了済アイテムのみ消去</string>
   <!-- Context: Clear shopping list -->
-  <string name="description_clear_shopping_list_option2">全アイテムを消去</string>
+  <string name="description_clear_shopping_list_option2">全項目を消去</string>
 
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock">
-    <item quantity="other">%1$d製品が在庫あり</item>
+    <item quantity="other">ストックあり %1$d 点。</item>
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_stock_due_soon">
-    <item quantity="other">%2$d日中に%1$d製品が期限切れ</item>
+    <item quantity="other">%2$d日以内に期限切れ %1$d 点。</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_overdue">
-    <item quantity="other">%1$d製品が賞味期限切れ</item>
+    <item quantity="other">賞味期限切れ %1$d 点。</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_expired">
-    <item quantity="other">%1$d製品が消費期限切れ</item>
+    <item quantity="other">消費期限切れ %1$d 点。</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing">
-    <item quantity="other">%1$d製品が最小在庫量以下です</item>
+    <item quantity="other">最低数量未満 %1$d 点。</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_single">
-    <item quantity="other">%1$d項目が買い物リストにあります</item>
+    <item quantity="other">買い物リスト追加済 %1$d 点。</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_multi">
-    <item quantity="other">%1$d項目が買い物リストにあります</item>
+    <item quantity="other">買い物リスト追加済 %1$d 点。</item>
   </plurals>
   <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
   <plurals name="description_overview_stock_value">
-    <item quantity="other">%1$d製品が在庫にあり、価格は%2$s%3$sです。</item>
+    <item quantity="other">ストックあり %1$d 点(%2$s%3$s)。</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list_multi">
-    <item quantity="other">%1$dアイテムがショッピングリストにあります</item>
+    <item quantity="other">買い物リスト追加済 %1$d 点。</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list">
-    <item quantity="other">%1$dアイテムがショッピングリストにあります</item>
+    <item quantity="other">買い物リスト追加済 %1$d 点。</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_recipes">
-    <item quantity="other">%1$dのレシピがあります</item>
+    <item quantity="other">レシピ %1$d 件。</item>
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_chores_due_soon">
-    <item quantity="other">%2$d日以内にこなす家事数：%1$d</item>
+    <item quantity="other">%2$d日以内に期限 %1$d 件。</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_overdue">
-    <item quantity="other">期限切れの家事数：%1$d</item>
+    <item quantity="other">期限超過 %1$d 件。</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_due_today">
-    <item quantity="other">今日期限の家事数：%1$d</item>
+    <item quantity="other">本日期限 %1$d 件。</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_assigned">
-    <item quantity="other">あなたに割り当てられた家事数：%1$d</item>
+    <item quantity="other">あなたの担当 %1$d 件。</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks">
-    <item quantity="other">こなすべきタスク数：%1$d</item>
+    <item quantity="other">まもなく期限 %1$d 件。</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks_user">
-    <item quantity="other">あなたに割り当てられたタスク数：%1$d</item>
+    <item quantity="other">あなたの担当 %1$d 件。</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
-    <item quantity="other">%1$d製品がデータベースにあります</item>
+    <item quantity="other">データベース内物品 %1$d。</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="error_max_decimal_places">
-    <item quantity="other">小数点以下は最大%1$s桁</item>
+    <item quantity="other">小数点以下最大%1$s桁</item>
   </plurals>
 
   <string name="property_name">名前</string>
   <string name="property_name_singular">名前(単数形)</string>
   <string name="property_name_plural">名前(複数形)</string>
-  <string name="property_product">製品</string>
-  <string name="property_products">製品</string>
-  <string name="property_product_name">製品名</string>
-  <string name="property_parent_product">親製品</string>
+  <string name="property_product">物品</string>
+  <string name="property_products">物品</string>
+  <string name="property_product_name">物品名</string>
+  <string name="property_parent_product">上位物品</string>
   <string name="property_description">説明</string>
-  <string name="property_product_description">製品の説明</string>
-  <string name="property_note">ノート</string>
+  <string name="property_product_description">物品説明</string>
+  <string name="property_note">メモ</string>
   <string name="property_status">状態</string>
-  <string name="property_status_insert">状態：</string>
+  <string name="property_status_insert">状態:</string>
   <string name="property_amount">数量</string>
-  <string name="property_amount_insert">数量：%1$s</string>
+  <string name="property_amount_insert">数量: %1$s</string>
   <string name="property_seconds">秒</string>
   <!-- %1$s is a number (amount of seconds) -->
   <plurals name="property_seconds_num">
-    <item quantity="other">%1$d秒</item>
+    <item quantity="other">%1$d 秒</item>
   </plurals>
-  <string name="property_amount_min_stock">最小在庫量</string>
+  <string name="property_amount_min_stock">最低ストック数量</string>
   <!-- %1$s is a quantity unit like "bottles" -->
-  <string name="property_amount_in">数量単位：%1$s</string>
+  <string name="property_amount_in">数量単位: %1$s</string>
   <string name="property_price">価格</string>
   <string name="property_price_average">平均価格</string>
   <!-- %1$s is a quantity unit-->
@@ -777,190 +830,219 @@
   <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
   <string name="property_price_with_currency">%1$s%2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
-  <string name="property_price_in">通貨：%1$s での価格</string>
+  <string name="property_price_in">価格(%1$s)</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
-  <string name="property_price_unit_in">%2$sでの1 %1$sあたり価格</string>
+  <string name="property_price_unit_in">1%1$sあたり(%2$s)</string>
   <string name="property_quantity_unit">単位</string>
-  <string name="property_quantity_units">数量単位</string>
+  <string name="property_quantity_units">単位</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_default_qu_purchase">デフォルトの購入単位</string>
+  <string name="property_default_qu_purchase">既定の購入単位</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_qu_stock">在庫数量単位</string>
+  <string name="property_qu_stock">ストック単位</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_qu_factor">保管数量単位に対する購入数量単位</string>
+  <string name="property_qu_factor">ストック単位に対する購入係数</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_default_qu_consume">既定の消費単位</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_prices">既定の価格単位</string>
   <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
-  <string name="property_quantity_unit_from">変換元：</string>
+  <string name="property_quantity_unit_from">変換元: </string>
   <!-- Example: "Convert to cup"; This string is part of a pair, there is also 'Convert from' -->
-  <string name="property_quantity_unit_to">変換先：</string>
+  <string name="property_quantity_unit_to">変換先: </string>
   <string name="property_factor">係数</string>
   <string name="property_barcode">バーコード</string>
   <string name="property_barcodes">バーコード</string>
-  <string name="property_barcodes_insert">バーコード：%1$s</string>
-  <string name="property_days">日にち</string>
+  <string name="property_barcodes_insert">バーコード: %1$s</string>
+  <string name="property_days">日数</string>
   <string name="property_purchased_date">購入日</string>
-  <string name="property_purchased_date_fill">購入日：%1$s</string>
+  <string name="property_purchased_date_fill">購入日: %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_date_type">期限の種別</string>
+  <string name="property_due_date_type">期限タイプ</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_type_best_before">賞味期限</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_type_expiration">消費期限</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_date">期限日</string>
+  <string name="property_due_date">期限</string>
   <!-- This string is for due date of task -->
-  <string name="property_due_date_task">期限日</string>
+  <string name="property_due_date_task">期限</string>
   <!-- %1$s is a due date-->
-  <string name="property_due_date_fill">期限日：%1$s</string>
+  <string name="property_due_date_fill">期限日: %1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_next">次の期限</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_days_default">デフォルトの期限</string>
+  <string name="property_due_days_default">既定の期限日数</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_days_default_opened">開封後のデフォルト期限</string>
+  <string name="property_due_days_default_opened">既定の開封後期限日数</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_days_default_freezing">冷凍後のデフォルト期限</string>
+  <string name="property_due_days_default_freezing">既定の冷凍後期限日数</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_days_default_thawing">解凍後のデフォルト期限</string>
-  <string name="property_location">場所</string>
-  <string name="property_location_insert">場所：%1$s</string>
-  <string name="property_location_default">デフォルトの場所</string>
-  <string name="property_location_default_insert">デフォルトの場所：%1$s</string>
-  <string name="property_location_consume_default">デフォルトの消費場所</string>
-  <string name="property_move_on_open">移動の際に開封</string>
-  <string name="property_notes">ノート</string>
-  <string name="property_locations">場所</string>
+  <string name="property_due_days_default_thawing">既定の解凍後期限日数</string>
+  <string name="property_day_summary">一日の概要</string>
+  <string name="property_location">保管場所</string>
+  <string name="property_location_insert">保管場所: %1$s</string>
+  <string name="property_location_default">既定の保管場所</string>
+  <string name="property_location_default_insert">既定の保管場所: %1$s</string>
+  <string name="property_location_consume_default">既定の優先消費保管場所</string>
+  <string name="property_move_on_open">開封時に移動</string>
+  <string name="property_notes">メモ</string>
+  <string name="property_locations">保管場所</string>
   <string name="property_store">購入店</string>
-  <string name="property_store_insert">購入店：%1$s</string>
+  <string name="property_store_insert">購入店: %1$s</string>
   <string name="property_store_unknown">不明な購入店</string>
-  <string name="property_store_default">デフォルトの店</string>
-  <string name="property_stores">店</string>
+  <string name="property_store_default">既定の購入店</string>
+  <string name="property_stores">購入店</string>
   <string name="property_shopping_list">買い物リスト</string>
   <string name="property_shopping_lists">買い物リスト</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_last_purchased">前回の購入</string>
+  <string name="property_last_purchased">直近の購入</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_last_used">前回の使用</string>
+  <string name="property_last_used">直近の消費</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_last_price">前回の価格</string>
-  <string name="property_last_price_unit">前回の価格(単位)</string>
-  <string name="property_last_price_total">前回の価格(全体)</string>
-  <string name="property_price_insert">価格：%1$s</string>
+  <string name="property_last_price">直近の価格</string>
+  <string name="property_last_price_unit">直近の価格(単価)</string>
+  <string name="property_last_price_total">直近の価格(合計)</string>
+  <string name="property_price_insert">価格: %1$s</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_average_shelf_life">平均の在庫日数</string>
+  <string name="property_average_shelf_life">平均保管期間</string>
   <string name="property_spoil_rate">廃棄率</string>
-  <string name="property_price_history">価格の履歴</string>
-  <string name="property_product_group">製品グループ</string>
-  <string name="property_product_groups">製品グループ</string>
-  <string name="property_assignment">割り当て</string>
-  <string name="property_value">価値</string>
-  <string name="property_stock_value">在庫価値</string>
+  <string name="property_created_timestamp">作成時期</string>
+  <string name="property_price_history">価格変動</string>
+  <string name="property_product_group">物品グループ</string>
+  <string name="property_product_groups">物品グループ</string>
+  <string name="property_assignment">担当</string>
+  <string name="property_value">価格</string>
+  <string name="property_stock_value">ストック価格</string>
   <string name="property_opened">開封済</string>
   <string name="property_not_opened">未開封</string>
-  <string name="property_is_freezer">冷凍庫です</string>
-  <string name="property_active">有効</string>
+  <string name="property_is_freezer">冷凍庫</string>
+  <!-- Means energy of an ingredient or product -->
+  <string name="property_energy_only">エネルギー</string>
+  <!-- %1$s is a unit for energy, like kcal (kilo calories) -->
+  <string name="property_energy_insert">ストック単位あたりエネルギー(%1$s)</string>
+  <string name="property_active">表示</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_never_show">ストック概要に表示しない</string>
+  <string name="property_never_show">ストック一覧に表示しない</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_disable_own_stock">在庫数量を管理しない</string>
+  <string name="property_disable_own_stock">個別ストック無効化</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_should_not_be_frozen">冷凍不可</string>
+  <string name="property_should_not_be_frozen">冷凍禁止</string>
   <string name="property_number">数</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_enable_tare_weight">容器による管理を有効にする</string>
+  <string name="property_enable_tare_weight">容器重量処理を有効化</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_tare_weight">容器の重量</string>
+  <string name="property_tare_weight">容器重量</string>
   <!-- %1$s is a quantity unit like "bottles" -->
-  <string name="property_tare_weight_in">容器で管理する場合の単位：%1$s</string>
+  <string name="property_tare_weight_in">1%1$sあたりの容器重量</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_disable_stock_check">レシピ原材料の場合、在庫量をチェックしない</string>
+  <string name="property_disable_stock_check">この材料のストック数量を確認しない</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_amount_quick_consume">クイック消費の数量</string>
+  <string name="property_amount_quick_consume">クイック消費数量</string>
   <!-- %1$s is a quantity unit like "bottles" -->
-  <string name="property_amount_quick_consume_in">クイック消費の単位：%1$s</string>
+  <string name="property_amount_quick_consume_in">クイック消費単位: %1$s</string>
+  <!--The same string is also in the web interface (server v4.0.0 or later): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_amount_quick_open">クイック開封数量</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_quick_open_in">クイック開封単位: %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_accumulate_amount">子製品の在庫量を蓄積する</string>
+  <string name="property_accumulate_amount">下位物品を合算して最低ストック数量を算出</string>
   <string name="property_picture">画像</string>
-  <string name="property_note_singleline">1行備考</string>
-  <string name="property_note_multiline">複数行備考</string>
+  <string name="property_note_singleline">テキスト(1行)</string>
+  <string name="property_note_multiline">テキスト(複数行)</string>
   <!-- like the words 'Single-line' in 'Single-line description'-->
   <string name="property_singleline">1行</string>
   <!-- like the words 'Multi-line' in 'Multi-line description'-->
   <string name="property_multiline">複数行</string>
   <!-- %1$s is an amount together with quantity unit -->
-  <string name="property_in_stock">在庫数：%1$s</string>
+  <string name="property_in_stock">ストック数: %1$s </string>
   <!-- %1$s is a sort mode like "name" or "due date" -->
-  <string name="property_sort_mode">%1$sでソート</string>
+  <string name="property_sort_mode">並べ替え: %1$s</string>
   <!-- %1$s is a grouping mode like "product group" or "due date" -->
-  <string name="property_group_by">%1$sでグループ化</string>
-  <string name="property_ungrouped">グループ化されていない</string>
+  <string name="property_group_by">グループ: %1$s</string>
+  <string name="property_ungrouped">グループなし</string>
   <!-- %1$s is a property like "product group" or "due date" -->
-  <string name="property_extra_field">ほかのフィールド：%1$s</string>
+  <string name="property_extra_field">追加フィールド: %1$s</string>
   <!-- Fields like fields of information -->
   <string name="property_fields">フィールド</string>
-  <string name="property_task_category">タスク種別</string>
-  <string name="property_task_categories">タスク種別</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_header">フィールド(ヘッダー)</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_entries">フィールド(エントリー)</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value">%1$s: %2$s</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value_without_space">%1$s:%2$s</string>
+  <string name="property_task_category">タスク分類</string>
+  <string name="property_task_categories">タスク分類</string>
   <string name="property_calories">カロリー</string>
-  <string name="property_calories_unit">カロリー(単位)</string>
-  <string name="property_calories_total">カロリー(総量)</string>
+  <string name="property_calories_unit">カロリー(単位あたり)</string>
+  <string name="property_calories_total">カロリー(合計)</string>
   <!-- %1$s is a value like energy or price, unit means value of items per unit -->
   <string name="property_insert_per_unit">%1$s (単位あたり)</string>
   <!-- %1$s is a value like energy or price, total means value of many items in total -->
-  <string name="property_insert_total">%1$s (すべて)</string>
+  <string name="property_insert_total">%1$s (合計)</string>
   <!-- %1$s is a value like price, average means average price -->
   <string name="property_insert_average">%1$s (平均)</string>
   <!-- %1$s is a value like price, "last" is like for example in "last price" -->
-  <string name="property_insert_last">%1$s (前回)</string>
-  <string name="property_category">種別</string>
-  <string name="property_assigned_to">割り当て：</string>
+  <string name="property_insert_last">%1$s (直近)</string>
+  <string name="property_category">分類</string>
+  <string name="property_assigned_to">担当者</string>
   <string name="property_users">ユーザー</string>
   <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
-  <string name="property_last_done_by">前回の実行者：</string>
+  <string name="property_last_done_by">直近の実行者</string>
   <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
-  <string name="property_last_tracked">前回の記録：</string>
+  <string name="property_last_tracked">直近の実行</string>
   <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
-  <string name="property_tracked_count">記録数：</string>
+  <string name="property_tracked_count">実行回数</string>
   <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
   <string name="property_average_execution_frequency">平均実行頻度</string>
   <!-- See context for this string on the web interface on the chores page, the table has this column -->
-  <string name="property_next_estimated_tracking">次回実行予定</string>
-  <string name="property_next_estimated_tracking_time">次回実行予定時刻</string>
+  <string name="property_next_estimated_tracking">次回予定</string>
+  <string name="property_next_estimated_tracking_time">次回予定時刻</string>
   <!-- See context for this string on the web interface on the recipes edit page -->
-  <string name="property_servings">提供数</string>
+  <string name="property_servings">分量</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it (hover over help icon) -->
-  <string name="property_servings_base_insert">基本提供量：%1$s</string>
+  <string name="property_servings_base_insert">基本分量: %1$s</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
-  <string name="property_servings_desired">希望提供数</string>
-  <string name="property_servings_desired_insert">必要提供数：%1$s</string>
-  <string name="property_not_check_shopping_list">買い物リストをチェックしない</string>
-  <string name="property_not_check_shopping_list_description">不足アイテムを追加する場合</string>
+  <string name="property_servings_desired">分量</string>
+  <string name="property_servings_desired_insert">分量: %1$s</string>
+  <string name="property_not_check_shopping_list">買い物リストと照合しない</string>
+  <string name="property_not_check_shopping_list_description">不足ストックを買い物リストに追加する際</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
-  <string name="property_preparation">準備</string>
+  <string name="property_preparation">作り方</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
-  <string name="property_costs">コスト</string>
+  <string name="property_costs">費用</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs">一週間の費用</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs_insert">一週間の費用: %1$s</string>
   <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="property_due_score">期限スコア</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_ingredients">材料</string>
-  <string name="property_only_check_single_unit_in_stock">在庫が存在する場合のみチェック</string>
+  <string name="property_only_check_single_unit_in_stock">ストック確認のみ</string>
   <!-- See context for this string on the web interface on the recipe ingredients edit page -->
   <string name="property_ingredient_group">グループ</string>
   <!-- See context for this string on the web interface on the recipe ingredients edit page -->
-  <string name="property_variable_amount">変動可能な数量</string>
-  <string name="property_requirements_fulfilled">必要条件が満たされました</string>
-  <string name="property_produces_product">製品を製造</string>
-  <string name="property_price_factor">価格の係数</string>
+  <string name="property_variable_amount">不定の数量</string>
+  <string name="property_requirements_fulfilled">要件</string>
+  <string name="property_produces_product">完成品をストックに追加</string>
+  <string name="property_price_factor">価格係数</string>
 
   <string name="date_today">今日</string>
   <string name="date_unknown">不明</string>
   <!-- This means the 'time' context -->
   <string name="date_unlimited">無制限</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
-  <string name="date_never">しない</string>
+  <string name="date_never">なし</string>
+  <!-- %1$s is 'from' date, %2$s is 'to' date -->
+  <string name="date_timespan">%1$s - %2$s</string>
+
   <plurals name="date_days">
     <item quantity="other">%d日</item>
   </plurals>
   <plurals name="date_months">
-    <item quantity="other">%dヶ月</item>
+    <item quantity="other">%dか月</item>
   </plurals>
   <plurals name="date_years">
     <item quantity="other">%d年</item>
@@ -971,7 +1053,7 @@
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_months_ago">
-    <item quantity="other">%dヶ月前</item>
+    <item quantity="other">%dか月前</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_years_ago">
@@ -983,36 +1065,40 @@
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_months_from_now">
-    <item quantity="other">%dヶ月後</item>
+    <item quantity="other">%dか月後</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_years_from_now">
     <item quantity="other">%d年後</item>
   </plurals>
 
-  <string name="info_acknowledgement">Grocy の開発者である Bernd Bestel に感謝します。彼の素晴らしい仕事がなければ、このアプリは決して実現できなかったでしょう。</string>
-  <string name="info_intro">イントロを再表示</string>
-  <string name="info_intro_description">ショーケース機能</string>
-  <string name="info_dev_beginning">開発の開始</string>
+  <string name="info_acknowledgement">Grocyの開発者であるBernd Bestel氏に感謝の意を表します。この人物の素晴らしい仕事がなければ、このアプリは決して実現しなかったでしょう。</string>
+  <string name="info_intro">イントロダクションを再表示</string>
+  <string name="info_intro_description">機能の紹介</string>
+  <string name="info_dev_beginning">開発開始</string>
   <string name="info_dev_beginning_date">2020年4月</string>
   <string name="info_version">バージョン</string>
   <string name="info_grocy_version">Grocyバージョン</string>
-  <string name="info_changelog">変更履歴</string>
-  <string name="info_changelog_description">変更点</string>
+  <string name="info_changelog">更新履歴</string>
+  <string name="info_changelog_description">新着情報</string>
   <string name="info_developers">開発者</string>
   <string name="info_github">GitHubのGrocy Android</string>
   <string name="info_github_description">ソースコード</string>
   <string name="info_website">Grocy webサイトを開く</string>
-  <string name="feature_1_title">Android用Grocy</string>
-  <string name="feature_1_description">あなたの自宅でできるセルフホスト食料雑貨管理</string>
-  <string name="feature_2_title">直感的デザイン</string>
-  <string name="feature_2_description">スワイプするだけで開封・消費</string>
+  <string name="info_translation_description">Grocy Androidの翻訳を手伝う</string>
+  <string name="info_privacy">プライバシーポリシー</string>
+  <string name="info_privacy_description">データの取り扱い方針</string>
+
+  <string name="feature_1_title">Grocy for Android</string>
+  <string name="feature_1_description">セルフホスト型の家庭用食料管理システム</string>
+  <string name="feature_2_title">直感的なデザイン</string>
+  <string name="feature_2_description">スワイプ1回で開封と消費を記録</string>
   <string name="feature_3_title">パワフルな一括処理</string>
-  <string name="feature_3_description">一瞬で購入したものを全てスキャン</string>
+  <string name="feature_3_description">購入したものを一瞬ですべてスキャン</string>
 
   <string name="category_licenses">オープンソースライセンス</string>
   <string name="category_general">一般</string>
-  <string name="category_stock">在庫</string>
+  <string name="category_stock">ストック</string>
   <string name="category_server">サーバー</string>
   <string name="category_user_settings">ユーザー設定</string>
   <string name="category_scanner">スキャナ</string>
@@ -1024,71 +1110,79 @@
   <string name="category_behavior">挙動</string>
   <string name="category_display_behavior">表示の挙動</string>
   <string name="category_input_behavior">入力時の挙動</string>
-  <string name="category_additional_services">付加サービス</string>
-  <string name="category_other_behavior">他の挙動</string>
+  <string name="category_additional_services">追加サービス</string>
+  <string name="category_other_behavior">その他の挙動</string>
   <string name="category_debugging">デバッグ</string>
-  <string name="category_new_product">新しい製品</string>
-  <string name="category_existing_products">既存の製品</string>
-  <string name="category_existing_products_similar">類似の既存製品</string>
+  <string name="category_new_product">新規物品</string>
+  <string name="category_existing_products">既存の物品</string>
+  <string name="category_existing_products_similar">類似の既存物品</string>
 
   <string name="hint_server">サーバーURL</string>
   <string name="hint_key">有効なAPIキー</string>
 
   <string name="setting_theme">テーマ</string>
-  <string name="setting_theme_description">他の表示スタイルを試す</string>
+  <string name="setting_theme_description">いつもと違うスタイルを試してみましょう</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system (automatic or shorter auto) theme. The button width should be as dense as possible. -->
   <string name="setting_theme_auto">自動</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">ダーク</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_light">ライト</string>
+  <string name="setting_contrast">コントラスト</string>
+  <string name="setting_contrast_description">視覚アクセシビリティ</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast. The button width should be as dense as possible. -->
+  <string name="setting_contrast_standard">標準</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_medium">中</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_high">高</string>
+  <string name="setting_contrast_dynamic">デバイステーマのコントラストはシステム側で設定する必要があります</string>
+  <string name="setting_contrast_dynamic_unsupported">デバイステーマのダイナミックコントラストはAndroid 14以降でのみ利用できます</string>
   <string name="setting_language">言語</string>
   <string name="setting_language_description">言語を選択</string>
-  <string name="setting_language_info">Transifex のボランティア翻訳者の皆様に厚く御礼申し上げます。\nGitHub にアクセスして、Grocy Android をあなたの言語で利用可能にする方法をご覧ください。</string>
-  <string name="setting_language_system">システムに従う</string>
+  <string name="setting_language_info">Transifexの有志翻訳者の皆様に心より感謝します\nあなたの言語でGrocy Androidを利用できるようにするためにご協力ください。詳細はGitHubのページをご覧ください。</string>
+  <string name="setting_language_system">システム準拠</string>
   <string name="setting_language_not_available">翻訳が存在しない場合は英語で表示</string>
-  <string name="setting_transition">スライドで設定ページを遷移</string>
-  <string name="setting_transition_description">フェードしない</string>
-  <string name="setting_open_food_facts">Open Food Facts と Open Beauty Facts を利用する</string>
+  <string name="setting_open_food_facts">Open Food FactsとOpen Beauty Factsを利用する</string>
   <string name="setting_open_food_facts_description">バーコードから情報を取得</string>
   <string name="setting_choose_barcode_scanner">バーコードスキャナを選択</string>
-  <string name="setting_choose_barcode_scanner_description">カメラでバーコードをスキャンする用</string>
-  <string name="setting_use_front_cam">全面カメラを使用</string>
-  <string name="setting_use_front_cam_description">バーコードスキャン用</string>
+  <string name="setting_choose_barcode_scanner_description">カメラによるバーコードスキャン</string>
+  <string name="setting_use_front_cam">インカメラを使用</string>
+  <string name="setting_use_front_cam_description">バーコードスキャン</string>
   <string name="setting_use_2d_scanner_format">2次元バーコードスキャナ形式を使用</string>
-  <string name="setting_use_2d_scanner_format_description">QRコードの輪郭</string>
+  <string name="setting_use_2d_scanner_format_description">QRコード用の正方形フレーム</string>
   <string name="setting_barcode_formats">バーコード形式</string>
   <!-- %1$s are barcode formats -->
-  <string name="setting_barcode_formats_description">バーコードを%1$sに制限</string>
+  <string name="setting_barcode_formats_description">制限: %1$s</string>
   <string name="setting_barcode_formats_description_all">無制限</string>
   <string name="setting_external_support">外部スキャナサポート</string>
-  <string name="setting_external_support_description">USB・bluetooth経由</string>
-  <string name="setting_reload_config">設定をリロード</string>
-  <string name="setting_reload_config_description">アプリ再起動が必要です</string>
+  <string name="setting_external_support_description">USBまたはbluetooth経由</string>
+  <string name="setting_reload_config">設定を再読み込み</string>
+  <string name="setting_reload_config_description">アプリの再起動が必要です</string>
   <string name="setting_logout">ログアウト</string>
   <string name="setting_logout_description">ログインページに戻る</string>
-  <string name="setting_manage_shortcuts">ショートカットを管理</string>
-  <string name="setting_list_indicator">リスト項目を表示</string>
-  <string name="setting_list_indicator_description">製品が買い物リストにある場合青い点を表示</string>
-  <string name="setting_shopping_mode_update_interval">ショッピングモードの更新時間</string>
-  <string name="setting_keep_screen_on">スクリーンを点灯したままにする</string>
-  <string name="setting_keep_screen_on_description">ショッピングモードの場合</string>
-  <string name="setting_show_done_items">完了済みアイテムを表示</string>
-  <string name="setting_show_done_items_description">下部に表示</string>
+  <string name="setting_manage_shortcuts">ショートカット管理</string>
+  <string name="setting_list_indicator">リスト項目表示</string>
+  <string name="setting_list_indicator_description">物品が買い物リストにある場合は青い点を表示</string>
+  <string name="setting_shopping_mode_update_interval">買い物モードの更新間隔</string>
+  <string name="setting_keep_screen_on">スクリーン常時点灯</string>
+  <string name="setting_keep_screen_on_description">買い物モード中</string>
+  <string name="setting_show_done_items">完了済項目を表示</string>
+  <string name="setting_show_done_items_description">最下部</string>
   <string name="setting_smaller_font">小さいフォントを使用</string>
-  <string name="setting_smaller_font_description">さらにアイテムを表示するには</string>
+  <string name="setting_smaller_font_description">一度に複数の項目を表示</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="setting_due_soon_days">期限間近として表示する日数</string>
+  <string name="setting_due_soon_days">まもなく期限</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="setting_default_amount_purchase">デフォルト購入数</string>
+  <string name="setting_default_amount_purchase">既定の購入数量</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="setting_default_amount_consume">デフォルト消費数</string>
-  <string name="setting_treat_opened_as_out_of_stock">在庫切れの場合に開封済みとして表示</string>
-  <string name="setting_purchased_date">購入日の入力を要求する</string>
-  <string name="setting_purchased_date_description">購入・目録ページで</string>
-  <string name="setting_use_quick_consume_amount">製品のクイック消費量を使用</string>
-  <string name="setting_auto_add_shopping_list">自動で製品を買い物リストに追加</string>
-  <string name="setting_auto_add_shopping_list_description">定められた最低在庫量を下回っています</string>
+  <string name="setting_default_amount_consume">既定の消費数量</string>
+  <string name="setting_treat_opened_as_out_of_stock">開封時にストックから減らす</string>
+  <string name="setting_purchased_date">購入日の入力要求</string>
+  <string name="setting_purchased_date_description">購入・ストック編集ページ</string>
+  <string name="setting_use_quick_consume_amount">「クイック消費数量」で指定した数量の物品を消費</string>
+  <string name="setting_auto_add_shopping_list">自動で買い物リストに追加</string>
+  <string name="setting_auto_add_shopping_list_description">最低数量未満の物品</string>
   <string name="setting_empty_value">空</string>
   <string name="setting_sync_off">同期オフ</string>
   <string name="setting_loading">値をロード中</string>
@@ -1097,45 +1191,92 @@
   <string name="setting_debug_description">デバッグ用</string>
   <string name="setting_log_level">ログレベル</string>
   <string name="setting_error_logs">エラーログのみ表示</string>
-  <string name="setting_info_logs">エラーログとインフォログを表示</string>
+  <string name="setting_info_logs">エラーログと情報ログを表示</string>
   <string name="setting_logs_description">このプロセスのlogcatを表示</string>
-  <string name="setting_timeout">タイムアウト時間</string>
-  <string name="setting_timeout_descriptions">ロードのキャンセル後</string>
-  <string name="setting_beginner_mode">初心者モード</string>
-  <string name="setting_beginner_mode_description">デフォルトでヘルプを表示</string>
-  <string name="setting_haptic">触覚エフェクト</string>
-  <string name="setting_haptic_description">没入体験</string>
+  <string name="setting_timeout">読み込みのタイムアウト</string>
+  <string name="setting_timeout_descriptions">読み込みキャンセルまでの時間</string>
+  <string name="setting_beginner_mode">ビギナーモード</string>
+  <string name="setting_beginner_mode_description">既定でヘルプテキストを表示</string>
+  <string name="setting_haptic">タッチ操作バイブ</string>
+  <string name="setting_haptic_description">没入感の高い操作</string>
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
-  <string name="setting_expand_bottom_sheets">ボトムシートを広げる</string>
-  <string name="setting_expand_bottom_sheets_description">横長表示時</string>
+  <string name="setting_expand_bottom_sheets">ボトムシート展開</string>
+  <string name="setting_expand_bottom_sheets_description">横向き表示時</string>
   <string name="setting_bottom_menu_button">メインメニューボタンを表示</string>
-  <string name="setting_bottom_menu_button_description">下のアプリバーで</string>
-  <string name="setting_turn_on_quick_mode">デフォルトでクイックモードを有効にする</string>
+  <string name="setting_bottom_menu_button_description">下部アプリバー</string>
+  <string name="setting_turn_on_quick_mode">既定クイックモード有効化</string>
   <string name="setting_turn_on_quick_mode_description">概要ページでスキャンボタンを使用する場合</string>
-  <string name="setting_speed_up_start">アプリの起動時間を削減</string>
-  <string name="setting_speed_up_start_description">早いデバイスでのみ効果あり</string>
+  <string name="setting_quick_mode_return">20秒後に一覧ページに戻る</string>
+  <string name="setting_quick_mode_return_description">一覧ページでスキャンボタンを使用し、クイックモードが使用されていない場合</string>
+  <string name="setting_speed_up_start">アプリ起動時間を短縮</string>
+  <string name="setting_speed_up_start_description">高速デバイスにのみ影響</string>
   <string name="setting_date_keyboard_input">キーボードで日付入力</string>
   <string name="setting_date_keyboard_input_description">日付ホイールを使用しない</string>
-  <string name="setting_date_keyboard_reverse">逆順日付形式を入力に使用</string>
-  <string name="setting_date_keyboard_reverse_description">YYMMDD の代わりに DDMMYY</string>
-  <string name="setting_loading_circle">全リクエストでローディングサークルを表示</string>
-  <string name="setting_loading_circle_description">低速ネットワークに適する</string>
+  <string name="setting_date_keyboard_reverse">入力に逆順日付形式を使用</string>
+  <string name="setting_date_keyboard_reverse_description">YYMMDDではなくDDMMYYを使用</string>
+  <string name="setting_barcode_amount">バーコード生成時の数量</string>
+  <string name="setting_barcode_amount_description">購入の一部として物品を作成する場合、入力した数量がバーコード生成時に使用されます。</string>
+  <string name="setting_loading_circle">全リクエストで処理中マークを表示</string>
+  <string name="setting_loading_circle_description">低速ネットワーク向け</string>
   <string name="setting_tor">Torを使用</string>
-  <string name="setting_tor_description">Orbotが必要です</string>
+  <string name="setting_tor_description">Orbotが必要</string>
   <string name="setting_proxy">HTTPプロキシを有効化</string>
-  <string name="setting_proxy_description">全てのネットワークリクエストでHTTPプロキシを使用</string>
+  <string name="setting_proxy_description">全てのネットワークリクエストに対してHTTPプロキシを構成</string>
   <string name="setting_proxy_host">プロキシホスト</string>
   <string name="setting_proxy_host_description">プロキシのホストネーム</string>
   <string name="setting_proxy_port">プロキシのポート</string>
   <string name="setting_proxy_port_description">プロキシのポート番号</string>
   <string name="setting_synchronized">以下のオプションはサーバーと同期されます</string>
-  <string name="settings_synchronized">これらの設定はサーバーと同期されます</string>
-  <string name="setting_message_duration">メッセージの時刻を表示</string>
-  <string name="setting_message_duration_description">トランザクションメッセージのみに関係する</string>
+  <string name="settings_synchronized">これらの設定はサーバーと同期されます。</string>
+  <string name="setting_message_duration">メッセージ表示時間</string>
+  <string name="setting_message_duration_description">処理メッセージのみに影響</string>
   <string name="setting_notifications_enable">通知を有効化</string>
-  <string name="setting_notification_time">通知の時刻</string>
+  <!-- The string belongs to the stock overview (stock items can be expired, overdue or due soon). -->
+  <string name="setting_notifications_stock_description">毎日ストックを確認し、消費期限切れ、賞味期限切れ、まもなく期限に該当する物品がある場合は通知</string>
+  <string name="setting_notifications_chores_description">毎日家事を確認し、期限の家事がある場合は通知</string>
+  <string name="setting_notification_time">通知時刻</string>
   <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
   <string name="setting_notification_time_description">確認完了時</string>
   <string name="setting_keep_screen_on_recipes_description">レシピ閲覧中</string>
 
-  </resources>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="notification_stock_not_fresh_title">
+    <item quantity="other">ストック内の%1$d点の物品が期限切れ/まもなく期限です。</item>
+  </plurals>
+  <string name="notification_stock_content">該当する物品を早めに消費して、フードロスを防ぎましょう。タップしてリストを開きます。</string>
+  <!-- %1$s is a number -->
+  <plurals name="notification_chores_due_title">
+    <item quantity="other">%1$d件の家事を完了してください。</item>
+  </plurals>
+  <string name="notification_chores_content">先延ばしにしてもいいことはありません。タップしてリストを開きます。</string>
+
+  <string name="ikm_select_cert">クライアント証明書を選択</string>
+  <string name="ikm_client_cert">サーバーがクライアント証明書を要求しています。使用する証明書を選択してください。</string>
+  <string name="ikm_client_cert_notification">クライアント証明書を選択</string>
+  <string name="ikm_decision_file">ファイルから</string>
+  <string name="ikm_decision_keychain">デバイスのKey Managerから</string>
+  <string name="ikm_notification">クライアント証明書を選択</string>
+  <string name="ikm_load_app_keystore">アプリkeystore読み込みエラー</string>
+  <string name="ikm_store_aliasMapping">keychainエイリアス保存エラー</string>
+  <string name="ikm_remove_keys">接続エラー: キーが削除されました</string>
+  <string name="ikm_remove_all_keys">全ての接続キーを削除しました</string>
+  <string name="ikm_add_from_keystore">指定keystore読み取りエラー</string>
+  <string name="ikm_add_from_keystore_alias">キー読み込みエラー:</string>
+  <string name="ikm_keychain">KeyChainエラー; 保存されたエイリアスを削除</string>
+  <string name="ikm_select_keystore">keystoreファイルを選択</string>
+
+  <string name="mtm_security_risk">警告: 潜在的セキュリティリスク</string>
+  <string name="mtm_trust_anchor">サーバー証明書は既知の証明機関によって署名されていません。</string>
+  <string name="mtm_cert_expired">サーバー証明書の有効期限が切れています。</string>
+  <string name="mtm_hostname_mismatch">サーバーは\&quot;%s\&quot;として認証できませんでした。</string>
+  <string name="mtm_trust_certificate">この証明書を信頼しますか？この証明書は、リストされている全ての名前を認証するために使用されます。</string>
+  <string name="mtm_accept_servername">一致しないサーバー名を受け入れますか？</string>
+  <string name="mtm_cert_details">証明書の詳細:</string>
+  <string name="mtm_valid_for">証明書の有効期限:</string>
+  <string name="mtm_decision_always">常時</string>
+  <string name="mtm_decision_once">一度だけ</string>
+  <string name="mtm_notification_channel">セキュリティ</string>
+  <string name="mtm_notification">証明書の検証</string>
+  <string name="mtm_error_keystore">ファイルからkey storeを読み込む際の例外</string>
+
+</resources>

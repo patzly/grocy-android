@@ -94,11 +94,11 @@ public class MatchProductsArrayAdapter extends ArrayAdapter<Product> {
         return new FilterResults();
       }
 
-      // Initialize suggestion list with max. capacity; growing is expensive.
-      ArrayList<Product> suggestions = new ArrayList<>(tempItems.keySet().size());
-      List<ExtractedResult> results = FuzzySearch.extractSorted(
+      ArrayList<Product> suggestions = new ArrayList<>(30);
+      List<ExtractedResult> results = FuzzySearch.extractTop(
           constraint.toString().toLowerCase(),
           tempItems.keySet(),
+          30,
           50
       );
       for (ExtractedResult result : results) {

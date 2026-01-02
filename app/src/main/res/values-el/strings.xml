@@ -1,0 +1,1335 @@
+<!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2024 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2024-2025 by Patrick Zedler
+  -->
+
+<resources>
+
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in purchase screen for example. -->
+  <string name="action_purchase">Αγορά</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in consume screen for example. -->
+  <string name="action_consume">Κατανάλωση</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in transfer screen for example. -->
+  <string name="action_transfer">Μεταφορά</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in inventory screen for example. -->
+  <string name="action_inventory">Ενημέρωση υπολοίπων</string>
+  <!-- This is an action – in English, it contains a verb. -->
+  <string name="action_consume_all">Κατανάλωση όλων</string>
+
+  <string name="action_consume_spoiled">Κατανάλωση ως χαλασμένο</string>
+  <string name="action_consume_one_spoiled">Κατανάλωση 1 ως χαλασμένο</string>
+  <!-- %1$s is a quantity unit and %2$s is a product name -->
+  <string name="action_consume_one">Κατανάλωση 1 %1$s από %2$s</string>
+  <string name="action_open">Επισήμανση ως ανοιγμένο</string>
+  <!-- %1$s is a quantity unit and %2$s is a product name -->
+  <string name="action_open_one">Άνοιγμα 1 %1$s από %2$s</string>
+  <string name="action_edit_product">Επεξεργασία προιόντος</string>
+  <string name="action_shopping_list_add">Προσθήκη στο καλάθι</string>
+  <string name="action_consume_recipe">Κατανάλωση όλων των αναγκάιων προιόντων για την συνταγή</string>
+  <string name="action_copy_recipe">Αντιγραφή συνταγής</string>
+  <string name="action_apply_desired_servings">Εφαρμογή των επιθυμητών μερίδων για την συνταγή και ενημέρωση των δεδομένων</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_product_opened">Ανοιχτό προιόν</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_from">Μεταφορά από</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_to">Μεταφορά στο</string>
+
+  <string name="action_back">Πίσω</string>
+  <string name="action_search">Αναζήτηση</string>
+  <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+  <string name="action_next">Επόμενο</string>
+  <string name="action_new">Νέο</string>
+  <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+  <string name="action_prev">Προηγούμενο</string>
+  <string name="action_feedback">Αποστολή σχόλιων</string>
+  <string name="action_reset">Επαναφορά</string>
+  <string name="action_reload">Ανανέωση</string>
+  <string name="action_top_scroll">Κύληση προς τα πάνω</string>
+  <string name="action_send">Αποστολή</string>
+  <string name="action_close">Κλείσιμο</string>
+  <string name="action_scan">Σκανάρισμα</string>
+  <string name="action_cancel">Ακύρωση</string>
+  <string name="action_add">Προσθήκη</string>
+  <string name="action_clear">Καθαρισμός</string>
+  <string name="action_clear_shopping_list">Καθαρισμός λίστας ψώνιων</string>
+  <string name="action_auto_sync">Αυτόματος συγχρονισμός</string>
+  <string name="action_rate">Βαθμολόγιση στο Google Play</string>
+  <string name="action_rate_description">Κίνητρο στους προγραμματιστές</string>
+  <string name="action_email">Αποστολή email</string>
+  <string name="action_email_description">Επικοινωνία με τους προγραμματιστές</string>
+  <string name="action_new_issue">Άνοιγμα νέου προβλήματος στο GitHub</string>
+  <string name="action_new_issue_description">Αναφορά προβλήματος ή αίτηση νέας λειτουργείας</string>
+  <string name="action_get_started">Ας αρχίσουμε</string>
+  <string name="action_ascending">Aύξουσα</string>
+  <string name="action_filter">Φιλτράρισμα</string>
+  <string name="action_sort">Κατανομή</string>
+  <string name="action_undo">Αναίρεση</string>
+  <string name="action_retry">Ξαναπροσπάθεια</string>
+  <string name="action_edit">Επεξεργασία</string>
+  <string name="action_copy">Αντιγραφή</string>
+  <string name="action_proceed">Συνέχεια</string>
+  <string name="action_delete">Διαγραφή</string>
+  <string name="action_save">Αποθήκευση</string>
+  <string name="action_save_close">Αποθήκευση και κλείσιμο</string>
+  <string name="action_save_not_close">Αποθήκευση χωρίς κλείσιμο</string>
+  <string name="action_logout">Αποσύνδεση</string>
+  <string name="action_restart">Επανεκκίνηση</string>
+  <string name="action_create">Δημιουργία</string>
+  <string name="action_link">Σύνδεση</string>
+  <string name="action_try_again">Δοκιμή ξανά</string>
+  <string name="action_open_scanner">Άνοιγμα σαρωτή</string>
+  <string name="action_discard">Απόρριψη</string>
+  <string name="action_clear_form">Εκκαθάριση φόρμας</string>
+  <string name="action_take_photo">Λήψη φωτογραφίας</string>
+  <!-- "Paste" like in "Paste from clipboard" -->
+  <string name="action_paste">Επικόλληση</string>
+  <!-- Short form for "Only link barcode to existing product", this should fit into a
+  button so keep it short. -->
+  <string name="action_link_and_clear">Σύνδεση μόνο</string>
+  <string name="action_toggle_done">Εναλλαγή ολοκλήρωσης</string>
+  <string name="action_change_layout">Αλλαγή διάταξης</string>
+  <string name="action_edit_notes">Επεξεργασία σημειώσεων</string>
+  <string name="action_add_missing">Προσθήκη ελλειπόντων προϊόντων</string>
+  <string name="action_purchase_done_items">Αγορά ολοκληρωμένων αντικειμένων</string>
+  <string name="action_purchase_all_items">Αγορά όλων των αντικειμένων</string>
+  <string name="action_skip_entry">Παράλειψη εγγραφής</string>
+  <string name="action_toggle_flash">Εναλλαγή φλας</string>
+  <string name="action_edit_recipe">Επεξεργασία συνταγής</string>
+  <string name="action_delete_recipe">Διαγραφή συνταγής</string>
+  <string name="action_delete_shopping_list">Διαγραφή λίστας αγορών</string>
+  <string name="action_create_key">Δημιουργία κλειδιού</string>
+  <string name="action_login">Σύνδεση</string>
+  <string name="action_ignore">Παράβλεψη</string>
+  <!-- This string should follow the equality between "all" and "Clear all items" -->
+  <string name="action_clear_all">Όλα</string>
+  <!-- This string should follow the equality between "done" and "Clear done items" -->
+  <string name="action_clear_done">Ολοκληρωμένα</string>
+  <string name="action_display_help">Εμφάνιση βοηθητικών κειμένων</string>
+  <string name="action_demo_server">Διακομιστής επίδειξης</string>
+  <string name="action_own_server">Δικός σας διακομιστής</string>
+  <string name="action_open_server">Χρήση διεπαφής διακομιστή</string>
+  <string name="action_enter_data_manually">Εισαγωγή δεδομένων χειροκίνητα</string>
+  <string name="action_settings_backup_restore">Δημιουργία ή επαναφορά αντιγράφου ρυθμίσεων</string>
+  <string name="action_details">Λεπτομέρειες</string>
+  <string name="action_perform">Εκτέλεση ενέργειας</string>
+  <string name="action_share">Κοινή χρήση</string>
+  <string name="action_share_description">Πείτε στους φίλους σας για το Grocy Android</string>
+  <string name="action_no_filter">Χωρίς φίλτρο</string>
+  <string name="action_show_done_tasks">Εμφάνιση ολοκληρωμένων εργασιών</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_chore_execution">Καταγραφή εκτέλεσης υποχρέωσης τώρα</string>
+  <!-- The same string is also in the web interface (server v4.0.0 or later): Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_track_next_chore_schedule">Καταγραφή επόμενου προγραμματισμού υποχρέωσης</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_skip_next_chore_schedule">Παράλειψη επόμενου προγραμματισμού υποχρεώσεων</string>
+  <!-- The same string is also in the web interface: Chore overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="action_reschedule_next_execution">Επαναπρογραμματισμός επόμενης εκτέλεσης</string>
+  <string name="action_put_missing_products_on_shopping_list">Προσθήκη ελλειπόντων προϊόντων στη λίστα αγορών</string>
+  <!-- This is the action part of "Backup to file" or "Backup data" -->
+  <string name="action_backup">Αντίγραφο ασφαλείας</string>
+  <!-- This is the action part of "Restore from file" or "Restore data" -->
+  <string name="action_restore">Επαναφορά</string>
+  <string name="action_configure_sections">Ρύθμιση ενοτήτων</string>
+
+  <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
+  <plurals name="msg_due_products">
+    <item quantity="one">%1$d σύντομα λήγει</item>
+    <item quantity="other">%1$d σύντομα λήγουν</item>
+  </plurals>
+  <!-- %1$s is the number of products which are overdue. This string is the short form of e.g. "3 products are overdue" -> "3 overdue" -->
+  <plurals name="msg_overdue_products">
+    <item quantity="one">%1$d εκπρόθεσμο</item>
+    <item quantity="other">%1$d εκπρόθεσμα</item>
+  </plurals>
+  <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
+  <plurals name="msg_expired_products">
+    <item quantity="one">%1$d ληγμένο</item>
+    <item quantity="other">%1$d ληγμένα</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_short">
+    <item quantity="one">%1$d όχι φρέσκο</item>
+    <item quantity="other">%1$d όχι φρέσκα</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_long">
+    <item quantity="one">%1$d όχι φρέσκο (όλα παρακάτω)</item>
+    <item quantity="other">%1$d όχι φρέσκα (όλα παρακάτω)</item>
+  </plurals>
+  <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
+  <plurals name="msg_missing_products">
+    <item quantity="one">%1$d κάτω από ελάχιστο</item>
+    <item quantity="other">%1$d κάτω από ελάχιστο</item>
+  </plurals>
+  <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
+  <plurals name="msg_in_stock_products">
+    <item quantity="one">%1$d σε απόθεμα</item>
+    <item quantity="other">%1$d σε απόθεμα</item>
+  </plurals>
+  <!-- %1$s is the number of products which are opened. This string is the short form of e.g. "3 products are opened" -> "3 opened" -->
+  <plurals name="msg_opened_products">
+    <item quantity="one">%1$d ανοιχτό</item>
+    <item quantity="other">%1$d ανοιχτά</item>
+  </plurals>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_consumed">Καταναλώθηκαν %1$s %2$s από %3$s</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_consumed_spoiled">Καταναλώθηκαν %1$s %2$s από %3$s ως χαλασμένα</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_opened">Μαρκάρισμα %1$s %2$s από %3$s ως ανοιχτά</string>
+  <!-- %1$s is the number of servings of a recipe. -->
+  <plurals name="msg_servings">
+    <item quantity="one">%1$s μερίδα</item>
+    <item quantity="other">%1$s μερίδες</item>
+  </plurals>
+  <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
+  <plurals name="msg_undone_items">
+    <item quantity="one">%1$d μη ολοκληρωμένο</item>
+    <item quantity="other">%1$d μη ολοκληρωμένα</item>
+  </plurals>
+  <!-- %1$s is the number of done items in shopping list. This string is the short form of e.g. "3 done items are in shopping list" -> "3 done" -->
+  <plurals name="msg_done_items">
+    <item quantity="one">%1$d ολοκληρωμένο</item>
+    <item quantity="other">%1$d ολοκληρωμένα</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are done. This string is the short form of e.g. "3 tasks are done" -> "3 done" -->
+  <plurals name="msg_done_tasks">
+    <item quantity="one">%1$d ολοκληρωμένη</item>
+    <item quantity="other">%1$d ολοκληρωμένες</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are not done. This string is the short form of e.g. "3 tasks are not done" -> "3 not done" -->
+  <plurals name="msg_not_done_tasks">
+    <item quantity="one">%1$d μη ολοκληρωμένη</item>
+    <item quantity="other">%1$d μη ολοκληρωμένες</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are due soon. This string is the short form of e.g. "3 tasks are due soon" -> "3 due soon" -->
+  <plurals name="msg_due_tasks">
+    <item quantity="one">%1$d σύντομα λήγει</item>
+    <item quantity="other">%1$d σύντομα λήγουν</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are due today. This string is the short form of e.g. "3 tasks are due today" -> "3 due today" -->
+  <plurals name="msg_due_today_tasks">
+    <item quantity="one">%1$d λήγει σήμερα</item>
+    <item quantity="other">%1$d λήγουν σήμερα</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
+  <plurals name="msg_overdue_tasks">
+    <item quantity="one">%1$d εκπρόθεσμη</item>
+    <item quantity="other">%1$d εκπρόθεσμες</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_short">
+    <item quantity="one">%1$d λήγει</item>
+    <item quantity="other">%1$d λήγουν</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue or due today. This string is the short form of e.g. "3 tasks are due" -> "3 due" -->
+  <plurals name="msg_due_tasks_long">
+    <item quantity="one">%1$d λήγει (όλες παρακάτω)</item>
+    <item quantity="other">%1$d λήγουν (όλες παρακάτω)</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
+  <plurals name="msg_assigned_tasks">
+    <item quantity="one">%1$d ανατεθημένη</item>
+    <item quantity="other">%1$d ανατεθημένες</item>
+  </plurals>
+  <string name="msg_task_mark">Επισήμανση εργασίας ως ολοκληρωμένης</string>
+  <string name="msg_task_completed">Η εργασία επισημάνθηκε ως ολοκληρωμένη</string>
+  <string name="msg_task_not_completed">Η εργασία επισημάνθηκε ως μη ολοκληρωμένη</string>
+  <string name="msg_task_undo">Αναίρεση εργασίας</string>
+  <string name="msg_recipes_enough_in_stock">Επαρκές απόθεμα</string>
+  <string name="msg_recipes_enough_in_stock_filter">(%1$d) Επαρκές απόθεμα</string>
+  <!-- %1$s is an amount with quantity unit (e.g. 3 bottles) -->
+  <string name="msg_recipes_enough_in_stock_amount">Επαρκές απόθεμα (%1$s)</string>
+  <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) Μη επαρκές απόθεμα αλλά στη λίστα αγορών</string>
+  <string name="msg_recipes_not_enough_filter">(%1$d) Μη επαρκές απόθεμα</string>
+  <string name="msg_recipes_not_enough">Μη επαρκές απόθεμα</string>
+  <plurals name="msg_recipes_ingredients_missing_but_on_shopping_list">
+    <item quantity="one">Λείπει %1$d συστατικό αλλά είναι ήδη στη λίστα αγορών</item>
+    <item quantity="other">Λείπουν %1$d συστατικά αλλά είναι ήδη στη λίστα αγορών</item>
+  </plurals>
+  <plurals name="msg_recipes_ingredients_missing">
+    <item quantity="one">Λείπει %1$d συστατικό</item>
+    <item quantity="other">Λείπουν %1$d συστατικά</item>
+  </plurals>
+  <string name="msg_recipes_ingredient_fulfillment_info_list">Λείπουν: %1$s | Ήδη στη λίστα αγορών: %2$s</string>
+  <string name="msg_chore_executed">Καταγράφηκε εκτέλεση υποχρέωσης</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_purchased">Αγοράστηκαν %1$s %2$s από %3$s</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_transferred">Μεταφέρθηκαν %1$s %2$s από %3$s</string>
+  <!-- %1$s is a product name, %2$s a number, %3$s is a quantity unit and %4$s a number (e.g. -3) -->
+  <string name="msg_inventoried">Η ποσότητα του %1$s είναι τώρα %2$s %3$s (%4$s)</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_not_in_stock">Το %1$s δεν είναι σε απόθεμα</string>
+  <string name="msg_no_connection">Χωρίς σύνδεση</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_no_stock_locations">Δεν υπάρχουν τοποθεσίες αποθέματος για %1$s</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_no_stock_entries">Δεν υπάρχουν καταχωρήσεις αποθέματος για %1$s</string>
+  <string name="msg_not_found">Το προϊόν δεν βρέθηκε</string>
+  <string name="msg_returning_to_overview">Επιστροφή στην επισκόπηση σε λίγα δευτερόλεπτα</string>
+  <string name="msg_editor_hint">Γράψτε κείμενο εδώ</string>
+  <string name="msg_coming_soon">Αυτή η λειτουργία θα είναι διαθέσιμη σύντομα</string>
+  <string name="msg_undo_transaction">Αναίρεση συναλλαγής;</string>
+  <string name="msg_undone_transaction">Η συναλλαγή ανετράπη</string>
+  <!-- %1$s is a date -->
+  <string name="msg_undone_transaction_description">Αναιρέθηκε στις %1$s</string>
+  <string name="msg_failed_to_sync">Αποτυχία συγχρονισμού καταχωρίσεων</string>
+  <string name="msg_synced">Οι καταχωρήσεις συγχρονίστηκαν με επιτυχία</string>
+  <!-- %1$s is a shopping list name -->
+  <string name="msg_added_missing_products">Προστέθηκαν ελλείποντα προϊόντα στο %1$s</string>
+  <!-- %1$s is a shopping list name -->
+  <string name="msg_shopping_list_cleared">Το %1$s καθαρίστηκε επιτυχώς</string>
+  <!-- %1$s is a shopping list name -->
+  <string name="msg_shopping_list_deleted">Το %1$s διαγράφηκε επιτυχώς</string>
+  <string name="msg_barcode_duplicate">Το Barcode υπάρχει ήδη</string>
+  <!-- %1$s is a master data type like "Product group" or "Location"; %2$s is the name of it. -->
+  <string name="msg_master_delete">Είστε σίγουρος ότι θέλετε να διαγράψετε %1$s «%2$s»;</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_master_delete_product">Είστε σίγουρος ότι θέλετε να διαγράψετε το προϊόν «%1$s»;\n\nΑυτό θα αφαιρέσει επίσης οποιαδήποτε ποσότητα αποθέματος, το ημερολόγιο και όλες τις άλλες αναφορές του προϊόντος.\n\nΕναλλακτικά, μπορείτε να κάνετε το προϊόν ανενεργό, αν θέλετε απλώς να το αποκρύψετε.</string>
+  <!-- %1$s is a master data type like "location" or "product" -->
+  <string name="msg_master_delete_usage">Αυτό το %1$s χρησιμοποιείται ακόμη</string>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_add">
+    <item quantity="one">%1$s %2$s θα προστεθεί στο απόθεμα.</item>
+    <item quantity="other">%1$s %2$s θα προστεθούν στο απόθεμα.</item>
+  </plurals>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_remove">
+    <item quantity="one">%1$s %2$s θα αφαιρεθεί από το απόθεμα.</item>
+    <item quantity="other">%1$s %2$s θα αφαιρεθούν από το απόθεμα.</item>
+  </plurals>
+  <string name="msg_transfer_tare_weight">Τα προϊόντα με ενεργοποιημένο το απόβαρο δεν υποστηρίζονται προς το παρόν για μεταφορά.</string>
+  <string name="msg_should_not_be_frozen">Αυτό το προϊόν δεν πρέπει να καταψυχθεί. Θέλετε να συνεχίσετε;</string>
+  <string name="msg_item_marked_as_done">Το στοιχείο επισημάνθηκε ως ολοκληρωμένο</string>
+  <string name="msg_item_marked_as_undone">Το στοιχείο επισημάνθηκε ως αναιρεμένο</string>
+  <string name="option_synced_success">Η επιλογή συγχρονίστηκε με επιτυχία</string>
+  <string name="option_synced_error">Δεν ήταν δυνατός ο συγχρονισμός της επιλογής</string>
+  <string name="msg_data_copied_from_product">Τα δεδομένα αντιγράφηκαν από το προϊόν «%1$s».</string>
+  <string name="msg_recipe_added_to_cart">Προστέθηκαν υλικά συνταγής στο καλάθι</string>
+  <string name="msg_recipe_consumed">Αφαιρέθηκαν όλα τα συστατικά της συνταγής «%1$s» από το απόθεμα</string>
+  <string name="msg_stored_purchases_overview">Υπάρχουν αγορές στη συσκευή που δεν έχουν ακόμη μεταφερθεί στον διακομιστή. Πατήστε εδώ για λεπτομέρειες.</string>
+  <string name="msg_stored_purchases">Εδώ εμφανίζονται οι αγορές που δεν έχουν ακόμη μεταφερθεί στον διακομιστή. Αποθηκεύτηκαν μαζί με προσωρινά προϊόντα σε αυτήν την εφαρμογή, ώστε να μπορείτε να σαρώνετε την αγορά σας πιο γρήγορα σε γρήγορη λειτουργία και να μην χρειάζεται να δημιουργείτε νέα προϊόντα απευθείας για τα κύρια δεδομένα.</string>
+  <string name="msg_stored_purchases_product_offline">Πατήστε στο προϊόν και συμπληρώστε τα απαιτούμενα δεδομένα. Στη συνέχεια, το προϊόν θα εμφανίζεται εδώ ως online και οι αποθηκευμένες αγορές μπορούν να αποσταλούν στον διακομιστή.</string>
+  <string name="msg_stored_purchases_product_online">Πατήστε εδώ για να στείλετε τις αποθηκευμένες αγορές για αυτό το προϊόν στον διακομιστή.</string>
+  <string name="msg_choose_product">Ο γραμμωτός κώδικας που σαρώσατε δεν έχει συνδεθεί ακόμη με κάποιο προϊόν. Μπορείτε να τον συνδέσετε με ένα υπάρχον ή να δημιουργήσετε ένα νέο προϊόν για αυτό.</string>
+  <string name="msg_product_name_off">Το όνομα προϊόντος για το barcode προέρχεται από το Open Food Facts.</string>
+  <string name="msg_product_name_obf">Το όνομα προϊόντος για το barcode προέρχεται από το Open Beauty Facts.</string>
+  <string name="msg_product_name_lookup_error">Δεν ήταν δυνατή η αναζήτηση barcode στο Open Food Facts ή στο Open Beauty Facts.</string>
+  <string name="msg_product_name_lookup_empty">Το barcode δεν υπάρχει στη βάση δεδομένων Open Food Facts ή Open Beauty Facts.</string>
+  <string name="msg_off_option_deactivated">Για αυτόματη πρόταση ονόματος προϊόντος, μπορείτε να ενεργοποιήσετε την αναζήτηση Open Food Facts στις ρυθμίσεις.</string>
+  <string name="msg_create_new_product_filled">Δημιουργία νέου προϊόντος «%1$s»</string>
+  <string name="msg_create_new_product">Δημιουργία νέου προϊόντος</string>
+  <string name="msg_create_new_pending_product_filled">Δημιουργία νέου προσωρινού προϊόντος «%1$s»</string>
+  <string name="msg_create_new_pending_product">Δημιουργία νέου προσωρινού προϊόντος</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_purchase">Συναλλαγή που θα εκτελεστεί:\n\nΠροσθήκη %1$s %2$s από %3$s στο απόθεμα\nΗμερομηνία λήξης: %4$s\nΤιμή: %5$s\nΚατάστημα: %6$s\nΤοποθεσία: %7$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_consume">Συναλλαγή που θα εκτελεστεί:\n\nΑφαίρεση %1$s %2$s από %3$s από το απόθεμα\nΤοποθεσία: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_open">Συναλλαγή που θα εκτελεστεί:\n\nΕπισήμανση %1$s %2$s από %3$s ως ανοιχτό\nΤοποθεσία: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
+  <string name="msg_quick_mode_confirm_transfer">Συναλλαγή που θα εκτελεστεί:\n\nΜεταφορά %1$s %2$s από %3$s\nΑπό τοποθεσία: %4$s\nΣτην τοποθεσία: %5$s</string>
+  <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_inventory">Συναλλαγή που θα εκτελεστεί:\n\nΟρισμός αποθέματος του %1$s σε %2$s %3$s\nΕφαρμογή για προστιθέμενα αντικείμενα:\nΗμερομηνία λήξης: %4$s\nΤιμή: %5$s\nΚατάστημα: %6$s\nΤοποθεσία: %7$s</string>
+  <string name="msg_compatibility">Αυτή η έκδοση της εφαρμογής δεν είναι συμβατή με την έκδοση του Grocy στον διακομιστή.\n\nΤρέχουσα έκδοση διακομιστή: %1$s\n\nΥποστηριζόμενες εκδόσεις διακομιστή:\n%2$s\nΑν η τρέχουσα έκδοση του διακομιστή έχει υψηλότερο αριθμό κύριας έκδοσης (πρώτο ψηφίο) από τις υποστηριζόμενες εκδόσεις και αγνοήσετε αυτή την προειδοποίηση, μπορεί να προκληθεί απώλεια δεδομένων (απίθανο) ή κρασαρίσματα (πιθανό).\nΑν υπάρχει μόνο μικρή διαφορά (π.χ. το τρίτο ψηφίο είναι υψηλότερο), πιθανότατα μπορείτε να αγνοήσετε αυτή την προειδοποίηση.</string>
+  <string name="msg_logout">Τίποτα στον διακομιστή σας δεν θα αλλάξει. Θα μεταφερθείτε στη σελίδα σύνδεσης.</string>
+  <string name="msg_logout_demo">Χρησιμοποιείτε τον δημόσιο διακομιστή επίδειξης <u>https://grocy.info</u>.\n\n<b>Καμία από τις αλλαγές σας δεν αποθηκεύεται για πάντα!\nΠαραμένουν δημόσιες μέχρι ο διακομιστής να τις αντικαταστήσει αυτόματα μία φορά την ημέρα.</b>\n\nΣτην οθόνη σύνδεσης μπορείτε να εισάγετε τη διεύθυνση του δικού σας διακομιστή.</string>
+  <string name="msg_logout_demo_short">Δημόσιος διακομιστής επίδειξης. Πατήστε για λεπτομέρειες.</string>
+  <string name="msg_restart">Πρέπει να γίνει επανεκκίνηση της εφαρμογής για να εφαρμοστεί η τρέχουσα διαμόρφωση. Θέλετε να την επανεκκινήσετε τώρα;</string>
+  <string name="msg_full_description">Πατήστε εδώ για να εμφανιστεί η πλήρης περιγραφή.</string>
+  <string name="msg_copied_clipboard">Αντιγράφηκε στο πρόχειρο</string>
+  <string name="msg_shortcuts">Μπορείτε να ενεργοποιήσετε έως 4 συντομεύσεις:</string>
+  <string name="msg_shortcuts_not_supported">Οι συντομεύσεις δεν υποστηρίζονται σε αυτή την έκδοση Android.</string>
+  <string name="msg_barcode_formats">Μπορείτε να βελτιώσετε την ταχύτητα του ανιχνευτή barcode διαμορφώνοντάς τον να ανιχνεύει μόνο εκείνες τις μορφές που αναμένετε να διαβάζει.</string>
+  <string name="msg_features">Ξεκινήστε την εισαγωγή ξανά στο «Σχετικά»</string>
+  <string name="msg_feedback">Έχετε επιθυμίες, ερωτήσεις ή σφάλματα; Επικοινωνήστε μαζί μας και αφήστε μας να σας βοηθήσουμε!\nΔιαφορετικά θα ήμασταν πολύ χαρούμενοι για μια ωραία κριτική στο Play Store.</string>
+  <string name="msg_point_at_barcode">Στρέψτε την κάμερά σας σε ένα barcode</string>
+  <string name="msg_save_product_first">Παρακαλώ αποθηκεύστε πρώτα το προϊόν</string>
+  <string name="msg_save_recipe_first">Παρακαλώ αποθηκεύστε πρώτα τη συνταγή</string>
+  <string name="msg_recipe_contains_nested_recipes">Αυτή η συνταγή περιέχει ένθετες συνταγές.</string>
+  <string name="msg_press_hold_confirm">Πατήστε και κρατήστε για επιβεβαίωση διαγραφής</string>
+  <string name="msg_recipe_consume_ask">Θέλετε σίγουρα να καταναλώσετε όλα τα συστατικά που απαιτούνται από τη συνταγή για «%1$s»; (τα συστατικά που επισημαίνονται με «μόνο έλεγχος» δεν θα καταναλωθούν)</string>
+  <string name="msg_recipe_shopping_list_ask">Θέλετε σίγουρα να προσθέσετε όλα τα ελλείποντα συστατικά που απαιτούνται από τη συνταγή για «%1$s» στη λίστα αγορών?\n\nΑποεπιλέξτε τυχόν συστατικό που δεν θέλετε να προστεθεί.</string>
+  <string name="msg_settings_backup_restore">Εδώ μπορείτε να δημιουργήσετε ή να επαναφέρετε ένα αντίγραφο ασφαλείας των ρυθμίσεων της εφαρμογής, π.χ. για να το μοιραστείτε με άλλα μέλη της οικογένειας (το αρχείο περιέχει διαπιστευτήρια όπως API-Key).\n\nΜετά την επαναφορά, οι ειδοποιήσεις μπορεί να μην λειτουργούν όπως επιθυμείτε και πρέπει να επανεκκινηθούν στο παρασκήνιο σε αυτή την εφαρμογή απενεργοποιώντας και ενεργοποιώντας ξανά τους διακόπτες.\n\nΑν υπάρχουν εσφαλμένα δεδομένα στο αρχείο που επαναφέρεται, η εφαρμογή μπορεί να μην λειτουργεί μετά από αυτό και τα δεδομένα της εφαρμογής θα πρέπει να διαγραφούν.</string>
+  <string name="msg_settings_backup_success">Το αντίγραφο ασφαλείας ρυθμίσεων δημιουργήθηκε επιτυχώς</string>
+  <string name="msg_settings_restore_success">Οι ρυθμίσεις επαναφέρθηκαν επιτυχώς, επανεκκίνηση εφαρμογής σε 2 δευτερόλεπτα</string>
+  <string name="msg_welcome">Καλώς ήρθατε στο Grocy Android!</string>
+  <string name="msg_welcome_introduce">Για να χρησιμοποιήσετε το Grocy παραγωγικά χρειάζεστε τον δικό σας διακομιστή ή το Grocy add-on για το Home Assistant.\nΑν θέλετε απλώς να δοκιμάσετε αυτή την εφαρμογή μπορείτε να χρησιμοποιήσετε τον διακομιστή επίδειξης από τον Bernd Bestel, τον δημιουργό του grocy.</string>
+  <string name="msg_choose_option_below">Παρακαλώ επιλέξτε μια επιλογή παρακάτω.</string>
+  <string name="msg_qr_code_scan">Σε άλλη συσκευή, επισκεφθείτε τον ιστότοπο Grocy και πηγαίνετε στη σελίδα «Κλειδιά API». Κάντε κλικ στο «Προσθήκη», στη συνέχεια κάντε κλικ στο μικρό σύμβολο QR κώδικα και σαρώστε τον QR κώδικα.</string>
+  <string name="msg_qr_code_scan_token">Χρησιμοποιείτε το Grocy Home Assistant add-on. Δημιουργήστε ένα μακροπρόθεσμο διακριτικό πρόσβασης στις ρυθμίσεις προφίλ του Home Assistant (τελευταία ενότητα). Κάτω από το πεδίο token, κάντε κλικ στο «Δημιουργία QR κώδικα» και σαρώστε τον εδώ.</string>
+  <string name="msg_port_connection_info_without_port">Η εφαρμογή θα συνδεθεί στη θύρα %1$s.\nΑν θέλετε να συνδεθεί σε διαφορετική θύρα, μπορείτε να προσθέσετε μία στη διεύθυνση URL.\nΠαράδειγμα: http://domain.com:81/</string>
+  <string name="msg_port_connection_info_with_port">Η εφαρμογή θα συνδεθεί στη θύρα %1$s.</string>
+  <string name="msg_clear_form_first">Καθαρίστε πρώτα τη φόρμα πριν σαρώσετε άλλο γνωστό barcode.</string>
+  <string name="msg_not_implemented_yet">Αυτό θα υλοποιηθεί σύντομα. Παρακαλώ χρησιμοποιήστε τη διεπαφή του διακομιστή σας προς το παρόν.</string>
+  <string name="msg_help_picture_changes">Οι αλλαγές στην εικόνα συγχρονίζονται αμέσως με τον διακομιστή, όχι μόνο κατά την αποθήκευση!</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_stock_label_type">Αυτός είναι ο προεπιλεγμένος τύπος ετικέτας εισαγωγής αποθέματος που θα συμπληρώνεται στην αγορά.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_hide_on_stock">Η σελίδα επισκόπησης αποθέματος εμφανίζει όλα τα προϊόντα που είναι επί του παρόντος σε απόθεμα ή κάτω από την ελάχιστη ποσότητά τους. Ενεργοποιήστε αυτό για να κρύψετε αυτό το προϊόν εκεί πάντα.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_parent_product_deactivated">Αυτό το προϊόν δεν μπορεί να έχει γονικό προϊόν επειδή χρησιμοποιείται ήδη ως γονικό προϊόν σε άλλο προϊόν.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_consume_location">Τα εισαγώγια αποθέματος στην παρακάτω τοποθεσία θα καταναλωθούν πρώτα.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_move_on_open">Όταν ενεργοποιηθεί, στο άνοιγμα αυτού του προϊόντος, η αντίστοιχη ποσότητα θα μετακινηθεί στην προεπιλεγμένη τοποθεσία κατανάλωσης.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_disable_own_stock">Όταν ενεργοποιηθεί, το αντίστοιχο προϊόν δεν μπορεί να έχει δικό του απόθεμα, δηλαδή δεν θα είναι επιλέξιμο στην αγορά (χρήσιμο για γονικά προϊόντα που χρησιμοποιούνται μόνο ως συνοπτική/συνολική προβολή των υπο-προϊόντων).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_should_not_be_frozen">Όταν ενεργοποιηθεί, στη μετακίνηση αυτού του προϊόντος σε τοποθεσία καταψύκτη (δηλαδή όταν καταψύχεται), θα εμφανιστεί προειδοποίηση.</string>
+  <string name="msg_help_due_date_type">Με βάση τον επιλεγμένο τύπο ημερομηνίας λήξης, η επισήμανση στη σελίδα επισκόπησης αποθέματος θα είναι διαφορετική. \"Ημερομηνία καλύτερης πριν\" σημαίνει ότι το προϊόν ίσως είναι ακόμη ασφαλές για κατανάλωση μετά την ημερομηνία λήξης. \"Ημερομηνία λήξης\" σημαίνει ότι το προϊόν δεν είναι ασφαλές για κατανάλωση μετά την ημερομηνία λήξης.</string>
+  <string name="msg_help_default_due_days_format">Μπορείτε να πατήσετε παρατεταμένα σε ένα στοιχείο παρακάτω για να εισαγάγετε ημερομηνία αντί για αριθμό.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days">Για αγορές, αυτός ο αριθμός ημερών θα προστεθεί στο σήμερα για την πρόταση ημερομηνίας λήξης (-1 σημαίνει ότι αυτό το προϊόν δεν θα λήξει ποτέ).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days_opened">Όταν αυτό το προϊόν σημανθεί ως ανοιχτό, η ημερομηνία λήξης θα αντικατασταθεί από σήμερα + αυτός ο αριθμός ημερών (η τιμή 0 απενεργοποιεί αυτό).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days_freezing">Στη μετακίνηση αυτού του προϊόντος σε τοποθεσία καταψύκτη (δηλαδή όταν καταψύχεται), η ημερομηνία λήξης θα αντικατασταθεί από σήμερα + αυτός ο αριθμός ημερών (-1 σημαίνει ότι αυτό το προϊόν δεν θα λήξει ποτέ).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days_thawing">Στη μετακίνηση αυτού του προϊόντος από τοποθεσία καταψύκτη (δηλαδή όταν ξεπαγώνει), η ημερομηνία λήξης θα αντικατασταθεί από σήμερα + αυτός ο αριθμός ημερών.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_stock">Η μονάδα ποσότητας αποθέματος δεν μπορεί να αλλάξει μετά την πρώτη αγορά.</string>
+  <string name="msg_help_qu_stock_changeable">Η μονάδα ποσότητας αποθέματος μπορεί να αλλάξει μόνο αν υπάρχουν μετατροπές μονάδας για την τρέχουσα μονάδα ποσότητας.</string>
+  <string name="msg_help_qu_changeable">Οι μονάδες ποσότητας μπορούν να αλλάξουν μόνο αν υπάρχουν μετατροπές μονάδας για αυτές.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_purchase">Αυτή είναι η προεπιλεγμένη μονάδα ποσότητας που χρησιμοποιείται στην αγορά και κατά την προσθήκη αυτού του προϊόντος στη λίστα αγορών.</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_consume">Αυτή είναι η προεπιλεγμένη μονάδα ποσότητας που χρησιμοποιείται κατά την κατανάλωση αυτού του προϊόντος.</string>
+  <!--The same string is also in the web interface (v4.x): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_price">Κατά την εμφάνιση τιμών για αυτό το προϊόν, θα σχετίζονται με αυτή τη μονάδα ποσότητας.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_accumulate_min_amount">Αν ενεργοποιηθεί, η ελάχιστη ποσότητα αποθέματος των υπο-προϊόντων θα συσσωρευθεί σε αυτό το προϊόν, που σημαίνει ότι το υπο-προϊόν δεν θα είναι ποτέ \"λείπον\", μόνο αυτό το προϊόν.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_treat_opened_as_out_of_stock">Όταν ενεργοποιηθεί, τα ανοιχτά στοιχεία θα μετρώνται ως λείποντα για τον υπολογισμό αν αυτό το προϊόν είναι κάτω από την ελάχιστη ποσότητα αποθέματός του.</string>
+  <!--The same string is also in the web interface (below server v4.0.0): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_consume_amount">Αυτή η ποσότητα χρησιμοποιείται για τα \"κουμπιά γρήγορης κατανάλωσης/ανοίγματος\" στη σελίδα επισκόπησης αποθέματος (σχετίζεται με τη μονάδα ποσότητας αποθέματος).</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_consume_amount_new">Αυτή η ποσότητα χρησιμοποιείται για το \"κουμπί γρήγορης κατανάλωσης\" στη σελίδα επισκόπησης αποθέματος (σχετίζεται με τη μονάδα ποσότητας αποθέματος).</string>
+  <!--The same string is also in the web interface (server v4.0.0 and later): Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_open_amount">Αυτή η ποσότητα χρησιμοποιείται για το \"κουμπί γρήγορου ανοίγματος\" στη σελίδα επισκόπησης αποθέματος (σχετίζεται με τη μονάδα ποσότητας αποθέματος).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_tare_weight">Ο χειρισμός βάρους απορρίμματος είναι χρήσιμος π.χ. για αλεύρι σε βάζα - στην αγορά/κατανάλωση/απογραφή ζυγίζετε πάντα ολόκληρο το βάζο, η ποσότητα που θα καταχωρηθεί υπολογίζεται τότε αυτόματα με βάση αυτό που είναι σε απόθεμα και το βάρος απορρίμματος που ορίζεται παρακάτω.</string>
+  <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_tare_weight_purchase">Ο χειρισμός βάρους απορρίμματος ενεργοποιήθηκε - παρακαλώ ζυγίστε ολόκληρο το δοχείο, η ποσότητα που θα καταχωρηθεί θα υπολογιστεί αυτόματα.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_disable_stock_check">Αυτό θα χρησιμοποιηθεί ως η προεπιλεγμένη ρύθμιση κατά την προσθήκη αυτού του προϊόντος ως συστατικό συνταγής.</string>
+  <string name="msg_help_inventory_fields">Τα παρακάτω πεδία εφαρμόζονται σε νέα προστιθέμενα προϊόντα.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_choose">Μπορείτε να επιλέξετε έναν σαρωτή barcode για σάρωση barcode με κάμερα.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_zxing">Το ZXing (\"zebra crossing\") χρησιμοποιεί τα δεδομένα αντίθεσης από τη ροή της κάμερας για να εντοπίσει ένα barcode. Στη συνέχεια υπολογίζει το σχετικό πλάτος όλων των γραμμών.\n\n- Μερικές φορές λανθασμένα αποτελέσματα\n- Το barcode πρέπει να είναι οριζόντια ευθυγραμμισμένο\n- Απαιτεί καλή αντίθεση και ευκρίνεια\n- Εκτελείται εντελώς εκτός σύνδεσης στη συσκευή σας\n- Το framework είναι ανοιχτού κώδικα</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_mlkit">Το ML Kit χρησιμοποιεί μηχανική μάθηση με τις τελευταίες τεχνολογίες για σάρωση barcode.\n\n- Σχεδόν κανένα λανθασμένο αποτέλεσμα\n- Ο προσανατολισμός δεν έχει σημασία\n- Λειτουργεί ακόμη και για θολά ή χαμηλής αντίθεσης barcodes\n- Εκτελείται εντελώς εκτός σύνδεσης στη συσκευή σας\n- Το framework δεν είναι ανοιχτού κώδικα</string>
+  <string name="msg_help_external_scanner_ready">Μπορείτε να χρησιμοποιήσετε έναν εξωτερικό σαρωτή για το παρακάτω πεδίο ενώ είναι εστιασμένο και κενό.</string>
+  <string name="msg_help_external_scanner_settings">Αυτή η εφαρμογή υποστηρίζει εξωτερικές συσκευές σαρωτή που λειτουργούν ως πληκτρολόγιο και μπορούν να συνδεθούν μέσω USB ή Bluetooth. Οι παρακάτω επιλογές πρέπει να ρυθμιστούν στον εξωτερικό σαρωτή σας:\n\nΠρόθεμα: Κανένα\nΚατάληξη: TAB ή ENTER</string>
+  <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_specific_item">Το πρώτο στοιχείο σε αυτή τη λίστα θα επιλεγόταν από τον προεπιλεγμένο κανόνα που είναι \"Πρώτα τα ανοιχτά, μετά πρώτα τα πρώτα που λήγουν, μετά πρώτα μέσα πρώτα έξω\".</string>
+  <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_consume">Αυτό είναι μόνο για στατιστικούς σκοπούς.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_not_check_shopping_list">Από προεπιλογή η ποσότητα που θα προστεθεί στη λίστα αγορών είναι \"απαιτούμενη ποσότητα - ποσότητα αποθέματος - ποσότητα λίστας αγορών\". Όταν αυτό ενεργοποιηθεί, ελέγχεται μόνο έναντι της ποσότητας αποθέματος, όχι έναντι αυτού που είναι ήδη στη λίστα αγορών.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_servings">Τα συστατικά αυτής της συνταγής έχουν ως αποτέλεσμα αυτή την ποσότητα μερίδων.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_produces_product">Όταν επιλεγεί ένα προϊόν, μία μονάδα (ανά μερίδα σε μονάδα ποσότητας αποθέματος) θα προστεθεί στο απόθεμα κατά την κατανάλωση αυτής της συνταγής.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_only_check_any_amount">Μια διαφορετική ποσότητα/μονάδα μπορεί στη συνέχεια να χρησιμοποιηθεί παρακάτω ενώ για έλεγχο εκπλήρωσης αποθέματος είναι αρκετό όταν οποιαδήποτε ποσότητα του προϊόντος είναι σε απόθεμα.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_variable_amount">Όταν αυτό δεν είναι κενό, θα εμφανίζεται αντί της ποσότητας που εισήχθη παραπάνω ενώ η ποσότητα εκεί θα εξακολουθεί να χρησιμοποιείται για έλεγχο εκπλήρωσης αποθέματος.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_group">Αυτό θα χρησιμοποιηθεί ως επικεφαλίδα για να ομαδοποιήσει τα συστατικά μαζί.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_price_factor">Η τελική τιμή αυτού του συστατικού θα πολλαπλασιαστεί με αυτόν τον παράγοντα.</string>
+  <string name="msg_help_recipe_ingredients_wrong">Με έκδοση διακομιστή Grocy κάτω από 4.0.0 αυτή η λίστα μπορεί να περιέχει λανθασμένες πληροφορίες εκπλήρωσης. Παρακαλώ ενημερώστε τον διακομιστή σας στην έκδοση 4.0.0 ή νεότερη για να δείτε σωστές τιμές.</string>
+  <string name="msg_help_date_chooser">Μπορείτε να μεταβείτε σε εισαγωγή από πληκτρολόγιο στις ρυθμίσεις, αυτό θα μπορούσε να αυξήσει την ταχύτητα εισαγωγής για εσάς.</string>
+  <string name="msg_help_date_chooser_keyboard">Μπορείτε να ενεργοποιήσετε την αντίστροφη μορφή ημερομηνίας στις ρυθμίσεις αν προτιμάται DDMMYY στη χώρα σας.\nΓια να εφαρμόσετε την εισαγωγή και να κλείσετε αυτή τη σελίδα μπορείτε να χρησιμοποιήσετε το πλήκτρο Done στο πληκτρολόγιό σας.</string>
+  <string name="msg_help_notifications_tap">Πατήστε εδώ αν δεν λαμβάνετε ειδοποιήσεις ή τις λαμβάνετε αναξιόπιστα.</string>
+  <string name="msg_help_notifications">Αν δεν λαμβάνετε ειδοποιήσεις, πατήστε εδώ για να ανοίξετε τη σελίδα πληροφοριών εφαρμογής Android και ελέγξτε αν επιτρέπονται οι ειδοποιήσεις και αν μπορούν να απενεργοποιηθούν τα μέτρα εξοικονόμησης ενέργειας. Το Android μερικές φορές παραδίδει ειδοποιήσεις αργότερα από την καθορισμένη ώρα για μείωση της κατανάλωσης μπαταρίας, που είναι κανονική συμπεριφορά.</string>
+  <string name="msg_help_notifications_other">Μην αφαιρείτε την εφαρμογή από την επισκόπηση με τις τρέχουσες εφαρμογές, διαφορετικά ορισμένοι κατασκευαστές θα διαγράψουν τη διαδικασία ειδοποίησης.</string>
+  <string name="msg_help_quick_mode">Μπορείτε να πατήσετε παρατεταμένα στη γραμμή τίτλου παραπάνω για να ενεργοποιήσετε τη γρήγορη λειτουργία. Σε αυτή τη λειτουργία, μια συναλλαγή θα εκτελεστεί αμέσως αν έχει εισαχθεί ή σαρωθεί ένα προϊόν και όλα τα πεδία θα μπορούσαν να συμπληρωθούν αυτόματα (από τις προεπιλογές προϊόντος και/ή barcode).</string>
+  <string name="msg_help_loading_circle_settings">Σε κάθε σελίδα όπου κάτι πρέπει να φορτωθεί από τον διακομιστή, η εφαρμογή ελέγχει πρώτα με ένα μικρό αίτημα αν η βάση δεδομένων του διακομιστή έχει αλλάξει από την τελευταία φορά και ενημερώνει μόνο τα ξεπερασμένα δεδομένα. Ενεργοποιήστε την παρακάτω επιλογή για να εμφανιστεί κύκλος φόρτωσης ακόμη και για αυτό το μικρό αίτημα.</string>
+  <string name="msg_help_start">Η λειτουργία αρχαρίου είναι ενεργή: Τα κείμενα βοήθειας εμφανίζονται από προεπιλογή σε όλες τις σελίδες αν είναι διαθέσιμα. Πατήστε για αλλαγή.</string>
+  <string name="msg_help_purchased_date_settings">Αν η παρακάτω επιλογή ενεργοποιηθεί, ένα πεδίο για ημερομηνία αγοράς θα εμφανιστεί στη σελίδα αγοράς και απογραφής. Διαφορετικά η ημερομηνία αγοράς θα είναι η σημερινή από προεπιλογή.</string>
+  <string name="msg_help_normal_login">Πατήστε σε αυτή την κάρτα αν χρησιμοποιείτε Home Assistant με το πρόσθετο Grocy.</string>
+  <string name="msg_help_home_assistant_login">Χρησιμοποιείτε το πρόσθετο Grocy Home Assistant. Επομένως απαιτούνται μερικές περισσότερες λεπτομέρειες. Πατήστε σε αυτή την κάρτα για να μεταβείτε σε κανονική σύνδεση.</string>
+  <string name="msg_help_home_assistant_login_help_show">Πατήστε εδώ για να εμφανίσετε κείμενα βοήθειας.</string>
+  <string name="msg_help_home_assistant_login_help_hide">Πατήστε εδώ για να κρύψετε κείμενα βοήθειας.</string>
+  <string name="msg_help_home_assistant_login_server">Στο παρακάτω πεδίο μπορείτε επίσης να εισαγάγετε το Nabu Casa cloud URL σας αν χρησιμοποιείτε αυτή την υπηρεσία. Πατήστε αυτή την κάρτα για να επισκεφθείτε τον ιστότοπο Nabu Casa.</string>
+  <string name="msg_help_home_assistant_login_token">Μπορείτε να δημιουργήσετε ένα μακροπρόθεσμο διακριτικό πρόσβασης στις ρυθμίσεις προφίλ του Home Assistant (τελευταία ενότητα). Πατήστε εδώ για να ανοίξετε το URL από παραπάνω.</string>
+  <string name="msg_help_home_assistant_login_proxy_id">Πηγαίνετε πίσω ή πατήστε αυτή την κάρτα για να σαρώσετε έναν κωδικό QR που συμπληρώνει τα παρακάτω πεδία.</string>
+  <string name="msg_help_fab_overview_start">Το κουμπί ενέργειας σε αυτή τη σελίδα επισκόπησης έχει δύο ενέργειες:\n\n- Σύντομο πάτημα: κατανάλωση με σαρωτή barcode\n- Μακρύ πάτημα: αγορά με σαρωτή barcode\n\nΜε αυτό το κουμπί η γρήγορη λειτουργία στις αντίστοιχες σελίδες ενεργοποιείται από προεπιλογή. Μπορείτε να το αλλάξετε στις ρυθμίσεις συμπεριφοράς.</string>
+  <string name="msg_help_fab_consume_start">Το κουμπί ενέργειας σε αυτή τη σελίδα καταναλώνει το προϊόν με τις δοσμένες τιμές. Για να σημάνετε το προϊόν ως ανοιχτό αντί αυτού, χρησιμοποιήστε το κουμπί στο κάτω αριστερό της γραμμής μενού.</string>
+  <string name="msg_share">Δείτε αυτό το Android client για το υπέροχο project Grocy: \nhttps://github.com/patzly/grocy-android</string>
+
+  <string name="error_api_not_working">Το κλειδί API δεν λειτουργεί</string>
+  <string name="error_orbot_not_installed">Το Orbot δεν είναι εγκατεστημένο</string>
+  <string name="error_select_product">Επιλέξτε ένα προϊόν</string>
+  <string name="error_empty">Απαιτείται</string>
+  <string name="error_empty_stock">Τίποτα σε απόθεμα</string>
+  <string name="error_empty_stock_sub">Πηγαίνετε να αγοράσετε προϊόντα</string>
+  <string name="error_empty_shopping_list">Κενή λίστα αγορών</string>
+  <string name="error_empty_shopping_list_sub">Προσθέστε προϊόντα που χρειάζεστε</string>
+  <string name="error_empty_barcodes_sub">Προσθέστε barcode με το κουμπί παρακάτω</string>
+  <string name="error_empty_master_data_sub">Δημιουργήστε μερικά με το κουμπί παρακάτω</string>
+  <string name="error_empty_product_barcodes">Δεν υπάρχουν barcodes προϊόντων</string>
+  <string name="error_empty_locations">Δεν υπάρχουν τοποθεσίες</string>
+  <string name="error_empty_product_groups">Δεν υπάρχουν ομάδες προϊόντων</string>
+  <string name="error_empty_products">Δεν υπάρχουν προϊόντα</string>
+  <string name="error_empty_qu">Δεν υπάρχουν μονάδες μέτρησης</string>
+  <string name="error_empty_stores">Δεν υπάρχουν καταστήματα</string>
+  <string name="error_empty_tasks">Δεν υπάρχουν εργασίες</string>
+  <string name="error_empty_task_categories">Δεν υπάρχουν κατηγορίες εργασιών</string>
+  <string name="error_empty_unit_conversions">Δεν υπάρχουν μετατροπές μονάδων μέτρησης</string>
+  <string name="error_empty_chores">Δεν υπάρχουν υποχρεώσεις</string>
+  <string name="error_empty_chores_sub">Πηγαίνετε στα κύρια δεδομένα και δημιουργήστε μερικές</string>
+  <string name="error_empty_recipes">Δεν υπάρχουν συνταγές</string>
+  <string name="error_empty_ingredients">Δεν υπάρχουν υλικά</string>
+  <string name="error_search">Δεν υπάρχουν αποτελέσματα αναζήτησης</string>
+  <string name="error_search_sub">Δοκιμάστε άλλους όρους</string>
+  <string name="error_filter">Τίποτα να εμφανιστεί</string>
+  <string name="error_filter_sub">Δοκιμάστε άλλα φίλτρα</string>
+  <string name="error_duplicate">Υπάρχει ήδη</string>
+  <string name="error_parent">Δεν μπορεί να είναι γονέας του εαυτού του</string>
+  <string name="error_invalid_product">Άκυρο προϊόν</string>
+  <string name="error_invalid_url">Άκυρο URL</string>
+  <string name="error_invalid_amount">Άκυρη ποσότητα</string>
+  <string name="error_invalid_price">Άκυρη τιμή</string>
+  <string name="error_invalid_factor">Άκυρος παράγοντας</string>
+  <string name="error_invalid_date_format">Άκυρη μορφή ημερομηνίας</string>
+  <string name="error_api_qr_code">Δεν είναι QR κωδικός με διαπιστευτήρια Grocy API</string>
+  <string name="error_token_qr_code">Δεν είναι QR κωδικός με μακροπρόθεσμο token πρόσβασης από Home Assistant</string>
+  <string name="error_loading_qus">Αποτυχία φόρτωσης μονάδων μέτρησης από το προϊόν</string>
+  <string name="error_clipboard_no_image">Το πρόχειρο δεν περιέχει εικόνα ή δεν μπόρεσε να διαβαστεί</string>
+  <string name="error_no_children">Το επιλεγμένο προϊόν δεν έχει παιδιά</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_amount_equal_stock">Δεν μπορεί να είναι ίσο με %1$s</string>
+  <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
+  <string name="error_bounds_min_max">Πρέπει να είναι μεταξύ %1$s και %2$s</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_bounds_min">Πρέπει να είναι ίσο ή μεγαλύτερο από %1$s</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_bounds_max">Πρέπει να είναι μικρότερο ή ίσο με %1$s</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_bounds_higher">Πρέπει να είναι μεγαλύτερο από %1$s</string>
+  <string name="error_offline">Εκτός σύνδεσης</string>
+  <string name="error_offline_subtitle">Αυτή η σελίδα λειτουργεί μόνο με σύνδεση στο διαδίκτυο. Ελέγξτε τη σύνδεσή σας.</string>
+  <string name="error_no_done_items">Δεν υπάρχουν στοιχεία επισημασμένα ως ολοκληρωμένα</string>
+  <string name="error_auto_sync_disabled">Ο αυτόματος συγχρονισμός είναι απενεργοποιημένος</string>
+  <string name="error_already_exists">Υπάρχει ήδη</string>
+  <string name="error_network">Σφάλμα δικτύου</string>
+  <string name="error_network_subtitle">Τα απαιτούμενα δεδομένα δεν μπόρεσαν να φορτωθούν πλήρως</string>
+  <string name="error_network_exact">Σφάλμα δικτύου: %1$s</string>
+  <string name="error_database">Σφάλμα βάσης δεδομένων</string>
+  <string name="error_insert">Σφάλμα: %1$s</string>
+  <string name="error_details">Λεπτομέρειες σφάλματος</string>
+  <string name="error_unknown">Ουπς!</string>
+  <string name="error_not_grocy_instance">Δεν είναι έγκυρη εγκατάσταση Grocy</string>
+  <string name="error_timeout">Σφάλμα λήξης χρόνου</string>
+  <string name="error_no_product_selected">Δεν επιλέχθηκε προϊόν</string>
+  <string name="error_failed_to_connect_to">Αποτυχία σύνδεσης με τον διακομιστή</string>
+  <string name="error_missing_information">Δεν έχουν συμπληρωθεί όλα τα απαιτούμενα πεδία</string>
+  <string name="error_handshake">Άκυρο πιστοποιητικό</string>
+  <string name="error_handshake_description">Αυτός ο διακομιστής απαιτεί πιστοποιητικό που δεν είναι γνωστό ή αξιόπιστο από το Android.\nΤο πιστοποιητικό διακομιστή πρέπει να είναι υπογεγραμμένο από αξιόπιστη αρχή πιστοποιητικών (π.χ. letsencrypt.org) ή να είναι αποθηκευμένο στο αποθετήριο πιστοποιητικών χρήστη Android αυτής της συσκευής.</string>
+  <string name="error_unexpected_response_code">Απροσδόκητος κωδικός απόκρισης</string>
+  <string name="error_unexpected_response">Απροσδόκητη απόκριση διακομιστή</string>
+  <string name="error_no_browser">Εγκαταστήστε έναν περιηγητή ιστού για να εμφανίσετε την ιστοσελίδα βοήθειας</string>
+  <string name="error_barcode_not_linked">Το barcode δεν είναι συνδεδεμένο με προϊόν</string>
+  <string name="error_no_product_details">Δεν ήταν δυνατή η λήψη λεπτομερειών προϊόντος</string>
+  <string name="error_failed_barcode_upload">Δεν ήταν δυνατή η μεταφόρτωση του barcode</string>
+  <string name="error_wrong_grocycode_type">Ο grocycode περιέχει λάθος τύπο οντότητας</string>
+  <string name="error_stock_entry_grocycode">Η εγγραφή αποθέματος από grocycode δεν βρέθηκε</string>
+  <string name="error_picture_uploads_forbidden">Για λόγους ασφαλείας, η μεταφόρτωση εικόνων επιτρέπεται μόνο σε διακομιστές που φιλοξενούνται από εσάς. Αυτή τη στιγμή χρησιμοποιείτε την εγκατάσταση επίδειξης.</string>
+  <string name="error_permission">Δεν έχετε δικαίωμα για αυτήν την ενέργεια</string>
+  <string name="error_permission_notification">Απαιτείται δικαίωμα ειδοποιήσεων για να λειτουργήσουν οι υπενθυμίσεις</string>
+  <string name="error_undefined">Παρουσιάστηκε σφάλμα</string>
+  <string name="error_invalid_base_servings">Άκυρες μερίδες</string>
+  <string name="error_pictures_size_exceeds_limit">Υπάρχουν ενσωματωμένες εικόνες σε περιγραφές προϊόντων ή συνταγών στον διακομιστή σας, που υπερβαίνουν το όριο ανάλυσης αυτής της εφαρμογής. Αφαιρέστε τις εικόνες υψηλής ποιότητας και μεγάλου μεγέθους από τις περιγραφές σας, αυτό θα επιταχύνει επίσης τη φόρτωση δεδομένων.</string>
+  <string name="error_userfield_type_not_supported">Ο τύπος πεδίου χρήστη δεν υποστηρίζεται αυτή τη στιγμή</string>
+  <string name="error_open_product_not_supported">Η επισήμανση προϊόντος ως ανοιχτό δεν υποστηρίζεται για αυτό το προϊόν</string>
+  <string name="error_settings_backup">Αποτυχία αντιγράφου ασφαλείας</string>
+  <string name="error_settings_restore">Αποτυχία επαναφοράς</string>
+
+  <string name="title_overview">Επισκόπηση</string>
+  <string name="title_stock_overview">Επισκόπηση αποθέματος</string>
+  <string name="title_purchase">Αγορά</string>
+  <string name="title_consume">Κατανάλωση</string>
+  <string name="title_transfer">Μεταφορά</string>
+  <string name="title_inventory">Απόθεμα</string>
+  <string name="title_barcode_input">Εισαγωγή barcode</string>
+  <string name="title_product_overview">Επισκόπηση προϊόντος</string>
+  <string name="title_product">Προϊόν</string>
+  <string name="title_product_create">Δημιουργία προϊόντος</string>
+  <string name="title_product_edit">Επεξεργασία προιόντος</string>
+  <string name="title_tasks">Εργασίες</string>
+  <string name="title_task_entry">Εγγραφή εργασίας</string>
+  <string name="title_master_data">Κύρια δεδομένα</string>
+  <string name="title_stock_entries">Καταχωρήσεις αποθέματος</string>
+  <string name="title_stock_entry">Καταχώρηση αποθέματος</string>
+  <string name="title_stock_journal">Ημερολόγιο αποθέματος</string>
+  <string name="title_shopping_list">Λίστα αγορών</string>
+  <string name="title_feedback">Ανατροφοδότηση</string>
+  <string name="title_settings">Ρυθμίσεις</string>
+  <string name="title_options">Επιλογές</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="title_barcode_scanner">Σαρωτής barcode</string>
+  <!-- Context: About this app -->
+  <string name="title_about">Σχετικά</string>
+  <string name="title_info">Πληροφορίες</string>
+  <string name="title_help">Βοήθεια</string>
+  <string name="title_logs">Αρχεία καταγραφής</string>
+  <string name="title_compatibility">Ζητήματα συμβατότητας</string>
+  <string name="title_logout">Αποσύνδεση από το Grocy;</string>
+  <string name="title_restart">Επανεκκίνηση Grocy;</string>
+  <string name="title_logout_demo">Αποσύνδεση από λειτουργία επίδειξης;</string>
+  <string name="title_manage_master_data">Διαχείριση κύριων δεδομένων</string>
+  <string name="title_edit_description">Επεξεργασία περιγραφής</string>
+  <!-- This is the header of a bottom sheet which is used to get numbers or text from the user. -->
+  <string name="title_input">Εισαγωγή</string>
+  <string name="title_external_barcode_input">Εξωτερικός σαρωτής</string>
+  <string name="title_confirmation">Επιβεβαίωση</string>
+  <string name="title_choose_product">Επιλογή προϊόντος</string>
+  <string name="title_pending_products">Εκκρεμή προϊόντα</string>
+  <string name="title_stored_purchases">Αποθηκευμένες αγορές</string>
+  <string name="title_chores">Υποχρεώσεις</string>
+  <string name="title_chore">Υποχρέωση</string>
+  <string name="title_recipes">Συνταγές</string>
+  <string name="title_meal_plan">Πρόγραμμα γευμάτων</string>
+  <!-- Editor for editing product description or recipe preparation-->
+  <string name="title_editor">Επεξεργαστής</string>
+  <string name="title_task_new">Νέα εργασία</string>
+  <string name="title_task_edit">Επεξεργασία εργασίας</string>
+  <string name="title_entry_new">Νέα εγγραφή</string>
+  <string name="title_entry_edit">Επεξεργασία εγγραφής</string>
+  <string name="title_ingredient_new">Νέο συστατικό</string>
+  <string name="title_ingredient_edit">Επεξεργασία συστατικού</string>
+  <string name="title_recipe_create">Νέα συνταγή</string>
+  <string name="title_recipe_edit">Επεξεργασία συνταγής</string>
+
+  <string name="title_spoiled">Χαλασμένο</string>
+  <string name="title_use_specific">Χρήση συγκεκριμένου αποθέματος</string>
+  <string name="title_specific">Συγκεκριμένο απόθεμα</string>
+  <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_exact_amount">Κατανάλωση ακριβούς ποσότητας</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_from">Από τοποθεσία</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_to">Σε τοποθεσία</string>
+  <string name="title_recipe">Συνταγή</string>
+  <string name="title_preparation_mode">Λειτουργία προετοιμασίας</string>
+  <string name="title_total_price">Συνολική τιμή</string>
+  <string name="title_unit_price">Τιμή μονάδας</string>
+  <!-- %1$s is a quantity unit -->
+  <string name="title_unit_price_specific">Τιμή %1$s</string>
+  <string name="title_stock_entry_no_specific">Χωρίς συγκεκριμένη καταχώρηση</string>
+  <string name="title_list_entry">Εγγραφή λίστας</string>
+  <string name="title_edit_barcode">Επεξεργασία barcode</string>
+  <string name="title_create_barcode">Δημιουργία barcode</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_edit_qu_conversion">Επεξεργασία μετατροπής ΜΜ</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_create_qu_conversion">Δημιουργία μετατροπής ΜΜ</string>
+  <string name="title_shopping_list_edit">Επεξεργασία λίστας αγορών</string>
+  <string name="title_shopping_list_new">Νέα λίστα αγορών</string>
+  <string name="title_shopping_mode">Λειτουργία αγορών</string>
+  <string name="title_batch_mode_shopping_list">Λειτουργία batch λίστας αγορών</string>
+  <string name="title_product_cat_optional">Προαιρετικές ιδιότητες</string>
+  <string name="title_product_cat_location">Προεπιλεγμένη τοποθεσία</string>
+  <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_product_cat_due_date">Ημερομηνία λήξης</string>
+  <string name="title_product_cat_amount">Ποσότητα</string>
+  <string name="title_product_cat_quantity_unit">Μονάδα μέτρησης</string>
+  <string name="title_notifications">Ειδοποιήσεις</string>
+  <string name="title_product_cat_barcodes">Barcodes</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_product_cat_qu_conversions">Μετατροπές ΜΜ</string>
+  <string name="title_unknown_input">Άγνωστη είσοδος</string>
+  <string name="title_presets_new_products">Προεπιλογές για νέα προϊόντα</string>
+  <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
+  <string name="title_ingredient_with_amount">%1$s %2$s από %3$s</string>
+
+  <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
+  <string name="subtitle_amount">%1$s %2$s</string>
+  <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
+  <string name="subtitle_opened">(ανοιχτό)</string>
+  <!-- %1$s is a number like 1, 2, 3 -->
+  <string name="subtitle_amount_opened">(%1$s ανοιχτό)</string>
+  <!-- %1$s is a product name -->
+  <string name="subtitle_stock_locations">Πού το %1$s έχει απόθεμα</string>
+  <string name="subtitle_none_selected">Δεν επιλέχθηκε κανένα</string>
+  <!-- Should follow the equality between 'None' and 'None selected' -->
+  <string name="subtitle_none">Κανένα</string>
+  <string name="subtitle_empty">Κενό</string>
+  <string name="subtitle_done">Ολοκληρωμένα</string>
+  <string name="subtitle_undone">Μη ολοκληρωμένα</string>
+  <string name="subtitle_uncategorized">Χωρίς κατηγορία</string>
+  <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="subtitle_never_overdue">Ποτέ εκπρόθεσμο</string>
+  <string name="subtitle_selected">Επιλεγμένο</string>
+  <string name="subtitle_stock_entry_no_specific">Πρώτα ανοιχτό, μετά πρώτα λήγει, μετά πρώτο μπαίνει πρώτα βγαίνει</string>
+  <!-- %1$s is a purchase date -->
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="subtitle_stock_entry_name">Αγοράστηκε στις %1$s</string>
+  <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened); The same string is also in the web interface: Consume form -->
+  <string name="subtitle_stock_entry">Λήγει στις %1$s; ποσότητα: %2$s; %3$s</string>
+  <!-- %1$s and %2$s are numbers -->
+  <string name="subtitle_entry_num_of_num">Εγγραφή %1$d από %2$d</string>
+  <!-- %1$s is an amount, %2$s is a quantity unit -->
+  <string name="subtitle_amount_compare">Αυτό ισούται με %1$s %2$s.</string>
+  <!-- %1$s is a price, %2$s is a quantity unit -->
+  <string name="subtitle_price_means">Αυτό σημαίνει %1$s ανά %2$s.</string>
+  <!-- %1$s and %2$s are amounts -->
+  <string name="subtitle_factor_means">Αυτό σημαίνει %1$s είναι το ίδιο με %2$s.</string>
+  <string name="subtitle_product_hidden">Το προϊόν είναι κρυμμένο</string>
+  <string name="subtitle_product_not_hidden">Το προϊόν δεν είναι κρυμμένο</string>
+  <string name="subtitle_product_not_on_server">Το προϊόν δεν είναι στον διακομιστή</string>
+
+  <string name="subtitle_barcodes_will_be_added">Υπάρχουν αποθηκευμένα barcodes, τα οποία προστίθενται στο προϊόν με τη λειτουργία αποθήκευσης.</string>
+  <string name="subtitle_unknown">Άγνωστο</string>
+  <!-- Like the word 'supported' from 'This version is supported.'-->
+  <string name="subtitle_supported">Υποστηρίζεται</string>
+  <!-- Like the words 'not supported' from 'This version is not supported.'-->
+  <string name="subtitle_not_supported">Δεν υποστηρίζεται</string>
+  <!-- %1$s is a number -->
+  <string name="subtitle_barcode_amount">Ποσότητα: %1$s</string>
+  <!-- %1$s is a unit -->
+  <string name="subtitle_barcode_unit">Μονάδα ποσότητας: %1$s</string>
+  <string name="subtitle_barcode">Barcode: %1$s</string>
+  <string name="subtitle_feature_disabled">Χαρακτηριστικό απενεργοποιημένο</string>
+  <string name="subtitle_date_from_input">Ημερομηνία από εισαγωγή:\n%1$s</string>
+  <string name="subtitle_product_amount">Ελάχ. απόθεμα, Γρήγορη κατανάλωση, Παράγοντας, Χειρισμός βάρους απορρίμματος</string>
+  <string name="subtitle_product_default_location">Τοποθεσία, Κατάστημα</string>
+  <string name="subtitle_product_due_date">Τύπος, Προεπιλεγμένες ημέρες (μετά άνοιγμα, κατάψυξη, ξεπάγωμα)</string>
+  <string name="subtitle_product_optional_properties">Κατάσταση, Γονικό προϊόν, Περιγραφή, Ομάδα προϊόντων, Ενέργεια, Εικόνα</string>
+  <string name="subtitle_product_quantity_unit">Απόθεμα, Προεπιλογή αγοράς</string>
+  <string name="subtitle_synced_with_server">Συγχρονισμένο με διακομιστή</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
+  <string name="subtitle_recipe_due_score">Βαθμολογία λήξης: %1$s</string>
+  <string name="subtitle_per_serving">ανά μερίδα</string>
+  <string name="subtitle_tap_preparation_mode">Πατήστε εδώ για λειτουργία προετοιμασίας</string>
+  <!-- Context is Label printer -->
+  <string name="subtitle_print_label_no">Χωρίς ετικέτα</string>
+  <!-- Short form for "One label per purchase" -->
+  <string name="subtitle_print_label_per_purchase">Ανά αγορά</string>
+  <!-- Short form for "One label per unit" -->
+  <string name="subtitle_print_label_per_unit">Ανά μονάδα</string>
+  <!-- %1$s is a price and %2$s is a currency -->
+  <string name="subtitle_total_price">Συνολική τιμή: %1$s %2$s</string>
+
+  <string name="description_input_product_part1">Το πεδίο προϊόντος περιέχει:</string>
+  <string name="description_input_product_part2">Παρακαλώ επιλέξτε πώς θα προχωρήσετε:</string>
+  <string name="description_input_product_option1">Δημιουργία νέου προϊόντος και χρήση εισαγωγής ως όνομα</string>
+  <string name="description_input_product_option2">Δημιουργία νέου προϊόντος και χρήση εισαγωγής ως barcode</string>
+  <string name="description_input_product_option3">Προσθήκη ως barcode σε υπάρχον προϊόν</string>
+  <!-- Context: Clear shopping list -->
+  <string name="description_clear_shopping_list_option1">Διαγραφή μόνο των ολοκληρωμένων στοιχείων</string>
+  <!-- Context: Clear shopping list -->
+  <string name="description_clear_shopping_list_option2">Διαγραφή όλων των στοιχείων</string>
+
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock">
+    <item quantity="one">Έχετε %1$d προϊόν σε απόθεμα.</item>
+    <item quantity="other">Έχετε %1$d προϊόντα σε απόθεμα.</item>
+  </plurals>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="description_overview_stock_due_soon">
+    <item quantity="one">%1$d προϊόν λήγει εντός των επόμενων %2$d ημερών.</item>
+    <item quantity="other">%1$d προϊόντα λήγουν εντός των επόμενων %2$d ημερών.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_overdue">
+    <item quantity="one">%1$d προϊόν είναι εκπρόθεσμο.</item>
+    <item quantity="other">%1$d προϊόντα είναι εκπρόθεσμα.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_expired">
+    <item quantity="one">%1$d προϊόν έχει λήξει.</item>
+    <item quantity="other">%1$d προϊόντα έχουν λήξει.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing">
+    <item quantity="one">%1$d προϊόν είναι κάτω από την ελάχιστη ποσότητα αποθέματος.</item>
+    <item quantity="other">%1$d προϊόντα είναι κάτω από την ελάχιστη ποσότητα αποθέματος.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing_shopping_list_single">
+    <item quantity="one">%1$d από αυτά είναι στη λίστα αγορών σας.</item>
+    <item quantity="other">%1$d από αυτά είναι στη λίστα αγορών σας.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing_shopping_list_multi">
+    <item quantity="one">%1$d από αυτά είναι στις λίστες αγορών σας.</item>
+    <item quantity="other">%1$d από αυτά είναι στις λίστες αγορών σας.</item>
+  </plurals>
+  <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
+  <plurals name="description_overview_stock_value">
+    <item quantity="one">Έχετε %1$d προϊόν σε απόθεμα με αξία %2$s %3$s.</item>
+    <item quantity="other">Έχετε %1$d προϊόντα σε απόθεμα με αξία %2$s %3$s.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_shopping_list_multi">
+    <item quantity="one">%1$d στοιχείο είναι στις λίστες αγορών σας.</item>
+    <item quantity="other">%1$d στοιχεία είναι στις λίστες αγορών σας.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_shopping_list">
+    <item quantity="one">%1$d στοιχείο είναι στη λίστα αγορών σας.</item>
+    <item quantity="other">%1$d στοιχεία είναι στη λίστα αγορών σας.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_recipes">
+    <item quantity="one">Έχετε %1$d συνταγή.</item>
+    <item quantity="other">Έχετε %1$d συνταγές.</item>
+  </plurals>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="description_overview_chores_due_soon">
+    <item quantity="one">%1$d εργασία πρέπει να γίνει εντός των επόμενων %2$d ημερών.</item>
+    <item quantity="other">%1$d εργασίες πρέπει να γίνουν εντός των επόμενων %2$d ημερών.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_overdue">
+    <item quantity="one">%1$d εργασία είναι εκπρόθεσμη.</item>
+    <item quantity="other">%1$d εργασίες είναι εκπρόθεσμες.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_due_today">
+    <item quantity="one">%1$d εργασία πρέπει να γίνει σήμερα.</item>
+    <item quantity="other">%1$d εργασίες πρέπει να γίνουν σήμερα.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_assigned">
+    <item quantity="one">%1$d εργασία έχει ανατεθεί σε εσάς.</item>
+    <item quantity="other">%1$d εργασίες έχουν ανατεθεί σε εσάς.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_tasks">
+    <item quantity="one">%1$d εργασία πρέπει να ολοκληρωθεί.</item>
+    <item quantity="other">%1$d εργασίες πρέπει να ολοκληρωθούν.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_tasks_user">
+    <item quantity="one">Σας έχει ανατεθεί %1$d εργασία.</item>
+    <item quantity="other">Σας έχουν ανατεθεί %1$d εργασίες.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_master_data">
+    <item quantity="one">Η βάση δεδομένων σας περιέχει %1$d προϊόν.</item>
+    <item quantity="other">Η βάση δεδομένων σας περιέχει %1$d προϊόντα.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="error_max_decimal_places">
+    <item quantity="one">Μέγιστο %1$s δεκαδικό ψηφίο</item>
+    <item quantity="other">Μέγιστο %1$s δεκαδικά ψηφία</item>
+  </plurals>
+
+  <string name="property_name">Όνομα</string>
+  <string name="property_name_singular">Όνομα (ενικός αριθμός)</string>
+  <string name="property_name_plural">Όνομα (πληθυντικός αριθμός)</string>
+  <string name="property_product">Προϊόν</string>
+  <string name="property_products">Προϊόντα</string>
+  <string name="property_product_name">Όνομα προϊόντος</string>
+  <string name="property_parent_product">Γονικό προϊόν</string>
+  <string name="property_description">Περιγραφή</string>
+  <string name="property_product_description">Περιγραφή προϊόντος</string>
+  <string name="property_note">Σημείωση</string>
+  <string name="property_status">Κατάσταση</string>
+  <string name="property_status_insert">Κατάσταση:</string>
+  <string name="property_amount">Ποσότητα</string>
+  <string name="property_amount_insert">Ποσότητα: %1$s</string>
+  <string name="property_seconds">Δευτερόλεπτα</string>
+  <!-- %1$s is a number (amount of seconds) -->
+  <plurals name="property_seconds_num">
+    <item quantity="one">%1$d δευτερόλεπτο</item>
+    <item quantity="other">%1$d δευτερόλεπτα</item>
+  </plurals>
+  <string name="property_amount_min_stock">Ελάχιστη ποσότητα αποθέματος</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_in">Ποσότητα σε %1$s</string>
+  <string name="property_price">Τιμή</string>
+  <string name="property_price_average">Μέση τιμή</string>
+  <!-- %1$s is a quantity unit-->
+  <string name="property_price_unit">Τιμή ανά %1$s</string>
+  <!-- %1$s is a price and %2$s is a quantity unit-->
+  <string name="property_price_unit_insert">%1$s ανά %2$s</string>
+  <!-- %1$s is a price and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_with_currency">%1$s %2$s</string>
+  <!-- %1$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_in">Τιμή σε %1$s</string>
+  <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_unit_in">Τιμή ανά %1$s σε %2$s</string>
+  <string name="property_quantity_unit">Μονάδα μέτρησης</string>
+  <string name="property_quantity_units">Μονάδες μέτρησης</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_default_qu_purchase">Προεπιλεγμένη μονάδα μέτρησης αγοράς</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_stock">Μονάδα μέτρησης αποθέματος</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_factor">Παράγοντας μονάδας μέτρησης αγοράς σε απόθεμα</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_default_qu_consume">Προεπιλεγμένη μονάδα μέτρησης κατανάλωσης</string>
+  <!--The same string is also in the web interface (version 4.x): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_prices">Μονάδα μέτρησης για τιμές</string>
+  <!-- Example: "Convert from bottle"; This string is part of a pair, there is also 'Convert to' -->
+  <string name="property_quantity_unit_from">Μετατροπή από</string>
+  <!-- Example: "Convert to cup"; This string is part of a pair, there is also 'Convert from' -->
+  <string name="property_quantity_unit_to">Μετατροπή σε</string>
+  <string name="property_factor">Παράγοντας</string>
+  <string name="property_barcode">Barcode</string>
+  <string name="property_barcodes">Barcodes</string>
+  <string name="property_barcodes_insert">Barcodes: %1$s</string>
+  <string name="property_days">Ημέρες</string>
+  <string name="property_purchased_date">Ημερομηνία αγοράς</string>
+  <string name="property_purchased_date_fill">Ημερομηνία αγοράς: %1$s</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_date_type">Τύπος ημερομηνίας λήξης</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_type_best_before">Ημερομηνία προτιμητέας κατανάλωσης</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_type_expiration">Ημερομηνία λήξης</string>
+  <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_date">Ημερομηνία λήξης</string>
+  <!-- This string is for due date of task -->
+  <string name="property_due_date_task">Ημερομηνία λήξης</string>
+  <!-- %1$s is a due date-->
+  <string name="property_due_date_fill">Ημερομηνία λήξης: %1$s</string>
+  <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_date_next">Επόμενη ημερομηνία λήξης</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_days_default">Προεπιλεγμένες ημέρες λήξης</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_days_default_opened">Προεπιλεγμένες ημέρες λήξης μετά το άνοιγμα</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_days_default_freezing">Προεπιλεγμένες ημέρες λήξης μετά την κατάψυξη</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_days_default_thawing">Προεπιλεγμένες ημέρες λήξης μετά το ξεπάγωμα</string>
+  <string name="property_day_summary">Περίληψη ημέρας</string>
+  <string name="property_location">Τοποθεσία</string>
+  <string name="property_location_insert">Τοποθεσία: %1$s</string>
+  <string name="property_location_default">Προεπιλεγμένη τοποθεσία</string>
+  <string name="property_location_default_insert">Προεπιλεγμένη τοποθεσία: %1$s</string>
+  <string name="property_location_consume_default">Προεπιλεγμένη τοποθεσία κατανάλωσης</string>
+  <string name="property_move_on_open">Μετακίνηση κατά το άνοιγμα</string>
+  <string name="property_notes">Σημειώσεις</string>
+  <string name="property_locations">Τοποθεσίες</string>
+  <string name="property_store">Κατάστημα</string>
+  <string name="property_store_insert">Κατάστημα: %1$s</string>
+  <string name="property_store_unknown">Άγνωστο κατάστημα</string>
+  <string name="property_store_default">Προεπιλεγμένο κατάστημα</string>
+  <string name="property_stores">Καταστήματα</string>
+  <string name="property_shopping_list">Λίστα αγορών</string>
+  <string name="property_shopping_lists">Λίστες αγορών</string>
+  <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_last_purchased">Τελευταία αγορά</string>
+  <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_last_used">Τελευταία χρήση</string>
+  <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_last_price">Τελευταία τιμή</string>
+  <string name="property_last_price_unit">Τελευταία τιμή (μονάδα)</string>
+  <string name="property_last_price_total">Τελευταία τιμή (σύνολο)</string>
+  <string name="property_price_insert">Τιμή: %1$s</string>
+  <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_average_shelf_life">Μέσος χρόνος ζωής</string>
+  <string name="property_spoil_rate">Ποσοστό φθοράς</string>
+  <string name="property_created_timestamp">Χρόνος δημιουργίας</string>
+  <string name="property_price_history">Ιστορικό τιμών</string>
+  <string name="property_product_group">Ομάδα προϊόντων</string>
+  <string name="property_product_groups">Ομάδες προϊόντων</string>
+  <string name="property_assignment">Ανάθεση</string>
+  <string name="property_value">Αξία</string>
+  <string name="property_stock_value">Αξία αποθέματος</string>
+  <string name="property_opened">ανοιχτό</string>
+  <string name="property_not_opened">μη ανοιχτό</string>
+  <string name="property_is_freezer">Είναι κατάψυκτης</string>
+  <!-- Means energy of an ingredient or product -->
+  <string name="property_energy_only">Ενέργεια</string>
+  <!-- %1$s is a unit for energy, like kcal (kilo calories) -->
+  <string name="property_energy_insert">Ενέργεια (%1$s) ανά μονάδα ποσότητας αποθέματος</string>
+  <string name="property_active">Ενεργό</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_never_show">Να μην εμφανίζεται ποτέ στην επισκόπηση αποθέματος</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_disable_own_stock">Απενεργοποίηση δικού του αποθέματος</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_should_not_be_frozen">Δεν πρέπει να καταψύχεται</string>
+  <string name="property_number">Αριθμός</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_enable_tare_weight">Ενεργοποίηση χειρισμού βάρους απορρίμματος</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_tare_weight">Βάρος απορρίμματος</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_tare_weight_in">Βάρος απορρίμματος σε %1$s</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_disable_stock_check">Απενεργοποίηση ελέγχου αποθέματος</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_amount_quick_consume">Ποσότητα γρήγορης κατανάλωσης</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_quick_consume_in">Ποσότητα γρήγορης κατανάλωσης σε %1$s</string>
+  <!--The same string is also in the web interface (server v4.0.0 or later): Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_amount_quick_open">Ποσότητα γρήγορου ανοίγματος</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_quick_open_in">Ποσότητα γρήγορου ανοίγματος σε %1$s</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_accumulate_amount">Συσσώρευση ποσότητας</string>
+  <string name="property_picture">Εικόνα</string>
+  <string name="property_note_singleline">Σημείωση (μία γραμμή)</string>
+  <string name="property_note_multiline">Σημείωση (πολλές γραμμές)</string>
+  <!-- like the words 'Single-line' in 'Single-line description'-->
+  <string name="property_singleline">Μία γραμμή</string>
+  <!-- like the words 'Multi-line' in 'Multi-line description'-->
+  <string name="property_multiline">Πολλές γραμμές</string>
+  <!-- %1$s is an amount together with quantity unit -->
+  <string name="property_in_stock">Σε απόθεμα: %1$s</string>
+  <!-- %1$s is a sort mode like "name" or "due date" -->
+  <string name="property_sort_mode">Ταξινόμηση κατά: %1$s</string>
+  <!-- %1$s is a grouping mode like "product group" or "due date" -->
+  <string name="property_group_by">Ομαδοποίηση κατά: %1$s</string>
+  <string name="property_ungrouped">Χωρίς ομαδοποίηση</string>
+  <!-- %1$s is a property like "product group" or "due date" -->
+  <string name="property_extra_field">Επιπλέον πεδίο: %1$s</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields">Πεδία</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_header">Επικεφαλίδα πεδίων</string>
+  <!-- Fields like fields of information -->
+  <string name="property_fields_entries">Εγγραφές πεδίων</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value">%1$s: %2$s</string>
+  <!-- %1$s is a userfield name and %2$s its value. Used in little information badges on lists. -->
+  <string name="property_userfield_value_without_space">%1$s:%2$s</string>
+  <string name="property_task_category">Κατηγορία εργασίας</string>
+  <string name="property_task_categories">Κατηγορίες εργασιών</string>
+  <string name="property_calories">Θερμίδες</string>
+  <string name="property_calories_unit">Θερμίδες (%1$s)</string>
+  <string name="property_calories_total">Σύνολο θερμίδων</string>
+  <!-- %1$s is a value like energy or price, unit means value of items per unit -->
+  <string name="property_insert_per_unit">%1$s ανά μονάδα</string>
+  <!-- %1$s is a value like energy or price, total means value of many items in total -->
+  <string name="property_insert_total">%1$s συνολικά</string>
+  <!-- %1$s is a value like price, average means average price -->
+  <string name="property_insert_average">%1$s μέσος όρος</string>
+  <!-- %1$s is a value like price, "last" is like for example in "last price" -->
+  <string name="property_insert_last">%1$s τελευταία</string>
+  <string name="property_category">Κατηγορία</string>
+  <string name="property_assigned_to">Ανατέθηκε σε</string>
+  <string name="property_users">Χρήστες</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
+  <string name="property_last_done_by">Τελευταία φορά από</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
+  <string name="property_last_tracked">Τελευταία παρακολούθηση</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
+  <string name="property_tracked_count">Πλήθος παρακολούθησης</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
+  <string name="property_average_execution_frequency">Μέση συχνότητα εκτέλεσης</string>
+  <!-- See context for this string on the web interface on the chores page, the table has this column -->
+  <string name="property_next_estimated_tracking">Επόμενη εκτιμώμενη παρακολούθηση</string>
+  <string name="property_next_estimated_tracking_time">Επόμενη εκτιμώμενη ώρα παρακολούθησης</string>
+  <!-- See context for this string on the web interface on the recipes edit page -->
+  <string name="property_servings">Μερίδες</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it (hover over help icon) -->
+  <string name="property_servings_base_insert">%1$s μερίδες βάσης</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_servings_desired">Επιθυμητές μερίδες</string>
+  <string name="property_servings_desired_insert">%1$s επιθυμητές μερίδες</string>
+  <string name="property_not_check_shopping_list">Μη έλεγχος λίστας αγορών</string>
+  <string name="property_not_check_shopping_list_description">Μη έλεγχος έναντι λίστας αγορών</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_preparation">Προετοιμασία</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_costs">Κόστος</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs">Κόστος εβδομάδας</string>
+  <!-- See context for this string on the web interface on the meal plan page, on the header -->
+  <string name="property_week_costs_insert">%1$s κόστος εβδομάδας</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
+  <string name="property_due_score">Βαθμολογία λήξης</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_ingredients">Συστατικά</string>
+  <string name="property_only_check_single_unit_in_stock">Έλεγχος μόνο μίας μονάδας σε απόθεμα</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
+  <string name="property_ingredient_group">Ομάδα συστατικού</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
+  <string name="property_variable_amount">Μεταβλητή ποσότητα</string>
+  <string name="property_requirements_fulfilled">Απαιτήσεις εκπληρωμένες</string>
+  <string name="property_produces_product">Παράγει προϊόν</string>
+  <string name="property_price_factor">Παράγοντας τιμής</string>
+
+  <string name="date_today">Σήμερα</string>
+  <string name="date_unknown">Άγνωστο</string>
+  <!-- This means the 'time' context -->
+  <string name="date_unlimited">Απεριόριστο</string>
+  <!-- This means the 'time' context, like 'Last used date: Never' -->
+  <string name="date_never">Ποτέ</string>
+  <!-- %1$s is 'from' date, %2$s is 'to' date -->
+  <string name="date_timespan">%1$s - %2$s</string>
+
+  <plurals name="date_days">
+    <item quantity="one">%1$d ημέρα</item>
+    <item quantity="other">%1$d ημέρες</item>
+  </plurals>
+  <plurals name="date_months">
+    <item quantity="one">%1$d μήνας</item>
+    <item quantity="other">%1$d μήνες</item>
+  </plurals>
+  <plurals name="date_years">
+    <item quantity="one">%1$d έτος</item>
+    <item quantity="other">%1$d έτη</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_days_ago">
+    <item quantity="one">Πριν από %1$d ημέρα</item>
+    <item quantity="other">Πριν από %1$d ημέρες</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_months_ago">
+    <item quantity="one">Πριν από %1$d μήνα</item>
+    <item quantity="other">Πριν από %1$d μήνες</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_years_ago">
+    <item quantity="one">Πριν από %1$d έτος</item>
+    <item quantity="other">Πριν από %1$d έτη</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_days_from_now">
+    <item quantity="one">Σε %1$d ημέρα</item>
+    <item quantity="other">Σε %1$d ημέρες</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_months_from_now">
+    <item quantity="one">Σε %1$d μήνα</item>
+    <item quantity="other">Σε %1$d μήνες</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_years_from_now">
+    <item quantity="one">Σε %1$d έτος</item>
+    <item quantity="other">Σε %1$d έτη</item>
+  </plurals>
+
+  <string name="info_acknowledgement">Αναγνώριση</string>
+  <string name="info_intro">Εισαγωγή</string>
+  <string name="info_intro_description">Αυτή η εφαρμογή είναι ένα Android client για το Grocy</string>
+  <string name="info_dev_beginning">Έναρξη ανάπτυξης</string>
+  <string name="info_dev_beginning_date">Ιανουάριος 2020</string>
+  <string name="info_version">Έκδοση εφαρμογής</string>
+  <string name="info_grocy_version">Έκδοση Grocy</string>
+  <string name="info_changelog">Ιστορικό αλλαγών</string>
+  <string name="info_changelog_description">Δείτε τις αλλαγές στο GitHub</string>
+  <string name="info_developers">Προγραμματιστές</string>
+  <string name="info_github">GitHub</string>
+  <string name="info_github_description">Δείτε τον κώδικα, αναφέρετε σφάλματα ή συνεισφέρετε</string>
+  <string name="info_website">Ιστότοπος</string>
+  <string name="info_translation_description">Βοηθήστε στη μετάφραση ή βελτιώστε τις υπάρχουσες μεταφράσεις</string>
+  <string name="info_privacy">Απόρρητο</string>
+  <string name="info_privacy_description">Δείτε πώς χειρίζεται η εφαρμογή τα δεδομένα σας</string>
+
+  <string name="feature_1_title">Διαχείριση αποθέματος</string>
+  <string name="feature_1_description">Παρακολουθήστε τα τρόφιμα και τις προμήθειες σας</string>
+  <string name="feature_2_title">Λίστα αγορών</string>
+  <string name="feature_2_description">Οργανώστε τις αγορές σας με έξυπνες λειτουργίες</string>
+  <string name="feature_3_title">Συνταγές</string>
+  <string name="feature_3_description">Διαχειριστείτε τις συνταγές σας και τα συστατικά τους</string>
+
+  <string name="category_licenses">Άδειες</string>
+  <string name="category_general">Γενικά</string>
+  <string name="category_stock">Απόθεμα</string>
+  <string name="category_server">Διακομιστής</string>
+  <string name="category_user_settings">Ρυθμίσεις χρήστη</string>
+  <string name="category_scanner">Σαρωτής</string>
+  <string name="category_scanner_camera">Σαρωτής κάμερας</string>
+  <string name="category_scanner_external">Εξωτερικός σαρωτής</string>
+  <string name="category_appearance">Εμφάνιση</string>
+  <string name="category_network">Δίκτυο</string>
+  <string name="category_network_proxy">Διακομιστής μεσολάβησης</string>
+  <string name="category_behavior">Συμπεριφορά</string>
+  <string name="category_display_behavior">Συμπεριφορά εμφάνισης</string>
+  <string name="category_input_behavior">Συμπεριφορά εισαγωγής</string>
+  <string name="category_additional_services">Πρόσθετες υπηρεσίες</string>
+  <string name="category_other_behavior">Άλλη συμπεριφορά</string>
+  <string name="category_debugging">Εντοπισμός σφαλμάτων</string>
+  <string name="category_new_product">Νέο προϊόν</string>
+  <string name="category_existing_products">Υπάρχοντα προϊόντα</string>
+  <string name="category_existing_products_similar">Παρόμοια υπάρχοντα προϊόντα</string>
+
+  <string name="hint_server">Διακομιστής</string>
+  <string name="hint_key">Κλειδί</string>
+
+  <string name="setting_theme">Θέμα</string>
+  <string name="setting_theme_description">Επιλέξτε έναν τρόπο εμφάνισης</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system (automatic or shorter auto) theme. The button width should be as dense as possible. -->
+  <string name="setting_theme_auto">Αυτόματο</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_dark">Σκοτεινό</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_light">Φωτεινό</string>
+  <string name="setting_contrast">Αντίθεση</string>
+  <string name="setting_contrast_description">Επιλέξτε έναν τρόπο αντίθεσης</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast. The button width should be as dense as possible. -->
+  <string name="setting_contrast_standard">Κανονική</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_medium">Μεσαία</string>
+  <!-- This is a contrast option name: User can choose between standard, medium and high contrast -->
+  <string name="setting_contrast_high">Υψηλή</string>
+  <string name="setting_contrast_dynamic">Δυναμική</string>
+  <string name="setting_contrast_dynamic_unsupported">Δεν υποστηρίζεται από τη συσκευή</string>
+  <string name="setting_language">Γλώσσα</string>
+  <string name="setting_language_description">Επιλέξτε γλώσσα</string>
+  <string name="setting_language_info">Οι μεταφράσεις έχουν παρασχεθεί από τους χρήστες. Αν θέλετε να βοηθήσετε, επισκεφτείτε το GitHub.</string>
+  <string name="setting_language_system">Σύστημα</string>
+  <string name="setting_language_not_available">Δεν είναι διαθέσιμη για τη συσκευή σας</string>
+  <string name="setting_open_food_facts">Open Food Facts</string>
+  <string name="setting_open_food_facts_description">Εμφάνιση γεγονότων τροφίμων από Open Food Facts</string>
+  <string name="setting_choose_barcode_scanner">Επιλογή σαρωτή barcode</string>
+  <string name="setting_choose_barcode_scanner_description">Εσωτερικός είναι ο σαρωτής της εφαρμογής, εξωτερικός είναι μια εφαρμογή τρίτου</string>
+  <string name="setting_use_front_cam">Χρήση μπροστινής κάμερας</string>
+  <string name="setting_use_front_cam_description">Χρήση μπροστινής κάμερας για σάρωση barcodes</string>
+  <string name="setting_use_2d_scanner_format">Σάρωση 2D barcodes</string>
+  <string name="setting_use_2d_scanner_format_description">Έλεγχος για QR κωδικούς και Data Matrix</string>
+  <string name="setting_barcode_formats">Μορφές barcode</string>
+  <!-- %1$s are barcode formats -->
+  <string name="setting_barcode_formats_description">Επιλέξτε μορφές barcode (%1$s επιλεγμένες)</string>
+  <string name="setting_barcode_formats_description_all">Όλες οι μορφές barcode επιλεγμένες</string>
+  <string name="setting_external_support">Εξωτερική υποστήριξη</string>
+  <string name="setting_external_support_description">Εμφάνιση εξωτερικού σαρωτή όταν αυτός δεν είναι διαθέσιμος</string>
+  <string name="setting_reload_config">Επαναφόρτωση διαμόρφωσης</string>
+  <string name="setting_reload_config_description">Επαναφόρτωση ρυθμίσεων διακομιστή</string>
+  <string name="setting_logout">Αποσύνδεση</string>
+  <string name="setting_logout_description">Αποσύνδεση από τον διακομιστή</string>
+  <string name="setting_manage_shortcuts">Διαχείριση συντομεύσεων</string>
+  <string name="setting_list_indicator">Δείκτης λίστας</string>
+  <string name="setting_list_indicator_description">Εμφάνιση δείκτη στη λίστα αγορών</string>
+  <string name="setting_shopping_mode_update_interval">Διάστημα ενημέρωσης λειτουργίας αγορών</string>
+  <string name="setting_keep_screen_on">Διατήρηση οθόνης αναμμένης</string>
+  <string name="setting_keep_screen_on_description">Διατήρηση οθόνης αναμμένης στη λίστα αγορών</string>
+  <string name="setting_show_done_items">Εμφάνιση ολοκληρωμένων στοιχείων</string>
+  <string name="setting_show_done_items_description">Εμφάνιση ολοκληρωμένων στοιχείων στη λίστα αγορών</string>
+  <string name="setting_smaller_font">Μικρότερη γραμματοσειρά</string>
+  <string name="setting_smaller_font_description">Χρήση μικρότερης γραμματοσειράς στη λίστα αγορών</string>
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="setting_due_soon_days">Ημέρες \"σύντομα λήγει\"</string>
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="setting_default_amount_purchase">Προεπιλεγμένη ποσότητα αγοράς</string>
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="setting_default_amount_consume">Προεπιλεγμένη ποσότητα κατανάλωσης</string>
+  <string name="setting_treat_opened_as_out_of_stock">Μεταχείριση ανοιχτών ως εξαντλημένων</string>
+  <string name="setting_purchased_date">Ημερομηνία αγοράς</string>
+  <string name="setting_purchased_date_description">Εμφάνιση πεδίου ημερομηνίας αγοράς</string>
+  <string name="setting_use_quick_consume_amount">Χρήση ποσότητας γρήγορης κατανάλωσης</string>
+  <string name="setting_auto_add_shopping_list">Αυτόματη προσθήκη στη λίστα αγορών</string>
+  <string name="setting_auto_add_shopping_list_description">Αυτόματη προσθήκη προϊόντων στη λίστα αγορών όταν είναι κάτω από το ελάχιστο</string>
+  <string name="setting_empty_value">Κενή τιμή</string>
+  <string name="setting_sync_off">Συγχρονισμός απενεργοποιημένος</string>
+  <string name="setting_loading">Φόρτωση</string>
+  <string name="setting_not_loaded">Δεν φορτώθηκε</string>
+  <string name="setting_debug">Εντοπισμός σφαλμάτων</string>
+  <string name="setting_debug_description">Ενεργοποίηση λειτουργιών εντοπισμού σφαλμάτων</string>
+  <string name="setting_log_level">Επίπεδο καταγραφής</string>
+  <string name="setting_error_logs">Αρχεία καταγραφής σφαλμάτων</string>
+  <string name="setting_info_logs">Αρχεία καταγραφής πληροφοριών</string>
+  <string name="setting_logs_description">Αποστολή αρχείων καταγραφής για εντοπισμό σφαλμάτων</string>
+  <string name="setting_timeout">Χρονικό όριο</string>
+  <string name="setting_timeout_descriptions">Χρονικό όριο για αιτήματα δικτύου σε δευτερόλεπτα</string>
+  <string name="setting_beginner_mode">Λειτουργία αρχαρίου</string>
+  <string name="setting_beginner_mode_description">Εμφάνιση κειμένων βοήθειας από προεπιλογή</string>
+  <string name="setting_haptic">Απτική ανάδραση</string>
+  <string name="setting_haptic_description">Δόνηση σε αγγίγματα και αλληλεπιδράσεις</string>
+  <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
+  <string name="setting_expand_bottom_sheets">Επέκταση bottom sheets</string>
+  <string name="setting_expand_bottom_sheets_description">Επέκταση bottom sheets σε πλήρες ύψος από προεπιλογή</string>
+  <string name="setting_bottom_menu_button">Κουμπί κάτω μενού</string>
+  <string name="setting_bottom_menu_button_description">Εμφάνιση κουμπιού στο κάτω μενού για γρήγορη πρόσβαση</string>
+  <string name="setting_turn_on_quick_mode">Ενεργοποίηση γρήγορης λειτουργίας</string>
+  <string name="setting_turn_on_quick_mode_description">Αυτόματη ενεργοποίηση γρήγορης λειτουργίας με το κουμπί ενέργειας</string>
+  <string name="setting_quick_mode_return">Επιστροφή γρήγορης λειτουργίας</string>
+  <string name="setting_quick_mode_return_description">Επιστροφή στην επισκόπηση μετά από συναλλαγή σε γρήγορη λειτουργία</string>
+  <string name="setting_speed_up_start">Επιτάχυνση εκκίνησης</string>
+  <string name="setting_speed_up_start_description">Φόρτωση δεδομένων στο παρασκήνιο για ταχύτερη εκκίνηση</string>
+  <string name="setting_date_keyboard_input">Εισαγωγή ημερομηνίας από πληκτρολόγιο</string>
+  <string name="setting_date_keyboard_input_description">Εισαγωγή ημερομηνίας με πληκτρολόγιο αντί για επιλογέα</string>
+  <string name="setting_date_keyboard_reverse">Αντίστροφη μορφή ημερομηνίας</string>
+  <string name="setting_date_keyboard_reverse_description">Χρήση μορφής ΗΜΜΕΕΕ αντί για ΕΕΜΜΗΗ</string>
+  <string name="setting_loading_circle">Κύκλος φόρτωσης</string>
+  <string name="setting_loading_circle_description">Εμφάνιση κύκλου φόρτωσης για όλα τα αιτήματα</string>
+  <string name="setting_tor">Tor</string>
+  <string name="setting_tor_description">Σύνδεση μέσω δικτύου Tor για ανωνυμία</string>
+  <string name="setting_proxy">Διακομιστής μεσολάβησης</string>
+  <string name="setting_proxy_description">Ενεργοποίηση διακομιστή μεσολάβησης για σύνδεση</string>
+  <string name="setting_proxy_host">Διεύθυνση διακομιστή μεσολάβησης</string>
+  <string name="setting_proxy_host_description">Εισαγάγετε τη διεύθυνση IP ή το όνομα κεντρικού υπολογιστή</string>
+  <string name="setting_proxy_port">Θύρα διακομιστή μεσολάβησης</string>
+  <string name="setting_proxy_port_description">Εισαγάγετε τον αριθμό θύρας</string>
+  <string name="setting_synchronized">Συγχρονισμένο</string>
+  <string name="settings_synchronized">Ρυθμίσεις συγχρονισμένες</string>
+  <string name="setting_message_duration">Διάρκεια μηνύματος</string>
+  <string name="setting_message_duration_description">Πόσο καιρό θα εμφανίζονται τα μηνύματα επιβεβαίωσης</string>
+  <string name="setting_notifications_enable">Ενεργοποίηση ειδοποιήσεων</string>
+  <!-- The string belongs to the stock overview (stock items can be expired, overdue or due soon). -->
+  <string name="setting_notifications_stock_description">Ειδοποίηση για προϊόντα που λήγουν σύντομα ή έχουν λήξει</string>
+  <string name="setting_notifications_chores_description">Ειδοποίηση για εργασίες που πρέπει να γίνουν</string>
+  <string name="setting_notification_time">Ώρα ειδοποίησης</string>
+  <!-- the description of the notification time preference. Check means when the data is loaded from the server and checked for due objects -->
+  <string name="setting_notification_time_description">Ώρα για έλεγχο και αποστολή ειδοποιήσεων</string>
+  <string name="setting_keep_screen_on_recipes_description">Διατήρηση οθόνης αναμμένης κατά την προβολή συνταγών</string>
+
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="notification_stock_not_fresh_title">
+    <item quantity="one">%1$d προϊόν δεν είναι φρέσκο</item>
+    <item quantity="other">%1$d προϊόντα δεν είναι φρέσκα</item>
+  </plurals>
+  <string name="notification_stock_content">Ελέγξτε τα προϊόντα σας για να δείτε ποια χρειάζονται προσοχή</string>
+  <!-- %1$s is a number -->
+  <plurals name="notification_chores_due_title">
+    <item quantity="one">%1$s εργασία πρέπει να γίνει</item>
+    <item quantity="other">%1$s εργασίες πρέπει να γίνουν</item>
+  </plurals>
+  <string name="notification_chores_content">Ελέγξτε τις εργασίες σας για να δείτε ποιες πρέπει να ολοκληρώσετε</string>
+
+  <string name="ikm_select_cert">Επιλογή πιστοποιητικού</string>
+  <string name="ikm_client_cert">Πιστοποιητικό πελάτη</string>
+  <string name="ikm_client_cert_notification">Πιστοποιητικό πελάτη απαιτείται</string>
+  <string name="ikm_decision_file">Αρχείο</string>
+  <string name="ikm_decision_keychain">Keychain</string>
+  <string name="ikm_notification">Ειδοποίηση</string>
+  <string name="ikm_load_app_keystore">Φόρτωση keystore εφαρμογής</string>
+  <string name="ikm_store_aliasMapping">Αποθήκευση αντιστοίχισης ψευδώνυμων</string>
+  <string name="ikm_remove_keys">Αφαίρεση κλειδιών</string>
+  <string name="ikm_remove_all_keys">Αφαίρεση όλων των κλειδιών</string>
+  <string name="ikm_add_from_keystore">Προσθήκη από keystore</string>
+  <string name="ikm_add_from_keystore_alias">Προσθήκη από keystore με ψευδώνυμο</string>
+  <string name="ikm_keychain">Keychain</string>
+  <string name="ikm_select_keystore">Επιλογή keystore</string>
+
+  <string name="mtm_security_risk">Κίνδυνος ασφαλείας</string>
+  <string name="mtm_trust_anchor">Αγκύρωση εμπιστοσύνης</string>
+  <string name="mtm_cert_expired">Το πιστοποιητικό έχει λήξει</string>
+  <string name="mtm_hostname_mismatch">Αναντιστοιχία ονόματος κεντρικού υπολογιστή</string>
+  <string name="mtm_trust_certificate">Εμπιστοσύνη πιστοποιητικού</string>
+  <string name="mtm_accept_servername">Αποδοχή ονόματος διακομιστή</string>
+  <string name="mtm_cert_details">Λεπτομέρειες πιστοποιητικού</string>
+  <string name="mtm_valid_for">Έγκυρο για</string>
+  <string name="mtm_decision_always">Πάντα</string>
+  <string name="mtm_decision_once">Μία φορά</string>
+  <string name="mtm_notification_channel">Κανάλι ειδοποίησης</string>
+  <string name="mtm_notification">Ειδοποίηση</string>
+  <string name="mtm_error_keystore">Σφάλμα keystore</string>
+
+</resources>

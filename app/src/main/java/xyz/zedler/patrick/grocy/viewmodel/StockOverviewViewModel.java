@@ -640,12 +640,12 @@ public class StockOverviewViewModel extends BaseViewModel {
   public void updateSearchInput(String input) {
     this.searchInput = input.toLowerCase();
 
-    // Initialize suggestion list with max. capacity; growing is expensive.
-    searchResultsFuzzy = new ArrayList<>(products.size());
-    List<BoundExtractedResult<Product>> results = FuzzySearch.extractSorted(
+    searchResultsFuzzy = new ArrayList<>(30);
+    List<BoundExtractedResult<Product>> results = FuzzySearch.extractTop(
         this.searchInput,
         products,
         item -> item.getName().toLowerCase(),
+        30,
         70
     );
     for (BoundExtractedResult<Product> result : results) {

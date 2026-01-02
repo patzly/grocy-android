@@ -22,9 +22,9 @@
   <font
     app:fontStyle="normal"
     app:fontWeight="400"
-    app:font="@font/jost_400_book" />
+    app:font="@font/google_sans_flex_regular" />
   <font
     app:fontStyle="italic"
     app:fontWeight="400"
-    app:font="@font/jost_400_book_italic" />
+    app:font="@font/google_sans_flex_regular_italic" />
 </font-family>

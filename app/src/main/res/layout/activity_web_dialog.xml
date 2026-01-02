@@ -57,7 +57,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginTop="20dp"
         android:text="@string/property_description"
-        android:fontFamily="@font/jost_book"
+        android:fontFamily="@font/google_sans_flex"
         android:textSize="24sp"
         android:lineHeight="32sp"
         tools:targetApi="p" />

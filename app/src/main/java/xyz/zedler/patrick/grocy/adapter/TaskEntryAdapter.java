@@ -151,7 +151,7 @@ public class TaskEntryAdapter extends
 
     if (colorDays) {
       holder.binding.days.setTypeface(
-          ResourcesCompat.getFont(context, R.font.jost_medium)
+          ResourcesCompat.getFont(context, R.font.google_sans_flex_medium)
       );
 
       int color;
@@ -165,7 +165,7 @@ public class TaskEntryAdapter extends
       holder.binding.days.setTextColor(color);
     } else {
       holder.binding.days.setTypeface(
-          ResourcesCompat.getFont(context, R.font.jost_book)
+          ResourcesCompat.getFont(context, R.font.google_sans_flex)
       );
       holder.binding.days.setTextColor(
           ResUtil.getColor(context, R.attr.colorOnSurfaceVariant)

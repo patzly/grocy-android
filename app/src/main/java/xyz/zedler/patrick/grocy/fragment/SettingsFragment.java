@@ -94,7 +94,7 @@ public class SettingsFragment extends BaseFragment {
     if (UiUtil.areAnimationsEnabled(activity)) {
       new Handler().postDelayed(this::navigateToSubpage, 300);
     } else {
-      login(true);
+      login();
     }
   }
 

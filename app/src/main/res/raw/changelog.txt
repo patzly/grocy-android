@@ -1,3 +1,14 @@
+## 3.9.0
+
+- New: Compatibility for server version 4.5.0 (thanks @jahway603!) (#940)
+- New: Minimum Android version is now Android 6.0 due to dependency requirements
+- New: Setting to enable or disable the use of amount in barcode (thanks @misery!) (#952)
+- New: Google Sans Flex typeface to better support expressive style
+- Improved: Quantity unit price used for last and average price (thanks @inhji!) (#950)
+- Improved: Faster product searches by showing top 30 items only (thanks @k3a!) (#937)
+- Improved: Removed compatibility check due to potential for confusion
+- Fixed: Confirmation bottom sheets not working when animations are disabled (thanks @k3a!) (#938)
+
 ## 3.8.1
 
 - New: Compatibility for server version 4.4.2

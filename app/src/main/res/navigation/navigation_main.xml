@@ -225,6 +225,16 @@
       app:nullable="true"
       android:defaultValue="@null" />
     <argument
+      android:name="quantityUnitConsume"
+      app:argType="xyz.zedler.patrick.grocy.model.QuantityUnit"
+      app:nullable="true"
+      android:defaultValue="@null" />
+    <argument
+      android:name="quantityUnitPrice"
+      app:argType="xyz.zedler.patrick.grocy.model.QuantityUnit"
+      app:nullable="true"
+      android:defaultValue="@null" />
+    <argument
       android:name="product"
       app:argType="xyz.zedler.patrick.grocy.model.Product"
       app:nullable="true"

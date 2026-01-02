@@ -89,6 +89,8 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
   private Product product;
   private QuantityUnit quantityUnitStock;
   private QuantityUnit quantityUnitPurchase;
+  private QuantityUnit quantityUnitConsume;
+  private QuantityUnit quantityUnitPrice;
   private PluralUtil pluralUtil;
   private Location location;
   private AlertDialog dialogDelete;
@@ -139,12 +141,16 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       stockItem = args.getStockItem();
       quantityUnitStock = args.getQuantityUnitStock();
       quantityUnitPurchase = args.getQuantityUnitPurchase();
+      quantityUnitConsume = args.getQuantityUnitConsume();
+      quantityUnitPrice = args.getQuantityUnitPrice();
       location = args.getLocation();
       product = stockItem.getProduct();
     } else if (args.getProduct() != null) {
       product = args.getProduct();
       quantityUnitStock = args.getQuantityUnitStock();
       quantityUnitPurchase = args.getQuantityUnitPurchase();
+      quantityUnitConsume = args.getQuantityUnitConsume();
+      quantityUnitPrice = args.getQuantityUnitPrice();
       location = args.getLocation();
     }
 
@@ -376,6 +382,8 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     if (hasDetails()) {
       quantityUnitStock = productDetails.getQuantityUnitStock();
       quantityUnitPurchase = productDetails.getQuantityUnitPurchase();
+      quantityUnitConsume = productDetails.getQuantityUnitConsume();
+      quantityUnitPrice = productDetails.getQuantityUnitPrice();
     }
 
     // AMOUNT
@@ -468,7 +476,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
               : null
       );
 
-      boolean quantityUnitsAreNotEqual = quantityUnitStock.getId() != quantityUnitPurchase.getId();
+      boolean quantityUnitsAreNotEqual = quantityUnitStock.getId() != quantityUnitPrice.getId();
 
       // LAST PRICE
       String lastPrice = productDetails.getLastPrice();
@@ -481,7 +489,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
                 NumUtil.trimPrice(NumUtil.toDouble(lastPrice)
                     * productDetails.getQuFactorPriceToStock(), decimalPlacesPriceDisplay)
                     + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
-                quantityUnitPurchase.getName()
+                quantityUnitPrice.getName()
             ),
             quantityUnitsAreNotEqual ? activity.getString(
                 R.string.property_price_unit_insert,
@@ -492,7 +500,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
         );
       }
 
-      // LAST PRICE
+      // AVERAGE PRICE
       String averagePrice = productDetails.getAvgPrice();
       if (NumUtil.isStringDouble(averagePrice) && isFeatureEnabled(
           Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
@@ -503,7 +511,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
                 NumUtil.trimPrice(NumUtil.toDouble(averagePrice)
                     * productDetails.getQuFactorPriceToStock(), decimalPlacesPriceDisplay)
                     + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
-                quantityUnitPurchase.getName()
+                quantityUnitPrice.getName()
             ),
             quantityUnitsAreNotEqual ? activity.getString(
                 R.string.property_price_unit_insert,

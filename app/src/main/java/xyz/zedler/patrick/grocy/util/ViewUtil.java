@@ -358,7 +358,7 @@ public class ViewUtil {
 
   public static class TouchProgressBarUtil {
     private final ProgressBar progressConfirm;
-    private ValueAnimator confirmProgressAnimator;
+    private ValueAnimatorUtil confirmProgressAnimator;
     private final OnConfirmedListener onConfirmedListener;
     private final int delayMilliseconds;
 
@@ -412,15 +412,15 @@ public class ViewUtil {
         confirmProgressAnimator.cancel();
         confirmProgressAnimator = null;
       }
-      confirmProgressAnimator = ValueAnimator.ofInt(startValue, progressConfirm.getMax());
+      confirmProgressAnimator = ValueAnimatorUtil.ofInt(startValue, progressConfirm.getMax());
       confirmProgressAnimator.setDuration((long) delayMilliseconds
           * (progressConfirm.getMax() - startValue) / progressConfirm.getMax());
       confirmProgressAnimator.addUpdateListener(
           animation -> progressConfirm.setProgress((Integer) animation.getAnimatedValue())
       );
-      confirmProgressAnimator.addListener(new AnimatorListenerAdapter() {
+      confirmProgressAnimator.addListener(new ValueAnimatorUtil.AnimatorListenerAdapter() {
         @Override
-        public void onAnimationEnd(Animator animation) {
+        public void onAnimationEnd(ValueAnimatorUtil animation) {
           int currentProgress = progressConfirm.getProgress();
           if (currentProgress == progressConfirm.getMax()) {
             TransitionManager.beginDelayedTransition((ViewGroup) progressConfirm.getParent());
@@ -429,16 +429,16 @@ public class ViewUtil {
             onConfirmedListener.onConfirmed(objectOptional);
             return;
           }
-          confirmProgressAnimator = ValueAnimator.ofInt(currentProgress, 0);
+          confirmProgressAnimator = ValueAnimatorUtil.ofInt(currentProgress, 0);
           confirmProgressAnimator.setDuration((long) (delayMilliseconds / 2)
               * currentProgress / progressConfirm.getMax());
           confirmProgressAnimator.setInterpolator(new FastOutSlowInInterpolator());
           confirmProgressAnimator.addUpdateListener(
               anim -> progressConfirm.setProgress((Integer) anim.getAnimatedValue())
           );
-          confirmProgressAnimator.addListener(new AnimatorListenerAdapter() {
+          confirmProgressAnimator.addListener(new ValueAnimatorUtil.AnimatorListenerAdapter() {
             @Override
-            public void onAnimationEnd(Animator animation) {
+            public void onAnimationEnd(ValueAnimatorUtil animation) {
               TransitionManager.beginDelayedTransition((ViewGroup) progressConfirm.getParent());
               progressConfirm.setVisibility(View.GONE);
             }
