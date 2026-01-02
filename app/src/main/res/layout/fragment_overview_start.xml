@@ -108,7 +108,7 @@
 
         </LinearLayout>
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
           android:id="@+id/toolbar"
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
@@ -466,7 +466,7 @@
 
                         <com.google.android.material.button.MaterialButton
                           android:id="@+id/button_inventory_text"
-                          style="@style/Widget.Grocy.Button.TonalButton.Icon"
+                          style="@style/Widget.Grocy.Button.TonalButton"
                           android:layout_marginEnd="8dp"
                           android:text="@string/title_inventory"
                           android:onClick="@{() -> activity.navUtil.navigate(R.id.inventoryFragment)}"
@@ -475,7 +475,7 @@
 
                         <com.google.android.material.button.MaterialButton
                           android:id="@+id/button_transfer_text"
-                          style="@style/Widget.Grocy.Button.TonalButton.Icon"
+                          style="@style/Widget.Grocy.Button.TonalButton"
                           android:layout_marginEnd="8dp"
                           android:text="@string/title_transfer"
                           android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) ? View.VISIBLE : View.GONE}"
@@ -484,7 +484,7 @@
                           app:icon="@drawable/ic_round_swap_horiz" />
 
                         <com.google.android.material.button.MaterialButton
-                          style="@style/Widget.Grocy.Button.TonalButton.Icon"
+                          style="@style/Widget.Grocy.Button.TonalButton"
                           android:layout_marginEnd="8dp"
                           android:text="@string/title_consume"
                           android:onClick="@{() -> activity.navUtil.navigate(R.id.consumeFragment)}"
@@ -492,7 +492,7 @@
                           app:icon="@drawable/ic_round_consume_product" />
 
                         <com.google.android.material.button.MaterialButton
-                          style="@style/Widget.Grocy.Button.TonalButton.Icon"
+                          style="@style/Widget.Grocy.Button.TonalButton"
                           android:text="@string/title_purchase"
                           android:onClick="@{() -> activity.navUtil.navigate(R.id.purchaseFragment)}"
                           app:clickUtil="@{clickUtil}"
@@ -586,7 +586,7 @@
 
                         <com.google.android.material.button.MaterialButton
                           android:id="@+id/button_shopping_text"
-                          style="@style/Widget.Grocy.Button.TonalButton.Icon"
+                          style="@style/Widget.Grocy.Button.TonalButton"
                           android:layout_marginEnd="8dp"
                           android:text="@string/title_shopping_mode"
                           android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_shoppingModeFragment)}"
@@ -595,7 +595,7 @@
 
                         <com.google.android.material.button.MaterialButton
                           android:id="@+id/button_add_shopping_list_item"
-                          style="@style/Widget.Grocy.Button.TonalButton.Icon"
+                          style="@style/Widget.Grocy.Button.TonalButton"
                           android:text="@string/title_entry_new"
                           android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_shoppingListItemEditFragmentCreate)}"
                           app:icon="@drawable/ic_round_add_anim" />
@@ -662,7 +662,7 @@
 
                       <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_meal_plan"
-                        style="@style/Widget.Grocy.Button.TonalButton.Icon"
+                        style="@style/Widget.Grocy.Button.TonalButton"
                         android:text="@string/title_meal_plan"
                         android:onClick="@{() -> activity.navUtil.navigateDeepLink(@string/deep_link_mealPlanFragment)}"
                         android:layout_marginStart="8dp"
@@ -969,7 +969,7 @@
                   </LinearLayout>
 
                   <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.Grocy.Button.TonalButton.Icon"
+                    style="@style/Widget.Grocy.Button.TonalButton"
                     android:layout_gravity="end"
                     android:layout_marginTop="8dp"
                     android:text="@string/title_task_new"

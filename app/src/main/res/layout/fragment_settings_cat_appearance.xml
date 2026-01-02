@@ -176,7 +176,7 @@
 
                   <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_other_theme_auto"
-                    style="@style/Widget.Grocy.Button.OutlinedButton"
+                    style="@style/Widget.Grocy.Button.UnelevatedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/setting_theme_auto"
@@ -184,7 +184,7 @@
 
                   <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_other_theme_light"
-                    style="@style/Widget.Grocy.Button.OutlinedButton"
+                    style="@style/Widget.Grocy.Button.UnelevatedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/setting_theme_light"
@@ -192,7 +192,7 @@
 
                   <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_other_theme_dark"
-                    style="@style/Widget.Grocy.Button.OutlinedButton"
+                    style="@style/Widget.Grocy.Button.UnelevatedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/setting_theme_dark"
@@ -266,17 +266,17 @@
 
               <Button
                 android:id="@+id/button_other_contrast_standard"
-                style="@style/Widget.Grocy.Button.OutlinedButton"
+                style="@style/Widget.Grocy.Button.UnelevatedButton"
                 android:text="@string/setting_contrast_standard" />
 
               <Button
                 android:id="@+id/button_other_contrast_medium"
-                style="@style/Widget.Grocy.Button.OutlinedButton"
+                style="@style/Widget.Grocy.Button.UnelevatedButton"
                 android:text="@string/setting_contrast_medium" />
 
               <Button
                 android:id="@+id/button_other_contrast_high"
-                style="@style/Widget.Grocy.Button.OutlinedButton"
+                style="@style/Widget.Grocy.Button.UnelevatedButton"
                 android:text="@string/setting_contrast_high" />
 
             </com.google.android.material.button.MaterialButtonToggleGroup>

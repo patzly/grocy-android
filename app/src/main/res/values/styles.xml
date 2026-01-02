@@ -28,7 +28,7 @@
        the medium variant of Jost*, so there is no extra attention needed for e.g. the app bar.
        Affected languages: Hebrew,... TODO: any other? -->
 
-  <style name="ThemeOverlay.Grocy.AlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+  <style name="ThemeOverlay.Grocy.AlertDialog" parent="ThemeOverlay.Material3Expressive.MaterialAlertDialog">
     <item name="android:backgroundDimAmount">0.7</item>
     <item name="buttonBarPositiveButtonStyle">@style/Widget.Grocy.Button.TextButton.Dialog</item>
     <item name="buttonBarNegativeButtonStyle">@style/Widget.Grocy.Button.TextButton.Dialog</item>
@@ -43,7 +43,7 @@
   </style>
 
   <!-- Prevents title from being displayed with smaller text size when it's long -->
-  <style name="MaterialAlertDialog.Grocy.Title.Text" parent="MaterialAlertDialog.Material3.Title.Text">
+  <style name="MaterialAlertDialog.Grocy.Title.Text" parent="MaterialAlertDialog.Material3Expressive.Title.Text">
     <item name="android:textAppearance">?attr/textAppearanceHeadlineSmall</item>
     <item name="android:capitalize">none</item>
     <item name="android:singleLine">false</item>
@@ -52,7 +52,7 @@
 
   <!-- Toolbar -->
 
-  <style name="Widget.Grocy.Toolbar" parent="@style/Widget.Material3.Toolbar.OnSurface">
+  <style name="Widget.Grocy.Toolbar" parent="@style/Widget.Material3Expressive.Toolbar.OnSurface">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">?attr/actionBarSize</item>
     <item name="titleTextAppearance">@style/TextAppearance.Grocy.TitleLarge</item>
@@ -93,7 +93,7 @@
   <!-- Localized style, no empty base style needed -->
   <style
     name="Widget.Grocy.Button.TextButton.Snackbar"
-    parent="Widget.Material3.Button.TextButton.Snackbar">
+    parent="Widget.Material3Expressive.Button.TextButton.Snackbar">
     <item name="android:fontFamily">@font/google_sans_flex_medium</item>
     <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>
@@ -126,7 +126,7 @@
   <!-- Base style -->
   <style
     name="Base.Grocy.Button.UnelevatedButton"
-    parent="Widget.Material3.Button.UnelevatedButton">
+    parent="Widget.Material3Expressive.Button">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
   </style>
@@ -142,7 +142,7 @@
   <!-- Base style -->
   <style
     name="Base.Grocy.Button.TonalButton"
-    parent="Widget.Material3.Button.TonalButton">
+    parent="Widget.Material3Expressive.Button.TonalButton">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
   </style>
@@ -157,24 +157,8 @@
 
   <!-- Base style -->
   <style
-    name="Base.Grocy.Button.TonalButton.Icon"
-    parent="Widget.Material3.Button.TonalButton.Icon">
-    <item name="android:layout_width">wrap_content</item>
-    <item name="android:layout_height">wrap_content</item>
-  </style>
-
-  <!-- Localized style -->
-  <style
-    name="Widget.Grocy.Button.TonalButton.Icon"
-    parent="Base.Grocy.Button.TonalButton.Icon">
-    <item name="android:fontFamily">@font/google_sans_flex_medium</item>
-    <item name="fontFamily">@font/google_sans_flex_medium</item>
-  </style>
-
-  <!-- Base style -->
-  <style
     name="Base.Grocy.Button.OutlinedButton"
-    parent="Widget.Material3.Button.OutlinedButton">
+    parent="Widget.Material3Expressive.Button.OutlinedButton">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
   </style>
@@ -189,25 +173,8 @@
 
   <!-- Base style -->
   <style
-    name="Base.Grocy.Button.OutlinedButton.Icon"
-    parent="Widget.Material3.Button.OutlinedButton.Icon">
-    <item name="android:layout_width">wrap_content</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="iconPadding">8dp</item>
-  </style>
-
-  <!-- Localized style -->
-  <style
-    name="Widget.Grocy.Button.OutlinedButton.Icon"
-    parent="Base.Grocy.Button.OutlinedButton.Icon">
-    <item name="android:fontFamily">@font/google_sans_flex_medium</item>
-    <item name="fontFamily">@font/google_sans_flex_medium</item>
-  </style>
-
-  <!-- Base style -->
-  <style
     name="Base.Grocy.Button.TextButton"
-    parent="Widget.Material3.Button.TextButton">
+    parent="Widget.Material3Expressive.Button.TextButton">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
   </style>
@@ -220,27 +187,10 @@
     <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>
 
-  <!-- Base style -->
-  <style
-    name="Base.Grocy.Button.TextButton.Icon"
-    parent="Widget.Material3.Button.TextButton.Icon">
-    <item name="android:layout_width">wrap_content</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="iconPadding">8dp</item>
-  </style>
-
-  <!-- Localized style -->
-  <style
-    name="Widget.Grocy.Button.TextButton.Icon"
-    parent="Base.Grocy.Button.TextButton.Icon">
-    <item name="android:fontFamily">@font/google_sans_flex_medium</item>
-    <item name="fontFamily">@font/google_sans_flex_medium</item>
-  </style>
-
   <!-- Localized style, no empty base style needed -->
   <style
     name="Widget.Grocy.Button.TextButton.Dialog"
-    parent="Widget.Material3.Button.TextButton.Dialog">
+    parent="Widget.Material3Expressive.Button.TextButton.Dialog">
     <item name="android:fontFamily">@font/google_sans_flex_medium</item>
     <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>
@@ -254,7 +204,7 @@
 
   <style
     name="Widget.Grocy.Button.IconButton"
-    parent="Widget.Material3.Button.IconButton">
+    parent="Widget.Material3Expressive.Button.IconButton.Tonal">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="iconTint">@color/selector_icon_button_icon_color</item>
@@ -267,7 +217,7 @@
 
   <style
     name="Widget.Grocy.Button.IconButton.Filled"
-    parent="Widget.Material3.Button.IconButton.Filled">
+    parent="Widget.Material3Expressive.Button.IconButton.Filled">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="iconSize">24dp</item>
@@ -279,7 +229,7 @@
 
   <style
     name="Widget.Grocy.Button.IconButton.Filled.Tonal"
-    parent="Widget.Material3.Button.IconButton.Filled.Tonal">
+    parent="Widget.Material3Expressive.Button.IconButton.Tonal">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="iconSize">24dp</item>
@@ -290,18 +240,8 @@
   </style>
 
   <style
-    name="Widget.Grocy.Button.IconButton.Filled.Tonal.Small"
-    parent="Widget.Material3.Button.IconButton.Filled.Tonal">
-    <item name="android:layout_width">wrap_content</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:insetLeft">0dp</item>
-    <item name="android:insetRight">0dp</item>
-    <item name="iconSize">20dp</item>
-  </style>
-
-  <style
     name="Widget.Grocy.Button.IconButton.Outlined"
-    parent="Widget.Material3.Button.IconButton.Outlined">
+    parent="Widget.Material3Expressive.Button.IconButton.Outlined">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="iconSize">24dp</item>
@@ -471,7 +411,7 @@
 
   <!-- Slider -->
 
-  <style name="Widget.Grocy.Slider" parent="Widget.Material3.Slider">
+  <style name="Widget.Grocy.Slider" parent="Widget.Material3Expressive.Slider.Xsmall">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_marginStart">59dp</item>
@@ -518,7 +458,7 @@
   <!-- Localized style, no empty base style needed -->
   <style
     name="Widget.Grocy.ExtendedFloatingActionButton"
-    parent="Widget.Material3.ExtendedFloatingActionButton.Primary">
+    parent="Widget.Material3Expressive.ExtendedFloatingActionButton.Small">
     <item name="android:fontFamily">@font/google_sans_flex_medium</item>
     <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>
@@ -586,7 +526,7 @@
   <!-- Localized style, no empty base style needed -->
   <style
     name="Widget.Grocy.Button.TextButton.Dialog.Flush"
-    parent="Widget.Material3.Button.TextButton.Dialog.Flush">
+    parent="Widget.Material3Expressive.Button.TextButton.Dialog.Flush">
     <item name="android:fontFamily">@font/google_sans_flex_medium</item>
     <item name="fontFamily">@font/google_sans_flex_medium</item>
   </style>

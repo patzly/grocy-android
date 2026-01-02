@@ -1,0 +1,1 @@
+• Fixed: Crash caused by color harmonization and internal ID mismatch

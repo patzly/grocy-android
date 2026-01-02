@@ -43,32 +43,14 @@
   </style>
 
   <style
-    name="Widget.Grocy.Button.TonalButton.Icon"
-    parent="Base.Grocy.Button.TonalButton.Icon">
-    <item name="android:textStyle">bold</item>
-  </style>
-
-  <style
     name="Widget.Grocy.Button.OutlinedButton"
     parent="Base.Grocy.Button.OutlinedButton">
     <item name="android:textStyle">bold</item>
   </style>
 
   <style
-    name="Widget.Grocy.Button.OutlinedButton.Icon"
-    parent="Base.Grocy.Button.OutlinedButton.Icon">
-    <item name="android:textStyle">bold</item>
-  </style>
-
-  <style
     name="Widget.Grocy.Button.TextButton"
     parent="Base.Grocy.Button.TextButton">
-    <item name="android:textStyle">bold</item>
-  </style>
-
-  <style
-    name="Widget.Grocy.Button.TextButton.Icon"
-    parent="Base.Grocy.Button.TextButton.Icon">
     <item name="android:textStyle">bold</item>
   </style>
 

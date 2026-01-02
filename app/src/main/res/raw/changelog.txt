@@ -1,3 +1,7 @@
+## 3.8.3
+
+- Fixed: Crash caused by color harmonization and internal ID mismatch (#955)
+
 ## 3.8.2
 
 - New: Compatibility for server version 4.5.0 (thanks @jahway603!) (#940)
