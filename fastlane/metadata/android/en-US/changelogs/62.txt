@@ -1,0 +1,7 @@
+• New: Compatibility for server version 4.5.0
+• New: Minimum Android version is now Android 6.0 due to dependency requirements
+• New: Setting to enable or disable the use of amount in barcode
+• Improved: Quantity unit price used for last and average price
+• Improved: Faster product searches by showing top 30 items only
+• Improved: Removed compatibility check due to potential for confusion
+• Fixed: Confirmation bottom sheets not working when animations are disabled
