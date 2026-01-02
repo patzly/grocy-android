@@ -64,6 +64,7 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.color.ColorContrast;
 import com.google.android.material.color.ColorContrastOptions;
 import com.google.android.material.color.DynamicColors;
+import com.google.android.material.color.DynamicColorsOptions;
 import com.google.android.material.color.HarmonizedColorAttributes;
 import com.google.android.material.color.HarmonizedColors;
 import com.google.android.material.color.HarmonizedColorsOptions;
@@ -443,7 +444,14 @@ public class UiUtil {
         break;
       default:
         if (DynamicColors.isDynamicColorAvailable()) {
-          DynamicColors.applyToActivityIfAvailable(activity);
+          DynamicColors.applyToActivityIfAvailable(
+              activity,
+              new DynamicColorsOptions.Builder().setOnAppliedCallback(
+                  a -> HarmonizedColors.applyToContextIfAvailable(
+                      a, HarmonizedColorsOptions.createMaterialDefaults()
+                  )
+              ).build()
+          );
           ColorContrast.applyToActivityIfAvailable(
               activity,
               new ColorContrastOptions.Builder()

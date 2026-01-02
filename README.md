@@ -43,7 +43,7 @@ If you want to try new features right after development, you can download an uns
 
 ## Compatibility
 
-Grocy Android requires at least Android 5.0 Lollipop and works properly on devices without any Google service installed.
+Grocy Android requires at least Android 6.0 Marshmallow and works properly on devices without any Google service installed.
 
 It is also possible to use the Grocy Add-on on an [Home Assistant](https://www.home-assistant.io/getting-started/) server. Click [here](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq4) for instructions.
 
