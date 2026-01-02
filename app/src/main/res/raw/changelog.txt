@@ -1,4 +1,4 @@
-## 3.9.0
+## 3.8.2
 
 - New: Compatibility for server version 4.5.0 (thanks @jahway603!) (#940)
 - New: Minimum Android version is now Android 6.0 due to dependency requirements
