@@ -21,7 +21,7 @@
 
 <resources>
 
-  <style name="Base.Grocy" parent="Theme.Material3.DayNight.NoActionBar">
+  <style name="Base.Grocy" parent="Theme.Material3Expressive.DayNight.NoActionBar">
     <item name="android:colorPrimaryDark">?attr/colorSurface</item>
     <item name="android:navigationBarColor">?attr/colorSurface</item>
     <item name="android:colorBackground">?attr/colorSurface</item>
