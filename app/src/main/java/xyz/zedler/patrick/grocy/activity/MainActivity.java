@@ -113,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
   private BroadcastReceiver networkReceiver;
   private BottomScrollBehavior scrollBehavior;
   private UiUtil uiUtil;
-  private HoneywellScannerUtil honeywellScannerUtil;
   private boolean runAsSuperClass;
   private boolean debug;
 
@@ -155,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
     netUtil = new NetUtil(this, sharedPrefs, debug, TAG);
     netUtil.insertConscrypt();
     netUtil.createWebSocketClient();
-    honeywellScannerUtil = new HoneywellScannerUtil(this, sharedPrefs);
 
     // LANGUAGE
 
@@ -292,7 +290,6 @@ public class MainActivity extends AppCompatActivity {
       netUtil.cancelHassSessionTimer();
     }
     super.onPause();
-    honeywellScannerUtil.deactivate();
   }
 
   @Override
@@ -306,7 +303,6 @@ public class MainActivity extends AppCompatActivity {
     if (!sharedPrefs.contains(Constants.SETTINGS.BEHAVIOR.HAPTIC)) {
       hapticUtil.setEnabled(HapticUtil.areSystemHapticsTurnedOn(this));
     }
-    honeywellScannerUtil.activate();
   }
 
   @Override

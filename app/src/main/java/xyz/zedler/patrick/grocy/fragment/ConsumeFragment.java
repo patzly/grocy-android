@@ -36,6 +36,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
@@ -58,6 +60,7 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.ClickUtil.InactivityUtil;
+import xyz.zedler.patrick.grocy.util.HoneywellScannerUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -77,8 +80,10 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
   private Boolean backFromChooseProductPage;
   private InactivityUtil inactivityUtil;
   private AlertDialog dialogFabInfo;
+  private HoneywellScannerUtil honeywellScannerUtil;
 
-  @Override
+
+    @Override
   public View onCreateView(
       @NonNull LayoutInflater inflater,
       ViewGroup container,
@@ -106,6 +111,7 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
   @Override
   public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
+    honeywellScannerUtil = new HoneywellScannerUtil(activity, this);
     ConsumeFragmentArgs args = ConsumeFragmentArgs.fromBundle(requireArguments());
 
     viewModel = new ViewModelProvider(this, new ConsumeViewModel
@@ -269,11 +275,13 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
       return;
     }
     embeddedFragmentScanner.onResume();
+    honeywellScannerUtil.activate();
   }
 
   @Override
   public void onPause() {
     embeddedFragmentScanner.onPause();
+    honeywellScannerUtil.deactivate();
     super.onPause();
   }
 

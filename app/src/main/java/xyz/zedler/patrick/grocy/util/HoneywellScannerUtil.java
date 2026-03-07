@@ -7,14 +7,15 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
 import java.util.Set;
 
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 
 public class HoneywellScannerUtil {
     private static final String TAG = HoneywellScannerUtil.class.getSimpleName();
@@ -65,18 +66,21 @@ public class HoneywellScannerUtil {
 
     private final Activity activity;
     private final SharedPreferences sharedPreferences;
+    private final EmbeddedFragmentScanner.BarcodeListener barcodeListener;
 
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String barcode = intent.getStringExtra("data");
             Log.i(TAG, "Received barcode: " + barcode);
+            HoneywellScannerUtil.this.barcodeListener.onBarcodeRecognized(barcode);
         }
     };
 
-    public HoneywellScannerUtil(Activity activity, SharedPreferences sharedPreferences) {
+    public HoneywellScannerUtil(Activity activity, EmbeddedFragmentScanner.BarcodeListener barcodeListener) {
         this.activity = activity;
-        this.sharedPreferences = sharedPreferences;
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity.getBaseContext());
+        this.barcodeListener = barcodeListener;
     }
 
     public void activate() {
