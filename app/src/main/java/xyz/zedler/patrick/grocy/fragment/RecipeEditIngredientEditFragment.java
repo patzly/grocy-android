@@ -48,12 +48,13 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
+import xyz.zedler.patrick.grocy.util.HoneywellScannerUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditIngredientEditViewModel;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditIngredientEditViewModel.RecipeEditIngredientEditViewModelFactory;
 
-public class RecipeEditIngredientEditFragment extends BaseFragment implements EmbeddedFragmentScanner.BarcodeListener {
+public class RecipeEditIngredientEditFragment extends BaseFragment implements EmbeddedFragmentScanner.BarcodeListener, HoneywellScannerUtil.BarcodeListener {
 
   private final static String TAG = RecipeEditIngredientEditFragment.class.getSimpleName();
 
@@ -63,6 +64,7 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
   private SystemBarBehavior systemBarBehavior;
+  private HoneywellScannerUtil honeywellScannerUtil;
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup group, Bundle state) {
@@ -84,6 +86,7 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
+    honeywellScannerUtil = new HoneywellScannerUtil(activity, this);
     RecipeEditIngredientEditFragmentArgs args = RecipeEditIngredientEditFragmentArgs
         .fromBundle(requireArguments());
     viewModel = new ViewModelProvider(
@@ -276,11 +279,13 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
   public void onResume() {
     super.onResume();
     embeddedFragmentScanner.onResume();
+    honeywellScannerUtil.activate();
   }
 
   @Override
   public void onPause() {
     embeddedFragmentScanner.onPause();
+    honeywellScannerUtil.deactivate();
     super.onPause();
   }
 
@@ -299,6 +304,12 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
 
   public void toggleTorch() {
     embeddedFragmentScanner.toggleTorch();
+  }
+
+  @Override
+  public void onBarcodeRecognized(String rawValue, byte[] dataBytes) {
+    clearInputFocus();
+    viewModel.onBarcodeRecognized(rawValue);
   }
 
   @Override

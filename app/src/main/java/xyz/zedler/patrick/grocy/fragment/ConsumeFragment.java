@@ -67,7 +67,7 @@ import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.view.FormattedTextView;
 import xyz.zedler.patrick.grocy.viewmodel.ConsumeViewModel;
 
-public class ConsumeFragment extends BaseFragment implements BarcodeListener {
+public class ConsumeFragment extends BaseFragment implements BarcodeListener, HoneywellScannerUtil.BarcodeListener {
 
   private final static String TAG = ConsumeFragment.class.getSimpleName();
   private static final String DIALOG_FAB_INFO = "dialog_fab_info";
@@ -334,6 +334,12 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
 
   public void toggleTorch() {
     embeddedFragmentScanner.toggleTorch();
+  }
+
+  @Override
+  public void onBarcodeRecognized(String rawValue, byte[] dataBytes) {
+    clearInputFocus();
+    viewModel.onBarcodeRecognized(rawValue);
   }
 
   @Override
