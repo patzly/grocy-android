@@ -87,6 +87,7 @@ public class ConsumeViewModel extends BaseViewModel {
   private List<QuantityUnitConversionResolved> unitConversions;
   private List<ProductBarcode> barcodes;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+  private String scannedBarcode;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -127,6 +128,11 @@ public class ConsumeViewModel extends BaseViewModel {
     quickModeEnabled = new MutableLiveData<>(quickModeStart);
 
     barcodes = new ArrayList<>();
+
+    scannedBarcode = args.getScannedBarcode();
+    if (args.getScannedBarcode() != null) {
+      loadFromDatabase(false);
+    }
   }
 
   public FormDataConsume getFormData() {
@@ -144,9 +150,15 @@ public class ConsumeViewModel extends BaseViewModel {
       );
       if (downloadAfterLoading) {
         downloadData(false);
-      } else if (queueEmptyAction != null) {
-        queueEmptyAction.run();
-        queueEmptyAction = null;
+      } else {
+        if (queueEmptyAction != null) {
+          queueEmptyAction.run();
+          queueEmptyAction = null;
+        }
+        if (scannedBarcode != null) {
+          onBarcodeRecognized(scannedBarcode);
+          scannedBarcode = null;
+        }
       }
     }, error -> onError(error, TAG));
   }

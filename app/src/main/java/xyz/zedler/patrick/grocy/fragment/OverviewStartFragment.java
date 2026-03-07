@@ -21,6 +21,7 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.animation.LayoutTransition;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -46,13 +47,14 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
+import xyz.zedler.patrick.grocy.util.HoneywellScannerUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.view.FormattedTextView;
 import xyz.zedler.patrick.grocy.viewmodel.OverviewStartViewModel;
 
-public class OverviewStartFragment extends BaseFragment {
+public class OverviewStartFragment extends BaseFragment implements HoneywellScannerUtil.BarcodeListener {
 
   private final static String TAG = OverviewStartFragment.class.getSimpleName();
 
@@ -63,6 +65,7 @@ public class OverviewStartFragment extends BaseFragment {
   private OverviewStartViewModel viewModel;
   private ClickUtil clickUtil;
   private AlertDialog dialogFabInfo;
+  private HoneywellScannerUtil honeywellScannerUtil;
 
   @Override
   public View onCreateView(
@@ -85,6 +88,7 @@ public class OverviewStartFragment extends BaseFragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
+    honeywellScannerUtil = new HoneywellScannerUtil(activity, this);
     viewModel = new ViewModelProvider(this).get(OverviewStartViewModel.class);
     binding.setViewModel(viewModel);
     binding.setFragment(this);
@@ -295,9 +299,60 @@ public class OverviewStartFragment extends BaseFragment {
     viewModel.downloadData(false);
   }
 
+  @Override
+  public void onResume() {
+    super.onResume();
+    honeywellScannerUtil.activate();
+  }
+  @Override
+  public void onPause() {
+    super.onPause();
+    honeywellScannerUtil.deactivate();
+  }
+
   @NonNull
   @Override
   public String toString() {
     return TAG;
+  }
+
+  @Override
+  public void onBarcodeRecognized(String barcode, byte[] barcodeBytes) {
+    AlertDialog actionChooseDialog = new MaterialAlertDialogBuilder(activity, R.style.ThemeOverlay_Grocy_AlertDialog)
+        .setItems(
+            new CharSequence[]{
+                getString(R.string.title_consume),
+                getString(R.string.title_purchase),
+                getString(R.string.title_transfer),
+                getString(R.string.title_inventory)
+            }, (dialog, which) -> {
+              switch (which) {
+                case 0:
+                  activity.navUtil.navigate(
+                      R.id.consumeFragment,
+                      new ConsumeFragmentArgs.Builder().setScannedBarcode(barcode).build().toBundle()
+                  );
+                  break;
+                case 1:
+                  activity.navUtil.navigate(
+                      R.id.purchaseFragment,
+                      new PurchaseFragmentArgs.Builder().setScannedBarcode(barcode).build().toBundle()
+                  );
+                  break;
+                case 2:
+                  activity.navUtil.navigate(
+                      R.id.transferFragment,
+                      new TransferFragmentArgs.Builder().setScannedBarcode(barcode).build().toBundle()
+                  );
+                  break;
+                case 3:
+                  activity.navUtil.navigate(
+                      R.id.inventoryFragment,
+                      new InventoryFragmentArgs.Builder().setScannedBarcode(barcode).build().toBundle()
+                  );
+                  break;
+              }
+            }).create();
+    actionChooseDialog.show();
   }
 }
