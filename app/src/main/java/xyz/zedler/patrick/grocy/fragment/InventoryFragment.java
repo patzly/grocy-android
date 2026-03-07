@@ -53,13 +53,14 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.FAB;
+import xyz.zedler.patrick.grocy.util.HoneywellScannerUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.InventoryViewModel;
 import xyz.zedler.patrick.grocy.viewmodel.InventoryViewModel.InventoryViewModelFactory;
 
-public class InventoryFragment extends BaseFragment implements BarcodeListener {
+public class InventoryFragment extends BaseFragment implements BarcodeListener, HoneywellScannerUtil.BarcodeListener {
 
   private final static String TAG = InventoryFragment.class.getSimpleName();
 
@@ -69,6 +70,7 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
   private Boolean backFromChooseProductPage;
+  private HoneywellScannerUtil honeywellScannerUtil;
 
   @Override
   public View onCreateView(
@@ -98,6 +100,7 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
   @Override
   public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
+    honeywellScannerUtil = new HoneywellScannerUtil(activity, this);
     InventoryFragmentArgs args = InventoryFragmentArgs.fromBundle(requireArguments());
 
     viewModel = new ViewModelProvider(this,
@@ -247,11 +250,13 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
       return;
     }
     embeddedFragmentScanner.onResume();
+    honeywellScannerUtil.activate();
   }
 
   @Override
   public void onPause() {
     embeddedFragmentScanner.onPause();
+    honeywellScannerUtil.deactivate();
     super.onPause();
   }
 
@@ -272,6 +277,12 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
 
   public void toggleTorch() {
     embeddedFragmentScanner.toggleTorch();
+  }
+
+  @Override
+  public void onBarcodeRecognized(String rawValue, byte[] dataBytes) {
+    clearInputFocus();
+    viewModel.onBarcodeRecognized(rawValue);
   }
 
   @Override
