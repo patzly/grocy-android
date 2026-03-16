@@ -111,7 +111,10 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
 
-    binding.toolbar.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
+    binding.toolbar.setNavigationOnClickListener(v -> {
+      clearInputFocus();
+      activity.navUtil.navigateUp();
+    });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -119,6 +122,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
             ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
         );
       } else if (event.getType() == Event.NAVIGATE_UP) {
+        clearInputFocus();
         activity.navUtil.navigateUp();
       } else if (event.getType() == Event.SET_SHOPPING_LIST_ID) {
         int id = event.getBundle().getInt(Constants.ARGUMENT.SELECTED_ID);
@@ -247,6 +251,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
           if (!viewModel.getFormData().isProductNameValid()) {
             clearFocusAndCheckProductInput();
           } else {
+            clearInputFocus();
             viewModel.saveItem();
           }
         }
@@ -304,6 +309,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
 
   public void saveItemOrClearInputFocus() {
     if (viewModel.getFormData().isFormValid()) {
+      clearInputFocus();
       viewModel.saveItem();
     } else {
       clearInputFocus();
