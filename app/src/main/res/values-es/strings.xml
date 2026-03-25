@@ -377,13 +377,6 @@ Localización: %4$s.</string>
   <string name="msg_quick_mode_confirm_transfer">Transacción que se ejecutará:\n\nMover %1$s %2$s de %3$s\nde la ubicación: %4$s\nA la ubicación: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">Transacción que se ejecutará:\n\nEStablecer %2$s %3$s de %1$s al inventario\nAplicar a los productos añadidos:\nFecha de vencimiento: %4$s\nPrecio: %5$s\nTienda: %6$s\nUbicación: %7$s</string>
-  <string name="msg_compatibility">Esta versión de la aplicación no es compatible con la versión del servidor Grocy.
-
-Versión actual del servidor: %1$s.
-Versiones del servidor soportadas:
-%2$s
-Si la versión actual del servidor tiene un número de versión mayorante (Primer dígito) mayor que las versiones soportadas e ignoras esta advertencia, pueden ocurrir pérdidas de datos (poco probable) o errores de ejecución (muy posible).
-Si sólo hay de diferencia una versión minorante (por ejemplo, el tercer dígito es mayor) puedes probablemente ignorar este aviso.</string>
   <string name="msg_logout">Nada será cambiado en tu servidor. Serás redireccionado a la página de inicio de sesión.</string>
   <string name="msg_logout_demo">Estás utilizando el servidor público de demostración <u>https://grocy.info</u>.\n\n<b>¡Ninguno de tus cambios aquí se guarda para siempre!\nPermanecen públicos hasta que el servidor los sobrescribe automáticamente una vez al día.</b>\n\nEn la pantalla de inicio de sesión puedes introducir la dirección de tu propio servidor.</string>
   <string name="msg_logout_demo_short">Servidor público de prueba. Haga clic para ver más detalles.</string>
@@ -1350,6 +1343,8 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <string name="setting_date_keyboard_input_description">En vez de ruedas selectoras de fechas</string>
   <string name="setting_date_keyboard_reverse">Usar formato inverso de fecha para entrada</string>
   <string name="setting_date_keyboard_reverse_description">DDMMYY en vez de YYMMDD</string>
+  <string name="setting_barcode_amount">Usar cantidad para la generación de códigos de barras</string>
+  <string name="setting_barcode_amount_description">Al crear un producto desde una compra, la cantidad introducida se utilizará para la generación del código de barras.</string>
   <string name="setting_loading_circle">Mostrar círculo de carga para todas las consultas</string>
   <string name="setting_loading_circle_description">Útil para redes lentas</string>
   <string name="setting_tor">Usar Tor</string>
