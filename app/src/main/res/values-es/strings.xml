@@ -1343,7 +1343,7 @@ El certificado del servidor debe ser firmado por una autoridad confiable de cert
   <string name="setting_date_keyboard_input_description">En vez de ruedas selectoras de fechas</string>
   <string name="setting_date_keyboard_reverse">Usar formato inverso de fecha para entrada</string>
   <string name="setting_date_keyboard_reverse_description">DDMMYY en vez de YYMMDD</string>
-  <string name="setting_barcode_amount">Usar cantidad para la generación de códigos de barras</string>
+  <string name="setting_barcode_amount">Usar cantidad para la generación del código de barras</string>
   <string name="setting_barcode_amount_description">Al crear un producto desde una compra, la cantidad introducida se utilizará para la generación del código de barras.</string>
   <string name="setting_loading_circle">Mostrar círculo de carga para todas las consultas</string>
   <string name="setting_loading_circle_description">Útil para redes lentas</string>
