@@ -25,8 +25,8 @@ zxing-core = "3.3.0"
 zxing-android-embedded = "4.3.0"
 desugar = "2.1.5"
 exifinterface = "1.4.2"
-camera-core = "1.4.1"
-camera-mlkit = "1.4.1"
+camera-core = "1.6.0"
+camera-mlkit = "1.6.0"
 mlkit = "17.3.0"
 
 [libraries]
