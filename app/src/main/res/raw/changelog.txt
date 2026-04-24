@@ -1,3 +1,11 @@
+## 3.9.0
+
+- New: Compatibility for Android 17
+- New: Navigation between mealplan and recipe (thanks @Tomahna!) (#976)
+- New: Honeywell CT50/CT60 Scanner support (thanks @jhbruhn!) (#970)
+- Fixed: Invalid shopping list FAB position after save (thanks @arblane!) (#972)
+- Fixed: Removed support of TLS 1.1 (thanks @misery!) (#957, #958)
+
 ## 3.8.3
 
 - Fixed: Crash caused by color harmonization and internal ID mismatch (#955)

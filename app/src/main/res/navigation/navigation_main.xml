@@ -1235,6 +1235,9 @@
     <deepLink
       android:id="@+id/deepLink20"
       app:uri="@string/deep_link_mealPlanFragment" />
+    <action
+      android:id="@+id/action_mealPlanFragment_to_recipeFragment"
+      app:destination="@id/recipeFragment" />
   </fragment>
   <dialog
     android:id="@+id/textBottomSheetDialogFragment"

@@ -89,12 +89,14 @@ public class MealPlanEntryAdapter extends
   private final int maxDecimalPlacesAmount;
   private final int decimalPlacesPriceDisplay;
   private final String currency;
+  private final MealPlanEntryAdapterListener listener;
 
   public MealPlanEntryAdapter(
       Context context,
       GrocyApi grocyApi,
       LazyHeaders grocyAuthHeaders,
-      String date
+      String date,
+      MealPlanEntryAdapterListener listener
   ) {
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     this.maxDecimalPlacesAmount = sharedPrefs.getInt(
@@ -120,6 +122,7 @@ public class MealPlanEntryAdapter extends
     this.grocyApi = grocyApi;
     this.grocyAuthHeaders = grocyAuthHeaders;
     this.groupedListItems = new ArrayList<>();
+    this.listener = listener;
   }
 
   static ArrayList<GroupedListItem> getGroupedListItems(
@@ -288,6 +291,7 @@ public class MealPlanEntryAdapter extends
           return;
         }
         binding.title.setText(recipe.getName());
+        binding.container.setOnClickListener(v -> listener.onItemRowClicked(recipe));
 
         if (activeFields.contains(MealPlanViewModel.FIELD_AMOUNT)) {
           double servings = NumUtil.isStringDouble(entry.getRecipeServings()) ? Double.parseDouble(
@@ -855,6 +859,11 @@ public class MealPlanEntryAdapter extends
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
       super.clearView(recyclerView, viewHolder);
     }
+  }
+
+  public interface MealPlanEntryAdapterListener {
+
+    void onItemRowClicked(Recipe recipe);
   }
 
 }
