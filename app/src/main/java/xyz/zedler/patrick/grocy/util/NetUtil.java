@@ -21,32 +21,20 @@
 package xyz.zedler.patrick.grocy.util;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
-import androidx.browser.customtabs.CustomTabsIntent;
 import dev.gustavoavila.websocketclient.WebSocketClient;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.security.NoSuchAlgorithmException;
-import java.security.Security;
-import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLEngine;
-import org.conscrypt.Conscrypt;
 import org.json.JSONException;
 import org.json.JSONObject;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
-import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 
 public class NetUtil {
 
@@ -73,30 +61,6 @@ public class NetUtil {
     }
     NetworkInfo networkInfo = cm.getActiveNetworkInfo();
     return networkInfo != null && networkInfo.isConnectedOrConnecting();
-  }
-
-  public void insertConscrypt() {
-    Security.insertProviderAt(Conscrypt.newProvider(), 1);
-
-    try {
-      Conscrypt.Version version = Conscrypt.version();
-      if (debug) {
-        Log.i(TAG, "insertConscrypt: Using Conscrypt/" + version.major() + "."
-            + version.minor() + "." + version.patch() + " for TLS");
-      }
-      SSLEngine engine = SSLContext.getDefault().createSSLEngine();
-      if (debug) {
-        Log.i(TAG, "Enabled protocols: "
-            + Arrays.toString(engine.getEnabledProtocols()) + " }");
-      }
-      if (debug) {
-        Log.i(TAG, "Enabled ciphers: "
-            + Arrays.toString(engine.getEnabledCipherSuites()) + " }");
-      }
-    } catch (NoSuchAlgorithmException e) {
-      Log.e(TAG, "insertConscrypt: NoSuchAlgorithmException");
-      Log.e(TAG, e.getMessage() != null ? e.getMessage() : e.toString());
-    }
   }
 
   public void createWebSocketClient() {

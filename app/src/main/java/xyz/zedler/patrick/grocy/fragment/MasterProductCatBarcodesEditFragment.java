@@ -44,11 +44,12 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
+import xyz.zedler.patrick.grocy.util.HoneywellScannerUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatBarcodesEditViewModel;
 
-public class MasterProductCatBarcodesEditFragment extends BaseFragment implements BarcodeListener {
+public class MasterProductCatBarcodesEditFragment extends BaseFragment implements BarcodeListener, HoneywellScannerUtil.BarcodeListener {
 
   private final static String TAG = MasterProductCatBarcodesEditFragment.class.getSimpleName();
 
@@ -58,6 +59,7 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
   private SystemBarBehavior systemBarBehavior;
+  private HoneywellScannerUtil honeywellScannerUtil;
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup group, Bundle state) {
@@ -79,6 +81,7 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
+    honeywellScannerUtil = new HoneywellScannerUtil(activity, this);
     MasterProductCatBarcodesEditFragmentArgs args = MasterProductCatBarcodesEditFragmentArgs
         .fromBundle(requireArguments());
     viewModel = new ViewModelProvider(this, new MasterProductCatBarcodesEditViewModel
@@ -177,11 +180,13 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
   public void onResume() {
     super.onResume();
     embeddedFragmentScanner.onResume();
+    honeywellScannerUtil.activate();
   }
 
   @Override
   public void onPause() {
     embeddedFragmentScanner.onPause();
+    honeywellScannerUtil.deactivate();
     super.onPause();
   }
 
@@ -200,6 +205,12 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
 
   public void toggleTorch() {
     embeddedFragmentScanner.toggleTorch();
+  }
+
+  @Override
+  public void onBarcodeRecognized(String rawValue, byte[] dataBytes) {
+    clearInputFocus();
+    viewModel.onBarcodeRecognized(rawValue);
   }
 
   public void toggleScannerVisibility() {

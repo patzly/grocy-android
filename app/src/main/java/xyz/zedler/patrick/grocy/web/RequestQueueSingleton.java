@@ -152,7 +152,7 @@ public class RequestQueueSingleton {
 
     private Socket enableTLSOnSocket(Socket socket) {
       if((socket instanceof SSLSocket)) {
-        ((SSLSocket)socket).setEnabledProtocols(new String[] {"TLSv1.1", "TLSv1.2", "TLSv1.3"});
+        ((SSLSocket)socket).setEnabledProtocols(new String[] {"TLSv1.2", "TLSv1.3"});
       }
       return socket;
     }

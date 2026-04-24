@@ -52,11 +52,12 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
+import xyz.zedler.patrick.grocy.util.HoneywellScannerUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.StockEntriesViewModel;
 
 public class StockEntriesFragment extends BaseFragment implements StockEntryAdapterListener,
-    BarcodeListener {
+    BarcodeListener, HoneywellScannerUtil.BarcodeListener {
 
   private final static String TAG = StockEntriesFragment.class.getSimpleName();
 
@@ -68,6 +69,7 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
   private FragmentStockEntriesBinding binding;
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
+  private HoneywellScannerUtil honeywellScannerUtil;
 
   @Override
   public View onCreateView(
@@ -102,6 +104,7 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
+    honeywellScannerUtil = new HoneywellScannerUtil(activity, this);
     viewModel = new ViewModelProvider(this, new StockEntriesViewModel
         .StockEntriesViewModelFactory(activity.getApplication(),
         StockEntriesFragmentArgs.fromBundle(requireArguments())
@@ -276,11 +279,13 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
   public void onResume() {
     super.onResume();
     embeddedFragmentScanner.onResume();
+    honeywellScannerUtil.activate();
   }
 
   @Override
   public void onPause() {
     embeddedFragmentScanner.onPause();
+    honeywellScannerUtil.deactivate();
     super.onPause();
   }
 
@@ -298,6 +303,11 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
 
   public void toggleTorch() {
     embeddedFragmentScanner.toggleTorch();
+  }
+
+  @Override
+  public void onBarcodeRecognized(String rawValue, byte[] dataBytes) {
+      binding.editTextSearch.setText(rawValue);
   }
 
   @Override

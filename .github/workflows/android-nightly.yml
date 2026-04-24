@@ -7,83 +7,68 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
-    
-    - name: Checkout branch
-      uses: actions/checkout@v3
-      with:
-        ref: 'master'
-    
-    - name: Replace applicationId and name
-      run: |
-        sed -i 's/applicationId "xyz.zedler.patrick.grocy"/applicationId "xyz.zedler.patrick.grocy.nightly"/' app/build.gradle
-        sed -i 's|<string name="app_name" translatable="false">Grocy</string>|<string name="app_name" translatable="false">Grocy Nightly</string>|g' app/src/main/res/values/strings.xml
-        
-    - name: Set up JDK 19
-      uses: actions/setup-java@v3
-      with:
-        java-version: '19'
-        distribution: 'temurin'
-        cache: gradle
+      - name: Checkout master
+        uses: actions/checkout@v4
+        with:
+          ref: 'master'
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-      
-    - name: Build with Gradle
-      run: ./gradlew build
-    
-    - name: Rename artifacts
-      run: |
-        mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/Grocy-Android-master-$(date +'%Y%m%d').apk
-        cp app/src/main/res/raw/changelog.txt app/build/outputs/apk/debug/Grocy-Android-master-$(date +'%Y%m%d')-changelog.txt
-    
-    - name: Upload artifacts
-      uses: pyTooling/Actions/releaser@r0
-      continue-on-error: true
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        rm: true
-        tag: nightly
-        files: |
-          app/build/outputs/apk/debug/*.apk
-          app/build/outputs/apk/debug/*.txt
-    
-    - name: Replace applicationId to default for checkout without git commit
-      run: |
-        sed -i 's/applicationId "xyz.zedler.patrick.grocy.nightly"/applicationId "xyz.zedler.patrick.grocy"/' app/build.gradle
-        sed -i 's|<string name="app_name" translatable="false">Grocy</string>|<string name="app_name" translatable="false">Grocy Nightly</string>|g' app/src/main/res/values/strings.xml
-        
-    - name: Checkout branch
-      uses: actions/checkout@v3
-      with:
-        ref: 'feature/mlkit_scanner'
-        
-    - name: Replace applicationId and name
-      run: |
-        sed -i 's/applicationId "xyz.zedler.patrick.grocy"/applicationId "xyz.zedler.patrick.grocy.nightly"/' app/build.gradle
-        sed -i 's%@string/app_name%Grocy Nightly%' app/src/main/AndroidManifest.xml
-        
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-      
-    - name: Build with Gradle
-      run: ./gradlew build
-      
-    - name: Rename artifacts
-      run: |
-        mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/Grocy-Android-mlkit-$(date +'%Y%m%d').apk
-        cp app/src/main/res/raw/changelog.txt app/build/outputs/apk/debug/Grocy-Android-mlkit-$(date +'%Y%m%d')-changelog.txt
+      - name: Replace applicationId and name (Master)
+        run: |
+          sed -i 's/applicationId = "xyz.zedler.patrick.grocy"/applicationId = "xyz.zedler.patrick.grocy.nightly"/' app/build.gradle
+          sed -i 's|<string name="app_name" translatable="false">Grocy</string>|<string name="app_name" translatable="false">Grocy Nightly</string>|g' app/src/main/res/values/strings.xml
 
-    - name: Upload artifacts
-      uses: pyTooling/Actions/releaser@r0
-      continue-on-error: true
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        rm: false
-        tag: nightly
-        files: |
-          app/build/outputs/apk/debug/*.apk
-          app/build/outputs/apk/debug/*.txt
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build Master Debug APK
+        run: ./gradlew assembleDebug
+
+      - name: Rename artifacts
+        run: |
+          mkdir -p deploy
+          cp app/build/outputs/apk/debug/app-debug.apk deploy/Grocy-Android-master-$(date +'%Y%m%d').apk
+          [ -f app/src/main/res/raw/changelog.txt ] && cp app/src/main/res/raw/changelog.txt deploy/Grocy-Android-master-$(date +'%Y%m%d')-changelog.txt
+
+      # --- Feature Branch ---
+
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: 'feature/mlkit_scanner'
+          clean: false
+
+      - name: Replace applicationId and name (MLKit)
+        run: |
+          sed -i 's/applicationId = "xyz.zedler.patrick.grocy"/applicationId = "xyz.zedler.patrick.grocy.nightly"/' app/build.gradle
+          sed -i 's/android:label="@string\/app_name"/android:label="Grocy Nightly"/' app/src/main/AndroidManifest.xml
+
+      - name: Build MLKit Debug APK
+        run: ./gradlew assembleDebug
+
+      - name: Rename MLKit artifacts
+        run: |
+          cp app/build/outputs/apk/debug/app-debug.apk deploy/Grocy-Android-mlkit-$(date +'%Y%m%d').apk
+          [ -f app/src/main/res/raw/changelog.txt ] && cp app/src/main/res/raw/changelog.txt deploy/Grocy-Android-mlkit-$(date +'%Y%m%d')-changelog.txt
+
+      - name: Upload all artifacts
+        uses: pyTooling/Actions/releaser@r0
+        continue-on-error: true
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          rm: true
+          tag: nightly
+          files: |
+            deploy/*.apk
+            deploy/*.txt

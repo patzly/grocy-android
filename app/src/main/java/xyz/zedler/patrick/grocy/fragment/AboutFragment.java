@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import xyz.zedler.patrick.grocy.BuildConfig;
 import xyz.zedler.patrick.grocy.NavigationMainDirections;
 import xyz.zedler.patrick.grocy.NavigationMainDirections.ActionGlobalOnboardingFragment;
 import xyz.zedler.patrick.grocy.R;
@@ -76,6 +77,8 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
     activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbarAbout.setNavigationOnClickListener(v -> activity.navUtil.navigateUp());
+
+    binding.textAboutVersion.setText(BuildConfig.VERSION_NAME);
 
     setOnClickListeners(
         view,

@@ -25,14 +25,14 @@ plugins {
 
 android {
     namespace = 'xyz.zedler.patrick.grocy'
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "xyz.zedler.patrick.grocy"
         minSdk = 23
-        targetSdk = 36
-        versionCode = 64
-        versionName = "3.8.3"
+        targetSdk = 37
+        versionCode = 65
+        versionName = "3.8.4"
         resourceConfigurations += ['ca', 'cs', 'de', 'en', 'es', 'et', 'fr', 'hu', 'it', 'iw', 'ja',
                                    'nb', 'nl', 'pl', 'pt-rBR', 'pt-rPT', 'ru', 'sk', 'sv', 'uk',
                                    'zh-rCN', 'zh-rTW']
@@ -43,21 +43,13 @@ android {
         }
     }
 
-    applicationVariants.configureEach { variant ->
-        variant.resValue "string", "versionName", variant.versionName
-    }
-
     buildTypes {
         release {
-            postprocessing {
-                removeUnusedCode = true
-                removeUnusedResources = true
-                obfuscate = false
-                optimizeCode = true
-                proguardFiles {
-                    getDefaultProguardFile('proguard-android-optimize.txt')
-                    'proguard-rules.pro'
-                }
+            minifyEnabled = true
+            shrinkResources = true
+            proguardFiles {
+                getDefaultProguardFile('proguard-android-optimize.txt')
+                'proguard-rules.pro'
             }
             debuggable = false
         }
@@ -121,10 +113,8 @@ dependencies {
     implementation(libs.calendar)
     implementation(libs.flexbox)
     // Volley for all general network requests and Glide for image loading
-    // Conscrypt for new TLS support on old Android devices
     implementation(libs.volley)
     implementation(libs.glide)
-    implementation(libs.conscrypt)
     implementation(libs.websocket.client)
     // GSON for converting JSON responses to Java objects
     implementation(libs.gson)
