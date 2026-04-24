@@ -104,8 +104,8 @@
                 android:text="@string/info_version" />
 
               <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:text="@string/versionName" />
+                android:id="@+id/text_about_version"
+                style="@style/Widget.Grocy.TextView.ListItem.Title" />
 
             </LinearLayout>
 

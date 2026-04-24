@@ -21,6 +21,7 @@
 package xyz.zedler.patrick.grocy.api;
 
 import android.content.Context;
+import xyz.zedler.patrick.grocy.BuildConfig;
 import xyz.zedler.patrick.grocy.R;
 
 public class OpenFoodFactsApi {
@@ -29,7 +30,7 @@ public class OpenFoodFactsApi {
 
   public static String getUserAgent(Context context) {
     return "Grocy Android - v"
-        + context.getString(R.string.versionName) + " - "
+        + BuildConfig.VERSION_NAME + " - "
         + context.getString(R.string.url_github);
   }
 

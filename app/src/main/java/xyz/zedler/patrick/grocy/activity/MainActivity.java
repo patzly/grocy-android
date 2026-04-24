@@ -151,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
     hapticUtil = new HapticUtil(this);
     hapticUtil.setEnabled(PrefsUtil.areHapticsEnabled(sharedPrefs, this));
     netUtil = new NetUtil(this, sharedPrefs, debug, TAG);
-    netUtil.insertConscrypt();
     netUtil.createWebSocketClient();
 
     // LANGUAGE
