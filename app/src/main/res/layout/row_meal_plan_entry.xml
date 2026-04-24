@@ -37,6 +37,7 @@
     android:layout_marginStart="32dp">
 
     <LinearLayout
+      android:id="@+id/container"
       android:layout_height="wrap_content"
       android:layout_width="match_parent"
       android:orientation="horizontal"
