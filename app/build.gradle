@@ -136,4 +136,11 @@ dependencies {
     implementation(libs.camera.view)
     implementation(libs.camera.mlkit)
     implementation(libs.barcode.scanning)
+    implementation(libs.guava)
+}
+
+configurations.configureEach {
+    resolutionStrategy {
+        force 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
+    }
 }

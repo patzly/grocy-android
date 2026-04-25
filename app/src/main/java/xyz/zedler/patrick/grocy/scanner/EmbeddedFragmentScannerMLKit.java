@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.TorchState;
 import androidx.camera.mlkit.vision.MlKitAnalyzer;
 import androidx.camera.view.CameraController;
@@ -251,7 +252,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
         ContextCompat.getMainExecutor(activity),
         new MlKitAnalyzer(
             List.of(barcodeScanner),
-            CameraController.COORDINATE_SYSTEM_VIEW_REFERENCED,
+            ImageAnalysis.COORDINATE_SYSTEM_VIEW_REFERENCED,
             ContextCompat.getMainExecutor(activity),
             result -> {
               try {
