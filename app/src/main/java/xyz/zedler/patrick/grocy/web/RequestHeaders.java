@@ -24,6 +24,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
+import android.webkit.CookieManager;
 import androidx.preference.PreferenceManager;
 import com.bumptech.glide.load.model.LazyHeaders;
 import java.util.HashMap;
@@ -54,8 +55,21 @@ public class RequestHeaders {
     if (apiKey != null && !apiKey.isEmpty()) {
       params.put("GROCY-API-KEY", apiKey);
     }
-    if (homeAssistantIngressSessionKey != null) {
-      params.put("Cookie", "ingress_session=" + homeAssistantIngressSessionKey);
+    String webViewCookies = serverUrl == null
+        ? null
+        : CookieManager.getInstance().getCookie(serverUrl);
+    if (homeAssistantIngressSessionKey != null || webViewCookies != null) {
+      StringBuilder cookies = new StringBuilder();
+      if (homeAssistantIngressSessionKey != null) {
+        cookies.append("ingress_session=").append(homeAssistantIngressSessionKey);
+      }
+      if (webViewCookies != null && !webViewCookies.trim().isEmpty()) {
+        if (cookies.length() > 0) {
+          cookies.append("; ");
+        }
+        cookies.append(webViewCookies);
+      }
+      params.put("Cookie", cookies.toString());
     }
     return params;
   }

@@ -55,6 +55,8 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue.QueueItem;
+import xyz.zedler.patrick.grocy.web.ReverseProxyAuthDetector;
+import xyz.zedler.patrick.grocy.web.ReverseProxyAuthManager;
 
 public class LoginRequestViewModel extends BaseViewModel {
 
@@ -72,6 +74,7 @@ public class LoginRequestViewModel extends BaseViewModel {
   private final MutableLiveData<String> loginErrorExactMsg;
   private final MutableLiveData<String> loginErrorHassMsg;
   private final MutableLiveData<String> loginErrorHassLog;
+  private final MutableLiveData<Boolean> reverseProxyAuthRequired;
 
   private final String serverUrl;
   private final String homeAssistantServerUrl;
@@ -111,6 +114,7 @@ public class LoginRequestViewModel extends BaseViewModel {
     loginErrorExactMsg = new MutableLiveData<>();
     loginErrorHassMsg = new MutableLiveData<>();
     loginErrorHassLog = new MutableLiveData<>();
+    reverseProxyAuthRequired = new MutableLiveData<>(false);
   }
 
   public void login() {
@@ -130,8 +134,12 @@ public class LoginRequestViewModel extends BaseViewModel {
     getSystemInfo(dlHelper, response -> {
           if (!response.contains("grocy_version")) {
             appendHassLog(" Error.\n");
-            loginErrorOccurred.setValue(true);
-            loginErrorMsg.setValue(getString(R.string.error_not_grocy_instance));
+            if (looksLikeInteractiveLogin(response)) {
+              reverseProxyAuthRequired.setValue(true);
+            } else {
+              loginErrorOccurred.setValue(true);
+              loginErrorMsg.setValue(getString(R.string.error_not_grocy_instance));
+            }
             return;
           }
           try {
@@ -154,6 +162,7 @@ public class LoginRequestViewModel extends BaseViewModel {
               .putString(Constants.PREF.SERVER_URL, serverUrl)
               .putString(Constants.PREF.API_KEY, apiKey)
               .apply();
+          ReverseProxyAuthManager.configure(serverUrl);
           if (useHassLoginFlow) {
             sharedPrefs.edit().putString(
                 Constants.PREF.HOME_ASSISTANT_SERVER_URL,
@@ -186,6 +195,10 @@ public class LoginRequestViewModel extends BaseViewModel {
         },
         error -> {
           Log.e(TAG, "requestLogin: VolleyError: " + error);
+          if (looksLikeInteractiveLogin(error)) {
+            reverseProxyAuthRequired.setValue(true);
+            return;
+          }
           loginErrorOccurred.setValue(true);
           if (error instanceof AuthFailureError) {
             loginErrorExactMsg.setValue(error.toString());
@@ -376,6 +389,48 @@ public class LoginRequestViewModel extends BaseViewModel {
 
   public MutableLiveData<String> getLoginErrorHassLog() {
     return loginErrorHassLog;
+  }
+
+  public MutableLiveData<Boolean> getReverseProxyAuthRequired() {
+    return reverseProxyAuthRequired;
+  }
+
+  public String getServerUrl() {
+    return serverUrl;
+  }
+
+  public void consumeReverseProxyAuthRequest() {
+    reverseProxyAuthRequired.setValue(false);
+  }
+
+  public void onReverseProxyAuthenticated() {
+    reverseProxyAuthRequired.setValue(false);
+    login();
+  }
+
+  private static boolean looksLikeInteractiveLogin(@Nullable String response) {
+    if (response == null) {
+      return false;
+    }
+    return ReverseProxyAuthDetector.looksLikeLoginPage(response);
+  }
+
+  private static boolean looksLikeInteractiveLogin(com.android.volley.VolleyError error) {
+    if (error == null || error.networkResponse == null) {
+      return false;
+    }
+    String location = error.networkResponse.headers == null
+        ? null
+        : error.networkResponse.headers.get("Location");
+    if (location != null && looksLikeInteractiveLogin(location)) {
+      return true;
+    }
+    if (error.networkResponse.data == null) {
+      return false;
+    }
+    return looksLikeInteractiveLogin(
+        new String(error.networkResponse.data, java.nio.charset.StandardCharsets.UTF_8)
+    );
   }
 
   public boolean isUseHassLoginFlow() {

@@ -30,6 +30,7 @@ import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import java.io.IOException;
+import java.net.CookieHandler;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.security.KeyManagementException;
@@ -72,6 +73,9 @@ public class RequestQueueSingleton {
 
   public void newRequestQueue() {
     //requestQueue = Volley.newRequestQueue(ctx);
+
+    // Share the session established by ReverseProxyAuthActivity with HttpURLConnection.
+    CookieHandler.setDefault(new WebViewCookieHandler());
 
     Cache cache = new DiskBasedCache(context.getCacheDir(), 1024 * 1024);
 

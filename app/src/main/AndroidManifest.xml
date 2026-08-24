@@ -67,6 +67,11 @@
     </activity>
 
     <activity
+      android:name=".activity.ReverseProxyAuthActivity"
+      android:exported="false"
+      android:windowSoftInputMode="adjustResize" />
+
+    <activity
       android:name=".activity.MainActivity"
       android:windowSoftInputMode="adjustNothing"
       android:exported="true">

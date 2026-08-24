@@ -127,6 +127,8 @@ dependencies {
     implementation(libs.zxing.android.embedded)
     // For image rotation
     implementation(libs.exifinterface)
+    testImplementation(libs.junit)
+    testImplementation(libs.arch.core.testing)
     // https://github.com/journeyapps/zxing-android-embedded#option-2-desugaring-advanced
     // prevents bug https://github.com/patzly/grocy-android/issues/425
     coreLibraryDesugaring(libs.desugar)

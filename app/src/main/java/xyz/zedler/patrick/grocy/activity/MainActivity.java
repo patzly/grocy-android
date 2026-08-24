@@ -20,6 +20,7 @@
 
 package xyz.zedler.patrick.grocy.activity;
 
+import android.app.Activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
@@ -48,6 +49,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
@@ -96,6 +99,7 @@ import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.web.OrbotHelper;
+import xyz.zedler.patrick.grocy.web.ReverseProxyAuthManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -114,6 +118,17 @@ public class MainActivity extends AppCompatActivity {
   private UiUtil uiUtil;
   private boolean runAsSuperClass;
   private boolean debug;
+  private boolean reverseProxyAuthOpen;
+  private final ActivityResultLauncher<Intent> reverseProxyAuthLauncher =
+      registerForActivityResult(
+          new ActivityResultContracts.StartActivityForResult(),
+          result -> {
+            reverseProxyAuthOpen = false;
+            if (result.getResultCode() == Activity.RESULT_OK) {
+              recreate();
+            }
+          }
+      );
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
     PrefsUtil.migratePrefs(sharedPrefs);
+    ReverseProxyAuthManager.configure(sharedPrefs.getString(Constants.PREF.SERVER_URL, null));
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     // DARK MODE AND THEME
@@ -202,6 +218,16 @@ public class MainActivity extends AppCompatActivity {
     // VIEWS
     binding = ActivityMainBinding.inflate(getLayoutInflater());
     setContentView(binding.getRoot());
+
+    ReverseProxyAuthManager.getAuthenticationRequired().observe(this, url -> {
+      if (!ReverseProxyAuthManager.shouldLaunchAuthentication(url, reverseProxyAuthOpen)) {
+        return;
+      }
+      reverseProxyAuthOpen = true;
+      Intent intent = new Intent(this, ReverseProxyAuthActivity.class);
+      intent.putExtra(ReverseProxyAuthActivity.EXTRA_TARGET_URL, url);
+      reverseProxyAuthLauncher.launch(intent);
+    });
 
     // NAVIGATION
     fragmentManager = getSupportFragmentManager();

@@ -20,17 +20,22 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavOptions;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.activity.ReverseProxyAuthActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentLoginRequestBinding;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
@@ -46,6 +51,20 @@ public class LoginRequestFragment extends BaseFragment {
   private FragmentLoginRequestBinding binding;
   private MainActivity activity;
   private LoginRequestViewModel viewModel;
+  private final ActivityResultLauncher<Intent> reverseProxyAuthLauncher =
+      registerForActivityResult(
+          new ActivityResultContracts.StartActivityForResult(),
+          result -> {
+            if (viewModel == null) {
+              return;
+            }
+            if (result.getResultCode() == Activity.RESULT_OK) {
+              viewModel.onReverseProxyAuthenticated();
+            } else {
+              viewModel.consumeReverseProxyAuthRequest();
+            }
+          }
+      );
 
   @Override
   public View onCreateView(
@@ -75,6 +94,16 @@ public class LoginRequestFragment extends BaseFragment {
     binding.setFragment(this);
     binding.setClickUtil(new ClickUtil());
     binding.setLifecycleOwner(getViewLifecycleOwner());
+
+    viewModel.getReverseProxyAuthRequired().observe(getViewLifecycleOwner(), required -> {
+      if (!Boolean.TRUE.equals(required)) {
+        return;
+      }
+      viewModel.consumeReverseProxyAuthRequest();
+      Intent intent = new Intent(activity, ReverseProxyAuthActivity.class);
+      intent.putExtra(ReverseProxyAuthActivity.EXTRA_TARGET_URL, viewModel.getServerUrl());
+      reverseProxyAuthLauncher.launch(intent);
+    });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {

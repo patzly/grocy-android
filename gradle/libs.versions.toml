@@ -25,6 +25,8 @@ zxing-core = "3.3.0"
 zxing-android-embedded = "4.3.0"
 desugar = "2.1.5"
 exifinterface = "1.4.2"
+junit = "4.13.2"
+archCoreTesting = "2.2.0"
 
 [libraries]
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
@@ -67,6 +69,8 @@ zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", ve
 # prevents bug https://github.com/patzly/grocy-android/issues/425
 desugar = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar" }
 exifinterface = { module = "androidx.exifinterface:exifinterface", version.ref = "exifinterface" }
+junit = { module = "junit:junit", version.ref = "junit" }
+arch-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "archCoreTesting" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

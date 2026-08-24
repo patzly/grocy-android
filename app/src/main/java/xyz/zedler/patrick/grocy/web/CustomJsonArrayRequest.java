@@ -83,6 +83,9 @@ public class CustomJsonArrayRequest extends JsonRequest<JSONArray> {
           response.data,
           HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET)
       );
+      if (ReverseProxyAuthManager.handleResponse(url, jsonString)) {
+        return Response.error(new com.android.volley.AuthFailureError());
+      }
       JSONArray result = null;
       if (jsonString.length() > 0) {
         result = new JSONArray(jsonString);
