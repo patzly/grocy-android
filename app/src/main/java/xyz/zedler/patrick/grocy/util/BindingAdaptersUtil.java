@@ -84,9 +84,10 @@ public class BindingAdaptersUtil {
     if (items == null) {
       return;
     }
-    view.setAdapter(
-        new MatchProductsArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1,
-            items));
+    MatchProductsArrayAdapter adapter = new MatchProductsArrayAdapter(view.getContext(),
+            android.R.layout.simple_list_item_1, items);
+    view.setAdapter(adapter);
+    adapter.getFilter().filter(view.getText());
   }
 
   @BindingAdapter("onSearchClickInSoftKeyboard")
