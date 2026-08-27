@@ -235,6 +235,7 @@ public class PrefsUtil {
     editPrefs.remove(PREF.DB_LAST_TIME_VOLATILE_MISSING);
     editPrefs.remove(PREF.DB_LAST_TIME_TASKS);
     editPrefs.remove(PREF.DB_LAST_TIME_TASK_CATEGORIES);
+    editPrefs.remove(PREF.DB_LAST_TIME_EQUIPMENT);
     editPrefs.remove(PREF.DB_LAST_TIME_CHORES);
     editPrefs.remove(PREF.DB_LAST_TIME_CHORE_ENTRIES);
     editPrefs.remove(PREF.DB_LAST_TIME_USERS);

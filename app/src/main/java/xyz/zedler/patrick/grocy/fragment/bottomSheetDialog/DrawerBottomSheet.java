@@ -116,6 +116,9 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
     binding.linearDrawerTasks.setBackground(
         ViewUtil.getRippleBgListItemSurface(requireContext())
     );
+    binding.linearDrawerEquipment.setBackground(
+        ViewUtil.getRippleBgListItemSurface(requireContext())
+    );
     binding.linearDrawerMasterData.setBackground(
         ViewUtil.getRippleBgListItemSurface(requireContext())
     );
@@ -185,6 +188,7 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
         binding.linearDrawerInventory,
         binding.linearDrawerChores,
         binding.linearDrawerTasks,
+        binding.linearDrawerEquipment,
         binding.linearDrawerRecipes,
         binding.linearDrawerMealPlan,
         binding.linearDrawerMasterData,
@@ -272,6 +276,9 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
     } else if (id == R.id.linear_drawer_tasks) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToTasksFragment());
+    } else if (id == R.id.linear_drawer_equipment) {
+      activity.navUtil.navigateDeepLink(R.string.deep_link_equipmentListFragment);
+      dismiss();
     } else if (id == R.id.linear_drawer_master_data) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToNavigationMasterObjects());

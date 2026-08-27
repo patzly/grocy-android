@@ -31,6 +31,7 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.Equipment;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.Userfield;
@@ -56,6 +57,7 @@ public class MasterObjectListRepository {
     private final List<QuantityUnit> quantityUnits;
     private final List<TaskCategory> taskCategories;
     private final List<Userfield> userfields;
+    private final List<Equipment> equipment;
 
     public MasterObjectData(
         List<Product> products,
@@ -64,7 +66,8 @@ public class MasterObjectListRepository {
         List<Location> locations,
         List<QuantityUnit> quantityUnits,
         List<TaskCategory> taskCategories,
-        List<Userfield> userfields
+        List<Userfield> userfields,
+        List<Equipment> equipment
     ) {
       this.products = products;
       this.productGroups = productGroups;
@@ -73,6 +76,7 @@ public class MasterObjectListRepository {
       this.quantityUnits = quantityUnits;
       this.taskCategories = taskCategories;
       this.userfields = userfields;
+      this.equipment = equipment;
     }
 
     public List<Product> getProducts() {
@@ -102,6 +106,10 @@ public class MasterObjectListRepository {
     public List<Userfield> getUserfields() {
       return userfields;
     }
+
+    public List<Equipment> getEquipment() {
+      return equipment;
+    }
   }
 
   public void loadFromDatabase(DataListener onSuccess, Consumer<Throwable> onError) {
@@ -114,6 +122,7 @@ public class MasterObjectListRepository {
             appDatabase.quantityUnitDao().getQuantityUnits(),
             appDatabase.taskCategoryDao().getTaskCategories(),
             appDatabase.userfieldDao().getUserfields(),
+            appDatabase.equipmentDao().getEquipment(),
             MasterObjectData::new
         )
         .subscribeOn(Schedulers.io())

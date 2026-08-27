@@ -667,6 +667,9 @@
       <action
         android:id="@+id/action_masterObjectListFragment_to_masterProductGroupFragment"
         app:destination="@id/masterProductGroupFragment" />
+      <deepLink
+        android:id="@+id/deepLinkEquipmentList"
+        app:uri="grocy://masterObjectList?entity={entity}" />
       <argument
         android:name="entity"
         app:argType="string" />
@@ -681,6 +684,9 @@
       <action
         android:id="@+id/action_masterObjectListFragment_to_masterTaskCategoryFragment"
         app:destination="@id/masterTaskCategoryFragment" />
+      <action
+        android:id="@+id/action_masterObjectListFragment_to_masterEquipmentFragment"
+        app:destination="@id/masterEquipmentFragment" />
     </fragment>
     <fragment
       android:id="@+id/masterLocationFragment"
@@ -969,6 +975,17 @@
       <argument
         android:name="taskCategory"
         app:argType="xyz.zedler.patrick.grocy.model.TaskCategory"
+        app:nullable="true"
+        android:defaultValue="@null" />
+    </fragment>
+    <fragment
+      android:id="@+id/masterEquipmentFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.MasterEquipmentFragment"
+      android:label="MasterEquipmentFragment"
+      tools:layout="@layout/fragment_master_equipment">
+      <argument
+        android:name="equipment"
+        app:argType="xyz.zedler.patrick.grocy.model.Equipment"
         app:nullable="true"
         android:defaultValue="@null" />
     </fragment>

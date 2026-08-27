@@ -507,6 +507,7 @@
   <string name="error_empty_stores">No stores</string>
   <string name="error_empty_tasks">No tasks</string>
   <string name="error_empty_task_categories">No task categories</string>
+  <string name="error_empty_equipment">No equipment</string>
   <string name="error_empty_unit_conversions">No quantity unit conversions</string>
   <string name="error_empty_chores">No chores</string>
   <string name="error_empty_chores_sub">Go to master data and create some</string>
@@ -1031,6 +1032,12 @@
   <string name="property_userfield_value_without_space">%1$s:%2$s</string>
   <string name="property_task_category">Task category</string>
   <string name="property_task_categories">Task categories</string>
+  <string name="property_equipment">Equipment</string>
+  <string name="property_equipment_singular">Equipment item</string>
+  <string name="property_instruction_manual">Instruction manual</string>
+  <string name="action_replace_manual">Replace manual</string>
+  <string name="action_delete_manual">Remove manual</string>
+  <string name="error_open_manual">No app can open this file</string>
   <string name="property_calories">Calories</string>
   <string name="property_calories_unit">Calories (unit)</string>
   <string name="property_calories_total">Calories (total)</string>

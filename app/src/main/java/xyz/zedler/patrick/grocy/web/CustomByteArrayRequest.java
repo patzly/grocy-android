@@ -42,6 +42,7 @@ public class CustomByteArrayRequest extends Request<byte[]> {
   private final String hassLongLivedAccessToken;
   private final byte[] content;
   private final Runnable successListener;
+  private final Response.Listener<byte[]> byteListener;
 
   public CustomByteArrayRequest(
       int method,
@@ -54,12 +55,29 @@ public class CustomByteArrayRequest extends Request<byte[]> {
       int timeoutSeconds,
       String tag
   ) {
+    this(method, url, apiKey, homeAssistantIngressSessionKey, content, successListener, null,
+        errorListener, timeoutSeconds, tag);
+  }
+
+  public CustomByteArrayRequest(
+      int method,
+      String url,
+      String apiKey,
+      String homeAssistantIngressSessionKey,
+      byte[] content,
+      @Nullable Runnable successListener,
+      @Nullable Response.Listener<byte[]> byteListener,
+      @Nullable Response.ErrorListener errorListener,
+      int timeoutSeconds,
+      String tag
+  ) {
     super(method, url, error -> {
       if (errorListener != null) {
         errorListener.onErrorResponse(error);
       }
     });
     this.successListener = successListener;
+    this.byteListener = byteListener;
     this.content = content;
     this.url = url;
     this.apiKey = apiKey;
@@ -79,7 +97,11 @@ public class CustomByteArrayRequest extends Request<byte[]> {
 
   @Override
   protected void deliverResponse(byte[] response) {
-    if (successListener != null) successListener.run();
+    if (byteListener != null) {
+      byteListener.onResponse(response);
+    } else if (successListener != null) {
+      successListener.run();
+    }
   }
 
   @Override

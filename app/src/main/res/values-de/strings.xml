@@ -1328,6 +1328,13 @@
   <string name="mtm_valid_for">Zertifikat gültig für:</string>
   <string name="mtm_decision_always">Immer</string>
   <string name="mtm_decision_once">Einmalig</string>
+  <string name="property_equipment">Ausstattung</string>
+  <string name="property_equipment_singular">Ausstattungsgegenstand</string>
+  <string name="property_instruction_manual">Bedienungsanleitung</string>
+  <string name="action_replace_manual">Anleitung ersetzen</string>
+  <string name="action_delete_manual">Anleitung löschen</string>
+  <string name="error_open_manual">Keine App kann diese Datei öffnen</string>
+  <string name="error_empty_equipment">Keine Ausstattung vorhanden</string>
   <string name="mtm_notification_channel">Sicherheit</string>
   <string name="mtm_notification">Überprüfung des Zertifikats</string>
   <string name="mtm_error_keystore">Fehler beim Laden des Keystores aus Datei</string>

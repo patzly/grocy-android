@@ -30,6 +30,7 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import xyz.zedler.patrick.grocy.dao.ChoreDao;
 import xyz.zedler.patrick.grocy.dao.ChoreEntryDao;
+import xyz.zedler.patrick.grocy.dao.EquipmentDao;
 import xyz.zedler.patrick.grocy.dao.LocationDao;
 import xyz.zedler.patrick.grocy.dao.MealPlanEntryDao;
 import xyz.zedler.patrick.grocy.dao.MealPlanSectionDao;
@@ -64,6 +65,7 @@ import xyz.zedler.patrick.grocy.dao.UserfieldDao;
 import xyz.zedler.patrick.grocy.dao.VolatileItemDao;
 import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
+import xyz.zedler.patrick.grocy.model.Equipment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MealPlanEntry;
 import xyz.zedler.patrick.grocy.model.MealPlanSection;
@@ -134,12 +136,13 @@ import xyz.zedler.patrick.grocy.repository.MainRepository.OnVersionListener;
         RecipeNesting.class,
         MealPlanEntry.class,
         MealPlanSection.class,
-        Userfield.class
+        Userfield.class,
+        Equipment.class
     },
     views = {
         RecipeNestingResolved.class
     },
-    version = 54
+    version = 55
 )
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
@@ -213,6 +216,8 @@ public abstract class AppDatabase extends RoomDatabase {
   public abstract UserfieldDao userfieldDao();
 
   public abstract ServerDao serverDao();
+
+  public abstract EquipmentDao equipmentDao();
 
   public static AppDatabase getAppDatabase(Context context) {
     if (INSTANCE == null) {

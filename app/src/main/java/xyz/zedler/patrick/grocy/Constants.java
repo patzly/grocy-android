@@ -117,6 +117,7 @@ public final class Constants {
     public final static String DB_LAST_TIME_USERFIELDS = "db_last_time_userfields";
     public final static String DB_LAST_TIME_MEAL_PLAN_ENTRIES = "db_last_time_meal_plan_entries";
     public final static String DB_LAST_TIME_MEAL_PLAN_SECTIONS = "db_last_time_meal_plan_sections";
+    public final static String DB_LAST_TIME_EQUIPMENT = "db_last_time_equipment";
     // when adding new constant for DB, also add it to clearCachingRelatedSharedPreferences()
     // in PrefsUtil
 

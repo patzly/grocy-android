@@ -65,6 +65,7 @@ public class GrocyApi {
     public final static String TASK_CATEGORIES = "task_categories";
     public final static String CHORES = "chores";
     public final static String USERFIELDS = "userfields";
+    public final static String EQUIPMENT = "equipment";
   }
 
   public final static class COMPARISON_OPERATOR {
@@ -521,5 +522,13 @@ public class GrocyApi {
   public String getProductPictureServeLarge(String filename) {
     return getProductPicture(filename)
         + "?force_serve_as=picture&best_fit_height=800&best_fit_width=1280";
+  }
+
+  public String getEquipmentManual(String filename) {
+    String fileNameEncoded = new String(Base64.encode(
+        filename.getBytes(StandardCharsets.UTF_8),
+        Base64.DEFAULT
+    ), StandardCharsets.UTF_8);
+    return getUrl("/files/equipmentmanuals/" + fileNameEncoded.replace("\n", ""));
   }
 }

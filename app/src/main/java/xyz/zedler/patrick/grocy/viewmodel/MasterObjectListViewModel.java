@@ -51,6 +51,7 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.Equipment;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.Userfield;
@@ -137,6 +138,9 @@ public class MasterObjectListViewModel extends BaseViewModel {
         case ENTITY.TASK_CATEGORIES:
           this.objects = data.getTaskCategories();
           break;
+        case ENTITY.EQUIPMENT:
+          this.objects = data.getEquipment();
+          break;
         default:
           this.objects = data.getStores();
           break;
@@ -166,6 +170,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
         (entity.equals(GrocyApi.ENTITY.QUANTITY_UNITS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))
             ? QuantityUnit.class : null,
         entity.equals(ENTITY.TASK_CATEGORIES) ? TaskCategory.class : null,
+        entity.equals(ENTITY.EQUIPMENT) ? Equipment.class : null,
         entity.equals(GrocyApi.ENTITY.PRODUCTS) ? Product.class : null,
         Userfield.class
     );

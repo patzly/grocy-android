@@ -54,6 +54,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.model.Equipment;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -99,6 +100,9 @@ public class MasterObjectListFragment extends BaseFragment
         break;
       case ENTITY.TASK_CATEGORIES:
         title = R.string.property_task_categories;
+        break;
+      case ENTITY.EQUIPMENT:
+        title = R.string.property_equipment;
         break;
       default: // STORES
         title = R.string.property_stores;
@@ -178,6 +182,9 @@ public class MasterObjectListFragment extends BaseFragment
               break;
             case ENTITY.TASK_CATEGORIES:
               fullscreenType = InfoFullscreen.INFO_EMPTY_TASK_CATEGORIES;
+              break;
+            case ENTITY.EQUIPMENT:
+              fullscreenType = InfoFullscreen.INFO_EMPTY_EQUIPMENT;
               break;
             default: // STORES
               fullscreenType = InfoFullscreen.INFO_EMPTY_STORES;
@@ -300,6 +307,10 @@ public class MasterObjectListFragment extends BaseFragment
               activity.navUtil.navigate(MasterObjectListFragmentDirections
                   .actionMasterObjectListFragmentToMasterTaskCategoryFragment());
               break;
+            case ENTITY.EQUIPMENT:
+              activity.navUtil.navigate(MasterObjectListFragmentDirections
+                  .actionMasterObjectListFragmentToMasterEquipmentFragment());
+              break;
           }
         }
     );
@@ -346,6 +357,11 @@ public class MasterObjectListFragment extends BaseFragment
         activity.navUtil.navigate(MasterObjectListFragmentDirections
             .actionMasterObjectListFragmentToMasterTaskCategoryFragment()
             .setTaskCategory((TaskCategory) object));
+        break;
+      case GrocyApi.ENTITY.EQUIPMENT:
+        activity.navUtil.navigate(MasterObjectListFragmentDirections
+            .actionMasterObjectListFragmentToMasterEquipmentFragment()
+            .setEquipment((Equipment) object));
         break;
       case GrocyApi.ENTITY.PRODUCTS:
         viewModel.showProductBottomSheet((Product) object);

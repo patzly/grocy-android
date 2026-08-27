@@ -41,6 +41,7 @@ public class InfoFullscreen {
   public static final int INFO_EMPTY_CHORES = 32;
   public static final int INFO_EMPTY_RECIPES = 34;
   public static final int INFO_EMPTY_INGREDIENTS = 36;
+  public static final int INFO_EMPTY_EQUIPMENT = 38;
 
   private final int type;
   private final String exact;

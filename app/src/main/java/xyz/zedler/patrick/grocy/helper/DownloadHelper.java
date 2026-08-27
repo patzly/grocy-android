@@ -73,6 +73,7 @@ import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.model.Equipment;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
@@ -364,6 +365,28 @@ public class DownloadHelper {
     requestQueue.add(request);
   }
 
+  public void getFile(
+      String url,
+      OnBytesResponseListener onResponse,
+      OnErrorListener onError
+  ) {
+    String sessionKey = sharedPrefs
+        .getString(Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY, null);
+    CustomByteArrayRequest request = new CustomByteArrayRequest(
+        Request.Method.GET,
+        url,
+        apiKey,
+        sessionKey,
+        null,
+        null,
+        onResponse::onResponse,
+        onError::onError,
+        timeoutSeconds,
+        uuidHelper
+    );
+    requestQueue.add(request);
+  }
+
   public void delete(
       String url,
       String tag,
@@ -542,6 +565,8 @@ public class DownloadHelper {
         queue.append(Task.updateTasks(this, dbChangedTime, forceUpdate, null));
       } else if (type == TaskCategory.class) {
         queue.append(TaskCategory.updateTaskCategories(this, dbChangedTime, forceUpdate, null));
+      } else if (type == Equipment.class) {
+        queue.append(Equipment.updateEquipment(this, dbChangedTime, forceUpdate, null));
       } else if (type == Chore.class) {
         queue.append(Chore.updateChores(this, dbChangedTime, forceUpdate, null));
       } else if (type == ChoreEntry.class) {
@@ -595,6 +620,11 @@ public class DownloadHelper {
   public interface OnJSONArrayResponseListener {
 
     void onResponse(JSONArray response);
+  }
+
+  public interface OnBytesResponseListener {
+
+    void onResponse(byte[] bytes);
   }
 
   public interface OnErrorListener {
