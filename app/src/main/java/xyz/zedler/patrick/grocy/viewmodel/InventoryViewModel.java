@@ -98,6 +98,7 @@ public class InventoryViewModel extends BaseViewModel {
   private boolean productWillBeFilled;
   private final int maxDecimalPlacesAmount;
   private final int decimalPlacesPriceInput;
+  private String scannedBarcode;
 
   public InventoryViewModel(@NonNull Application application, InventoryFragmentArgs args) {
     super(application);
@@ -132,6 +133,11 @@ public class InventoryViewModel extends BaseViewModel {
     quickModeEnabled = new MutableLiveData<>(quickModeStart);
 
     barcodes = new ArrayList<>();
+
+    scannedBarcode = args.getScannedBarcode();
+    if (scannedBarcode != null) {
+      loadFromDatabase(false);
+    }
   }
 
   public FormDataInventory getFormData() {
@@ -153,6 +159,10 @@ public class InventoryViewModel extends BaseViewModel {
         if (queueEmptyAction != null) {
           queueEmptyAction.run();
           queueEmptyAction = null;
+        }
+        if (scannedBarcode != null) {
+          onBarcodeRecognized(scannedBarcode);
+          scannedBarcode = null;
         }
       }
     }, error -> onError(error, TAG));

@@ -107,6 +107,7 @@ public class PurchaseViewModel extends BaseViewModel {
   private List<ShoppingListItem> shoppingListItems;
   private HashMap<Integer, ShoppingListItem> shoppingListItemHashMap;
   private ArrayList<Integer> batchShoppingListItemIds;
+  private String scannedBarcode;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -169,6 +170,11 @@ public class PurchaseViewModel extends BaseViewModel {
     if (hasStoredPurchase()) {
       setQueueEmptyAction(() -> setStoredPurchase(storedPurchase));
     }
+
+    scannedBarcode = args.getScannedBarcode();
+    if (args.getScannedBarcode() != null) {
+      loadFromDatabase(false);
+    }
   }
 
   public FormDataPurchase getFormData() {
@@ -205,6 +211,10 @@ public class PurchaseViewModel extends BaseViewModel {
         }
         if (batchShoppingListItemIds != null) {
           fillWithShoppingListItem();
+        }
+        if (scannedBarcode != null) {
+          onBarcodeRecognized(scannedBarcode);
+          scannedBarcode = null;
         }
       }
     }, error -> onError(error, TAG));

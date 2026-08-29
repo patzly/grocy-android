@@ -95,6 +95,7 @@ public class TransferViewModel extends BaseViewModel {
   private Runnable queueEmptyAction;
   private boolean productWillBeFilled;
   private final int maxDecimalPlacesAmount;
+  private String scannedBarcode;
 
   public TransferViewModel(@NonNull Application application, TransferFragmentArgs args) {
     super(application);
@@ -125,6 +126,11 @@ public class TransferViewModel extends BaseViewModel {
     quickModeEnabled = new MutableLiveData<>(quickModeStart);
 
     barcodes = new ArrayList<>();
+
+    scannedBarcode = args.getScannedBarcode();
+    if (args.getScannedBarcode() != null) {
+      loadFromDatabase(false);
+    }
   }
 
   public FormDataTransfer getFormData() {
@@ -141,9 +147,15 @@ public class TransferViewModel extends BaseViewModel {
       formData.getProductsLive().setValue(Product.getActiveAndStockEnabledProductsOnly(products));
       if (downloadAfterLoading) {
         downloadData(false);
-      } else if (queueEmptyAction != null) {
-        queueEmptyAction.run();
-        queueEmptyAction = null;
+      } else {
+        if (queueEmptyAction != null) {
+          queueEmptyAction.run();
+          queueEmptyAction = null;
+        }
+        if (scannedBarcode != null) {
+          onBarcodeRecognized(scannedBarcode);
+          scannedBarcode = null;
+        }
       }
     }, error -> onError(error, TAG));
   }
