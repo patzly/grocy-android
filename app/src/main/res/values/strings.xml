@@ -594,6 +594,7 @@
   <string name="title_stock_entries">Stock entries</string>
   <string name="title_stock_entry">Stock entry</string>
   <string name="title_stock_journal">Stock journal</string>
+  <string name="title_stock_report_spendings">Spending report</string>
   <string name="title_shopping_list">Shopping list</string>
   <string name="title_feedback">Feedback</string>
   <string name="title_settings">Settings</string>
@@ -719,6 +720,7 @@
 
   <string name="subtitle_barcodes_will_be_added">There are stored barcodes, which are added to the product with the save operation.</string>
   <string name="subtitle_unknown">Unknown</string>
+  <string name="subtitle_others">Others</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
   <string name="subtitle_supported">Supported</string>
   <!-- Like the words 'not supported' from 'This version is not supported.'-->
@@ -1031,6 +1033,12 @@
   <string name="property_userfield_value_without_space">%1$s:%2$s</string>
   <string name="property_task_category">Task category</string>
   <string name="property_task_categories">Task categories</string>
+  <string name="property_date_range">Date range</string>
+  <string name="property_group_by_label">Group by</string>
+  <string name="title_total">Total:</string>
+  <string name="date_range_this_month">This month</string>
+  <string name="date_range_last_month">Last month</string>
+  <string name="date_range_this_year">This year</string>
   <string name="property_calories">Calories</string>
   <string name="property_calories_unit">Calories (unit)</string>
   <string name="property_calories_total">Calories (total)</string>

@@ -130,4 +130,5 @@ dependencies {
     // https://github.com/journeyapps/zxing-android-embedded#option-2-desugaring-advanced
     // prevents bug https://github.com/patzly/grocy-android/issues/425
     coreLibraryDesugaring(libs.desugar)
+    implementation("com.github.AppDevNext.AndroidChart:chartLib:5.2.4")
 }

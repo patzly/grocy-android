@@ -329,4 +329,36 @@ public class StockLogEntry implements Parcelable {
   ) {
     return getStockLogEntries(dlHelper, limit, offset, -1, onResponseListener, null);
   }
+
+  public static QueueItem getPurchaseEntries(
+      DownloadHelper dlHelper,
+      String startDate,
+      String endDate,
+      OnObjectsResponseListener<StockLogEntry> onResponseListener,
+      OnErrorListener onErrorListener
+  ) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnMultiTypeErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        dlHelper.get(
+            dlHelper.grocyApi.getPurchaseStockLog(startDate, endDate),
+            uuid,
+            response -> {
+              Type type = new TypeToken<ArrayList<StockLogEntry>>() {}.getType();
+              ArrayList<StockLogEntry> entries = dlHelper.gson.fromJson(response, type);
+              if (onResponseListener != null) onResponseListener.onResponse(entries);
+              if (responseListener != null) responseListener.onResponse(response);
+            },
+            error -> {
+              if (onErrorListener != null) onErrorListener.onError(error);
+              if (errorListener != null) errorListener.onError(error);
+            }
+        );
+      }
+    };
+  }
 }

@@ -1328,6 +1328,14 @@
   <string name="mtm_valid_for">Zertifikat gültig für:</string>
   <string name="mtm_decision_always">Immer</string>
   <string name="mtm_decision_once">Einmalig</string>
+  <string name="title_stock_report_spendings">Ausgaben-Report</string>
+  <string name="subtitle_others">Sonstige</string>
+  <string name="property_date_range">Zeitraum</string>
+  <string name="property_group_by_label">Gruppieren nach</string>
+  <string name="title_total">Gesamt:</string>
+  <string name="date_range_this_month">Dieser Monat</string>
+  <string name="date_range_last_month">Letzter Monat</string>
+  <string name="date_range_this_year">Dieses Jahr</string>
   <string name="mtm_notification_channel">Sicherheit</string>
   <string name="mtm_notification">Überprüfung des Zertifikats</string>
   <string name="mtm_error_keystore">Fehler beim Laden des Keystores aus Datei</string>

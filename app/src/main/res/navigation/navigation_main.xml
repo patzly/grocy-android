@@ -1010,6 +1010,9 @@
     <action
       android:id="@+id/action_stockOverviewFragment_to_stockJournalFragment"
       app:destination="@id/stockJournalFragment" />
+    <action
+      android:id="@+id/action_stockOverviewFragment_to_stockReportSpendingsFragment"
+      app:destination="@id/stockReportSpendingsFragment" />
   </fragment>
   <fragment
     android:id="@+id/chooseProductFragment"
@@ -1204,6 +1207,11 @@
     android:name="xyz.zedler.patrick.grocy.fragment.StockJournalFragment"
     android:label="StockJournalFragment"
     tools:layout="@layout/fragment_stock_journal"/>
+  <fragment
+    android:id="@+id/stockReportSpendingsFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.StockReportSpendingsFragment"
+    android:label="StockReportSpendingsFragment"
+    tools:layout="@layout/fragment_stock_report_spendings"/>
   <fragment
     android:id="@+id/editorHtmlFragment2"
     android:name="xyz.zedler.patrick.grocy.fragment.EditorHtmlFragment"

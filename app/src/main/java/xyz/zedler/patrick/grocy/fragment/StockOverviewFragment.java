@@ -355,6 +355,11 @@ public class StockOverviewFragment extends BaseFragment implements
           StockOverviewFragmentDirections.actionStockOverviewFragmentToStockEntriesFragment()
       );
       return true;
+    } else if (item.getItemId() == R.id.action_stock_report_spendings) {
+      activity.navUtil.navigate(
+          StockOverviewFragmentDirections.actionStockOverviewFragmentToStockReportSpendingsFragment()
+      );
+      return true;
     }
     return false;
   }

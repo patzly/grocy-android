@@ -42,4 +42,10 @@
     android:icon="@drawable/ic_round_format_list_numbered"
     app:showAsAction="ifRoom" />
 
+  <item
+    android:id="@+id/action_stock_report_spendings"
+    android:title="@string/title_stock_report_spendings"
+    android:icon="@drawable/ic_round_cash_multiple"
+    app:showAsAction="ifRoom" />
+
 </menu>
