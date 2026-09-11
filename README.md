@@ -2,7 +2,7 @@
 
 # Grocy Android
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Release](https://img.shields.io/github/v/release/patzly/grocy-android?label=Release)](https://github.com/patzly/grocy-android/releases)  [![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads)](https://github.com/patzly/grocy-android/releases) 
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Release](https://img.shields.io/github/v/release/patzly/grocy-android?label=Release)](https://github.com/patzly/grocy-android/releases)  [![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads)](https://github.com/patzly/grocy-android/releases)
 
 > **⚠️ Because I don't have much time for Grocy Android in addition to my studies, work and other spare time activities and projects, pull requests for closing issues, adding improvements or implementing new features are highly appreciated!**
 
@@ -10,8 +10,8 @@ Grocy Android is an open-source Android client for [Grocy](https://grocy.info/) 
 
 Grocy Android uses Grocy's official API to provide you a beautiful interface on your smartphone with powerful barcode scanning and intuitive batch processing, all what you need to efficiently manage your groceries.
 
-**This app requires a running self-hosted instance of the [Grocy server application](https://grocy.info/).**  
-It is a **companion** app, therefore it **cannot run standalone** or manage products itself.  
+**This app requires a running self-hosted instance of the [Grocy server application](https://grocy.info/).**
+It is a **companion** app, therefore it **cannot run standalone** or manage products itself.
 You can try it using the demo option available on the login screen.
 
 iOS/macOS client for Grocy: [Grocy-SwiftUI](https://github.com/supergeorg/Grocy-SwiftUI)
@@ -45,7 +45,7 @@ If you want to try new features right after development, you can download an uns
 
 Grocy Android requires at least Android 6.0 Marshmallow and works properly on devices without any Google service installed.
 
-It is also possible to use the Grocy Add-on on an [Home Assistant](https://www.home-assistant.io/getting-started/) server. Click [here](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq4) for instructions.
+It is also possible to use the Grocy Add-on on an [Home Assistant](https://www.home-assistant.io/getting-started/) server. Click [here](FAQ.md#user-content-faq4) for instructions.
 
 This app supports `https` encryption
 - if your server uses a certificate which is signed by a public and trusted [certificate authority (CA)](https://en.wikipedia.org/wiki/Certificate_authority). To meet this requirement, you can use a free certificate from [letsencrypt.org](https://letsencrypt.org/) for your server. Old Android devices can have problems with newer CAs because their internal list of trusted CAs can be outdated if they don't receive system updates anymore, therefore we've integrated [Conscrypt](https://github.com/google/conscrypt/#readme) into the app to support current CAs on all Android versions.
@@ -53,14 +53,14 @@ This app supports `https` encryption
 
 ## FAQ
 
-Please see the in-app help dialog or the [FAQ](https://github.com/patzly/grocy-android/blob/master/FAQ.md) for a list of frequently asked questions.
+Please see the in-app help dialog or the [FAQ](FAQ.md) for a list of frequently asked questions.
 
 ## Contribution
 
 If you run into a bug or miss a feature, please [open an issue](https://github.com/patzly/grocy-android/issues) in this repository. If you have a good knowledge of Java, pull requests are highly appreciated!
 
 Like the grocy project, Grocy Android can be translated, too. The main language is English, but I also maintain the German translation because it's my mother tongue.
-You can help translate this project at [Transifex](https://app.transifex.com/patzly/grocy-android), if your language is incomplete, contains typos or is not available yet. Translations which reached a completion level of 80% will be included in releases.  
+You can help translate this project at [Transifex](https://app.transifex.com/patzly/grocy-android), if your language is incomplete, contains typos or is not available yet. Translations which reached a completion level of 80% will be included in releases.
 
 Thanks for your contributions!
 

@@ -8,10 +8,11 @@ Credits for the layout and some text of this FAQ go to [M66B](https://github.com
 
 ## Index
 
-* [How to](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-howto)
-* [Planned features](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-planned-features)
-* [Frequently Asked Questions](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-frequently-asked-questions)
-* [Support](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-support)
+* [How to](#how-to)
+* [Planned features](#planned-features)
+* [Frequently Asked Questions](#frequently-asked-questions)
+* [Deeplinks](#deeplinks)
+* [Support](#support)
 
 <a name="howto"></a>
 
@@ -54,16 +55,16 @@ Anything on this list is in random order and *might* be added in the near future
 
 ## Frequently Asked Questions
 
-* [(1) Which permissions are needed and why?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq1)
-* [(2) How do I know what something does?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq2)
-* [(3) My API key is invalid. What can I do?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq3)
-* [(4) How can I use this app with Hass.io?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq4)
-* [(5) Why are my barcodes unreadable if I use the selfie camera?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq5)
-* [(6) What is ML Kit barcode scanner?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq6)
-* [(7) How can I connect to my instance through Tor Hidden Service or Proxy?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq7)
-* [(8) How can I use my USB or Bluetooth™ barcode scanner device?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq8)
-
-[I have another question.](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-support)
+* [(1) Which permissions are needed and why?](#user-content-faq1)
+* [(2) How do I know what something does?](#user-content-faq2)
+* [(3) My API key is invalid. What can I do?](#user-content-faq3)
+* [(4) How can I use this app with Hass.io?](#user-content-faq4)
+* [(5) Why are my barcodes unreadable if I use the selfie camera?](#user-content-faq5)
+* [(6) What is ML Kit barcode scanner?](#user-content-faq6)
+* [(7) How can I connect to my instance through Tor Hidden Service or Proxy?](#user-content-faq7)
+* [(8) How can I use my USB or Bluetooth™ barcode scanner device?](#user-content-faq8)
++ [(9) How can I use an NFC tag to quickly open a page in Grocy?](#user-content-faq9)
+[I have another question.](#support)
 
 <br />
 
@@ -92,7 +93,7 @@ Starting with Android 8 you can long press almost every clickable element withou
 Tap CREATE KEY to open the key management page of your Grocy instance.
 Create a new key and copy it to your clipboard, then paste it in the key field of Grocy Android and try again.
 
-If you use Hass.io with the Grocy Add-on, read [this](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq4) section.
+If you use Hass.io with the Grocy Add-on, read [this](#user-content-faq4) section.
 
 <br />
 
@@ -100,7 +101,7 @@ If you use Hass.io with the Grocy Add-on, read [this](https://github.com/patzly/
 **(4) How can I use this app with the grocy Home Assistant add-on?**
 
 After tapping "Own server" on the login page, you will be prompted to scan the QR code from an API key of your grocy server. Once you do that, the app will detect that you are using Home Assistant and prompt you to scan the QR code of a long-lived access token from Home Assistant. You can get this in your Home Assistant user profile in the bottom section. Once you scan the QR code, you will be directed to a form where you will need to fill in any missing data. If you have followed the steps up to this point, all that should be left is the server URL of Home Assistant (i.e. the URL where you can reach your Home Assistant instance). Be aware that you may add the port if your server uses another port than 443 or 80 (e.g. the local port of Home Assistant server is 8123).
-  
+
 You can also enter the URL of your Home Assistant Cloud (Nabu Casa), if you use this service. The URL must then be in the form `https://xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.ui.nabu.casa/`. Since typing can cause typos, we recommend copying the URL from somewhere else via Android's clipboard and pasting it into the field.
 
 <br />
@@ -131,6 +132,42 @@ Go to `app settings -> Network` and enable Tor support or HTTP-Proxy. Orbot is r
 **(8) How can I use my USB or Bluetooth™ barcode scanner device?**
 
 Go to `app settings -> Scanner` and enable support for external scanners. Then you can connect a scanner for example using USB or Bluetooth™ and use it on the purchase/consume/transfer/inventory pages (the product field must be focused). Your scanner should have TAB or Enter as suffix, otherwise the workflow won't start after a scan.
+
+<a name="faq9"></a>
+**(9) How can I use an NFC tag to quickly open a page in Grocy?**
+
+See [deeplinks](#deeplinks)
+
+## Deeplinks
+
+You can open a desired page of the app using an URI. This could be written e.g. into a NFC tag for
+easy navigation to the consume page or other pages in the app using physical interaction.
+
+#### URIs:
+
+- grocy://stockOverviewFragment
+- grocy://stockOverviewFragment?statusFilterId={statusFilterId}
+- grocy://shoppingListFragment
+- grocy://shoppingListItemEditFragment?action=create
+- grocy://shoppingModeFragment
+- grocy://purchaseFragment
+- grocy://consumeFragment
+- grocy://transferFragment
+- grocy://inventoryFragment
+- grocy://settingsFragment
+- grocy://tasksFragment
+- grocy://taskEntryEditFragment?action=create
+- grocy://choresFragment
+- grocy://choresFragment?statusFilterId={statusFilterId}
+- grocy://recipesFragment
+- grocy://masterDataOverviewFragment
+- grocy://stockEntriesFragment
+
+The value of parameter statusFilterId for the stockOverviewFragment URI can be 0 for all items,
+1 for due soon, 2 for overdue, 3 for expired, 4 for below min. stock amount, 5 for in stock, 6 for
+opened and 7 for "not fresh" combination. The value of parameter statusFilterId for the
+choresFragment URI can be 0 for all items, 1 for due today, 2 for due soon, 3 for overdue
+and 4 for due.
 
 ## Support
 
