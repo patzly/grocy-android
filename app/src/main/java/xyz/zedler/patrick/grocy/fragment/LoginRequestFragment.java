@@ -126,6 +126,9 @@ public class LoginRequestFragment extends BaseFragment {
   @Override
   public void login() {
     viewModel.clearHassData();
-    new Handler().postDelayed(() -> viewModel.login(), 500);
+    // A self-hosted server is usually on the local network, so make sure we may reach it
+    activity.requestLocalNetworkAccess(
+        () -> new Handler().postDelayed(() -> viewModel.login(), 500)
+    );
   }
 }
