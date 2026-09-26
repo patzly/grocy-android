@@ -20,6 +20,7 @@
 
 package xyz.zedler.patrick.grocy.activity;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
@@ -29,15 +30,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.CursorWindow;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -48,6 +54,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts.RequestPermission;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
@@ -114,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
   private UiUtil uiUtil;
   private boolean runAsSuperClass;
   private boolean debug;
+  private ActivityResultLauncher<String> localNetworkPermissionLauncher;
+  private Runnable onLocalNetworkPermissionResult;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -246,8 +256,30 @@ public class MainActivity extends AppCompatActivity {
         binding.anchor, binding.anchorMaxBottom
     );
 
+    // LOCAL NETWORK ACCESS
+
+    localNetworkPermissionLauncher = registerForActivityResult(
+        new RequestPermission(),
+        isGranted -> {
+          if (!isGranted) {
+            // The system stops showing its dialog after a denial, so offer the app settings
+            Snackbar snackbar = getSnackbar(R.string.error_permission_local_network, true);
+            snackbar.setAction(R.string.action_open_app_settings, v -> openAppInfoPage());
+            showSnackbar(snackbar);
+          }
+          Runnable onResult = onLocalNetworkPermissionResult;
+          onLocalNetworkPermissionResult = null;
+          if (onResult != null) {
+            onResult.run();
+          }
+        }
+    );
+
     // UPDATE CONFIG | CHECK GROCY COMPATIBILITY
     if (!PrefsUtil.isServerUrlEmpty(sharedPrefs)) {
+      // Servers are usually self-hosted on the local network, which needs this permission
+      // since targetSdk 37. Existing installations never got asked, so do it here.
+      requestLocalNetworkAccess(null);
       ConfigUtil.loadInfo(
           new DownloadHelper(this, TAG),
           grocyApi,
@@ -330,6 +362,38 @@ public class MainActivity extends AppCompatActivity {
       resources.updateConfiguration(config, resources.getDisplayMetrics());
       super.attachBaseContext(base.createConfigurationContext(config));
     }
+  }
+
+  /**
+   * Makes sure the app may reach servers on the local network before running onDone.
+   *
+   * Since targetSdk 37 (Android 17) ACCESS_LOCAL_NETWORK is a runtime permission. Without it
+   * requests to a self-hosted Grocy server silently run into a timeout. On older versions the
+   * permission does not exist and nothing has to be requested.
+   *
+   * @param onDone run once the permission was granted or denied, may be null
+   */
+  public void requestLocalNetworkAccess(@Nullable Runnable onDone) {
+    boolean needsRequest = VERSION.SDK_INT >= VERSION_CODES.CINNAMON_BUN
+        && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_LOCAL_NETWORK)
+        != PackageManager.PERMISSION_GRANTED;
+    if (!needsRequest || localNetworkPermissionLauncher == null) {
+      if (onDone != null) {
+        onDone.run();
+      }
+      return;
+    }
+    onLocalNetworkPermissionResult = onDone;
+    localNetworkPermissionLauncher.launch(Manifest.permission.ACCESS_LOCAL_NETWORK);
+  }
+
+  /**
+   * Opens this app's page in the system settings, where a denied permission can be granted again.
+   */
+  public void openAppInfoPage() {
+    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+    intent.setData(Uri.fromParts("package", getPackageName(), null));
+    startActivity(intent);
   }
 
   public BottomScrollBehavior getScrollBehavior() {
