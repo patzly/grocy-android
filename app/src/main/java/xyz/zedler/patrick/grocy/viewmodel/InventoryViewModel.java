@@ -362,6 +362,11 @@ public class InventoryViewModel extends BaseViewModel {
   }
 
   public void inventoryProduct() {
+    if (formData.getProductDetailsLive().getValue() != null
+        && formData.getQuantityUnitStockLive().getValue() == null) {
+      showMessage(R.string.error_missing_stock_quantity_unit);
+      return;
+    }
     if (!formData.isFormValid()) {
       showMessage(R.string.error_missing_information);
       return;

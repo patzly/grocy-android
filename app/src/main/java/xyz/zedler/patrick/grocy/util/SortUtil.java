@@ -59,10 +59,14 @@ public class SortUtil {
       ",J<k,K<l,L<m,M<n,N<o,O<p,P<q,Q<r,R<s, S & SS,ß<t,T& TH, Þ &TH," +
       "þ <u,U<v,V<w,W<x,X<y,Y<z,Z&AE,Æ&AE,æ&OE,Œ&OE,œ";
 
+  private static String getSortableProductName(Product product) {
+    return product != null && product.getName() != null ? product.getName().toLowerCase() : "";
+  }
+
   private static void compareStockItemsWithExtGerman(List<StockItem> items, boolean asc) {
     Collections.sort(items, (item1, item2) -> Collator.getInstance(Locale.GERMAN).compare(
-        (asc ? item1 : item2).getProduct().getName().toLowerCase(),
-        (asc ? item2 : item1).getProduct().getName().toLowerCase()
+        getSortableProductName((asc ? item1 : item2).getProduct()),
+        getSortableProductName((asc ? item2 : item1).getProduct())
     ));
   }
 
@@ -72,8 +76,8 @@ public class SortUtil {
     }
     Locale locale = LocaleUtil.getLocale();
     Collections.sort(stockItems, (item1, item2) -> Collator.getInstance(locale).compare(
-        (ascending ? item1 : item2).getProduct().getName().toLowerCase(),
-        (ascending ? item2 : item1).getProduct().getName().toLowerCase())
+        getSortableProductName((ascending ? item1 : item2).getProduct()),
+        getSortableProductName((ascending ? item2 : item1).getProduct()))
     );
   }
 
@@ -202,8 +206,8 @@ public class SortUtil {
         return 1;
       }
       return Collator.getInstance(locale).compare(
-          product1.getName().toLowerCase(),
-          product2.getName().toLowerCase()
+          getSortableProductName(product1),
+          getSortableProductName(product2)
       );
     });
   }
@@ -214,8 +218,8 @@ public class SortUtil {
     }
     Collections.sort(
         products,
-        (item1, item2) -> (ascending ? item1 : item2).getName().toLowerCase().compareTo(
-            (ascending ? item2 : item1).getName().toLowerCase()
+        (item1, item2) -> getSortableProductName(ascending ? item1 : item2).compareTo(
+            getSortableProductName(ascending ? item2 : item1)
         )
     );
   }

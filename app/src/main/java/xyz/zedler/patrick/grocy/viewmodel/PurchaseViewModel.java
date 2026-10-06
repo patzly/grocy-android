@@ -639,6 +639,11 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public void purchaseProduct(boolean confirmed) {
+    if (formData.getProductDetailsLive().getValue() != null
+        && formData.getQuantityUnitStockLive().getValue() == null) {
+      showMessage(R.string.error_missing_stock_quantity_unit);
+      return;
+    }
     if (!formData.isFormValid()) {
       showMessage(R.string.error_missing_information);
       return;

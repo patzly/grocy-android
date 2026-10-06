@@ -673,7 +673,8 @@ public class FormDataPurchase {
   }
 
   private boolean isQuantityUnitValid() {
-    if (productDetailsLive.getValue() != null && quantityUnitLive.getValue() == null) {
+    if (productDetailsLive.getValue() != null
+        && (quantityUnitLive.getValue() == null || quantityUnitStockLive.getValue() == null)) {
       quantityUnitErrorLive.setValue(true);
       return false;
     }

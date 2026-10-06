@@ -335,6 +335,9 @@ public class StockOverviewViewModel extends BaseViewModel {
   }
 
   public void updateFilteredStockItems() {
+    if (stockItems == null) {
+      return;
+    }
     ArrayList<StockItem> filteredStockItems = new ArrayList<>();
 
     Product productSearch = null;
@@ -365,7 +368,8 @@ public class StockOverviewViewModel extends BaseViewModel {
 
       boolean searchContainsItem = true;
       if (searchInput != null && !searchInput.isEmpty()) {
-        String productName = item.getProduct().getName().toLowerCase();
+        String name = item.getProduct().getName();
+        String productName = name != null ? name.toLowerCase() : "";
         searchContainsItem = productName.contains(searchInput);
         if (!searchContainsItem) {
           searchContainsItem = searchResultsFuzzy.contains(productName);
@@ -643,8 +647,8 @@ public class StockOverviewViewModel extends BaseViewModel {
     searchResultsFuzzy = new ArrayList<>(30);
     List<BoundExtractedResult<Product>> results = FuzzySearch.extractTop(
         this.searchInput,
-        products,
-        item -> item.getName().toLowerCase(),
+        products != null ? products : new ArrayList<>(),
+        item -> item.getName() != null ? item.getName().toLowerCase() : "",
         30,
         70
     );

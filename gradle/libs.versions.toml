@@ -1,4 +1,7 @@
 [versions]
+httpclient = "4.5.14"
+junit = "4.13.2"
+robolectric = "4.17"
 agp = "9.2.0"
 appcompat = "1.7.1"
 fragment = "1.8.9"
@@ -27,6 +30,9 @@ desugar = "2.1.5"
 exifinterface = "1.4.2"
 
 [libraries]
+httpclient = { module = "org.apache.httpcomponents:httpclient", version.ref = "httpclient" }
+junit = { module = "junit:junit", version.ref = "junit" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 fragment = { group = "androidx.fragment", name = "fragment", version.ref = "fragment" }
 preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }

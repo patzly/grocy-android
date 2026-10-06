@@ -403,6 +403,11 @@ public class ConsumeViewModel extends BaseViewModel {
   }
 
   public void consumeProduct(boolean isActionOpen) {
+    if (formData.getProductDetailsLive().getValue() != null
+        && formData.getQuantityUnitStockLive().getValue() == null) {
+      showMessage(R.string.error_missing_stock_quantity_unit);
+      return;
+    }
     if (!formData.isFormValid()) {
       showMessage(R.string.error_missing_information);
       return;

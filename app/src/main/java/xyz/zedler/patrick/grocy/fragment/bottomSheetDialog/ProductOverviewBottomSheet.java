@@ -166,7 +166,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
 
     // TOOLBAR
 
-    boolean isInStock = stockItem != null && stockItem.getAmountDouble() > 0;
+    boolean isInStock = quantityUnitStock != null && stockItem != null && stockItem.getAmountDouble() > 0;
     MenuCompat.setGroupDividerEnabled(binding.toolbar.getMenu(), true);
     // disable actions if necessary
     MenuItem itemConsumeAll = binding.toolbar.getMenu().findItem(R.id.action_consume_all);
@@ -317,13 +317,15 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     ViewUtil.setTooltipText(
         binding.buttonConsume,
         activity.getString(
-            R.string.action_consume_one, quantityUnitStock.getName(), product.getName()
+            R.string.action_consume_one, quantityUnitStock != null ? quantityUnitStock.getName()
+                : getString(R.string.subtitle_unknown), product.getName()
         )
     );
     ViewUtil.setTooltipText(
         binding.buttonOpen,
         activity.getString(
-            R.string.action_open_one, quantityUnitStock.getName(), product.getName()
+            R.string.action_open_one, quantityUnitStock != null ? quantityUnitStock.getName()
+                : getString(R.string.subtitle_unknown), product.getName()
         )
     );
 
@@ -385,6 +387,8 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       quantityUnitConsume = productDetails.getQuantityUnitConsume();
       quantityUnitPrice = productDetails.getQuantityUnitPrice();
     }
+
+    refreshButtonStates();
 
     // AMOUNT
     if (stockItem != null) {
@@ -476,11 +480,18 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
               : null
       );
 
-      boolean quantityUnitsAreNotEqual = quantityUnitStock.getId() != quantityUnitPrice.getId();
+      boolean hasPriceUnits = quantityUnitStock != null && quantityUnitPrice != null;
+      boolean quantityUnitsAreNotEqual = hasPriceUnits
+          && quantityUnitStock.getId() != quantityUnitPrice.getId();
+
+      if (!hasPriceUnits) {
+        binding.itemLastPrice.setVisibility(View.GONE);
+        binding.itemAveragePrice.setVisibility(View.GONE);
+      }
 
       // LAST PRICE
       String lastPrice = productDetails.getLastPrice();
-      if (NumUtil.isStringDouble(lastPrice) && isFeatureEnabled(
+      if (hasPriceUnits && NumUtil.isStringDouble(lastPrice) && isFeatureEnabled(
           Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
         binding.itemLastPrice.setText(
             activity.getString(R.string.property_last_price),
@@ -502,7 +513,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
 
       // AVERAGE PRICE
       String averagePrice = productDetails.getAvgPrice();
-      if (NumUtil.isStringDouble(averagePrice) && isFeatureEnabled(
+      if (hasPriceUnits && NumUtil.isStringDouble(averagePrice) && isFeatureEnabled(
           Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
         binding.itemAveragePrice.setText(
             activity.getString(R.string.property_price_average),
@@ -557,10 +568,14 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
 
       ArrayList<String> stockLocationNames = new ArrayList<>();
       for (StockLocation stockLocation : stockLocations) {
-        if (stockLocationNames.contains(stockLocation.getLocationName())) {
+        String name = stockLocation.getLocationName();
+        if (name == null || name.isBlank()) {
+          name = getString(R.string.subtitle_unknown);
+        }
+        if (stockLocationNames.contains(name)) {
           continue;
         }
-        stockLocationNames.add(stockLocation.getLocationName());
+        stockLocationNames.add(name);
       }
       StringBuilder locationsString = new StringBuilder();
       for (String name : stockLocationNames) {
@@ -668,11 +683,11 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
 
   private void refreshButtonStates() {
     binding.buttonConsume.setEnabled(
-        stockItem != null && stockItem.getAmountDouble() > 0
+        quantityUnitStock != null && stockItem != null && stockItem.getAmountDouble() > 0
             && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0
     );
     binding.buttonOpen.setEnabled(
-        stockItem != null && stockItem.getAmountDouble() > stockItem.getAmountOpenedDouble()
+        quantityUnitStock != null && stockItem != null && stockItem.getAmountDouble() > stockItem.getAmountOpenedDouble()
             && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0
     );
   }

@@ -550,6 +550,7 @@
   <string name="error_database">Database error</string>
   <string name="error_insert">Error: %1$s</string>
   <string name="error_details">Error details</string>
+  <string name="error_missing_stock_quantity_unit">This product’s stock quantity unit is missing. Edit the product to select a valid unit.</string>
   <string name="error_unknown">Oops!</string>
   <string name="error_not_grocy_instance">Not a valid Grocy instance</string>
   <string name="error_timeout">Timeout error</string>

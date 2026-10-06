@@ -412,7 +412,8 @@ public class FormDataConsume {
   }
 
   private boolean isQuantityUnitValid() {
-    if (productDetailsLive.getValue() != null && quantityUnitLive.getValue() == null) {
+    if (productDetailsLive.getValue() != null
+        && (quantityUnitLive.getValue() == null || quantityUnitStockLive.getValue() == null)) {
       quantityUnitErrorLive.setValue(true);
       return false;
     }
@@ -529,8 +530,9 @@ public class FormDataConsume {
     String stockLocationName;
     if (isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
       StockLocation stockLocation = stockLocationLive.getValue();
-      assert stockLocation != null;
-      stockLocationName = stockLocation.getLocationName();
+      stockLocationName = stockLocation != null && stockLocation.getLocationName() != null
+          ? stockLocation.getLocationName()
+          : getString(R.string.subtitle_unknown);
     } else {
       stockLocationName = getString(R.string.subtitle_feature_disabled);
     }
