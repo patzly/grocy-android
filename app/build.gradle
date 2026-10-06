@@ -64,6 +64,10 @@ android {
         buildConfig = true
     }
 
+    testOptions {
+        unitTests.includeAndroidResources = true
+    }
+
     lint {
         abortOnError = false
         disable = ['MissingTranslation']
@@ -91,6 +95,10 @@ android {
 }
 
 dependencies {
+    testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
+    // Volley references the legacy Apache interfaces, absent from the JVM test SDK.
+    testRuntimeOnly(libs.httpclient)
     implementation(libs.appcompat)
     implementation(libs.fragment)
     implementation(libs.preference)

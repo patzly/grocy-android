@@ -57,7 +57,7 @@ public class ChoresNotificationReceiver extends BroadcastReceiver {
         ReminderUtil.CHORES_TYPE,
         NOTIFICATIONS.CHORES_ID,
         reminderTime,
-        StockNotificationReceiver.class
+        ChoresNotificationReceiver.class
     );
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -72,8 +72,15 @@ public class ChoresNotificationReceiver extends BroadcastReceiver {
     }
     DownloadHelper dlHelper = new DownloadHelper(context, ChoresNotificationReceiver.class.getSimpleName());
 
+    PendingResult pendingResult = goAsync();
+    Runnable finish = () -> {
+      dlHelper.destroy();
+      if (pendingResult != null) {
+        pendingResult.finish();
+      }
+    };
+
     ChoreEntry.getChoreEntries(dlHelper, choreEntries -> {
-      if (choreEntries.size() == 0) return;
 
       int choresDueCount = 0;
       for (ChoreEntry choreEntry : choreEntries) {
@@ -86,6 +93,10 @@ public class ChoresNotificationReceiver extends BroadcastReceiver {
         if (daysFromNow <= 0) {
           choresDueCount++;
         }
+      }
+      if (choresDueCount == 0) {
+        finish.run();
+        return;
       }
       String titleText = context.getResources().getQuantityString(
           R.plurals.notification_chores_due_title,
@@ -110,14 +121,14 @@ public class ChoresNotificationReceiver extends BroadcastReceiver {
           NOTIFICATIONS.CHORES_CHANNEL,
           notificationIntent
       ));
-      dlHelper.destroy();
+      finish.run();
     }, error -> {
-      dlHelper.destroy();
 
       new ReminderUtil(context).scheduleAgainIn10Minutes(
-          NOTIFICATIONS.STOCK_ID,
-          StockNotificationReceiver.class
+          NOTIFICATIONS.CHORES_ID,
+          ChoresNotificationReceiver.class
       );
+      finish.run();
     });
   }
 }

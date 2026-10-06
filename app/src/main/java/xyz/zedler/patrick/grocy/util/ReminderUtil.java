@@ -102,14 +102,18 @@ public class ReminderUtil {
     if (time == null) {
       switch (reminderType) {
         case STOCK_TYPE:
-          time = NOTIFICATIONS.STOCK_TIME;
+          time = SETTINGS_DEFAULT.NOTIFICATIONS.STOCK_TIME;
           break;
         case CHORES_TYPE:
-          time = NOTIFICATIONS.CHORES_TIME;
+          time = SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_TIME;
           break;
         default:
           throw new IllegalArgumentException("Unknown reminder type: " + reminderType);
       }
+    }
+
+    if (CHORES_TYPE.equals(reminderType)) {
+      cancelLegacyChoresAlarm();
     }
 
     Calendar calendar = Calendar.getInstance();
@@ -179,6 +183,7 @@ public class ReminderUtil {
         receiverClass = StockNotificationReceiver.class;
         break;
       case CHORES_TYPE:
+        cancelLegacyChoresAlarm();
         sharedPrefs.edit().putBoolean(NOTIFICATIONS.CHORES_ENABLE, enabled).apply();
         reminderId = NOTIFICATIONS.CHORES_ID;
         reminderTime = NOTIFICATIONS.CHORES_TIME;
@@ -210,7 +215,24 @@ public class ReminderUtil {
         alarmManager.cancel(pendingIntent);
       }
     }
-    startOnBootCompleted(enabled);
+    startOnBootCompleted(
+        sharedPrefs.getBoolean(NOTIFICATIONS.STOCK_ENABLE, SETTINGS_DEFAULT.NOTIFICATIONS.STOCK_ENABLE)
+            || sharedPrefs.getBoolean(NOTIFICATIONS.CHORES_ENABLE,
+                SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_ENABLE)
+    );
+  }
+
+  private void cancelLegacyChoresAlarm() {
+    // Older versions scheduled a chores alarm with the stock receiver component.
+    PendingIntent legacy = PendingIntent.getBroadcast(context, NOTIFICATIONS.CHORES_ID,
+        new Intent(context, StockNotificationReceiver.class),
+        PendingIntent.FLAG_NO_CREATE | getPendingIntentFlags());
+    if (legacy != null) {
+      if (alarmManager != null) {
+        alarmManager.cancel(legacy);
+      }
+      legacy.cancel();
+    }
   }
 
   public void startOnBootCompleted(boolean enabled) {
