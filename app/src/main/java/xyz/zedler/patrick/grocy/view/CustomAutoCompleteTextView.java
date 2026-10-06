@@ -42,7 +42,10 @@ public class CustomAutoCompleteTextView extends MaterialAutoCompleteTextView {
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_TAB && onTabPressListener != null) {
+    if ((keyCode == KeyEvent.KEYCODE_TAB && onTabPressListener != null)
+        || (keyCode == KeyEvent.KEYCODE_ENTER && onEnterPressListener != null)) {
+      // Consume the down event too, so autocomplete cannot replace a scanner
+      // barcode with the highlighted suggestion before the up listener runs.
       return true;
     }
     return super.onKeyDown(keyCode, event);

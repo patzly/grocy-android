@@ -68,6 +68,7 @@ import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.ProductInputUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
@@ -274,6 +275,10 @@ public class InventoryViewModel extends BaseViewModel {
   }
 
   public void onBarcodeRecognized(String barcode) {
+    barcode = barcode != null ? barcode.trim() : "";
+    if (barcode.isEmpty()) {
+      return;
+    }
     if (formData.getProductDetailsLive().getValue() != null) {
       if (ProductBarcode.getFromBarcode(barcodes, barcode) == null) {
         formData.getBarcodeLive().setValue(barcode);
@@ -315,31 +320,11 @@ public class InventoryViewModel extends BaseViewModel {
       if (input == null || input.isEmpty()) {
           return;
       }
-    Product product = Product.getProductFromName(products, input);
+    Product product = Product.getProductFromName(products, input.trim());
 
-    Grocycode grocycode = GrocycodeUtil.getGrocycode(input.trim());
-    if (grocycode != null && grocycode.isProduct()) {
-      product = Product.getProductFromId(products, grocycode.getObjectId());
-      if (product == null) {
-        showMessageAndContinueScanning(R.string.msg_not_found);
-        return;
-      }
-    } else if (grocycode != null) {
-      showMessageAndContinueScanning(R.string.error_wrong_grocycode_type);
+    if (product == null && ProductInputUtil.isBarcode(input, barcodes)) {
+      onBarcodeRecognized(input);
       return;
-    }
-    if (product == null) {
-      ProductBarcode barcode = null;
-      for (ProductBarcode code : barcodes) {
-        if (code.getBarcode().equals(input.trim())) {
-          barcode = code;
-          product = Product.getProductFromId(products, code.getProductIdInt());
-        }
-      }
-      if (product != null) {
-        setProduct(product.getId(), barcode);
-        return;
-      }
     }
 
     ProductDetails currentProductDetails = formData.getProductDetailsLive().getValue();
