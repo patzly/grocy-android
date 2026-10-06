@@ -1,4 +1,5 @@
 [versions]
+junit = "4.13.2"
 agp = "9.2.0"
 appcompat = "1.7.1"
 fragment = "1.8.9"
@@ -27,6 +28,7 @@ desugar = "2.1.5"
 exifinterface = "1.4.2"
 
 [libraries]
+junit = { module = "junit:junit", version.ref = "junit" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 fragment = { group = "androidx.fragment", name = "fragment", version.ref = "fragment" }
 preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }

@@ -20,8 +20,6 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -122,19 +120,8 @@ public class MasterDataOverviewFragment extends BaseFragment {
                 GrocyApi.ENTITY.TASK_CATEGORIES
             ))
     );
-    binding.linearChores.setOnClickListener(v -> viewModel.showMessageWithAction(
-        R.string.msg_not_implemented_yet,
-        R.string.action_open_server,
-        () -> {
-          Intent browserIntent = new Intent(
-              Intent.ACTION_VIEW, Uri.parse(activity.getGrocyApi().getBaseUrl() + "/chores")
-          );
-          startActivity(browserIntent);
-        },
-        getSharedPrefs().getInt(
-            Constants.SETTINGS.BEHAVIOR.MESSAGE_DURATION,
-            Constants.SETTINGS_DEFAULT.BEHAVIOR.MESSAGE_DURATION
-        )
+    binding.linearChores.setOnClickListener(v -> activity.navUtil.navigate(
+        MasterDataOverviewFragmentDirections.actionMasterDataOverviewFragmentToMasterChoreFragment()
     ));
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {

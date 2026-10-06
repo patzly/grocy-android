@@ -91,6 +91,7 @@ android {
 }
 
 dependencies {
+    testImplementation(libs.junit)
     implementation(libs.appcompat)
     implementation(libs.fragment)
     implementation(libs.preference)

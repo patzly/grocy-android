@@ -646,10 +646,18 @@
       <action
         android:id="@+id/action_masterDataOverviewFragment_to_masterObjectListFragment"
         app:destination="@id/masterObjectListFragment" />
+      <action
+        android:id="@+id/action_masterDataOverviewFragment_to_masterChoreFragment"
+        app:destination="@id/masterChoreFragment" />
       <deepLink
         android:id="@+id/deepLink10"
         app:uri="@string/deep_link_masterDataOverviewFragment" />
     </fragment>
+    <fragment
+      android:id="@+id/masterChoreFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.MasterChoreFragment"
+      android:label="MasterChoreFragment"
+      tools:layout="@layout/fragment_master_chore" />
     <fragment
       android:id="@+id/masterObjectListFragment"
       android:name="xyz.zedler.patrick.grocy.fragment.MasterObjectListFragment"

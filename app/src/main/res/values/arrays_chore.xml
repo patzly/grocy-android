@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array name="chore_period_labels">
+    <item>@string/chore_period_manually</item>
+    <item>@string/chore_period_daily</item>
+    <item>@string/chore_period_weekly</item>
+    <item>@string/chore_period_monthly</item>
+    <item>@string/chore_period_yearly</item>
+  </string-array>
+</resources>

@@ -431,6 +431,10 @@ public class GrocyApi {
     return getUrl("/chores/" + choreId + "/execute");
   }
 
+  public String calculateChoreAssignments() {
+    return getUrl("/chores/executions/calculate-next-assignments");
+  }
+
   // RECIPES
 
   /**

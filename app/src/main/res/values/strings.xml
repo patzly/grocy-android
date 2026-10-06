@@ -1396,4 +1396,23 @@
   <string name="mtm_notification">Certificate Verification</string>
   <string name="mtm_error_keystore">Exception on loading key store from file</string>
 
+  <string name="title_chore_create">Create chore</string>
+  <string name="property_chore_period">Repeat</string>
+  <string name="property_chore_interval">Repeat every (days, weeks, months or years)</string>
+  <string name="property_chore_month_day">Day of month (1–31)</string>
+  <string name="property_chore_weekdays">Select weekdays</string>
+  <string name="property_chore_start_date">Start date</string>
+  <string name="property_chore_start_date_value">Start date: %1$s</string>
+  <string name="description_chore_create">New chores are active, track dates only, and have no assignment. Open the server to manage existing chores or configure assignments and other options.</string>
+  <string name="error_chore_interval">Enter a whole number greater than zero</string>
+  <string name="error_chore_month_day">Enter a day between 1 and 31</string>
+  <string name="error_chore_weekdays">Select at least one weekday</string>
+  <string name="msg_chore_create_check_server">The save result is unknown. Check chores on the server before creating this chore again.</string>
+  <string name="msg_chore_created_assignment_retry">The chore was created, but setup could not finish. Tap Save to retry setup without creating another chore.</string>
+  <string name="msg_chore_create_server_version">Native chore creation requires Grocy 4.0 or newer. You can still create chores by opening the server.</string>
+  <string name="chore_period_manually">Manually</string>
+  <string name="chore_period_daily">Daily</string>
+  <string name="chore_period_weekly">Weekly</string>
+  <string name="chore_period_monthly">Monthly</string>
+  <string name="chore_period_yearly">Yearly</string>
 </resources>
