@@ -38,6 +38,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -234,6 +236,24 @@ public class QuantityUnitConversion implements Parcelable {
     for (RecipePosition recipePosition : recipePositions) {
       List<QuantityUnitConversion> conversionsPosition = getFromTargetUnit(quantityUnitConversions, recipePosition.getQuantityUnitId());
       result.addAll(conversionsPosition);
+    }
+    return result;
+  }
+
+  public static List<QuantityUnitConversion> getUniquePairsForProduct(
+      List<QuantityUnitConversion> conversions, int productId
+  ) {
+    List<QuantityUnitConversion> result = new ArrayList<>();
+    Set<String> pairs = new HashSet<>();
+    for (QuantityUnitConversion conversion : conversions) {
+      if (conversion.getProductIdInt() != productId) {
+        continue;
+      }
+      String pair = Math.min(conversion.getFromQuId(), conversion.getToQuId()) + ":"
+          + Math.max(conversion.getFromQuId(), conversion.getToQuId());
+      if (pairs.add(pair)) {
+        result.add(conversion);
+      }
     }
     return result;
   }

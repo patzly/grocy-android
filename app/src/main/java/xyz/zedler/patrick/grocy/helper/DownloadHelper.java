@@ -266,6 +266,19 @@ public class DownloadHelper {
       OnJSONResponseListener onResponse,
       OnErrorListener onError
   ) {
+    post(url, json, onResponse, onError, true);
+  }
+
+  public void postWithoutRetry(
+      String url, JSONObject json, OnJSONResponseListener onResponse, OnErrorListener onError
+  ) {
+    post(url, json, onResponse, onError, false);
+  }
+
+  private void post(
+      String url, JSONObject json, OnJSONResponseListener onResponse,
+      OnErrorListener onError, boolean retry
+  ) {
     String sessionKey = sharedPrefs
         .getString(Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY, null);
     CustomJsonObjectRequest request = new CustomJsonObjectRequest(
@@ -279,6 +292,11 @@ public class DownloadHelper {
         timeoutSeconds,
         uuidHelper
     );
+    if (!retry) {
+      request.setRetryPolicy(new com.android.volley.DefaultRetryPolicy(
+          timeoutSeconds * 1000, 0, com.android.volley.DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+      ));
+    }
     requestQueue.add(request);
   }
 

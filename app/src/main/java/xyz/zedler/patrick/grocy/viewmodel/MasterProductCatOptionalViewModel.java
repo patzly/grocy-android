@@ -247,7 +247,6 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
         pictureData,
         () -> {
           deleteCurrentPicture(filename);
-          formData.getPictureFilenameLive().setValue(filename);
         },
         error -> {
           isLoadingLive.setValue(false);
@@ -257,36 +256,30 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
   }
 
   public void deleteCurrentPicture(String newFilename) {
-    if (isActionEdit()) {
-      JSONObject jsonObject = new JSONObject();
-      try {
-        jsonObject.put("picture_file_name", newFilename != null ? newFilename : "");
-        dlHelper.put(
-            grocyApi.getObject(ENTITY.PRODUCTS, args.getProduct().getId()),
-            jsonObject,
-            response -> {},
-            volleyError -> {}
-        );
-      } catch (JSONException ignored) {}
+    String filename = newFilename != null ? newFilename : "";
+    if (!isActionEdit()) {
+      formData.getPictureFilenameLive().setValue(filename);
+      isLoadingLive.setValue(false);
+      return;
     }
-    String lastFilename = formData.getPictureFilenameLive().getValue();
-    if (lastFilename != null && !lastFilename.isBlank()) {
-      dlHelper.delete(
-          grocyApi.getProductPicture(lastFilename),
+    isLoadingLive.setValue(true);
+    JSONObject jsonObject = new JSONObject();
+    try {
+      jsonObject.put("picture_file_name", filename);
+      dlHelper.put(
+          grocyApi.getObject(ENTITY.PRODUCTS, args.getProduct().getId()),
+          jsonObject,
           response -> {
+            // Copied products can share this file. Remove only this product's reference.
+            formData.getPictureFilenameLive().setValue(filename);
             isLoadingLive.setValue(false);
-            formData.getPictureFilenameLive().setValue("");
           },
-          volleyError -> {
+          error -> {
             isLoadingLive.setValue(false);
-            showNetworkErrorMessage(volleyError);
-            formData.getPictureFilenameLive().setValue(lastFilename);
+            showNetworkErrorMessage(error);
           }
       );
-    } else if (lastFilename != null && lastFilename.isBlank()) {
-      isLoadingLive.setValue(false);
-      formData.getPictureFilenameLive().setValue("");
-    } else {
+    } catch (JSONException ignored) {
       isLoadingLive.setValue(false);
     }
   }

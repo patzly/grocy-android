@@ -30,6 +30,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
+import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONException;
@@ -47,10 +48,12 @@ import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class MasterProductViewModel extends BaseViewModel {
@@ -76,6 +79,10 @@ public class MasterProductViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> actionEditLive;
   private final MasterProductFragmentArgs args;
   private final boolean forceSaveWithClose;
+  private int copiedFromProductId = -1;
+  private int createdProductId = -1;
+  private boolean saveInProgress;
+  private List<QuantityUnitConversion> copiedConversions;
 
   public MasterProductViewModel(
       @NonNull Application application,
@@ -115,7 +122,8 @@ public class MasterProductViewModel extends BaseViewModel {
       }
     } else if (args.getProduct() != null || NumUtil.isStringInt(args.getProductId())) {  // on clone
       if (args.getProduct() != null) {
-        Product product = args.getProduct();
+        Product product = dlHelper.gson.fromJson(dlHelper.gson.toJson(args.getProduct()), Product.class);
+        copiedFromProductId = product.getId();
         formData.getMessageCopiedFromLive()
             .setValue(getString(R.string.msg_data_copied_from_product, product.getName()));
         if (args.getProductName() != null) {
@@ -131,6 +139,7 @@ public class MasterProductViewModel extends BaseViewModel {
         extraQueueItem = ProductDetails.getProductDetails(dlHelper, productId, productDetails -> {
           extraQueueItem = null;
           Product product = productDetails.getProduct();
+          copiedFromProductId = product.getId();
           formData.getMessageCopiedFromLive()
               .setValue(getString(R.string.msg_data_copied_from_product, product.getName()));
           if (args.getProductName() != null) {
@@ -231,7 +240,9 @@ public class MasterProductViewModel extends BaseViewModel {
   private ArrayList<String> getProductNames(List<Product> products, @Nullable String nameToRemove) {
     ArrayList<String> names = new ArrayList<>();
     for (Product product : products) {
-      names.add(product.getName());
+      if (product.getId() != createdProductId) {
+        names.add(product.getName());
+      }
     }
     if (isActionEdit() && (formData.getProductLive().getValue() != null || nameToRemove != null)) {
       names.remove(nameToRemove != null
@@ -242,70 +253,121 @@ public class MasterProductViewModel extends BaseViewModel {
   }
 
   public void saveProduct(boolean withClosing) {
+    if (saveInProgress) {
+      return;
+    }
     if (!formData.isWholeFormValid()) {
       showMessage(getString(R.string.error_missing_information));
       return;
     }
-
-    Product product = getFilledProduct();
-    JSONObject jsonObject = product.getJsonFromProduct(sharedPrefs, debug, TAG);
-
-    if (isActionEdit()) {
-      dlHelper.put(
-          grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, product.getId()),
-          jsonObject,
+    saveInProgress = true;
+    if (copiedFromProductId >= 0 && copiedConversions == null) {
+      dlHelper.get(
+          grocyApi.getObjectsEqualValue(GrocyApi.ENTITY.QUANTITY_UNIT_CONVERSIONS,
+              "product_id", String.valueOf(copiedFromProductId)),
           response -> {
-            Bundle bundle = new Bundle();
-            bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, product.getId());
-            sendEvent(Event.SET_PRODUCT_ID, bundle);
-            sendEvent(Event.NAVIGATE_UP);
-          },
-          error -> {
-            showNetworkErrorMessage(error);
-            if (debug) {
-              Log.e(TAG, "saveProduct: " + error);
-            }
-          }
+            List<QuantityUnitConversion> conversions = dlHelper.gson.fromJson(response,
+                new TypeToken<List<QuantityUnitConversion>>() {}.getType());
+            copiedConversions = VersionUtil.isGrocyServerMin400(sharedPrefs)
+                ? QuantityUnitConversion.getUniquePairsForProduct(conversions, copiedFromProductId)
+                : conversions;
+            persistProduct(withClosing);
+          }, this::onSaveError
       );
     } else {
-      dlHelper.post(
-          grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
-          jsonObject,
+      persistProduct(withClosing);
+    }
+  }
+
+  private void persistProduct(boolean withClosing) {
+    Product product = getFilledProduct();
+    JSONObject jsonObject = product.getJsonFromProduct(sharedPrefs, debug, TAG);
+    if (isActionEdit() || createdProductId >= 0) {
+      int productId = createdProductId >= 0 ? createdProductId : product.getId();
+      dlHelper.put(
+          grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, productId), jsonObject,
+          response -> copyConversions(productId, 0,
+              () -> finishSaving(product, productId, withClosing)),
+          this::onSaveError
+      );
+    } else {
+      dlHelper.postWithoutRetry(
+          grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS), jsonObject,
           response -> {
-            int objectId = -1;
             try {
-              objectId = response.getInt("created_object_id");
-              Log.i(TAG, "saveProduct: " + objectId);
+              // Keep the ID before subsequent requests, so retries update this copy.
+              createdProductId = response.getInt("created_object_id");
+              copyConversions(createdProductId, 0,
+                  () -> finishSaving(product, createdProductId, withClosing));
             } catch (JSONException e) {
-              if (debug) {
-                Log.e(TAG, "saveProduct: " + e);
-              }
+              saveInProgress = false;
+              showErrorMessage();
             }
-            if (withClosing) {
-              if (objectId != -1) {
-                Bundle bundle = new Bundle();
-                bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, objectId);
-                sendEvent(Event.SET_PRODUCT_ID, bundle);
-              }
-              uploadBarcodesIfNecessary(objectId, () -> sendEvent(Event.NAVIGATE_UP));
-            } else {
-              int finalObjectId = objectId;
-              uploadBarcodesIfNecessary(objectId, () -> {
-                actionEditLive.setValue(true);
-                product.setId(finalObjectId);
-                setCurrentProduct(product);
-                sendEvent(Event.TRANSACTION_SUCCESS);
-              });
-            }
-          },
-          error -> {
-            showNetworkErrorMessage(error);
-            if (debug) {
-              Log.e(TAG, "saveProduct: " + error);
-            }
-          }
+          }, this::onSaveError
       );
     }
+  }
+
+  private void copyConversions(int productId, int index, Runnable onFinished) {
+    if (copiedConversions == null || index >= copiedConversions.size()) {
+      onFinished.run();
+      return;
+    }
+    QuantityUnitConversion source = copiedConversions.get(index);
+    JSONObject json = source.getJsonFromConversion(debug, TAG);
+    try {
+      json.put("product_id", productId);
+    } catch (JSONException ignored) {
+      saveInProgress = false;
+      showErrorMessage();
+      return;
+    }
+    // The server can create a default purchase/stock conversion and inverse rows.
+    // Read existing rows also on retry to avoid duplicate conversion records.
+    dlHelper.get(
+        grocyApi.getObjectsEqualValue(GrocyApi.ENTITY.QUANTITY_UNIT_CONVERSIONS,
+            "product_id", String.valueOf(productId)),
+        response -> {
+          List<QuantityUnitConversion> existing = dlHelper.gson.fromJson(response,
+              new TypeToken<List<QuantityUnitConversion>>() {}.getType());
+          QuantityUnitConversion match = QuantityUnitConversion.getFromTwoUnits(existing,
+              source.getFromQuId(), source.getToQuId(), productId);
+          DownloadHelper.OnJSONResponseListener onResponse = ignored ->
+              copyConversions(productId, index + 1, onFinished);
+          if (match != null) {
+            dlHelper.put(grocyApi.getObject(GrocyApi.ENTITY.QUANTITY_UNIT_CONVERSIONS,
+                match.getId()), json, onResponse, this::onSaveError);
+          } else {
+            dlHelper.postWithoutRetry(grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNIT_CONVERSIONS),
+                json, onResponse, this::onSaveError);
+          }
+        }, this::onSaveError
+    );
+  }
+
+  private void finishSaving(Product product, int productId, boolean withClosing) {
+    uploadBarcodesIfNecessary(productId, () -> {
+      saveInProgress = false;
+      createdProductId = -1;
+      copiedFromProductId = -1;
+      copiedConversions = null;
+      actionEditLive.setValue(true);
+      product.setId(productId);
+      setCurrentProduct(product);
+      if (withClosing) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, productId);
+        sendEvent(Event.SET_PRODUCT_ID, bundle);
+        sendEvent(Event.NAVIGATE_UP);
+      } else {
+        sendEvent(Event.TRANSACTION_SUCCESS);
+      }
+    });
+  }
+
+  private void onSaveError(com.android.volley.VolleyError error) {
+    saveInProgress = false;
+    showNetworkErrorMessage(error);
   }
 
   private void uploadBarcodesIfNecessary(int productId, Runnable onFinished) {
