@@ -74,23 +74,21 @@ public class X509KeyStoreFile {
   /**
    * Load keystore from file using password
    *
-   * @param createNew create file with empty keystore if it does not exist; fail otherwise
+   * @param createNew initialize an empty in-memory keystore if the file does not exist; fail
+   *                  otherwise
    */
   public void load(boolean createNew) throws IOException, KeyStoreException {
     loadedVersion = -1;
     Log.d(TAG, "load(file=" + file + ", createNew=" + createNew + ")");
-    // Initialize empty keystore
     keyStore = KeyStore.getInstance("BKS");
-    try {
-      keyStore.load(null, null);
-    } catch (NoSuchAlgorithmException | CertificateException | IOException e) {
-      throw new KeyStoreException("Could not create empty keystore");
-    }
-    // Save new keystore if file does not exist
     if (!file.exists() && createNew) {
-      save();
+      try {
+        keyStore.load(null, null);
+      } catch (NoSuchAlgorithmException | CertificateException | IOException e) {
+        throw new KeyStoreException("Could not create empty keystore");
+      }
+      return;
     }
-    // Load keystore from file
     InputStream is = null;
     try {
       is = new java.io.FileInputStream(file);
@@ -266,7 +264,8 @@ public class X509KeyStoreFile {
   }
 
   /**
-   * Reload keystore from file, store private key in keystore, and save keystore back to file
+   * Load keystore from file or initialize a missing keystore, store private key in keystore, and
+   * save keystore back to file
    *
    * @param alias alias of the entry
    * @param key   private key of the entry
@@ -275,8 +274,8 @@ public class X509KeyStoreFile {
   public void storeKey(@NonNull String alias, @NonNull PrivateKey key,
       Collection<X509Certificate> chain) throws IOException, KeyStoreException {
     Log.d(TAG, "storeKey(alias=" + alias + ", chain=" + getCertificateSubjects(chain) + ")");
-    // Reload keystore from file
-    load(false);
+    // Reload keystore from file or initialize a missing keystore
+    load(true);
     // Store private key in keystore
     KeyStore.ProtectionParameter protection = new KeyStore.PasswordProtection(
         password.toCharArray());
