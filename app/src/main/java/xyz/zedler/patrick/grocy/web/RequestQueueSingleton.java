@@ -100,7 +100,6 @@ public class RequestQueueSingleton {
 
     public TLSSocketFactory() throws KeyManagementException, NoSuchAlgorithmException {
       SSLContext sslContext = SSLContext.getInstance("TLS");
-      sslContext.init(null, null, null);
 
       // Client certificates
       KeyManager keyManager = new InteractiveKeyManager(context);
