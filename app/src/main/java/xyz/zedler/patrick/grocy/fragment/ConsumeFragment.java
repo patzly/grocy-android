@@ -59,14 +59,14 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.ClickUtil.InactivityUtil;
-import xyz.zedler.patrick.grocy.util.HoneywellScannerUtil;
+import xyz.zedler.patrick.grocy.util.HardwareScannerUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.view.FormattedTextView;
 import xyz.zedler.patrick.grocy.viewmodel.ConsumeViewModel;
 
-public class ConsumeFragment extends BaseFragment implements BarcodeListener, HoneywellScannerUtil.BarcodeListener {
+public class ConsumeFragment extends BaseFragment implements BarcodeListener, HardwareScannerUtil.BarcodeListener {
 
   private final static String TAG = ConsumeFragment.class.getSimpleName();
   private static final String DIALOG_FAB_INFO = "dialog_fab_info";
@@ -79,7 +79,7 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener, Ho
   private Boolean backFromChooseProductPage;
   private InactivityUtil inactivityUtil;
   private AlertDialog dialogFabInfo;
-  private HoneywellScannerUtil honeywellScannerUtil;
+  private HardwareScannerUtil hardwareScannerUtil;
 
 
     @Override
@@ -110,7 +110,7 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener, Ho
   @Override
   public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    honeywellScannerUtil = new HoneywellScannerUtil(activity, this);
+    hardwareScannerUtil = new HardwareScannerUtil(activity, this);
     ConsumeFragmentArgs args = ConsumeFragmentArgs.fromBundle(requireArguments());
 
     viewModel = new ViewModelProvider(this, new ConsumeViewModel
@@ -274,13 +274,13 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener, Ho
       return;
     }
     embeddedFragmentScanner.onResume();
-    honeywellScannerUtil.activate();
+    hardwareScannerUtil.activate();
   }
 
   @Override
   public void onPause() {
     embeddedFragmentScanner.onPause();
-    honeywellScannerUtil.deactivate();
+    hardwareScannerUtil.deactivate();
     super.onPause();
   }
 

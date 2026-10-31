@@ -60,14 +60,14 @@ import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
-import xyz.zedler.patrick.grocy.util.HoneywellScannerUtil;
+import xyz.zedler.patrick.grocy.util.HardwareScannerUtil;
 import xyz.zedler.patrick.grocy.util.PictureUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditViewModel;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditViewModel.RecipeEditViewModelFactory;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
-public class RecipeEditFragment extends BaseFragment implements EmbeddedFragmentScanner.BarcodeListener, HoneywellScannerUtil.BarcodeListener {
+public class RecipeEditFragment extends BaseFragment implements EmbeddedFragmentScanner.BarcodeListener, HardwareScannerUtil.BarcodeListener {
 
   private final static String TAG = RecipeEditFragment.class.getSimpleName();
 
@@ -80,7 +80,7 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
   private EmbeddedFragmentScanner embeddedFragmentScanner;
   private AlertDialog dialogDelete;
   private ActivityResultLauncher<Intent> mActivityResultLauncherTakePicture;
-  private HoneywellScannerUtil honeywellScannerUtil;
+  private HardwareScannerUtil hardwareScannerUtil;
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup group, Bundle state) {
@@ -102,7 +102,7 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    honeywellScannerUtil = new HoneywellScannerUtil(activity, this);
+    hardwareScannerUtil = new HardwareScannerUtil(activity, this);
     RecipeEditFragmentArgs args = RecipeEditFragmentArgs
         .fromBundle(requireArguments());
     viewModel = new ViewModelProvider(
@@ -389,13 +389,13 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
   public void onResume() {
     super.onResume();
     embeddedFragmentScanner.onResume();
-    honeywellScannerUtil.activate();
+    hardwareScannerUtil.activate();
   }
 
   @Override
   public void onPause() {
     embeddedFragmentScanner.onPause();
-    honeywellScannerUtil.deactivate();
+    hardwareScannerUtil.deactivate();
     super.onPause();
   }
 
