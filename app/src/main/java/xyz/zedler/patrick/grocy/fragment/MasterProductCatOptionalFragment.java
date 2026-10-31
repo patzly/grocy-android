@@ -59,12 +59,12 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
-import xyz.zedler.patrick.grocy.util.HoneywellScannerUtil;
+import xyz.zedler.patrick.grocy.util.HardwareScannerUtil;
 import xyz.zedler.patrick.grocy.util.PictureUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatOptionalViewModel;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
-public class MasterProductCatOptionalFragment extends BaseFragment implements BarcodeListener, HoneywellScannerUtil.BarcodeListener {
+public class MasterProductCatOptionalFragment extends BaseFragment implements BarcodeListener, HardwareScannerUtil.BarcodeListener {
 
   private final static String TAG = MasterProductCatOptionalFragment.class.getSimpleName();
 
@@ -74,7 +74,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
   private ActivityResultLauncher<Intent> mActivityResultLauncherTakePicture;
-  private HoneywellScannerUtil honeywellScannerUtil;
+  private HardwareScannerUtil hardwareScannerUtil;
 
   @Override
   public View onCreateView(
@@ -102,7 +102,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
   @Override
   public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    honeywellScannerUtil = new HoneywellScannerUtil(activity, this);
+    hardwareScannerUtil = new HardwareScannerUtil(activity, this);
     MasterProductCatOptionalFragmentArgs args = MasterProductCatOptionalFragmentArgs
         .fromBundle(requireArguments());
     viewModel = new ViewModelProvider(this, new MasterProductCatOptionalViewModel
@@ -243,13 +243,13 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
   public void onResume() {
     super.onResume();
     embeddedFragmentScanner.onResume();
-    honeywellScannerUtil.activate();
+    hardwareScannerUtil.activate();
   }
 
   @Override
   public void onPause() {
     embeddedFragmentScanner.onPause();
-    honeywellScannerUtil.deactivate();
+    hardwareScannerUtil.deactivate();
     super.onPause();
   }
 

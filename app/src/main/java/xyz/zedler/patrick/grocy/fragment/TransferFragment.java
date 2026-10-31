@@ -55,14 +55,14 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.FAB;
-import xyz.zedler.patrick.grocy.util.HoneywellScannerUtil;
+import xyz.zedler.patrick.grocy.util.HardwareScannerUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.TransferViewModel;
 import xyz.zedler.patrick.grocy.viewmodel.TransferViewModel.TransferViewModelFactory;
 
-public class TransferFragment extends BaseFragment implements BarcodeListener, HoneywellScannerUtil.BarcodeListener {
+public class TransferFragment extends BaseFragment implements BarcodeListener, HardwareScannerUtil.BarcodeListener {
 
   private final static String TAG = TransferFragment.class.getSimpleName();
 
@@ -72,7 +72,7 @@ public class TransferFragment extends BaseFragment implements BarcodeListener, H
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
   private Boolean backFromChooseProductPage;
-  private HoneywellScannerUtil honeywellScannerUtil;
+  private HardwareScannerUtil hardwareScannerUtil;
 
   @Override
   public View onCreateView(
@@ -102,7 +102,7 @@ public class TransferFragment extends BaseFragment implements BarcodeListener, H
   @Override
   public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    honeywellScannerUtil = new HoneywellScannerUtil(activity, this);
+    hardwareScannerUtil = new HardwareScannerUtil(activity, this);
     TransferFragmentArgs args = TransferFragmentArgs.fromBundle(requireArguments());
 
     viewModel = new ViewModelProvider(this, new TransferViewModelFactory(activity.getApplication(),
@@ -265,7 +265,7 @@ public class TransferFragment extends BaseFragment implements BarcodeListener, H
   @Override
   public void onResume() {
     super.onResume();
-    honeywellScannerUtil.activate();
+    hardwareScannerUtil.activate();
     if (backFromChooseProductPage != null && backFromChooseProductPage
         && (viewModel.getFormData().getProductDetailsLive().getValue() != null
         || viewModel.isProductWillBeFilled())) {
@@ -278,7 +278,7 @@ public class TransferFragment extends BaseFragment implements BarcodeListener, H
   @Override
   public void onPause() {
     embeddedFragmentScanner.onPause();
-    honeywellScannerUtil.deactivate();
+    hardwareScannerUtil.deactivate();
     super.onPause();
   }
 

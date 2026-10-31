@@ -55,13 +55,13 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
-import xyz.zedler.patrick.grocy.util.HoneywellScannerUtil;
+import xyz.zedler.patrick.grocy.util.HardwareScannerUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingListItemEditViewModel;
 
-public class ShoppingListItemEditFragment extends BaseFragment implements BarcodeListener, HoneywellScannerUtil.BarcodeListener {
+public class ShoppingListItemEditFragment extends BaseFragment implements BarcodeListener, HardwareScannerUtil.BarcodeListener {
 
   private final static String TAG = ShoppingListItemEditFragment.class.getSimpleName();
 
@@ -70,7 +70,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
   private ShoppingListItemEditViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
-  private HoneywellScannerUtil honeywellScannerUtil;
+  private HardwareScannerUtil hardwareScannerUtil;
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup group, Bundle state) {
@@ -92,7 +92,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    honeywellScannerUtil = new HoneywellScannerUtil(activity, this);
+    hardwareScannerUtil = new HardwareScannerUtil(activity, this);
     ShoppingListItemEditFragmentArgs args = ShoppingListItemEditFragmentArgs
         .fromBundle(requireArguments());
     viewModel = new ViewModelProvider(this, new ShoppingListItemEditViewModel
@@ -262,13 +262,13 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
   public void onResume() {
     super.onResume();
     embeddedFragmentScanner.onResume();
-    honeywellScannerUtil.activate();
+    hardwareScannerUtil.activate();
   }
 
   @Override
   public void onPause() {
     embeddedFragmentScanner.onPause();
-    honeywellScannerUtil.deactivate();
+    hardwareScannerUtil.deactivate();
     super.onPause();
   }
 

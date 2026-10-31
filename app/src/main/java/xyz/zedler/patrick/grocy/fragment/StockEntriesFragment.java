@@ -52,12 +52,12 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.util.HoneywellScannerUtil;
+import xyz.zedler.patrick.grocy.util.HardwareScannerUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.StockEntriesViewModel;
 
 public class StockEntriesFragment extends BaseFragment implements StockEntryAdapterListener,
-    BarcodeListener, HoneywellScannerUtil.BarcodeListener {
+    BarcodeListener, HardwareScannerUtil.BarcodeListener {
 
   private final static String TAG = StockEntriesFragment.class.getSimpleName();
 
@@ -69,7 +69,7 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
   private FragmentStockEntriesBinding binding;
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
-  private HoneywellScannerUtil honeywellScannerUtil;
+  private HardwareScannerUtil hardwareScannerUtil;
 
   @Override
   public View onCreateView(
@@ -104,7 +104,7 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    honeywellScannerUtil = new HoneywellScannerUtil(activity, this);
+    hardwareScannerUtil = new HardwareScannerUtil(activity, this);
     viewModel = new ViewModelProvider(this, new StockEntriesViewModel
         .StockEntriesViewModelFactory(activity.getApplication(),
         StockEntriesFragmentArgs.fromBundle(requireArguments())
@@ -279,13 +279,13 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
   public void onResume() {
     super.onResume();
     embeddedFragmentScanner.onResume();
-    honeywellScannerUtil.activate();
+    hardwareScannerUtil.activate();
   }
 
   @Override
   public void onPause() {
     embeddedFragmentScanner.onPause();
-    honeywellScannerUtil.deactivate();
+    hardwareScannerUtil.deactivate();
     super.onPause();
   }
 

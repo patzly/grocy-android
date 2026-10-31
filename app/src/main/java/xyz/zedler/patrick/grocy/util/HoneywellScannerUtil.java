@@ -65,7 +65,7 @@ public class HoneywellScannerUtil {
 
     private final Activity activity;
     private final SharedPreferences sharedPreferences;
-    private final BarcodeListener barcodeListener;
+    private final HardwareScannerUtil.BarcodeListener barcodeListener;
 
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -77,7 +77,7 @@ public class HoneywellScannerUtil {
         }
     };
 
-    public HoneywellScannerUtil(Activity activity, BarcodeListener barcodeListener) {
+    public HoneywellScannerUtil(Activity activity, HardwareScannerUtil.BarcodeListener barcodeListener) {
         this.activity = activity;
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity.getBaseContext());
         this.barcodeListener = barcodeListener;
@@ -167,9 +167,5 @@ public class HoneywellScannerUtil {
 
     private void releaseScanner() {
         this.activity.sendBroadcast(new Intent(ACTION_RELEASE_SCANNER));
-    }
-
-    public interface BarcodeListener {
-        void onBarcodeRecognized(String barcode, byte[] barcodeBytes);
     }
 }
